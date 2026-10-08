@@ -363,11 +363,14 @@ fn scan_tree(root: &Path) -> Vec<Finding> {
     rust_sources(root)
         .iter()
         .flat_map(|path| {
+            // Joined with `/` on every OS, so a finding reads the same on Windows.
             let name = path
                 .strip_prefix(root)
                 .unwrap_or(path)
-                .display()
-                .to_string();
+                .iter()
+                .map(|part| part.to_string_lossy())
+                .collect::<Vec<_>>()
+                .join("/");
             scan(
                 &name,
                 &fs::read_to_string(path).expect("UTF-8 source"),
