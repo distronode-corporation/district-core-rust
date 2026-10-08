@@ -17,6 +17,49 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-08
+
+### Security
+
+- "Manage on the web" binds the sign-in it hands to the browser to the browser the app
+  opened. The core first opens the service's hand-off start page
+  (`HAND_OFF_START_PATH`) with a fresh `state`; the browser answers through a
+  `districtai://handoff` link carrying a one-time nonce that the service also keeps in
+  that browser as a short-lived cookie, and the link is asked for with that nonce, so it
+  signs in only the browser holding the cookie. A link sent to someone else's browser no
+  longer signs that browser in to your account. A `districtai://handoff` link that does
+  not answer the hand-off under way is dropped and leaves it waiting. If the browser
+  does not answer within ten seconds (`HAND_OFF_CALLBACK_WAIT`), the link is asked for
+  unbound, as before, which the service accepts until it requires the binding; if no
+  browser took the start page, the hand-off is given up. The `state` and the nonce are
+  redacted from `Debug` and never logged.
+
+### Added
+
+- district-auth: `HandOffState`, `HandOffNonce`, `HandOffError`, `HAND_OFF_START_PATH`,
+  `HAND_OFF_HOST`, `HAND_OFF_NONCE_LEN`, `is_valid_hand_off_state` and
+  `is_valid_hand_off_nonce`.
+- district-model: `CODE_INVALID_NONCE` and `CODE_NONCE_REQUIRED`, the codes of the
+  service's two 400s for a hand-off's nonce, each shown in words of the app's own.
+- district-core: `Event::HandOffCallback`, and `Event::from_link`, which turns a link
+  the desktop hands the app into the sign-in's or the hand-off's event by its host, so
+  an app routes every `districtai:` link through one call. `HandOffLeg`,
+  `HAND_OFF_CALLBACK_WAIT`, and `SchedulingScreen::opening` and
+  `SchedulingScreen::minting`.
+
+### Changed
+
+- These change what an app calls or matches on. No app pins the core yet, so they ship
+  as a minor release, as the plan for this release set out:
+  - `ApiClient::scheduling_hand_off` and `DistrictApi::scheduling_hand_off` take a
+    `nonce: Option<&str>`; without one the key is left out of the body, never sent as
+    `null`.
+  - `Effect::RequestSchedulingHandOff` has a `nonce` field.
+  - `SchedulingScreen::opening`, a field, is now `SchedulingScreen::hand_off`, a
+    `HandOffLeg`; `opening()` and `minting()` say what the field said.
+  - "Manage on the web" now yields `Effect::OpenOneTimeUrl` for the start page and an
+    `Effect::Wait`, rather than `Effect::RequestSchedulingHandOff` at once.
+
 ## [1.0.0] - 2026-10-08
 
 ### Added
