@@ -26,8 +26,8 @@
 //! second presentation by revoking every token descended from the same sign-in.
 //! Its documentation lists the rules that guarantee this.
 //!
-//! The refresh token lives in a [`SessionStore`]: the desktop secret store in
-//! the app (`district-desktop` implements it), or [`MemorySessionStore`] when
+//! The refresh token lives in a [`SessionStore`]: the system's secret store,
+//! which each app implements for its own system, or [`MemorySessionStore`] when
 //! there is none. The access token lives only in memory.
 //!
 //! # Signing out

@@ -10,8 +10,8 @@ authors.workspace = true
 publish.workspace = true
 
 # Nothing here may name a crate that only builds on Linux (no oo7, no zbus, no
-# XDG crate): a Windows app builds on this crate too. district-desktop holds the
-# Linux half.
+# XDG crate) and nothing that builds only on Windows: both apps build on this
+# crate, and each keeps its own system's half.
 [dependencies]
 # `TokenFingerprint`, what the refresh-pending marker holds.
 district-auth = { workspace = true }

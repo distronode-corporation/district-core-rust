@@ -1,0 +1,69 @@
+version: 2
+
+# Two ecosystems, and one of them is easy to forget: the action SHAs. Every `uses:`
+# in the workflows is pinned to a commit with a `# vX.Y.Z` comment, which is right
+# for supply-chain safety and wrong for noticing a security fix, because a pinned
+# SHA never moves on its own. `github-actions` here is what turns each pin into a
+# pull request; Dependabot rewrites both the SHA and the version comment.
+#
+# `cargo` opens pull requests against Cargo.lock, which CI enforces with `--locked`,
+# so a bump that does not build fails in its pull request rather than in someone's
+# checkout. A bump that lands here reaches the apps only when they move their pin
+# to a release that holds it, and their own Cargo.lock then takes it.
+#
+# `cooldown` holds a version update back until the release is a week old, so a
+# compromised publish that is yanked within days never reaches a pull request here.
+# It does not delay security updates, which Dependabot opens as soon as an advisory
+# lands.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      # One pull request for the routine bumps. A major version usually needs a
+      # workflow edit, so it is deliberately left on its own.
+      actions-minor:
+        update-types: [minor, patch]
+
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      # The LiveKit SDK's crates release together, and webrtc-sys-build names the
+      # prebuilt libwebrtc that scripts/fetch-libwebrtc.sh is pinned to. A bump
+      # that moves that libwebrtc fails voice.yml until the script's pin moves in
+      # the same pull request, which is the point: see the script's header.
+      # Listed first because a dependency joins the first group that matches it,
+      # and with no `update-types` so that the breaking 0.x bumps land here too,
+      # as one pull request.
+      livekit:
+        patterns:
+          - livekit
+          - livekit-*
+          - libwebrtc
+          - webrtc-sys
+          - webrtc-sys-build
+      cargo-minor:
+        update-types: [minor, patch]
+    ignore:
+      # These are the versions the trees these crates are built into already use:
+      # sha2, hmac and pbkdf2 through District AI for Linux's secret store client
+      # (oo7), base64 through reqwest 0.12 (the LiveKit SDK's), pbjson and
+      # wiremock. Moving only ours to the next generation compiles a second copy
+      # of each (and of digest and its helpers) into the apps and changes nothing
+      # they do; patch releases still come through. Lift an entry once the crates
+      # named here have moved.
+      - dependency-name: sha2
+        versions: [">= 0.11"]
+      - dependency-name: hmac
+        versions: [">= 0.13"]
+      - dependency-name: pbkdf2
+        versions: [">= 0.13"]
+      - dependency-name: base64
+        versions: [">= 0.23"]

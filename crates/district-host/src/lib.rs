@@ -1,7 +1,8 @@
 //! What a District AI desktop app keeps on the machine, and how it hears that
 //! the machine is going to sleep, on any operating system. No GTK, and nothing
-//! that builds only on Linux: `district-desktop` is the Linux half, and a
-//! Windows app uses this crate the same way.
+//! that builds only on Linux or only on Windows: each app keeps its own
+//! system's half (the secret store, where the directories are, the sleep
+//! signal) and uses this crate the same way.
 //!
 //! - [`RefreshMarkerFile`]: the refresh-pending marker, a fingerprint of the
 //!   refresh token being rotated (never the token), written atomically and
@@ -15,7 +16,7 @@
 //!   holding the sleep while the app gets ready for it.
 //!
 //! Every type takes its directory as a constructor argument: the app says where
-//! (on Linux, `district_desktop::XdgDirs`), and the tests point it at a
+//! (on Linux, the XDG directories), and the tests point it at a
 //! temporary directory, so they never touch the real user's files.
 
 #![forbid(unsafe_code)]

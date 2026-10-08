@@ -1,0 +1,20 @@
+# Rust
+/target
+**/*.rs.bk
+
+# Raw coverage profiles. A test run under the coverage environment writes these
+# into whatever directory the test starts in when the profile path is not set.
+*.profraw
+
+# Python bytecode from the scripts under scripts/
+__pycache__/
+
+# Local environment and secrets. Never commit a real token.
+.env
+.env.*
+!.env.example
+
+# Editors
+.idea/
+.vscode/
+*.swp

@@ -1,4 +1,4 @@
-//! The data District AI for Linux exchanges with the District AI service.
+//! The data the District AI desktop apps exchange with the District AI service.
 //!
 //! Serde types for the REST API, mirroring the core model of the District AI
 //! Android app so both clients read the same wire format, plus the credential

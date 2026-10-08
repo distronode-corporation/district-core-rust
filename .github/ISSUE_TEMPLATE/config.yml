@@ -1,0 +1,23 @@
+# No blank issues: bugs go through the structured Bug report form, and everything
+# else through the links below.
+#
+# The Discussions link needs Discussions enabled on the repository (Settings,
+# Features). With blank issues off and Discussions off there is nowhere for a
+# question or an idea to go.
+blank_issues_enabled: false
+contact_links:
+  - name: README
+    url: https://github.com/distronode-corporation/district-core-rust#readme
+    about: What these crates are, which apps use them, and how to build and test them.
+  - name: A bug in District AI for Linux
+    url: https://github.com/distronode-corporation/district-linux/issues
+    about: A bug you see in the Linux app goes to its own repository; if the cause is here, we move it.
+  - name: A bug in District AI for Windows
+    url: https://github.com/distronode-corporation/district-windows/issues
+    about: A bug you see in the Windows app goes to its own repository; if the cause is here, we move it.
+  - name: Questions and ideas
+    url: https://github.com/distronode-corporation/district-core-rust/discussions
+    about: For "how do I", build trouble and feature ideas. The issue tracker is for reproducible bugs.
+  - name: Security report
+    url: https://github.com/distronode-corporation/district-core-rust/security/advisories/new
+    about: Please do not open a public issue for a vulnerability. Report it privately here (see SECURITY.md).

@@ -1,0 +1,53 @@
+# Line coverage floors, one entry per workspace crate.
+#
+# CI's `rust` job measures line coverage while it runs the tests, and
+# scripts/check-coverage.py fails the job when a crate is under its floor, when a
+# crate is missing from the report, or when an entry here is incomplete.
+#
+#   floor   The whole-number percentage of the crate's lines under src/ that the
+#           tests must execute. 100 means every line.
+#   reason  One line saying why the floor is where it is.
+#
+# Floors only ratchet up. A change that raises a crate's coverage raises its floor
+# in the same change, and lowering a floor needs a reason stated in review. There
+# is no exclusion list: code that CI cannot exercise stays in the measurement and
+# holds its crate's floor down where everyone can see it. See "Coverage" in
+# CONTRIBUTING.md.
+#
+# A crate whose optional feature builds code the default build does not has a
+# second entry for that build, [features."<crate>/<feature>"], checked by the
+# workflow that builds it (`check-coverage.py --feature <crate>/<feature>`). The
+# two measure different code and are not combined: each floor is the share of
+# its own build's lines under src/ that that build's tests run.
+
+[crates.district-model]
+floor = 100
+reason = "Plain data types with no IO, so the unit and contract tests reach every line."
+
+[crates.district-api]
+floor = 100
+reason = "Tested against a local mock HTTP server, so every path, failures included, runs in CI."
+
+[crates.district-auth]
+floor = 100
+reason = "Protocol logic a test can drive end to end, with a local server standing in for the real one."
+
+[crates.district-live]
+floor = 100
+reason = "A local test server can drive the telemetry client through every state."
+
+[crates.district-core]
+floor = 100
+reason = "App state with no user interface toolkit and no IO: plain functions the tests call directly."
+
+[crates.district-host]
+floor = 100
+reason = "Files in a temporary directory and a scripted sleep source, so the tests reach every line on any machine."
+
+[crates.district-call]
+floor = 100
+reason = "The default build: the crate root and UnavailableCallEngine, all of which the tests run. The LiveKit engine is the entry below."
+
+[features."district-call/livekit"]
+floor = 97
+reason = "Measured, not a target: voice.yml's tests against a real media server reach all but races (a room left as its join ends, a report racing a hang-up) and states libwebrtc never reports with the web client's key settings; races won in one run and not the next move it between 97.5 and 98.6."

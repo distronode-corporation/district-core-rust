@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Record the brand colours the app's stylesheet uses, from the design tokens.
+"""Record the brand colours the apps' styles use, from the design tokens.
 
     python3 scripts/sync-palette.py --monorepo <path>          # rewrite the snapshot
     python3 scripts/sync-palette.py --monorepo <path> --check  # fail if it is stale
@@ -7,9 +7,9 @@
 
 The Distronode design tokens live in the private repository that holds the
 website (SERVER_REPO_TOKENS below): one table of custom properties for the
-light theme (`:root`) and one for the dark (`[data-theme="dark"]`). This app takes
-only the accent and the semantic colours from it (the neutrals stay
-libadwaita's own), and this script writes those, both themes, into
+light theme (`:root`) and one for the dark (`[data-theme="dark"]`). The apps take
+only the accent and the semantic colours from it (the neutrals stay each
+toolkit's own), and this script writes those, both themes, into
 contracts/palette.snapshot.json with a description of the source, the commit it
 was read at and the date.
 

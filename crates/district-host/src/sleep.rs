@@ -12,8 +12,8 @@
 //!
 //! [`watch_sleep`] is that protocol, over two small traits: [`SleepSource`],
 //! the system's side, and [`SleepHandler`], the app's. On Linux the source is
-//! logind's delay inhibitor and `PrepareForSleep` signal
-//! (`district_desktop::Logind`); another system provides its own.
+//! logind's delay inhibitor and `PrepareForSleep` signal, which District AI for
+//! Linux implements; another system provides its own.
 
 use std::future::Future;
 use std::time::Duration;

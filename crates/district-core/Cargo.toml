@@ -1,6 +1,6 @@
 [package]
 name = "district-core"
-description = "GTK-free application state for District AI for Linux: the session, routes, role capabilities, screen models and the effect runner."
+description = "GTK-free application state for the District AI desktop apps: the session, routes, role capabilities, screen models and the effect runner."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

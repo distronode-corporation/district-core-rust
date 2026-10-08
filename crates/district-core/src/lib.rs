@@ -1,5 +1,5 @@
-//! Application state for District AI for Linux, with no GTK in it and no IO of
-//! its own.
+//! Application state for the District AI desktop apps (for Linux and for
+//! Windows), with no user interface toolkit in it and no IO of its own.
 //!
 //! # Shape
 //!
@@ -11,8 +11,8 @@
 //!    state. [`Model::update`] takes an [`Event`] and returns the [`Effect`]s to
 //!    run next. Effects are plain data, such as "load the overview of this
 //!    workspace" or "open this page in the browser".
-//! 2. The GTK app renders the model and forwards what the user does as events.
-//!    It decides nothing.
+//! 2. The app (GTK on Linux, WinUI on Windows) renders the model and forwards
+//!    what the user does as events. It decides nothing.
 //! 3. [`EffectRunner`] runs each effect against ten traits ([`DistrictApi`],
 //!    [`Auth`], [`Settings`], [`UrlOpener`], [`Clock`], [`LiveUpdates`],
 //!    [`Notifier`], [`Presence`], [`CallEngine`], [`RingSurface`]) and turns its

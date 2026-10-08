@@ -1,0 +1,49 @@
+name: Audit
+
+# A weekly re-check of the dependency tree against the RustSec advisory database,
+# because an advisory is published against code that did not change. ci.yml's
+# `cargo-deny` job runs only on a push or a pull request, so it goes quiet exactly
+# when nothing is happening; a quiet week should still produce an answer.
+#
+# Advisories only. Licences, bans and sources are properties of Cargo.lock and
+# deny.toml, which cannot change without a push, and ci.yml checks those.
+#
+# Alerting is the run status and nothing else: a failed scheduled run sends
+# GitHub's own failure email. Nothing here opens an issue or posts anywhere. If
+# this workflow is red on a Monday, something in the tree has a new advisory.
+#
+# GitHub disables a scheduled workflow in a public repository after 60 days
+# without repository activity, and emails the owner when it does. Re-enable it
+# from the Actions tab (or push anything).
+on:
+  schedule:
+    # Weekly, Monday, after voice.yml's '23 6 * * 1', so the weekly jobs do not
+    # queue against each other.
+    - cron: '47 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A scheduled run and a manual one never overlap; the later one waits.
+concurrency:
+  group: audit-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # The install is the local action ci.yml's `cargo-deny` job uses too, so the
+  # two jobs test with the same binary.
+  cargo-deny:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: $/.github/actions/install-cargo-deny
+
+      # `--locked`: the answer is about the tree that is committed, so a run that
+      # quietly resolved a different Cargo.lock would be answering another question.
+      - name: cargo deny check advisories
+        run: cargo deny --locked check advisories
