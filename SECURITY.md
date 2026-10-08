@@ -29,7 +29,7 @@ backported, and the apps move their pin to it.
 
 | Version | Supported |
 | --- | --- |
-| 1.0.x (the current release, [1.0.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
+| 1.1.x (the current release, [1.1.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
 | Anything older | No |
 
 ## Security model
@@ -54,6 +54,29 @@ that app's SECURITY.md describes it.
   before anything in it is used, so a code injected by another program, or an old
   callback replayed from the browser's history, is never exchanged. An attempt is
   used up by its first callback, whatever the outcome.
+
+### Handing off to the web (district-auth, district-core)
+
+- "Manage on the web" asks the service for a one-time link that signs the
+  browser in. On its own such a link signs in whichever browser opens it, so it
+  is bound to the browser the app opened: the app first opens the service's
+  start page (`/dashboard/handoff/start`) there with a fresh random `state`; the
+  service leaves a nonce in that browser as a short-lived cookie and answers
+  through `districtai://handoff` with the `state` and the nonce; the app asks for
+  the link with that nonce, and the service redeems it only in a browser holding
+  the matching cookie. A link minted by someone else and sent to you therefore
+  does not sign your browser in to their account.
+- The answer is taken only when it is `districtai://handoff` with no port, user
+  or path, carries exactly one `state` equal to the one this hand-off generated
+  (compared in constant time) and exactly one nonce of the shape the service
+  sends. Anything else is dropped and leaves the hand-off waiting for its own
+  answer, so a stray or forged link cannot cancel it.
+- If no answer arrives within ten seconds, the link is asked for unbound, which
+  the service accepts until it requires the binding. If no browser took the
+  start page, the hand-off is given up instead.
+- The `state`, the nonce and the link are held in memory only, redacted from
+  `Debug` (the events, effects and screen state that carry them included), and
+  never logged.
 
 ### Tokens (district-auth, district-host)
 

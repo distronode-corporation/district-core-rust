@@ -16,7 +16,7 @@ use std::future::Future;
 use std::time::Duration;
 
 use district_api::ApiError;
-use district_auth::{AccessClaims, DrainReport, SignOutReport};
+use district_auth::{AccessClaims, DrainReport, HandOffNonce, SignOutReport};
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse, BlockTarget,
     BlockedContactsResponse, CallDetailResponse, CallSummary, CallTranscriptResponse,
@@ -331,11 +331,13 @@ pub trait DistrictApi: Send + Sync {
         workspace_id: &str,
     ) -> impl Future<Output = Result<SchedulingEnableResponse, ApiError>> + Send;
     /// A link that signs the browser in to manage booking pages, landing on
-    /// `next`. A credential; sent once.
+    /// `next`, bound by `nonce` to the browser that answered with it, or
+    /// unbound without one. A credential; sent once.
     fn scheduling_hand_off(
         &self,
         workspace_id: &str,
         next: Option<&str>,
+        nonce: Option<&str>,
     ) -> impl Future<Output = Result<SchedulingHandOffResponse, ApiError>> + Send;
     /// The help desk's settings.
     fn desk_settings(
@@ -1215,13 +1217,19 @@ where
             Effect::RequestSchedulingHandOff {
                 ticket,
                 workspace_id,
-            } => Event::SchedulingHandOffReady {
-                ticket,
-                result: self
-                    .api
-                    .scheduling_hand_off(&workspace_id, Some(SCHEDULING_WEB_PATH))
-                    .await,
-            },
+                nonce,
+            } => {
+                // Nothing is logged about a hand-off (CONTRIBUTING.md, Logging):
+                // whether it was bound is the service's to count, from the request.
+                let nonce = nonce.as_ref().map(HandOffNonce::as_str);
+                Event::SchedulingHandOffReady {
+                    ticket,
+                    result: self
+                        .api
+                        .scheduling_hand_off(&workspace_id, Some(SCHEDULING_WEB_PATH), nonce)
+                        .await,
+                }
+            }
             Effect::LoadDeskSettings {
                 ticket,
                 workspace_id,

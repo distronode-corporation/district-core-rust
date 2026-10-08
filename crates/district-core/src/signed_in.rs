@@ -502,8 +502,9 @@ impl SignedIn {
         }])
     }
 
-    pub(crate) fn url_open_failed(&mut self) -> Next {
+    pub(crate) fn url_open_failed(&mut self, tickets: &mut Tickets) -> Next {
         self.notice = Some(Notice::NoBrowser);
+        self.hand_off_unopened(tickets);
         stay()
     }
 
