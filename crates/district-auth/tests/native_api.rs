@@ -360,9 +360,15 @@ async fn a_closed_port_is_not_sent_and_a_silent_server_is_ambiguous() {
     let token = RefreshToken::new("refresh-0");
 
     // Nothing listening: the connection is refused and not one byte left the
-    // machine, so the token is certainly unspent.
+    // machine, so the token is certainly unspent. The standard timeouts, not
+    // the impatient ones: Windows retries a refused connection for about two
+    // seconds before failing it, and a request timeout inside that window is
+    // (rightly) ambiguous.
     assert_eq!(
-        impatient(&closed_port()).refresh(&token).await,
+        NativeAuthApi::new(&config_for(&closed_port()))
+            .unwrap()
+            .refresh(&token)
+            .await,
         RefreshOutcome::NotSent
     );
 
