@@ -1,0 +1,13 @@
+{
+  "workspaceId": "ws_1",
+  "callId": "call_1",
+  "eventType": "transcript_error",
+  "data": {
+    "v": 1,
+    "callId": "call_1",
+    "op": "transcript.subscribe",
+    "code": "not_live",
+    "retryAfterMs": null
+  },
+  "timestamp": "2026-10-06T14:30:32.000Z"
+}

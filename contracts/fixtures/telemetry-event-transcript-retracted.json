@@ -1,0 +1,15 @@
+{
+  "workspaceId": "ws_1",
+  "callId": "call_1",
+  "eventType": "transcript_retracted",
+  "data": {
+    "v": 1,
+    "callId": "call_1",
+    "epoch": null,
+    "seq": null,
+    "all": true,
+    "segmentIds": [],
+    "reason": "erased"
+  },
+  "timestamp": "2026-10-06T14:30:20.000Z"
+}

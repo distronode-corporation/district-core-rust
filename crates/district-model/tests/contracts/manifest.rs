@@ -44,7 +44,7 @@ use district_model::{
     WorkspaceConfigResponse, WorkspaceListResponse, WorkspaceSaveResponse,
 };
 
-use crate::support::{Codec, Set, codec, names_in};
+use crate::support::{Codec, Set, codec, names_in, read_in};
 
 /// One set's accounting, as the tests below read it.
 pub struct Manifest {
@@ -87,7 +87,7 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 157;
+pub const EXPECTED_FIXTURE_COUNT: usize = 166;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
@@ -444,6 +444,10 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
         "district-support-requests.json",
         codec::<SupportRequestsResponse>,
     ),
+    // POST /api/district/telemetry/token: the desktop set's file, which the
+    // service also writes here, byte for byte, because the mobile apps open the
+    // same socket for the live call transcript.
+    ("district-telemetry-token.json", codec::<TelemetryToken>),
     // GET /api/district/timeline, an older page that fills its window.
     ("district-timeline-page.json", codec::<TimelineResponse>),
     // GET /api/district/timeline: messages of each channel and calls, interleaved.
@@ -498,6 +502,36 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
         "district-workspace-list.json",
         codec::<WorkspaceListResponse>,
     ),
+    // One /ws/telemetry frame per event of the live call transcript, which the
+    // mobile apps show during a call. They decode as envelopes of an event type
+    // this client does not name (`TelemetryEventType::Unknown`), on purpose: the
+    // desktop apps show no live transcript, and the core reads nothing again
+    // for an event it does not know, so a call's stream of segments costs no
+    // requests. `fixtures.rs` holds them to that.
+    (
+        "telemetry-event-transcript-ended.json",
+        codec::<TelemetryEnvelope>,
+    ),
+    (
+        "telemetry-event-transcript-error.json",
+        codec::<TelemetryEnvelope>,
+    ),
+    (
+        "telemetry-event-transcript-retracted.json",
+        codec::<TelemetryEnvelope>,
+    ),
+    (
+        "telemetry-event-transcript-segment-interim.json",
+        codec::<TelemetryEnvelope>,
+    ),
+    (
+        "telemetry-event-transcript-segment.json",
+        codec::<TelemetryEnvelope>,
+    ),
+    (
+        "telemetry-event-transcript-snapshot.json",
+        codec::<TelemetryEnvelope>,
+    ),
 ];
 
 /// The length [`NOT_YET_MODELLED`] may not exceed, kept equal to it.
@@ -529,53 +563,67 @@ pub struct Exclusion {
 }
 
 /// Fixtures of endpoints this client will not use, by decision.
-pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[Exclusion {
-    reason: "Scheduling is managed on the web. Like the Android app, this client only \
+pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
+    Exclusion {
+        reason: "Sign in with Apple's native sheet and its second step belong to the \
+                 Apple apps: `POST /api/auth/native/apple` answering that the account \
+                 needs its authenticator code, and `POST /api/auth/native/mfa` trading \
+                 the ticket and the code for the grant. A desktop signs in through the \
+                 browser, which asks for the second factor itself, and reads the grant \
+                 from `POST /api/auth/native/token` (district-auth).",
+        fixtures: &[
+            "district-native-apple-mfa-required.json",
+            "district-native-mfa.json",
+        ],
+    },
+    Exclusion {
+        reason: "Scheduling is managed on the web. Like the Android app, this client only \
                  reads the scheduling status and turns scheduling on, which are the \
                  `district-scheduling-status-*` and `district-scheduling-enable` fixtures, \
                  not these.",
-    fixtures: &[
-        "district-scheduling-admin-failure.json",
-        "district-scheduling-admin-invalid-params.json",
-        "district-scheduling-admin-not-ready.json",
-        "district-scheduling-api-key-created.json",
-        "district-scheduling-api-keys.json",
-        "district-scheduling-booking-answers.json",
-        "district-scheduling-booking.json",
-        "district-scheduling-bookings.json",
-        "district-scheduling-branding.json",
-        "district-scheduling-caldav-connect.json",
-        "district-scheduling-calendar-status.json",
-        "district-scheduling-calendars.json",
-        "district-scheduling-event-type.json",
-        "district-scheduling-event-types.json",
-        "district-scheduling-hosts.json",
-        "district-scheduling-llm.json",
-        "district-scheduling-me.json",
-        "district-scheduling-no-content.json",
-        "district-scheduling-oauth-connections.json",
-        "district-scheduling-ok.json",
-        "district-scheduling-override-created.json",
-        "district-scheduling-override-range.json",
-        "district-scheduling-overrides.json",
-        "district-scheduling-question.json",
-        "district-scheduling-questions.json",
-        "district-scheduling-rule.json",
-        "district-scheduling-rules.json",
-        "district-scheduling-slots.json",
-        "district-scheduling-team.json",
-        "district-scheduling-teams.json",
-        "district-scheduling-test-email.json",
-        "district-scheduling-upload.json",
-        "district-scheduling-user-archive.json",
-        "district-scheduling-user-upcoming.json",
-        "district-scheduling-users.json",
-        "district-scheduling-webhook-created.json",
-        "district-scheduling-webhook-deliveries.json",
-        "district-scheduling-webhooks.json",
-        "district-scheduling-zoom-status.json",
-    ],
-}];
+        fixtures: &[
+            "district-scheduling-admin-failure.json",
+            "district-scheduling-admin-invalid-params.json",
+            "district-scheduling-admin-not-ready.json",
+            "district-scheduling-api-key-created.json",
+            "district-scheduling-api-keys.json",
+            "district-scheduling-booking-answers.json",
+            "district-scheduling-booking.json",
+            "district-scheduling-bookings.json",
+            "district-scheduling-branding.json",
+            "district-scheduling-caldav-connect.json",
+            "district-scheduling-calendar-status.json",
+            "district-scheduling-calendars.json",
+            "district-scheduling-event-type.json",
+            "district-scheduling-event-types.json",
+            "district-scheduling-hosts.json",
+            "district-scheduling-llm.json",
+            "district-scheduling-me.json",
+            "district-scheduling-no-content.json",
+            "district-scheduling-oauth-connections.json",
+            "district-scheduling-ok.json",
+            "district-scheduling-override-created.json",
+            "district-scheduling-override-range.json",
+            "district-scheduling-overrides.json",
+            "district-scheduling-question.json",
+            "district-scheduling-questions.json",
+            "district-scheduling-rule.json",
+            "district-scheduling-rules.json",
+            "district-scheduling-slots.json",
+            "district-scheduling-team.json",
+            "district-scheduling-teams.json",
+            "district-scheduling-test-email.json",
+            "district-scheduling-upload.json",
+            "district-scheduling-user-archive.json",
+            "district-scheduling-user-upcoming.json",
+            "district-scheduling-users.json",
+            "district-scheduling-webhook-created.json",
+            "district-scheduling-webhook-deliveries.json",
+            "district-scheduling-webhooks.json",
+            "district-scheduling-zoom-status.json",
+        ],
+    },
+];
 
 /// Every file in `contracts/desktop/`. Asserted exactly, for the same reason as
 /// [`EXPECTED_FIXTURE_COUNT`].
@@ -800,14 +848,24 @@ fn the_three_lists_add_up_to_each_corpus() {
     }
 }
 
+/// The one file the service writes to both sets.
+const SHARED_BY_THE_SERVICE: &str = "district-telemetry-token.json";
+
 #[test]
-fn the_two_sets_share_no_file_name() {
+fn the_two_sets_share_no_file_name_but_the_one_the_service_copies() {
     // The desktop set records only what no Android fixture records, so a name in
     // both is a fixture that was copied rather than recorded for this client.
+    // The one exception is the service's own: it writes the telemetry token to
+    // both sets, byte for byte, because the mobile apps open the same socket.
     let android = names_in(Set::Android);
     let shared: Vec<String> = names_in(Set::Desktop)
         .into_iter()
         .filter(|name| android.contains(name))
         .collect();
-    assert!(shared.is_empty(), "in both sets: {shared:#?}");
+    assert_eq!(shared, [SHARED_BY_THE_SERVICE], "in both sets");
+    assert_eq!(
+        read_in(Set::Android, SHARED_BY_THE_SERVICE),
+        read_in(Set::Desktop, SHARED_BY_THE_SERVICE),
+        "{SHARED_BY_THE_SERVICE} differs between the sets"
+    );
 }

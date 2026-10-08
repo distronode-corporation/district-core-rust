@@ -495,6 +495,63 @@ fn a_call_event_reads_the_log_and_the_open_call_again() {
     );
 }
 
+/// The live call transcript's frames, which the service publishes many times a
+/// call for the mobile apps, read nothing again here, even with the log and
+/// that very call open: the desktop shows no live transcript, and a call
+/// event already reads the call when it changes.
+#[test]
+fn the_live_transcript_frames_read_nothing_again() {
+    let (mut model, _) = loaded(AGENCY, "agency");
+    let effects = model.update(Event::Navigate(Route::Calls));
+    model.update(Event::CallsLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(fixture("district-calls.json")),
+    });
+    let opened = model.update(Event::Navigate(Route::CallDetail {
+        call_id: "call_contract_answered".to_owned(),
+    }));
+    model.update(Event::CallLoaded {
+        ticket: ticket(&opened[0]),
+        result: Ok(fixture("district-call-detail.json")),
+    });
+    model.update(Event::TranscriptLoaded {
+        ticket: ticket(&opened[1]),
+        result: Ok(fixture("district-call-transcript.json")),
+    });
+    for name in [
+        "telemetry-event-transcript-ended.json",
+        "telemetry-event-transcript-error.json",
+        "telemetry-event-transcript-retracted.json",
+        "telemetry-event-transcript-segment-interim.json",
+        "telemetry-event-transcript-segment.json",
+        "telemetry-event-transcript-snapshot.json",
+    ] {
+        let recorded: TelemetryEnvelope = fixture(name);
+        assert!(
+            matches!(recorded.event_type, TelemetryEventType::Unknown(_)),
+            "{name}"
+        );
+        let effects = model.update(live(
+            AGENCY,
+            LiveUpdate::Event(TelemetryEnvelope {
+                workspace_id: AGENCY.to_owned(),
+                call_id: "call_contract_answered".to_owned(),
+                ..recorded
+            }),
+        ));
+        assert!(effects.is_empty(), "{name}: {effects:?}");
+    }
+    // The same call's own event still reads it again.
+    assert!(
+        !event(
+            &mut model,
+            TelemetryEventType::CallUpdated,
+            "call_contract_answered"
+        )
+        .is_empty()
+    );
+}
+
 /// A ring for another member, or one whose list cannot be read, rings
 /// nothing here; the rings themselves are `ringing.rs`'s. An event type this
 /// build does not act on reads nothing.

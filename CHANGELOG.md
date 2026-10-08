@@ -17,6 +17,31 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-08
+
+### Changed
+
+- The contract fixtures follow the service's current shapes. The Android set gains nine
+  files and loses none: the live call transcript's six frames on the telemetry socket,
+  the telemetry token (the service now writes the desktop set's file to both sets, byte
+  for byte, because the mobile apps open the same socket), and the two answers of the
+  Apple apps' native second sign-in step. The desktop set is unchanged.
+- The live transcript's frames decode as `TelemetryEnvelope`s of an event type this
+  client does not name (`TelemetryEventType::Unknown`), on purpose: the desktop apps
+  show no live transcript, and the core reads nothing again for them, so a call's
+  stream of transcript frames costs no requests. Tests hold both to that.
+- The two native second-step fixtures are excluded by decision: a desktop signs in
+  through the browser, which asks for the second factor itself.
+
+### Removed
+
+- `AiPersona::avatar_recording` (`videoRecording` on the wire). It named a recording of
+  avatar calls the service has never made, and the service no longer stores it. A shipped
+  build still reads a persona that carries the key, which it ignores. This is a change
+  to a public type; no app pins the core yet, so it ships in a minor release.
+  `CallSummary::recording_url` stays, always `None`, because the service still sends
+  `recordingUrl: null` for older clients that require the key.
+
 ## [1.1.0] - 2026-10-08
 
 ### Security

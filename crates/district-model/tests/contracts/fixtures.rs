@@ -1296,6 +1296,47 @@ fn base64url_matches_the_rfc_4648_examples() {
     assert_eq!(base64url(&[0xfb, 0xff]), "-_8");
 }
 
+/// The live call transcript's frames on `/ws/telemetry`, which the Android set
+/// records for the mobile apps. The desktop apps show no live transcript, so no
+/// variant names these events: each decodes as an envelope of an unknown type,
+/// all for one call, and the core reads nothing again for it. A frame here of a
+/// type this client does name would be a change to decide about.
+#[test]
+fn the_live_transcript_frames_decode_as_events_this_client_leaves_alone() {
+    let frames: Vec<(String, TelemetryEnvelope)> = names_in(Set::Android)
+        .into_iter()
+        .filter(|name| name.starts_with("telemetry-event-"))
+        .map(|name| {
+            let envelope = decode(&name);
+            (name, envelope)
+        })
+        .collect();
+    let types: BTreeSet<&str> = frames.iter().map(|(_, e)| e.event_type.as_str()).collect();
+    assert_eq!(
+        types,
+        BTreeSet::from([
+            "transcript_ended",
+            "transcript_error",
+            "transcript_retracted",
+            "transcript_segment",
+            "transcript_snapshot",
+        ]),
+        "{frames:?}"
+    );
+    let (_, first) = &frames[0];
+    for (name, envelope) in &frames {
+        assert!(
+            matches!(envelope.event_type, TelemetryEventType::Unknown(_)),
+            "{name}"
+        );
+        assert_eq!(envelope.workspace_id, first.workspace_id, "{name}");
+        assert_eq!(envelope.call_id, first.call_id, "{name}");
+        assert!(!envelope.timestamp.is_empty(), "{name}");
+        // The transcript's text is customer data, and stays out of `Debug`.
+        assert!(!format!("{envelope:?}").contains("Thursday"), "{name}");
+    }
+}
+
 // The desktop set.
 
 #[test]

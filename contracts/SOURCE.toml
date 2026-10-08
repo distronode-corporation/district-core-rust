@@ -21,12 +21,12 @@
 # `sha256sum -c SHA256SUMS` checks them.
 
 [source]
-commit = "dce182eb6cf7c7cde710522e1a5e861f56d47624"
+commit = "e08aef5ae0410d3a8d03afdf97a2ab2351ed4a72"
 
 [sets.fixtures]
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
-file_count = 157
+file_count = 166
 
 [sets.desktop]
 source = "the desktop-only contract fixtures, recorded by the District AI server's contract tests"
@@ -34,7 +34,7 @@ source_clean = true
 file_count = 13
 
 [sync]
-date = "2026-10-05"
+date = "2026-10-08"
 checksums = "SHA256SUMS"
 
 [[substitution]]

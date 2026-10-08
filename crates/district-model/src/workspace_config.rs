@@ -109,8 +109,10 @@ fn object_rows(stored: Option<&Value>) -> Option<Vec<Map<String, Value>>> {
 /// [`PersonaPatch`](crate::PersonaPatch), which sends only what the member
 /// changed: the service keeps every field it is not sent. The rest is here to be
 /// shown. The stored object can carry keys this type does not name (the caller
-/// disclosure setting, and the call-handling pair that has a route of its own);
-/// they are left alone, because nothing sends them back.
+/// disclosure setting, the call-handling pair that has a route of its own, and
+/// an older workspace's `videoRecording`, which named a recording the service
+/// never makes and which it no longer stores); they are left alone, because
+/// nothing sends them back.
 ///
 /// The avatar settings are `avatar_*` here and `video*` on the wire. No source
 /// file of this client spells the prefix of the billed avatar room kind, and a
@@ -206,13 +208,6 @@ pub struct AiPersona {
         skip_serializing_if = "Option::is_none"
     )]
     pub avatar_background_url: Option<String>,
-    /// Whether avatar calls are recorded (`videoRecording`).
-    #[serde(
-        rename = "videoRecording",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub avatar_recording: Option<bool>,
     /// Whether contacts are researched with outside business data. `None`
     /// means never answered, which is off; send `false` only when the member
     /// turned it off.

@@ -566,7 +566,7 @@ dependencies = [
 
 [[package]]
 name = "district-api"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "district-model",
  "httpdate",
@@ -582,7 +582,7 @@ dependencies = [
 
 [[package]]
 name = "district-auth"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "base64 0.22.1",
  "district-api",
@@ -601,7 +601,7 @@ dependencies = [
 
 [[package]]
 name = "district-call"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "base64 0.22.1",
  "district-auth",
@@ -622,7 +622,7 @@ dependencies = [
 
 [[package]]
 name = "district-core"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "base64 0.22.1",
  "district-api",
@@ -639,7 +639,7 @@ dependencies = [
 
 [[package]]
 name = "district-host"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "district-auth",
  "district-core",
@@ -653,7 +653,7 @@ dependencies = [
 
 [[package]]
 name = "district-live"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "district-api",
  "district-model",
@@ -673,7 +673,7 @@ dependencies = [
 
 [[package]]
 name = "district-model"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "district-model",
  "serde",
