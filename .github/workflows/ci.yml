@@ -134,7 +134,8 @@ jobs:
           save-if: ${{ github.ref == 'refs/heads/main' }}
 
       - name: cargo test
-        run: cargo test --workspace --locked
+        # Every failing test in one run, not one per round trip.
+        run: cargo test --workspace --locked --no-fail-fast
 
   # The declared Rust floor, compiled at the floor. Without this job `rust-version`
   # is a comment: `rust` builds on stable, so a feature stabilised after the declared
