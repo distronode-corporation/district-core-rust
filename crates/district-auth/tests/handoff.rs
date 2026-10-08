@@ -62,9 +62,13 @@ fn the_shape_checks_match_the_service() {
     assert!(is_valid_hand_off_nonce(&sent));
     assert!(!is_valid_hand_off_nonce(&sent[1..]));
     assert!(!is_valid_hand_off_nonce(&format!("{sent}a")));
-    for odd in ['=', '.', '~', '+', '/', ' '] {
-        let nonce = format!("{}{odd}", &sent[1..]);
-        assert!(!is_valid_hand_off_nonce(&nonce), "{nonce}");
+    // Every ASCII character in the last place: only base64url's alphabet (no
+    // padding, and none of `.` and `~` that a `state` may carry) is a nonce's.
+    for byte in 0u8..=127 {
+        let last = char::from(byte);
+        let nonce = format!("{}{last}", &sent[1..]);
+        let base64url = last.is_ascii_alphanumeric() || last == '-' || last == '_';
+        assert_eq!(is_valid_hand_off_nonce(&nonce), base64url, "{byte}");
     }
 }
 
