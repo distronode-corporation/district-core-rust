@@ -1,0 +1,25 @@
+{
+  "workspaceId": "ws_1",
+  "callId": "call_1",
+  "eventType": "transcript_segment",
+  "data": {
+    "v": 1,
+    "callId": "call_1",
+    "segment": {
+      "segmentId": "item_b2",
+      "index": 1,
+      "epoch": 1791297000000,
+      "seq": 2,
+      "rev": 0,
+      "speaker": "caller",
+      "speakerName": null,
+      "text": "I'd like to book a cleaning on Thursday.",
+      "final": true,
+      "interrupted": false,
+      "language": "en",
+      "startedAt": "2026-10-06T14:30:07.200Z",
+      "endedAt": "2026-10-06T14:30:10.700Z"
+    }
+  },
+  "timestamp": "2026-10-06T14:30:10.950Z"
+}

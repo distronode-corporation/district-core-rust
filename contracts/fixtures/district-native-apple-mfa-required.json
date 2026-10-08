@@ -1,0 +1,7 @@
+{
+  "error": "mfa_required",
+  "code": "MFA_REQUIRED",
+  "message": "Enter the code from your authenticator app.",
+  "mfaTicket": "q6urq6urq6urq6urq6urq6urq6urq6urq6urq6urq6s",
+  "mfaTicketExpiresAt": "2026-08-15T14:35:00.000Z"
+}

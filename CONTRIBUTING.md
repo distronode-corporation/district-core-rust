@@ -303,7 +303,9 @@ recorded from the server's own route handlers, which these crates read too.
 `contracts/desktop/` holds the shapes only the desktop apps read and no Android
 fixture records: the live telemetry credential, one frame of the telemetry socket
 per event type, the call hang-up, the booking-pages hand-off and the desktop's
-presence registration.
+presence registration. The one exception is the telemetry credential, which the
+server also writes to the Android set, byte for byte, because the mobile apps open
+the same socket for the live call transcript; a test holds the two copies equal.
 
 `crates/district-model` decodes every file in both sets in its tests with unknown
 fields refused (the `strict-contracts` feature, which its tests always enable), so
