@@ -141,6 +141,16 @@ impl DraftWrites {
         vec![write.effect(tickets.issue(Slot::DraftWrite))]
     }
 
+    /// The app is quitting: every write still waiting goes now, since nothing
+    /// will be left to send it when the one on its way lands. Their answers
+    /// no longer matter, so each simply takes the slot.
+    fn drain(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        std::mem::take(&mut self.waiting)
+            .into_values()
+            .map(|write| write.effect(tickets.issue(Slot::DraftWrite)))
+            .collect()
+    }
+
     /// The write on its way landed, whatever its answer (a failed save is
     /// superseded by the next one, and the text is still in the composer):
     /// the next one waiting goes.
@@ -492,8 +502,26 @@ impl SignedIn {
     /// Closes the open thread. A save still waiting for the typing to stop is
     /// sent now rather than lost.
     pub(crate) fn close_thread(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
-        let effects = self
-            .thread
+        let effects = self.flush_draft(tickets);
+        tickets.cancel_each(&THREAD_SLOTS);
+        self.thread = None;
+        effects
+    }
+
+    /// The app is quitting. A save still waiting for the typing to stop goes
+    /// now, and so does every write queued behind the one on its way, rather
+    /// than being lost with the app. The thread stays open.
+    pub(crate) fn quit_drafts(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        tickets.cancel(Slot::DraftTimer);
+        let mut effects = self.flush_draft(tickets);
+        effects.extend(self.draft_writes.drain(tickets));
+        effects
+    }
+
+    /// The open thread's save still waiting for the typing to stop, written
+    /// now; nothing when none is waiting.
+    fn flush_draft(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        self.thread
             .as_mut()
             .filter(|screen| screen.composer.save_pending)
             .map(|screen| {
@@ -504,10 +532,7 @@ impl SignedIn {
                     tickets,
                 )
             })
-            .unwrap_or_default();
-        tickets.cancel_each(&THREAD_SLOTS);
-        self.thread = None;
-        effects
+            .unwrap_or_default()
     }
 
     /// The composer's save timer ran out.

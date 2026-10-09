@@ -273,7 +273,7 @@ pub enum Event {
     /// The desktop woke up.
     Resumed,
     /// The app is quitting. Run the effects it returns, for a short while at
-    /// most, before exiting.
+    /// most, before exiting: among them, a reply still waiting to be saved.
     Quitting,
 
     /// The start-up check finished.
@@ -2710,7 +2710,9 @@ impl Model {
             }
             Event::Suspending => self.signed_in(|s, tickets, _| s.suspend(tickets)),
             Event::Quitting => {
-                let mut effects = self.signed_in(|s, tickets, _| s.suspend(tickets));
+                let mut effects =
+                    self.signed_in(|s, tickets, _| Next::Stay(s.quit_drafts(tickets)));
+                effects.extend(self.signed_in(|s, tickets, _| s.suspend(tickets)));
                 let signed_in = matches!(self.session, SessionState::SignedIn(_));
                 effects.extend(signed_in.then_some(Effect::SaveSession));
                 effects

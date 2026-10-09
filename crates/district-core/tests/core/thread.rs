@@ -649,6 +649,63 @@ fn leaving_the_thread_saves_what_was_waiting_and_drops_the_rest() {
     assert!(model.update(Event::Back).is_empty());
 }
 
+fn draft_writes(effects: &[Effect]) -> Vec<&str> {
+    effects
+        .iter()
+        .filter_map(|effect| match effect {
+            Effect::SaveDraft { draft, .. } => Some(draft.body.as_str()),
+            Effect::DeleteDraft { .. } => Some(""),
+            _ => None,
+        })
+        .collect()
+}
+
+/// Quitting sends a save still waiting for the typing to stop, and every write
+/// queued behind the one on its way, so a reply typed just before the app quits
+/// is not lost with it.
+#[test]
+fn quitting_saves_what_was_waiting() {
+    let mut model = opened("agency");
+    let wait = last_ticket(&thread_event(
+        &mut model,
+        ThreadEvent::Compose("Nearly done".to_owned()),
+    ));
+    let effects = model.update(Event::Quitting);
+    assert_eq!(draft_writes(&effects), ["Nearly done"]);
+    assert_eq!(effects.last(), Some(&Effect::SaveSession));
+    // The timer's late end writes nothing more.
+    assert!(model.update(Event::WaitOver { ticket: wait }).is_empty());
+
+    // A write on its way and a newer one queued behind it: the newer one goes.
+    let mut model = opened("agency");
+    assert_eq!(
+        draft_writes(&typed_and_saved(&mut model, "First")),
+        ["First"]
+    );
+    assert!(typed_and_saved(&mut model, "First and second").is_empty());
+    assert_eq!(
+        draft_writes(&model.update(Event::Quitting)),
+        ["First and second"]
+    );
+
+    // Typing on top of a queued write: the newest text replaces it.
+    let mut model = opened("agency");
+    typed_and_saved(&mut model, "One");
+    typed_and_saved(&mut model, "One, two");
+    thread_event(
+        &mut model,
+        ThreadEvent::Compose("One, two, three".to_owned()),
+    );
+    assert_eq!(
+        draft_writes(&model.update(Event::Quitting)),
+        ["One, two, three"]
+    );
+
+    // Nothing waiting: no draft write.
+    let mut model = opened("agency");
+    assert!(draft_writes(&model.update(Event::Quitting)).is_empty());
+}
+
 // Sending.
 
 /// One send at a time: every send is billed, and a second click must never

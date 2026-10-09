@@ -21,6 +21,10 @@ variant, or a field of one. Those take a new major version.
 
 ### Added
 
+- `district-auth`: the authorize URL names the app's platform (`platform=linux` or
+  `platform=windows`, `Platform::wire`), after `redirect_uri`. The service offers
+  account creation on its sign-in page to the Windows app only, binding the value to
+  the attempt's challenge and state; it reads any other value, or none, as before.
 - The live transcript of the call on this desktop, with the semantics of
   district-core-swift 6.0.0's `TranscriptReducer`. Once the call has an id (a placed
   call's from the dial's answer, an answered call's from its ring), the core asks the
@@ -59,6 +63,13 @@ variant, or a field of one. Those take a new major version.
   `watch_transcript`, which `LiveHub` implements. The six transcript fixtures are now
   decoded with their typed data in the contract gate, not as envelopes of an unknown
   type.
+
+### Fixed
+
+- `Event::Quitting` saves the open thread's reply when its save is still waiting for
+  the typing to stop, and sends every draft write queued behind the one on its way.
+  Before, a reply typed in the last two seconds before quitting, or queued behind a
+  slow save, was lost.
 
 ## [1.2.0] - 2026-10-08
 

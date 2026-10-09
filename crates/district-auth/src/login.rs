@@ -55,6 +55,7 @@ const MAX_ERROR_LEN: usize = 64;
 /// under way.
 pub struct LoginFlow {
     authorize_url: Url,
+    platform: &'static str,
     attempt: Option<Attempt>,
 }
 
@@ -80,6 +81,7 @@ impl LoginFlow {
         }
         Self {
             authorize_url,
+            platform: config.client.platform.wire(),
             attempt: None,
         }
     }
@@ -90,8 +92,16 @@ impl LoginFlow {
     /// or `gtk::UriLauncher`), never in a web view inside the app.
     ///
     /// The URL carries exactly the parameters the service reads, in this order:
-    /// `code_challenge`, `code_challenge_method` (always `S256`), `state` and
-    /// `redirect_uri`. The verifier stays here.
+    /// `code_challenge`, `code_challenge_method` (always `S256`), `state`,
+    /// `redirect_uri` and `platform` (the app's
+    /// [`Platform::wire`](district_model::Platform::wire)). The verifier stays
+    /// here.
+    ///
+    /// `platform` only decides what the sign-in page offers: the service lets
+    /// the Windows app's users create an account there, and reads any other
+    /// value, or none, as an app that must not offer it. It binds the value to
+    /// this attempt's challenge and state, so it cannot be changed in the
+    /// browser on the way.
     pub fn authorize_url(&mut self) -> Url {
         let attempt = Attempt {
             pkce: Pkce::generate(),
@@ -102,7 +112,8 @@ impl LoginFlow {
             .append_pair("code_challenge", attempt.pkce.challenge())
             .append_pair("code_challenge_method", CODE_CHALLENGE_METHOD)
             .append_pair("state", &attempt.state)
-            .append_pair("redirect_uri", REDIRECT_URI);
+            .append_pair("redirect_uri", REDIRECT_URI)
+            .append_pair("platform", self.platform);
         self.attempt = Some(attempt);
         url
     }
