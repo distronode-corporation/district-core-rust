@@ -62,6 +62,13 @@ variant, or a field of one. Those take a new major version.
   decoded with their typed data in the contract gate, not as envelopes of an unknown
   type.
 
+### Fixed
+
+- `Event::Quitting` saves the open thread's reply when its save is still waiting for
+  the typing to stop, and sends every draft write queued behind the one on its way.
+  Before, a reply typed in the last two seconds before quitting, or queued behind a
+  slow save, was lost.
+
 ## [1.2.0] - 2026-10-08
 
 ### Changed
