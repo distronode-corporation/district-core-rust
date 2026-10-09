@@ -124,6 +124,7 @@ mod signed_in;
 pub mod studio;
 mod support;
 mod thread;
+mod transcript;
 mod workflows;
 mod workspaces;
 
@@ -233,6 +234,10 @@ pub use support::{
 pub use thread::{
     ATTACHMENT_TYPES, Composer, DRAFT_SAVE_DEBOUNCE, MAX_ATTACHMENT_BYTES, MAX_ATTACHMENTS,
     PickedAttachment, ThreadControls, ThreadEvent, ThreadEvents, ThreadHistory, ThreadScreen,
+};
+pub use transcript::{
+    FINAL_FETCH_ATTEMPTS, FinalTranscript, GAP_HEAL, LiveTranscript, LiveTranscriptPhase,
+    NOT_LIVE_RETRY, RATE_LIMIT_FALLBACK, TranscriptWatch, final_fetch_delay,
 };
 pub use workflows::{
     CampaignCard, CampaignConfirm, RUNS_PAGE_SIZE, RunHistory, Tone, WorkflowControls,

@@ -14,6 +14,8 @@
 //!   fixture holds.
 //! - `strict`: the `strict-contracts` feature is on in tests, and every type in
 //!   `src/` that derives `Deserialize` honours it.
+//! - `transcript`: the live transcript's frames read into their typed events,
+//!   and the ops a client sends.
 
 mod checksums;
 mod fixtures;
@@ -21,4 +23,5 @@ mod manifest;
 mod round_trip;
 mod strict;
 mod support;
+mod transcript;
 mod voice_studio;

@@ -37,6 +37,7 @@ use crate::failure::FailureText;
 use crate::media::{DisconnectReason, MediaCredential, MediaOwner};
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::transcript::LiveTranscript;
 
 /// How often the duration moves on.
 pub const CALL_TICK: Duration = Duration::from_secs(1);
@@ -60,6 +61,8 @@ pub struct ActiveCall {
     call_id: Option<String>,
     /// Whether the carrier has been asked to end it, so it is asked once.
     hang_up_sent: bool,
+    /// Its live transcript, once it has an id.
+    pub(crate) transcript: Option<LiveTranscript>,
 }
 
 /// Which way a call went.
@@ -129,6 +132,7 @@ impl ActiveCall {
             answered: false,
             call_id: None,
             hang_up_sent: false,
+            transcript: None,
         }
     }
 
@@ -141,12 +145,25 @@ impl ActiveCall {
             answered: false,
             call_id: Some(call_id),
             hang_up_sent: false,
+            transcript: None,
         }
     }
 
     /// Whether it is over.
     pub fn is_over(&self) -> bool {
         matches!(self.phase, CallPhase::Ended(_))
+    }
+
+    /// The call's live transcript: its lines as they are spoken, from the
+    /// moment the call has an id until its summary is put away. `None` before
+    /// that, and for a call whose id the service would refuse.
+    pub fn transcript(&self) -> Option<&LiveTranscript> {
+        self.transcript.as_ref()
+    }
+
+    /// The call's id, once known.
+    pub(crate) fn call_id(&self) -> Option<&str> {
+        self.call_id.as_deref()
     }
 
     /// Whether it was answered, so its duration means something.
@@ -208,7 +225,12 @@ impl SignedIn {
             CallEvent::HangUp => Next::Stay(self.hang_up(CallEnd::HungUp, tickets)),
             CallEvent::Dismiss => {
                 self.active_call = self.active_call.take().filter(|call| !call.is_over());
-                stay()
+                let dropped = self.active_call.is_none();
+                Next::Stay(if dropped {
+                    self.transcript_dropped(tickets)
+                } else {
+                    Vec::new()
+                })
             }
         }
     }
@@ -227,6 +249,7 @@ impl SignedIn {
         }
         let mut effects = self.carrier_hang_up();
         effects.extend(self.leave_media_of(MediaOwner::Call));
+        effects.extend(self.transcript_call_ended(tickets));
         effects
     }
 
@@ -303,7 +326,9 @@ impl SignedIn {
             call.call_id = Some(answer.call_id);
             call.phase = CallPhase::Connecting;
         }
-        self.start_media(MediaOwner::Call, credential, true, tickets)
+        let mut effects = self.start_media(MediaOwner::Call, credential, true, tickets);
+        effects.extend(self.start_transcript(tickets));
+        effects
     }
 
     /// An answer landed with a credential: the call is this desktop's now.
@@ -315,12 +340,14 @@ impl SignedIn {
         tickets: &mut Tickets,
     ) -> Vec<Effect> {
         self.active_call = Some(ActiveCall::inbound(workspace_id, call_id));
-        self.start_media(
+        let mut effects = self.start_media(
             MediaOwner::Call,
             MediaCredential::from_answer(answer),
             true,
             tickets,
-        )
+        );
+        effects.extend(self.start_transcript(tickets));
+        effects
     }
 
     /// The call's media is up: an answered call is answered now, and a placed

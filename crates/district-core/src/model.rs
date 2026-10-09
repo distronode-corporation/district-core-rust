@@ -90,6 +90,7 @@ use crate::settings::{
 use crate::signed_in::{Next, SignedIn};
 use crate::support::SupportEvent;
 use crate::thread::{PickedAttachment, ThreadEvent};
+use crate::transcript::TranscriptWatch;
 use crate::workflows::WorkflowsEvent;
 
 /// How long the app waits before its first attempt to resume a session again
@@ -1306,6 +1307,22 @@ pub enum Effect {
         /// The workspaces to watch.
         workspace_ids: Vec<String>,
     },
+    /// Ask the socket of a workspace for the live transcript of one call, or,
+    /// with `None`, for none. Reports nothing back; the frames arrive as
+    /// [`Event::Live`].
+    ///
+    /// Like [`WatchLive`](Self::WatchLive) the request is a state, applied only
+    /// when no request with a later `revision` has been applied already. A
+    /// different call or workspace than the last applied one unsubscribes that
+    /// one and subscribes this one; the same call with more
+    /// [`resubscribes`](crate::TranscriptWatch::resubscribes) asks for it again,
+    /// which brings a fresh snapshot.
+    WatchTranscript {
+        /// Orders the requests: a later one compares greater.
+        revision: Ticket,
+        /// The call whose transcript is wanted, if any.
+        transcript: Option<TranscriptWatch>,
+    },
     /// Show a desktop notification. Reports nothing back.
     Notify(Notification),
     /// Read the inbox's threads.
@@ -2189,6 +2206,7 @@ impl Effect {
             | Self::RememberWorkspace { .. }
             | Self::OpenUrl { .. }
             | Self::WatchLive { .. }
+            | Self::WatchTranscript { .. }
             | Self::Notify(_)
             | Self::OpenOneTimeUrl { .. }
             | Self::SaveRingSetting { .. }
@@ -2320,6 +2338,11 @@ pub(crate) enum Slot {
     Dial,
     CallAnswer,
     CallTick,
+    TranscriptGap,
+    TranscriptResubscribe,
+    TranscriptFetchWait,
+    TranscriptFetch,
+    TranscriptCooldown,
     RingDeadline,
 }
 
@@ -3223,6 +3246,7 @@ impl Model {
         match &mut self.session {
             SessionState::SignedIn(signed_in) => {
                 let mut effects = signed_in.end_voice(&mut self.tickets);
+                effects.extend(signed_in.stop_transcript(&mut self.tickets));
                 effects.extend(signed_in.unwatch(&mut self.tickets));
                 effects
             }

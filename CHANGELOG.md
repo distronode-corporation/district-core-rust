@@ -17,6 +17,47 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Added
+
+- The live transcript of the call on this desktop, with the semantics of
+  district-core-swift 6.0.0's `TranscriptReducer`. Once the call has an id (a placed
+  call's from the dial's answer, an answered call's from its ring), the core asks the
+  call's workspace socket for it with the new `Effect::WatchTranscript`, and applies the
+  `transcript_*` frames that socket delivers for that call to
+  `ActiveCall::transcript()`, a `LiveTranscript`: `lines()` in (epoch, index) order with
+  their speaker and text, interim lines (`is_final` false) replaced in place by later
+  revisions and their finals, `phase()` (`Subscribing`, `Live`, `Reconnecting`,
+  `Ended`, `Unavailable`), `is_complete()`, and `final_transcript()`, the full
+  transcript read with backoff once the live one ends. `status()`, `speaker_label()` and
+  the `LiveTranscript` constants are the words both apps show. Duplicates, gaps (healed
+  after `GAP_HEAL` with one subscribe in flight), snapshots in parts, retractions,
+  `agent_error`, `rate_limited` and `not_live` (retried only on a call event showing the
+  call in progress, at most once per `NOT_LIVE_RETRY`) follow the contract. A frame for
+  another call or workspace, one that cannot be read, and one after the call ended
+  (except a retraction, which still takes lines off) change nothing.
+- `district-model`: `TelemetryEventType` names the five transcript events
+  (`TranscriptSnapshot`, `TranscriptSegment`, `TranscriptEnded`, `TranscriptRetracted`,
+  `TranscriptError`, and `is_transcript()`), `TelemetryEnvelope::transcript_event()`
+  reads their data into `TranscriptEvent` (refusing another `v`, a call id that
+  disagrees with the envelope's, and text over `TRANSCRIPT_TEXT_MAX_UTF16`), with the open
+  vocabularies `TranscriptSpeaker`, `TranscriptEndReason`, `TranscriptRetractReason` and
+  `TranscriptErrorCode`; a segment's text stays out of `Debug`. `TranscriptClientOp`
+  writes the client's ops.
+- `district-live`: a connection keeps the calls whose transcript it receives
+  (`subscribe_transcript`, `unsubscribe_transcript`, `resubscribe_transcript`, on
+  `TelemetryConnection` and per workspace on `TelemetryHub`) and sends a
+  `transcript.subscribe` for each on every socket it opens, renewals included. An op it
+  sends does not count as the server speaking. `is_transient` is public.
+- `LiveHub::transcripts()` names the calls whose transcript the sockets are asked for.
+
+### Changed
+
+- Breaking: `TelemetryEventType` gains five variants, so an exhaustive `match` over it
+  needs them; `Effect` gains `WatchTranscript`; and `LiveUpdates` gains
+  `watch_transcript`, which `LiveHub` implements. The six transcript fixtures are now
+  decoded with their typed data in the contract gate, not as envelopes of an unknown
+  type.
+
 ## [1.2.0] - 2026-10-08
 
 ### Changed

@@ -15,8 +15,8 @@ use district_model::{CallAnswerResponse, MAX_APP_RING_SECONDS, TelemetryEventTyp
 use serde_json::json;
 
 use crate::support::{
-    AGENCY, CLIENT, USER, VIEWER, call_event, connect, fixture, has, loaded, media, person,
-    ring_here, ringing, server_error, service, signed_in, signed_out_error,
+    AGENCY, CLIENT, USER, VIEWER, and_transcript_read, call_event, connect, fixture, has, loaded,
+    media, person, ring_here, ringing, server_error, service, signed_in, signed_out_error,
 };
 
 const CALL: &str = "call_contract_ringing";
@@ -151,7 +151,15 @@ fn in_call(model: &mut Model) -> Ticket {
         result: Ok(answer()),
     });
     let (session, credential, microphone) = connect(&effects);
-    assert_eq!(effects.len(), 1, "{effects:?}");
+    assert_eq!(effects.len(), 2, "{effects:?}");
+    assert!(
+        matches!(
+            &effects[1],
+            Effect::WatchTranscript { transcript: Some(watch), .. }
+                if watch.workspace_id == AGENCY && watch.call_id == CALL
+        ),
+        "{effects:?}"
+    );
     assert_eq!(credential.url(), answer().url);
     assert_eq!(credential.passphrase(), None);
     assert!(microphone);
@@ -365,7 +373,7 @@ fn answering_is_sent_once_and_joins_the_call_through_the_engine() {
 
     // Hanging up leaves the room and tells the service nothing: the hang-up
     // route is for calls placed here.
-    let effects = model.update(Event::Call(CallEvent::HangUp));
+    let effects = and_transcript_read(model.update(Event::Call(CallEvent::HangUp)));
     assert_eq!(effects, [Effect::DisconnectMedia { session }]);
     let call = signed_in(&model).active_call.as_ref().unwrap();
     assert_eq!(call.phase, CallPhase::Ended(CallEnd::HungUp));
@@ -530,6 +538,7 @@ fn a_call_answered_here_ends_here_when_it_ends() {
         session,
         MediaEvent::Disconnected(DisconnectReason::RoomEnded),
     ));
+    let effects = and_transcript_read(effects);
     assert!(
         effects.is_empty(),
         "nothing to tell the carrier: {effects:?}"
@@ -565,7 +574,7 @@ fn a_ring_during_a_call_waits_without_a_sound_until_the_call_ends() {
     );
 
     // The call ends: now it rings.
-    let effects = model.update(Event::Call(CallEvent::HangUp));
+    let effects = and_transcript_read(model.update(Event::Call(CallEvent::HangUp)));
     assert_eq!(
         effects,
         [
@@ -656,7 +665,18 @@ fn the_ended_call_is_put_away_and_an_ended_ring_is_not_a_live_one() {
     model.update(Event::Call(CallEvent::Dismiss));
     assert!(signed_in(&model).active_call.is_some());
     model.update(Event::Call(CallEvent::HangUp));
-    assert!(model.update(Event::Call(CallEvent::Dismiss)).is_empty());
+    // Put away, it takes its live transcript with it.
+    let effects = model.update(Event::Call(CallEvent::Dismiss));
+    assert!(
+        matches!(
+            effects.as_slice(),
+            [Effect::WatchTranscript {
+                transcript: None,
+                ..
+            }]
+        ),
+        "{effects:?}"
+    );
     assert_eq!(signed_in(&model).active_call, None);
     // Dismissing a live ring does nothing.
     rung(&mut model);

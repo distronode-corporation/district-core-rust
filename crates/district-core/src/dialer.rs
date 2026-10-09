@@ -197,11 +197,15 @@ impl SignedIn {
             abandoned: false,
         });
         self.active_call = Some(ActiveCall::outbound(workspace_id.clone(), to.clone()));
-        vec![Effect::Dial {
+        // The summary of a call before it, and with it its transcript, is
+        // gone.
+        let mut effects = self.transcript_dropped(tickets);
+        effects.push(Effect::Dial {
             ticket: tickets.issue(Slot::Dial),
             workspace_id,
             to,
-        }]
+        });
+        effects
     }
 }
 

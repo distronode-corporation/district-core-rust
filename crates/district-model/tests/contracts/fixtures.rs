@@ -31,10 +31,10 @@ use district_model::{
     SendMessageResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
     SupportRequestCreateResponse, SupportRequestFiling, SupportRequestResponse,
     SupportRequestsResponse, TelemetryEnvelope, TelemetryEventType, TelemetryToken, ThreadRef,
-    TimelineResponse, UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse,
-    UsageResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
-    WorkspaceBillingResponse, WorkspaceConfigResponse, WorkspaceListResponse,
-    WorkspaceSaveResponse,
+    TimelineResponse, TranscriptEvent, UnreadCountResponse, UpdateContactRequest,
+    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
+    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceConfigResponse,
+    WorkspaceListResponse, WorkspaceSaveResponse,
 };
 use serde_json::Value;
 use sha2::{Digest, Sha256};
@@ -1297,12 +1297,12 @@ fn base64url_matches_the_rfc_4648_examples() {
 }
 
 /// The live call transcript's frames on `/ws/telemetry`, which the Android set
-/// records for the mobile apps. The desktop apps show no live transcript, so no
-/// variant names these events: each decodes as an envelope of an unknown type,
-/// all for one call, and the core reads nothing again for it. A frame here of a
-/// type this client does name would be a change to decide about.
+/// records for every app: one of each of the five event types (two segments,
+/// interim and final), all for one call, each read by
+/// [`TelemetryEnvelope::transcript_event`] into the typed event the core applies
+/// to the active call's transcript.
 #[test]
-fn the_live_transcript_frames_decode_as_events_this_client_leaves_alone() {
+fn the_live_transcript_frames_are_read_as_transcript_events() {
     let frames: Vec<(String, TelemetryEnvelope)> = names_in(Set::Android)
         .into_iter()
         .filter(|name| name.starts_with("telemetry-event-"))
@@ -1324,17 +1324,28 @@ fn the_live_transcript_frames_decode_as_events_this_client_leaves_alone() {
         "{frames:?}"
     );
     let (_, first) = &frames[0];
+    let mut finals = BTreeSet::new();
     for (name, envelope) in &frames {
-        assert!(
-            matches!(envelope.event_type, TelemetryEventType::Unknown(_)),
-            "{name}"
-        );
+        assert!(envelope.event_type.is_transcript(), "{name}");
         assert_eq!(envelope.workspace_id, first.workspace_id, "{name}");
         assert_eq!(envelope.call_id, first.call_id, "{name}");
         assert!(!envelope.timestamp.is_empty(), "{name}");
+        let event = envelope
+            .transcript_event()
+            .unwrap_or_else(|| panic!("{name} is not read"));
+        assert_eq!(event.call_id(), Some(envelope.call_id.as_str()), "{name}");
+        if let TranscriptEvent::Segment(data) = &event {
+            finals.insert(data.segment.is_final);
+        }
         // The transcript's text is customer data, and stays out of `Debug`.
         assert!(!format!("{envelope:?}").contains("Thursday"), "{name}");
+        assert!(!format!("{event:?}").contains("Thursday"), "{name}");
     }
+    assert_eq!(
+        finals,
+        BTreeSet::from([false, true]),
+        "an interim and a final"
+    );
 }
 
 // The desktop set.

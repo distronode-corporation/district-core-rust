@@ -11,7 +11,7 @@ use district_core::{
     ExchangeFailure, HAND_OFF_CALLBACK_WAIT, InboxEvent, LiveUpdates, MediaCredential, Model,
     Notification, Notifier, OneTimeUrl, OverviewScreen, PickedAttachment, Presence, RestoreError,
     RingSurface, Route, SEARCH_DEBOUNCE, SchedulingEvent, Settings, SignInError, SignedInSession,
-    Ticket, TokioClock, Urgency, UrlOpener,
+    Ticket, TokioClock, TranscriptWatch, Urgency, UrlOpener,
 };
 use district_core::{
     CallEnd, CallEvent, CallPhase, DialerEvent, MediaEvent, MediaUpdate, MemberWrite,
@@ -1007,6 +1007,10 @@ impl LiveUpdates for FakeLive {
     async fn watch(&self, _revision: Ticket, workspace_ids: Vec<String>) {
         self.0.push(format!("watch {workspace_ids:?}"));
     }
+
+    async fn watch_transcript(&self, _revision: Ticket, transcript: Option<TranscriptWatch>) {
+        self.0.push(format!("watch transcript {transcript:?}"));
+    }
 }
 
 struct FakeNotifier(Log);
@@ -1789,10 +1793,25 @@ async fn watching_and_notifying_report_nothing_back() {
     };
     assert_eq!(runner.run(Effect::Notify(notification)).await, None);
     assert_eq!(
+        runner
+            .run(Effect::WatchTranscript {
+                revision: a_ticket(),
+                transcript: Some(TranscriptWatch {
+                    workspace_id: AGENCY.to_owned(),
+                    call_id: "call_1".to_owned(),
+                    resubscribes: 2,
+                }),
+            })
+            .await,
+        None
+    );
+    assert_eq!(
         log.take(),
         [
             "watch [\"ws-contract-active\"]",
             "notify message:msg_1 New message: Open District AI to read it.",
+            "watch transcript Some(TranscriptWatch { workspace_id: \"ws-contract-active\", \
+             call_id: \"call_1\", resubscribes: 2 })",
         ]
     );
 }
@@ -1808,6 +1827,10 @@ fn an_effect_names_the_ticket_its_result_carries() {
         Effect::WatchLive {
             revision: ticket,
             workspace_ids: Vec::new(),
+        },
+        Effect::WatchTranscript {
+            revision: ticket,
+            transcript: None,
         },
         Effect::DisconnectMedia { session: ticket },
         Effect::PresentWindow,
@@ -3106,6 +3129,8 @@ async fn a_placed_call_runs_through_the_engine_from_dial_to_hang_up() {
         log.take(),
         [
             "dial ws-contract-active +1 212 555 0142",
+            "watch transcript Some(TranscriptWatch { workspace_id: \"ws-contract-active\", \
+             call_id: \"CAabababababababababababababababab\", resubscribes: 0 })",
             "connect wss://media.example.com microphone true",
             "microphone false",
             "disconnect",

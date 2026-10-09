@@ -13,8 +13,9 @@ use district_auth::{
     RevokeStatus, TokenRefreshCoordinator,
 };
 use district_core::{
-    Auth, CodeExchange, DesktopPresence, DistrictApi, Effect, ExchangeFailure, LiveHub,
-    LiveUpdates, NativeAuth, Presence, PresenceApi, RestoreError, SignInError, Ticket,
+    Auth, CodeExchange, DesktopPresence, DistrictApi, Effect, Event, ExchangeFailure, LiveHub,
+    LiveUpdates, NativeAuth, Presence, PresenceApi, RestoreError, Route, SignInError, Ticket,
+    TranscriptWatch,
 };
 use district_live::{
     LiveConfig, LiveError, LiveUpdate, OpenFuture, SystemClock, TokenMinter, Transport,
@@ -36,7 +37,9 @@ use url::Url;
 use wiremock::matchers::{body_string_contains, method, path, query_param};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-use crate::support::{THIS_DEVICE, USER, claims, desktop_fixture, fixture, listed, ticket};
+use crate::support::{
+    AGENCY, THIS_DEVICE, USER, claims, desktop_fixture, fixture, listed, loaded, ticket,
+};
 
 /// The app on `platform`; the Linux one is the Linux app at this release.
 fn app_on(platform: Platform) -> ClientIdentity {
@@ -1027,6 +1030,76 @@ async fn the_live_hub_applies_only_the_newest_watched_set() {
     let update = updates.recv().await.unwrap();
     assert_eq!(update.workspace_id, "ws_c");
     assert_eq!(*minted.lock().unwrap(), ["ws_a", "ws_c"]);
+}
+
+/// Tickets in the order a model issued them, oldest first.
+fn many_revisions() -> Vec<Ticket> {
+    let (mut model, _) = loaded(AGENCY, "agency");
+    let mut tickets = Vec::new();
+    for route in [Route::Calls, Route::Inbox, Route::Contacts]
+        .iter()
+        .cycle()
+        .take(9)
+        .cloned()
+    {
+        tickets.extend(
+            model
+                .update(Event::Navigate(route))
+                .iter()
+                .filter_map(Effect::ticket),
+        );
+        tickets.extend(model.update(Event::Back).iter().filter_map(Effect::ticket));
+    }
+    assert!(tickets.windows(2).all(|pair| pair[0] < pair[1]));
+    assert!(tickets.len() >= 6, "{tickets:?}");
+    tickets
+}
+
+/// The transcript the model asked for last is the one the sockets are asked
+/// for, whatever order the runner ran the requests in: a different call
+/// replaces the one before, and a heal of the same call keeps it.
+#[tokio::test]
+async fn the_live_hub_asks_for_only_the_newest_transcript() {
+    let config = LiveConfig {
+        transport: Arc::new(NoNetwork),
+        clock: Arc::new(SystemClock),
+        jitter: || 0.5,
+    };
+    let minted = Arc::new(Mutex::new(Vec::new()));
+    let (hub, _updates) = LiveHub::new(Arc::new(RefusingMinter(minted)), config);
+    let watch = |workspace_id: &str, call_id: &str, resubscribes: u32| {
+        Some(TranscriptWatch {
+            workspace_id: workspace_id.to_owned(),
+            call_id: call_id.to_owned(),
+            resubscribes,
+        })
+    };
+    let pair = |workspace_id: &str, call_id: &str| (workspace_id.to_owned(), call_id.to_owned());
+    let revisions = many_revisions();
+    let [first, second, third, fourth, fifth] = revisions[..5] else {
+        panic!("{revisions:?}");
+    };
+
+    hub.watch_transcript(second, watch("ws_a", "call_1", 0))
+        .await;
+    assert_eq!(hub.transcripts().await, [pair("ws_a", "call_1")]);
+    // Older, run late, or the same request again: nothing changes.
+    hub.watch_transcript(first, None).await;
+    hub.watch_transcript(second, watch("ws_b", "call_2", 0))
+        .await;
+    assert_eq!(hub.transcripts().await, [pair("ws_a", "call_1")]);
+    // A heal, and the same state again, keep the call.
+    hub.watch_transcript(third, watch("ws_a", "call_1", 1))
+        .await;
+    hub.watch_transcript(fourth, watch("ws_a", "call_1", 1))
+        .await;
+    assert_eq!(hub.transcripts().await, [pair("ws_a", "call_1")]);
+    // Another call replaces it; none drops it.
+    hub.watch_transcript(fifth, watch("ws_b", "call_2", 0))
+        .await;
+    assert_eq!(hub.transcripts().await, [pair("ws_b", "call_2")]);
+    hub.watch_transcript(revisions[5], None).await;
+    assert!(hub.transcripts().await.is_empty());
 }
 
 /// Who asked for an exchange: the installation id and name.

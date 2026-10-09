@@ -13,8 +13,8 @@ use district_model::DialResponse;
 
 use crate::settings::stale;
 use crate::support::{
-    AGENCY, CLIENT, VIEWER, connect, fixture, loaded, media, person, service, signed_in,
-    signed_out_error,
+    AGENCY, CLIENT, VIEWER, and_transcript_read, connect, fixture, loaded, media, person, service,
+    signed_in, signed_out_error,
 };
 
 /// A number in the fictional range, as a member might type it.
@@ -67,7 +67,16 @@ fn placed(model: &mut Model) -> Ticket {
         result: Ok(dialled()),
     });
     let (session, credential, microphone) = connect(&effects);
-    assert_eq!(effects.len(), 1, "{effects:?}");
+    assert_eq!(effects.len(), 2, "{effects:?}");
+    // The call has its id now, and its live transcript is asked for.
+    assert!(
+        matches!(
+            &effects[1],
+            Effect::WatchTranscript { transcript: Some(watch), .. }
+                if watch.workspace_id == AGENCY && watch.call_id == dialled().call_id
+        ),
+        "{effects:?}"
+    );
     assert_eq!(credential.url(), dialled().url);
     assert_eq!(credential.token(), dialled().token);
     assert_eq!(credential.passphrase(), None, "a phone call is unencrypted");
@@ -266,7 +275,7 @@ fn hanging_up_ends_the_carrier_leg_and_leaves_the_room_once() {
     let mut model = at_dialler(AGENCY, "agency");
     let (session, tick) = answered(&mut model);
     model.update(Event::WaitOver { ticket: tick });
-    let effects = hang_up(&mut model);
+    let effects = and_transcript_read(hang_up(&mut model));
     assert_eq!(
         effects,
         [carrier_hang_up(), Effect::DisconnectMedia { session }]
@@ -301,7 +310,7 @@ fn the_far_end_hanging_up_ends_the_call_here_and_at_the_carrier() {
         },
     ));
     assert_eq!(
-        effects,
+        and_transcript_read(effects),
         [carrier_hang_up(), Effect::DisconnectMedia { session }]
     );
     assert_eq!(*phase(&model), CallPhase::Ended(CallEnd::Remote));
@@ -316,7 +325,11 @@ fn a_room_that_ends_before_an_answer_ends_the_call_unanswered() {
         session,
         MediaEvent::Disconnected(DisconnectReason::RoomEnded),
     ));
-    assert_eq!(effects, [carrier_hang_up()], "the room is already gone");
+    assert_eq!(
+        and_transcript_read(effects),
+        [carrier_hang_up()],
+        "the room is already gone"
+    );
     assert_eq!(*phase(&model), CallPhase::Ended(CallEnd::Remote));
     assert!(!call(&model).was_answered());
     assert_eq!(call(&model).status(), ActiveCall::ENDED);
@@ -330,7 +343,7 @@ fn a_room_that_cannot_be_joined_is_a_failed_call() {
         session,
         MediaEvent::Disconnected(DisconnectReason::ConnectFailed),
     ));
-    assert_eq!(effects, [carrier_hang_up()]);
+    assert_eq!(and_transcript_read(effects), [carrier_hang_up()]);
     let CallPhase::Ended(CallEnd::Failed(failure)) = phase(&model) else {
         panic!("{:?}", phase(&model));
     };
@@ -347,7 +360,11 @@ fn a_call_through_an_engine_that_can_join_nothing_fails_saying_so() {
         session,
         MediaEvent::Disconnected(DisconnectReason::Unavailable),
     ));
-    assert_eq!(effects, [carrier_hang_up()], "the telephone leg is ended");
+    assert_eq!(
+        and_transcript_read(effects),
+        [carrier_hang_up()],
+        "the telephone leg is ended"
+    );
     let CallPhase::Ended(CallEnd::Failed(failure)) = phase(&model) else {
         panic!("{:?}", phase(&model));
     };

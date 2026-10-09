@@ -44,7 +44,7 @@ use district_model::{
     WorkspaceConfigResponse, WorkspaceListResponse, WorkspaceSaveResponse,
 };
 
-use crate::support::{Codec, Set, codec, names_in, read_in};
+use crate::support::{Codec, Set, codec, names_in, read_in, transcript_frame};
 
 /// One set's accounting, as the tests below read it.
 pub struct Manifest {
@@ -445,8 +445,8 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
         codec::<SupportRequestsResponse>,
     ),
     // POST /api/district/telemetry/token: the desktop set's file, which the
-    // service also writes here, byte for byte, because the mobile apps open the
-    // same socket for the live call transcript.
+    // service also writes here, byte for byte, because every app opens the same
+    // socket for the live call transcript.
     ("district-telemetry-token.json", codec::<TelemetryToken>),
     // GET /api/district/timeline, an older page that fills its window.
     ("district-timeline-page.json", codec::<TimelineResponse>),
@@ -502,36 +502,22 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
         "district-workspace-list.json",
         codec::<WorkspaceListResponse>,
     ),
-    // One /ws/telemetry frame per event of the live call transcript, which the
-    // mobile apps show during a call. They decode as envelopes of an event type
-    // this client does not name (`TelemetryEventType::Unknown`), on purpose: the
-    // desktop apps show no live transcript, and the core reads nothing again
-    // for an event it does not know, so a call's stream of segments costs no
-    // requests. `fixtures.rs` holds them to that.
-    (
-        "telemetry-event-transcript-ended.json",
-        codec::<TelemetryEnvelope>,
-    ),
-    (
-        "telemetry-event-transcript-error.json",
-        codec::<TelemetryEnvelope>,
-    ),
+    // One /ws/telemetry frame per event of the live call transcript, which a
+    // socket receives only for a call it subscribed to. Each decodes as the
+    // envelope and its data as the typed data of its event type, which is how
+    // the core reads them into the live transcript of the desktop's active call.
+    ("telemetry-event-transcript-ended.json", transcript_frame),
+    ("telemetry-event-transcript-error.json", transcript_frame),
     (
         "telemetry-event-transcript-retracted.json",
-        codec::<TelemetryEnvelope>,
+        transcript_frame,
     ),
     (
         "telemetry-event-transcript-segment-interim.json",
-        codec::<TelemetryEnvelope>,
+        transcript_frame,
     ),
-    (
-        "telemetry-event-transcript-segment.json",
-        codec::<TelemetryEnvelope>,
-    ),
-    (
-        "telemetry-event-transcript-snapshot.json",
-        codec::<TelemetryEnvelope>,
-    ),
+    ("telemetry-event-transcript-segment.json", transcript_frame),
+    ("telemetry-event-transcript-snapshot.json", transcript_frame),
 ];
 
 /// The length [`NOT_YET_MODELLED`] may not exceed, kept equal to it.

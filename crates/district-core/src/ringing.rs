@@ -221,7 +221,7 @@ fn names(envelope: &TelemetryEnvelope, user_id: &str) -> bool {
 /// Whether a call event says the call can no longer be answered: it ended, or
 /// its status is one the answer route would refuse. An update that names no
 /// status says nothing about it.
-fn is_over(envelope: &TelemetryEnvelope) -> bool {
+pub(crate) fn is_over(envelope: &TelemetryEnvelope) -> bool {
     envelope.event_type == TelemetryEventType::CallEnded
         || envelope
             .data

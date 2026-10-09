@@ -27,8 +27,9 @@ impl<S: TokenSource + 'static> TokenMinter for ApiClient<S> {
     }
 }
 
-/// Whether a failed mint may succeed if tried again later, as opposed to one
-/// that needs something to change first.
+/// Whether a failed request (a mint, or any read the same rule suits) may
+/// succeed if tried again later, as opposed to one that needs something to
+/// change first.
 ///
 /// Transient: no answer, a server error, a rate limit, and an access token that
 /// could not be fetched because the session's own refresh was rate limited or
@@ -37,7 +38,7 @@ impl<S: TokenSource + 'static> TokenMinter for ApiClient<S> {
 /// reach (retrying on a timer would raise the unlock prompt again and again), and
 /// any other 4xx, redirect or unreadable answer, which retrying the same request
 /// cannot fix.
-pub(crate) fn is_transient(error: &ApiError) -> bool {
+pub fn is_transient(error: &ApiError) -> bool {
     match error {
         ApiError::Offline(_)
         | ApiError::Server { .. }

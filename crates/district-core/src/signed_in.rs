@@ -47,6 +47,7 @@ use crate::settings::{
 };
 use crate::support::{SupportList, SupportRequestScreen, SupportScreen};
 use crate::thread::{DraftWrites, ThreadScreen};
+use crate::transcript::TranscriptWatch;
 use crate::workflows::WorkflowsScreen;
 use crate::workspaces::{self, Resolved, WorkspacesState};
 
@@ -144,6 +145,8 @@ pub struct SignedIn {
     pub presence: PresenceState,
     /// The dial whose answer is awaited.
     pub(crate) pending_dial: Option<PendingDial>,
+    /// The live transcript the call's socket was last asked for.
+    pub(crate) transcript_watch: Option<TranscriptWatch>,
     /// The saved replies being written, one at a time.
     pub(crate) draft_writes: DraftWrites,
     /// Whether this build can carry a call's audio
@@ -215,6 +218,7 @@ impl SignedIn {
             media: None,
             presence: PresenceState::default(),
             pending_dial: None,
+            transcript_watch: None,
             draft_writes: DraftWrites::default(),
             calls_available,
         }

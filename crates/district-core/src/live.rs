@@ -448,17 +448,33 @@ impl SignedIn {
             workspace_id,
             update,
         } = update;
-        if self.live.workspace_id.as_deref() == Some(workspace_id.as_str()) {
-            return Next::Stay(self.open_live(update, tickets));
-        }
-        let Some(socket) = self.live.others.get_mut(&workspace_id) else {
+        let open = self.live.workspace_id.as_deref() == Some(workspace_id.as_str());
+        if !open && !self.live.others.contains_key(&workspace_id) {
             return stay();
-        };
-        reported(&mut socket.status, &mut socket.connected_before, &update);
-        let effects = match update {
-            LiveUpdate::Event(envelope) => self.other_event(workspace_id, envelope, tickets),
+        }
+        self.transcript_reconnected(&workspace_id, &update, tickets);
+        let mut effects = match &update {
+            // A frame of the call's live transcript is for that call alone,
+            // and asks nothing of any screen.
+            LiveUpdate::Event(envelope) if envelope.event_type.is_transcript() => {
+                return Next::Stay(self.transcript_frame(&workspace_id, envelope, tickets));
+            }
+            LiveUpdate::Event(envelope) => {
+                self.transcript_call_signal(&workspace_id, envelope, tickets)
+            }
             _ => Vec::new(),
         };
+        if open {
+            effects.extend(self.open_live(update, tickets));
+            return Next::Stay(effects);
+        }
+        let socket = self.live.others.get_mut(&workspace_id);
+        if let Some(socket) = socket {
+            reported(&mut socket.status, &mut socket.connected_before, &update);
+        }
+        if let LiveUpdate::Event(envelope) = update {
+            effects.extend(self.other_event(workspace_id, envelope, tickets));
+        }
         Next::Stay(effects)
     }
 
@@ -501,9 +517,15 @@ impl SignedIn {
                 workspace_id,
                 envelope.call_id,
             ))],
+            // A transcript frame never reaches here; see `live`.
             TelemetryEventType::MessageSent
             | TelemetryEventType::CallStarted
             | TelemetryEventType::ToolOutcome
+            | TelemetryEventType::TranscriptSnapshot
+            | TelemetryEventType::TranscriptSegment
+            | TelemetryEventType::TranscriptEnded
+            | TelemetryEventType::TranscriptRetracted
+            | TelemetryEventType::TranscriptError
             | TelemetryEventType::Unknown(_) => Vec::new(),
         }
     }
@@ -526,8 +548,15 @@ impl SignedIn {
             }
             TelemetryEventType::CallRinging => self.call_ringing(&envelope, tickets),
             // An event type added after this build is left alone for the same
-            // reason as a message that could not be read.
-            TelemetryEventType::ToolOutcome | TelemetryEventType::Unknown(_) => Vec::new(),
+            // reason as a message that could not be read. A transcript frame
+            // never reaches here; see `live`.
+            TelemetryEventType::ToolOutcome
+            | TelemetryEventType::TranscriptSnapshot
+            | TelemetryEventType::TranscriptSegment
+            | TelemetryEventType::TranscriptEnded
+            | TelemetryEventType::TranscriptRetracted
+            | TelemetryEventType::TranscriptError
+            | TelemetryEventType::Unknown(_) => Vec::new(),
         }
     }
 
@@ -686,6 +715,9 @@ impl SignedIn {
 
     /// A wait the model asked for is over.
     pub(crate) fn wait_over(&mut self, ticket: Ticket, tickets: &mut Tickets) -> Next {
+        if let Some(effects) = self.transcript_wait_over(ticket, tickets) {
+            return Next::Stay(effects);
+        }
         let effects = if tickets.accept(Slot::SearchTimer, ticket) {
             self.search_due(tickets)
         } else if tickets.accept(Slot::DraftTimer, ticket) {

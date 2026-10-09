@@ -25,6 +25,9 @@ pub struct TelemetryHub<M> {
     config: LiveConfig,
     updates: UnboundedSender<WorkspaceUpdate>,
     connections: BTreeMap<String, TelemetryConnection>,
+    /// The calls whose live transcript each workspace's socket receives, kept
+    /// here too so a connection started later subscribes from its first socket.
+    transcripts: BTreeMap<String, BTreeSet<String>>,
 }
 
 impl<M: TokenMinter> TelemetryHub<M> {
@@ -38,6 +41,7 @@ impl<M: TokenMinter> TelemetryHub<M> {
             config,
             updates,
             connections: BTreeMap::new(),
+            transcripts: BTreeMap::new(),
         };
         (hub, receiver)
     }
@@ -63,6 +67,10 @@ impl<M: TokenMinter> TelemetryHub<M> {
             Arc::clone(&self.minter),
             self.config.clone(),
             self.updates.clone(),
+            self.transcripts
+                .get(workspace_id)
+                .cloned()
+                .unwrap_or_default(),
         );
         self.connections.insert(workspace_id.to_owned(), connection);
         true
@@ -100,6 +108,53 @@ impl<M: TokenMinter> TelemetryHub<M> {
         for id in &wanted {
             self.watch(id);
         }
+    }
+
+    /// Receives the live transcript of `call_id` on `workspace_id`'s socket,
+    /// from now on and on every socket after it, whether or not the workspace
+    /// is watched yet: a connection started later subscribes from its first
+    /// socket. See [`TelemetryConnection::subscribe_transcript`].
+    pub fn subscribe_transcript(&mut self, workspace_id: &str, call_id: &str) {
+        self.transcripts
+            .entry(workspace_id.to_owned())
+            .or_default()
+            .insert(call_id.to_owned());
+        if let Some(connection) = self.connections.get(workspace_id) {
+            connection.subscribe_transcript(call_id);
+        }
+    }
+
+    /// Stops receiving the live transcript of `call_id` on `workspace_id`'s
+    /// socket.
+    pub fn unsubscribe_transcript(&mut self, workspace_id: &str, call_id: &str) {
+        if let Some(calls) = self.transcripts.get_mut(workspace_id) {
+            calls.remove(call_id);
+            if calls.is_empty() {
+                self.transcripts.remove(workspace_id);
+            }
+        }
+        if let Some(connection) = self.connections.get(workspace_id) {
+            connection.unsubscribe_transcript(call_id);
+        }
+    }
+
+    /// Asks again for the live transcript of `call_id` on `workspace_id`'s
+    /// socket, for a fresh snapshot. See
+    /// [`TelemetryConnection::resubscribe_transcript`].
+    pub fn resubscribe_transcript(&self, workspace_id: &str, call_id: &str) {
+        if let Some(connection) = self.connections.get(workspace_id) {
+            connection.resubscribe_transcript(call_id);
+        }
+    }
+
+    /// The calls whose live transcript the hub receives, as (workspace, call)
+    /// pairs, in order.
+    pub fn transcripts(&self) -> impl Iterator<Item = (&str, &str)> {
+        self.transcripts.iter().flat_map(|(workspace_id, calls)| {
+            calls
+                .iter()
+                .map(move |call_id| (workspace_id.as_str(), call_id.as_str()))
+        })
     }
 
     /// The workspaces with a connection, running or ended, in order.

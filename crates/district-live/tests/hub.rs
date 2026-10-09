@@ -157,3 +157,78 @@ async fn an_ended_connection_is_restarted_by_watching_it_again() {
     assert_eq!(minter.calls(), 2);
     hub.stop().await;
 }
+
+fn subscribe_op(call_id: &str) -> String {
+    format!(r#"{{"op":"transcript.subscribe","v":1,"callId":"{call_id}"}}"#)
+}
+
+fn unsubscribe_op(call_id: &str) -> String {
+    format!(r#"{{"op":"transcript.unsubscribe","v":1,"callId":"{call_id}"}}"#)
+}
+
+/// The next text frame the client sent, past its pongs.
+async fn next_text(conn: &mut ServerConn) -> String {
+    loop {
+        let message = tokio::time::timeout(std::time::Duration::from_secs(3600), conn.next())
+            .await
+            .expect("the client sends something")
+            .expect("the connection is open");
+        if let tokio_tungstenite::tungstenite::Message::Text(text) = message {
+            return text.to_string();
+        }
+    }
+}
+
+#[tokio::test(start_paused = true)]
+async fn the_hub_keeps_each_workspaces_subscriptions_for_its_connections() {
+    let clock = TestClock::new();
+    let minter = common::FakeMinter::new(clock.clone());
+    let (config, _, mut server) = memory(clock, no_jitter);
+    let (mut hub, _updates) = TelemetryHub::new(minter, config);
+
+    // Before the workspace is watched: its first socket subscribes.
+    hub.subscribe_transcript("ws_a", "call_a");
+    hub.subscribe_transcript("ws_b", "call_b");
+    hub.subscribe_transcript("ws_b", "call_c");
+    hub.unsubscribe_transcript("ws_b", "call_c");
+    hub.unsubscribe_transcript("ws_none", "call_x");
+    // A heal for a workspace with no connection has nowhere to go.
+    hub.resubscribe_transcript("ws_a", "call_a");
+    assert_eq!(
+        hub.transcripts().collect::<Vec<_>>(),
+        [("ws_a", "call_a"), ("ws_b", "call_b")]
+    );
+
+    hub.set_watched(["ws_a", "ws_b"]).await;
+    let mut conns = accept_all(&mut server, 2).await;
+    assert_eq!(
+        next_text(conns.get_mut("ws_a").unwrap()).await,
+        subscribe_op("call_a")
+    );
+    assert_eq!(
+        next_text(conns.get_mut("ws_b").unwrap()).await,
+        subscribe_op("call_b")
+    );
+
+    // While running: each op reaches its own workspace's socket.
+    hub.resubscribe_transcript("ws_a", "call_a");
+    assert_eq!(
+        next_text(conns.get_mut("ws_a").unwrap()).await,
+        subscribe_op("call_a")
+    );
+    hub.unsubscribe_transcript("ws_b", "call_b");
+    assert_eq!(
+        next_text(conns.get_mut("ws_b").unwrap()).await,
+        unsubscribe_op("call_b")
+    );
+    hub.subscribe_transcript("ws_b", "call_d");
+    assert_eq!(
+        next_text(conns.get_mut("ws_b").unwrap()).await,
+        subscribe_op("call_d")
+    );
+    assert_eq!(
+        hub.transcripts().collect::<Vec<_>>(),
+        [("ws_a", "call_a"), ("ws_b", "call_d")]
+    );
+    hub.stop().await;
+}
