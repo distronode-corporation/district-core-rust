@@ -200,7 +200,7 @@ pub use presence::{
 };
 pub use purchase::{
     BillingDestination, CHECKOUT_PATH, EmbeddedView, PlanChoice, PlanTerm, PlanTier, PromoCode,
-    PurchaseSetting, PurchaseState, PurchaseSurface,
+    PurchaseSetting, PurchaseState, PurchaseSurface, WORKSPACE_SETUP_WAITS,
 };
 pub use ringing::{IncomingRing, RING_DEADLINE, RingController, RingEnd, RingEvent, RingPhase};
 pub use role::{Capabilities, WorkspaceRole};

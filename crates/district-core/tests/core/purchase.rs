@@ -4,15 +4,17 @@
 //! shows checkout, the browser when the app cannot show one, and the
 //! per-device setting that hides it all.
 
+use std::time::Duration;
+
 use district_api::{ApiError, ErrorDetail, ReauthReason, TransportError, TransportKind};
 use district_auth::is_valid_hand_off_state;
 use district_core::{
     BillingDestination, BillingEvent, CHECKOUT_PATH, Effect, EmbeddedView, Event,
     HAND_OFF_CALLBACK_WAIT, HandOffLeg, Model, OneTimeUrl, PlanChoice, PlanTerm, PlanTier,
     PromoCode, PurchaseSetting, PurchaseState, PurchaseSurface, Route, SchedulingEvent,
-    SessionState, Ticket, WorkspacesState,
+    SessionState, Ticket, WORKSPACE_SETUP_WAITS, WorkspacesState,
 };
-use district_model::{BillingHandOffResponse, CODE_INVALID_NEXT};
+use district_model::{BillingHandOffResponse, CODE_INVALID_NEXT, WorkspaceListResponse};
 
 use crate::support::{
     AGENCY, VIEWER, claims, config, desktop_fixture, fixture, last_ticket, overview, pick,
@@ -551,37 +553,84 @@ fn an_account_with_no_workspace_is_told_to_choose_a_plan_only_while_they_are_off
     assert_eq!(signed_in(&agency()).no_workspace_message(), None);
 }
 
-/// Checkout is what makes an account's first workspace: closing the view lists
-/// the workspaces again and opens the new one, without a restart. One not made
-/// yet leaves the account as it was, to be listed again later.
+/// The workspace list of an account with none.
+fn no_workspaces() -> WorkspaceListResponse {
+    WorkspaceListResponse {
+        workspaces: Vec::new(),
+        degraded_regions: Vec::new(),
+        inactive_count: 0,
+        default_workspace_id: None,
+        ..workspace_list()
+    }
+}
+
+/// The ticket of the one workspace list `effects` ask for.
+fn listing(effects: &[Effect]) -> Ticket {
+    pick(effects, |e| matches!(e, Effect::LoadWorkspaces { .. }))
+}
+
+/// The list answered with no workspace; the effects that follow.
+fn still_none(model: &mut Model, ticket: Ticket) -> Vec<Effect> {
+    model.update(Event::WorkspacesLoaded {
+        ticket,
+        remembered: None,
+        result: Ok(no_workspaces()),
+    })
+}
+
+/// While the workspace a checkout may have paid for is waited for, the page
+/// says it is being set up and offers no plan, so nobody pays twice.
+fn assert_setting_up(model: &mut Model) {
+    let signed_in = signed_in(model);
+    assert!(purchase(model).setting_up());
+    assert_eq!(signed_in.workspaces, WorkspacesState::NoWorkspaces);
+    assert!(!signed_in.offers_plans());
+    assert_eq!(
+        signed_in.no_workspace_title(),
+        Some(WorkspacesState::SETTING_UP_TITLE)
+    );
+    assert_eq!(
+        signed_in.no_workspace_message().as_deref(),
+        Some(WorkspacesState::SETTING_UP_MESSAGE)
+    );
+    assert!(act(model, BillingEvent::ChoosePlan(pro_annual())).is_empty());
+    assert_eq!(purchase(model).confirming, None);
+}
+
+/// Checkout is what makes an account's first workspace, when its payment's
+/// webhook lands: closing the view lists the workspaces again, and again on a
+/// backoff while the list is empty, and opens the new one without a restart.
 #[test]
-fn closing_checkout_with_no_workspace_lists_again_and_opens_the_new_one() {
+fn closing_checkout_with_no_workspace_waits_for_it_and_opens_it() {
     let mut model = signed_in_with(None, None);
     checkout(&mut model);
     let effects = model.update(Event::EmbeddedClosed);
-    let [Effect::LoadWorkspaces { ticket }] = effects.as_slice() else {
-        panic!("{effects:?}");
-    };
+    let list = listing(&effects);
+    assert_eq!(effects.len(), 1, "{effects:?}");
     assert!(!purchase(&model).opening());
-    assert_eq!(signed_in(&model).workspaces, WorkspacesState::Loading);
-    assert!(
-        !signed_in(&model).offers_plans(),
-        "nothing to choose while listing"
-    );
+    assert_setting_up(&mut model);
 
+    // Empty twice (a 404 is an account with none too), then found.
     let effects = model.update(Event::WorkspacesLoaded {
-        ticket: *ticket,
+        ticket: list,
         remembered: None,
         result: Err(ApiError::NotFound(ErrorDetail::default())),
     });
-    assert!(effects.is_empty(), "{effects:?}");
-    assert_eq!(signed_in(&model).workspaces, WorkspacesState::NoWorkspaces);
-    assert!(signed_in(&model).offers_plans());
-
-    // Closed again once the workspace is made: it opens.
-    let effects = model.update(Event::EmbeddedClosed);
+    let [Effect::Wait { ticket, delay }] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(*delay, WORKSPACE_SETUP_WAITS[0]);
+    assert_setting_up(&mut model);
+    let list = listing(&model.update(Event::WaitOver { ticket: *ticket }));
+    let effects = still_none(&mut model, list);
+    let [Effect::Wait { ticket, delay }] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(*delay, WORKSPACE_SETUP_WAITS[1]);
+    assert_setting_up(&mut model);
+    let list = listing(&model.update(Event::WaitOver { ticket: *ticket }));
     let effects = model.update(Event::WorkspacesLoaded {
-        ticket: last_ticket(&effects),
+        ticket: list,
         remembered: None,
         result: Ok(workspace_list()),
     });
@@ -592,8 +641,11 @@ fn closing_checkout_with_no_workspace_lists_again_and_opens_the_new_one() {
     assert!(effects.iter().any(
         |e| matches!(e, Effect::LoadOverview { workspace_id, .. } if *workspace_id == opened)
     ));
+    assert!(!effects.iter().any(|e| matches!(e, Effect::Wait { .. })));
+    assert!(!purchase(&model).setting_up());
     assert_eq!(signed_in(&model).route, Route::Overview);
     assert_eq!(signed_in(&model).no_workspace_message(), None);
+    assert_eq!(signed_in(&model).no_workspace_title(), None);
 
     // With a workspace open, closing the view off the billing screen lists
     // nothing again.
@@ -602,6 +654,113 @@ fn closing_checkout_with_no_workspace_lists_again_and_opens_the_new_one() {
         result: Ok(overview(&opened, "agency")),
     });
     assert!(model.update(Event::EmbeddedClosed).is_empty());
+}
+
+/// About 30 seconds with no workspace: the plans are offered again, with a
+/// word that a paid workspace can take a few minutes; a later list still finds
+/// it, and a new purchase drops the word.
+#[test]
+fn no_workspace_after_the_waits_offers_the_plans_again() {
+    assert_eq!(
+        WORKSPACE_SETUP_WAITS.iter().sum::<Duration>(),
+        Duration::from_secs(30)
+    );
+    let mut model = signed_in_with(None, None);
+    checkout(&mut model);
+    let mut list = listing(&model.update(Event::EmbeddedClosed));
+    for delay in WORKSPACE_SETUP_WAITS {
+        let effects = still_none(&mut model, list);
+        let [
+            Effect::Wait {
+                ticket,
+                delay: waited,
+            },
+        ] = effects.as_slice()
+        else {
+            panic!("{effects:?}");
+        };
+        assert_eq!(*waited, delay);
+        assert_setting_up(&mut model);
+        list = listing(&model.update(Event::WaitOver { ticket: *ticket }));
+    }
+    assert!(still_none(&mut model, list).is_empty(), "no more waits");
+    assert!(!purchase(&model).setting_up());
+    assert!(signed_in(&model).offers_plans());
+    assert_eq!(
+        signed_in(&model).no_workspace_title(),
+        Some("No workspace found")
+    );
+    let message = signed_in(&model).no_workspace_message().unwrap();
+    assert_eq!(message, WorkspacesState::CHOOSE_PLAN_AFTER_CHECKOUT_MESSAGE);
+    assert!(message.starts_with(WorkspacesState::CHOOSE_PLAN_MESSAGE));
+
+    // Off reads as it always did.
+    model.update(Event::SetPurchases(PurchaseSetting::Off));
+    assert_eq!(
+        signed_in(&model).no_workspace_message().as_deref(),
+        Some("This account is not linked to a District workspace yet. Please contact support.")
+    );
+    model.update(Event::SetPurchases(PurchaseSetting::SignInEveryTime));
+
+    // A refresh lists again, as ever, and starts no wait.
+    let effects = model.update(Event::Refresh);
+    let effects = still_none(&mut model, listing(&effects));
+    assert!(effects.is_empty(), "{effects:?}");
+    // A new purchase is a new question.
+    checkout(&mut model);
+    assert_eq!(
+        signed_in(&model).no_workspace_message().as_deref(),
+        Some(WorkspacesState::CHOOSE_PLAN_MESSAGE)
+    );
+}
+
+/// An account with no workspace, its checkout view just closed: the list
+/// that starts the wait.
+fn waiting() -> (Model, Ticket) {
+    let mut model = signed_in_with(None, None);
+    checkout(&mut model);
+    let list = listing(&model.update(Event::EmbeddedClosed));
+    (model, list)
+}
+
+/// Only the current wait counts: closing the view again starts afresh, a list
+/// that fails ends the wait as the failure it is, and signing out ends it.
+#[test]
+fn a_wait_ends_with_its_session_and_a_stale_one_does_nothing() {
+    let (mut model, list) = waiting();
+    let [Effect::Wait { ticket: first, .. }] = still_none(&mut model, list)[..] else {
+        panic!();
+    };
+    let list = listing(&model.update(Event::EmbeddedClosed));
+    assert!(model.update(Event::WaitOver { ticket: first }).is_empty());
+    assert_setting_up(&mut model);
+
+    // Signed out mid-wait: its timer and its list are nobody's any more.
+    let [Effect::Wait { ticket: wait, .. }] = still_none(&mut model, list)[..] else {
+        panic!();
+    };
+    model.update(Event::SignOut);
+    assert!(!matches!(model.session(), SessionState::SignedIn(_)));
+    let before = format!("{:?}", model.session());
+    assert!(model.update(Event::WaitOver { ticket: wait }).is_empty());
+    assert!(still_none(&mut model, list).is_empty());
+    assert_eq!(format!("{:?}", model.session()), before);
+
+    // A list that could not be read is not an empty account: the wait ends.
+    let (mut model, list) = waiting();
+    model.update(Event::WorkspacesLoaded {
+        ticket: list,
+        remembered: None,
+        result: Err(ApiError::Server {
+            status: 503,
+            detail: ErrorDetail::default(),
+        }),
+    });
+    assert!(!purchase(&model).setting_up());
+    assert!(matches!(
+        signed_in(&model).workspaces,
+        WorkspacesState::Unavailable(_)
+    ));
 }
 
 #[test]

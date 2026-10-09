@@ -44,6 +44,21 @@ impl WorkspacesState {
     pub const CHOOSE_PLAN_MESSAGE: &'static str =
         "This account does not have a District workspace yet. Choose a plan to set one up.";
 
+    /// The heading for [`NoWorkspaces`](Self::NoWorkspaces) while the workspace
+    /// a checkout may have paid for is waited for
+    /// ([`SignedIn::no_workspace_title`](crate::SignedIn::no_workspace_title)).
+    pub const SETTING_UP_TITLE: &'static str = "Setting up your workspace";
+
+    /// The body meanwhile, in place of [`CHOOSE_PLAN_MESSAGE`](Self::CHOOSE_PLAN_MESSAGE):
+    /// no plans are offered, so nobody pays twice for one workspace.
+    pub const SETTING_UP_MESSAGE: &'static str =
+        "If you completed checkout, your workspace is being set up. It appears here in a moment.";
+
+    /// The body once that wait is over with still no workspace: the plans are
+    /// offered again, and a workspace paid for may still be on its way.
+    pub const CHOOSE_PLAN_AFTER_CHECKOUT_MESSAGE: &'static str = "This account does not have a District workspace yet. Choose a plan to set one up. A \
+         workspace you paid for can take a few minutes, and appears here once it is ready.";
+
     /// The heading for a state that shows no workspace, or `None` for the other
     /// two.
     pub fn title(&self) -> Option<&'static str> {
