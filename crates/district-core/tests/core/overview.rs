@@ -152,6 +152,8 @@ fn an_account_with_nothing_says_so_and_only_then() {
         state.message().as_deref(),
         Some("This account is not linked to a District workspace yet. Please contact support.")
     );
+    // An app that does not buy in the app says exactly that.
+    assert_eq!(signed_in(&model).no_workspace_message(), state.message());
 }
 
 #[test]

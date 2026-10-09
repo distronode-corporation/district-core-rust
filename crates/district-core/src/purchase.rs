@@ -48,6 +48,8 @@
 //! purchases. The code is opened as soon as it arrives, well inside its minute,
 //! and a second press mints a second code rather than reusing the first.
 
+use std::time::Duration;
+
 use district_api::ApiError;
 use district_auth::{HAND_OFF_START_PATH, HandOffNonce, HandOffState};
 use district_model::BillingHandOffResponse;
@@ -70,6 +72,18 @@ pub const CHECKOUT_PATH: &str = "/checkout";
 /// The one `reason` the checkout page reads: the account has no workspace yet,
 /// and checkout is what makes one.
 const NO_WORKSPACE_REASON: &str = "no-workspace";
+
+/// How long to wait before each further list of the workspaces, after the
+/// checkout view closed with no workspace and the list came back empty: the
+/// service makes the workspace a checkout paid for when the payment's webhook
+/// lands, which can be after its success page shows. About 30 seconds in all,
+/// with no plans offered meanwhile, so nobody pays twice for one workspace.
+pub const WORKSPACE_SETUP_WAITS: [Duration; 4] = [
+    Duration::from_secs(2),
+    Duration::from_secs(4),
+    Duration::from_secs(8),
+    Duration::from_secs(16),
+];
 
 /// A plan the app offers, by the key the service publishes it under. The
 /// self-serve voice plans only: the service's network plan is not sold in the
@@ -323,6 +337,11 @@ pub struct PurchaseState {
     pub in_browser: bool,
     /// Where the hand-off under way, or the last one, lands.
     pub(crate) destination: BillingDestination,
+    /// While the workspace a checkout may have paid for is waited for: how
+    /// many of [`WORKSPACE_SETUP_WAITS`] have been started. `None` otherwise.
+    pub(crate) setting_up: Option<usize>,
+    /// That wait ended with still no workspace.
+    pub(crate) setup_missed: bool,
 }
 
 impl PurchaseState {
@@ -374,6 +393,13 @@ impl PurchaseState {
         self.setting == Some(PurchaseSetting::SignInEveryTime)
     }
 
+    /// Whether the workspace a checkout may have paid for is being waited for,
+    /// after the checkout view closed with no workspace. No plans are offered
+    /// meanwhile.
+    pub fn setting_up(&self) -> bool {
+        self.setting_up.is_some()
+    }
+
     /// Whether a hand-off is under way, in either leg.
     pub fn opening(&self) -> bool {
         self.leg != HandOffLeg::Idle
@@ -388,14 +414,50 @@ impl PurchaseState {
 impl SignedIn {
     /// Whether to offer the plans: purchases are on, and either no workspace
     /// exists yet (an account checkout will make one for) or the member's role
-    /// could change the plan of the one open.
+    /// could change the plan of the one open. Not while the workspace a
+    /// checkout may have paid for is waited for
+    /// ([`PurchaseState::setting_up`]).
     pub fn offers_plans(&self) -> bool {
         self.purchase.enabled()
+            && !self.purchase.setting_up()
             && match self.workspaces {
                 WorkspacesState::NoWorkspaces => true,
                 WorkspacesState::Ready(_) => self.capabilities().can_change,
                 _ => false,
             }
+    }
+
+    /// The body for a state that shows no workspace, as
+    /// [`WorkspacesState::message`] gives it, except for an account with no
+    /// workspace while purchases are on: it is told to choose a plan
+    /// ([`WorkspacesState::CHOOSE_PLAN_MESSAGE`]) rather than to contact
+    /// support; that its workspace is being set up while one a checkout may
+    /// have paid for is waited for ([`WorkspacesState::SETTING_UP_MESSAGE`]);
+    /// and, once that wait found none, that a paid workspace can take a few
+    /// minutes ([`WorkspacesState::CHOOSE_PLAN_AFTER_CHECKOUT_MESSAGE`]).
+    pub fn no_workspace_message(&self) -> Option<String> {
+        if self.workspaces != WorkspacesState::NoWorkspaces || !self.purchase.enabled() {
+            return self.workspaces.message();
+        }
+        let message = if self.purchase.setting_up() {
+            WorkspacesState::SETTING_UP_MESSAGE
+        } else if self.purchase.setup_missed {
+            WorkspacesState::CHOOSE_PLAN_AFTER_CHECKOUT_MESSAGE
+        } else {
+            WorkspacesState::CHOOSE_PLAN_MESSAGE
+        };
+        Some(message.to_owned())
+    }
+
+    /// The heading for a state that shows no workspace, as
+    /// [`WorkspacesState::title`] gives it, except while the workspace a
+    /// checkout may have paid for is waited for
+    /// ([`WorkspacesState::SETTING_UP_TITLE`]).
+    pub fn no_workspace_title(&self) -> Option<&'static str> {
+        if self.workspaces == WorkspacesState::NoWorkspaces && self.purchase.setting_up() {
+            return Some(WorkspacesState::SETTING_UP_TITLE);
+        }
+        self.workspaces.title()
     }
 
     /// Whether to offer "Manage billing" inside the app: purchases are on, a
@@ -488,6 +550,8 @@ impl SignedIn {
         } else {
             PurchaseSurface::InApp
         };
+        self.end_setup(tickets);
+        self.purchase.setup_missed = false;
         self.purchase.leg = HandOffLeg::Browser(state);
         self.purchase.destination = destination;
         self.purchase.surface = Some(surface);
@@ -569,8 +633,12 @@ impl SignedIn {
     }
 
     /// The member closed the view inside the app. A start page it held will
-    /// never answer, so its purchase is given up; and the billing screen, if it
-    /// shows, is read again, since a purchase may have changed the plan.
+    /// never answer, so its purchase is given up. An account with no workspace
+    /// lists its workspaces again, since checkout is what makes the first one,
+    /// and opens it if it is there; while the list comes back empty it is read
+    /// again after each of [`WORKSPACE_SETUP_WAITS`], with no plans offered.
+    /// Otherwise the billing screen, if it shows, is read again, since a
+    /// purchase may have changed the plan.
     pub(crate) fn embedded_closed(&mut self, tickets: &mut Tickets, config: &CoreConfig) -> Next {
         if !config.in_app_purchases {
             return stay();
@@ -581,10 +649,58 @@ impl SignedIn {
             tickets.cancel(Slot::BillingHandOffWait);
             self.purchase.leg = HandOffLeg::Idle;
         }
+        if self.workspaces == WorkspacesState::NoWorkspaces {
+            tickets.cancel(Slot::WorkspaceSetupWait);
+            self.purchase.setting_up = Some(0);
+            self.purchase.setup_missed = false;
+            return Next::Stay(self.list_for_setup(tickets));
+        }
         if self.route == Route::Billing {
             return Next::Stay(self.enter_billing(tickets));
         }
         stay()
+    }
+
+    /// Lists the workspaces while the one a checkout may have paid for is
+    /// waited for. The no-workspace page stays, saying it is being set up.
+    pub(crate) fn list_for_setup(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        vec![Effect::LoadWorkspaces {
+            ticket: tickets.issue(Slot::Workspaces),
+        }]
+    }
+
+    /// The workspace list was answered. While a workspace is waited for, an
+    /// account still with none waits for the next list, or, after the last
+    /// wait, is offered the plans again; any other answer ends the wait.
+    pub(crate) fn setup_listed(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        let Some(started) = self.purchase.setting_up else {
+            return Vec::new();
+        };
+        let waits_left = WORKSPACE_SETUP_WAITS.get(started);
+        match (&self.workspaces, waits_left) {
+            (WorkspacesState::NoWorkspaces, Some(delay)) => {
+                self.purchase.setting_up = Some(started + 1);
+                vec![Effect::Wait {
+                    ticket: tickets.issue(Slot::WorkspaceSetupWait),
+                    delay: *delay,
+                }]
+            }
+            (WorkspacesState::NoWorkspaces, None) => {
+                self.purchase.setting_up = None;
+                self.purchase.setup_missed = true;
+                Vec::new()
+            }
+            _ => {
+                self.end_setup(tickets);
+                Vec::new()
+            }
+        }
+    }
+
+    /// Stops waiting for a workspace.
+    fn end_setup(&mut self, tickets: &mut Tickets) {
+        tickets.cancel(Slot::WorkspaceSetupWait);
+        self.purchase.setting_up = None;
     }
 
     /// No browser took a page. A purchase awaiting its start page there never

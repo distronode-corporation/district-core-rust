@@ -401,7 +401,7 @@ impl SignedIn {
     /// The overview, or any screen while no workspace is open: read the
     /// workspace list again, then the overview. What is showing stays until the
     /// answer arrives.
-    fn refresh_overview(&mut self, ready: bool, tickets: &mut Tickets) -> Vec<Effect> {
+    pub(crate) fn refresh_overview(&mut self, ready: bool, tickets: &mut Tickets) -> Vec<Effect> {
         match &mut self.overview {
             OverviewScreen::Loaded(content) => content.refreshing = true,
             other => *other = OverviewScreen::Loading,
@@ -534,9 +534,21 @@ impl SignedIn {
         if !tickets.accept(Slot::Workspaces, ticket) {
             return stay();
         }
+        let mut effects = self.workspaces_listed(remembered, result, tickets);
+        effects.extend(self.setup_listed(tickets));
+        Next::Stay(effects)
+    }
+
+    /// What an accepted workspace list comes to.
+    fn workspaces_listed(
+        &mut self,
+        remembered: Option<String>,
+        result: Result<WorkspaceListResponse, ApiError>,
+        tickets: &mut Tickets,
+    ) -> Vec<Effect> {
         let response = match result {
             Ok(response) => response,
-            Err(error) => return Next::Stay(self.workspaces_failed(&error, tickets)),
+            Err(error) => return self.workspaces_failed(&error, tickets),
         };
         let previous = self.active_id();
         let Resolved {
@@ -549,7 +561,7 @@ impl SignedIn {
         }
         let WorkspacesState::Ready(workspaces) = &state else {
             effects.extend(self.close_workspace(state, tickets));
-            return Next::Stay(effects);
+            return effects;
         };
         let active = workspaces.active().id.clone();
         self.workspaces = state;
@@ -566,7 +578,7 @@ impl SignedIn {
             ticket,
             workspace_id: active,
         });
-        Next::Stay(effects)
+        effects
     }
 
     pub(crate) fn overview_loaded(

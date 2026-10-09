@@ -17,6 +17,33 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-10-09
+
+### Added
+
+- `SignedIn::no_workspace_message` and `WorkspacesState::CHOOSE_PLAN_MESSAGE`: an
+  account with no workspace that is offered the plans (`SignedIn::offers_plans`) is
+  told to choose a plan to set one up, not to contact support. Every other state,
+  and every app that does not buy in the app, reads `WorkspacesState::message` as
+  before.
+- Waiting for the workspace a checkout paid for, which the service makes when the
+  payment's webhook lands, possibly after its success page shows.
+  `PurchaseState::setting_up` says the wait is on: no plans are offered meanwhile,
+  so nobody pays twice, and `SignedIn::no_workspace_title` and
+  `no_workspace_message` give `WorkspacesState::SETTING_UP_TITLE` and
+  `SETTING_UP_MESSAGE`. `WORKSPACE_SETUP_WAITS` (2, 4, 8 and 16 seconds) are the
+  waits between lists. When they are over with still no workspace, the plans are
+  offered again with `WorkspacesState::CHOOSE_PLAN_AFTER_CHECKOUT_MESSAGE`. A
+  failed list, signing out or a new purchase ends the wait.
+
+### Changed
+
+- `Event::EmbeddedClosed` with no workspace open lists the workspaces again
+  (`Effect::LoadWorkspaces`), then again after each of `WORKSPACE_SETUP_WAITS`
+  while the list is empty (`Effect::Wait`), and opens the workspace checkout made
+  as soon as it is listed, without a restart. Only in an app with
+  `CoreConfig::in_app_purchases`.
+
 ## [3.0.0] - 2026-10-09
 
 ### Added

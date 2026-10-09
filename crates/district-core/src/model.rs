@@ -2368,6 +2368,7 @@ pub(crate) enum Slot {
     PurchaseSetting,
     BillingHandOff,
     BillingHandOffWait,
+    WorkspaceSetupWait,
     DeskQueueSettings,
     DeskTickets,
     DeskEnable,
