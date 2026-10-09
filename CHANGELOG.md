@@ -17,6 +17,22 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-10-09
+
+### Added
+
+- `SignedIn::no_workspace_message` and `WorkspacesState::CHOOSE_PLAN_MESSAGE`: an
+  account with no workspace that is offered the plans (`SignedIn::offers_plans`) is
+  told to choose a plan to set one up, not to contact support. Every other state,
+  and every app that does not buy in the app, reads `WorkspacesState::message` as
+  before.
+
+### Changed
+
+- `Event::EmbeddedClosed` with no workspace open lists the workspaces again
+  (`Effect::LoadWorkspaces`) and opens the one checkout made, without a
+  restart. Only in an app with `CoreConfig::in_app_purchases`.
+
 ## [3.0.0] - 2026-10-09
 
 ### Added

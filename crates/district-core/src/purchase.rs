@@ -398,6 +398,18 @@ impl SignedIn {
             }
     }
 
+    /// The body for a state that shows no workspace, as
+    /// [`WorkspacesState::message`] gives it, except that an account with no
+    /// workspace that is offered the plans is told to choose one
+    /// ([`WorkspacesState::CHOOSE_PLAN_MESSAGE`]) rather than to contact
+    /// support.
+    pub fn no_workspace_message(&self) -> Option<String> {
+        if self.workspaces == WorkspacesState::NoWorkspaces && self.offers_plans() {
+            return Some(WorkspacesState::CHOOSE_PLAN_MESSAGE.to_owned());
+        }
+        self.workspaces.message()
+    }
+
     /// Whether to offer "Manage billing" inside the app: purchases are on, a
     /// workspace is open, and the member's role could change its plan.
     pub fn offers_manage_in_app(&self) -> bool {
@@ -569,8 +581,10 @@ impl SignedIn {
     }
 
     /// The member closed the view inside the app. A start page it held will
-    /// never answer, so its purchase is given up; and the billing screen, if it
-    /// shows, is read again, since a purchase may have changed the plan.
+    /// never answer, so its purchase is given up. An account with no workspace
+    /// lists its workspaces again, since checkout is what makes the first one,
+    /// and opens it if it is there; otherwise the billing screen, if it shows,
+    /// is read again, since a purchase may have changed the plan.
     pub(crate) fn embedded_closed(&mut self, tickets: &mut Tickets, config: &CoreConfig) -> Next {
         if !config.in_app_purchases {
             return stay();
@@ -580,6 +594,9 @@ impl SignedIn {
         {
             tickets.cancel(Slot::BillingHandOffWait);
             self.purchase.leg = HandOffLeg::Idle;
+        }
+        if self.workspaces == WorkspacesState::NoWorkspaces {
+            return Next::Stay(self.refresh_overview(false, tickets));
         }
         if self.route == Route::Billing {
             return Next::Stay(self.enter_billing(tickets));

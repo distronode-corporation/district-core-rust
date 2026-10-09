@@ -525,6 +525,85 @@ fn an_account_with_no_workspace_buys_and_checkout_is_told_why() {
     );
 }
 
+/// An account with no workspace that is offered the plans is told to choose
+/// one, not to contact support; with purchases off it reads as before, and a
+/// workspace open, or any other state, keeps the state's own words.
+#[test]
+fn an_account_with_no_workspace_is_told_to_choose_a_plan_only_while_they_are_offered() {
+    let model = signed_in_with(None, None);
+    assert_eq!(
+        signed_in(&model).no_workspace_message().as_deref(),
+        Some(WorkspacesState::CHOOSE_PLAN_MESSAGE)
+    );
+    assert!(!WorkspacesState::CHOOSE_PLAN_MESSAGE.contains("support"));
+    assert_eq!(
+        WorkspacesState::NoWorkspaces.title(),
+        Some("No workspace found")
+    );
+
+    let off = signed_in_with(Some(PurchaseSetting::Off), None);
+    assert_eq!(signed_in(&off).workspaces, WorkspacesState::NoWorkspaces);
+    assert_eq!(
+        signed_in(&off).no_workspace_message().as_deref(),
+        Some("This account is not linked to a District workspace yet. Please contact support.")
+    );
+
+    assert_eq!(signed_in(&agency()).no_workspace_message(), None);
+}
+
+/// Checkout is what makes an account's first workspace: closing the view lists
+/// the workspaces again and opens the new one, without a restart. One not made
+/// yet leaves the account as it was, to be listed again later.
+#[test]
+fn closing_checkout_with_no_workspace_lists_again_and_opens_the_new_one() {
+    let mut model = signed_in_with(None, None);
+    checkout(&mut model);
+    let effects = model.update(Event::EmbeddedClosed);
+    let [Effect::LoadWorkspaces { ticket }] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    assert!(!purchase(&model).opening());
+    assert_eq!(signed_in(&model).workspaces, WorkspacesState::Loading);
+    assert!(
+        !signed_in(&model).offers_plans(),
+        "nothing to choose while listing"
+    );
+
+    let effects = model.update(Event::WorkspacesLoaded {
+        ticket: *ticket,
+        remembered: None,
+        result: Err(ApiError::NotFound(ErrorDetail::default())),
+    });
+    assert!(effects.is_empty(), "{effects:?}");
+    assert_eq!(signed_in(&model).workspaces, WorkspacesState::NoWorkspaces);
+    assert!(signed_in(&model).offers_plans());
+
+    // Closed again once the workspace is made: it opens.
+    let effects = model.update(Event::EmbeddedClosed);
+    let effects = model.update(Event::WorkspacesLoaded {
+        ticket: last_ticket(&effects),
+        remembered: None,
+        result: Ok(workspace_list()),
+    });
+    let WorkspacesState::Ready(workspaces) = &signed_in(&model).workspaces else {
+        panic!("{:?}", signed_in(&model).workspaces);
+    };
+    let opened = workspaces.active().id.clone();
+    assert!(effects.iter().any(
+        |e| matches!(e, Effect::LoadOverview { workspace_id, .. } if *workspace_id == opened)
+    ));
+    assert_eq!(signed_in(&model).route, Route::Overview);
+    assert_eq!(signed_in(&model).no_workspace_message(), None);
+
+    // With a workspace open, closing the view off the billing screen lists
+    // nothing again.
+    model.update(Event::OverviewLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadOverview { .. })),
+        result: Ok(overview(&opened, "agency")),
+    });
+    assert!(model.update(Event::EmbeddedClosed).is_empty());
+}
+
 #[test]
 fn checkout_opens_inside_the_app_bound_to_the_view_that_shows_it() {
     let mut model = agency();

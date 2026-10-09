@@ -37,6 +37,13 @@ pub enum WorkspacesState {
 }
 
 impl WorkspacesState {
+    /// The body for [`NoWorkspaces`](Self::NoWorkspaces) in place of
+    /// [`message`](Self::message) while the plans are offered
+    /// ([`SignedIn::no_workspace_message`](crate::SignedIn::no_workspace_message)):
+    /// choosing one is what sets up a workspace.
+    pub const CHOOSE_PLAN_MESSAGE: &'static str =
+        "This account does not have a District workspace yet. Choose a plan to set one up.";
+
     /// The heading for a state that shows no workspace, or `None` for the other
     /// two.
     pub fn title(&self) -> Option<&'static str> {

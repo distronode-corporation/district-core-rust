@@ -401,7 +401,7 @@ impl SignedIn {
     /// The overview, or any screen while no workspace is open: read the
     /// workspace list again, then the overview. What is showing stays until the
     /// answer arrives.
-    fn refresh_overview(&mut self, ready: bool, tickets: &mut Tickets) -> Vec<Effect> {
+    pub(crate) fn refresh_overview(&mut self, ready: bool, tickets: &mut Tickets) -> Vec<Effect> {
         match &mut self.overview {
             OverviewScreen::Loaded(content) => content.refreshing = true,
             other => *other = OverviewScreen::Loading,
