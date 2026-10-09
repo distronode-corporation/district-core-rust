@@ -33,14 +33,28 @@ thread_local! {
     /// Whether [`config`] describes a build with calls, for the test running on
     /// this thread. See [`without_calls`].
     static CALLS_AVAILABLE: Cell<bool> = const { Cell::new(true) };
+    /// Whether [`config`] describes an app that buys in the app, for the test
+    /// running on this thread. See [`with_purchases`].
+    static IN_APP_PURCHASES: Cell<bool> = const { Cell::new(false) };
 }
 
+/// The configuration of the Linux app: calls, and no purchases in the app.
 pub fn config() -> CoreConfig {
     CoreConfig {
         web_base_url: "https://www.distronode.com/".to_owned(),
         app_version: "0.1.0".to_owned(),
         calls_available: CALLS_AVAILABLE.get(),
+        in_app_purchases: IN_APP_PURCHASES.get(),
     }
+}
+
+/// Runs `test` with every model these helpers build describing an app that
+/// buys in the app, as District AI for Windows does.
+pub fn with_purchases<T>(test: impl FnOnce() -> T) -> T {
+    IN_APP_PURCHASES.set(true);
+    let result = test();
+    IN_APP_PURCHASES.set(false);
+    result
 }
 
 /// Runs `test` with every model these helpers build describing a build with

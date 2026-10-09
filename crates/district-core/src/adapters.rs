@@ -12,15 +12,15 @@ use district_auth::{
 };
 use district_live::{LiveConfig, TelemetryHub, TokenMinter, WorkspaceUpdate};
 use district_model::{
-    AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse, BlockTarget,
-    BlockedContactsResponse, CallDetailResponse, CallSummary, CallTranscriptResponse,
-    CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse, ContactDetailResponse,
-    ContactListResponse, ContactMutationResponse, ConversationsResponse, CreateContactRequest,
-    DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse,
-    DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse, DeskTicketStatus,
-    DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
-    DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
-    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqTurn, MarkReadResponse,
+    AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
+    BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse, CallSummary,
+    CallTranscriptResponse, CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse,
+    ContactDetailResponse, ContactListResponse, ContactMutationResponse, ConversationsResponse,
+    CreateContactRequest, DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch,
+    DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse,
+    DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse,
+    DeviceRevokeResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest,
+    EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqTurn, MarkReadResponse,
     MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
     MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
     OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
@@ -422,6 +422,15 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         nonce: Option<&str>,
     ) -> impl Future<Output = Result<SchedulingHandOffResponse, ApiError>> + Send {
         ApiClient::scheduling_hand_off(self, workspace_id, next, nonce)
+    }
+
+    fn billing_hand_off(
+        &self,
+        workspace_id: Option<&str>,
+        next: &str,
+        nonce: Option<&str>,
+    ) -> impl Future<Output = Result<BillingHandOffResponse, ApiError>> + Send {
+        ApiClient::billing_hand_off(self, workspace_id, next, nonce)
     }
 
     fn desk_settings(

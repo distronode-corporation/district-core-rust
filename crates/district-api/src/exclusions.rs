@@ -162,6 +162,11 @@ pub const DESKTOP_ONLY: &[Addition] = &[
         endpoint: Endpoint::ContactsBlocked,
         reason: "The blocked callers list on the contacts page, for the same reason as blocking.",
     },
+    Addition {
+        endpoint: Endpoint::BillingHandOff,
+        reason: "Checkout and the billing page inside District AI for Windows, the one app that \
+                 buys in the app. Every other app's billing is read only.",
+    },
 ];
 
 /// A path template with every `{name}` placeholder written as `{}`, so that two

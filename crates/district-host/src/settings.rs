@@ -4,7 +4,7 @@
 use std::path::{Path, PathBuf};
 use std::sync::{Mutex, MutexGuard, PoisonError};
 
-use district_core::Settings;
+use district_core::{PurchaseSetting, Settings};
 use district_model::Platform;
 use serde::{Deserialize, Serialize};
 
@@ -35,6 +35,13 @@ pub struct Preferences {
     /// The workspace last chosen in this app, or none.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_workspace: Option<String>,
+    /// "Purchases on this computer", as [`PurchaseSetting::key`] spells it, or
+    /// none until the member sets it, which reads as its default. Only an app
+    /// that buys in the app sets it, so no other app's file ever has the key.
+    /// A value this build does not know reads as the default too, and leaves
+    /// every other preference as it is.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub purchases: Option<String>,
 }
 
 impl Default for Preferences {
@@ -42,6 +49,7 @@ impl Default for Preferences {
         Self {
             ring_on_this_computer: true,
             last_workspace: None,
+            purchases: None,
         }
     }
 }
@@ -107,7 +115,7 @@ impl SettingsFile {
         let text = format!(
             "{}{}",
             header(self.platform),
-            toml::to_string(&*preferences).expect("two plain keys always serialise")
+            toml::to_string(&*preferences).expect("plain keys always serialise")
         );
         // Kept in memory whatever happens to the write: see the type's
         // documentation.
@@ -130,5 +138,16 @@ impl Settings for SettingsFile {
 
     fn set_ring_on_this_computer(&self, ring_here: bool) {
         self.change(|preferences| preferences.ring_on_this_computer = ring_here);
+    }
+
+    fn purchases(&self) -> Option<PurchaseSetting> {
+        self.lock()
+            .purchases
+            .as_deref()
+            .and_then(PurchaseSetting::from_key)
+    }
+
+    fn set_purchases(&self, setting: PurchaseSetting) {
+        self.change(|preferences| preferences.purchases = Some(setting.key().to_owned()));
     }
 }

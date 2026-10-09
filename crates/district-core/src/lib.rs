@@ -57,6 +57,12 @@
 //!   [`DeskTicketScreen`], [`DeskSettingsView`]), support requests
 //!   ([`SupportScreen`], [`SupportRequestScreen`]) and the rooms lobby with its
 //!   meeting records ([`RoomsScreen`]).
+//! - Buying in the app, for an app built with
+//!   [`CoreConfig::in_app_purchases`] (District AI for Windows): choosing a
+//!   plan and managing billing on the service's own pages inside the app
+//!   window, each signed in afresh through a hand-off, with a confirmation that
+//!   names Stripe and a per-device setting ([`PurchaseState`],
+//!   [`PurchaseSetting`], [`BillingDestination`], [`EmbeddedView`]).
 //! - The screens of the fourth: the workspace settings hub ([`settings_rows`]),
 //!   District Studio's group first ([`SettingsGroup`]), and its sections, each read when it opens and saved only from what it read:
 //!   the persona with its audition ([`PersonaSection`]), Voice Studio, the
@@ -112,6 +118,7 @@ mod overview;
 mod paging;
 pub mod palette;
 mod presence;
+mod purchase;
 mod ringing;
 mod role;
 mod rooms;
@@ -190,6 +197,10 @@ pub use palette::Palette;
 pub use presence::{
     DesktopPresence, PRESENCE_HEARTBEAT, PRESENCE_RETRY, Presence, PresenceApi, PresenceState,
     PresenceStatus,
+};
+pub use purchase::{
+    BillingDestination, CHECKOUT_PATH, EmbeddedView, PlanChoice, PlanTerm, PlanTier, PromoCode,
+    PurchaseSetting, PurchaseState, PurchaseSurface,
 };
 pub use ringing::{IncomingRing, RING_DEADLINE, RingController, RingEnd, RingEvent, RingPhase};
 pub use role::{Capabilities, WorkspaceRole};

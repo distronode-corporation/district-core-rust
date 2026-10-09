@@ -537,7 +537,7 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
         )
         .mount(&server)
         .await;
-    let routes: [(&str, &str, serde_json::Value); 32] = [
+    let routes: [(&str, &str, serde_json::Value); 33] = [
         (
             "POST",
             "/api/district/hq",
@@ -607,6 +607,11 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
         (
             "POST",
             "/api/district/scheduling/handoff",
+            desktop_fixture("district-scheduling-handoff.json"),
+        ),
+        (
+            "POST",
+            "/api/district/billing/handoff",
             desktop_fixture("district-scheduling-handoff.json"),
         ),
         (
@@ -822,6 +827,13 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
             Some("/dashboard/district/scheduling"),
             None,
         )
+            .await
+            .unwrap()
+            .expires_in,
+        60
+    );
+    assert_eq!(
+        DistrictApi::billing_hand_off(&client, Some(ws), "/dashboard/district/billing", None)
             .await
             .unwrap()
             .expires_in,

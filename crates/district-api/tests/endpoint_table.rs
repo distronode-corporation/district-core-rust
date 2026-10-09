@@ -116,6 +116,7 @@ fn calls_with_side_effects_or_cost_never_repeat() {
         Endpoint::PersonaPreviewToken,
         Endpoint::SchedulingEnable,
         Endpoint::SchedulingHandOff,
+        Endpoint::BillingHandOff,
         Endpoint::ContactCreate,
         Endpoint::ContactDelete,
         Endpoint::ContactEnrich,
@@ -194,6 +195,9 @@ fn only_account_and_device_endpoints_are_unscoped() {
         Endpoint::NativeDeviceRevoke,
         Endpoint::NativeRevokeAll,
         Endpoint::StripeBilling,
+        // An account the app just created buys before it has a workspace; one
+        // that is open is a plain body field, recorded and never authorising.
+        Endpoint::BillingHandOff,
         Endpoint::WorkspaceList,
         Endpoint::CallRoomToken,
         Endpoint::PushRegister,

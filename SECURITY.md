@@ -77,6 +77,18 @@ that app's SECURITY.md describes it.
 - The `state`, the nonce and the link are held in memory only, redacted from
   `Debug` (the events, effects and screen state that carry them included), and
   never logged.
+- Buying in the app (District AI for Windows only, `CoreConfig::in_app_purchases`)
+  uses the same three legs through the billing hand-off, which the service lets
+  land on two pages only, the checkout and the billing page, each in one exact
+  shape that the core builds from closed sets and never from text. Both the start
+  page and the link open in one private view inside the app that starts with
+  nothing and keeps nothing once it closes, so the nonce cookie and the web
+  session it redeems into live only as long as that view. Every purchase mints a
+  fresh one-time link after the member confirms a step that names Stripe. If the
+  app cannot show the view, the whole hand-off starts again in the system
+  browser and the app says so. A purchase hand-off belongs to the account rather
+  than the open workspace (an account with no workspace yet buys one), so it
+  survives a change of workspace, and ends at sign-out like everything else.
 
 ### Tokens (district-auth, district-host)
 

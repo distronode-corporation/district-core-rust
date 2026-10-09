@@ -17,6 +17,65 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Added
+
+- Buying in the app, for District AI for Windows only, through the service's own
+  Stripe checkout and billing page shown inside the app window. Off unless the app
+  sets `CoreConfig::in_app_purchases` (see Changed); with it off nothing below
+  happens and billing stays read only.
+  - `BillingEvent::ChoosePlan(PlanChoice)` with `PlanTier` (the four voice plans,
+    by their published keys), `PlanTerm` (monthly or annual) and an optional
+    `PromoCode` (taken only in the one shape the checkout reads, refused whole
+    otherwise), then `ConfirmPurchase` or `CancelPurchase`; `ManageInApp` for the
+    billing page; `DismissPurchaseNotice`. `SignedIn::offers_plans` (purchases on,
+    and a role that can change the plan, or no workspace yet) and
+    `SignedIn::offers_manage_in_app` say what to show.
+  - Each starts the hand-off of 1.1.0's booking pages (S33), with its own `state`:
+    the start page opens in a new private view inside the app
+    (`Effect::OpenEmbedded` with `EmbeddedView::NewPrivate`), the
+    `districtai://handoff` answer the app catches there comes back as
+    `Event::HandOffCallback`, as from the browser, and the link is asked for with
+    its nonce (`Effect::RequestBillingHandOff`, `Event::BillingHandOffReady`) and
+    opened in the same view (`EmbeddedView::Same`). `BillingDestination::next`
+    builds the only two destinations the service admits, `/checkout` with `tier`,
+    `term`, `promo` and `reason=no-workspace`, or `/dashboard/district/billing`.
+  - `UrlOpener::open_embedded`, defaulting to false ("not supported"). Then, or
+    on `Event::EmbeddedUnavailable`, the purchase starts again in the system
+    browser and `PurchaseState::in_browser` says so. `Event::EmbeddedClosed`
+    gives up a start page the closed view held and reads the billing screen again.
+  - "Purchases on this computer" (`PurchaseSetting`, `Off` or `SignInEveryTime`,
+    the default), read at sign-in (`Effect::ReadPurchaseSetting`,
+    `Event::PurchaseSettingRead`), changed with `Event::SetPurchases` and kept with
+    `Effect::SavePurchaseSetting`. Off hides every purchase action and drops a
+    purchase under way.
+  - The words: `PurchaseState`'s constants (the confirmation naming Stripe, the
+    in-app note, the browser fallback), `PurchaseSetting::LABEL` and `BODY`, the
+    plan and term labels. No price is named; checkout shows them.
+  - Each refusal of the hand-off maps to a notice, `invalid_next` among them.
+- `district-api`: `ApiClient::billing_hand_off` for `POST /api/district/billing/handoff`,
+  `Endpoint::BillingHandOff` (account-scoped, never repeated, on `DESKTOP_ONLY`).
+- `district-model`: `BillingHandOffResponse` (the scheduling hand-off's two fields,
+  as the service answers both) and `CODE_INVALID_NEXT`.
+- `district-host`: the settings file keeps `purchases`, only once it is set, so no
+  other app's file changes.
+
+### Changed
+
+- Breaking: `CoreConfig` has a new field, `in_app_purchases`. District AI for Linux
+  sets it false, and then every event, effect and view is what 2.0.0 had.
+- Breaking: `DistrictApi` has a new required method, `billing_hand_off`.
+- Breaking: `Settings` has two new required methods, `purchases` and
+  `set_purchases`. `district-host`'s `SettingsFile` implements them, and
+  `Preferences` has a new field, `purchases`.
+- Breaking: new `Event` variants (`SetPurchases`, `EmbeddedClosed`,
+  `PurchaseSettingRead`, `BillingHandOffReady`, `EmbeddedUnavailable`), `Effect`
+  variants (`OpenEmbedded`, `RequestBillingHandOff`, `ReadPurchaseSetting`,
+  `SavePurchaseSetting`) and `BillingEvent` variants (`ChoosePlan`,
+  `ConfirmPurchase`, `CancelPurchase`, `ManageInApp`, `DismissPurchaseNotice`), and
+  a new `SignedIn` field, `purchase`.
+- `UrlOpener` has a new method, `open_embedded`, with a default, so an existing
+  implementation keeps compiling and never shows a page inside the app.
+
 ## [2.0.0] - 2026-10-09
 
 ### Added

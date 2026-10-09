@@ -1,12 +1,30 @@
 //! Billing, read only: the workspace's plan from the service's own records, and
 //! the account's subscriptions and invoices from the payment processor.
 //!
-//! Nothing here changes a plan or a payment method. That stays on the web.
+//! Nothing here changes a plan or a payment method. That stays on the web, or,
+//! in an app that buys in the app, on the service's own checkout and billing
+//! pages, reached through the billing hand-off ([`BillingHandOffResponse`]).
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::UsageMonth;
+use crate::{SchedulingHandOffResponse, UsageMonth};
+
+/// The code of the 400 for a billing hand-off asked to land anywhere but the
+/// checkout or the billing page, or on either with a query the page does not
+/// read in exactly the shape it reads it. Refused, never repaired: a client
+/// that asks for it has a bug.
+pub const CODE_INVALID_NEXT: &str = "invalid_next";
+
+/// `POST /api/district/billing/handoff`: a link that signs a browser in to the
+/// checkout or the billing page.
+///
+/// The service answers it with the scheduling hand-off's two fields and no
+/// more (its route says so, and builds the link the same way), so it is that
+/// type: the same required `url`, the same redacted `Debug`, and the desktop
+/// contract fixture of the scheduling hand-off holds its shape. The link is a
+/// one-time credential, good for one sign-in within a minute.
+pub type BillingHandOffResponse = SchedulingHandOffResponse;
 
 /// An [`overage_policy`](WorkspaceBilling::overage_policy): once the plan's
 /// allowance is used up, calls are refused.

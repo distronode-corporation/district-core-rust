@@ -36,26 +36,26 @@ use district_auth::{
 use district_live::WorkspaceUpdate;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
-    AvailabilityResponse, BlockedContactsResponse, CallAnswerResponse, CallDetailResponse,
-    CallHandlingPatch, CallHandlingResponse, CallSummary, CallTranscriptResponse,
-    CampaignStatusResponse, ContactDetailResponse, ContactListResponse, ContactMutationResponse,
-    ConversationsResponse, CreateContactRequest, DeskLogoRemovalResponse, DeskReplyResponse,
-    DeskSettingsPatch, DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft,
-    DeskTicketResponse, DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse,
-    DeviceListResponse, DeviceRevokeResponse, DialResponse, DirectoryEntry, DraftListResponse,
-    DraftResponse, DraftSaveRequest, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqTurn,
-    KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode, KnowledgeModeResponse,
-    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
-    MemberListResponse, MessageSearchResponse, MessageThreadResponse, MessagingCredentials,
-    MessagingResponse, MessagingTestResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
-    OwnedNumbersResponse, PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm,
-    PersonaPreviewTokenResponse, RenameResponse, RoomTokenResponse, RoutingRule,
-    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
-    SendMessageRequest, SendMessageResponse, SupportCloseResponse, SupportReplyResponse,
-    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
-    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
-    UsageHistoryResponse, UsageResponse, VoiceStudioResponse, WorkflowListResponse,
-    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
+    AvailabilityResponse, BillingHandOffResponse, BlockedContactsResponse, CallAnswerResponse,
+    CallDetailResponse, CallHandlingPatch, CallHandlingResponse, CallSummary,
+    CallTranscriptResponse, CampaignStatusResponse, ContactDetailResponse, ContactListResponse,
+    ContactMutationResponse, ConversationsResponse, CreateContactRequest, DeskLogoRemovalResponse,
+    DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse, DeskTicketCreateResponse,
+    DeskTicketDraft, DeskTicketResponse, DeskTicketStatus, DeskTicketStatusResponse,
+    DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DialResponse, DirectoryEntry,
+    DraftListResponse, DraftResponse, DraftSaveRequest, HqConfirmResponse, HqPendingWrite,
+    HqPromptResponse, HqTurn, KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode,
+    KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail,
+    MeetingSummary, MemberListResponse, MessageSearchResponse, MessageThreadResponse,
+    MessagingCredentials, MessagingResponse, MessagingTestResponse, NumberSearch,
+    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, PersonaOptionsResponse,
+    PersonaPatch, PersonaPreviewForm, PersonaPreviewTokenResponse, RenameResponse,
+    RoomTokenResponse, RoutingRule, SchedulingEnableResponse, SchedulingHandOffResponse,
+    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SupportCloseResponse,
+    SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
+    SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
+    UnreadCountResponse, UsageHistoryResponse, UsageResponse, VoiceStudioResponse,
+    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
     WorkspaceConfigResponse, WorkspaceListResponse,
 };
 use url::Url;
@@ -74,6 +74,7 @@ use crate::inbox::InboxEvent;
 use crate::live::{Notification, NotificationTarget};
 use crate::marketplace::MarketplaceEvent;
 use crate::media::{MediaCredential, MediaUpdate};
+use crate::purchase::{BillingDestination, EmbeddedView, PurchaseSetting};
 use crate::ringing::RingEvent;
 use crate::role::Capabilities;
 use crate::rooms::RoomsEvent;
@@ -120,6 +121,14 @@ pub struct CoreConfig {
     /// costs nothing to ask for, is still tried, and fails with
     /// [`DisconnectReason::Unavailable`](crate::DisconnectReason::Unavailable).
     pub calls_available: bool,
+    /// Whether this app signs up and buys in the app: District AI for Windows
+    /// does, through the service's own checkout shown inside the app window
+    /// ([`purchase`](crate::PurchaseState)). False for every other app, District
+    /// AI for Linux among them, and with it false the billing screen and every
+    /// event and effect are exactly those of an app built before this existed:
+    /// billing is read only, the purchases setting is never read, and the
+    /// purchase events change nothing.
+    pub in_app_purchases: bool,
 }
 
 impl CoreConfig {
@@ -266,6 +275,13 @@ pub enum Event {
     Media(MediaUpdate),
     /// The member turned "ring on this computer" on or off.
     SetRingOnThisComputer(bool),
+    /// The member changed "Purchases on this computer". Changes nothing in an
+    /// app without [`CoreConfig::in_app_purchases`].
+    SetPurchases(PurchaseSetting),
+    /// The view inside the app that [`Effect::OpenEmbedded`] opened was
+    /// closed, by the member or by the page. Sent by an app with
+    /// [`CoreConfig::in_app_purchases`] only.
+    EmbeddedClosed,
     /// The desktop is about to sleep: the app sends it when the system says so
     /// (logind's `PrepareForSleep`), and holds the sleep until the effects it
     /// returns have run, or a short while has passed.
@@ -841,6 +857,21 @@ pub enum Event {
         /// The service's answer: the name stored.
         result: Result<RenameResponse, ApiError>,
     },
+    /// The purchases setting was read.
+    PurchaseSettingRead {
+        /// The ticket of [`Effect::ReadPurchaseSetting`].
+        ticket: Ticket,
+        /// The setting, or `None` when this computer has none yet.
+        setting: Option<PurchaseSetting>,
+    },
+    /// The billing hand-off link arrived, or was refused. Its `Debug` output
+    /// leaves the link out.
+    BillingHandOffReady {
+        /// The ticket of [`Effect::RequestBillingHandOff`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<BillingHandOffResponse, ApiError>,
+    },
     /// The "ring on this computer" setting was read.
     RingSettingRead {
         /// The ticket of [`Effect::ReadRingSetting`].
@@ -873,6 +904,9 @@ pub enum Event {
     /// No browser would open a page from [`Effect::OpenUrl`] or
     /// [`Effect::OpenOneTimeUrl`].
     UrlOpenFailed,
+    /// The app could not show a page from [`Effect::OpenEmbedded`] inside its
+    /// window: it cannot embed one at all, or the view to open it in is gone.
+    EmbeddedUnavailable,
 }
 
 impl Event {
@@ -1049,6 +1083,10 @@ impl Event {
                 result: Err(error),
             }
             | Event::SchedulingHandOffReady {
+                ticket,
+                result: Err(error),
+            }
+            | Event::BillingHandOffReady {
                 ticket,
                 result: Err(error),
             }
@@ -1818,6 +1856,33 @@ pub enum Effect {
         /// The link.
         url: OneTimeUrl,
     },
+    /// Open a link that carries a sign-in of its own, at once, in a view
+    /// inside the app window rather than the browser, through
+    /// [`UrlOpener::open_embedded`](crate::UrlOpener::open_embedded). Reports
+    /// back only a failure, as [`Event::EmbeddedUnavailable`], and the model
+    /// then falls back to the browser. The link is redacted in `Debug`. Only an
+    /// app with [`CoreConfig::in_app_purchases`] is ever asked.
+    OpenEmbedded {
+        /// The link.
+        url: OneTimeUrl,
+        /// Which view: a new private one, or the one the last new one opened.
+        view: EmbeddedView,
+    },
+    /// Ask for the link that signs a browser in to the checkout or the billing
+    /// page. Sent once: each is a credential.
+    RequestBillingHandOff {
+        /// Returned in [`Event::BillingHandOffReady`].
+        ticket: Ticket,
+        /// The workspace open, recorded with the code; `None` for an account
+        /// with none yet.
+        workspace_id: Option<String>,
+        /// Where it lands, sent as [`BillingDestination::next`].
+        destination: BillingDestination,
+        /// The nonce from the start page's answer, binding the link to the
+        /// view or browser that holds its cookie; `None` when it did not answer
+        /// in time. Redacted in `Debug`.
+        nonce: Option<HandOffNonce>,
+    },
     /// Read the workspace settings row.
     LoadWorkspaceConfig {
         /// Returned in [`Event::WorkspaceConfigLoaded`].
@@ -2012,6 +2077,16 @@ pub enum Effect {
         /// The name, trimmed.
         name: String,
     },
+    /// Read the purchases setting.
+    ReadPurchaseSetting {
+        /// Returned in [`Event::PurchaseSettingRead`].
+        ticket: Ticket,
+    },
+    /// Keep the purchases setting. Reports nothing back.
+    SavePurchaseSetting {
+        /// The setting.
+        setting: PurchaseSetting,
+    },
     /// Read the "ring on this computer" setting.
     ReadRingSetting {
         /// Returned in [`Event::RingSettingRead`].
@@ -2156,6 +2231,8 @@ impl Effect {
             | Self::LoadSchedulingStatus { ticket, .. }
             | Self::EnableScheduling { ticket, .. }
             | Self::RequestSchedulingHandOff { ticket, .. }
+            | Self::RequestBillingHandOff { ticket, .. }
+            | Self::ReadPurchaseSetting { ticket }
             | Self::LoadDeskSettings { ticket, .. }
             | Self::SaveDeskSettings { ticket, .. }
             | Self::UploadDeskLogo { ticket, .. }
@@ -2209,6 +2286,8 @@ impl Effect {
             | Self::WatchTranscript { .. }
             | Self::Notify(_)
             | Self::OpenOneTimeUrl { .. }
+            | Self::OpenEmbedded { .. }
+            | Self::SavePurchaseSetting { .. }
             | Self::SaveRingSetting { .. }
             | Self::HangUpCall { .. }
             | Self::ConnectMedia { .. }
@@ -2286,6 +2365,9 @@ pub(crate) enum Slot {
     SchedulingEnable,
     SchedulingHandOff,
     SchedulingHandOffWait,
+    PurchaseSetting,
+    BillingHandOff,
+    BillingHandOffWait,
     DeskQueueSettings,
     DeskTickets,
     DeskEnable,
@@ -2653,7 +2735,9 @@ impl Model {
             Event::Marketplace(event) => {
                 self.signed_in(|s, tickets, config| s.marketplace_event(event, tickets, config))
             }
-            Event::Billing(event) => self.signed_in(|s, _, config| s.billing_event(event, config)),
+            Event::Billing(event) => {
+                self.signed_in(|s, tickets, config| s.billing_event(event, tickets, config))
+            }
             Event::Workflows(event) => {
                 self.signed_in(|s, tickets, _| s.workflows_event(event, tickets))
             }
@@ -2692,6 +2776,12 @@ impl Model {
             }
             Event::DismissNotice => self.signed_in(|s, _, _| s.dismiss_notice()),
             Event::UrlOpenFailed => self.signed_in(|s, tickets, _| s.url_open_failed(tickets)),
+            Event::EmbeddedUnavailable => {
+                self.signed_in(|s, tickets, config| s.embedded_unavailable(tickets, config))
+            }
+            Event::EmbeddedClosed => {
+                self.signed_in(|s, tickets, config| s.embedded_closed(tickets, config))
+            }
             Event::OpenNotification(target) => {
                 self.signed_in(|s, tickets, _| s.open_notification(target, tickets))
             }
@@ -2707,6 +2797,12 @@ impl Model {
             }
             Event::SetRingOnThisComputer(on) => {
                 self.signed_in(|s, tickets, _| s.set_ring_here(on, tickets))
+            }
+            Event::SetPurchases(setting) => {
+                self.signed_in(|s, tickets, config| s.set_purchases(setting, tickets, config))
+            }
+            Event::PurchaseSettingRead { ticket, setting } => {
+                self.signed_in(|s, tickets, _| s.purchase_setting_read(ticket, setting, tickets))
             }
             Event::Suspending => self.signed_in(|s, tickets, _| s.suspend(tickets)),
             Event::Quitting => {
@@ -2866,6 +2962,11 @@ impl Model {
             Event::SchedulingHandOffReady { ticket, result } => {
                 self.signed_in(|s, tickets, config| {
                     s.scheduling_hand_off(ticket, result, tickets, config)
+                })
+            }
+            Event::BillingHandOffReady { ticket, result } => {
+                self.signed_in(|s, tickets, config| {
+                    s.billing_hand_off(ticket, result, tickets, config)
                 })
             }
             Event::DeskSettingsLoaded { ticket, result } => {
@@ -3191,7 +3292,8 @@ impl Model {
 
     /// Someone is signed in: read the workspaces, and whether this desktop
     /// rings for calls. A build without calls does not ask: nothing may ring
-    /// in it whatever the setting says.
+    /// in it whatever the setting says. An app that buys in the app reads its
+    /// purchases setting too; no other app has one.
     fn start_signed_in(&mut self, identity: Identity, notice: Option<Notice>) -> Vec<Effect> {
         self.tickets.cancel_all();
         let calls_available = self.config.calls_available;
@@ -3199,6 +3301,10 @@ impl Model {
         if calls_available {
             let setting = self.tickets.issue(Slot::RingSetting);
             effects.push(Effect::ReadRingSetting { ticket: setting });
+        }
+        if self.config.in_app_purchases {
+            let setting = self.tickets.issue(Slot::PurchaseSetting);
+            effects.push(Effect::ReadPurchaseSetting { ticket: setting });
         }
         let ticket = self.tickets.issue(Slot::Workspaces);
         effects.push(Effect::LoadWorkspaces { ticket });

@@ -76,6 +76,15 @@ pub(crate) const HAND_OFF_UPDATE_NEEDED: &str = "District AI now needs your brow
 /// hand-off gets a fresh one.
 pub(crate) const HAND_OFF_NONCE_REFUSED: &str = "District AI could not confirm the browser \
     that was opened for the web. Please try again.";
+/// The billing hand-off refused the page it was asked to land on. The app
+/// builds only the shapes the service admits, so this is a service that has
+/// changed them.
+pub(crate) const HAND_OFF_PAGE_REFUSED: &str = "District AI did not accept the page this \
+    version of the app asked to open. Updating the app should fix it.";
+/// The app could not show a purchase page inside its window. Pressing again
+/// opens it in the browser.
+pub(crate) const PURCHASE_NOT_SHOWN: &str = "District AI could not show that page in this \
+    window. Try again, and it opens in your browser.";
 /// An audition credential with no encryption passphrase, or for a room that is
 /// not an audition room. It is not joined.
 pub(crate) const PREVIEW_UNENCRYPTED: &str = "District AI sent an audition that could not be \
