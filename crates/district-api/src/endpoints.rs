@@ -202,6 +202,13 @@ endpoint_table! {
     /// The account's subscription and invoices. Read only.
     StripeBilling => Get "/api/billing",
         workspace: None, body: Empty, retry: OnceAfterRefresh;
+    /// A single-use code that signs a browser in to the checkout or the billing
+    /// page, for an app that buys in the app. Scoped to the account: an account
+    /// the app just created has no workspace until checkout makes one, so a
+    /// `workspaceId`, when there is one, is a plain body field the service
+    /// records and never authorises with.
+    BillingHandOff => Post "/api/district/billing/handoff",
+        workspace: None, body: Json, retry: Never;
     /// The workspaces this account is a member of.
     WorkspaceList => Get "/api/district/workspace/list",
         workspace: None, body: Empty, retry: OnceAfterRefresh;

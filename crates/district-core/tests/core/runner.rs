@@ -14,9 +14,13 @@ use district_core::{
     Ticket, TokioClock, TranscriptWatch, Urgency, UrlOpener,
 };
 use district_core::{
+    BillingDestination, EmbeddedView, PlanChoice, PlanTerm, PlanTier, PurchaseSetting,
+};
+use district_core::{
     CallEnd, CallEvent, CallPhase, DialerEvent, MediaEvent, MediaUpdate, MemberWrite,
     MessagingWrite, MicrophoneState,
 };
+use district_model::BillingHandOffResponse;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse, BlockTarget,
     BlockedContactsResponse, CallDetailResponse, CallSummary, CallTranscriptResponse,
@@ -500,6 +504,18 @@ impl DistrictApi for FakeApi {
     ) -> Result<SchedulingHandOffResponse, ApiError> {
         self.0
             .push(format!("hand-off {workspace_id} {next:?} {nonce:?}"));
+        Ok(desktop_fixture("district-scheduling-handoff.json"))
+    }
+
+    async fn billing_hand_off(
+        &self,
+        workspace_id: Option<&str>,
+        next: &str,
+        nonce: Option<&str>,
+    ) -> Result<BillingHandOffResponse, ApiError> {
+        self.0.push(format!(
+            "billing hand-off {workspace_id:?} {next} {nonce:?}"
+        ));
         Ok(desktop_fixture("district-scheduling-handoff.json"))
     }
 
@@ -1114,7 +1130,12 @@ impl Auth for FakeAuth {
     }
 }
 
-struct FakeSettings(Mutex<Option<String>>, Log, Mutex<bool>);
+struct FakeSettings(
+    Mutex<Option<String>>,
+    Log,
+    Mutex<bool>,
+    Mutex<Option<PurchaseSetting>>,
+);
 
 impl Settings for FakeSettings {
     fn last_workspace(&self) -> Option<String> {
@@ -1134,6 +1155,15 @@ impl Settings for FakeSettings {
         self.1.push(format!("ring here {ring_here}"));
         *self.2.lock().unwrap() = ring_here;
     }
+
+    fn purchases(&self) -> Option<PurchaseSetting> {
+        *self.3.lock().unwrap()
+    }
+
+    fn set_purchases(&self, setting: PurchaseSetting) {
+        self.1.push(format!("purchases {setting:?}"));
+        *self.3.lock().unwrap() = Some(setting);
+    }
 }
 
 struct FakeOpener(bool, Log);
@@ -1142,6 +1172,21 @@ impl UrlOpener for FakeOpener {
     async fn open(&self, url: &str) -> bool {
         self.1.push(format!("open {url}"));
         self.0
+    }
+
+    async fn open_embedded(&self, url: &str, view: EmbeddedView) -> bool {
+        self.1.push(format!("embed {view:?} {url}"));
+        self.0
+    }
+}
+
+/// An opener that leaves `open_embedded` to the trait's default, as an app
+/// written before it existed does.
+struct BrowserOnlyOpener;
+
+impl UrlOpener for BrowserOnlyOpener {
+    async fn open(&self, _url: &str) -> bool {
+        true
     }
 }
 
@@ -1169,6 +1214,7 @@ fn fakes(remembered: Option<&str>, browser: bool) -> (Runner, Log) {
             Mutex::new(remembered.map(str::to_owned)),
             log.clone(),
             Mutex::new(false),
+            Mutex::new(None),
         ),
         FakeOpener(browser, log.clone()),
         TokioClock,
@@ -3073,7 +3119,12 @@ async fn a_placed_call_runs_through_the_engine_from_dial_to_hang_up() {
     let runner: ScriptedRunner = EffectRunner::new(
         FakeApi(log.clone()),
         FakeAuth(log.clone()),
-        FakeSettings(Mutex::new(None), log.clone(), Mutex::new(false)),
+        FakeSettings(
+            Mutex::new(None),
+            log.clone(),
+            Mutex::new(false),
+            Mutex::new(None),
+        ),
         FakeOpener(true, log.clone()),
         TokioClock,
         FakeLive(log.clone()),
@@ -3137,4 +3188,142 @@ async fn a_placed_call_runs_through_the_engine_from_dial_to_hang_up() {
             "hang up ws-contract-active CAabababababababababababababababab",
         ]
     );
+}
+
+/// A page inside the app: an app whose opener predates it answers "not
+/// supported" through the trait's default; the runner reports a page the
+/// opener did not show as unavailable, and one it did as nothing.
+#[tokio::test]
+async fn a_page_inside_the_app_is_opened_by_the_opener_or_reported_unavailable() {
+    let url = OneTimeUrl::new("https://www.distronode.com/dashboard/handoff?code=c");
+    assert!(BrowserOnlyOpener.open(url.expose()).await);
+    assert!(
+        !BrowserOnlyOpener
+            .open_embedded(url.expose(), EmbeddedView::NewPrivate)
+            .await
+    );
+
+    let effect = Effect::OpenEmbedded {
+        url: url.clone(),
+        view: EmbeddedView::NewPrivate,
+    };
+    assert_eq!(effect.ticket(), None);
+    assert!(!format!("{effect:?}").contains("code=c"));
+    let (runner, log) = fakes(None, true);
+    assert_eq!(runner.run(effect.clone()).await, None);
+    assert_eq!(
+        runner
+            .run(Effect::OpenEmbedded {
+                url: url.clone(),
+                view: EmbeddedView::Same,
+            })
+            .await,
+        None
+    );
+    assert_eq!(
+        log.take(),
+        [
+            "embed NewPrivate https://www.distronode.com/dashboard/handoff?code=c",
+            "embed Same https://www.distronode.com/dashboard/handoff?code=c",
+        ]
+    );
+    let (runner, _) = fakes(None, false);
+    assert_eq!(runner.run(effect).await, Some(Event::EmbeddedUnavailable));
+}
+
+/// The billing hand-off is asked for with the destination built in the
+/// service's shape, the workspace when one is open, and the nonce.
+#[tokio::test]
+async fn a_billing_hand_off_is_asked_for_in_the_shape_the_service_admits() {
+    const NONCE: &str = "n0nce-n0nce_n0nce-n0nce_n0nce-n0nce_n0nce-n";
+    let state = HandOffState::generate();
+    let nonce = state
+        .check(&format!(
+            "districtai://handoff?state={}&nonce={NONCE}",
+            state.as_str()
+        ))
+        .unwrap();
+    let ticket = a_ticket();
+    let checkout = BillingDestination::Checkout(PlanChoice {
+        tier: PlanTier::VoiceStarter,
+        term: PlanTerm::Monthly,
+        promo: None,
+    });
+    let bound = Effect::RequestBillingHandOff {
+        ticket,
+        workspace_id: Some(AGENCY.to_owned()),
+        destination: checkout.clone(),
+        nonce: Some(nonce),
+    };
+    assert_eq!(bound.ticket(), Some(ticket));
+    assert!(!format!("{bound:?}").contains(NONCE));
+    let (runner, log) = fakes(None, true);
+    let Some(Event::BillingHandOffReady {
+        ticket: reported,
+        result: Ok(answer),
+    }) = runner.run(bound).await
+    else {
+        panic!("the link");
+    };
+    assert_eq!(reported, ticket);
+    assert!(!format!("{answer:?}").contains("contract-handoff-code"));
+    let unbound = Effect::RequestBillingHandOff {
+        ticket,
+        workspace_id: None,
+        destination: checkout,
+        nonce: None,
+    };
+    runner.run(unbound).await.unwrap();
+    runner
+        .run(Effect::RequestBillingHandOff {
+            ticket,
+            workspace_id: Some(AGENCY.to_owned()),
+            destination: BillingDestination::BillingPage,
+            nonce: None,
+        })
+        .await
+        .unwrap();
+    assert_eq!(
+        log.take(),
+        [
+            format!(
+                "billing hand-off Some(\"ws-contract-active\") \
+                 /checkout?tier=VoiceStarter&term=monthly Some(\"{NONCE}\")"
+            ),
+            "billing hand-off None /checkout?tier=VoiceStarter&term=monthly&reason=no-workspace \
+             None"
+                .to_owned(),
+            "billing hand-off Some(\"ws-contract-active\") /dashboard/district/billing None"
+                .to_owned(),
+        ]
+    );
+}
+
+/// The purchases setting is read from, and kept in, the app's settings.
+#[tokio::test]
+async fn the_purchases_setting_is_read_and_kept() {
+    let (runner, log) = fakes(None, true);
+    let ticket = a_ticket();
+    let read = Effect::ReadPurchaseSetting { ticket };
+    assert_eq!(read.ticket(), Some(ticket));
+    assert_eq!(
+        runner.run(read.clone()).await,
+        Some(Event::PurchaseSettingRead {
+            ticket,
+            setting: None
+        })
+    );
+    let save = Effect::SavePurchaseSetting {
+        setting: PurchaseSetting::Off,
+    };
+    assert_eq!(save.ticket(), None);
+    assert_eq!(runner.run(save).await, None);
+    assert_eq!(
+        runner.run(read).await,
+        Some(Event::PurchaseSettingRead {
+            ticket,
+            setting: Some(PurchaseSetting::Off)
+        })
+    );
+    assert_eq!(log.take(), ["purchases Off"]);
 }

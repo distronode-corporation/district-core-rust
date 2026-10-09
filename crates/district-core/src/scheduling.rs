@@ -29,13 +29,14 @@ use std::time::Duration;
 use district_api::ApiError;
 use district_auth::{HAND_OFF_START_PATH, HandOffNonce, HandOffState};
 use district_model::{
-    CODE_INVALID_NONCE, CODE_NONCE_REQUIRED, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SchedulingTenant,
+    CODE_INVALID_NEXT, CODE_INVALID_NONCE, CODE_NONCE_REQUIRED, SchedulingEnableResponse,
+    SchedulingHandOffResponse, SchedulingStatusResponse, SchedulingTenant,
 };
 
 use crate::failure::{
-    FailureText, HAND_OFF_ELSEWHERE, HAND_OFF_NONCE_REFUSED, HAND_OFF_REFUSED, HAND_OFF_TOO_MANY,
-    HAND_OFF_UPDATE_NEEDED, SCHEDULING_NOT_OFFERED, SCHEDULING_SETUP_FAILED, SCHEDULING_TOO_MANY,
+    FailureText, HAND_OFF_ELSEWHERE, HAND_OFF_NONCE_REFUSED, HAND_OFF_PAGE_REFUSED,
+    HAND_OFF_REFUSED, HAND_OFF_TOO_MANY, HAND_OFF_UPDATE_NEEDED, SCHEDULING_NOT_OFFERED,
+    SCHEDULING_SETUP_FAILED, SCHEDULING_TOO_MANY,
 };
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
@@ -109,9 +110,9 @@ pub enum HandOffLeg {
     /// None under way.
     #[default]
     Idle,
-    /// The start page was opened in the browser with this `state`, and the
-    /// browser's answer is awaited, for [`HAND_OFF_CALLBACK_WAIT`] at most.
-    /// Redacted in `Debug`.
+    /// The start page was opened in the browser (or, for a purchase, in a view
+    /// inside the app) with this `state`, and its answer is awaited, for
+    /// [`HAND_OFF_CALLBACK_WAIT`] at most. Redacted in `Debug`.
     Browser(HandOffState),
     /// The link is being asked for.
     Minting,
@@ -367,15 +368,19 @@ impl SignedIn {
     /// answer: a link with nothing awaiting it, one for another hand-off (an old
     /// one, or one an answer arrived after the wait gave up on), or one that is
     /// not well formed. A stray or forged link cannot cancel a hand-off.
+    ///
+    /// The same link answers a purchase's start page, whether that page showed
+    /// in the browser or in a view inside the app: each hand-off has its own
+    /// `state`, so a link answers one of them at most.
     pub(crate) fn hand_off_callback(&mut self, link: &OneTimeUrl, tickets: &mut Tickets) -> Next {
-        let HandOffLeg::Browser(state) = &self.scheduling.hand_off else {
-            return stay();
-        };
-        let Ok(nonce) = state.check(link.expose()) else {
-            return stay();
-        };
-        tickets.cancel(Slot::SchedulingHandOffWait);
-        Next::Stay(self.mint_hand_off(Some(nonce), tickets))
+        if let Some(nonce) = answer_to(&self.scheduling.hand_off, link) {
+            tickets.cancel(Slot::SchedulingHandOffWait);
+            return Next::Stay(self.mint_hand_off(Some(nonce), tickets));
+        }
+        if let Some(nonce) = answer_to(&self.purchase.leg, link) {
+            return Next::Stay(self.mint_purchase(Some(nonce), tickets));
+        }
+        stay()
     }
 
     /// The browser did not answer in time: the service may not have the start
@@ -426,27 +431,46 @@ impl SignedIn {
                     url: OneTimeUrl::new(answer.url),
                 }]);
             }
-            Ok(_) => screen.notice = Some(FailureText::final_(HAND_OFF_ELSEWHERE)),
-            // On this route a 403 is the sign-in the request carried, not the role
-            // and not the workspace's offer.
-            Err(ApiError::Forbidden(_)) => {
-                screen.notice = Some(FailureText::final_(HAND_OFF_REFUSED));
-            }
-            Err(ApiError::RateLimited { .. }) => {
-                screen.notice = Some(FailureText::retryable(HAND_OFF_TOO_MANY));
-            }
-            // The service wants a bound hand-off and this one was not, because
-            // the browser did not answer in time. Pressing again binds it if
-            // the browser answers.
-            Err(error) if error.code() == Some(CODE_NONCE_REQUIRED) => {
-                screen.notice = Some(FailureText::retryable(HAND_OFF_UPDATE_NEEDED));
-            }
-            Err(error) if error.code() == Some(CODE_INVALID_NONCE) => {
-                screen.notice = Some(FailureText::retryable(HAND_OFF_NONCE_REFUSED));
-            }
-            Err(error) => screen.notice = Some(FailureText::from_api_error(&error)),
+            Ok(_) => screen.notice = Some(hand_off_failure(None)),
+            Err(error) => screen.notice = Some(hand_off_failure(Some(&error))),
         }
         stay()
+    }
+}
+
+/// The nonce `link` carries, if it is the answer to the start page `leg`
+/// awaits. Anything else is `None`, and leaves that hand-off waiting.
+fn answer_to(leg: &HandOffLeg, link: &OneTimeUrl) -> Option<HandOffNonce> {
+    let HandOffLeg::Browser(state) = leg else {
+        return None;
+    };
+    state.check(link.expose()).ok()
+}
+
+/// What to say about a hand-off that failed: refused with `error`, or, with
+/// `None`, answered with a link that is not on the service's own address.
+pub(crate) fn hand_off_failure(error: Option<&ApiError>) -> FailureText {
+    match error {
+        None => FailureText::final_(HAND_OFF_ELSEWHERE),
+        // On these routes a 403 is the sign-in the request carried, not the
+        // role and not the workspace's offer.
+        Some(ApiError::Forbidden(_)) => FailureText::final_(HAND_OFF_REFUSED),
+        Some(ApiError::RateLimited { .. }) => FailureText::retryable(HAND_OFF_TOO_MANY),
+        // The service wants a bound hand-off and this one was not, because the
+        // browser did not answer in time. Pressing again binds it if the
+        // browser answers.
+        Some(error) if error.code() == Some(CODE_NONCE_REQUIRED) => {
+            FailureText::retryable(HAND_OFF_UPDATE_NEEDED)
+        }
+        Some(error) if error.code() == Some(CODE_INVALID_NONCE) => {
+            FailureText::retryable(HAND_OFF_NONCE_REFUSED)
+        }
+        // Only the billing hand-off refuses a destination; the scheduling one
+        // falls back to its own.
+        Some(error) if error.code() == Some(CODE_INVALID_NEXT) => {
+            FailureText::final_(HAND_OFF_PAGE_REFUSED)
+        }
+        Some(error) => FailureText::from_api_error(error),
     }
 }
 
@@ -455,7 +479,7 @@ impl SignedIn {
 /// `https://www.distronode.com.example` is not taken for the service. HTTPS is
 /// checked on its own too, so a build pointed at a plain-HTTP address still
 /// never sends this credential in the clear.
-fn on_origin(url: &str, config: &CoreConfig) -> bool {
+pub(crate) fn on_origin(url: &str, config: &CoreConfig) -> bool {
     let origin = format!("{}/", config.web_base_url.trim_end_matches('/'));
     starts_with_ignoring_case(url, "https://") && starts_with_ignoring_case(url, &origin)
 }

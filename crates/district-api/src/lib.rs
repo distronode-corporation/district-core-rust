@@ -49,7 +49,9 @@
 //!   [`ApiClient::usage_history`]);
 //! - phone numbers and billing, read only ([`ApiClient::number_search`],
 //!   [`ApiClient::owned_numbers`], [`ApiClient::workspace_billing`],
-//!   [`ApiClient::account_billing`]);
+//!   [`ApiClient::account_billing`]), and the hand-off to the service's
+//!   checkout and billing pages for an app that buys in the app
+//!   ([`ApiClient::billing_hand_off`]);
 //! - automations ([`ApiClient::workflows`], [`ApiClient::workflow_runs`],
 //!   [`ApiClient::set_workflow_active`], [`ApiClient::campaign_status`],
 //!   [`ApiClient::set_campaign_enabled`]);

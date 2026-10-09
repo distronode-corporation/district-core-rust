@@ -737,6 +737,8 @@ impl SignedIn {
             self.presence_due(tickets)
         } else if tickets.accept(Slot::SchedulingHandOffWait, ticket) {
             self.hand_off_unanswered(tickets)
+        } else if tickets.accept(Slot::BillingHandOffWait, ticket) {
+            self.mint_purchase(None, tickets)
         } else {
             Vec::new()
         };

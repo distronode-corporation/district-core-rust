@@ -35,6 +35,7 @@ use crate::media::MediaSession;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets, WORKSPACE_SLOTS};
 use crate::overview::{OverviewContent, OverviewScreen, SETUP_WEB_PATH, workspace_mismatch};
 use crate::presence::PresenceState;
+use crate::purchase::PurchaseState;
 use crate::ringing::RingController;
 use crate::role::Capabilities;
 use crate::rooms::RoomsScreen;
@@ -94,6 +95,10 @@ pub struct SignedIn {
     pub marketplace: MarketplaceScreen,
     /// Billing.
     pub billing: BillingScreen,
+    /// Purchases inside the app, for the account rather than the open
+    /// workspace. Never used in an app without
+    /// [`CoreConfig::in_app_purchases`].
+    pub purchase: PurchaseState,
     /// Workflows and the campaign.
     pub workflows: WorkflowsScreen,
     /// Booking pages.
@@ -193,6 +198,7 @@ impl SignedIn {
             analytics: AnalyticsScreen::default(),
             marketplace: MarketplaceScreen::default(),
             billing: BillingScreen::default(),
+            purchase: PurchaseState::default(),
             workflows: WorkflowsScreen::default(),
             scheduling: SchedulingScreen::default(),
             desk: DeskScreen::default(),
@@ -509,6 +515,7 @@ impl SignedIn {
     pub(crate) fn url_open_failed(&mut self, tickets: &mut Tickets) -> Next {
         self.notice = Some(Notice::NoBrowser);
         self.hand_off_unopened(tickets);
+        self.purchase_unopened(tickets);
         stay()
     }
 

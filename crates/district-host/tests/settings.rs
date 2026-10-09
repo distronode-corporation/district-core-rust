@@ -6,7 +6,7 @@ use std::path::Path;
 use std::sync::Arc;
 use std::thread;
 
-use district_core::Settings;
+use district_core::{PurchaseSetting, Settings};
 use district_host::{Preferences, SETTINGS_FILE, SettingsFile};
 use district_model::Platform;
 
@@ -77,6 +77,7 @@ fn a_change_is_written_whole_and_read_back_by_the_next_run() {
         Preferences {
             ring_on_this_computer: false,
             last_workspace: Some("ws-contract-active".to_owned()),
+            purchases: None,
         }
     );
 
@@ -157,6 +158,7 @@ fn changes_from_two_threads_are_both_kept() {
         Preferences {
             ring_on_this_computer: false,
             last_workspace: Some("ws-contract-viewer".to_owned()),
+            purchases: None,
         }
     );
     assert!(format!("{settings:?}").starts_with("SettingsFile"));
@@ -189,4 +191,38 @@ fn the_header_names_the_app_that_wrote_the_file() {
             .unwrap()
             .starts_with("# District AI for Windows: ")
     );
+}
+
+#[test]
+fn the_purchases_setting_is_kept_and_an_unknown_value_reads_as_unset() {
+    let temp = tempfile::tempdir().unwrap();
+    let settings = load(temp.path());
+    assert_eq!(settings.purchases(), None, "never set");
+    settings.set_purchases(PurchaseSetting::Off);
+    assert_eq!(settings.purchases(), Some(PurchaseSetting::Off));
+    let path = temp.path().join(SETTINGS_FILE);
+    let text = fs::read_to_string(&path).unwrap();
+    assert!(text.contains("purchases = \"off\""), "{text}");
+    assert_eq!(load(temp.path()).purchases(), Some(PurchaseSetting::Off));
+
+    settings.set_purchases(PurchaseSetting::SignInEveryTime);
+    assert_eq!(
+        load(temp.path()).purchases(),
+        Some(PurchaseSetting::SignInEveryTime)
+    );
+    assert!(
+        fs::read_to_string(&path)
+            .unwrap()
+            .contains("purchases = \"sign_in_every_time\"")
+    );
+
+    // A value from a newer build is no setting, and costs no other preference.
+    fs::write(
+        &path,
+        "ring_on_this_computer = false\npurchases = \"ask_every_time\"\n",
+    )
+    .unwrap();
+    let settings = load(temp.path());
+    assert_eq!(settings.purchases(), None);
+    assert!(!settings.ring_on_this_computer());
 }

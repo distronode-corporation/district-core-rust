@@ -3,13 +3,13 @@
 
 use district_api::{ApiError, Endpoint};
 use district_model::{
-    AVAILABILITY_REASON_NO_MEMBER_ROW, BlockTarget, CODE_INVALID_NONCE, CODE_LAST_AGENCY_MEMBER,
-    CODE_MEMBER_EXISTS, CODE_NONCE_REQUIRED, CUSTOM_PIPELINE, CallHandlingPatch, DeskBrandName,
-    DeskSettingsPatch, DeskTicketDraft, DeskTicketStatus, EngineMix, HqPendingWrite, MemberRole,
-    MessagingAccountSave, MessagingCredentialSource, MessagingCredentials, NumberSearch,
-    PersonaEngineChoice, PersonaPatch, Platform, PresenceRegistration, RoutingRule,
-    RoutingRuleField, SinchCredentials, SupportRequestDraft, SupportRequestFiling,
-    SupportRequestKind, ThreadRef, TimelinePageInfo, TimelineResponse,
+    AVAILABILITY_REASON_NO_MEMBER_ROW, BlockTarget, CODE_INVALID_NEXT, CODE_INVALID_NONCE,
+    CODE_LAST_AGENCY_MEMBER, CODE_MEMBER_EXISTS, CODE_NONCE_REQUIRED, CUSTOM_PIPELINE,
+    CallHandlingPatch, DeskBrandName, DeskSettingsPatch, DeskTicketDraft, DeskTicketStatus,
+    EngineMix, HqPendingWrite, MemberRole, MessagingAccountSave, MessagingCredentialSource,
+    MessagingCredentials, NumberSearch, PersonaEngineChoice, PersonaPatch, Platform,
+    PresenceRegistration, RoutingRule, RoutingRuleField, SinchCredentials, SupportRequestDraft,
+    SupportRequestFiling, SupportRequestKind, ThreadRef, TimelinePageInfo, TimelineResponse,
 };
 use serde_json::{Value, json};
 use wiremock::matchers::any;
@@ -406,6 +406,56 @@ async fn a_refused_nonce_comes_back_with_its_code() {
         );
         assert_eq!(error.code(), Some(code));
     }
+}
+
+/// The billing hand-off records the open workspace and binds to the browser
+/// beside its destination; without them, neither key is sent.
+#[tokio::test]
+async fn a_billing_hand_off_sends_the_workspace_and_nonce_only_when_there_are_some() {
+    const NONCE: &str = "n0nce-n0nce_n0nce-n0nce_n0nce-n0nce_n0nce-n";
+    let server = answering(200, desktop_fixture("district-scheduling-handoff.json")).await;
+    let link = client(&server)
+        .billing_hand_off(Some(WS), "/dashboard/district/billing", Some(NONCE))
+        .await
+        .unwrap();
+    assert_eq!(link.expires_in, 60);
+    assert!(!format!("{link:?}").contains("contract-handoff-code"));
+    let request = only_request(&server).await;
+    assert_eq!(request.url.query(), None, "the workspace is not a query");
+    assert_eq!(
+        body(&request),
+        json!({"workspaceId": WS, "next": "/dashboard/district/billing", "nonce": NONCE})
+    );
+
+    let server = answering(200, desktop_fixture("district-scheduling-handoff.json")).await;
+    client(&server)
+        .billing_hand_off(
+            None,
+            "/checkout?tier=VoiceSolo&term=annual&reason=no-workspace",
+            None,
+        )
+        .await
+        .unwrap();
+    assert_eq!(
+        body(&only_request(&server).await),
+        json!({"next": "/checkout?tier=VoiceSolo&term=annual&reason=no-workspace"})
+    );
+}
+
+/// A destination the service does not admit comes back as its refusal, with
+/// its code.
+#[tokio::test]
+async fn a_refused_billing_destination_comes_back_with_its_code() {
+    let server = answering(
+        400,
+        json!({"error": "next must be the checkout or the billing page", "code": "invalid_next"}),
+    )
+    .await;
+    let error = client(&server)
+        .billing_hand_off(None, "/dashboard", None)
+        .await
+        .unwrap_err();
+    assert_eq!(error.code(), Some(CODE_INVALID_NEXT));
 }
 
 #[tokio::test]

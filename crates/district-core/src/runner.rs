@@ -18,15 +18,15 @@ use std::time::Duration;
 use district_api::ApiError;
 use district_auth::{AccessClaims, DrainReport, HandOffNonce, SignOutReport};
 use district_model::{
-    AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse, BlockTarget,
-    BlockedContactsResponse, CallDetailResponse, CallSummary, CallTranscriptResponse,
-    CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse, ContactDetailResponse,
-    ContactListResponse, ContactMutationResponse, ConversationsResponse, CreateContactRequest,
-    DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse,
-    DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse, DeskTicketStatus,
-    DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
-    DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
-    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqTurn, MarkReadResponse,
+    AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
+    BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse, CallSummary,
+    CallTranscriptResponse, CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse,
+    ContactDetailResponse, ContactListResponse, ContactMutationResponse, ConversationsResponse,
+    CreateContactRequest, DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch,
+    DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse,
+    DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse,
+    DeviceRevokeResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest,
+    EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqTurn, MarkReadResponse,
     MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
     MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
     OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
@@ -55,6 +55,7 @@ use crate::live::Notification;
 use crate::media::CallEngine;
 use crate::model::{Effect, Event, Ticket};
 use crate::presence::Presence;
+use crate::purchase::{EmbeddedView, PurchaseSetting};
 use crate::scheduling::SCHEDULING_WEB_PATH;
 use crate::session::{RestoreError, SignInError, SignedInSession};
 use crate::settings::{MemberWrite, MessagingWrite};
@@ -340,6 +341,17 @@ pub trait DistrictApi: Send + Sync {
         next: Option<&str>,
         nonce: Option<&str>,
     ) -> impl Future<Output = Result<SchedulingHandOffResponse, ApiError>> + Send;
+    /// A link that signs a browser in to the checkout or the billing page,
+    /// landing on `next` (built by
+    /// [`BillingDestination::next`](crate::BillingDestination::next)), bound by
+    /// `nonce` to the view or browser that answered with it, and recording
+    /// `workspace_id` when one is open. A credential; sent once.
+    fn billing_hand_off(
+        &self,
+        workspace_id: Option<&str>,
+        next: &str,
+        nonce: Option<&str>,
+    ) -> impl Future<Output = Result<BillingHandOffResponse, ApiError>> + Send;
     /// The help desk's settings.
     fn desk_settings(
         &self,
@@ -675,13 +687,40 @@ pub trait Settings: Send + Sync {
     fn ring_on_this_computer(&self) -> bool;
     /// Keeps the "ring on this computer" setting.
     fn set_ring_on_this_computer(&self, ring_here: bool);
+    /// "Purchases on this computer", or `None` when it was never set (the
+    /// model then takes [`PurchaseSetting`]'s default). Read only by an app
+    /// with [`CoreConfig::in_app_purchases`](crate::CoreConfig::in_app_purchases).
+    fn purchases(&self) -> Option<PurchaseSetting>;
+    /// Keeps "Purchases on this computer".
+    fn set_purchases(&self, setting: PurchaseSetting);
 }
 
-/// Opens a page in the user's own browser (never in a view inside the app, so
-/// the page gets the browser's session and the app sees nothing of it).
+/// Opens a page: in the user's own browser, so the page gets the browser's
+/// session and the app sees nothing of it, and, for an app that buys in the
+/// app, in a view inside the app window.
 pub trait UrlOpener: Send + Sync {
-    /// Opens `url`. Answers whether a browser took it.
+    /// Opens `url` in the browser. Answers whether a browser took it.
     fn open(&self, url: &str) -> impl Future<Output = bool> + Send;
+
+    /// Opens `url` in a view inside the app window, as `view` says, and
+    /// answers whether it did. Only an app with
+    /// [`CoreConfig::in_app_purchases`](crate::CoreConfig::in_app_purchases)
+    /// is asked, and only for the service's hand-off start page and the
+    /// hand-off link that follows it.
+    ///
+    /// A [`NewPrivate`](EmbeddedView::NewPrivate) view starts with nothing
+    /// from any earlier one or from the browser and keeps nothing once it
+    /// closes. While it shows, the app catches every navigation to
+    /// `districtai://handoff` in it, cancels it, and hands the link over as
+    /// [`Event::from_link`](crate::Event::from_link) does for one from the
+    /// browser; it reports the view closing as
+    /// [`Event::EmbeddedClosed`](crate::Event::EmbeddedClosed).
+    ///
+    /// The default answers false, "not supported", and the model then opens
+    /// the pages in the browser instead.
+    fn open_embedded(&self, _url: &str, _view: EmbeddedView) -> impl Future<Output = bool> + Send {
+        std::future::ready(false)
+    }
 }
 
 /// Which workspaces have a live telemetry socket open.
@@ -1246,6 +1285,22 @@ where
                         .await,
                 }
             }
+            Effect::RequestBillingHandOff {
+                ticket,
+                workspace_id,
+                destination,
+                nonce,
+            } => {
+                let next = destination.next(workspace_id.is_some());
+                let nonce = nonce.as_ref().map(HandOffNonce::as_str);
+                Event::BillingHandOffReady {
+                    ticket,
+                    result: self
+                        .api
+                        .billing_hand_off(workspace_id.as_deref(), &next, nonce)
+                        .await,
+                }
+            }
             Effect::LoadDeskSettings {
                 ticket,
                 workspace_id,
@@ -1407,6 +1462,12 @@ where
                     return None;
                 }
                 Event::UrlOpenFailed
+            }
+            Effect::OpenEmbedded { url, view } => {
+                if self.opener.open_embedded(url.expose(), view).await {
+                    return None;
+                }
+                Event::EmbeddedUnavailable
             }
             Effect::LoadWorkspaceConfig {
                 ticket,
@@ -1612,6 +1673,14 @@ where
             },
             Effect::SaveRingSetting { ring_here } => {
                 self.settings.set_ring_on_this_computer(ring_here);
+                return None;
+            }
+            Effect::ReadPurchaseSetting { ticket } => Event::PurchaseSettingRead {
+                ticket,
+                setting: self.settings.purchases(),
+            },
+            Effect::SavePurchaseSetting { setting } => {
+                self.settings.set_purchases(setting);
                 return None;
             }
             Effect::SetPresence { ticket, registered } => Event::PresenceSet {

@@ -3,7 +3,10 @@
 //!
 //! Nothing here changes a plan, cancels a subscription or touches a card; the
 //! web dashboard does those, and "Manage billing" opens it in the browser for a
-//! member whose role could use it there. A viewer is told who can.
+//! member whose role could use it there. A viewer is told who can. An app that
+//! buys in the app ([`CoreConfig::in_app_purchases`]) adds choosing a plan and
+//! managing billing inside the app window, on the service's own pages
+//! ([`PurchaseState`](crate::PurchaseState)); nothing of that is here.
 //!
 //! The two reads never share a failure, and the plan is what the screen stands
 //! on: without it there is no headline, so its failure is the screen's. The
@@ -21,6 +24,7 @@ use district_model::{
 use crate::analytics::sum_metered;
 use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
+use crate::purchase::PlanChoice;
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
 
@@ -283,6 +287,11 @@ impl Renewal {
 
 /// What the member does on the billing screen. Reading it again is
 /// [`Event::Refresh`](crate::Event::Refresh).
+///
+/// The purchase events change something only while
+/// [`SignedIn::offers_plans`] or [`SignedIn::offers_manage_in_app`] says the
+/// action is offered, which is never in an app without
+/// [`CoreConfig::in_app_purchases`].
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum BillingEvent {
     /// Open an invoice's page, which the payment processor hosts, in the
@@ -293,6 +302,17 @@ pub enum BillingEvent {
     },
     /// Open the web billing page, for a role that can use it.
     ManageOnWeb,
+    /// Choose a plan: the confirmation step naming Stripe shows
+    /// ([`PurchaseState::confirming`](crate::PurchaseState::confirming)).
+    ChoosePlan(PlanChoice),
+    /// Confirm the plan chosen: checkout opens inside the app.
+    ConfirmPurchase,
+    /// Back out of the confirmation step.
+    CancelPurchase,
+    /// Open the billing page inside the app, signed in for this visit only.
+    ManageInApp,
+    /// Dismiss the purchase notice.
+    DismissPurchaseNotice,
 }
 
 impl SignedIn {
@@ -316,7 +336,12 @@ impl SignedIn {
         ]
     }
 
-    pub(crate) fn billing_event(&mut self, event: BillingEvent, config: &CoreConfig) -> Next {
+    pub(crate) fn billing_event(
+        &mut self,
+        event: BillingEvent,
+        tickets: &mut Tickets,
+        config: &CoreConfig,
+    ) -> Next {
         let url = match event {
             BillingEvent::OpenInvoice { invoice_id } => match &self.billing.account {
                 AccountSection::Ready(account) => account
@@ -328,6 +353,20 @@ impl SignedIn {
             },
             BillingEvent::ManageOnWeb => BillingScreen::offers_web(&self.capabilities())
                 .then(|| config.web_url(BILLING_WEB_PATH)),
+            BillingEvent::ChoosePlan(choice) => {
+                self.choose_plan(choice);
+                None
+            }
+            BillingEvent::ConfirmPurchase => return self.confirm_purchase(tickets, config),
+            BillingEvent::CancelPurchase => {
+                self.cancel_purchase();
+                None
+            }
+            BillingEvent::ManageInApp => return self.manage_in_app(tickets, config),
+            BillingEvent::DismissPurchaseNotice => {
+                self.dismiss_purchase_notice();
+                None
+            }
         };
         Next::Stay(url.map(|url| Effect::OpenUrl { url }).into_iter().collect())
     }

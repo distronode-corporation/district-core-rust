@@ -925,6 +925,19 @@ pub fn cases() -> Vec<Case> {
                 "next": "/dashboard/district/scheduling",
             })),
         },
+        // The billing hand-off: scoped to the account, so an account with no
+        // workspace yet sends none.
+        Case {
+            name: "billing_hand_off",
+            endpoint: Endpoint::BillingHandOff,
+            retried: false,
+            answer: desktop_fixture("district-scheduling-handoff.json"),
+            call: call!(c => c.billing_hand_off(None, "/checkout?tier=VoicePro&term=monthly", None)),
+            method: "POST",
+            path: "/api/district/billing/handoff",
+            query: vec![],
+            body: Sent::Json(json!({"next": "/checkout?tier=VoicePro&term=monthly"})),
+        },
         // The help desk: the workspace in the query on every route.
         Case {
             name: "desk_settings",

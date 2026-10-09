@@ -266,6 +266,7 @@ impl Member {
             web_base_url: "https://www.distronode.com".to_owned(),
             app_version: "0.1.0".to_owned(),
             calls_available: district_call::CALLS_AVAILABLE,
+            in_app_purchases: false,
         };
         let (mut model, effects) = Model::new(config);
         let Some(Effect::RestoreSession { ticket }) = effects.last().cloned() else {

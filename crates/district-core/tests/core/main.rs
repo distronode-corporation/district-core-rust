@@ -27,6 +27,7 @@ mod overview;
 mod palette;
 mod persona;
 mod presence;
+mod purchase;
 mod ringing;
 mod role;
 mod rooms;
