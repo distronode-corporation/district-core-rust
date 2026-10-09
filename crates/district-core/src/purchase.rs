@@ -344,6 +344,12 @@ impl PurchaseState {
         processor. Checkout opens in a private window inside District AI, signed in for this \
         purchase only. Your card details go to Stripe, not to District AI, and the price is \
         shown before you pay.";
+    /// The confirmation step's body once purchase pages open in the system
+    /// browser ([`in_browser`](Self::in_browser)), where the browser keeps its
+    /// own session.
+    pub const CONFIRM_BODY_BROWSER: &'static str = "Payment is handled by Stripe, District AI's \
+        payment processor. Checkout opens in your browser, signed in to District AI. Your card \
+        details go to Stripe, not to District AI, and the price is shown before you pay.";
     /// The confirmation step's action.
     pub const CONFIRM_ACTION: &'static str = "Continue to checkout";
     /// The confirmation step's way back.
@@ -353,6 +359,15 @@ impl PurchaseState {
     /// Said once purchase pages open in the system browser.
     pub const IN_BROWSER: &'static str = "This computer cannot show checkout inside District AI, \
         so it opens in your browser.";
+
+    /// The confirmation step's body, for where checkout will open.
+    pub fn confirm_body(&self) -> &'static str {
+        if self.in_browser {
+            Self::CONFIRM_BODY_BROWSER
+        } else {
+            Self::CONFIRM_BODY
+        }
+    }
 
     /// Whether purchases are on for this computer.
     pub fn enabled(&self) -> bool {

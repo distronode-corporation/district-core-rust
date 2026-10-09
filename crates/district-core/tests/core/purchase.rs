@@ -30,7 +30,7 @@ fn purchase(model: &Model) -> &PurchaseState {
     &signed_in(model).purchase
 }
 
-fn billing(model: &mut Model, event: BillingEvent) -> Vec<Effect> {
+fn act(model: &mut Model, event: BillingEvent) -> Vec<Effect> {
     model.update(Event::Billing(event))
 }
 
@@ -105,7 +105,7 @@ fn answer(state: &str) -> Event {
 /// Opens the start page for `destination`'s action, checks it opened inside
 /// the app in a new private view, and returns the wait's ticket.
 fn press(model: &mut Model, event: BillingEvent) -> Ticket {
-    let effects = billing(model, event);
+    let effects = act(model, event);
     let [
         Effect::OpenEmbedded { url, view },
         Effect::Wait { ticket, delay },
@@ -128,8 +128,11 @@ fn press(model: &mut Model, event: BillingEvent) -> Ticket {
 
 /// Chooses Voice Pro, annual, with a code, and confirms it.
 fn checkout(model: &mut Model) -> Ticket {
-    assert!(billing(model, BillingEvent::ChoosePlan(pro_annual())).is_empty());
+    assert!(act(model, BillingEvent::ChoosePlan(pro_annual())).is_empty());
     assert_eq!(purchase(model).confirming, Some(pro_annual()));
+    if !purchase(model).in_browser {
+        assert_eq!(purchase(model).confirm_body(), PurchaseState::CONFIRM_BODY);
+    }
     let wait = press(model, BillingEvent::ConfirmPurchase);
     assert_eq!(purchase(model).confirming, None);
     wait
@@ -374,6 +377,7 @@ fn the_confirmation_names_stripe_and_no_price() {
     for text in [
         PurchaseState::CONFIRM_TITLE,
         PurchaseState::CONFIRM_BODY,
+        PurchaseState::CONFIRM_BODY_BROWSER,
         PurchaseState::IN_APP_NOTE,
     ] {
         assert!(text.contains("Stripe"), "{text}");
@@ -385,6 +389,7 @@ fn the_confirmation_names_stripe_and_no_price() {
         PurchaseState::IN_APP_NOTE,
         PurchaseState::CONFIRM_TITLE,
         PurchaseState::CONFIRM_BODY,
+        PurchaseState::CONFIRM_BODY_BROWSER,
         PurchaseState::CONFIRM_ACTION,
         PurchaseState::CANCEL_ACTION,
         PurchaseState::OPENING,
@@ -456,7 +461,7 @@ fn an_app_that_does_not_buy_in_the_app_is_exactly_as_before() {
     assert!(!before.offers_plans() && !before.offers_manage_in_app());
 
     // The read-only screen's own actions are what they were.
-    let effects = billing(&mut model, BillingEvent::ManageOnWeb);
+    let effects = act(&mut model, BillingEvent::ManageOnWeb);
     assert_eq!(
         effects,
         [Effect::OpenUrl {
@@ -481,8 +486,8 @@ fn an_app_that_buys_reads_the_setting_and_offers_plans_to_a_role_that_can_change
     assert!(!signed_in(&viewer).offers_plans());
     assert!(!signed_in(&viewer).offers_manage_in_app());
     let before = signed_in(&viewer).clone();
-    assert!(billing(&mut viewer, BillingEvent::ChoosePlan(pro_annual())).is_empty());
-    assert!(billing(&mut viewer, BillingEvent::ManageInApp).is_empty());
+    assert!(act(&mut viewer, BillingEvent::ChoosePlan(pro_annual())).is_empty());
+    assert!(act(&mut viewer, BillingEvent::ManageInApp).is_empty());
     assert_eq!(signed_in(&viewer), &before);
 
     let off = signed_in_with(Some(PurchaseSetting::Off), Some((AGENCY, "agency")));
@@ -498,7 +503,7 @@ fn an_account_with_no_workspace_buys_and_checkout_is_told_why() {
     assert_eq!(signed_in(&model).workspaces, WorkspacesState::NoWorkspaces);
     assert!(signed_in(&model).offers_plans());
     assert!(!signed_in(&model).offers_manage_in_app());
-    assert!(billing(&mut model, BillingEvent::ManageInApp).is_empty());
+    assert!(act(&mut model, BillingEvent::ManageInApp).is_empty());
 
     checkout(&mut model);
     let state = awaited_state(&model);
@@ -633,7 +638,7 @@ fn only_the_answer_to_this_purchase_mints_its_link() {
 
     // A second press while the view is awaited starts over: the first
     // answer no longer matches.
-    billing(&mut model, BillingEvent::ChoosePlan(pro_annual()));
+    act(&mut model, BillingEvent::ChoosePlan(pro_annual()));
     press(&mut model, BillingEvent::ConfirmPurchase);
     let second = awaited_state(&model);
     assert_ne!(first, second);
@@ -641,15 +646,15 @@ fn only_the_answer_to_this_purchase_mints_its_link() {
     answered(&mut model);
 
     // While the link is asked for, pressing again does nothing.
-    billing(&mut model, BillingEvent::ChoosePlan(pro_annual()));
-    assert!(billing(&mut model, BillingEvent::ConfirmPurchase).is_empty());
-    assert!(billing(&mut model, BillingEvent::ManageInApp).is_empty());
+    act(&mut model, BillingEvent::ChoosePlan(pro_annual()));
+    assert!(act(&mut model, BillingEvent::ConfirmPurchase).is_empty());
+    assert!(act(&mut model, BillingEvent::ManageInApp).is_empty());
     assert_eq!(purchase(&model).confirming, Some(pro_annual()));
-    billing(&mut model, BillingEvent::CancelPurchase);
+    act(&mut model, BillingEvent::CancelPurchase);
     assert_eq!(purchase(&model).confirming, None);
     // Confirming nothing does nothing.
     let mut idle = agency();
-    assert!(billing(&mut idle, BillingEvent::ConfirmPurchase).is_empty());
+    assert!(act(&mut idle, BillingEvent::ConfirmPurchase).is_empty());
 
     // The booking pages' hand-off and the purchase's do not answer each other.
     let mut model = agency();
@@ -718,6 +723,10 @@ fn an_app_that_cannot_embed_falls_back_to_the_browser_and_says_so() {
     );
     assert!(purchase(&model).in_browser);
     assert_eq!(purchase(&model).surface, Some(PurchaseSurface::Browser));
+    assert_eq!(
+        purchase(&model).confirm_body(),
+        PurchaseState::CONFIRM_BODY_BROWSER
+    );
     assert!(
         model
             .update(Event::WaitOver { ticket: first_wait })
@@ -743,7 +752,7 @@ fn an_app_that_cannot_embed_falls_back_to_the_browser_and_says_so() {
     assert_eq!(url.expose(), LINK);
 
     // The next purchase goes straight to the browser.
-    let effects = billing(&mut model, BillingEvent::ManageInApp);
+    let effects = act(&mut model, BillingEvent::ManageInApp);
     let [Effect::OpenOneTimeUrl { .. }, Effect::Wait { .. }] = effects.as_slice() else {
         panic!("{effects:?}");
     };
@@ -775,9 +784,9 @@ fn a_link_the_view_could_not_show_is_gone_and_the_next_press_uses_the_browser() 
         "{notice:?}"
     );
     assert!(purchase(&model).in_browser);
-    billing(&mut model, BillingEvent::DismissPurchaseNotice);
+    act(&mut model, BillingEvent::DismissPurchaseNotice);
     assert_eq!(purchase(&model).notice, None);
-    let effects = billing(&mut model, BillingEvent::ManageInApp);
+    let effects = act(&mut model, BillingEvent::ManageInApp);
     let [Effect::OpenOneTimeUrl { .. }, Effect::Wait { .. }] = effects.as_slice() else {
         panic!("{effects:?}");
     };
@@ -843,10 +852,10 @@ fn turning_purchases_off_hides_them_and_drops_one_under_way() {
     assert!(!signed_in(&model).offers_manage_in_app());
     assert!(!purchase(&model).opening());
     assert!(model.update(Event::WaitOver { ticket: wait }).is_empty());
-    assert!(billing(&mut model, BillingEvent::ChoosePlan(pro_annual())).is_empty());
+    assert!(act(&mut model, BillingEvent::ChoosePlan(pro_annual())).is_empty());
     assert_eq!(purchase(&model).confirming, None);
-    assert!(billing(&mut model, BillingEvent::ConfirmPurchase).is_empty());
-    assert!(billing(&mut model, BillingEvent::ManageInApp).is_empty());
+    assert!(act(&mut model, BillingEvent::ConfirmPurchase).is_empty());
+    assert!(act(&mut model, BillingEvent::ManageInApp).is_empty());
 
     // A link asked for before it was turned off is not opened.
     let mut model = agency();
@@ -934,7 +943,7 @@ fn each_refusal_says_why_in_this_apps_words() {
         assert_eq!(notice.retryable, retryable, "{notice:?}");
         assert!(!purchase(&model).opening());
         // A new press clears it.
-        billing(&mut model, BillingEvent::ChoosePlan(pro_annual()));
+        act(&mut model, BillingEvent::ChoosePlan(pro_annual()));
         assert_eq!(purchase(&model).notice, None);
     }
 
