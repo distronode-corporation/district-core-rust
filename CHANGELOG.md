@@ -17,6 +17,8 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-10-09
+
 ### Added
 
 - Buying in the app, for District AI for Windows only, through the service's own
