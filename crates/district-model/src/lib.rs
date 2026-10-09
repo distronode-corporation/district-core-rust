@@ -61,6 +61,7 @@ mod setup;
 mod softphone;
 mod support;
 mod telemetry;
+mod transcript;
 mod usage;
 mod voice_studio;
 mod workflows;
@@ -158,6 +159,12 @@ pub use support::{
     SupportRequestKind, SupportRequestResponse, SupportRequestSummary, SupportRequestsResponse,
 };
 pub use telemetry::{TelemetryEnvelope, TelemetryEventType, TelemetryToken};
+pub use transcript::{
+    TRANSCRIPT_CALL_ID_MAX, TRANSCRIPT_SUBSCRIBE_OP, TRANSCRIPT_TEXT_MAX_UTF16, TRANSCRIPT_VERSION,
+    TranscriptClientOp, TranscriptEndReason, TranscriptEndedData, TranscriptErrorCode,
+    TranscriptErrorData, TranscriptEvent, TranscriptRetractReason, TranscriptRetractedData,
+    TranscriptSegment, TranscriptSegmentData, TranscriptSnapshotData, TranscriptSpeaker,
+};
 pub use usage::{UsageHistoryResponse, UsageMonth, UsageResponse};
 pub use voice_studio::{
     CUSTOM_PIPELINE, ENGINE_MIX_VERSION, EngineMix, EngineMixInterruption, EngineMixLlm,

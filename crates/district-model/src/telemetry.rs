@@ -73,6 +73,8 @@ pub struct TelemetryEnvelope {
     ///   event, so a desktop rings only when its own user id is in `userIds`.
     /// - `tool_outcome` carries `{tool, result, provider?, reason?}` and nothing
     ///   about the caller.
+    /// - The five `transcript_*` events carry one call's live transcript, read
+    ///   with [`transcript_event`](Self::transcript_event).
     /// - The message events carry `{messageId, counterpart, type}`, where
     ///   `counterpart` is the other party's number or address. Fetch the thread
     ///   for its content.
@@ -124,6 +126,19 @@ pub enum TelemetryEventType {
     MessageReceived,
     /// `message_sent`: a message was sent from the workspace.
     MessageSent,
+    /// `transcript_snapshot`: a call's live transcript so far, in reply to a
+    /// subscribe. Read the data with
+    /// [`transcript_event`](TelemetryEnvelope::transcript_event), as for the
+    /// four below.
+    TranscriptSnapshot,
+    /// `transcript_segment`: a new or revised line of a live transcript.
+    TranscriptSegment,
+    /// `transcript_ended`: the assistant stopped transcribing a call.
+    TranscriptEnded,
+    /// `transcript_retracted`: lines that must come off every screen.
+    TranscriptRetracted,
+    /// `transcript_error`: a transcript op could not be honoured.
+    TranscriptError,
     /// A name this client does not know, kept as it was sent.
     Unknown(String),
 }
@@ -139,8 +154,26 @@ impl TelemetryEventType {
             Self::ToolOutcome => "tool_outcome",
             Self::MessageReceived => "message_received",
             Self::MessageSent => "message_sent",
+            Self::TranscriptSnapshot => "transcript_snapshot",
+            Self::TranscriptSegment => "transcript_segment",
+            Self::TranscriptEnded => "transcript_ended",
+            Self::TranscriptRetracted => "transcript_retracted",
+            Self::TranscriptError => "transcript_error",
             Self::Unknown(name) => name,
         }
+    }
+
+    /// Whether this is one of the five live transcript events, which reach a
+    /// socket only for a call it subscribed to.
+    pub fn is_transcript(&self) -> bool {
+        matches!(
+            self,
+            Self::TranscriptSnapshot
+                | Self::TranscriptSegment
+                | Self::TranscriptEnded
+                | Self::TranscriptRetracted
+                | Self::TranscriptError
+        )
     }
 }
 
@@ -154,6 +187,11 @@ impl From<String> for TelemetryEventType {
             "tool_outcome" => Self::ToolOutcome,
             "message_received" => Self::MessageReceived,
             "message_sent" => Self::MessageSent,
+            "transcript_snapshot" => Self::TranscriptSnapshot,
+            "transcript_segment" => Self::TranscriptSegment,
+            "transcript_ended" => Self::TranscriptEnded,
+            "transcript_retracted" => Self::TranscriptRetracted,
+            "transcript_error" => Self::TranscriptError,
             _ => Self::Unknown(name),
         }
     }
@@ -172,7 +210,7 @@ impl From<TelemetryEventType> for String {
 mod tests {
     use super::*;
 
-    const KNOWN: [(&str, TelemetryEventType); 7] = [
+    const KNOWN: [(&str, TelemetryEventType); 12] = [
         ("call_started", TelemetryEventType::CallStarted),
         ("call_updated", TelemetryEventType::CallUpdated),
         ("call_ended", TelemetryEventType::CallEnded),
@@ -180,6 +218,17 @@ mod tests {
         ("tool_outcome", TelemetryEventType::ToolOutcome),
         ("message_received", TelemetryEventType::MessageReceived),
         ("message_sent", TelemetryEventType::MessageSent),
+        (
+            "transcript_snapshot",
+            TelemetryEventType::TranscriptSnapshot,
+        ),
+        ("transcript_segment", TelemetryEventType::TranscriptSegment),
+        ("transcript_ended", TelemetryEventType::TranscriptEnded),
+        (
+            "transcript_retracted",
+            TelemetryEventType::TranscriptRetracted,
+        ),
+        ("transcript_error", TelemetryEventType::TranscriptError),
     ];
 
     #[test]
@@ -189,6 +238,7 @@ mod tests {
             assert_eq!(decoded, expected);
             assert_eq!(decoded.as_str(), name);
             assert_eq!(serde_json::to_value(&decoded).unwrap(), name);
+            assert_eq!(decoded.is_transcript(), name.starts_with("transcript_"));
         }
     }
 

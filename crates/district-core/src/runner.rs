@@ -58,6 +58,7 @@ use crate::presence::Presence;
 use crate::scheduling::SCHEDULING_WEB_PATH;
 use crate::session::{RestoreError, SignInError, SignedInSession};
 use crate::settings::{MemberWrite, MessagingWrite};
+use crate::transcript::TranscriptWatch;
 
 /// The District AI API, as far as the app's screens use it.
 pub trait DistrictApi: Send + Sync {
@@ -693,6 +694,14 @@ pub trait LiveUpdates: Send + Sync {
         revision: Ticket,
         workspace_ids: Vec<String>,
     ) -> impl Future<Output = ()> + Send;
+    /// Asks the sockets for the live transcript of `transcript`'s call, or of
+    /// none, unless a request with a later `revision` has been applied already
+    /// (see [`Effect::WatchTranscript`]).
+    fn watch_transcript(
+        &self,
+        revision: Ticket,
+        transcript: Option<TranscriptWatch>,
+    ) -> impl Future<Output = ()> + Send;
 }
 
 /// The desktop's notifications.
@@ -898,6 +907,13 @@ where
                 workspace_ids,
             } => {
                 self.live.watch(revision, workspace_ids).await;
+                return None;
+            }
+            Effect::WatchTranscript {
+                revision,
+                transcript,
+            } => {
+                self.live.watch_transcript(revision, transcript).await;
                 return None;
             }
             Effect::Notify(notification) => {

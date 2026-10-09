@@ -417,36 +417,6 @@ pub const OPAQUE_OBJECTS: &[OpaqueObject] = &[
         reason: STORED_LIST,
     },
     OpaqueObject {
-        fixture: "fixtures/telemetry-event-transcript-ended.json",
-        path: "$.data",
-        reason: TELEMETRY_DATA,
-    },
-    OpaqueObject {
-        fixture: "fixtures/telemetry-event-transcript-error.json",
-        path: "$.data",
-        reason: TELEMETRY_DATA,
-    },
-    OpaqueObject {
-        fixture: "fixtures/telemetry-event-transcript-retracted.json",
-        path: "$.data",
-        reason: TELEMETRY_DATA,
-    },
-    OpaqueObject {
-        fixture: "fixtures/telemetry-event-transcript-segment-interim.json",
-        path: "$.data",
-        reason: TELEMETRY_DATA,
-    },
-    OpaqueObject {
-        fixture: "fixtures/telemetry-event-transcript-segment.json",
-        path: "$.data",
-        reason: TELEMETRY_DATA,
-    },
-    OpaqueObject {
-        fixture: "fixtures/telemetry-event-transcript-snapshot.json",
-        path: "$.data",
-        reason: TELEMETRY_DATA,
-    },
-    OpaqueObject {
         fixture: "desktop/telemetry-event-call-ended-row.json",
         path: "$.data",
         reason: TELEMETRY_DATA,

@@ -32,8 +32,14 @@
 //!    as one text message, pings every thirty seconds (a socket that misses a
 //!    ping's reply is dropped at the next one), checks the membership and the
 //!    session again every sixty seconds, and closes the socket with 4401 once the
-//!    credential has expired. It closes with 1001 when it shuts down. It reads
-//!    nothing the client sends.
+//!    credential has expired. It closes with 1001 when it shuts down.
+//! 5. The client may send ops as text messages
+//!    ([`TranscriptClientOp`](district_model::TranscriptClientOp)): subscribe to
+//!    one call's live transcript, and unsubscribe. The server keeps them per
+//!    socket, so a connection sends its subscriptions again on every socket it
+//!    opens. The server answers a subscribe with a `transcript_snapshot`, relays
+//!    the call's `transcript_*` events after it, and answers an op it refuses
+//!    with a `transcript_error`; the socket stays open.
 //!
 //! # What is never kept or shown
 //!
@@ -63,6 +69,6 @@ pub use config::{
 };
 pub use connection::TelemetryConnection;
 pub use hub::TelemetryHub;
-pub use minter::TokenMinter;
+pub use minter::{TokenMinter, is_transient};
 pub use transport::{Io, NetworkTransport, OpenFuture, Transport};
 pub use update::{Disconnect, EndpointError, LiveError, LiveUpdate, WorkspaceUpdate};

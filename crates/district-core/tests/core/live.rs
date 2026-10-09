@@ -496,8 +496,9 @@ fn a_call_event_reads_the_log_and_the_open_call_again() {
 }
 
 /// The live call transcript's frames, which the service publishes many times a
-/// call for the mobile apps, read nothing again here, even with the log and
-/// that very call open: the desktop shows no live transcript, and a call
+/// call, read nothing again here, even with the log and that very call open:
+/// they are for the live transcript of the call on this desktop alone (see
+/// `transcript.rs`), and with no call here they change nothing at all. A call
 /// event already reads the call when it changes.
 #[test]
 fn the_live_transcript_frames_read_nothing_again() {
@@ -527,10 +528,7 @@ fn the_live_transcript_frames_read_nothing_again() {
         "telemetry-event-transcript-snapshot.json",
     ] {
         let recorded: TelemetryEnvelope = fixture(name);
-        assert!(
-            matches!(recorded.event_type, TelemetryEventType::Unknown(_)),
-            "{name}"
-        );
+        assert!(recorded.event_type.is_transcript(), "{name}");
         let effects = model.update(live(
             AGENCY,
             LiveUpdate::Event(TelemetryEnvelope {

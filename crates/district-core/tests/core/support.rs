@@ -280,3 +280,12 @@ pub fn person(identity: &str) -> Participant {
 pub fn service(identity: &str) -> Participant {
     Participant::new(identity, None, true)
 }
+
+/// `effects` without the wait before the first read of the call's full
+/// transcript, which ending a call with a live transcript asks for last.
+pub fn and_transcript_read(mut effects: Vec<Effect>) -> Vec<Effect> {
+    match effects.pop() {
+        Some(Effect::Wait { delay, .. }) if delay == district_core::final_fetch_delay(1) => effects,
+        other => panic!("no read of the full transcript last, but {other:?}"),
+    }
+}

@@ -50,6 +50,7 @@ use crate::model::Ticket;
 use crate::presence::{Presence, PresenceApi, PresenceSignOut};
 use crate::runner::{Auth, DistrictApi, LiveUpdates};
 use crate::session::{ExchangeFailure, RestoreError, SignInError, SignedInSession};
+use crate::transcript::TranscriptWatch;
 
 impl<S: TokenSource> DistrictApi for ApiClient<S> {
     fn workspace_list(
@@ -842,6 +843,8 @@ pub struct LiveHub<M> {
 struct Watched<M> {
     hub: TelemetryHub<M>,
     applied: Option<Ticket>,
+    transcript_applied: Option<Ticket>,
+    transcript: Option<TranscriptWatch>,
 }
 
 impl<M: TokenMinter> LiveHub<M> {
@@ -850,8 +853,26 @@ impl<M: TokenMinter> LiveHub<M> {
     /// must be read for as long as the hub lives; dropping it ends every socket.
     pub fn new(minter: Arc<M>, config: LiveConfig) -> (Self, UnboundedReceiver<WorkspaceUpdate>) {
         let (hub, updates) = TelemetryHub::new(minter, config);
-        let state = tokio::sync::Mutex::new(Watched { hub, applied: None });
+        let state = tokio::sync::Mutex::new(Watched {
+            hub,
+            applied: None,
+            transcript_applied: None,
+            transcript: None,
+        });
         (Self { state }, updates)
+    }
+}
+
+impl<M: TokenMinter> LiveHub<M> {
+    /// The calls whose live transcript the sockets are asked for, as
+    /// (workspace, call) pairs, in order.
+    pub async fn transcripts(&self) -> Vec<(String, String)> {
+        let watched = self.state.lock().await;
+        watched
+            .hub
+            .transcripts()
+            .map(|(workspace_id, call_id)| (workspace_id.to_owned(), call_id.to_owned()))
+            .collect()
     }
 }
 
@@ -863,6 +884,36 @@ impl<M: TokenMinter> LiveUpdates for LiveHub<M> {
         }
         watched.applied = Some(revision);
         watched.hub.set_watched(workspace_ids).await;
+    }
+
+    async fn watch_transcript(&self, revision: Ticket, transcript: Option<TranscriptWatch>) {
+        let mut watched = self.state.lock().await;
+        if watched
+            .transcript_applied
+            .is_some_and(|applied| applied >= revision)
+        {
+            return;
+        }
+        watched.transcript_applied = Some(revision);
+        let previous = std::mem::replace(&mut watched.transcript, transcript.clone());
+        let hub = &mut watched.hub;
+        match (previous, transcript) {
+            (Some(was), Some(now))
+                if was.workspace_id == now.workspace_id && was.call_id == now.call_id =>
+            {
+                if now.resubscribes > was.resubscribes {
+                    hub.resubscribe_transcript(&now.workspace_id, &now.call_id);
+                }
+            }
+            (was, now) => {
+                if let Some(was) = was {
+                    hub.unsubscribe_transcript(&was.workspace_id, &was.call_id);
+                }
+                if let Some(now) = now {
+                    hub.subscribe_transcript(&now.workspace_id, &now.call_id);
+                }
+            }
+        }
     }
 }
 

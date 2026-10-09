@@ -256,6 +256,9 @@ impl SignedIn {
         result: Result<CallTranscriptResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
+        if let Some(effects) = self.final_transcript_read(ticket, &result, tickets) {
+            return Next::Stay(effects);
+        }
         if !tickets.accept(Slot::Transcript, ticket) {
             return stay();
         }

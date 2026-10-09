@@ -42,5 +42,6 @@ mod studio_edits;
 mod support;
 mod support_requests;
 mod thread;
+mod transcript;
 mod voice_studio;
 mod workflows;

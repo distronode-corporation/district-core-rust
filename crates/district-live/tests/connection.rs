@@ -8,8 +8,8 @@ use std::io::ErrorKind;
 use std::time::Duration;
 
 use common::{
-    FakeMinter, MINUTE, Plan, SECOND, Selection, TTL, TestClock, WORKSPACE, envelope, full_jitter,
-    memory, next, next_at, no_jitter, settle, token_text,
+    FakeMinter, MINUTE, Plan, SECOND, Selection, ServerConn, TTL, TestClock, WORKSPACE, envelope,
+    full_jitter, memory, next, next_at, no_jitter, settle, token_text,
 };
 use district_api::{
     ApiError, ErrorDetail, ReauthReason, RetryReason, TransportError, TransportKind,
@@ -813,4 +813,149 @@ async fn dropping_the_receiver_ends_the_connection() {
         2,
         "it gave up after the second try"
     );
+}
+
+// Live transcript subscriptions: sent on every socket in call id order, and
+// changed while one is open.
+
+fn subscribe(call_id: &str) -> String {
+    format!(r#"{{"op":"transcript.subscribe","v":1,"callId":"{call_id}"}}"#)
+}
+
+fn unsubscribe(call_id: &str) -> String {
+    format!(r#"{{"op":"transcript.unsubscribe","v":1,"callId":"{call_id}"}}"#)
+}
+
+/// The next text frame the client sent, past its pongs.
+async fn next_text(conn: &mut ServerConn) -> String {
+    loop {
+        let message = tokio::time::timeout(Duration::from_secs(3600), conn.next())
+            .await
+            .expect("the client sends something")
+            .expect("the connection is open");
+        if let Message::Text(text) = message {
+            return text.to_string();
+        }
+    }
+}
+
+/// Whether the client sent no text frame for a while.
+async fn sends_nothing(conn: &mut ServerConn) -> bool {
+    loop {
+        match tokio::time::timeout(Duration::from_secs(5), conn.next()).await {
+            Err(_) => return true,
+            Ok(Some(Message::Text(_))) => return false,
+            Ok(Some(_)) => continue,
+            Ok(None) => return true,
+        }
+    }
+}
+
+#[tokio::test(start_paused = true)]
+async fn every_socket_subscribes_to_every_call_kept_in_call_id_order() {
+    let clock = TestClock::new();
+    let minter = FakeMinter::new(clock.clone());
+    let (config, _, mut server) = memory(clock, no_jitter);
+    let (connection, mut updates) = TelemetryConnection::start(WORKSPACE, minter, config);
+    // Asked for before any socket is open: kept for the first one.
+    connection.subscribe_transcript("call_b");
+    connection.subscribe_transcript("call_a");
+    // Changed meanwhile: what is sent is what is kept when the socket opens.
+    connection.subscribe_transcript("call_c");
+    connection.unsubscribe_transcript("call_c");
+    connection.resubscribe_transcript("call_a");
+
+    let mut first = server.accept().await;
+    assert_eq!(next(&mut updates).await, LiveUpdate::Connected);
+    assert_eq!(next_text(&mut first).await, subscribe("call_a"));
+    assert_eq!(next_text(&mut first).await, subscribe("call_b"));
+    assert!(sends_nothing(&mut first).await, "one subscribe per call");
+
+    // The socket is lost: the next one subscribes again, from scratch.
+    first.close(1001, "going away");
+    assert!(matches!(
+        next(&mut updates).await,
+        LiveUpdate::Reconnecting {
+            cause: Disconnect::Closed { code: 1001, .. },
+            ..
+        }
+    ));
+    let mut second = server.accept().await;
+    assert_eq!(next(&mut updates).await, LiveUpdate::Connected);
+    assert_eq!(next_text(&mut second).await, subscribe("call_a"));
+    assert_eq!(next_text(&mut second).await, subscribe("call_b"));
+    connection.stop().await;
+}
+
+#[tokio::test(start_paused = true)]
+async fn ops_on_an_open_socket_are_sent_at_once_and_only_when_they_change_something() {
+    let clock = TestClock::new();
+    let minter = FakeMinter::new(clock.clone());
+    let (config, _, mut server) = memory(clock, no_jitter);
+    let (connection, mut updates) = TelemetryConnection::start(WORKSPACE, minter, config);
+    let mut conn = server.accept().await;
+    assert_eq!(next(&mut updates).await, LiveUpdate::Connected);
+
+    connection.subscribe_transcript("call_1");
+    assert_eq!(next_text(&mut conn).await, subscribe("call_1"));
+    // A heal asks again for the snapshot.
+    connection.resubscribe_transcript("call_1");
+    assert_eq!(next_text(&mut conn).await, subscribe("call_1"));
+    connection.unsubscribe_transcript("call_1");
+    assert_eq!(next_text(&mut conn).await, unsubscribe("call_1"));
+
+    // Nothing that changes nothing goes out: a second unsubscribe, a heal for a
+    // call not subscribed, a subscribe the server would refuse, a duplicate.
+    connection.unsubscribe_transcript("call_1");
+    connection.resubscribe_transcript("call_2");
+    connection.subscribe_transcript("call 3\"");
+    connection.subscribe_transcript(&"a".repeat(65));
+    connection.subscribe_transcript("call_4");
+    connection.subscribe_transcript("call_4");
+    assert_eq!(next_text(&mut conn).await, subscribe("call_4"));
+    assert!(sends_nothing(&mut conn).await);
+    connection.stop().await;
+}
+
+#[tokio::test(start_paused = true)]
+async fn an_op_sent_is_not_the_server_speaking() {
+    let clock = TestClock::new();
+    let minter = FakeMinter::new(clock.clone());
+    let (config, _, mut server) = memory(clock, no_jitter);
+    server.heartbeat = false;
+    let (connection, mut updates) = TelemetryConnection::start(WORKSPACE, minter, config);
+    let mut conn = server.accept().await;
+    let (_, connected_at) = next_at(&mut updates).await;
+
+    tokio::time::sleep(MINUTE).await;
+    connection.subscribe_transcript("call_1");
+    assert_eq!(next_text(&mut conn).await, subscribe("call_1"));
+    let (update, silent_at) = next_at(&mut updates).await;
+    assert_eq!(
+        update,
+        LiveUpdate::Reconnecting {
+            delay: backoff_delay(1, 0.0),
+            cause: Disconnect::Silent,
+        }
+    );
+    assert_eq!(silent_at - connected_at, SILENCE_LIMIT);
+    connection.stop().await;
+}
+
+#[tokio::test(start_paused = true)]
+async fn an_op_for_a_connection_that_ended_is_dropped() {
+    let clock = TestClock::new();
+    let minter = FakeMinter::new(clock.clone());
+    let (config, _, mut server) = memory(clock, no_jitter);
+    let (connection, mut updates) = TelemetryConnection::start(WORKSPACE, minter, config);
+    let conn = server.accept().await;
+    assert_eq!(next(&mut updates).await, LiveUpdate::Connected);
+    conn.close(4403, "not a member");
+    assert!(matches!(
+        next(&mut updates).await,
+        LiveUpdate::Ended(Some(_))
+    ));
+    settle().await;
+    assert!(connection.is_finished());
+    connection.subscribe_transcript("call_1");
 }

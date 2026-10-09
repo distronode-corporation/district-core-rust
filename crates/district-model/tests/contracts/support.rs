@@ -109,3 +109,25 @@ pub fn codec<T: DeserializeOwned + Serialize>(raw: &str) -> Result<Value, String
     serde_json::to_value(&decoded)
         .map_err(|error| format!("{} does not encode: {error}", std::any::type_name::<T>()))
 }
+
+/// The [`Codec`] for a live transcript frame: the envelope, and its `data` as
+/// the typed data of its event type, both strictly, encoded again with the typed
+/// data in place of the plain JSON the envelope carries.
+pub fn transcript_frame(raw: &str) -> Result<Value, String> {
+    use district_model::{
+        TelemetryEnvelope, TelemetryEventType, TranscriptEndedData, TranscriptErrorData,
+        TranscriptRetractedData, TranscriptSegmentData, TranscriptSnapshotData,
+    };
+    let mut envelope: TelemetryEnvelope =
+        serde_json::from_str(raw).map_err(|error| format!("not an envelope: {error}"))?;
+    let data = envelope.data.to_string();
+    envelope.data = match envelope.event_type {
+        TelemetryEventType::TranscriptSnapshot => codec::<TranscriptSnapshotData>(&data)?,
+        TelemetryEventType::TranscriptSegment => codec::<TranscriptSegmentData>(&data)?,
+        TelemetryEventType::TranscriptEnded => codec::<TranscriptEndedData>(&data)?,
+        TelemetryEventType::TranscriptRetracted => codec::<TranscriptRetractedData>(&data)?,
+        TelemetryEventType::TranscriptError => codec::<TranscriptErrorData>(&data)?,
+        other => return Err(format!("{other:?} is not a transcript event")),
+    };
+    serde_json::to_value(&envelope).map_err(|error| error.to_string())
+}

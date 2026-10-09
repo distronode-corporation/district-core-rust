@@ -1,13 +1,14 @@
 //! One workspace's telemetry connection: minting, connecting, renewing,
 //! reconnecting and stopping.
 
+use std::collections::BTreeSet;
 use std::fmt::Display;
 use std::sync::Arc;
 use std::time::Duration;
 
 use district_api::ApiError;
-use district_model::{TelemetryEnvelope, TelemetryToken};
-use futures_util::StreamExt;
+use district_model::{TelemetryEnvelope, TelemetryToken, TranscriptClientOp};
+use futures_util::{SinkExt, StreamExt};
 use tokio::sync::mpsc::{self, UnboundedReceiver, UnboundedSender};
 use tokio::sync::watch;
 use tokio::task::JoinHandle;
@@ -52,12 +53,26 @@ use crate::update::{Disconnect, EndpointError, LiveError, LiveUpdate, WorkspaceU
 /// A credential that still has more than the renewal lead to run is reused when
 /// reconnecting; only a refused or expiring one is replaced.
 ///
+/// It also keeps the calls whose live transcript it receives
+/// ([`subscribe_transcript`](Self::subscribe_transcript)), and sends a
+/// `transcript.subscribe` for each on every socket it opens, in call id order,
+/// renewals included, because the server keeps subscriptions per socket.
+///
 /// Dropping the handle stops the connection too, in the background.
 #[derive(Debug)]
 pub struct TelemetryConnection {
     workspace_id: String,
     stop: watch::Sender<bool>,
+    ops: UnboundedSender<TranscriptOp>,
     task: JoinHandle<()>,
+}
+
+/// A change to a connection's transcript subscriptions.
+#[derive(Debug)]
+enum TranscriptOp {
+    Subscribe(String),
+    Unsubscribe(String),
+    Resubscribe(String),
 }
 
 impl TelemetryConnection {
@@ -78,7 +93,13 @@ impl TelemetryConnection {
         config: LiveConfig,
     ) -> (Self, UnboundedReceiver<WorkspaceUpdate>) {
         let (updates, receiver) = mpsc::unbounded_channel();
-        let connection = Self::spawn(workspace_id.into(), minter, config, updates);
+        let connection = Self::spawn(
+            workspace_id.into(),
+            minter,
+            config,
+            updates,
+            BTreeSet::new(),
+        );
         (connection, receiver)
     }
 
@@ -89,14 +110,18 @@ impl TelemetryConnection {
         minter: Arc<M>,
         config: LiveConfig,
         updates: UnboundedSender<WorkspaceUpdate>,
+        transcripts: BTreeSet<String>,
     ) -> Self {
         let (stop, stop_receiver) = watch::channel(false);
+        let (ops, ops_receiver) = mpsc::unbounded_channel();
         let worker = Worker {
             workspace_id: workspace_id.clone(),
             minter,
             config,
             updates,
             stop: stop_receiver,
+            ops: ops_receiver,
+            transcripts,
             token: None,
             failures: 0,
         };
@@ -104,8 +129,39 @@ impl TelemetryConnection {
         Self {
             workspace_id,
             stop,
+            ops,
             task,
         }
+    }
+
+    /// Receives the live transcript of `call_id` from now on, on this socket
+    /// and every one after it, until
+    /// [`unsubscribe_transcript`](Self::unsubscribe_transcript). The server
+    /// answers each subscribe with a `transcript_snapshot` and then sends the
+    /// call's `transcript_*` events. A call id the server would refuse
+    /// ([`TranscriptClientOp::is_valid_call_id`]) is not kept, and one already
+    /// kept changes nothing.
+    pub fn subscribe_transcript(&self, call_id: &str) {
+        self.send_op(TranscriptOp::Subscribe(call_id.to_owned()));
+    }
+
+    /// Stops receiving the live transcript of `call_id`.
+    pub fn unsubscribe_transcript(&self, call_id: &str) {
+        self.send_op(TranscriptOp::Unsubscribe(call_id.to_owned()));
+    }
+
+    /// Asks again for the live transcript of `call_id`, which brings a fresh
+    /// snapshot: how a client heals a gap. Nothing for a call not subscribed,
+    /// and nothing while no socket is open, since the next one subscribes
+    /// anyway.
+    pub fn resubscribe_transcript(&self, call_id: &str) {
+        self.send_op(TranscriptOp::Resubscribe(call_id.to_owned()));
+    }
+
+    /// Hands `op` to the connection's task. One that has ended takes nothing,
+    /// and needs nothing.
+    fn send_op(&self, op: TranscriptOp) {
+        let _ = self.ops.send(op);
     }
 
     /// The workspace this connection streams.
@@ -206,6 +262,11 @@ struct Worker<M> {
     config: LiveConfig,
     updates: UnboundedSender<WorkspaceUpdate>,
     stop: watch::Receiver<bool>,
+    /// Changes to the transcript subscriptions, applied as they come while a
+    /// socket is open and when the next one opens otherwise.
+    ops: UnboundedReceiver<TranscriptOp>,
+    /// The calls whose live transcript this connection receives.
+    transcripts: BTreeSet<String>,
     /// The credential the last connection used, kept for the next one while it
     /// has time left.
     token: Option<TelemetryToken>,
@@ -321,8 +382,17 @@ impl<M: TokenMinter> Worker<M> {
     async fn pump(&mut self, mut socket: Socket, renew_at: Instant) -> Next {
         let opened = Instant::now();
         let stable = || opened.elapsed() >= STABLE_AFTER;
+        // What changed while no socket was open is kept, and this socket
+        // subscribes to every call kept.
+        while let Ok(op) = self.ops.try_recv() {
+            self.apply(op);
+        }
+        let subscriptions: Vec<String> = self.transcripts.iter().cloned().collect();
+        for call_id in subscriptions {
+            send(&mut socket, &TranscriptClientOp::Subscribe(call_id)).await;
+        }
+        let mut quiet_until = Instant::now() + SILENCE_LIMIT;
         loop {
-            let quiet_until = Instant::now() + SILENCE_LIMIT;
             let frame = tokio::select! {
                 biased;
                 () = stopped(&mut self.stop) => {
@@ -341,8 +411,17 @@ impl<M: TokenMinter> Worker<M> {
                 () = sleep_until(quiet_until) => {
                     return Next::Retry(Retry::new(Disconnect::Silent, stable()));
                 }
+                Some(op) = self.ops.recv() => {
+                    if let Some(frame) = self.apply(op) {
+                        send(&mut socket, &frame).await;
+                    }
+                    continue;
+                }
                 frame = socket.next() => frame.unwrap_or(Err(WsError::ConnectionClosed)),
             };
+            // Only what the server sends counts against its silence, not an op
+            // this side sent.
+            quiet_until = Instant::now() + SILENCE_LIMIT;
             match frame {
                 Ok(Message::Close(frame)) => {
                     // Reading once more sends the reply the protocol queued.
@@ -355,6 +434,24 @@ impl<M: TokenMinter> Worker<M> {
                 Ok(message) => self.receive(&message),
                 Err(error) => return network(error, stable()),
             }
+        }
+    }
+
+    /// Applies a change to the subscriptions, and returns the op to send for it
+    /// on an open socket, if any.
+    fn apply(&mut self, op: TranscriptOp) -> Option<TranscriptClientOp> {
+        match op {
+            TranscriptOp::Subscribe(call_id) => (TranscriptClientOp::is_valid_call_id(&call_id)
+                && self.transcripts.insert(call_id.clone()))
+            .then_some(TranscriptClientOp::Subscribe(call_id)),
+            TranscriptOp::Unsubscribe(call_id) => self
+                .transcripts
+                .remove(&call_id)
+                .then_some(TranscriptClientOp::Unsubscribe(call_id)),
+            TranscriptOp::Resubscribe(call_id) => self
+                .transcripts
+                .contains(&call_id)
+                .then_some(TranscriptClientOp::Subscribe(call_id)),
         }
     }
 
@@ -441,6 +538,14 @@ impl<M: TokenMinter> Worker<M> {
         };
         self.updates.send(update).map_err(|_| End::Abandoned)
     }
+}
+
+/// Sends `op` on `socket`. A send that fails is not reported here: the socket
+/// is broken, and its next read says so.
+async fn send(socket: &mut Socket, op: &TranscriptClientOp) {
+    // Every op that reaches here names a call id already checked.
+    let text = op.text().unwrap_or_default();
+    let _ = socket.send(Message::text(text)).await;
 }
 
 /// Resolves once a stop is requested, or the handle that could request one is
