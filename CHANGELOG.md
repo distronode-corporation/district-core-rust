@@ -17,6 +17,8 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-09
+
 ### Added
 
 - The live transcript of the call on this desktop, with the semantics of
