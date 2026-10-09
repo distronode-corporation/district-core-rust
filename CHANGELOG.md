@@ -17,6 +17,8 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-09
+
 ### Added
 
 - `district-auth`: the authorize URL names the app's platform (`platform=linux` or
