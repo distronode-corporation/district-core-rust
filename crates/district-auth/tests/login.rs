@@ -58,7 +58,8 @@ fn the_authorize_url_carries_exactly_what_the_service_reads() {
             "code_challenge",
             "code_challenge_method",
             "state",
-            "redirect_uri"
+            "redirect_uri",
+            "platform"
         ]
     );
     assert!(is_valid_challenge(&param(&url, "code_challenge")));
@@ -71,6 +72,18 @@ fn the_authorize_url_carries_exactly_what_the_service_reads() {
     assert_eq!(REDIRECT_SCHEME, "districtai");
     // The verifier never leaves the app, only its digest does.
     assert!(!url.as_str().contains("verifier"));
+    assert_eq!(param(&url, "platform"), "linux");
+}
+
+#[test]
+fn the_authorize_url_names_each_platform_by_its_wire_value() {
+    for platform in Platform::ALL {
+        let config = ApiConfig::new(ClientIdentity::new(platform, "DistrictAI-Test", "1.0.0"));
+        let url = LoginFlow::new(&config).authorize_url();
+        assert_eq!(param(&url, "platform"), platform.wire());
+    }
+    // The value the service lets offer sign-up.
+    assert_eq!(Platform::Windows.wire(), "windows");
 }
 
 #[test]
