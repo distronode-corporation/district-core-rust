@@ -193,11 +193,28 @@ impl PlanStatus {
 /// The plan's name, or the line for a workspace with none. Never "Free": the
 /// service sends no tier for a workspace without one, and a name nobody wrote is
 /// not shown.
+///
+/// The service sends the tier as it stores it (`VoicePro`); the four it sells
+/// are shown by the names its pricing page gives them ("Voice Pro"), which are
+/// the service's `PLAN_TIER_LABELS`. A tier this build does not know is shown as
+/// the service spells it rather than guessed at.
 pub fn plan_name(billing: &WorkspaceBilling) -> &str {
-    billing
-        .subscription_tier
-        .as_deref()
-        .unwrap_or("No plan on this workspace")
+    match billing.subscription_tier.as_deref() {
+        Some(tier) => plan_label(tier),
+        None => "No plan on this workspace",
+    }
+}
+
+/// The name of the plan the service stores as `tier`, or `tier` itself when it
+/// is not one of the four this build knows.
+fn plan_label(tier: &str) -> &str {
+    match tier {
+        "VoiceSolo" => "Voice Solo",
+        "VoiceStarter" => "Voice Starter",
+        "VoicePro" => "Voice Pro",
+        "VoiceStudio" => "Voice Studio",
+        other => other,
+    }
 }
 
 /// What happens past the included minutes, and whether it is happening now, or
