@@ -14,7 +14,8 @@ What it writes, under crates/district-l10n/:
                             contracts/i18n/wire-vocabulary.json, its server
                             placeholders, and the generic labels for a value
                             this build does not know
-  src/generated/core.rs, api_errors.rs, wire.rs, support.rs, numbers.rs
+  src/generated/core.rs, api_errors.rs, wire.rs, support.rs, numbers.rs,
+  scheduling.rs
                             the accessors, by `tools/l10n/l10n.py gen --backend
                             rust`, one module per catalog
   src/generated/api_error_table.rs, wire_table.rs
@@ -27,7 +28,9 @@ What it writes, under crates/district-l10n/:
                             to its catalog's text (tests/accessors.rs includes
                             it, unformatted)
 
-catalog/core.toml, catalog/support.toml and catalog/numbers.toml are written by hand. The two catalogs written here keep any
+catalog/core.toml, catalog/support.toml, catalog/numbers.toml and
+catalog/scheduling.toml (the booking scheduler's administration) are written
+by hand. The two catalogs written here keep any
 `fr`, `state` and the other translation fields an entry already has, as long as
 its English has not changed: `l10n.py import` writes French into them like into
 any other catalog, and a regeneration does not lose it.
@@ -63,6 +66,7 @@ MODULES = (
     ("wire", "wire_strings"),
     ("support", "support_strings"),
     ("numbers", "numbers_strings"),
+    ("scheduling", "scheduling_strings"),
 )
 GEN_OPTS = ("--opt", "locale_path=crate::Locale", "--opt", "int_fmt=crate::format::integer")
 

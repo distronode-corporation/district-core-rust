@@ -43,6 +43,7 @@ use district_model::{
     PersonaPreviewTokenResponse, PresenceRegistration, PushRegistrationResponse, RenameResponse,
     RoutingRule, VoiceStudioResponse, WorkspaceConfigResponse, WorkspaceSaveResponse,
 };
+use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
 use tokio::sync::mpsc::UnboundedReceiver;
 use url::Url;
 
@@ -462,6 +463,22 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         nonce: Option<&str>,
     ) -> impl Future<Output = Result<SchedulingHandOffResponse, ApiError>> + Send {
         ApiClient::scheduling_hand_off(self, workspace_id, next, nonce)
+    }
+
+    fn scheduling_admin(
+        &self,
+        workspace_id: &str,
+        request: &SchedulingAdminRequest,
+    ) -> impl Future<Output = Result<SchedulingAdminReply, ApiError>> + Send {
+        ApiClient::scheduling_admin(self, workspace_id, request)
+    }
+
+    fn scheduling_sign_in(
+        &self,
+        workspace_id: &str,
+        next: &str,
+    ) -> impl Future<Output = Result<SchedulingSecret, ApiError>> + Send {
+        ApiClient::scheduling_sign_in(self, workspace_id, next)
     }
 
     fn billing_hand_off(

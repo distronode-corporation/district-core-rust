@@ -8,6 +8,8 @@
 //! workspace, so switching workspaces leaves a detail for its list (see
 //! [`Route::after_workspace_switch`]).
 
+use crate::scheduling_admin::SchedulingSection;
+
 /// The five destinations the navigation bar always offers, in its order.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Tab {
@@ -79,8 +81,11 @@ pub enum Route {
     Billing,
     /// Workflows, their runs and the outbound campaign's switch.
     Workflows,
-    /// Booking pages.
+    /// Booking pages: their status, and the way into their administration.
     Scheduling,
+    /// A section of the booking scheduler's administration, or a detail under
+    /// one. Every section's reads admit a viewer.
+    SchedulingAdmin(SchedulingSection),
     /// The help desk: the tickets the workspace's own customers raised. Closed
     /// to a viewer, reads included.
     Desk,
@@ -200,6 +205,7 @@ impl Route {
             Self::Devices => Some(Self::Account),
             Self::Workspace(WorkspaceSection::Hub) => Some(Self::Overview),
             Self::Workspace(_) => Some(Self::Workspace(WorkspaceSection::Hub)),
+            Self::SchedulingAdmin(section) => Some(section.parent()),
             Self::Hq
             | Self::Analytics
             | Self::Marketplace
@@ -231,6 +237,9 @@ impl Route {
             | Self::Support
             | Self::SupportRequest { .. }
             | Self::Dialer => Self::Overview,
+            // The new workspace may have no booking pages: its own status, on
+            // the booking pages screen, says.
+            Self::SchedulingAdmin(_) => Self::Scheduling,
             Self::Thread { .. } | Self::CallDetail { .. } | Self::ContactDetail { .. } => {
                 self.tab().route()
             }

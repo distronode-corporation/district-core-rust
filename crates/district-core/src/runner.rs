@@ -49,6 +49,7 @@ use district_model::{
     PersonaPreviewTokenResponse, RenameResponse, RoutingRule, VoiceStudioResponse,
     WorkspaceConfigResponse, WorkspaceSaveResponse,
 };
+use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
 
 use crate::contacts::{ContactWrite, ContactWritten};
 use crate::live::Notification;
@@ -349,6 +350,20 @@ pub trait DistrictApi: Send + Sync {
         next: Option<&str>,
         nonce: Option<&str>,
     ) -> impl Future<Output = Result<SchedulingHandOffResponse, ApiError>> + Send;
+    /// One request of the booking scheduler's administration: an operation of
+    /// the service's catalog, or an image. A write is sent once.
+    fn scheduling_admin(
+        &self,
+        workspace_id: &str,
+        request: &SchedulingAdminRequest,
+    ) -> impl Future<Output = Result<SchedulingAdminReply, ApiError>> + Send;
+    /// A link that signs the browser in to the scheduler itself, landing on
+    /// `next`: the start of a calendar connection. A credential; sent once.
+    fn scheduling_sign_in(
+        &self,
+        workspace_id: &str,
+        next: &str,
+    ) -> impl Future<Output = Result<SchedulingSecret, ApiError>> + Send;
     /// A link that signs a browser in to the checkout or the billing page,
     /// landing on `next` (built by
     /// [`BillingDestination::next`](crate::BillingDestination::next)), bound by
@@ -1301,6 +1316,22 @@ where
                         .await,
                 }
             }
+            Effect::SchedulingAdmin {
+                ticket,
+                workspace_id,
+                request,
+            } => Event::SchedulingAdminAnswered {
+                ticket,
+                result: self.api.scheduling_admin(&workspace_id, &request).await,
+            },
+            Effect::SchedulingSignIn {
+                ticket,
+                workspace_id,
+                next,
+            } => Event::SchedulingSignInReady {
+                ticket,
+                result: self.api.scheduling_sign_in(&workspace_id, &next).await,
+            },
             Effect::RequestBillingHandOff {
                 ticket,
                 workspace_id,

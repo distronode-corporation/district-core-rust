@@ -38,6 +38,7 @@ mod rooms;
 mod route;
 mod runner;
 mod scheduling;
+mod scheduling_admin;
 mod session;
 mod settings;
 mod settings_lists;

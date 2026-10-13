@@ -59,6 +59,7 @@ use district_model::{
     WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
     WorkspaceConfigResponse, WorkspaceListResponse,
 };
+use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
 use url::Url;
 
 use crate::account::AccountView;
@@ -82,6 +83,7 @@ use crate::role::Capabilities;
 use crate::rooms::RoomsEvent;
 use crate::route::Route;
 use crate::scheduling::{OneTimeUrl, SchedulingEvent};
+use crate::scheduling_admin::SchedulingAdminEvent;
 use crate::session::{
     Identity, Notice, RestoreError, Restoring, SessionEnd, SessionState, SignInError, SignInPhase,
     SignOutOutcome, SignOutScope, SignedInSession, SignedOut, SignedOutWhy, SigningIn, SigningOut,
@@ -233,6 +235,8 @@ pub enum Event {
     Workflows(WorkflowsEvent),
     /// Something on the booking pages screen.
     Scheduling(SchedulingEvent),
+    /// Something in the booking scheduler's administration.
+    SchedulingAdmin(SchedulingAdminEvent),
     /// Something on the help desk's screens.
     Desk(DeskEvent),
     /// Something on the support screens.
@@ -651,6 +655,23 @@ pub enum Event {
         ticket: Ticket,
         /// The service's answer.
         result: Result<SchedulingHandOffResponse, ApiError>,
+    },
+    /// The booking scheduler's administration answered, or the request
+    /// failed: a scheduler's refusal is an answer
+    /// ([`SchedulingAdminReply::Refused`]).
+    SchedulingAdminAnswered {
+        /// The ticket of [`Effect::SchedulingAdmin`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<SchedulingAdminReply, ApiError>,
+    },
+    /// The scheduler sign-in link arrived, or was refused. Its `Debug` output
+    /// leaves the link out.
+    SchedulingSignInReady {
+        /// The ticket of [`Effect::SchedulingSignIn`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<SchedulingSecret, ApiError>,
     },
     /// The help desk's settings were read.
     DeskSettingsLoaded {
@@ -1102,6 +1123,14 @@ impl Event {
                 result: Err(error),
             }
             | Event::SchedulingHandOffReady {
+                ticket,
+                result: Err(error),
+            }
+            | Event::SchedulingAdminAnswered {
+                ticket,
+                result: Err(error),
+            }
+            | Event::SchedulingSignInReady {
                 ticket,
                 result: Err(error),
             }
@@ -1726,6 +1755,27 @@ pub enum Effect {
         /// link is asked for unbound. Redacted in `Debug`.
         nonce: Option<HandOffNonce>,
     },
+    /// Ask the booking scheduler's administration: one operation of the
+    /// service's catalog, or an image. A write is sent once.
+    SchedulingAdmin {
+        /// Returned in [`Event::SchedulingAdminAnswered`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The operation and its parameters.
+        request: SchedulingAdminRequest,
+    },
+    /// Ask for the link that signs the browser in to the scheduler itself,
+    /// landing on `next`: the start of a calendar connection. Sent once: it is
+    /// a credential.
+    SchedulingSignIn {
+        /// Returned in [`Event::SchedulingSignInReady`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// Where in the scheduler it lands.
+        next: String,
+    },
     /// Read the help desk's settings.
     LoadDeskSettings {
         /// Returned in [`Event::DeskSettingsLoaded`].
@@ -2261,6 +2311,8 @@ impl Effect {
             | Self::LoadSchedulingStatus { ticket, .. }
             | Self::EnableScheduling { ticket, .. }
             | Self::RequestSchedulingHandOff { ticket, .. }
+            | Self::SchedulingAdmin { ticket, .. }
+            | Self::SchedulingSignIn { ticket, .. }
             | Self::RequestBillingHandOff { ticket, .. }
             | Self::ReadPurchaseSetting { ticket }
             | Self::LoadDeskSettings { ticket, .. }
@@ -2404,6 +2456,8 @@ pub(crate) enum Slot {
     SchedulingEnable,
     SchedulingHandOff,
     SchedulingHandOffWait,
+    /// Keyed: one per answer awaited, each section keeping what it is for.
+    SchedulingAdmin,
     PurchaseSetting,
     BillingHandOff,
     BillingHandOffWait,
@@ -2475,7 +2529,7 @@ const SLOTS: usize = Slot::RingDeadline as usize + 1;
 /// forgotten with the sections. The draft write is not among them: a reply
 /// saved as the workspace closes still lands, and the writes waiting behind it
 /// go after it.
-pub(crate) const WORKSPACE_SLOTS: [Slot; 64] = [
+pub(crate) const WORKSPACE_SLOTS: [Slot; 65] = [
     Slot::Unread,
     Slot::Conversations,
     Slot::DraftKeys,
@@ -2522,6 +2576,7 @@ pub(crate) const WORKSPACE_SLOTS: [Slot; 64] = [
     Slot::SchedulingEnable,
     Slot::SchedulingHandOff,
     Slot::SchedulingHandOffWait,
+    Slot::SchedulingAdmin,
     Slot::DeskQueueSettings,
     Slot::DeskTickets,
     Slot::DeskEnable,
@@ -2634,6 +2689,11 @@ impl Tickets {
             .iter()
             .position(|(s, t, _)| *s == slot && *t == ticket)?;
         Some(self.keyed.remove(index).2)
+    }
+
+    /// Stops waiting for `ticket` in the keyed `slot`.
+    pub(crate) fn forget(&mut self, slot: Slot, ticket: Ticket) {
+        self.keyed.retain(|(s, t, _)| !(*s == slot && *t == ticket));
     }
 
     /// A number for [`Effect::WatchLive`], later than every one before it.
@@ -2793,6 +2853,8 @@ impl Model {
             Event::Scheduling(event) => {
                 self.signed_in(|s, tickets, config| s.scheduling_event(event, tickets, config))
             }
+            Event::SchedulingAdmin(event) => self
+                .signed_in(|s, tickets, config| s.scheduling_admin_event(event, tickets, config)),
             Event::Desk(event) => self.signed_in(|s, tickets, _| s.desk_event(event, tickets)),
             Event::Support(event) => {
                 self.signed_in(|s, tickets, _| s.support_event(event, tickets))
@@ -3015,6 +3077,12 @@ impl Model {
                 self.signed_in(|s, tickets, config| {
                     s.scheduling_hand_off(ticket, result, tickets, config)
                 })
+            }
+            Event::SchedulingAdminAnswered { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.scheduling_admin_answered(ticket, result, tickets))
+            }
+            Event::SchedulingSignInReady { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.scheduling_sign_in_ready(ticket, result, tickets))
             }
             Event::BillingHandOffReady { ticket, result } => {
                 self.signed_in(|s, tickets, config| {

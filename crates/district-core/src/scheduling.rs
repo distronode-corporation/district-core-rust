@@ -1,5 +1,7 @@
 //! Booking pages: whether the workspace has them and where they stand, turning
-//! them on, and managing them on the web.
+//! them on, the way into their administration (whose sections are
+//! [`scheduling_admin`](crate::scheduling_admin), listed once the pages are
+//! live), and the web dashboard for whatever this app does not draw.
 //!
 //! Whether "Enable" is offered is the service's answer (the status says whether
 //! this member may), never worked out from a role here: a copy that failed
@@ -9,7 +11,7 @@
 //! answer is re-read from the status either way, because the status is the
 //! truth; a setup that ran and failed is an ordinary answer carrying its reason.
 //!
-//! Managing them happens on the web, through a hand-off: a link the service
+//! The web dashboard is reached through a hand-off: a link the service
 //! mints on request that signs the browser in, good for one use within a minute.
 //! It is asked for when the member asks to go, checked to be on the service's
 //! own address, opened at once, and then gone. It is never kept in the state,
@@ -35,6 +37,7 @@ use district_model::{
 
 use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
+use crate::scheduling_admin::SchedulingSection;
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::{english_only, l, s};
 
@@ -96,6 +99,22 @@ impl SchedulingScreen {
     /// nothing; while the browser is awaited, a press starts over.
     pub fn minting(&self) -> bool {
         self.hand_off == HandOffLeg::Minting
+    }
+
+    /// The administration's sections to list, in the web dashboard's order:
+    /// all of them once the booking pages are live, and none before (every
+    /// one would answer that there are no booking pages), nor while the status
+    /// is unknown.
+    pub fn sections(&self) -> Vec<SchedulingSection> {
+        match self.status.presentation() {
+            Some(SchedulingPresentation::Live(_)) => SchedulingSection::listed().to_vec(),
+            _ => Vec::new(),
+        }
+    }
+
+    /// The heading over the sections: "Manage".
+    pub fn sections_heading() -> &'static str {
+        district_l10n::scheduling_strings::sections_eyebrow(l())
     }
 }
 
@@ -225,7 +244,8 @@ impl SchedulingPresentation {
         matches!(self, Self::Provisioning(_) | Self::SetupFailed(_))
     }
 
-    /// Whether to offer "Manage on the web".
+    /// Whether to offer the web dashboard, the way to whatever this app does
+    /// not draw.
     pub fn offers_web(&self) -> bool {
         matches!(self, Self::Live(_))
     }
@@ -311,16 +331,17 @@ impl SignedIn {
         result: Result<SchedulingStatusResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
-        if tickets.accept(Slot::SchedulingStatus, ticket) {
-            self.scheduling.status = match result {
-                Ok(status) => SchedulingStatus::Ready {
-                    status,
-                    refreshing: false,
-                },
-                Err(error) => SchedulingStatus::Failed(FailureText::from_api_error(&error)),
-            };
+        if !tickets.accept(Slot::SchedulingStatus, ticket) {
+            return stay();
         }
-        stay()
+        self.scheduling.status = match result {
+            Ok(status) => SchedulingStatus::Ready {
+                status,
+                refreshing: false,
+            },
+            Err(error) => SchedulingStatus::Failed(FailureText::from_api_error(&error)),
+        };
+        Next::Stay(self.scheduling_status_arrived(tickets))
     }
 
     /// Turning them on finished, one way or another. The status is read again

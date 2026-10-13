@@ -43,6 +43,7 @@ use crate::role::Capabilities;
 use crate::rooms::RoomsScreen;
 use crate::route::{Route, WorkspaceSection};
 use crate::scheduling::SchedulingScreen;
+use crate::scheduling_admin::SchedulingAdmin;
 use crate::session::{Identity, Notice, SignOutScope};
 use crate::settings::{
     CallHandlingSection, DirectorySection, KnowledgeSection, MembersSection, MessagingSection,
@@ -105,6 +106,9 @@ pub struct SignedIn {
     pub workflows: WorkflowsScreen,
     /// Booking pages.
     pub scheduling: SchedulingScreen,
+    /// The booking scheduler's administration: its sections, each while it
+    /// shows.
+    pub scheduling_admin: SchedulingAdmin,
     /// The help desk's queue.
     pub desk: DeskScreen,
     /// The open help desk ticket, while [`Route::DeskTicket`] shows.
@@ -203,6 +207,7 @@ impl SignedIn {
             purchase: PurchaseState::default(),
             workflows: WorkflowsScreen::default(),
             scheduling: SchedulingScreen::default(),
+            scheduling_admin: SchedulingAdmin::default(),
             desk: DeskScreen::default(),
             desk_ticket: None,
             desk_settings: None,
@@ -303,6 +308,7 @@ impl SignedIn {
         self.close_desk_ticket(tickets);
         self.close_desk_settings(tickets);
         self.close_support_request(tickets);
+        self.close_scheduling_admin(next, tickets);
         effects.extend(self.close_rooms(tickets));
         effects.extend(self.close_thread(tickets));
         effects
@@ -332,6 +338,7 @@ impl SignedIn {
             Route::Billing => self.enter_billing(tickets),
             Route::Workflows => self.enter_workflows(tickets),
             Route::Scheduling => self.enter_scheduling(tickets),
+            Route::SchedulingAdmin(section) => self.enter_scheduling_admin(section, tickets),
             Route::Desk => self.enter_desk(tickets),
             Route::DeskTicket { ticket_id } => self.open_desk_ticket(ticket_id, tickets),
             Route::DeskSettings => self.enter_desk_settings(tickets),
@@ -371,6 +378,7 @@ impl SignedIn {
             Route::Contacts => self.contacts.list == ContactList::NotLoaded,
             Route::Desk => self.desk.queue == DeskQueue::NotLoaded,
             Route::Support => self.support.list == SupportList::NotLoaded,
+            Route::SchedulingAdmin(ref section) => self.scheduling_admin.never_read(section),
             _ => false,
         }
     }
@@ -482,6 +490,7 @@ impl SignedIn {
         self.billing = BillingScreen::default();
         self.workflows = WorkflowsScreen::default();
         self.scheduling = SchedulingScreen::default();
+        self.scheduling_admin = SchedulingAdmin::default();
         self.desk = DeskScreen::default();
         self.desk_ticket = None;
         self.desk_settings = None;

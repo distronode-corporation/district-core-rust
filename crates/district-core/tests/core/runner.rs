@@ -517,6 +517,32 @@ impl DistrictApi for FakeApi {
         Ok(desktop_fixture("district-scheduling-handoff.json"))
     }
 
+    async fn scheduling_admin(
+        &self,
+        workspace_id: &str,
+        request: &district_model::SchedulingAdminRequest,
+    ) -> Result<district_model::SchedulingAdminReply, ApiError> {
+        self.0.push(format!(
+            "scheduling admin {workspace_id} {:?}",
+            request.op().map(|op| op.as_str())
+        ));
+        Ok(district_model::SchedulingAdminReply::Done(
+            district_model::SchedulingAdminData::Done(district_model::SchedulingOk { ok: true }),
+        ))
+    }
+
+    async fn scheduling_sign_in(
+        &self,
+        workspace_id: &str,
+        next: &str,
+    ) -> Result<district_model::SchedulingSecret, ApiError> {
+        self.0
+            .push(format!("scheduling sign-in {workspace_id} {next}"));
+        Ok(district_model::SchedulingSecret::new(
+            "https://book.example.com/v1/auth/sso?token=t",
+        ))
+    }
+
     async fn billing_hand_off(
         &self,
         workspace_id: Option<&str>,
