@@ -107,20 +107,6 @@ pub const EXCLUDED: &[Exclusion] = &[
         android_calls_it: true,
     },
     Exclusion {
-        name: "booking scheduler administration",
-        method: None,
-        path: PathMatch::Subtree("/api/district/scheduling/admin"),
-        reason: "The booking scheduler's operator console stays in the web dashboard.",
-        android_calls_it: true,
-    },
-    Exclusion {
-        name: "booking scheduler console sign-in",
-        method: None,
-        path: PathMatch::Exact("/api/district/scheduling/sso"),
-        reason: "A redirect into the scheduler's own console, superseded by the hand-off endpoint.",
-        android_calls_it: true,
-    },
-    Exclusion {
         name: "campaign dialling",
         method: None,
         path: PathMatch::Exact("/api/district/calls/outbound"),

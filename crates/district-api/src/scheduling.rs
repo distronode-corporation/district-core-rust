@@ -1,7 +1,6 @@
 //! Typed calls for booking pages, the way the Android app reaches them: their
-//! status, turning them on, and a hand-off that signs the browser in to manage
-//! them on the web. Nothing of the booking scheduler's own administration is
-//! here.
+//! status, turning them on, and a hand-off that signs the browser in to the web
+//! dashboard. Their administration is `scheduling_admin.rs`.
 //!
 //! None of these answers has a `success` flag. Their required fields are what
 //! turn an empty body into [`ApiError::Decode`].

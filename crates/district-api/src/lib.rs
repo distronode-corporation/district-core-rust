@@ -63,7 +63,9 @@
 //!   [`ApiClient::set_workflow_active`], [`ApiClient::campaign_status`],
 //!   [`ApiClient::set_campaign_enabled`]);
 //! - booking pages ([`ApiClient::scheduling_status`],
-//!   [`ApiClient::enable_scheduling`], [`ApiClient::scheduling_hand_off`]);
+//!   [`ApiClient::enable_scheduling`], [`ApiClient::scheduling_hand_off`]) and
+//!   their administration, one catalogued operation at a time
+//!   ([`ApiClient::scheduling_admin`]);
 //! - the help desk ([`ApiClient::desk_tickets`], [`ApiClient::desk_ticket`],
 //!   [`ApiClient::reply_to_desk_ticket`], [`ApiClient::desk_settings`] and the
 //!   rest) and support requests ([`ApiClient::support_requests`],
@@ -130,6 +132,7 @@ mod persona;
 mod presence;
 mod rooms;
 mod scheduling;
+mod scheduling_admin;
 mod settings;
 mod support;
 mod telemetry;

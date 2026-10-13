@@ -522,6 +522,21 @@ endpoint_table! {
     /// A single-use code that signs a browser in to manage booking pages.
     SchedulingHandOff => Post "/api/district/scheduling/handoff",
         workspace: Body, body: Json, retry: Never;
+    /// The booking scheduler's administration: one operation of the service's
+    /// catalog, named in the body (`{op, params}`), never a path. Reads and
+    /// writes alike are this one `POST`, so it is never repeated.
+    SchedulingAdmin => Post "/api/district/scheduling/admin",
+        workspace: Body, body: Json, retry: Never;
+    /// A single-use sign-in to the scheduler itself, as a redirect whose
+    /// `Location` is read and never followed: the way to a calendar provider's
+    /// consent screen (`next` names the scheduler's calendar connect), which no
+    /// operation can reach because the screen is the provider's.
+    SchedulingSignIn => Get "/api/district/scheduling/sso",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// Replaces the booking pages' logo or banner, or the member's own picture.
+    /// The workspace is in the query and the image's `target` a form field.
+    SchedulingAdminUpload => Post "/api/district/scheduling/admin/upload",
+        workspace: Query, body: Multipart, retry: Never;
 
     // The workspace's own help desk, for its customers. The workspace is a query
     // parameter on every one of these, writes included.

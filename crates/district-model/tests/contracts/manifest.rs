@@ -45,6 +45,18 @@ use district_model::{
     WorkspaceConfigResponse, WorkspaceListResponse, WorkspaceSaveResponse,
 };
 
+use district_model::{
+    SchedulingAdminErrorBody, SchedulingAdminFailure, SchedulingAdminSuccess, SchedulingApiKey,
+    SchedulingApiKeyCreated, SchedulingAvailabilityOverride, SchedulingAvailabilityRule,
+    SchedulingBooking, SchedulingBookingAnswer, SchedulingBookingPage, SchedulingBranding,
+    SchedulingCaldavConnection, SchedulingCalendarSelections, SchedulingCalendarStatus,
+    SchedulingEventType, SchedulingHost, SchedulingItems, SchedulingLlmSettings, SchedulingMe,
+    SchedulingOauthConnection, SchedulingOk, SchedulingOverrideGroup, SchedulingQuestion,
+    SchedulingSlots, SchedulingTeam, SchedulingTestEmail, SchedulingUpcomingBooking,
+    SchedulingUploadResult, SchedulingUser, SchedulingUserArchived, SchedulingWebhook,
+    SchedulingWebhookCreated, SchedulingWebhookDelivery, SchedulingZoomStatus,
+};
+
 use crate::support::{Codec, Set, codec, names_in, read_in, transcript_frame};
 
 /// One set's accounting, as the tests below read it.
@@ -407,10 +419,150 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
         "district-routing-patch.json",
         codec::<WorkspaceSaveResponse>,
     ),
+    // POST /api/district/scheduling/admin when the scheduler refused: a 200.
+    (
+        "district-scheduling-admin-failure.json",
+        codec::<SchedulingAdminFailure>,
+    ),
+    // The admin route's 400 for parameters its schema refused, by field.
+    (
+        "district-scheduling-admin-invalid-params.json",
+        codec::<SchedulingAdminErrorBody>,
+    ),
+    // The admin route's 409 for a workspace without booking pages.
+    (
+        "district-scheduling-admin-not-ready.json",
+        codec::<SchedulingAdminErrorBody>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-api-key-created.json",
+        codec::<SchedulingAdminSuccess<SchedulingApiKeyCreated>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-api-keys.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingApiKey>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-booking-answers.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingBookingAnswer>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-booking.json",
+        codec::<SchedulingAdminSuccess<SchedulingBooking>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-bookings.json",
+        codec::<SchedulingAdminSuccess<SchedulingBookingPage>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-branding.json",
+        codec::<SchedulingAdminSuccess<SchedulingBranding>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-caldav-connect.json",
+        codec::<SchedulingAdminSuccess<SchedulingCaldavConnection>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-calendar-status.json",
+        codec::<SchedulingAdminSuccess<SchedulingCalendarStatus>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-calendars.json",
+        codec::<SchedulingAdminSuccess<SchedulingCalendarSelections>>,
+    ),
     // POST /api/district/scheduling/enable.
     (
         "district-scheduling-enable.json",
         codec::<SchedulingEnableResponse>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-event-type.json",
+        codec::<SchedulingAdminSuccess<SchedulingEventType>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-event-types.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingEventType>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-hosts.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingHost>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-llm.json",
+        codec::<SchedulingAdminSuccess<SchedulingLlmSettings>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-me.json",
+        codec::<SchedulingAdminSuccess<SchedulingMe>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-no-content.json",
+        codec::<SchedulingAdminSuccess<SchedulingOk>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-oauth-connections.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingOauthConnection>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-ok.json",
+        codec::<SchedulingAdminSuccess<SchedulingOk>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-override-created.json",
+        codec::<SchedulingAdminSuccess<SchedulingAvailabilityOverride>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-override-range.json",
+        codec::<SchedulingAdminSuccess<SchedulingOverrideGroup>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-overrides.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingAvailabilityOverride>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-question.json",
+        codec::<SchedulingAdminSuccess<SchedulingQuestion>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-questions.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingQuestion>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-rule.json",
+        codec::<SchedulingAdminSuccess<SchedulingAvailabilityRule>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-rules.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingAvailabilityRule>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-slots.json",
+        codec::<SchedulingAdminSuccess<SchedulingSlots>>,
     ),
     // GET /api/district/scheduling/status, the last setup failed.
     (
@@ -431,6 +583,61 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     (
         "district-scheduling-status-ready.json",
         codec::<SchedulingStatusResponse>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-team.json",
+        codec::<SchedulingAdminSuccess<SchedulingTeam>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-teams.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingTeam>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-test-email.json",
+        codec::<SchedulingAdminSuccess<SchedulingTestEmail>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-upload.json",
+        codec::<SchedulingAdminSuccess<SchedulingUploadResult>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-user-archive.json",
+        codec::<SchedulingAdminSuccess<SchedulingUserArchived>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-user-upcoming.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingUpcomingBooking>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-users.json",
+        codec::<SchedulingAdminSuccess<Vec<SchedulingUser>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-webhook-created.json",
+        codec::<SchedulingAdminSuccess<SchedulingWebhookCreated>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-webhook-deliveries.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingWebhookDelivery>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-webhooks.json",
+        codec::<SchedulingAdminSuccess<SchedulingItems<SchedulingWebhook>>>,
+    ),
+    // POST /api/district/scheduling/admin, an operation's answer.
+    (
+        "district-scheduling-zoom-status.json",
+        codec::<SchedulingAdminSuccess<SchedulingZoomStatus>>,
     ),
     // GET /api/district/setup.
     ("district-setup.json", codec::<SetupResponse>),
@@ -558,67 +765,18 @@ pub struct Exclusion {
 }
 
 /// Fixtures of endpoints this client will not use, by decision.
-pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
-    Exclusion {
-        reason: "Sign in with Apple's native sheet and its second step belong to the \
+pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[Exclusion {
+    reason: "Sign in with Apple's native sheet and its second step belong to the \
                  Apple apps: `POST /api/auth/native/apple` answering that the account \
                  needs its authenticator code, and `POST /api/auth/native/mfa` trading \
                  the ticket and the code for the grant. A desktop signs in through the \
                  browser, which asks for the second factor itself, and reads the grant \
                  from `POST /api/auth/native/token` (district-auth).",
-        fixtures: &[
-            "district-native-apple-mfa-required.json",
-            "district-native-mfa.json",
-        ],
-    },
-    Exclusion {
-        reason: "Scheduling is managed on the web. Like the Android app, this client only \
-                 reads the scheduling status and turns scheduling on, which are the \
-                 `district-scheduling-status-*` and `district-scheduling-enable` fixtures, \
-                 not these.",
-        fixtures: &[
-            "district-scheduling-admin-failure.json",
-            "district-scheduling-admin-invalid-params.json",
-            "district-scheduling-admin-not-ready.json",
-            "district-scheduling-api-key-created.json",
-            "district-scheduling-api-keys.json",
-            "district-scheduling-booking-answers.json",
-            "district-scheduling-booking.json",
-            "district-scheduling-bookings.json",
-            "district-scheduling-branding.json",
-            "district-scheduling-caldav-connect.json",
-            "district-scheduling-calendar-status.json",
-            "district-scheduling-calendars.json",
-            "district-scheduling-event-type.json",
-            "district-scheduling-event-types.json",
-            "district-scheduling-hosts.json",
-            "district-scheduling-llm.json",
-            "district-scheduling-me.json",
-            "district-scheduling-no-content.json",
-            "district-scheduling-oauth-connections.json",
-            "district-scheduling-ok.json",
-            "district-scheduling-override-created.json",
-            "district-scheduling-override-range.json",
-            "district-scheduling-overrides.json",
-            "district-scheduling-question.json",
-            "district-scheduling-questions.json",
-            "district-scheduling-rule.json",
-            "district-scheduling-rules.json",
-            "district-scheduling-slots.json",
-            "district-scheduling-team.json",
-            "district-scheduling-teams.json",
-            "district-scheduling-test-email.json",
-            "district-scheduling-upload.json",
-            "district-scheduling-user-archive.json",
-            "district-scheduling-user-upcoming.json",
-            "district-scheduling-users.json",
-            "district-scheduling-webhook-created.json",
-            "district-scheduling-webhook-deliveries.json",
-            "district-scheduling-webhooks.json",
-            "district-scheduling-zoom-status.json",
-        ],
-    },
-];
+    fixtures: &[
+        "district-native-apple-mfa-required.json",
+        "district-native-mfa.json",
+    ],
+}];
 
 /// Every file in `contracts/desktop/`. Asserted exactly, for the same reason as
 /// [`EXPECTED_FIXTURE_COUNT`].
