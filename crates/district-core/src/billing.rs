@@ -24,7 +24,7 @@ use district_model::{
 use crate::analytics::sum_metered;
 use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
-use crate::purchase::PlanChoice;
+use crate::purchase::{PlanChoice, PlanTier};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
 
@@ -197,11 +197,18 @@ impl PlanStatus {
 /// The plan's name, or the line for a workspace with none. Never "Free": the
 /// service sends no tier for a workspace without one, and a name nobody wrote is
 /// not shown.
+///
+/// The service sends the plan's key (`VoicePro`); a key one of [`PlanTier::ALL`]
+/// publishes reads as that plan's [`PlanTier::label`] ("Voice Pro"), the name
+/// the service's own plan chooser shows. Any other value is shown as sent.
 pub fn plan_name(billing: &WorkspaceBilling) -> &str {
-    billing
-        .subscription_tier
-        .as_deref()
-        .unwrap_or("No plan on this workspace")
+    match billing.subscription_tier.as_deref() {
+        Some(tier) => PlanTier::ALL
+            .into_iter()
+            .find(|plan| plan.key() == tier)
+            .map_or(tier, |plan| plan.label()),
+        None => "No plan on this workspace",
+    }
 }
 
 /// What happens past the included minutes, and whether it is happening now, or

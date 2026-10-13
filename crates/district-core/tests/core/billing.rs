@@ -194,7 +194,7 @@ fn managing_billing_opens_the_web_for_a_member_who_could_use_it() {
 #[test]
 fn the_plan_says_its_name_its_status_and_what_happens_past_the_minutes() {
     let mut billing = plan();
-    assert_eq!(plan_name(&billing), "VoicePro");
+    assert_eq!(plan_name(&billing), "Voice Pro");
     billing.subscription_tier = None;
     assert_eq!(plan_name(&billing), "No plan on this workspace");
 
@@ -258,6 +258,39 @@ fn the_plan_says_its_name_its_status_and_what_happens_past_the_minutes() {
         Some("Minutes beyond your plan are billed automatically.")
     );
     assert_eq!(overage("something_new", true), None);
+}
+
+fn named(tier: Option<&str>) -> String {
+    plan_name(&WorkspaceBilling {
+        subscription_tier: tier.map(str::to_owned),
+        ..plan()
+    })
+    .to_owned()
+}
+
+/// Each of the four published keys reads as the name the service's plan
+/// chooser shows (its `PLAN_TIER_LABELS`), never the key itself.
+#[test]
+fn each_plan_key_reads_as_its_name() {
+    assert_eq!(named(Some("VoiceSolo")), "Voice Solo");
+    assert_eq!(named(Some("VoiceStarter")), "Voice Starter");
+    assert_eq!(named(Some("VoicePro")), "Voice Pro");
+    assert_eq!(named(Some("VoiceStudio")), "Voice Studio");
+}
+
+/// A tier this build does not know, a legacy one included, is shown as sent:
+/// a name nobody wrote is not made up, and a near miss is not matched.
+#[test]
+fn an_unknown_plan_key_is_shown_as_sent() {
+    assert_eq!(named(Some("free")), "free");
+    assert_eq!(named(Some("VoiceEnterprise")), "VoiceEnterprise");
+    assert_eq!(named(Some("voicepro")), "voicepro");
+}
+
+/// No tier is no plan, never "Free".
+#[test]
+fn no_plan_key_is_no_plan() {
+    assert_eq!(named(None), "No plan on this workspace");
 }
 
 /// Minutes never metered are not zero minutes: the meter says so rather than
