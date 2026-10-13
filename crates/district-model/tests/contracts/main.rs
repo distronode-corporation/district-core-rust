@@ -15,6 +15,9 @@
 //!   fixture holds.
 //! - `strict`: the `strict-contracts` feature is on in tests, and every type in
 //!   `src/` that derives `Deserialize` honours it.
+//! - `scheduling_admin`: the booking scheduler's administration, each
+//!   operation's answer read by the request that asks for it, and what each
+//!   request sends.
 //! - `transcript`: the live transcript's frames read into their typed events,
 //!   and the ops a client sends.
 
@@ -22,6 +25,7 @@ mod checksums;
 mod fixtures;
 mod manifest;
 mod round_trip;
+mod scheduling_admin;
 mod strict;
 mod support;
 mod transcript;

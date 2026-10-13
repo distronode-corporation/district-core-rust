@@ -437,6 +437,11 @@ pub const OPAQUE_OBJECTS: &[OpaqueObject] = &[
         reason: TELEMETRY_DATA,
     },
     OpaqueObject {
+        fixture: "fixtures/district-scheduling-slots.json",
+        path: "$.data.hosts",
+        reason: "Keyed by scheduler user id, and read by no screen: the slots are.",
+    },
+    OpaqueObject {
         fixture: "desktop/telemetry-event-call-started.json",
         path: "$.data",
         reason: TELEMETRY_DATA,

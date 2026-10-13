@@ -58,6 +58,7 @@ mod pkce;
 mod push;
 mod rooms;
 mod scheduling;
+mod scheduling_admin;
 mod setup;
 mod softphone;
 mod support;
@@ -158,6 +159,7 @@ pub use scheduling::{
     CODE_INVALID_NONCE, CODE_NONCE_REQUIRED, SchedulingEnableResponse, SchedulingHandOffResponse,
     SchedulingStatusResponse, SchedulingTenant,
 };
+pub use scheduling_admin::*;
 pub use setup::{
     SETUP_STEP_DONE, SETUP_STEP_SKIPPED, SETUP_STEP_TODO, SetupProgress, SetupResponse, SetupSteps,
 };

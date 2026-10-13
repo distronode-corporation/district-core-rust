@@ -1,8 +1,10 @@
-//! Booking pages, which are managed on the web.
+//! Booking pages: whether the workspace has them, turning them on, and the
+//! hand-off that signs the browser in to the web dashboard for whatever this
+//! app does not draw. Their administration (event types, availability,
+//! bookings and the rest) is [`SchedulingAdminRequest`](crate::SchedulingAdminRequest).
 //!
-//! From here a member can see whether the workspace has booking pages, turn them
-//! on, and be signed in to the web to manage them. None of these answers carries
-//! a `success` flag; their required fields are what reject an empty body.
+//! None of these answers carries a `success` flag; their required fields are
+//! what reject an empty body.
 
 use std::fmt;
 

@@ -66,8 +66,13 @@ impl<S: TokenSource> ApiClient<S> {
     }
 
     /// Sends `prepared`, and on a 401 decides by the endpoint's retry policy
-    /// whether to send it once more with a fresh token.
-    async fn exchange(&self, prepared: &Prepared) -> Result<Response, ApiError> {
+    /// whether to send it once more with a fresh token. A redirect is an error,
+    /// unless `redirect_expected`, when it is the answer.
+    async fn exchange(
+        &self,
+        prepared: &Prepared,
+        redirect_expected: bool,
+    ) -> Result<Response, ApiError> {
         let mut refreshed = false;
         loop {
             // Built before a token is asked for, so that a request that cannot be
@@ -87,7 +92,9 @@ impl<S: TokenSource> ApiClient<S> {
                 .map_err(|e| ApiError::Offline(TransportError::from_reqwest(e)))?;
 
             if response.status() != reqwest::StatusCode::UNAUTHORIZED {
-                return if response.status().is_success() {
+                let answered = response.status().is_success()
+                    || (redirect_expected && response.status().is_redirection());
+                return if answered {
                     Ok(response)
                 } else {
                     Err(ApiError::from_failure(response).await)
@@ -225,6 +232,13 @@ impl<S: TokenSource> Request<'_, S> {
         self
     }
 
+    /// Adds a text field to a multipart body, beside the file. Refused for any
+    /// other body.
+    pub fn form_field(mut self, name: &str, value: impl Into<String>) -> Self {
+        self.parts.form.push((name.to_owned(), value.into()));
+        self
+    }
+
     /// The file for a multipart upload, sent as the part named `file`.
     pub fn file(
         mut self,
@@ -247,9 +261,28 @@ impl<S: TokenSource> Request<'_, S> {
     pub async fn send<T: DeserializeOwned>(self) -> Result<T, ApiError> {
         let endpoint = self.parts.spec.id;
         let prepared = self.parts.prepare(&self.client.transport.base_url)?;
-        let response = self.client.exchange(&prepared).await?;
+        let response = self.client.exchange(&prepared, false).await?;
         let body = success_body(response).await?;
         serde_json::from_slice(&body).map_err(|error| decode_error(endpoint, &error))
+    }
+
+    /// Sends the request and answers where the redirect it is answered with
+    /// points, whole, without following it: for a route whose answer is a
+    /// single-use sign-in link in a `Location`, which following would spend on
+    /// a transport nobody sees. The link is a credential: open it at once and
+    /// keep it nowhere. A success that does not redirect, or a redirect that
+    /// names nowhere, is [`ApiError::Unconfirmed`].
+    pub async fn send_for_location(self) -> Result<String, ApiError> {
+        let endpoint = self.parts.spec.id;
+        let prepared = self.parts.prepare(&self.client.transport.base_url)?;
+        let response = self.client.exchange(&prepared, true).await?;
+        response
+            .headers()
+            .get(reqwest::header::LOCATION)
+            .and_then(|value| value.to_str().ok())
+            .filter(|location| response.status().is_redirection() && !location.is_empty())
+            .map(str::to_owned)
+            .ok_or(ApiError::Unconfirmed { endpoint })
     }
 }
 
@@ -267,6 +300,7 @@ struct Parts {
     workspace: Option<String>,
     query: Vec<(String, String)>,
     json: Option<Map<String, Value>>,
+    form: Vec<(String, String)>,
     file: Option<FilePart>,
     error: Option<String>,
 }
@@ -279,6 +313,7 @@ impl Parts {
             workspace: None,
             query: Vec::new(),
             json: None,
+            form: Vec::new(),
             file: None,
             error: None,
         }
@@ -365,6 +400,9 @@ impl Parts {
         if url.query() == Some("") {
             url.set_query(None);
         }
+        if spec.body != BodyKind::Multipart && !self.form.is_empty() {
+            return Err(invalid(format!("{name} takes no form fields")));
+        }
 
         let body = match spec.body {
             BodyKind::Empty if self.json.is_some() || self.file.is_some() => {
@@ -402,10 +440,11 @@ impl Parts {
                 let Some(file) = self.file else {
                     return Err(invalid(format!("{name} needs a file")));
                 };
-                let fields = match &workspace {
+                let mut fields = match &workspace {
                     Some((WorkspaceIn::Form, id)) => vec![(WORKSPACE_ID.to_owned(), id.clone())],
                     _ => Vec::new(),
                 };
+                fields.extend(self.form);
                 PreparedBody::Multipart { fields, file }
             }
         };
