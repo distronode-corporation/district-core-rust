@@ -19,6 +19,7 @@ use uuid::Uuid;
 use super::{ConfigLoad, SaveState, after_save, read_config, settle};
 use crate::model::{Effect, Slot, Tickets};
 use crate::signed_in::{Next, SignedIn};
+use crate::text::{l, s};
 
 /// The routing rules.
 #[derive(Clone, Debug, PartialEq)]
@@ -44,47 +45,40 @@ impl RoutingRulesConfirm {
     /// The question's heading.
     pub fn title(self) -> &'static str {
         if self.rules == 0 {
-            "Remove every routing rule?"
+            s::routing_confirm_clear_title(l())
         } else {
-            "Replace the routing rules?"
+            s::routing_confirm_replace_title(l())
         }
     }
 
     /// What saving does.
     pub fn body(self) -> String {
         match self.rules {
-            0 => "Saving with no rules removes every override: every caller gets the \
-                  workspace's persona."
-                .to_owned(),
-            1 => "There will be exactly one rule, replacing what is stored.".to_owned(),
-            n => format!(
-                "There will be exactly these {n} rules, in this order, replacing what is stored."
-            ),
+            0 => s::routing_confirm_clear_body(l()).to_owned(),
+            1 => s::routing_confirm_one_body(l()).to_owned(),
+            n => s::routing_confirm_many_body(l(), n as i64),
         }
     }
 
     /// The confirming button's label.
     pub fn action(self) -> &'static str {
         if self.rules == 0 {
-            "Remove all rules"
+            s::routing_confirm_clear_action(l())
         } else {
-            "Replace"
+            s::routing_confirm_replace_action(l())
         }
     }
 }
 
 impl RoutingRulesSection {
     /// The heading for rules this app cannot edit.
-    pub const UNMODELLABLE_TITLE: &'static str = "Cannot be edited here";
+    pub const UNMODELLABLE_TITLE: &'static str = district_l10n::english::ROUTING_UNMODELLABLE_TITLE;
     /// The body for rules this app cannot edit.
-    pub const UNMODELLABLE_BODY: &'static str = "This workspace's routing rules are stored in a \
-        shape this app cannot change without losing part of them. Change them on the District \
-        AI website.";
+    pub const UNMODELLABLE_BODY: &'static str = district_l10n::english::ROUTING_UNMODELLABLE_BODY;
     /// The heading for no rules.
-    pub const EMPTY_TITLE: &'static str = "No routing rules";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::ROUTING_EMPTY_TITLE;
     /// The body for no rules.
-    pub const EMPTY_BODY: &'static str = "Every caller gets the workspace's persona. Add a rule \
-        to give some callers another voice or instruction.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::ROUTING_EMPTY_BODY;
 
     fn loading() -> Self {
         Self {

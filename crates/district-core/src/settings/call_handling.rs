@@ -25,6 +25,7 @@ use super::SaveState;
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// The mode a stored value names, when it is one this app knows. The service
 /// reports anything else as `ai_first`, so `None` is only for a mode added later.
@@ -41,32 +42,27 @@ pub fn call_handling_mode(stored: &str) -> Option<CallHandlingMode> {
 /// A mode's name.
 pub fn call_handling_mode_label(mode: CallHandlingMode) -> &'static str {
     match mode {
-        CallHandlingMode::AiFirst => "The receptionist answers",
-        CallHandlingMode::AiThenApp => "The receptionist answers, then your devices ring",
-        CallHandlingMode::AppFirst => "Your devices ring first",
+        CallHandlingMode::AiFirst => s::call_handling_mode_ai_first(l()),
+        CallHandlingMode::AiThenApp => s::call_handling_mode_ai_then_app(l()),
+        CallHandlingMode::AppFirst => s::call_handling_mode_app_first(l()),
     }
 }
 
 /// What a mode does.
 pub fn call_handling_mode_body(mode: CallHandlingMode) -> &'static str {
     match mode {
-        CallHandlingMode::AiFirst => "The receptionist takes every incoming call.",
-        CallHandlingMode::AiThenApp => {
-            "The receptionist takes the call and can hand it to the members' devices."
-        }
-        CallHandlingMode::AppFirst => "The members' devices ring before the receptionist answers.",
+        CallHandlingMode::AiFirst => s::call_handling_mode_ai_first_body(l()),
+        CallHandlingMode::AiThenApp => s::call_handling_mode_ai_then_app_body(l()),
+        CallHandlingMode::AppFirst => s::call_handling_mode_app_first_body(l()),
     }
 }
 
 /// Why a member cannot be made available, in words.
 pub fn availability_reason_text(reason: &str) -> &'static str {
     match reason {
-        AVAILABILITY_REASON_ROLE => "Viewers are not rung for calls.",
-        AVAILABILITY_REASON_NO_MEMBER_ROW => {
-            "You hold your role as this workspace's owner, \
-            with no membership to set this on, so it cannot be changed here."
-        }
-        _ => "You cannot be made available for calls in this workspace.",
+        AVAILABILITY_REASON_ROLE => s::call_handling_unavailable_viewer(l()),
+        AVAILABILITY_REASON_NO_MEMBER_ROW => s::call_handling_unavailable_owner(l()),
+        _ => s::call_handling_unavailable_other(l()),
     }
 }
 
@@ -111,10 +107,9 @@ pub struct CallHandlingSection {
 
 impl CallHandlingSection {
     /// The note for a viewer.
-    pub const VIEWER: &'static str =
-        "Only agency and client members can change how this workspace answers calls.";
+    pub const VIEWER: &'static str = district_l10n::english::CALL_HANDLING_VIEWER;
     /// The hint under the ring.
-    pub const RING_HINT: &'static str = "Between 5 and 30 seconds.";
+    pub const RING_HINT: &'static str = district_l10n::english::CALL_HANDLING_RING_HINT;
 
     fn loading() -> Self {
         Self {

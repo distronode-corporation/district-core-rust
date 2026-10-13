@@ -26,6 +26,7 @@ use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// The HQ conversation of the open workspace. It lasts as long as the
 /// workspace is open, across visits to other screens.
@@ -39,22 +40,21 @@ pub struct HqScreen {
 
 impl HqScreen {
     /// The heading of an empty conversation.
-    pub const EMPTY_TITLE: &'static str = "Ask District HQ";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::HQ_EMPTY_TITLE;
     /// The body of an empty conversation.
-    pub const EMPTY_BODY: &'static str =
-        "Ask about your calls, contacts, the receptionist or your knowledge base.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::HQ_EMPTY_BODY;
     /// The line while a prompt is being answered.
-    pub const THINKING: &'static str = "Thinking.";
+    pub const THINKING: &'static str = district_l10n::english::HQ_THINKING;
     /// The heading of a proposed change's card.
-    pub const CONFIRM_TITLE: &'static str = "Confirm this change";
+    pub const CONFIRM_TITLE: &'static str = district_l10n::english::HQ_CONFIRM_TITLE;
     /// The note under a proposed change: it is a proposal, not a change.
-    pub const CONFIRM_NOTE: &'static str = "Nothing has been changed yet.";
+    pub const CONFIRM_NOTE: &'static str = district_l10n::english::HQ_CONFIRM_NOTE;
     /// The confirming button's label.
-    pub const CONFIRM_ACTION: &'static str = "Confirm";
+    pub const CONFIRM_ACTION: &'static str = district_l10n::english::HQ_CONFIRM_ACTION;
     /// The declining button's label.
-    pub const DISMISS_ACTION: &'static str = "Dismiss";
+    pub const DISMISS_ACTION: &'static str = district_l10n::english::HQ_DISMISS_ACTION;
     /// The line while a confirmed change is being applied.
-    pub const APPLYING: &'static str = "Applying the change.";
+    pub const APPLYING: &'static str = district_l10n::english::HQ_APPLYING;
 
     /// What the screen may offer a member with `capabilities` now.
     pub fn controls(&self, capabilities: &Capabilities) -> HqControls {
@@ -161,12 +161,9 @@ impl HqNote {
     /// The note's sentence.
     pub fn text(self) -> &'static str {
         match self {
-            Self::Applied => "Done. The change is in place.",
-            Self::NotApplied => "That change was not made.",
-            Self::Mismatched => {
-                "District AI reports a change other than the one you confirmed. Check your \
-                 workspace settings before relying on it."
-            }
+            Self::Applied => s::hq_note_applied(l()),
+            Self::NotApplied => s::hq_note_not_applied(l()),
+            Self::Mismatched => s::hq_note_mismatched(l()),
         }
     }
 

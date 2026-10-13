@@ -8,7 +8,7 @@ public repository.
 The fixtures are JSON bodies recorded from the District AI server's own route
 handlers (and, for the live telemetry socket, from its real publisher) by tests in
 the server repository, which is private. PATH is a checkout of it. They come in
-two sets, each from its own directory there and each vendored into its own
+three sets, each from its own directory there and each vendored into its own
 directory here (SETS below):
 
   fixtures  the mobile apps' set, which this client reads too; into
@@ -17,13 +17,16 @@ directory here (SETS below):
             read, because no app calls those routes.
   desktop   the shapes only this client reads, which no Android fixture records;
             into contracts/desktop/
+  i18n      the service's localization facts (its API error sentences, the
+            labels of the wire values a screen shows, and its formatting
+            vectors); into contracts/i18n/, read by crates/district-l10n
 
 This script:
 
   1. refuses to run if either source directory has uncommitted, untracked or
      ignored changes (unless --allow-dirty), because the commit recorded below
      would then not describe what was copied;
-  2. reads every fixture of both sets and applies SUBSTITUTIONS, one declared
+  2. reads every fixture of every set and applies SUBSTITUTIONS, one declared
      table for both, which swaps data that must not appear in a public repository
      for fictional stand-ins: phone numbers outside +1 NPA 555-0100..0199, host
      names under the service's domain, email addresses, and the em dash;
@@ -32,8 +35,9 @@ This script:
      (`JSON.stringify(body, null, 2)` plus a newline), passes
      scripts/check-public-hygiene.py's rules, and holds no real-looking North
      American number in any of the formats the fixtures use;
-  4. writes contracts/fixtures/ and contracts/desktop/, contracts/SHA256SUMS
-     (`sha256sum -c` from contracts/, one list for both sets) and
+  4. writes contracts/fixtures/, contracts/desktop/ and contracts/i18n/,
+     contracts/SHA256SUMS (`sha256sum -c` from contracts/, one list for every
+     set) and
      contracts/SOURCE.toml (where each set came from, and every substitution with
      its per-file counts).
 
@@ -50,7 +54,7 @@ and replaces the ones the table names. A finding with no entry stops the sync an
 prints the entry to add, digest included.
 
 Every entry must match at least once in one set or the other, every replacement
-must be new to the corpus of both sets (so values that were distinct stay
+must be new to the corpus of every set (so values that were distinct stay
 distinct), and no two entries may share a replacement.
 """
 
@@ -101,6 +105,8 @@ SERVER_REPO_ANDROID_FIXTURES = "distronode-website/contracts/mobile"
 SERVER_REPO_ANDROID_GENERATOR = "distronode-website/src/lib/contracts/__tests__/android-contracts.test.ts"
 SERVER_REPO_DESKTOP_FIXTURES = "distronode-website/contracts/desktop"
 SERVER_REPO_DESKTOP_GENERATOR = "distronode-website/src/lib/contracts/__tests__/desktop-contracts.test.ts"
+SERVER_REPO_I18N_FIXTURES = "distronode-website/contracts/i18n"
+SERVER_REPO_I18N_GENERATOR = "distronode-website/src/lib/contracts/__tests__/i18n-contracts.test.ts"
 
 # In the order SOURCE.toml lists them.
 SETS: tuple[FixtureSet, ...] = (
@@ -115,6 +121,12 @@ SETS: tuple[FixtureSet, ...] = (
         "the desktop-only contract fixtures, recorded by the District AI server's contract tests",
         SERVER_REPO_DESKTOP_FIXTURES,
         SERVER_REPO_DESKTOP_GENERATOR,
+    ),
+    FixtureSet(
+        "i18n",
+        "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests",
+        SERVER_REPO_I18N_FIXTURES,
+        SERVER_REPO_I18N_GENERATOR,
     ),
 )
 
@@ -521,15 +533,17 @@ def toml_string(value: str) -> str:
 
 
 SOURCE_HEADER = """\
-# Where contracts/fixtures/ and contracts/desktop/ came from. Written by
-# scripts/sync-contracts.py; change the script and re-run it rather than editing
-# this file.
+# Where contracts/fixtures/, contracts/desktop/ and contracts/i18n/ came from.
+# Written by scripts/sync-contracts.py; change the script and re-run it rather
+# than editing this file.
 #
 # Each fixture is a JSON body recorded from the District AI server by a test in the
 # server repository, laid out as that test writes it (JSON.stringify(body, null, 2)
-# plus a newline). There are two sets, each with its own [sets.<name>] table below:
-# `fixtures`, the Android app's set, which this client reads too, and `desktop`,
-# the shapes only this client reads. Both come from the one commit in [source].
+# plus a newline). There are three sets, each with its own [sets.<name>] table
+# below: `fixtures`, the Android app's set, which this client reads too,
+# `desktop`, the shapes only this client reads, and `i18n`, the service's
+# localization facts, which crates/district-l10n reads. All come from the one
+# commit in [source].
 #
 # The files here are those bytes except for the substitutions below, which replace
 # data that must not appear in a public repository. A phone, email or host
@@ -540,7 +554,7 @@ SOURCE_HEADER = """\
 # (NPA) NXX-XXXX national form, or bare digits. Per-file counts name each file by
 # its path under contracts/.
 #
-# contracts/SHA256SUMS holds a digest of every file of both sets; from contracts/,
+# contracts/SHA256SUMS holds a digest of every file of every set; from contracts/,
 # `sha256sum -c SHA256SUMS` checks them.
 """
 

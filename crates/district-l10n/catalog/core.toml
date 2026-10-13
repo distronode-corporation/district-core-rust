@@ -1,0 +1,3447 @@
+[meta]
+catalog = "core"
+platform = "rust"
+apple = false
+
+[account.delete_account_caption]
+en = "Request deletion of your account and its data. Opens in your browser."
+ctx = "body"
+screen = "account"
+tier = "T0"
+note = "Caption of the account deletion row. Deletion cannot be undone; the request continues in the web browser, which is why the caption says so."
+
+[account.devices_caption]
+en = "See where you are signed in, and sign out a device you no longer have."
+ctx = "body"
+screen = "account"
+tier = "T3"
+note = "Caption of the row that opens the list of devices signed in to this account."
+
+[account.sign_out_caption]
+en = "Sign out of District AI on this device."
+ctx = "body"
+screen = "account"
+tier = "T2"
+note = "Caption of the sign-out row on the account screen."
+
+[analytics.change_down]
+en = "Down {pct}% on the previous period."
+ctx = "body"
+screen = "analytics"
+tier = "T1"
+args = { pct = "int" }
+note = "Under the call volume: calls fell by {pct} percent against the window before. French puts a no-break space before %."
+
+[analytics.change_flat]
+en = "No change on the previous period."
+ctx = "body"
+screen = "analytics"
+tier = "T3"
+note = "Under the call volume: the same number of calls as the window before."
+
+[analytics.change_new]
+en = "New: no calls in the previous period to compare with."
+ctx = "body"
+screen = "analytics"
+tier = "T3"
+note = "Under the call volume: the previous window had no calls, so there is nothing to compare with."
+
+[analytics.change_up]
+en = "Up {pct}% on the previous period."
+ctx = "body"
+screen = "analytics"
+tier = "T1"
+args = { pct = "int" }
+note = "Under the call volume: calls rose by {pct} percent against the window before. French puts a no-break space before %."
+
+[analytics.failed_title]
+en = "Could not load analytics"
+ctx = "title"
+screen = "analytics"
+tier = "T2"
+note = "Heading of the analytics screen when every figure on it failed to load."
+
+[analytics.history_caption]
+en = "The bars compare metered call minutes across these months."
+ctx = "body"
+screen = "analytics"
+tier = "T3"
+note = "Caption under the usage history bars: each bar is one month's metered call minutes."
+
+[analytics.history_failed_title]
+en = "Could not load usage history"
+ctx = "title"
+screen = "analytics"
+tier = "T2"
+note = "Heading of the usage history card when it failed to load."
+
+[analytics.history_none]
+en = "No usage has been recorded in recent months."
+ctx = "body"
+screen = "analytics"
+tier = "T3"
+note = "The usage history card when nothing was metered in any of the recent months."
+
+[analytics.no_calls]
+en = "No calls in this window."
+ctx = "body"
+screen = "analytics"
+tier = "T3"
+note = "Under the call volume chart when the selected window has no calls."
+
+[analytics.no_sentiment]
+en = "No calls to analyse yet."
+ctx = "body"
+screen = "analytics"
+tier = "T3"
+note = "Under the sentiment breakdown when no call has been analysed yet."
+
+[analytics.not_recorded]
+en = "Not recorded"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "What a usage figure reads when the service measured nothing for it: absent, not zero."
+
+[analytics.range_30_days]
+en = "30 days"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "Chip that selects the last 30 days as the window of the call analytics."
+
+[analytics.range_7_days]
+en = "7 days"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "Chip that selects the last 7 days as the window of the call analytics."
+
+[analytics.range_90_days]
+en = "90 days"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "Chip that selects the last 90 days as the window of the call analytics."
+
+[analytics.report_failed_title]
+en = "Could not load call analytics"
+ctx = "title"
+screen = "analytics"
+tier = "T2"
+note = "Heading of the call analytics card when it failed to load."
+
+[analytics.usage_avatar_minutes]
+en = "Video minutes"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "A usage line: minutes of video (the video avatar) this month."
+
+[analytics.usage_failed_title]
+en = "Could not load usage"
+ctx = "title"
+screen = "analytics"
+tier = "T2"
+note = "Heading of the usage card when it failed to load."
+
+[analytics.usage_inbound_minutes]
+en = "Inbound call minutes"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "A usage line: minutes of calls received (inbound) this month."
+
+[analytics.usage_none]
+en = "No usage has been recorded this month yet."
+ctx = "body"
+screen = "analytics"
+tier = "T3"
+note = "The usage card when nothing has been metered this month."
+
+[analytics.usage_outbound_minutes]
+en = "Outbound call minutes"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "A usage line: minutes of calls placed (outbound) this month."
+
+[analytics.usage_phone_numbers]
+en = "Phone numbers"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "A usage line: how many phone numbers the workspace holds."
+
+[analytics.usage_picture_messages_sent]
+en = "Picture messages sent"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "A usage line: picture messages (MMS) sent this month."
+
+[analytics.usage_texts_received]
+en = "Texts received"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "A usage line: text messages (SMS) received this month."
+
+[analytics.usage_texts_sent]
+en = "Texts sent"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "A usage line: text messages (SMS) sent this month."
+
+[analytics.usage_whatsapp_received]
+en = "WhatsApp messages received"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "A usage line: WhatsApp messages received this month. WhatsApp is a product name."
+
+[analytics.usage_whatsapp_sent]
+en = "WhatsApp messages sent"
+ctx = "label"
+screen = "analytics"
+tier = "T3"
+note = "A usage line: WhatsApp messages sent this month. WhatsApp is a product name."
+
+[billing.account_failed_title]
+en = "Could not load your subscription and invoices"
+ctx = "title"
+screen = "billing"
+tier = "T2"
+note = "Heading of the subscriptions and invoices section when it failed to load."
+
+[billing.failed_title]
+en = "Could not load billing"
+ctx = "title"
+screen = "billing"
+tier = "T2"
+note = "Heading of the billing screen when the workspace's plan failed to load."
+
+[billing.invoices_truncated]
+en = "Showing your most recent invoices. Older ones are on the website."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "Under the invoices list when older invoices exist that are not shown."
+
+[billing.no_invoices]
+en = "No invoices yet."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "The invoices list when the account has none."
+
+[billing.no_plan]
+en = "No plan on this workspace"
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "In place of the plan's name when the workspace has no plan. Never \"Free\"."
+
+[billing.no_subscription]
+en = "No subscription is attached to this account."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "The subscriptions list when the account has none."
+
+[billing.overage_auto_bill]
+en = "Minutes beyond your plan are billed automatically."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "Under the minutes meter, auto-billing plan: minutes past the allowance are charged automatically."
+
+[billing.overage_auto_bill_exceeded]
+en = "You are over your included minutes, and the extra is being billed."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "Under the minutes meter, auto-billing plan, allowance used up: the extra minutes are being charged."
+
+[billing.overage_hard_cap]
+en = "Calls stop once your included minutes run out."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "Under the minutes meter, hard cap plan: calls stop once the included minutes are used."
+
+[billing.overage_hard_cap_exceeded]
+en = "Calls are being declined: your included minutes are used up."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "Under the minutes meter, hard cap plan, allowance used up: incoming calls are refused right now. The most urgent message on the screen."
+
+[billing.read_only]
+en = "Plan changes, payment methods and cancellations are made on the District AI website. This screen is read only."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "Note on the billing screen for a member who could manage billing on the web: nothing can be changed in this app."
+
+[billing.read_only_viewer]
+en = "This screen is read only. Ask an agency or client member of this workspace to change the plan."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "Note on the billing screen for a viewer: they cannot change the plan; agency and client are the two other roles."
+
+[billing.status_active]
+en = "Active"
+ctx = "label"
+screen = "billing"
+tier = "T1"
+note = "Badge: the subscription is paid up."
+
+[billing.status_cancelled]
+en = "Cancelled"
+ctx = "label"
+screen = "billing"
+tier = "T1"
+note = "Badge: the subscription was cancelled and will end."
+
+[billing.status_cancelled_caption]
+en = "This plan will not renew."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "Under the cancelled badge: the plan ends at the end of its period."
+
+[billing.status_none]
+en = "No subscription"
+ctx = "label"
+screen = "billing"
+tier = "T1"
+note = "Badge: the workspace has no subscription."
+
+[billing.status_past_due]
+en = "Past due"
+ctx = "label"
+screen = "billing"
+tier = "T1"
+note = "Badge: a payment failed and is being retried."
+
+[billing.status_past_due_caption]
+en = "A payment did not go through. Service continues while it is retried."
+ctx = "body"
+screen = "billing"
+tier = "T1"
+note = "Under the past due badge: a payment failed, and service goes on while it is retried."
+
+[billing.unavailable_body]
+en = "The payment provider could not be reached just now, so your subscription and invoices are not shown. Your plan and usage above are current, and nothing about your account has changed."
+ctx = "body"
+screen = "billing"
+tier = "T2"
+note = "Body of that section: the payment provider could not be reached; the plan and usage above it are still current."
+
+[billing.unavailable_title]
+en = "Billing details unavailable"
+ctx = "title"
+screen = "billing"
+tier = "T2"
+note = "Heading of the subscriptions and invoices section when the payment provider (Stripe) could not be reached."
+
+[billing.web_action]
+en = "Manage billing on the web"
+ctx = "button"
+screen = "billing"
+tier = "T1"
+note = "Button that opens the billing page in the web browser."
+
+[call.caller]
+en = "Caller"
+ctx = "title"
+screen = "call"
+tier = "T3"
+note = "Title of the call window for a call answered on this computer, when nothing names the caller."
+
+[call.connect_failed]
+en = "The call could not be connected."
+ctx = "error"
+screen = "call"
+tier = "T2"
+note = "The call's audio could not be joined."
+
+[call.connecting]
+en = "Connecting."
+ctx = "label"
+screen = "call"
+tier = "T3"
+note = "Status under the title while the app joins the call's audio."
+
+[call.dialing]
+en = "Placing the call."
+ctx = "label"
+screen = "call"
+tier = "T3"
+note = "Status under the title while an outbound call is being placed."
+
+[call.ended]
+en = "Call ended."
+ctx = "label"
+screen = "call"
+tier = "T3"
+note = "Status under the title after a call ended."
+
+[call.ended_lasted]
+en = "Call ended. It lasted {duration}."
+ctx = "label"
+screen = "call"
+tier = "T3"
+args = { duration = "duration" }
+note = "Status after an answered call ended. {duration} is its length as a clock, 1:05 or 1:02:05."
+
+[call.ended_note]
+en = "The call log has the record of this call. The length here is this app's own count."
+ctx = "body"
+screen = "call"
+tier = "T3"
+note = "Note under an ended call: the call log holds the real record; the length shown is counted by this app."
+
+[call.ringing]
+en = "Calling."
+ctx = "label"
+screen = "call"
+tier = "T3"
+note = "Status under the title while a placed call rings at the other end."
+
+[call_handling.mode_ai_first]
+en = "The receptionist answers"
+ctx = "label"
+screen = "settings call handling"
+tier = "T3"
+note = "How the workspace answers calls: the AI receptionist answers every call."
+
+[call_handling.mode_ai_first_body]
+en = "The receptionist takes every incoming call."
+ctx = "body"
+screen = "settings call handling"
+tier = "T3"
+note = "What that mode does."
+
+[call_handling.mode_ai_then_app]
+en = "The receptionist answers, then your devices ring"
+ctx = "label"
+screen = "settings call handling"
+tier = "T3"
+note = "How the workspace answers calls: the AI receptionist answers, then the members' devices ring."
+
+[call_handling.mode_ai_then_app_body]
+en = "The receptionist takes the call and can hand it to the members' devices."
+ctx = "body"
+screen = "settings call handling"
+tier = "T3"
+note = "What that mode does: the receptionist can hand the call to the members' devices."
+
+[call_handling.mode_app_first]
+en = "Your devices ring first"
+ctx = "label"
+screen = "settings call handling"
+tier = "T3"
+note = "How the workspace answers calls: the members' devices ring first."
+
+[call_handling.mode_app_first_body]
+en = "The members' devices ring before the receptionist answers."
+ctx = "body"
+screen = "settings call handling"
+tier = "T3"
+note = "What that mode does: devices ring before the receptionist answers."
+
+[call_handling.ring_hint]
+en = "Between 5 and 30 seconds."
+ctx = "placeholder"
+screen = "settings call handling"
+tier = "T3"
+note = "Hint under the ring time field: how long devices ring."
+
+[call_handling.unavailable_other]
+en = "You cannot be made available for calls in this workspace."
+ctx = "body"
+screen = "settings call handling"
+tier = "T3"
+note = "Why the member cannot be made available for calls, when the service gives another reason."
+
+[call_handling.unavailable_owner]
+en = "You hold your role as this workspace's owner, with no membership to set this on, so it cannot be changed here."
+ctx = "body"
+screen = "settings call handling"
+tier = "T3"
+note = "Why the workspace's owner, who holds the role without a membership, cannot change their availability here."
+
+[call_handling.unavailable_viewer]
+en = "Viewers are not rung for calls."
+ctx = "body"
+screen = "settings call handling"
+tier = "T3"
+note = "Why a viewer cannot be made available for calls."
+
+[call_handling.viewer]
+en = "Only agency and client members can change how this workspace answers calls."
+ctx = "body"
+screen = "settings call handling"
+tier = "T3"
+note = "Note for a viewer on the call handling settings."
+
+[calls.empty_body]
+en = "Calls your receptionist answers will appear here."
+ctx = "body"
+screen = "calls"
+tier = "T3"
+note = "Body of the empty call log: calls the AI receptionist answers are listed here."
+
+[calls.empty_title]
+en = "No calls yet"
+ctx = "title"
+screen = "calls"
+tier = "T3"
+note = "Heading of the call log when the workspace has no calls."
+
+[calls.failed_title]
+en = "Could not load the call log"
+ctx = "title"
+screen = "calls"
+tier = "T2"
+note = "Heading of the call log when it failed to load."
+
+[calls.transcript_absent]
+en = "No transcript for this call."
+ctx = "body"
+screen = "calls"
+tier = "T3"
+note = "In place of a call's transcript when the call has none."
+
+[contacts.action_block]
+en = "Block"
+ctx = "button"
+screen = "contacts"
+tier = "T2"
+note = "Button that confirms blocking a caller."
+
+[contacts.action_clear_intel]
+en = "Clear research"
+ctx = "button"
+screen = "contacts"
+tier = "T2"
+note = "Button that confirms clearing a contact's research."
+
+[contacts.action_delete]
+en = "Delete"
+ctx = "button"
+screen = "contacts"
+tier = "T2"
+note = "Button that confirms deleting a contact."
+
+[contacts.action_unblock]
+en = "Unblock"
+ctx = "button"
+screen = "contacts"
+tier = "T2"
+note = "Button that confirms unblocking a caller."
+
+[contacts.blocked_empty_title]
+en = "No blocked callers"
+ctx = "title"
+screen = "contacts"
+tier = "T3"
+note = "Heading of the blocked callers list when nobody is blocked."
+
+[contacts.blocked_failed_title]
+en = "Could not load blocked callers"
+ctx = "title"
+screen = "contacts"
+tier = "T2"
+note = "Heading of the blocked callers list when it failed to load."
+
+[contacts.confirm_block]
+en = "Block this caller? Their conversations and calls stop appearing in this workspace. You can unblock them at any time."
+ctx = "body"
+screen = "contacts"
+tier = "T2"
+note = "Confirmation before blocking a caller: their conversations and calls stop appearing; a carrier may still connect the call, so it does not claim they can no longer call."
+
+[contacts.confirm_clear_intel]
+en = "Clear this contact's research? The contact, its phone number, email and history are kept. Getting the research back means running it again."
+ctx = "body"
+screen = "contacts"
+tier = "T2"
+note = "Confirmation before clearing a contact's research (what outside research found about the caller). Running the research again costs money."
+
+[contacts.confirm_delete]
+en = "Delete this contact? This cannot be undone."
+ctx = "body"
+screen = "contacts"
+tier = "T2"
+note = "Confirmation before deleting a contact. Cannot be undone."
+
+[contacts.confirm_unblock]
+en = "Unblock this caller? Their conversations and calls start appearing in this workspace again."
+ctx = "body"
+screen = "contacts"
+tier = "T2"
+note = "Confirmation before unblocking a caller."
+
+[contacts.empty_body]
+en = "Callers are added automatically as they come in."
+ctx = "body"
+screen = "contacts"
+tier = "T3"
+note = "Body of the empty contact list: callers become contacts by themselves."
+
+[contacts.empty_title]
+en = "No contacts yet"
+ctx = "title"
+screen = "contacts"
+tier = "T3"
+note = "Heading of the contact list when the workspace has none."
+
+[contacts.failed_title]
+en = "Could not load contacts"
+ctx = "title"
+screen = "contacts"
+tier = "T2"
+note = "Heading of the contact list when it failed to load."
+
+[contacts.needs_phone_or_email]
+en = "Enter a phone number or an email address."
+ctx = "error"
+screen = "contacts"
+tier = "T2"
+note = "Under the contact form when it has a name but no way to reach the contact."
+
+[contacts.unnamed]
+en = "Unnamed contact"
+ctx = "label"
+screen = "contacts"
+tier = "T3"
+note = "What a contact with no name, phone number or email address is called in lists."
+
+[desk.author_assistant]
+en = "Receptionist"
+ctx = "label"
+screen = "help desk"
+tier = "T3"
+note = "Who wrote a message in a ticket's thread: the AI receptionist."
+
+[desk.author_customer]
+en = "Customer"
+ctx = "label"
+screen = "help desk"
+tier = "T3"
+note = "Who wrote a message in a ticket's thread: the customer who raised it."
+
+[desk.author_team]
+en = "Your team"
+ctx = "label"
+screen = "help desk"
+tier = "T3"
+note = "Who wrote a message in a ticket's thread: a member of the workspace (\"your\" is the workspace)."
+
+[desk.empty_body]
+en = "Tickets your customers raise will appear here."
+ctx = "body"
+screen = "help desk"
+tier = "T3"
+note = "Body of the empty ticket queue."
+
+[desk.empty_title]
+en = "No tickets yet"
+ctx = "title"
+screen = "help desk"
+tier = "T3"
+note = "Heading of the ticket queue when it has no tickets."
+
+[desk.failed_title]
+en = "Could not load the help desk"
+ctx = "title"
+screen = "help desk"
+tier = "T2"
+note = "Heading of the help desk when it failed to load."
+
+[desk.logo_file_kept]
+en = "The logo is no longer shown to customers, but its file could not be deleted and may still be reachable at its address."
+ctx = "body"
+screen = "help desk"
+tier = "T2"
+note = "After removing the help desk logo: it is no longer shown, but its file could not be deleted and may still be reachable at its address."
+
+[desk.none_matching]
+en = "No tickets with this status."
+ctx = "body"
+screen = "help desk"
+tier = "T3"
+note = "The ticket queue when the status filter matches no ticket."
+
+[desk.off_body]
+en = "While the desk is off, no tickets are recorded. Turn it on to start taking them."
+ctx = "body"
+screen = "help desk"
+tier = "T3"
+note = "Body when the help desk is off: no tickets are recorded until it is turned on."
+
+[desk.off_title]
+en = "The help desk is off"
+ctx = "title"
+screen = "help desk"
+tier = "T3"
+note = "Heading of the help desk when it is turned off."
+
+[desk.settings_failed_title]
+en = "Could not load the desk's settings"
+ctx = "title"
+screen = "help desk"
+tier = "T2"
+note = "Heading of the help desk settings when they failed to load."
+
+[desk.status_open]
+en = "Open"
+ctx = "label"
+screen = "help desk"
+tier = "T3"
+note = "A help desk ticket's status: open, waiting for the team."
+
+[desk.status_resolved]
+en = "Resolved"
+ctx = "label"
+screen = "help desk"
+tier = "T3"
+note = "A help desk ticket's status: resolved."
+
+[desk.status_waiting]
+en = "Waiting on the customer"
+ctx = "label"
+screen = "help desk"
+tier = "T3"
+note = "A help desk ticket's status: the team replied and waits for the customer."
+
+[desk.ticket_already_raised]
+en = "That ticket was already raised."
+ctx = "toast"
+screen = "help desk"
+tier = "T3"
+note = "After raising a ticket that the service already had (the same press arrived twice)."
+
+[desk.ticket_raised]
+en = "Ticket {reference} is open."
+ctx = "toast"
+screen = "help desk"
+tier = "T3"
+args = { reference = "str" }
+note = "After raising a ticket. {reference} is its reference, for example DESK-42."
+
+[desk.turn_on]
+en = "Turn on the help desk"
+ctx = "button"
+screen = "help desk"
+tier = "T3"
+note = "Button that turns the help desk on."
+
+[devices.action_sign_out]
+en = "Sign out"
+ctx = "button"
+screen = "devices"
+tier = "T2"
+note = "Button that confirms a sign-out."
+
+[devices.confirm_device]
+en = "Sign this device out? It will need to sign in again to use District AI."
+ctx = "body"
+screen = "devices"
+tier = "T2"
+note = "Confirmation before signing out another device."
+
+[devices.confirm_everywhere]
+en = "Sign out of District AI on every device, including this one?"
+ctx = "body"
+screen = "devices"
+tier = "T2"
+note = "Confirmation before signing out every device, including this one."
+
+[devices.confirm_this_device]
+en = "This is the device you are using. Signing it out will return you to the sign-in screen."
+ctx = "body"
+screen = "devices"
+tier = "T2"
+note = "Confirmation before signing out the device the person is using: they go back to the sign-in screen."
+
+[devices.empty_body]
+en = "Nothing else is signed in to this account right now. A device that just signed in can take a few minutes to appear."
+ctx = "body"
+screen = "devices"
+tier = "T3"
+note = "Body of the empty devices list: a device that just signed in can take a few minutes to appear."
+
+[devices.empty_title]
+en = "No other devices"
+ctx = "title"
+screen = "devices"
+tier = "T3"
+note = "Heading of the devices list when no other device is signed in."
+
+[devices.failed_title]
+en = "Could not list your devices"
+ctx = "title"
+screen = "devices"
+tier = "T2"
+note = "Heading of the devices list when it failed to load."
+
+[devices.last_active]
+en = "Last active {when}"
+ctx = "label"
+screen = "devices"
+tier = "T3"
+args = { when = "str" }
+note = "Under a device: when it last renewed its sign-in. {when} is the time as the service stamped it."
+
+[devices.nothing_revoked]
+en = "That device was already signed out. The list has been refreshed."
+ctx = "toast"
+screen = "devices"
+tier = "T2"
+note = "After signing out a device that was already signed out."
+
+[devices.platform_unknown]
+en = "Unknown platform"
+ctx = "label"
+screen = "devices"
+tier = "T3"
+note = "Platform of a signed-in device that did not say what it is."
+
+[devices.signed_in_recently]
+en = "Signed in recently"
+ctx = "label"
+screen = "devices"
+tier = "T3"
+note = "Under a device that has not renewed its sign-in yet (its first ten minutes)."
+
+[devices.this_device]
+en = "This device"
+ctx = "label"
+screen = "devices"
+tier = "T3"
+note = "Marker on the row of the device the person is using."
+
+[devices.unnamed]
+en = "Unnamed device"
+ctx = "label"
+screen = "devices"
+tier = "T3"
+note = "Name of a signed-in device that gave no name of its own."
+
+[dialer.busy_note]
+en = "Finish the call or meeting you are in first."
+ctx = "body"
+screen = "dialler"
+tier = "T3"
+note = "For a member who is already in a call or a meeting room."
+
+[dialer.hint]
+en = "Enter a number with its country code, for example +1 212 555 0142."
+ctx = "placeholder"
+screen = "dialler"
+tier = "T3"
+note = "Above the keypad: enter the number with its country code. +1 212 555 0142 is an example number; keep it as it is."
+
+[dialer.microphone_note]
+en = "Placing a call turns on your microphone."
+ctx = "body"
+screen = "dialler"
+tier = "T0"
+note = "Under the keypad: placing a call turns the microphone on (a privacy notice)."
+
+[directory.add_rejected]
+en = "A name and a phone number are both needed to add someone."
+ctx = "error"
+screen = "settings transfer directory"
+tier = "T2"
+note = "When adding a transfer target without a name or a phone number."
+
+[directory.confirm_clear_action]
+en = "Remove everyone"
+ctx = "button"
+screen = "settings transfer directory"
+tier = "T2"
+note = "Button that saves an empty directory."
+
+[directory.confirm_clear_body]
+en = "Saving an empty directory removes everyone the receptionist can put a live caller through to."
+ctx = "body"
+screen = "settings transfer directory"
+tier = "T2"
+note = "Before saving an empty directory: nobody is left to transfer callers to."
+
+[directory.confirm_clear_title]
+en = "Remove every transfer target?"
+ctx = "title"
+screen = "settings transfer directory"
+tier = "T2"
+note = "Confirmation heading before saving an empty transfer directory (the people the receptionist can put a caller through to)."
+
+[directory.confirm_many_body]
+en = "The directory will hold exactly these {count} entries, replacing what is stored."
+ctx = "body"
+screen = "settings transfer directory"
+tier = "T2"
+args = { count = "int" }
+note = "Before saving a directory of {count} entries (2 or more): it replaces what is stored."
+
+[directory.confirm_one_body]
+en = "The directory will hold exactly one entry, replacing what is stored."
+ctx = "body"
+screen = "settings transfer directory"
+tier = "T2"
+note = "Before saving a directory of one entry: it replaces what is stored."
+
+[directory.confirm_replace_action]
+en = "Replace"
+ctx = "button"
+screen = "settings transfer directory"
+tier = "T2"
+note = "Button that saves the directory, replacing what is stored."
+
+[directory.confirm_replace_title]
+en = "Replace the transfer directory?"
+ctx = "title"
+screen = "settings transfer directory"
+tier = "T2"
+note = "Confirmation heading before saving the transfer directory."
+
+[directory.empty_body]
+en = "The receptionist has nobody to put a caller through to. Add someone below."
+ctx = "body"
+screen = "settings transfer directory"
+tier = "T3"
+note = "Body of an empty directory: add someone below."
+
+[directory.empty_title]
+en = "No transfer targets"
+ctx = "title"
+screen = "settings transfer directory"
+tier = "T3"
+note = "Heading of an empty transfer directory."
+
+[directory.unmodellable_body]
+en = "This workspace's transfer directory is stored in a shape this app cannot change without losing part of it. Change it on the District AI website."
+ctx = "body"
+screen = "settings transfer directory"
+tier = "T3"
+note = "Body: the directory must be changed on the website so nothing is lost."
+
+[directory.unmodellable_title]
+en = "Cannot be edited here"
+ctx = "title"
+screen = "settings transfer directory"
+tier = "T3"
+note = "Heading when the stored directory has a shape this app cannot edit."
+
+[failure.affected_regions]
+en = "Affected regions: {regions}"
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+args = { regions = "str" }
+note = "Under the regions-unreachable message. {regions} is the list of region codes in capitals, joined by commas (EU, APAC)."
+
+[failure.app_bug]
+en = "Something went wrong in the app. Please report it if it keeps happening."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The app built a request the service could not accept: a bug in the app, which the person may report."
+
+[failure.fallback]
+en = "Something went wrong. Please try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "A refusal the service gave no words for and this app has no sentence of its own for."
+
+[failure.forbidden]
+en = "Your role in this workspace does not allow this."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The member's role in this workspace does not allow the action. Fallback when the service gave no words of its own."
+
+[failure.hand_off_elsewhere]
+en = "District AI sent a sign-in link for another address, so it was not opened. Updating the app may fix it."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Opening the web: the service sent a sign-in link for an address other than its own, so the app did not open it."
+
+[failure.hand_off_nonce_refused]
+en = "District AI could not confirm the browser that was opened for the web. Please try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Opening the web: the service could not confirm the browser that was opened. A new attempt fixes it."
+
+[failure.hand_off_page_refused]
+en = "District AI did not accept the page this version of the app asked to open. Updating the app should fix it."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Opening a billing page on the web: the service refused the page this version of the app asked for."
+
+[failure.hand_off_refused]
+en = "District AI could not confirm your sign-in for the web. Sign out, sign in again, and try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Opening the web from the app signed in (a hand-off): the service refused the app's sign-in for it."
+
+[failure.hand_off_too_many]
+en = "The web was opened several times just now. Wait a moment and try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Opening the web from the app signed in: asked too often in the last minute."
+
+[failure.hand_off_update_needed]
+en = "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Opening the web: the service now needs the browser to answer the app first, and it did not in time."
+
+[failure.keyring_locked]
+en = "Your keyring is locked. Unlock it, then try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Linux: the secret store (keyring) is locked; unlocking it lets the app read the saved sign-in."
+
+[failure.keyring_unavailable]
+en = "Your sign-in could not be read because no keyring is available. Start your keyring (for example GNOME Keyring or KeePassXC), then try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Linux: no secret store (keyring) is running, so the saved sign-in cannot be read. GNOME Keyring and KeePassXC are product names."
+
+[failure.last_agency_member]
+en = "Every workspace needs at least one agency member, so this change was not made."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Changing or removing a member: the workspace would be left with no agency (administrator) member, so nothing changed."
+
+[failure.live_forbidden]
+en = "Live updates are not available to you in this workspace. New calls and messages appear when you refresh."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Live updates (new calls and messages appearing by themselves) are refused for this member; refreshing by hand still works."
+
+[failure.live_unusable]
+en = "Live updates could not be started, so new calls and messages appear when you refresh. Updating the app may fix it."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Live updates could not start for a reason an app update may fix; refreshing by hand still works."
+
+[failure.member_exists]
+en = "That address is already a member of this workspace."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Adding a member: the email address is already a member of this workspace."
+
+[failure.not_found]
+en = "That could not be found. It may have been removed."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The record asked for does not exist any more. Fallback when the service gave no words of its own."
+
+[failure.not_json]
+en = "Could not reach District AI. If this network asks you to sign in, as hotel and public networks often do, sign in to it and try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Something other than the service answered, typically a hotel or public wifi page asking the person to sign in to the network first."
+
+[failure.offline]
+en = "Could not reach District AI. Check your connection."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "No connection to the service: no network, a refused connection or a timeout."
+
+[failure.preview_unencrypted]
+en = "District AI sent an audition that could not be joined securely, so it was not started. Updating the app may fix it."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Trying the receptionist's voice (an audition): the service sent one that could not be joined securely, so it did not start."
+
+[failure.purchase_not_shown]
+en = "District AI could not show that page in this window. Try again, and it opens in your browser."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Windows: the checkout or billing page could not be shown inside the app window; pressing again opens it in the browser."
+
+[failure.rate_limited]
+en = "Too many requests. Wait a moment and try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The service refused because of too many requests in a short time. Waiting fixes it."
+
+[failure.redirected]
+en = "Could not reach District AI: the request was redirected. If this network asks you to sign in, sign in to it and try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The request was redirected, which a network that wants its own sign-in does. The app never follows redirects."
+
+[failure.refused_not_retried]
+en = "District AI did not accept that just now. Please try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The service refused the sign-in token on a request that is never repeated automatically; pressing again sends a fresh one."
+
+[failure.regions_degraded]
+en = "A region is unreachable, so this could not be loaded. Your account has not changed."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "A regional database did not answer, so the list or page could not be loaded in full. Reassures that nothing about the account changed."
+
+[failure.scheduling_not_offered]
+en = "Booking pages are not offered to this workspace."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Turning booking pages on: the service does not offer them to this workspace."
+
+[failure.scheduling_setup_failed]
+en = "Setting up booking pages did not finish, and no reason was given."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Setting up booking pages ran and failed, and the service gave no reason."
+
+[failure.scheduling_too_many]
+en = "Booking pages were turned on several times in the last hour for this workspace. Try again later."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Turning booking pages on: refused because it was tried several times in the last hour for the whole workspace."
+
+[failure.server]
+en = "Something went wrong on our side. Please try again shortly."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The service failed (an HTTP 5xx). \"Our side\" is District AI's side."
+
+[failure.signed_out]
+en = "Your session has ended."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The session has ended (signed out elsewhere, expired or refused); signing in again is the only way on."
+
+[failure.storage_failed]
+en = "Your sign-in could not be read or saved on this computer. Please try again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The saved sign-in could not be read or written on this computer, for a reason other than the keyring."
+
+[failure.unexpected_response]
+en = "District AI sent a response this version of the app does not understand. Updating the app should fix it."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "The service answered in a shape this version of the app cannot read; an update of the app fixes it."
+
+[failure.unreadable_attachment]
+en = "That image could not be read. Try picking it again."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Attaching an image (to a message or as the help desk logo): the file could not be read."
+
+[failure.unsupported_attachment]
+en = "Only JPEG, PNG, GIF or WebP images can be attached."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+note = "Attaching a file to a text message: only these image formats are accepted. JPEG, PNG, GIF and WebP are format names."
+
+[hq.applying]
+en = "Applying the change."
+ctx = "label"
+screen = "District HQ"
+tier = "T3"
+note = "While a confirmed change is being applied."
+
+[hq.confirm_action]
+en = "Confirm"
+ctx = "button"
+screen = "District HQ"
+tier = "T2"
+note = "Button that confirms the proposed change."
+
+[hq.confirm_note]
+en = "Nothing has been changed yet."
+ctx = "body"
+screen = "District HQ"
+tier = "T2"
+note = "Under a proposed change: it is only a proposal; nothing has changed."
+
+[hq.confirm_title]
+en = "Confirm this change"
+ctx = "title"
+screen = "District HQ"
+tier = "T2"
+note = "Heading of a card proposing a change to the workspace that the member must confirm."
+
+[hq.dismiss_action]
+en = "Dismiss"
+ctx = "button"
+screen = "District HQ"
+tier = "T3"
+note = "Button that declines the proposed change."
+
+[hq.empty_body]
+en = "Ask about your calls, contacts, the receptionist or your knowledge base."
+ctx = "body"
+screen = "District HQ"
+tier = "T3"
+note = "Body of the empty District HQ conversation: what it can be asked about."
+
+[hq.empty_title]
+en = "Ask District HQ"
+ctx = "title"
+screen = "District HQ"
+tier = "T3"
+note = "Heading of District HQ, the assistant the member asks questions of, before anything was asked. District HQ is a product name."
+
+[hq.note_applied]
+en = "Done. The change is in place."
+ctx = "toast"
+screen = "District HQ"
+tier = "T3"
+note = "After a confirmed change was applied."
+
+[hq.note_mismatched]
+en = "District AI reports a change other than the one you confirmed. Check your workspace settings before relying on it."
+ctx = "body"
+screen = "District HQ"
+tier = "T2"
+note = "After a confirmed change: the service reports a different change than the one confirmed; the member should check the settings."
+
+[hq.note_not_applied]
+en = "That change was not made."
+ctx = "toast"
+screen = "District HQ"
+tier = "T2"
+note = "After a confirmed change was not made."
+
+[hq.thinking]
+en = "Thinking."
+ctx = "label"
+screen = "District HQ"
+tier = "T3"
+note = "While District HQ is answering."
+
+[inbox.empty_body]
+en = "Texts and emails from your customers will appear here."
+ctx = "body"
+screen = "inbox"
+tier = "T3"
+note = "Body of the empty inbox: texts and emails from customers are listed here."
+
+[inbox.empty_title]
+en = "No conversations yet"
+ctx = "title"
+screen = "inbox"
+tier = "T3"
+note = "Heading of the inbox when there are no conversations."
+
+[inbox.failed_title]
+en = "Could not load your conversations"
+ctx = "title"
+screen = "inbox"
+tier = "T2"
+note = "Heading of the inbox when the conversations failed to load."
+
+[inbox.partial_note]
+en = "Showing recent conversations. Older, quieter threads are not listed."
+ctx = "body"
+screen = "inbox"
+tier = "T3"
+note = "Under the inbox when only recent conversations are listed."
+
+[inbox.search_none_body]
+en = "Search looks inside every message in this workspace, including older threads."
+ctx = "body"
+screen = "inbox"
+tier = "T3"
+note = "Body when a search found nothing: the search covers every message, older threads included."
+
+[inbox.search_none_title]
+en = "No matches"
+ctx = "title"
+screen = "inbox"
+tier = "T3"
+note = "Heading when a search of the messages found nothing."
+
+[inbox.search_truncated]
+en = "Showing the newest matches. Older ones are not listed."
+ctx = "body"
+screen = "inbox"
+tier = "T3"
+note = "Under search results when only the newest matches are listed."
+
+[knowledge.add_billed]
+en = "Adding a document is billed by its length. It is added once, when you press Add."
+ctx = "body"
+screen = "settings knowledge"
+tier = "T1"
+note = "Note: adding a document is billed by its length, once, when Add is pressed. \"Add\" is the button's label."
+
+[knowledge.add_rejected]
+en = "A title and some text are both needed."
+ctx = "error"
+screen = "settings knowledge"
+tier = "T2"
+note = "When adding a document without a title or text."
+
+[knowledge.confirm_delete_action]
+en = "Delete"
+ctx = "button"
+screen = "settings knowledge"
+tier = "T2"
+note = "Button that deletes a knowledge document."
+
+[knowledge.confirm_delete_body]
+en = "\"{title}\" and everything the receptionist learned from it are deleted. Getting it back means adding it again, which is billed again."
+ctx = "body"
+screen = "settings knowledge"
+tier = "T2"
+args = { title = "str" }
+note = "Before deleting a knowledge document. {title} is its title; French uses « » around it. Adding a document is billed."
+
+[knowledge.confirm_delete_title]
+en = "Delete this document?"
+ctx = "title"
+screen = "settings knowledge"
+tier = "T2"
+note = "Confirmation heading before deleting a knowledge document."
+
+[knowledge.confirm_linked_action]
+en = "Send questions to Atlassian"
+ctx = "button"
+screen = "settings knowledge"
+tier = "T0"
+note = "Button that confirms sending questions to Atlassian."
+
+[knowledge.confirm_linked_body]
+en = "Callers' questions will be sent to Atlassian, outside this workspace's region, and answered by its assistant instead of from the documents added here."
+ctx = "body"
+screen = "settings knowledge"
+tier = "T0"
+note = "Before linking: questions leave the workspace's data region for Atlassian, and the documents added here stop being used."
+
+[knowledge.confirm_linked_title]
+en = "Send questions to Atlassian?"
+ctx = "title"
+screen = "settings knowledge"
+tier = "T0"
+note = "Confirmation heading before sending callers' questions to Atlassian."
+
+[knowledge.empty_body]
+en = "The receptionist has nothing of your own to answer from. Add a document above."
+ctx = "body"
+screen = "settings knowledge"
+tier = "T3"
+note = "Body when the knowledge base has no documents: add one above."
+
+[knowledge.empty_title]
+en = "No documents yet"
+ctx = "title"
+screen = "settings knowledge"
+tier = "T3"
+note = "Heading when the knowledge base has no documents."
+
+[knowledge.mode_internal]
+en = "Your own knowledge base"
+ctx = "label"
+screen = "settings knowledge"
+tier = "T3"
+note = "Where the receptionist's answers come from: the workspace's own documents."
+
+[knowledge.mode_internal_body]
+en = "Answers come only from the documents added here, searched in this workspace's own region."
+ctx = "body"
+screen = "settings knowledge"
+tier = "T0"
+note = "What that mode means: answers only from the documents added here, searched in the workspace's own data region."
+
+[knowledge.mode_linked]
+en = "Linked support knowledge base"
+ctx = "label"
+screen = "settings knowledge"
+tier = "T3"
+note = "Where the receptionist's answers come from: a linked support knowledge base (Atlassian)."
+
+[knowledge.mode_linked_body]
+en = "Callers' questions are sent to Atlassian, whose assistant writes the answers."
+ctx = "body"
+screen = "settings knowledge"
+tier = "T0"
+note = "What that mode means: callers' questions go to Atlassian (a company), whose assistant writes the answers."
+
+[knowledge.mode_unavailable]
+en = "Where this workspace's answers come from could not be read, so it cannot be changed right now."
+ctx = "body"
+screen = "settings knowledge"
+tier = "T2"
+note = "When where answers come from could not be read."
+
+[knowledge.viewer]
+en = "You have read-only access to this workspace. An agency or client member can add documents and change where answers come from."
+ctx = "body"
+screen = "settings knowledge"
+tier = "T3"
+note = "Note for a member with read-only access."
+
+[live.action_answer]
+en = "Answer"
+ctx = "button"
+screen = "live updates"
+tier = "T0"
+note = "Button on an incoming call notification that answers it."
+
+[live.action_decline]
+en = "Decline"
+ctx = "button"
+screen = "live updates"
+tier = "T0"
+note = "Button on an incoming call notification that declines it."
+
+[live.message_body]
+en = "Open District AI to read it."
+ctx = "notification"
+screen = "live updates"
+tier = "T0"
+note = "Desktop notification body for a new message. District AI is the app's name."
+
+[live.message_title]
+en = "New message"
+ctx = "notification"
+screen = "live updates"
+tier = "T0"
+note = "Desktop notification heading for a new message. It never shows the message, which stays private."
+
+[live.missed_body]
+en = "Open District AI to see it in the call log."
+ctx = "notification"
+screen = "live updates"
+tier = "T0"
+note = "Desktop notification body for a missed call."
+
+[live.missed_title]
+en = "Missed call"
+ctx = "notification"
+screen = "live updates"
+tier = "T0"
+note = "Desktop notification heading for a missed call."
+
+[live.reconnecting]
+en = "Reconnecting to live updates."
+ctx = "label"
+screen = "live updates"
+tier = "T3"
+note = "Status bar line while live updates reconnect."
+
+[live.waiting_title]
+en = "Another call is ringing"
+ctx = "notification"
+screen = "live updates"
+tier = "T0"
+note = "Desktop notification heading when a call rings while another call is already ringing or in progress."
+
+[marketplace.not_configured_title]
+en = "No carrier connected"
+ctx = "title"
+screen = "phone numbers"
+tier = "T3"
+note = "Heading when the workspace has no carrier account connected, so numbers cannot be searched."
+
+[marketplace.number_type_local]
+en = "Local"
+ctx = "label"
+screen = "phone numbers"
+tier = "T3"
+note = "A kind of phone number to search for: a local number."
+
+[marketplace.number_type_mobile]
+en = "Mobile"
+ctx = "label"
+screen = "phone numbers"
+tier = "T3"
+note = "A kind of phone number to search for: a mobile number."
+
+[marketplace.number_type_toll_free]
+en = "Toll-free"
+ctx = "label"
+screen = "phone numbers"
+tier = "T3"
+note = "A kind of phone number to search for: a toll-free number."
+
+[marketplace.owned_empty_body]
+en = "This workspace has no active phone numbers."
+ctx = "body"
+screen = "phone numbers"
+tier = "T3"
+note = "Body when the workspace has no active phone numbers."
+
+[marketplace.owned_empty_title]
+en = "No numbers yet"
+ctx = "title"
+screen = "phone numbers"
+tier = "T3"
+note = "Heading of the workspace's numbers when it has none."
+
+[marketplace.owned_failed_title]
+en = "Could not load this workspace's numbers"
+ctx = "title"
+screen = "phone numbers"
+tier = "T2"
+note = "Heading when the workspace's numbers failed to load."
+
+[marketplace.partial_note]
+en = "Could not reach {carriers}, so this list may be missing numbers."
+ctx = "body"
+screen = "phone numbers"
+tier = "T2"
+args = { carriers = "str" }
+note = "Under the workspace's numbers when carriers did not answer. {carriers} names them (Twilio, Telnyx), joined by commas."
+
+[marketplace.partial_note_unnamed]
+en = "Could not reach a carrier, so this list may be missing numbers."
+ctx = "body"
+screen = "phone numbers"
+tier = "T2"
+note = "Under the workspace's numbers when a carrier did not answer and the service did not say which."
+
+[marketplace.read_only]
+en = "Numbers cannot be bought, released or changed in this app, so this screen is read only."
+ctx = "body"
+screen = "phone numbers"
+tier = "T3"
+note = "Note on the phone numbers screen for a member who could buy numbers on the web: nothing changes in this app."
+
+[marketplace.read_only_viewer]
+en = "This screen is read only. Ask an agency or client member of this workspace to add or release a number."
+ctx = "body"
+screen = "phone numbers"
+tier = "T3"
+note = "Note on the phone numbers screen for a viewer: agency and client members can add or release numbers."
+
+[marketplace.search_failed_title]
+en = "Could not search for numbers"
+ctx = "title"
+screen = "phone numbers"
+tier = "T2"
+note = "Heading when a number search failed."
+
+[marketplace.search_none_body]
+en = "The carrier has no numbers matching these filters."
+ctx = "body"
+screen = "phone numbers"
+tier = "T3"
+note = "Body when a number search found nothing for these filters."
+
+[marketplace.search_none_title]
+en = "No matches"
+ctx = "title"
+screen = "phone numbers"
+tier = "T3"
+note = "Heading when a number search found nothing."
+
+[marketplace.web_action]
+en = "Open the number marketplace on the web"
+ctx = "button"
+screen = "phone numbers"
+tier = "T3"
+note = "Button that opens the number marketplace in the web browser."
+
+[marketplace.web_caption]
+en = "Numbers are bought on the District AI website. This opens it in your browser."
+ctx = "body"
+screen = "phone numbers"
+tier = "T1"
+note = "Caption under that button: numbers are bought on the website, which opens in the browser."
+
+[media.connect_failed]
+en = "The room could not be joined. Try again."
+ctx = "error"
+screen = "call"
+tier = "T2"
+note = "A call or meeting room could not be joined."
+
+[media.connection_lost]
+en = "The connection was lost and could not be resumed."
+ctx = "error"
+screen = "call"
+tier = "T2"
+note = "The call's connection was lost and could not be resumed."
+
+[media.encryption_failed]
+en = "Someone's audio could not be decrypted, so you may not hear them. Leaving and joining again may fix it."
+ctx = "error"
+screen = "call"
+tier = "T2"
+note = "During an encrypted call or room: someone's audio could not be decrypted."
+
+[media.joined_elsewhere]
+en = "You joined this room from somewhere else."
+ctx = "error"
+screen = "call"
+tier = "T2"
+note = "The same person joined this room from another device, which ends this session."
+
+[media.microphone_unavailable]
+en = "Your microphone could not be used, so nobody can hear you."
+ctx = "error"
+screen = "call"
+tier = "T2"
+note = "During a call or room: the microphone could not be used, so nobody hears the member."
+
+[media.reconnecting]
+en = "Reconnecting. The call is still here."
+ctx = "label"
+screen = "call"
+tier = "T3"
+note = "During a call or room while the connection is being resumed."
+
+[media.removed]
+en = "You were removed from the room."
+ctx = "error"
+screen = "call"
+tier = "T2"
+note = "The service removed the member from the meeting room."
+
+[media.unavailable]
+en = "Calls and meeting rooms are not available in this build of District AI."
+ctx = "error"
+screen = "call"
+tier = "T2"
+note = "This build of the app has no calling: calls and meeting rooms cannot be joined. Said plainly; trying again never helps."
+
+[members.add_rejected]
+en = "That does not look like an email address."
+ctx = "error"
+screen = "settings members"
+tier = "T2"
+note = "When the address typed to add a member is not an email address."
+
+[members.no_invitation]
+en = "Adding someone sends no invitation. They get access when they sign in with this address."
+ctx = "body"
+screen = "settings members"
+tier = "T2"
+note = "Note: adding someone sends no invitation; they get access by signing in with that address."
+
+[members.remove_action]
+en = "Remove"
+ctx = "button"
+screen = "settings members"
+tier = "T2"
+note = "Button that removes a member."
+
+[members.remove_body]
+en = "{email} loses access to this workspace at once. Adding them again makes a new membership."
+ctx = "body"
+screen = "settings members"
+tier = "T2"
+args = { email = "str" }
+note = "Before removing a member. {email} is their email address."
+
+[members.remove_title]
+en = "Remove this member?"
+ctx = "title"
+screen = "settings members"
+tier = "T2"
+note = "Confirmation heading before removing a member."
+
+[members.role_agency]
+en = "Agency"
+ctx = "label"
+screen = "settings members"
+tier = "T3"
+note = "A member's role: full access. \"Agency\" is the role's name in the product (the agency running the workspace)."
+
+[members.role_agency_body]
+en = "Full access, including who belongs here and what each member may do."
+ctx = "body"
+screen = "settings members"
+tier = "T2"
+note = "What the agency role may do."
+
+[members.role_client]
+en = "Client"
+ctx = "label"
+screen = "settings members"
+tier = "T3"
+note = "A member's role: everyday use. \"Client\" is the role's name in the product (the business the workspace serves)."
+
+[members.role_client_body]
+en = "Everyday use: calls, contacts, messages and the workspace's settings."
+ctx = "body"
+screen = "settings members"
+tier = "T2"
+note = "What the client role may do."
+
+[members.role_viewer]
+en = "Viewer"
+ctx = "label"
+screen = "settings members"
+tier = "T3"
+note = "A member's role: read only."
+
+[members.role_viewer_body]
+en = "Read only: sees calls, contacts and messages, and changes nothing."
+ctx = "body"
+screen = "settings members"
+tier = "T2"
+note = "What the viewer role may do."
+
+[messaging.channel_sms]
+en = "SMS"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "A channel a carrier account carries: text messages (SMS)."
+
+[messaging.channel_voice]
+en = "Voice"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "A channel a carrier account carries: phone calls."
+
+[messaging.channel_whatsapp]
+en = "WhatsApp"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "A channel a carrier account carries: WhatsApp (a product name)."
+
+[messaging.creator_cell_help]
+en = "Where the receptionist reaches the workspace's owner. The saved number is not shown here; typing one replaces it."
+ctx = "body"
+screen = "settings messaging accounts"
+tier = "T0"
+note = "About the owner's mobile number box: the receptionist reaches the owner there; the saved number is never shown."
+
+[messaging.delete_action]
+en = "Remove and release"
+ctx = "button"
+screen = "settings messaging accounts"
+tier = "T2"
+note = "Button that removes the carrier account and releases its numbers."
+
+[messaging.delete_body]
+en = "\"{account}\" is removed, and its phone numbers ({count}) are released: another workspace can then claim a number only this account held."
+ctx = "body"
+screen = "settings messaging accounts"
+tier = "T2"
+args = { account = "str", count = "int" }
+note = "Before removing a carrier account. {account} is its name; {count} is how many phone numbers it holds. French uses « » around the name."
+
+[messaging.delete_title]
+en = "Remove this carrier account?"
+ctx = "title"
+screen = "settings messaging accounts"
+tier = "T2"
+note = "Confirmation heading before removing a carrier account."
+
+[messaging.empty_body]
+en = "This workspace has no carrier account, so it cannot send texts from its own numbers."
+ctx = "body"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Body: without a carrier account the workspace cannot text from its own numbers."
+
+[messaging.empty_title]
+en = "No carrier connected"
+ctx = "title"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Heading when the workspace has no carrier account."
+
+[messaging.field_account_sid]
+en = "Account SID"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Label of a carrier credential box: Twilio's Account SID (keep the vendor's term as the vendor's French console writes it)."
+
+[messaging.field_api_key]
+en = "API key"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Label of a carrier credential box: Telnyx's API key."
+
+[messaging.field_application_key]
+en = "Application key"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Label of a carrier credential box: Sinch's application key."
+
+[messaging.field_application_secret]
+en = "Application secret"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Label of a carrier credential box: Sinch's application secret."
+
+[messaging.field_auth_token]
+en = "Auth token"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Label of a carrier credential box: Twilio's auth token."
+
+[messaging.field_key_id]
+en = "Key ID"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Label of a carrier credential box: Sinch's key ID."
+
+[messaging.field_key_secret]
+en = "Key secret"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Label of a carrier credential box: Sinch's key secret."
+
+[messaging.field_project_id]
+en = "Project ID"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Label of a carrier credential box: Sinch's project ID."
+
+[messaging.numbers_help]
+en = "Leave this alone to keep the numbers as they are. Editing it replaces the account's numbers with the ones listed."
+ctx = "body"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "About the numbers box: editing it replaces the account's numbers."
+
+[messaging.provider_switch]
+en = "Changing the carrier drops the saved keys, so enter the new carrier's keys before saving."
+ctx = "body"
+screen = "settings messaging accounts"
+tier = "T2"
+note = "After changing an existing account's carrier: the saved keys are dropped."
+
+[messaging.secret_keep]
+en = "Leave blank to keep the saved value."
+ctx = "placeholder"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Under the secret boxes of a saved account: leaving one blank keeps the saved value."
+
+[messaging.source_byok]
+en = "Your own carrier account"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Whose carrier account it is: the workspace brought its own."
+
+[messaging.source_managed]
+en = "Managed by Distronode"
+ctx = "label"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Whose carrier account it is: Distronode (the company) manages it."
+
+[messaging.test_needs_every_field]
+en = "Fill in every key to check them."
+ctx = "body"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "When the credential check cannot run yet."
+
+[messaging.viewer]
+en = "You have read-only access to this workspace, so carrier accounts are shown and not changed."
+ctx = "body"
+screen = "settings messaging accounts"
+tier = "T3"
+note = "Note for a member with read-only access."
+
+[overview.finish_setup_action]
+en = "Open the web dashboard"
+ctx = "button"
+screen = "overview"
+tier = "T3"
+note = "Button on that card that opens the web dashboard in the browser."
+
+[overview.finish_setup_body]
+en = "Your receptionist is not live yet. Pick your number, set up how it answers, and go live from the web dashboard."
+ctx = "body"
+screen = "overview"
+tier = "T3"
+note = "Body of that card: the receptionist is not answering calls yet; the number and how it answers are set up on the web dashboard."
+
+[overview.finish_setup_title]
+en = "Finish setting up on the web"
+ctx = "title"
+screen = "overview"
+tier = "T3"
+note = "Heading of the card shown while the workspace's receptionist is not live yet: setup is finished on the website."
+
+[overview.read_only_badge]
+en = "Read-only access"
+ctx = "label"
+screen = "overview"
+tier = "T3"
+note = "Badge on the overview for a member whose role can change nothing in this workspace."
+
+[overview.workspace_mismatch]
+en = "The workspace you selected is no longer the one District AI can report on. Try again to reload your workspaces."
+ctx = "error"
+screen = "overview"
+tier = "T2"
+note = "The overview answered for a different workspace than the one selected; trying again reloads the workspace list."
+
+[persona.clear_hint]
+en = "Clearing a box saves it as empty. Anything you do not change is kept as it is."
+ctx = "body"
+screen = "settings persona"
+tier = "T3"
+note = "Under the persona's text boxes: an emptied box saves as empty; the rest is kept."
+
+[persona.engine_read_only]
+en = "The languages and answer lengths this workspace may use could not be read, so they cannot be changed right now."
+ctx = "body"
+screen = "settings persona"
+tier = "T2"
+note = "When the languages and answer lengths could not be read."
+
+[persona.preview_billed]
+en = "This places a real call to your receptionist, with the settings on screen whether or not they are saved. It is billed like any call."
+ctx = "body"
+screen = "settings persona"
+tier = "T1"
+note = "Shown before the audition starts: it is a real call, billed like any other."
+
+[persona.preview_not_joined]
+en = "The audition could not be joined. Try again in a moment."
+ctx = "error"
+screen = "settings persona"
+tier = "T2"
+note = "Trying the receptionist (an audition, a real call to it): its room could not be joined."
+
+[persona.preview_title]
+en = "Try this receptionist"
+ctx = "title"
+screen = "settings persona"
+tier = "T3"
+note = "Heading of the dialog that tries the receptionist with a real call."
+
+[persona.refit_checking]
+en = "Checking that the voice chain speaks the new language."
+ctx = "label"
+screen = "settings persona"
+tier = "T3"
+note = "After changing the receptionist's language: checking that every part of its voice chain (speech recognition, model, voice) speaks it."
+
+[persona.refit_failed]
+en = "The voice chain could not be moved to the new language. Fit it in Voice Studio."
+ctx = "body"
+screen = "settings persona"
+tier = "T2"
+note = "Moving the voice chain to the new language failed."
+
+[persona.refit_failed_reason]
+en = "The voice chain could not be moved to the new language. Fit it in Voice Studio. {reason}"
+ctx = "body"
+screen = "settings persona"
+tier = "T2"
+args = { reason = "str" }
+note = "Moving the voice chain to the new language failed. {reason} is a full sentence saying why."
+
+[persona.refit_no_fit]
+en = "No model this workspace may use speaks the new language for every part of the voice chain. Choose them in Voice Studio."
+ctx = "body"
+screen = "settings persona"
+tier = "T2"
+note = "No model the workspace may use speaks the new language for every part of the voice chain."
+
+[persona.refit_not_seen]
+en = "The voice chain was saved, but Voice Studio does not show it fitting the new language. Check it there."
+ctx = "body"
+screen = "settings persona"
+tier = "T2"
+note = "The voice chain was saved, but reading it back does not show it fitting the new language."
+
+[persona.refit_refitted]
+en = "The voice chain was moved to models that speak the new language. Voice Studio shows it."
+ctx = "body"
+screen = "settings persona"
+tier = "T3"
+note = "The voice chain was moved to models that speak the new language. Voice Studio is the name of a settings section."
+
+[persona.studio_hint]
+en = "The voice, the engine and how it is tuned are changed in Voice Studio."
+ctx = "body"
+screen = "settings persona"
+tier = "T3"
+note = "Where the voice and engine are changed: Voice Studio (a settings section)."
+
+[presence.failed]
+en = "Calls cannot ring here right now. {reason}"
+ctx = "error"
+screen = "settings"
+tier = "T2"
+args = { reason = "str" }
+note = "Under the ring setting when registering this computer for calls failed. {reason} is a full sentence saying why."
+
+[presence.setting_body]
+en = "Calls handed to you ring here while District AI is running and you are signed in. Your availability for calls is set in Call handling."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "What that setting does. \"Call handling\" is the name of a settings section; use the same words as its title."
+
+[presence.setting_label]
+en = "Ring on this computer"
+ctx = "label"
+screen = "settings"
+tier = "T3"
+note = "A setting: let calls handed to the member ring on this computer."
+
+[purchase.cancel_action]
+en = "Cancel"
+ctx = "button"
+screen = "billing purchase"
+tier = "T3"
+note = "Button that goes back without opening checkout."
+
+[purchase.choose_plan_action]
+en = "Choose a plan"
+ctx = "button"
+screen = "billing purchase"
+tier = "T1"
+note = "Button that shows the plans to choose from."
+
+[purchase.confirm_action]
+en = "Continue to checkout"
+ctx = "button"
+screen = "billing purchase"
+tier = "T0"
+note = "Button that continues to checkout."
+
+[purchase.confirm_body]
+en = "Payment is handled by Stripe, District AI's payment processor. Checkout opens in a private window inside District AI, signed in for this purchase only. Your card details go to Stripe, not to District AI, and the price is shown before you pay."
+ctx = "body"
+screen = "billing purchase"
+tier = "T0"
+note = "Body of that step when checkout opens inside the app: Stripe handles the payment, card details go to Stripe only."
+
+[purchase.confirm_body_browser]
+en = "Payment is handled by Stripe, District AI's payment processor. Checkout opens in your browser, signed in to District AI. Your card details go to Stripe, not to District AI, and the price is shown before you pay."
+ctx = "body"
+screen = "billing purchase"
+tier = "T0"
+note = "Body of that step when checkout opens in the web browser instead."
+
+[purchase.confirm_title]
+en = "Continue to checkout with Stripe"
+ctx = "title"
+screen = "billing purchase"
+tier = "T0"
+note = "Heading of the step before checkout opens. Stripe is the payment processor's name."
+
+[purchase.in_app_note]
+en = "Choose or change your plan here. Checkout and payment are handled by Stripe, and open inside District AI."
+ctx = "body"
+screen = "billing purchase"
+tier = "T1"
+note = "Windows: the billing screen's note while buying in the app is on. Stripe is the payment processor's name."
+
+[purchase.in_browser]
+en = "This computer cannot show checkout inside District AI, so it opens in your browser."
+ctx = "body"
+screen = "billing purchase"
+tier = "T3"
+note = "Windows: said once checkout opens in the browser because this computer cannot show it inside the app."
+
+[purchase.manage_action]
+en = "Manage billing"
+ctx = "button"
+screen = "billing purchase"
+tier = "T1"
+note = "Button that opens the billing page (payment method, invoices, cancellation)."
+
+[purchase.opening]
+en = "Opening a secure page"
+ctx = "label"
+screen = "billing purchase"
+tier = "T3"
+note = "While the checkout or billing page is being opened."
+
+[purchase.prices_note]
+en = "Prices, and any promotion, are shown at checkout before you pay."
+ctx = "body"
+screen = "billing purchase"
+tier = "T1"
+note = "Beside the plans: the app shows no prices; checkout shows them, and any promotion, before paying."
+
+[purchase.promo_invalid]
+en = "A promotion code has only letters, digits, hyphens and underscores, up to 40 of them."
+ctx = "error"
+screen = "billing purchase"
+tier = "T2"
+note = "Under the promotion code field: the code may only hold letters, digits, hyphens and underscores, at most 40."
+
+[purchase.promo_label]
+en = "Promotion code (optional)"
+ctx = "label"
+screen = "billing purchase"
+tier = "T1"
+note = "Label of the promotion code field at checkout."
+
+[purchase.setting_body]
+en = "With Sign in every time, choosing a plan or managing billing signs you in afresh, in a private window inside District AI that keeps nothing once it closes. Off hides plans and billing actions on this computer."
+ctx = "body"
+screen = "billing purchase"
+tier = "T1"
+note = "Windows: what that setting does. \"Sign in every time\" and \"Off\" are its two values; use the same words as their labels."
+
+[purchase.setting_label]
+en = "Purchases on this computer"
+ctx = "label"
+screen = "billing purchase"
+tier = "T1"
+note = "Windows: a setting for buying in the app on this computer."
+
+[purchase.setting_off]
+en = "Off"
+ctx = "label"
+screen = "billing purchase"
+tier = "T1"
+note = "Windows: a value of the purchases setting that hides plans and billing actions."
+
+[purchase.setting_sign_in_every_time]
+en = "Sign in every time"
+ctx = "label"
+screen = "billing purchase"
+tier = "T1"
+note = "Windows: a value of the purchases setting: each purchase signs in afresh in a private window."
+
+[purchase.term_annual]
+en = "Annual"
+ctx = "label"
+screen = "billing purchase"
+tier = "T1"
+note = "How often a plan is billed: once a year, paid up front."
+
+[purchase.term_monthly]
+en = "Monthly"
+ctx = "label"
+screen = "billing purchase"
+tier = "T1"
+note = "How often a plan is billed: every month."
+
+[ringing.body]
+en = "Transferred from your AI receptionist."
+ctx = "notification"
+screen = "incoming call"
+tier = "T0"
+note = "What an incoming call says: the AI receptionist transferred it. Nothing about the caller."
+
+[ringing.call_ended]
+en = "That call ended before you could answer it."
+ctx = "body"
+screen = "incoming call"
+tier = "T3"
+note = "After the caller hung up before the call was answered."
+
+[ringing.microphone_note]
+en = "Answering puts your microphone on this call."
+ctx = "body"
+screen = "incoming call"
+tier = "T0"
+note = "Beside the Answer button: answering turns the microphone on (a privacy notice)."
+
+[ringing.missed]
+en = "You missed a call."
+ctx = "body"
+screen = "incoming call"
+tier = "T3"
+note = "After an incoming call was not answered in time."
+
+[ringing.title]
+en = "Incoming call"
+ctx = "notification"
+screen = "incoming call"
+tier = "T0"
+note = "Heading of an incoming call, in the app and in its desktop notification."
+
+[ringing.waiting_body]
+en = "Hang up to answer it."
+ctx = "notification"
+screen = "incoming call"
+tier = "T0"
+note = "An incoming call while another call is in progress: hang up the current one to answer."
+
+[rooms.busy_note]
+en = "Finish the call you are on to join a room."
+ctx = "body"
+screen = "rooms"
+tier = "T3"
+note = "For a member who is on a call: finish it before joining a room."
+
+[rooms.companion_note]
+en = "The Companion joins every room and writes up the minutes."
+ctx = "body"
+screen = "rooms"
+tier = "T0"
+note = "The Companion (the AI note-taker, a product name) joins every room and writes the minutes. A privacy notice."
+
+[rooms.empty_body]
+en = "Meetings appear here once one has been held, with the minutes when it ends."
+ctx = "body"
+screen = "rooms"
+tier = "T3"
+note = "Body of the empty meetings list: a meeting appears once held, with minutes when it ends."
+
+[rooms.empty_title]
+en = "No meetings yet"
+ctx = "title"
+screen = "rooms"
+tier = "T3"
+note = "Heading of the meetings list when none has been held."
+
+[rooms.failed_title]
+en = "Could not load meetings"
+ctx = "title"
+screen = "rooms"
+tier = "T2"
+note = "Heading of the meetings list when it failed to load."
+
+[rooms.listener_note]
+en = "You are in this workspace as a viewer, so you join rooms to listen."
+ctx = "body"
+screen = "rooms"
+tier = "T3"
+note = "For a viewer: they join rooms to listen only."
+
+[rooms.name_hint]
+en = "Name the room. Anyone in this workspace who types the same name joins you."
+ctx = "body"
+screen = "rooms"
+tier = "T3"
+note = "Under the room name field: everyone in the workspace who types the same name meets in the same room."
+
+[rooms.name_preview]
+en = "Everyone who joins \"{room}\" meets in the same room."
+ctx = "body"
+screen = "rooms"
+tier = "T3"
+args = { room = "str" }
+note = "Under the room name field: {room} is the room's name as typed, cleaned to letters, digits and hyphens. French uses « » around it."
+
+[rooms.no_minutes]
+en = "No minutes were saved for this meeting."
+ctx = "body"
+screen = "rooms"
+tier = "T3"
+note = "For a finished meeting with no minutes saved."
+
+[rooms.no_minutes_yet]
+en = "Minutes are written when the meeting ends."
+ctx = "body"
+screen = "rooms"
+tier = "T3"
+note = "For a meeting still running: the minutes are written when it ends."
+
+[rooms.start_title]
+en = "Start or join a room"
+ctx = "title"
+screen = "rooms"
+tier = "T3"
+note = "Heading of the form that starts or joins a meeting room."
+
+[routing.confirm_clear_action]
+en = "Remove all rules"
+ctx = "button"
+screen = "settings call routing"
+tier = "T2"
+note = "Button that saves no rules."
+
+[routing.confirm_clear_body]
+en = "Saving with no rules removes every override: every caller gets the workspace's persona."
+ctx = "body"
+screen = "settings call routing"
+tier = "T2"
+note = "Before saving no rules: every caller gets the workspace's persona."
+
+[routing.confirm_clear_title]
+en = "Remove every routing rule?"
+ctx = "title"
+screen = "settings call routing"
+tier = "T2"
+note = "Confirmation heading before saving no call routing rules (rules that give some callers another voice or instruction)."
+
+[routing.confirm_many_body]
+en = "There will be exactly these {count} rules, in this order, replacing what is stored."
+ctx = "body"
+screen = "settings call routing"
+tier = "T2"
+args = { count = "int" }
+note = "Before saving {count} rules (2 or more): they replace what is stored, in this order."
+
+[routing.confirm_one_body]
+en = "There will be exactly one rule, replacing what is stored."
+ctx = "body"
+screen = "settings call routing"
+tier = "T2"
+note = "Before saving one rule: it replaces what is stored."
+
+[routing.confirm_replace_action]
+en = "Replace"
+ctx = "button"
+screen = "settings call routing"
+tier = "T2"
+note = "Button that saves the rules, replacing what is stored."
+
+[routing.confirm_replace_title]
+en = "Replace the routing rules?"
+ctx = "title"
+screen = "settings call routing"
+tier = "T2"
+note = "Confirmation heading before saving the call routing rules."
+
+[routing.empty_body]
+en = "Every caller gets the workspace's persona. Add a rule to give some callers another voice or instruction."
+ctx = "body"
+screen = "settings call routing"
+tier = "T3"
+note = "Body when there are no routing rules."
+
+[routing.empty_title]
+en = "No routing rules"
+ctx = "title"
+screen = "settings call routing"
+tier = "T3"
+note = "Heading when there are no routing rules."
+
+[routing.unmodellable_body]
+en = "This workspace's routing rules are stored in a shape this app cannot change without losing part of them. Change them on the District AI website."
+ctx = "body"
+screen = "settings call routing"
+tier = "T3"
+note = "Body: the rules must be changed on the website so nothing is lost."
+
+[routing.unmodellable_title]
+en = "Cannot be edited here"
+ctx = "title"
+screen = "settings call routing"
+tier = "T3"
+note = "Heading when the stored rules have a shape this app cannot edit."
+
+[scheduling.failed_title]
+en = "Could not load booking pages"
+ctx = "title"
+screen = "booking pages"
+tier = "T2"
+note = "Heading of the booking pages card when it failed to load."
+
+[scheduling.live]
+en = "Your booking page is live."
+ctx = "body"
+screen = "booking pages"
+tier = "T3"
+note = "Booking pages card: the booking page is live."
+
+[scheduling.live_without_url]
+en = "This workspace has a booking page, but District AI did not send its address."
+ctx = "body"
+screen = "booking pages"
+tier = "T3"
+note = "Booking pages card: there is a booking page but the service did not send its address."
+
+[scheduling.not_offered]
+en = "Booking pages are not offered to this workspace."
+ctx = "body"
+screen = "booking pages"
+tier = "T3"
+note = "Booking pages card: the service does not offer booking pages (customers booking appointments on a web page) to this workspace."
+
+[scheduling.not_set_up]
+en = "Booking pages are available to this workspace. Turn them on to give customers a page to book on."
+ctx = "body"
+screen = "booking pages"
+tier = "T3"
+note = "Booking pages card: available but not turned on yet."
+
+[scheduling.provisioning]
+en = "Your booking page is being set up. This usually takes under a minute, and it is checked again every hour if anything stalls."
+ctx = "body"
+screen = "booking pages"
+tier = "T3"
+note = "Booking pages card: the booking page is being set up."
+
+[scheduling.setup_failed]
+en = "Setting up your booking page did not finish."
+ctx = "body"
+screen = "booking pages"
+tier = "T2"
+note = "Booking pages card: setting up the booking page failed."
+
+[scheduling.switched_off]
+en = "Booking pages are switched off for this workspace."
+ctx = "body"
+screen = "booking pages"
+tier = "T3"
+note = "Booking pages card: booking pages are turned off for this workspace."
+
+[scheduling.unknown]
+en = "This workspace has a booking page, and this version of the app does not recognise its state. Updating the app should fix it."
+ctx = "body"
+screen = "booking pages"
+tier = "T3"
+note = "Booking pages card: the service reports a state this version of the app does not know."
+
+[session.callback_expired]
+en = "That sign-in link has expired. Sign in again."
+ctx = "error"
+screen = "sign-in"
+tier = "T2"
+note = "The sign-in link that came back is no longer waited for."
+
+[session.callback_malformed]
+en = "Sign-in did not complete. Sign in to try again."
+ctx = "error"
+screen = "sign-in"
+tier = "T2"
+note = "The browser's answer to the sign-in was incomplete."
+
+[session.callback_mismatch]
+en = "Sign-in refused: the response did not match this request."
+ctx = "error"
+screen = "sign-in"
+tier = "T2"
+note = "Security: the browser handed back a sign-in this app did not ask for, so it was refused. Said plainly."
+
+[session.denied]
+en = "Sign-in did not complete ({reason})."
+ctx = "error"
+screen = "sign-in"
+tier = "T2"
+args = { reason = "str" }
+note = "The sign-in page reported an error. {reason} is the sign-in service's own short code for it, in English (for example access_denied)."
+
+[session.ended_refresh]
+en = "Your session ended. Signing in again will restore it."
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+note = "Sign-in screen after the session ended routinely (its renewal was interrupted or the service could not be reached)."
+
+[session.ended_title]
+en = "Please sign in again"
+ctx = "title"
+screen = "sign-in"
+tier = "T2"
+note = "Heading of the sign-in screen after the session ended."
+
+[session.exchange_rejected]
+en = "Sign-in expired. Please try again."
+ctx = "error"
+screen = "sign-in"
+tier = "T2"
+note = "Completing the sign-in was refused because it took too long."
+
+[session.exchanging]
+en = "Finishing sign-in."
+ctx = "label"
+screen = "sign-in"
+tier = "T3"
+note = "After the browser handed the sign-in back, while it is completed."
+
+[session.no_browser]
+en = "No browser is available, and signing in needs one."
+ctx = "error"
+screen = "sign-in"
+tier = "T2"
+note = "Signing in needs a web browser and none would open."
+
+[session.no_browser_for_page]
+en = "No browser is available to open that page."
+ctx = "error"
+screen = "sign-in"
+tier = "T2"
+note = "No web browser would open a page the app asked for."
+
+[session.no_longer_valid]
+en = "Your session is no longer valid. Please sign in again."
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+note = "Sign-in screen after the service refused the session."
+
+[session.not_saved]
+en = "You are signed in, but your sign-in could not be saved ({problem}), so you will need to sign in again the next time the app starts."
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+args = { problem = "str" }
+note = "After signing in when the sign-in could not be saved on this computer. {problem} is a clause from session.store_problem."
+
+[session.opening_browser]
+en = "Opening your browser to sign in."
+ctx = "label"
+screen = "sign-in"
+tier = "T3"
+note = "While the web browser opens the sign-in page."
+
+[session.resuming]
+en = "Resuming your session."
+ctx = "label"
+screen = "sign-in"
+tier = "T3"
+note = "At start-up while the saved session is being resumed."
+
+[session.sign_in_to_continue]
+en = "Sign in to continue."
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+note = "Sign-in screen when there is no session at all."
+
+[session.sign_out_deferred]
+en = "District AI could not be reached, so it will be told the next time the app starts."
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+note = "After signing out while offline: the service will be told the next time the app starts."
+
+[session.sign_out_not_attempted]
+en = "Your stored sign-in could not be read ({problem}), so District AI was not told. It may stay valid on the service until it expires. You can sign this device out from Devices on another device."
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+args = { problem = "str" }
+note = "After signing out when the saved sign-in could not be read. {problem} is a clause from session.store_problem. \"Devices\" is the name of a screen."
+
+[session.sign_out_not_removed]
+en = "Your sign-in could not be removed from this computer ({problem}), so you may find yourself signed in the next time the app starts. Try signing out again."
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+args = { problem = "str" }
+note = "After signing out when the saved sign-in could not be deleted. {problem} is a clause from session.store_problem."
+
+[session.sign_out_stranded]
+en = "District AI could not be reached, and the sign-in could not be kept to tell it later ({problem}), so it may stay valid on the service until it expires. You can sign this device out from Devices on another device."
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+args = { problem = "str" }
+note = "After signing out while offline when the sign-in could not be kept to tell the service later. {problem} is a clause from session.store_problem. \"Devices\" is the name of a screen."
+
+[session.signed_out]
+en = "You are signed out."
+ctx = "title"
+screen = "sign-in"
+tier = "T3"
+note = "Headline after signing out of this device."
+
+[session.signed_out_everywhere]
+en = "You are signed out on every device."
+ctx = "title"
+screen = "sign-in"
+tier = "T3"
+note = "Headline after signing out of every device."
+
+[session.store_problem_corrupt]
+en = "what is stored could not be read"
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+note = "A clause inside parentheses in the sign-out and sign-in sentences: what is stored could not be read. Lower case; no final period."
+
+[session.store_problem_io]
+en = "a file could not be read or written"
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+note = "A clause inside parentheses in the sign-out and sign-in sentences: a file could not be read or written. Lower case; no final period."
+
+[session.store_problem_locked]
+en = "the keyring is locked"
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+note = "A clause inside parentheses in the sign-out and sign-in sentences: the keyring is locked. Lower case; no final period."
+
+[session.store_problem_unavailable]
+en = "no keyring is available"
+ctx = "body"
+screen = "sign-in"
+tier = "T2"
+note = "A clause inside parentheses in the sign-out and sign-in sentences: no secret store (keyring) is running. Lower case; no final period."
+
+[session.unreadable_token]
+en = "District AI sent a sign-in this version of the app does not understand. Updating the app should fix it."
+ctx = "error"
+screen = "sign-in"
+tier = "T2"
+note = "The service sent a sign-in this version of the app cannot read; an update fixes it."
+
+[session.waiting_for_browser]
+en = "Waiting for sign-in to finish in your browser."
+ctx = "label"
+screen = "sign-in"
+tier = "T3"
+note = "While the person signs in, in the web browser."
+
+[settings.failed_title]
+en = "Could not load this workspace's settings"
+ctx = "title"
+screen = "settings"
+tier = "T2"
+note = "Heading when the workspace's settings failed to load."
+
+[settings.group_workspace]
+en = "Workspace"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Heading of the settings group about the workspace itself (carrier accounts, members, numbers)."
+
+[settings.more_on_web]
+en = "District Studio's Integrations and Video, and the outbound campaign, are changed on the District AI website."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Under the settings list: these other settings are changed on the website. District Studio, Integrations and Video are names of web pages; keep District Studio as is."
+
+[settings.row_call_handling]
+en = "Call handling"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens how calls are answered."
+
+[settings.row_call_handling_body]
+en = "Who answers first, how long your devices ring, and whether you are rung."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Call handling settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.row_directory]
+en = "Transfer directory"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens the people the receptionist can transfer a caller to."
+
+[settings.row_directory_body]
+en = "Who it can put a live caller through to."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Transfer directory settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.row_knowledge]
+en = "Knowledge"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens the knowledge base it answers from."
+
+[settings.row_knowledge_body]
+en = "The documents it answers from, and where answers come from."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Knowledge settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.row_members]
+en = "Members"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens the workspace's members."
+
+[settings.row_members_body]
+en = "Who belongs to this workspace, their roles, and its name."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Members settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.row_messaging]
+en = "Messaging accounts"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens the carrier accounts."
+
+[settings.row_messaging_body]
+en = "The carrier accounts this workspace sends from."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Messaging accounts settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.row_numbers]
+en = "Phone numbers"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens the workspace's phone numbers."
+
+[settings.row_numbers_body]
+en = "The numbers this workspace uses."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Phone numbers settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.row_persona]
+en = "Persona"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens the receptionist's persona (name, greeting, character)."
+
+[settings.row_persona_body]
+en = "The receptionist's name, greeting, character, language and answer length."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Persona settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.row_routing]
+en = "Call routing rules"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens the call routing rules."
+
+[settings.row_routing_body]
+en = "Which callers get which voice and instruction."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Call routing rules settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.row_tools]
+en = "Skills"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens what the receptionist may do on a call."
+
+[settings.row_tools_body]
+en = "What it may do on a call, and outside research on contacts."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Skills settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.row_voice]
+en = "Voice"
+ctx = "title"
+screen = "settings"
+tier = "T3"
+note = "Title of the settings row that opens the receptionist's voice and speech engine (Voice Studio)."
+
+[settings.row_voice_body]
+en = "The voice and engine it speaks with, part by part, and how fast it answers."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Subtitle of the Voice settings row: what the section holds. \"It\" is the AI receptionist."
+
+[settings.saved]
+en = "Saved."
+ctx = "toast"
+screen = "settings"
+tier = "T3"
+note = "After a setting was saved."
+
+[settings.saved_stale]
+en = "Saved, but the settings could not be read back. Read them again before changing anything else."
+ctx = "toast"
+screen = "settings"
+tier = "T2"
+note = "After a save, when the settings could not be read back."
+
+[settings.viewer_note]
+en = "You have read-only access to this workspace. These are the settings you may read; an agency or client member can change them."
+ctx = "body"
+screen = "settings"
+tier = "T3"
+note = "Under the settings list for a viewer."
+
+[studio.leg_out]
+en = "{leg}: {place}"
+ctx = "format"
+screen = "settings voice studio"
+tier = "T0"
+args = { leg = "str", place = "str" }
+note = "One part of the voice chain that runs outside the workspace's data region. {leg} is the part's name and {place} where it runs, both already in the reader's language. French puts a no-break space before the colon."
+
+[support.capped]
+en = "Showing the 100 most recent requests."
+ctx = "body"
+screen = "support"
+tier = "T3"
+note = "Under the list when it holds the service's maximum of 100 requests."
+
+[support.close_action]
+en = "Mark as resolved"
+ctx = "button"
+screen = "support"
+tier = "T2"
+note = "Button that marks a support request resolved."
+
+[support.close_question]
+en = "Mark this request as resolved? Our team is told, and it cannot be reopened from here. You can still reply to take it up again."
+ctx = "body"
+screen = "support"
+tier = "T2"
+note = "Confirmation before marking a support request resolved: Distronode's team is told; it cannot be reopened here, but replying takes it up again."
+
+[support.closed_as]
+en = "Closed as {status}."
+ctx = "toast"
+screen = "support"
+tier = "T3"
+args = { status = "str" }
+note = "After closing a support request. {status} is the status name the support desk gave it, in its own words (often English)."
+
+[support.deduplicated]
+en = "That request was already sent."
+ctx = "toast"
+screen = "support"
+tier = "T3"
+note = "After sending a support request the service already had."
+
+[support.empty_body]
+en = "Requests your team raises with Distronode appear here, with our replies."
+ctx = "body"
+screen = "support"
+tier = "T3"
+note = "Body of the empty list: requests the workspace raises with Distronode (the company) appear here with its replies."
+
+[support.empty_title]
+en = "No requests"
+ctx = "title"
+screen = "support"
+tier = "T3"
+note = "Heading of the support requests list when there are none."
+
+[support.failed_title]
+en = "Could not load your support requests"
+ctx = "title"
+screen = "support"
+tier = "T2"
+note = "Heading of the support requests list when it failed to load."
+
+[support.filed]
+en = "Request {key} is open with our team."
+ctx = "toast"
+screen = "support"
+tier = "T3"
+args = { key = "str" }
+note = "After sending a support request to Distronode. {key} is its reference, for example SUP-12. \"Our team\" is Distronode's support team."
+
+[support.kind_problem]
+en = "Something is broken"
+ctx = "label"
+screen = "support"
+tier = "T3"
+note = "A kind of support request: something does not work."
+
+[support.kind_question]
+en = "A question"
+ctx = "label"
+screen = "support"
+tier = "T3"
+note = "A kind of support request: a question."
+
+[support.kind_suggestion]
+en = "A suggestion"
+ctx = "label"
+screen = "support"
+tier = "T3"
+note = "A kind of support request: a suggestion."
+
+[support.pending]
+en = "We have your request. Its reference will appear here shortly."
+ctx = "toast"
+screen = "support"
+tier = "T3"
+note = "After sending a support request whose reference is not known yet. It was received."
+
+[thread.attachment_size]
+en = "Attachments must be between 1 byte and {megabytes} MB."
+ctx = "error"
+screen = "conversation"
+tier = "T2"
+args = { megabytes = "int" }
+note = "When an image to attach is empty or too large. {megabytes} is the largest size in megabytes. MB is the unit (Mo in French)."
+
+[thread.no_reply_target]
+en = "Replies cannot be sent on this conversation from here."
+ctx = "body"
+screen = "conversation"
+tier = "T3"
+note = "In place of the reply box on a conversation the app cannot reply on."
+
+[thread.read_only_role]
+en = "You have read-only access to this workspace, so you cannot reply here."
+ctx = "body"
+screen = "conversation"
+tier = "T3"
+note = "In place of the reply box for a member whose role cannot reply."
+
+[thread.too_many_attachments]
+en = "You can attach up to {count} images to one message."
+ctx = "error"
+screen = "conversation"
+tier = "T2"
+args = { count = "int" }
+note = "When attaching one image too many to a text message. {count} is the most allowed (more than one)."
+
+[thread.untitled]
+en = "Conversation"
+ctx = "title"
+screen = "conversation"
+tier = "T3"
+note = "Title of a conversation with a contact the app knows nothing else about yet."
+
+[tools.book_appointment]
+en = "Book appointments"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: book appointments for the caller."
+
+[tools.cancel_appointment]
+en = "Cancel appointments"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: cancel the caller's appointments."
+
+[tools.check_availability]
+en = "Check availability"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: check free times on the booking calendar."
+
+[tools.dispatch_email]
+en = "Email dispatcher"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: send an email to the workspace's dispatcher."
+
+[tools.enrichment_body]
+en = "When on, contacts can be researched with business details from licensed providers and public web search. Off unless someone turns it on; calls and contacts work normally without it."
+ctx = "body"
+screen = "settings skills"
+tier = "T0"
+note = "What that switch does: research uses licensed data providers and public web search; it is off unless turned on."
+
+[tools.enrichment_title]
+en = "Outside research on contacts"
+ctx = "title"
+screen = "settings skills"
+tier = "T0"
+note = "Title of the switch for outside research on contacts (business details about callers)."
+
+[tools.leave_message]
+en = "Take a message"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: take a message for the team."
+
+[tools.list_appointments]
+en = "Read back appointments"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: read the caller's appointments back to them."
+
+[tools.list_event_types]
+en = "List appointment types"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: list the kinds of appointment that can be booked."
+
+[tools.needs_support_number]
+en = "Needs a support team number, which is set on the District AI website."
+ctx = "body"
+screen = "settings skills"
+tier = "T3"
+note = "Note on the fallback transfer when no support team number is stored."
+
+[tools.reschedule_appointment]
+en = "Reschedule appointments"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: move the caller's appointments."
+
+[tools.search_knowledge_base]
+en = "Knowledge base"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: answer from the knowledge base."
+
+[tools.send_sms]
+en = "Text the caller"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: send the caller a text message."
+
+[tools.transfer_to_agent]
+en = "Transfer to a person (fallback)"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: transfer to a person, as the fallback when nothing else fits."
+
+[tools.transfer_to_person]
+en = "Transfer to a person"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill the receptionist may use on a call: transfer the caller to a person."
+
+[tools.unknown_tool]
+en = "Stored for this workspace. This version of the app has no name for it, and leaving it on keeps it."
+ctx = "body"
+screen = "settings skills"
+tier = "T3"
+note = "Note on a stored skill this version of the app has no name for."
+
+[tools.update_contact]
+en = "Update contacts"
+ctx = "label"
+screen = "settings skills"
+tier = "T3"
+note = "A skill: create or update the caller's contact."
+
+[transcript.assistant]
+en = "Assistant"
+ctx = "label"
+screen = "call transcript"
+tier = "T3"
+note = "Label of a line spoken by the AI assistant when the service gives no persona name."
+
+[transcript.caller]
+en = "Caller"
+ctx = "label"
+screen = "call transcript"
+tier = "T3"
+note = "Label of a line spoken by the caller."
+
+[transcript.connecting]
+en = "Connecting."
+ctx = "label"
+screen = "call transcript"
+tier = "T3"
+note = "Status while the live transcript starts."
+
+[transcript.ended]
+en = "Call ended"
+ctx = "label"
+screen = "call transcript"
+tier = "T3"
+note = "Status after the call ended."
+
+[transcript.heading]
+en = "Live transcript"
+ctx = "title"
+screen = "call transcript"
+tier = "T3"
+note = "Heading over the transcript of a call in progress, written as it is spoken."
+
+[transcript.incomplete]
+en = "Earlier lines will appear in the full transcript after the call."
+ctx = "body"
+screen = "call transcript"
+tier = "T3"
+note = "Note when the live transcript does not reach back to the start of the call."
+
+[transcript.interrupted]
+en = "Interrupted"
+ctx = "label"
+screen = "call transcript"
+tier = "T3"
+note = "Under an assistant's line that was cut off; its text is what was actually played."
+
+[transcript.live]
+en = "Live"
+ctx = "label"
+screen = "call transcript"
+tier = "T3"
+note = "Status while lines of the live transcript arrive."
+
+[transcript.loading_full]
+en = "Loading the full transcript."
+ctx = "body"
+screen = "call transcript"
+tier = "T3"
+note = "While the call's full transcript is read after the call."
+
+[transcript.no_transcript]
+en = "No transcript for this call."
+ctx = "body"
+screen = "call transcript"
+tier = "T3"
+note = "When the call's full transcript is empty."
+
+[transcript.other_speaker]
+en = "Other speaker"
+ctx = "label"
+screen = "call transcript"
+tier = "T3"
+note = "Label of a line by a speaker the app does not know."
+
+[transcript.reconnecting]
+en = "Reconnecting."
+ctx = "label"
+screen = "call transcript"
+tier = "T3"
+note = "Status after the AI assistant on the call failed; the call may get a fresh one."
+
+[transcript.waiting]
+en = "Nothing has been said yet."
+ctx = "body"
+screen = "call transcript"
+tier = "T3"
+note = "While the live transcript is open and nobody has spoken yet."
+
+[voice_studio.failed_title]
+en = "Could not load Voice Studio"
+ctx = "title"
+screen = "settings voice studio"
+tier = "T2"
+note = "Heading when Voice Studio (a settings section: the receptionist's voice and engine) failed to load."
+
+[voice_studio.saved_stale]
+en = "Saved, but Voice Studio could not be read back. Read it again before changing anything else."
+ctx = "toast"
+screen = "settings voice studio"
+tier = "T2"
+note = "After a save, when Voice Studio could not be read back."
+
+[workflows.campaign_active]
+en = "Active"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "Badge: the outbound campaign is running."
+
+[workflows.campaign_failed_title]
+en = "Could not load the campaign"
+ctx = "title"
+screen = "workflows"
+tier = "T2"
+note = "Heading of the campaign card when it failed to load."
+
+[workflows.campaign_no_batch]
+en = "No batch size set yet."
+ctx = "body"
+screen = "workflows"
+tier = "T3"
+note = "The campaign's batch size (contacts worked per run) was never set."
+
+[workflows.campaign_no_goal]
+en = "No goal set yet."
+ctx = "body"
+screen = "workflows"
+tier = "T3"
+note = "The campaign's goal was never set."
+
+[workflows.campaign_paused]
+en = "Paused"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "Badge: the outbound campaign is paused, or was never set up."
+
+[workflows.campaign_title]
+en = "Outbound campaign"
+ctx = "title"
+screen = "workflows"
+tier = "T3"
+note = "Heading of the outbound campaign card: the receptionist calling and messaging contacts on its own."
+
+[workflows.campaign_viewer]
+en = "You are a viewer in this workspace. Ask an agency or client member to change the campaign."
+ctx = "body"
+screen = "workflows"
+tier = "T3"
+note = "Note for a viewer: agency and client members can change the campaign."
+
+[workflows.campaign_web_only]
+en = "The campaign's goal and batch size are changed on the District AI website."
+ctx = "body"
+screen = "workflows"
+tier = "T3"
+note = "Note: the goal and batch size are changed on the website."
+
+[workflows.confirm_pause_action]
+en = "Pause campaign"
+ctx = "button"
+screen = "workflows"
+tier = "T2"
+note = "Button that pauses the campaign."
+
+[workflows.confirm_pause_body]
+en = "The campaign stops working through your contacts. Nothing is deleted, and its goal and batch size are kept, so resuming picks up where it left off."
+ctx = "body"
+screen = "workflows"
+tier = "T2"
+note = "Before pausing: nothing is deleted; resuming continues where it stopped."
+
+[workflows.confirm_pause_title]
+en = "Pause the outbound campaign?"
+ctx = "title"
+screen = "workflows"
+tier = "T2"
+note = "Confirmation heading before pausing the outbound campaign."
+
+[workflows.confirm_resume_action]
+en = "Resume campaign"
+ctx = "button"
+screen = "workflows"
+tier = "T1"
+note = "Button that resumes the campaign."
+
+[workflows.confirm_resume_body]
+en = "The campaign starts calling and messaging your contacts again, which spends call and message credit."
+ctx = "body"
+screen = "workflows"
+tier = "T1"
+note = "Before resuming: the campaign calls and messages contacts again, which spends credit."
+
+[workflows.confirm_resume_title]
+en = "Resume the outbound campaign?"
+ctx = "title"
+screen = "workflows"
+tier = "T1"
+note = "Confirmation heading before resuming the outbound campaign."
+
+[workflows.empty_body]
+en = "Workflows run an action after a call, a message or a new contact. They are built on the District AI website."
+ctx = "body"
+screen = "workflows"
+tier = "T3"
+note = "Body of the empty list: what a workflow is, and that workflows are built on the website."
+
+[workflows.empty_title]
+en = "No workflows yet"
+ctx = "title"
+screen = "workflows"
+tier = "T3"
+note = "Heading of the workflows list when none was built."
+
+[workflows.failed_title]
+en = "Could not load workflows"
+ctx = "title"
+screen = "workflows"
+tier = "T2"
+note = "Heading of the workflows list when it failed to load."
+
+[workflows.runs_empty]
+en = "This workflow has not run yet."
+ctx = "body"
+screen = "workflows"
+tier = "T3"
+note = "Under a workflow that has never run."
+
+[workflows.trigger_call_answered]
+en = "After an answered call"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: an answered call ends."
+
+[workflows.trigger_call_ended]
+en = "After any call ends"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: any call ends."
+
+[workflows.trigger_call_missed]
+en = "After a missed call"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: a missed call."
+
+[workflows.trigger_contact_created]
+en = "New contact"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: a contact was added."
+
+[workflows.trigger_dnc_registered]
+en = "Added to do-not-call"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: a contact was added to the do-not-call list."
+
+[workflows.trigger_intent_detected]
+en = "Intent detected"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: a caller's intent was recognized."
+
+[workflows.trigger_negative_sentiment]
+en = "Negative sentiment"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: a call analysed as negative."
+
+[workflows.trigger_neutral_sentiment]
+en = "Neutral sentiment"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: a call analysed as neutral."
+
+[workflows.trigger_positive_sentiment]
+en = "Positive sentiment"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: a call analysed as positive."
+
+[workflows.trigger_sms_received]
+en = "Message received"
+ctx = "label"
+screen = "workflows"
+tier = "T3"
+note = "What starts a workflow: a text message arrived."
+
+[workspaces.billing_blocked_many]
+en = "None of your {count} workspaces has an active subscription."
+ctx = "body"
+screen = "workspaces"
+tier = "T1"
+args = { count = "int" }
+note = "Body when none of the account's workspaces has an active subscription. {count} is always 2 or more."
+
+[workspaces.billing_blocked_one]
+en = "Your workspace does not have an active subscription."
+ctx = "body"
+screen = "workspaces"
+tier = "T1"
+note = "Body when the account's one workspace has no active subscription."
+
+[workspaces.billing_blocked_title]
+en = "Subscription inactive"
+ctx = "title"
+screen = "workspaces"
+tier = "T1"
+note = "Heading when no workspace of the account has an active subscription."
+
+[workspaces.choose_plan_after_checkout_message]
+en = "This account does not have a District workspace yet. Choose a plan to set one up. A workspace you paid for can take a few minutes, and appears here once it is ready."
+ctx = "body"
+screen = "workspaces"
+tier = "T1"
+note = "Still no workspace after that wait: plans are offered again, and a workspace paid for may still be on its way."
+
+[workspaces.choose_plan_message]
+en = "This account does not have a District workspace yet. Choose a plan to set one up."
+ctx = "body"
+screen = "workspaces"
+tier = "T1"
+note = "Signed in with no workspace while plans are offered: choosing a plan sets one up. \"District\" is the product's name."
+
+[workspaces.failed_title]
+en = "Could not load your workspace"
+ctx = "title"
+screen = "workspaces"
+tier = "T2"
+note = "Heading when the workspace list failed to load."
+
+[workspaces.none_message]
+en = "This account is not linked to a District workspace yet. Please contact support."
+ctx = "body"
+screen = "workspaces"
+tier = "T2"
+note = "Body when the account has no workspace and plans are not offered: support can link one."
+
+[workspaces.none_title]
+en = "No workspace found"
+ctx = "title"
+screen = "workspaces"
+tier = "T2"
+note = "Heading when the account has no workspace."
+
+[workspaces.partial_warning]
+en = "Some workspaces could not be listed ({regions} unreachable). This list may be incomplete."
+ctx = "body"
+screen = "workspaces"
+tier = "T2"
+args = { regions = "str" }
+note = "Beside the workspace switcher when regions did not answer. {regions} lists their codes in capitals, joined by commas (EU, APAC)."
+
+[workspaces.regions_degraded]
+en = "Your workspaces could not be listed because a region is unreachable. Your account has not changed."
+ctx = "error"
+screen = "workspaces"
+tier = "T2"
+note = "The workspace list failed because a region did not answer; nothing about the account changed."
+
+[workspaces.setting_up_message]
+en = "If you completed checkout, your workspace is being set up. It appears here in a moment."
+ctx = "body"
+screen = "workspaces"
+tier = "T1"
+note = "Body meanwhile: no plans are offered, so nobody pays twice."
+
+[workspaces.setting_up_title]
+en = "Setting up your workspace"
+ctx = "title"
+screen = "workspaces"
+tier = "T1"
+note = "Heading while a workspace that a checkout may have paid for is being set up."

@@ -55,13 +55,14 @@ use district_auth::{HAND_OFF_START_PATH, HandOffNonce, HandOffState};
 use district_model::BillingHandOffResponse;
 
 use crate::billing::BILLING_WEB_PATH;
-use crate::failure::{FailureText, PURCHASE_NOT_SHOWN};
+use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::route::Route;
 use crate::scheduling::{
     HAND_OFF_CALLBACK_WAIT, HandOffLeg, OneTimeUrl, hand_off_failure, on_origin,
 };
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 use crate::workspaces::WorkspacesState;
 #[cfg(doc)]
 use crate::{BillingEvent, Event};
@@ -155,8 +156,8 @@ impl PlanTerm {
     /// The term's name.
     pub fn label(self) -> &'static str {
         match self {
-            Self::Monthly => "Monthly",
-            Self::Annual => "Annual",
+            Self::Monthly => s::purchase_term_monthly(l()),
+            Self::Annual => s::purchase_term_annual(l()),
         }
     }
 }
@@ -172,10 +173,9 @@ impl PromoCode {
     /// The longest code the service reads.
     pub const MAX_LEN: usize = 40;
     /// The field's label.
-    pub const LABEL: &'static str = "Promotion code (optional)";
+    pub const LABEL: &'static str = district_l10n::english::PURCHASE_PROMO_LABEL;
     /// What to say about a code that is not of that shape.
-    pub const INVALID: &'static str = "A promotion code has only letters, digits, hyphens and \
-        underscores, up to 40 of them.";
+    pub const INVALID: &'static str = district_l10n::english::PURCHASE_PROMO_INVALID;
 
     /// The code the member typed, or `None` when it is not of the shape the
     /// service reads. Letters are upper-cased and surrounding spaces dropped,
@@ -264,17 +264,15 @@ impl PurchaseSetting {
     /// Both values, in the order the setting lists them.
     pub const ALL: [Self; 2] = [Self::SignInEveryTime, Self::Off];
     /// The setting's label.
-    pub const LABEL: &'static str = "Purchases on this computer";
+    pub const LABEL: &'static str = district_l10n::english::PURCHASE_SETTING_LABEL;
     /// What the setting does.
-    pub const BODY: &'static str = "With Sign in every time, choosing a plan or managing billing \
-        signs you in afresh, in a private window inside District AI that keeps nothing once it \
-        closes. Off hides plans and billing actions on this computer.";
+    pub const BODY: &'static str = district_l10n::english::PURCHASE_SETTING_BODY;
 
     /// The value's name.
     pub fn label(self) -> &'static str {
         match self {
-            Self::Off => "Off",
-            Self::SignInEveryTime => "Sign in every time",
+            Self::Off => s::purchase_setting_off(l()),
+            Self::SignInEveryTime => s::purchase_setting_sign_in_every_time(l()),
         }
     }
 
@@ -346,45 +344,39 @@ pub struct PurchaseState {
 
 impl PurchaseState {
     /// The action that shows the plans.
-    pub const CHOOSE_PLAN_ACTION: &'static str = "Choose a plan";
+    pub const CHOOSE_PLAN_ACTION: &'static str =
+        district_l10n::english::PURCHASE_CHOOSE_PLAN_ACTION;
     /// The action that opens the billing page.
-    pub const MANAGE_ACTION: &'static str = "Manage billing";
+    pub const MANAGE_ACTION: &'static str = district_l10n::english::PURCHASE_MANAGE_ACTION;
     /// The line beside the plans: the core names no price.
-    pub const PRICES_NOTE: &'static str = "Prices, and any promotion, are shown at checkout \
-        before you pay.";
+    pub const PRICES_NOTE: &'static str = district_l10n::english::PURCHASE_PRICES_NOTE;
     /// The billing screen's note, in place of the read-only one, while
     /// purchases are on.
-    pub const IN_APP_NOTE: &'static str = "Choose or change your plan here. Checkout and \
-        payment are handled by Stripe, and open inside District AI.";
+    pub const IN_APP_NOTE: &'static str = district_l10n::english::PURCHASE_IN_APP_NOTE;
     /// The confirmation step's heading.
-    pub const CONFIRM_TITLE: &'static str = "Continue to checkout with Stripe";
+    pub const CONFIRM_TITLE: &'static str = district_l10n::english::PURCHASE_CONFIRM_TITLE;
     /// The confirmation step's body, naming Stripe before checkout opens.
-    pub const CONFIRM_BODY: &'static str = "Payment is handled by Stripe, District AI's payment \
-        processor. Checkout opens in a private window inside District AI, signed in for this \
-        purchase only. Your card details go to Stripe, not to District AI, and the price is \
-        shown before you pay.";
+    pub const CONFIRM_BODY: &'static str = district_l10n::english::PURCHASE_CONFIRM_BODY;
     /// The confirmation step's body once purchase pages open in the system
     /// browser ([`in_browser`](Self::in_browser)), where the browser keeps its
     /// own session.
-    pub const CONFIRM_BODY_BROWSER: &'static str = "Payment is handled by Stripe, District AI's \
-        payment processor. Checkout opens in your browser, signed in to District AI. Your card \
-        details go to Stripe, not to District AI, and the price is shown before you pay.";
+    pub const CONFIRM_BODY_BROWSER: &'static str =
+        district_l10n::english::PURCHASE_CONFIRM_BODY_BROWSER;
     /// The confirmation step's action.
-    pub const CONFIRM_ACTION: &'static str = "Continue to checkout";
+    pub const CONFIRM_ACTION: &'static str = district_l10n::english::PURCHASE_CONFIRM_ACTION;
     /// The confirmation step's way back.
-    pub const CANCEL_ACTION: &'static str = "Cancel";
+    pub const CANCEL_ACTION: &'static str = district_l10n::english::PURCHASE_CANCEL_ACTION;
     /// While the page is being opened.
-    pub const OPENING: &'static str = "Opening a secure page";
+    pub const OPENING: &'static str = district_l10n::english::PURCHASE_OPENING;
     /// Said once purchase pages open in the system browser.
-    pub const IN_BROWSER: &'static str = "This computer cannot show checkout inside District AI, \
-        so it opens in your browser.";
+    pub const IN_BROWSER: &'static str = district_l10n::english::PURCHASE_IN_BROWSER;
 
     /// The confirmation step's body, for where checkout will open.
     pub fn confirm_body(&self) -> &'static str {
         if self.in_browser {
-            Self::CONFIRM_BODY_BROWSER
+            s::purchase_confirm_body_browser(l())
         } else {
-            Self::CONFIRM_BODY
+            s::purchase_confirm_body(l())
         }
     }
 
@@ -440,11 +432,11 @@ impl SignedIn {
             return self.workspaces.message();
         }
         let message = if self.purchase.setting_up() {
-            WorkspacesState::SETTING_UP_MESSAGE
+            s::workspaces_setting_up_message(l())
         } else if self.purchase.setup_missed {
-            WorkspacesState::CHOOSE_PLAN_AFTER_CHECKOUT_MESSAGE
+            s::workspaces_choose_plan_after_checkout_message(l())
         } else {
-            WorkspacesState::CHOOSE_PLAN_MESSAGE
+            s::workspaces_choose_plan_message(l())
         };
         Some(message.to_owned())
     }
@@ -455,7 +447,7 @@ impl SignedIn {
     /// ([`WorkspacesState::SETTING_UP_TITLE`]).
     pub fn no_workspace_title(&self) -> Option<&'static str> {
         if self.workspaces == WorkspacesState::NoWorkspaces && self.purchase.setting_up() {
-            return Some(WorkspacesState::SETTING_UP_TITLE);
+            return Some(s::workspaces_setting_up_title(l()));
         }
         self.workspaces.title()
     }
@@ -628,7 +620,7 @@ impl SignedIn {
             let destination = self.purchase.destination.clone();
             return Next::Stay(self.start_purchase(destination, tickets, config));
         }
-        self.purchase.notice = Some(FailureText::retryable(PURCHASE_NOT_SHOWN));
+        self.purchase.notice = Some(FailureText::retryable(s::failure_purchase_not_shown(l())));
         stay()
     }
 

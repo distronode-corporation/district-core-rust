@@ -24,13 +24,12 @@ pub struct AccountView {
 
 impl AccountView {
     /// The sign-out row's caption.
-    pub const SIGN_OUT_CAPTION: &'static str = "Sign out of District AI on this device.";
+    pub const SIGN_OUT_CAPTION: &'static str = district_l10n::english::ACCOUNT_SIGN_OUT_CAPTION;
     /// The devices row's caption.
-    pub const DEVICES_CAPTION: &'static str =
-        "See where you are signed in, and sign out a device you no longer have.";
+    pub const DEVICES_CAPTION: &'static str = district_l10n::english::ACCOUNT_DEVICES_CAPTION;
     /// The deletion row's caption. It says the page opens in the browser, because
     /// deletion cannot be undone and the hand-off should not surprise anyone
     /// halfway through deciding.
     pub const DELETE_ACCOUNT_CAPTION: &'static str =
-        "Request deletion of your account and its data. Opens in your browser.";
+        district_l10n::english::ACCOUNT_DELETE_ACCOUNT_CAPTION;
 }

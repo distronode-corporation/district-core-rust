@@ -214,6 +214,16 @@ jobs:
       - name: Public hygiene (dashes, phone numbers, host names, email addresses)
         run: python3 scripts/check-public-hygiene.py
 
+      # The vendored catalog tools are the bytes their SOURCE.toml names, and
+      # every file generated from crates/district-l10n's catalogs and from
+      # contracts/i18n/ is what they produce now (the script also runs
+      # `l10n.py check` on each catalog against its generated module).
+      - name: The vendored l10n tools are unmodified
+        run: python3 tools/l10n/l10n.py vendor --check --dest tools/l10n
+
+      - name: The generated strings match their catalogs
+        run: python3 scripts/gen-l10n.py --check
+
       # The coverage check itself runs in `rust`, after the tests that produce its
       # report. Its self-test needs no report, so it runs here, in seconds.
       - name: The coverage check still catches what it claims to

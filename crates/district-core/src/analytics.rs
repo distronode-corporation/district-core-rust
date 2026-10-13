@@ -17,6 +17,7 @@
 //! them rather than dividing by zero.
 
 use district_api::ApiError;
+use district_l10n::{Locale, WireCategory, format};
 use district_model::{
     AnalyticsRange, AnalyticsResponse, CallVolumeDelta, DIRECTION_DOWN, DIRECTION_UP,
     UsageHistoryResponse, UsageMonth, UsageResponse,
@@ -25,13 +26,14 @@ use district_model::{
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{self, l, s};
 
 /// How many months of usage history are read: the span the web console shows,
 /// so the two show the same months under the same heading.
 pub const USAGE_HISTORY_MONTHS: u32 = 3;
 
 /// What an absent measure reads as.
-pub const NOT_RECORDED: &str = "Not recorded";
+pub const NOT_RECORDED: &str = district_l10n::english::ANALYTICS_NOT_RECORDED;
 
 /// The analytics screen.
 #[derive(Clone, Debug, PartialEq)]
@@ -61,7 +63,7 @@ impl Default for AnalyticsScreen {
 
 impl AnalyticsScreen {
     /// The heading for a screen where every read failed.
-    pub const FAILED_TITLE: &'static str = "Could not load analytics";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::ANALYTICS_FAILED_TITLE;
 
     /// Why the whole screen failed, when all three reads did: the only case
     /// with nothing on the screen to keep, and where one "Try again" is honest.
@@ -79,9 +81,9 @@ impl AnalyticsScreen {
     /// The label of `range`, for its chip.
     pub fn range_label(range: AnalyticsRange) -> &'static str {
         match range {
-            AnalyticsRange::SevenDays => "7 days",
-            AnalyticsRange::ThirtyDays => "30 days",
-            AnalyticsRange::NinetyDays => "90 days",
+            AnalyticsRange::SevenDays => s::analytics_range_7_days(l()),
+            AnalyticsRange::ThirtyDays => s::analytics_range_30_days(l()),
+            AnalyticsRange::NinetyDays => s::analytics_range_90_days(l()),
         }
     }
 }
@@ -102,7 +104,7 @@ pub enum AnalyticsCard {
 
 impl AnalyticsCard {
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load call analytics";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::ANALYTICS_REPORT_FAILED_TITLE;
 }
 
 /// Call analytics for one window.
@@ -118,9 +120,9 @@ pub struct AnalyticsReport {
 
 impl AnalyticsReport {
     /// The line under an empty trend.
-    pub const NO_CALLS: &'static str = "No calls in this window.";
+    pub const NO_CALLS: &'static str = district_l10n::english::ANALYTICS_NO_CALLS;
     /// The line under an empty sentiment breakdown.
-    pub const NO_SENTIMENT: &'static str = "No calls to analyse yet.";
+    pub const NO_SENTIMENT: &'static str = district_l10n::english::ANALYTICS_NO_SENTIMENT;
 
     /// The average call's length, in the tiles' short form: `45s`, `2m 5s`.
     pub fn average_call(&self) -> String {
@@ -129,7 +131,7 @@ impl AnalyticsReport {
 
     /// The conversion rate, as a percentage: `38%`.
     pub fn conversion(&self) -> String {
-        format!("{}%", self.response.metrics.conversion_rate)
+        text::percent(self.response.metrics.conversion_rate as f64)
     }
 
     /// How call volume moved against the window before.
@@ -159,7 +161,10 @@ impl AnalyticsReport {
     pub fn funnel(&self) -> Vec<ChartBar> {
         let stages = &self.response.funnel_data;
         let values: Vec<i64> = stages.iter().map(|stage| stage.count).collect();
-        let labels = stages.iter().map(|stage| stage.name.clone()).collect();
+        let labels = stages
+            .iter()
+            .map(|stage| text::wire(WireCategory::FunnelStage, &stage.name))
+            .collect();
         bars(labels, &values)
     }
 
@@ -173,7 +178,7 @@ impl AnalyticsReport {
             .iter()
             .zip(shares(&values))
             .map(|(slice, share)| SentimentShare {
-                label: slice.name.clone(),
+                label: text::wire(WireCategory::AnalyticsSentiment, &slice.name),
                 value: slice.value,
                 share,
                 color: parse_hex_color(&slice.color),
@@ -208,10 +213,10 @@ impl VolumeChange {
     /// The sentence for the change.
     pub fn text(self) -> String {
         match self {
-            Self::New => "New: no calls in the previous period to compare with.".to_owned(),
-            Self::Up(pct) => format!("Up {pct}% on the previous period."),
-            Self::Down(pct) => format!("Down {pct}% on the previous period."),
-            Self::Flat => "No change on the previous period.".to_owned(),
+            Self::New => s::analytics_change_new(l()).to_owned(),
+            Self::Up(pct) => s::analytics_change_up(l(), pct),
+            Self::Down(pct) => s::analytics_change_down(l(), pct),
+            Self::Flat => s::analytics_change_flat(l()).to_owned(),
         }
     }
 }
@@ -262,9 +267,9 @@ pub enum UsageCard {
 
 impl UsageCard {
     /// The line for a month with nothing metered yet.
-    pub const NONE: &'static str = "No usage has been recorded this month yet.";
+    pub const NONE: &'static str = district_l10n::english::ANALYTICS_USAGE_NONE;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load usage";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::ANALYTICS_USAGE_FAILED_TITLE;
 }
 
 /// The last few months of metered usage.
@@ -288,11 +293,11 @@ pub enum HistoryCard {
 
 impl HistoryCard {
     /// The line for a history with nothing metered in it.
-    pub const NONE: &'static str = "No usage has been recorded in recent months.";
+    pub const NONE: &'static str = district_l10n::english::ANALYTICS_HISTORY_NONE;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load usage history";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::ANALYTICS_HISTORY_FAILED_TITLE;
     /// The caption under the bars.
-    pub const CAPTION: &'static str = "The bars compare metered call minutes across these months.";
+    pub const CAPTION: &'static str = district_l10n::english::ANALYTICS_HISTORY_CAPTION;
 }
 
 /// One metered measure of a month, ready to show.
@@ -308,15 +313,30 @@ pub struct UsageLine {
 /// that was not metered is left out rather than shown as zero.
 pub fn usage_lines(month: &UsageMonth) -> Vec<UsageLine> {
     [
-        ("Texts sent", month.sms_outbound),
-        ("Texts received", month.sms_inbound),
-        ("Picture messages sent", month.mms_outbound),
-        ("WhatsApp messages sent", month.whatsapp_outbound),
-        ("WhatsApp messages received", month.whatsapp_inbound),
-        ("Outbound call minutes", month.call_minutes_outbound),
-        ("Inbound call minutes", month.call_minutes_inbound),
-        ("Phone numbers", month.number_count),
-        ("Video minutes", month.avatar_minutes),
+        (s::analytics_usage_texts_sent(l()), month.sms_outbound),
+        (s::analytics_usage_texts_received(l()), month.sms_inbound),
+        (
+            s::analytics_usage_picture_messages_sent(l()),
+            month.mms_outbound,
+        ),
+        (
+            s::analytics_usage_whatsapp_sent(l()),
+            month.whatsapp_outbound,
+        ),
+        (
+            s::analytics_usage_whatsapp_received(l()),
+            month.whatsapp_inbound,
+        ),
+        (
+            s::analytics_usage_outbound_minutes(l()),
+            month.call_minutes_outbound,
+        ),
+        (
+            s::analytics_usage_inbound_minutes(l()),
+            month.call_minutes_inbound,
+        ),
+        (s::analytics_usage_phone_numbers(l()), month.number_count),
+        (s::analytics_usage_avatar_minutes(l()), month.avatar_minutes),
     ]
     .into_iter()
     .filter_map(|(label, amount)| {
@@ -422,26 +442,34 @@ pub fn sum_metered(values: &[Option<f64>]) -> Option<f64> {
 }
 
 /// A metered amount: whole numbers without a decimal point, anything else to
-/// two places without trailing zeros (`412`, `318.5`, `1204.25`).
+/// two places without trailing zeros (`412`, `318.5`, `1204.25`; in French
+/// `1 204,25`).
 pub fn format_amount(value: f64) -> String {
     let rounded = (value * 100.0).round() / 100.0;
-    let text = format!("{rounded:.2}");
-    text.trim_end_matches('0').trim_end_matches('.').to_owned()
-}
-
-/// Seconds in the short form: `45s`, and `2m 5s` from a minute on. A negative
-/// value, which no duration is, reads as `0s`.
-pub fn format_duration(seconds: i64) -> String {
-    let seconds = seconds.max(0);
-    match (seconds / 60, seconds % 60) {
-        (0, rest) => format!("{rest}s"),
-        (minutes, rest) => format!("{minutes}m {rest}s"),
+    match l() {
+        Locale::En => {
+            let text = format!("{rounded:.2}");
+            text.trim_end_matches('0').trim_end_matches('.').to_owned()
+        }
+        Locale::FrCa => format::number(Locale::FrCa, rounded),
     }
 }
 
-/// A `YYYY-MM` month as `Aug 2026`, by lookup rather than by date arithmetic: the
-/// key is a calendar month, not an instant, and has no time zone to shift it. A
-/// key of any other shape is shown as it is.
+/// Seconds in the short form: `45s`, and `2m 5s` from a minute on. A negative
+/// value, which no duration is, reads as `0s`. In French, the service's form:
+/// `45 s`, `2 min 5 s`, `2 min`, and `0 min` for none.
+pub fn format_duration(seconds: i64) -> String {
+    let seconds = seconds.max(0);
+    match (l(), seconds / 60, seconds % 60) {
+        (Locale::FrCa, _, _) => format::minutes_seconds(Locale::FrCa, seconds),
+        (Locale::En, 0, rest) => format!("{rest}s"),
+        (Locale::En, minutes, rest) => format!("{minutes}m {rest}s"),
+    }
+}
+
+/// A `YYYY-MM` month as `Aug 2026` (`août 2026` in French), by lookup rather
+/// than by date arithmetic: the key is a calendar month, not an instant, and has
+/// no time zone to shift it. A key of any other shape is shown as it is.
 pub fn month_label(month: &str) -> String {
     const MONTHS: [&str; 12] = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
@@ -451,7 +479,13 @@ pub fn month_label(month: &str) -> String {
         .filter(|(year, _)| year.len() == 4 && year.bytes().all(|b| b.is_ascii_digit()))
         .and_then(|(year, number)| {
             let index = number.parse::<usize>().ok()?.checked_sub(1)?;
-            MONTHS.get(index).map(|name| format!("{name} {year}"))
+            let name = MONTHS.get(index)?;
+            Some(match l() {
+                Locale::En => format!("{name} {year}"),
+                Locale::FrCa => {
+                    format::month_year(Locale::FrCa, year.parse().ok()?, index as u8 + 1)
+                }
+            })
         });
     name.unwrap_or_else(|| month.to_owned())
 }
@@ -503,7 +537,7 @@ fn finite(value: Option<f64>) -> f64 {
 
 /// A metered amount formatted, or [`NOT_RECORDED`].
 fn metered_text(value: Option<f64>) -> String {
-    value.map_or_else(|| NOT_RECORDED.to_owned(), format_amount)
+    value.map_or_else(|| s::analytics_not_recorded(l()).to_owned(), format_amount)
 }
 
 /// What the member does on the analytics screen. Reading everything again is

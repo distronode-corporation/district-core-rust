@@ -33,6 +33,7 @@ use district_model::{Platform, PresenceRegistration, PushRegistrationResponse};
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// How often the presence is renewed while the desktop should ring: half the
 /// service's ten minutes, so one late renewal does not let it lapse.
@@ -74,10 +75,9 @@ pub enum PresenceStatus {
 
 impl PresenceState {
     /// The setting's label.
-    pub const SETTING_LABEL: &'static str = "Ring on this computer";
+    pub const SETTING_LABEL: &'static str = district_l10n::english::PRESENCE_SETTING_LABEL;
     /// What the setting does.
-    pub const SETTING_BODY: &'static str = "Calls handed to you ring here while District AI is \
-        running and you are signed in. Your availability for calls is set in Call handling.";
+    pub const SETTING_BODY: &'static str = district_l10n::english::PRESENCE_SETTING_BODY;
 
     /// Whether the desktop should ring now: the setting is on and it is awake.
     pub(crate) fn rings_here(&self) -> bool {
@@ -87,10 +87,7 @@ impl PresenceState {
     /// The line under the setting, or `None` when there is nothing to add.
     pub fn message(&self) -> Option<String> {
         match &self.status {
-            PresenceStatus::Failed(failure) => Some(format!(
-                "Calls cannot ring here right now. {}",
-                failure.message
-            )),
+            PresenceStatus::Failed(failure) => Some(s::presence_failed(l(), &failure.message)),
             PresenceStatus::Off | PresenceStatus::Registering | PresenceStatus::Registered => None,
         }
     }

@@ -27,22 +27,23 @@ use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 use crate::workspaces::WorkspacesState;
 
 /// A role's name and what it may do.
 pub fn member_role_label(role: MemberRole) -> (&'static str, &'static str) {
     match role {
         MemberRole::Agency => (
-            "Agency",
-            "Full access, including who belongs here and what each member may do.",
+            s::members_role_agency(l()),
+            s::members_role_agency_body(l()),
         ),
         MemberRole::Client => (
-            "Client",
-            "Everyday use: calls, contacts, messages and the workspace's settings.",
+            s::members_role_client(l()),
+            s::members_role_client_body(l()),
         ),
         MemberRole::Viewer => (
-            "Viewer",
-            "Read only: sees calls, contacts and messages, and changes nothing.",
+            s::members_role_viewer(l()),
+            s::members_role_viewer_body(l()),
         ),
     }
 }
@@ -137,14 +138,13 @@ pub struct MembersSection {
 
 impl MembersSection {
     /// The line for a failed "Add".
-    pub const ADD_REJECTED: &'static str = "That does not look like an email address.";
+    pub const ADD_REJECTED: &'static str = district_l10n::english::MEMBERS_ADD_REJECTED;
     /// The note about adding.
-    pub const NO_INVITATION: &'static str = "Adding someone sends no invitation. They get \
-        access when they sign in with this address.";
+    pub const NO_INVITATION: &'static str = district_l10n::english::MEMBERS_NO_INVITATION;
     /// The removal question's heading.
-    pub const REMOVE_TITLE: &'static str = "Remove this member?";
+    pub const REMOVE_TITLE: &'static str = district_l10n::english::MEMBERS_REMOVE_TITLE;
     /// The removal question's button.
-    pub const REMOVE_ACTION: &'static str = "Remove";
+    pub const REMOVE_ACTION: &'static str = district_l10n::english::MEMBERS_REMOVE_ACTION;
 
     fn loading() -> Self {
         Self {
@@ -162,10 +162,7 @@ impl MembersSection {
 
     /// What removing `email` does.
     pub fn remove_body(email: &str) -> String {
-        format!(
-            "{email} loses access to this workspace at once. Adding them again makes a new \
-             membership."
-        )
+        s::members_remove_body(l(), email)
     }
 
     /// Whether a write is on its way.

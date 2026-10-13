@@ -30,6 +30,7 @@ use crate::paging::Paging;
 use crate::role::Capabilities;
 use crate::route::Route;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// How many contacts one page of the list asks for.
 pub const CONTACT_PAGE_SIZE: u32 = 25;
@@ -86,11 +87,11 @@ pub enum ContactList {
 
 impl ContactList {
     /// The heading for an empty list.
-    pub const EMPTY_TITLE: &'static str = "No contacts yet";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::CONTACTS_EMPTY_TITLE;
     /// The body for an empty list.
-    pub const EMPTY_BODY: &'static str = "Callers are added automatically as they come in.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::CONTACTS_EMPTY_BODY;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load contacts";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::CONTACTS_FAILED_TITLE;
 }
 
 /// The contacts read so far.
@@ -169,7 +170,8 @@ pub struct ContactForm {
 
 impl ContactForm {
     /// The guidance for a form with a name and no way to reach the contact.
-    pub const NEEDS_PHONE_OR_EMAIL: &'static str = "Enter a phone number or an email address.";
+    pub const NEEDS_PHONE_OR_EMAIL: &'static str =
+        district_l10n::english::CONTACTS_NEEDS_PHONE_OR_EMAIL;
 
     /// The form for changing `contact`, filled with what it holds.
     pub fn from_contact(contact: &Contact) -> Self {
@@ -191,7 +193,7 @@ impl ContactForm {
     /// form starts.
     pub fn hint(&self) -> Option<&'static str> {
         (!self.name.trim().is_empty() && !self.has_contact_method())
-            .then_some(Self::NEEDS_PHONE_OR_EMAIL)
+            .then_some(s::contacts_needs_phone_or_email(l()))
     }
 
     fn has_contact_method(&self) -> bool {
@@ -223,7 +225,7 @@ impl ContactForm {
 }
 
 /// What a contact with no name, number or address is called on screen.
-pub const UNNAMED_CONTACT: &str = "Unnamed contact";
+pub const UNNAMED_CONTACT: &str = district_l10n::english::CONTACTS_UNNAMED;
 
 /// What to call `contact` on screen: its name, else its phone number as a
 /// person reads it, else its email address, else [`UNNAMED_CONTACT`]. A name
@@ -249,7 +251,7 @@ fn label(name: Option<&str>, phone_number: Option<&str>, email: Option<&str>) ->
         .map(str::to_owned)
         .or_else(|| given(phone_number).map(format_phone_number))
         .or_else(|| given(email).map(str::to_owned))
-        .unwrap_or_else(|| UNNAMED_CONTACT.to_owned())
+        .unwrap_or_else(|| s::contacts_unnamed(l()).to_owned())
 }
 
 /// `value` when it holds more than white space.
@@ -392,24 +394,15 @@ impl ContactConfirmation {
     /// The question.
     pub fn question(self) -> &'static str {
         match self {
-            Self::Delete => "Delete this contact? This cannot be undone.",
+            Self::Delete => s::contacts_confirm_delete(l()),
             // Names the cost of undoing it: getting the research back means
             // paying for another run.
-            Self::ClearIntel => {
-                "Clear this contact's research? The contact, its phone number, email and \
-                 history are kept. Getting the research back means running it again."
-            }
+            Self::ClearIntel => s::contacts_confirm_clear_intel(l()),
             // Says what blocking does and that it can be undone, without
             // claiming the caller can no longer ring: a carrier still connects
             // the call.
-            Self::Block => {
-                "Block this caller? Their conversations and calls stop appearing in this \
-                 workspace. You can unblock them at any time."
-            }
-            Self::Unblock => {
-                "Unblock this caller? Their conversations and calls start appearing in this \
-                 workspace again."
-            }
+            Self::Block => s::contacts_confirm_block(l()),
+            Self::Unblock => s::contacts_confirm_unblock(l()),
         }
     }
 
@@ -417,10 +410,10 @@ impl ContactConfirmation {
     /// that asked.
     pub fn action(self) -> &'static str {
         match self {
-            Self::Delete => "Delete",
-            Self::ClearIntel => "Clear research",
-            Self::Block => "Block",
-            Self::Unblock => "Unblock",
+            Self::Delete => s::contacts_action_delete(l()),
+            Self::ClearIntel => s::contacts_action_clear_intel(l()),
+            Self::Block => s::contacts_action_block(l()),
+            Self::Unblock => s::contacts_action_unblock(l()),
         }
     }
 }
@@ -490,9 +483,9 @@ pub enum BlockedList {
 
 impl BlockedList {
     /// The heading for an empty list.
-    pub const EMPTY_TITLE: &'static str = "No blocked callers";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::CONTACTS_BLOCKED_EMPTY_TITLE;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load blocked callers";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::CONTACTS_BLOCKED_FAILED_TITLE;
 }
 
 /// A change to a contact, for [`Effect::WriteContact`](crate::Effect::WriteContact).

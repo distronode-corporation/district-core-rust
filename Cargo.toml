@@ -8,10 +8,11 @@ members = [
   "crates/district-core",
   "crates/district-host",
   "crates/district-call",
+  "crates/district-l10n",
 ]
 
 [workspace.package]
-version = "3.1.1"
+version = "4.0.0-beta.1"
 edition = "2024"
 # NOT 1.85, WHICH IS WHAT EDITION 2024 ALONE WOULD IMPLY. The floor is the highest
 # of two numbers: the oldest Rust the apps that pin this repository build with
@@ -49,6 +50,7 @@ district-live = { path = "crates/district-live" }
 district-core = { path = "crates/district-core" }
 district-host = { path = "crates/district-host" }
 district-call = { path = "crates/district-call" }
+district-l10n = { path = "crates/district-l10n" }
 
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.151"

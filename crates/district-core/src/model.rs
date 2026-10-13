@@ -33,6 +33,7 @@ use district_api::{ApiError, ReauthReason, RetryReason, TokenError};
 use district_auth::{
     AccessClaims, HAND_OFF_HOST, HandOffNonce, LoginError, REDIRECT_SCHEME, SignOutReport,
 };
+use district_l10n::Locale;
 use district_live::WorkspaceUpdate;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
@@ -129,6 +130,12 @@ pub struct CoreConfig {
     /// billing is read only, the purchases setting is never read, and the
     /// purchase events change nothing.
     pub in_app_purchases: bool,
+    /// The language every sentence and label the core writes is in. The app
+    /// chooses it, for example with [`Locale::from_tags`] over the user's
+    /// preferred languages; the core never reads the system's. English
+    /// unless the app says otherwise, and only one per process: the model
+    /// built last, or changed last with [`Model::set_locale`], sets it.
+    pub locale: Locale,
 }
 
 impl CoreConfig {
@@ -2640,6 +2647,7 @@ impl Model {
     /// The state at start-up, and the effects to run first: drain the revoke
     /// outbox, and look for a stored session.
     pub fn new(config: CoreConfig) -> (Self, Vec<Effect>) {
+        district_l10n::set_current(config.locale);
         let mut tickets = Tickets::default();
         let ticket = tickets.issue(Slot::Restore);
         let model = Self {
@@ -2667,6 +2675,14 @@ impl Model {
     /// The configuration the model was built with.
     pub fn config(&self) -> &CoreConfig {
         &self.config
+    }
+
+    /// Changes the language the core writes in, for every sentence written
+    /// from now on. What a screen already holds stays in the language it was
+    /// written in until the screen is read again.
+    pub fn set_locale(&mut self, locale: Locale) {
+        self.config.locale = locale;
+        district_l10n::set_current(locale);
     }
 
     /// What the member's role in the open workspace lets the app offer: nothing

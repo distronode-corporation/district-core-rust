@@ -60,6 +60,7 @@ use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::ringing::is_over;
 use crate::signed_in::SignedIn;
+use crate::text::{l, s};
 
 /// How long a gap in a transcript's frames may stay open before the call is
 /// asked for again.
@@ -279,35 +280,34 @@ pub struct LiveTranscript {
 
 impl LiveTranscript {
     /// The heading over the lines.
-    pub const HEADING: &'static str = "Live transcript";
+    pub const HEADING: &'static str = district_l10n::english::TRANSCRIPT_HEADING;
     /// The status while the first snapshot is awaited.
-    pub const CONNECTING: &'static str = "Connecting.";
+    pub const CONNECTING: &'static str = district_l10n::english::TRANSCRIPT_CONNECTING;
     /// The status while lines arrive.
-    pub const LIVE: &'static str = "Live";
+    pub const LIVE: &'static str = district_l10n::english::TRANSCRIPT_LIVE;
     /// The status after `agent_error`: the call may get a fresh assistant.
-    pub const RECONNECTING: &'static str = "Reconnecting.";
+    pub const RECONNECTING: &'static str = district_l10n::english::TRANSCRIPT_RECONNECTING;
     /// The status after the end.
-    pub const ENDED: &'static str = "Call ended";
+    pub const ENDED: &'static str = district_l10n::english::TRANSCRIPT_ENDED;
     /// What shows while live with no line yet.
-    pub const WAITING: &'static str = "Nothing has been said yet.";
+    pub const WAITING: &'static str = district_l10n::english::TRANSCRIPT_WAITING;
     /// The note when the service's memory did not reach back to the call's
     /// first line. Saying so keeps a partial transcript from reading as the
     /// whole call.
-    pub const INCOMPLETE: &'static str =
-        "Earlier lines will appear in the full transcript after the call.";
+    pub const INCOMPLETE: &'static str = district_l10n::english::TRANSCRIPT_INCOMPLETE;
     /// What shows while the full transcript is read.
-    pub const LOADING_FULL: &'static str = "Loading the full transcript.";
+    pub const LOADING_FULL: &'static str = district_l10n::english::TRANSCRIPT_LOADING_FULL;
     /// What shows when the full transcript is empty.
-    pub const NO_TRANSCRIPT: &'static str = "No transcript for this call.";
+    pub const NO_TRANSCRIPT: &'static str = district_l10n::english::TRANSCRIPT_NO_TRANSCRIPT;
     /// The note under an assistant line that was cut off: its text is what was
     /// actually played.
-    pub const INTERRUPTED: &'static str = "Interrupted";
+    pub const INTERRUPTED: &'static str = district_l10n::english::TRANSCRIPT_INTERRUPTED;
     /// The label of a caller's line.
-    pub const CALLER: &'static str = "Caller";
+    pub const CALLER: &'static str = district_l10n::english::TRANSCRIPT_CALLER;
     /// The label of an assistant's line when the service names no persona.
-    pub const ASSISTANT: &'static str = "Assistant";
+    pub const ASSISTANT: &'static str = district_l10n::english::TRANSCRIPT_ASSISTANT;
     /// The label of a line by a speaker this client does not know.
-    pub const OTHER_SPEAKER: &'static str = "Other speaker";
+    pub const OTHER_SPEAKER: &'static str = district_l10n::english::TRANSCRIPT_OTHER_SPEAKER;
 
     /// A transcript for `call_id`, just asked for.
     pub(crate) fn new(call_id: String) -> Self {
@@ -369,10 +369,10 @@ impl LiveTranscript {
     /// shown and the app offers the call log's instead.
     pub fn status(&self) -> Option<&'static str> {
         match self.phase {
-            LiveTranscriptPhase::Subscribing => Some(Self::CONNECTING),
-            LiveTranscriptPhase::Live => Some(Self::LIVE),
-            LiveTranscriptPhase::Reconnecting => Some(Self::RECONNECTING),
-            LiveTranscriptPhase::Ended(_) => Some(Self::ENDED),
+            LiveTranscriptPhase::Subscribing => Some(s::transcript_connecting(l())),
+            LiveTranscriptPhase::Live => Some(s::transcript_live(l())),
+            LiveTranscriptPhase::Reconnecting => Some(s::transcript_reconnecting(l())),
+            LiveTranscriptPhase::Ended(_) => Some(s::transcript_ended(l())),
             LiveTranscriptPhase::Unavailable(_) => None,
         }
     }
@@ -382,13 +382,13 @@ impl LiveTranscript {
     /// client does not know.
     pub fn speaker_label(segment: &TranscriptSegment) -> &str {
         match &segment.speaker {
-            TranscriptSpeaker::Caller => Self::CALLER,
+            TranscriptSpeaker::Caller => s::transcript_caller(l()),
             TranscriptSpeaker::Agent => segment
                 .speaker_name
                 .as_deref()
                 .filter(|name| !name.is_empty())
-                .unwrap_or(Self::ASSISTANT),
-            TranscriptSpeaker::Other(_) => Self::OTHER_SPEAKER,
+                .unwrap_or(s::transcript_assistant(l())),
+            TranscriptSpeaker::Other(_) => s::transcript_other_speaker(l()),
         }
     }
 

@@ -25,6 +25,7 @@ use district_model::{
 use super::engine::StudioEngine;
 use super::legs::tts_voices;
 use super::words;
+use crate::text::{l, s};
 
 const MEASURED: &str = "measured";
 const AUTO: &str = "auto";
@@ -428,7 +429,7 @@ fn local_residency(engine: &StudioEngine, studio: &VoiceStudioResponse) -> Resid
     let out: Vec<String> = legs
         .into_iter()
         .filter(|(_, place)| !place.in_region)
-        .map(|(title, place)| format!("{title}: {}", place.text))
+        .map(|(title, place)| s::studio_leg_out(l(), &title, &place.text))
         .collect();
     ResidencyView {
         in_region: out.is_empty(),

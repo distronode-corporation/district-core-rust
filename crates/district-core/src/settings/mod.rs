@@ -48,6 +48,7 @@ use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::role::Capabilities;
 use crate::route::{Route, WorkspaceSection};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 pub use call_handling::{
     AvailabilityView, CallHandlingEvent, CallHandlingSection, CallHandlingView,
@@ -134,10 +135,9 @@ pub enum SaveState {
 
 impl SaveState {
     /// The notice for [`Saved`](Self::Saved).
-    pub const SAVED: &'static str = "Saved.";
+    pub const SAVED: &'static str = district_l10n::english::SETTINGS_SAVED;
     /// The notice for [`SavedButStale`](Self::SavedButStale).
-    pub const SAVED_STALE: &'static str = "Saved, but the settings could not be read back. \
-        Read them again before changing anything else.";
+    pub const SAVED_STALE: &'static str = district_l10n::english::SETTINGS_SAVED_STALE;
 
     /// Whether a save is on its way.
     pub fn is_busy(&self) -> bool {
@@ -161,7 +161,7 @@ pub enum ConfigLoad {
 
 impl ConfigLoad {
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load this workspace's settings";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::SETTINGS_FAILED_TITLE;
 
     /// The settings, once read.
     pub fn config(&self) -> Option<&WorkspaceConfig> {
@@ -237,7 +237,7 @@ impl SettingsGroup {
     pub fn heading(self) -> &'static str {
         match self {
             Self::Studio => DISTRICT_STUDIO,
-            Self::Workspace => "Workspace",
+            Self::Workspace => s::settings_group_workspace(l()),
         }
     }
 }
@@ -260,76 +260,76 @@ pub struct SettingsRow {
 /// routing rules and the transfer directory sit on the web's Call handling
 /// page, so they follow it here), then the workspace's. The web's Studio
 /// home, Integrations and Video have no section in this app.
-const ROWS: [SettingsRow; 10] = [
-    SettingsRow {
-        section: WorkspaceSection::Persona,
-        group: SettingsGroup::Studio,
-        title: "Persona",
-        subtitle: "The receptionist's name, greeting, character, language and answer length.",
-    },
-    SettingsRow {
-        section: WorkspaceSection::VoiceStudio,
-        group: SettingsGroup::Studio,
-        title: "Voice",
-        subtitle: "The voice and engine it speaks with, part by part, and how fast it answers.",
-    },
-    SettingsRow {
-        section: WorkspaceSection::CallHandling,
-        group: SettingsGroup::Studio,
-        title: "Call handling",
-        subtitle: "Who answers first, how long your devices ring, and whether you are rung.",
-    },
-    SettingsRow {
-        section: WorkspaceSection::Routing,
-        group: SettingsGroup::Studio,
-        title: "Call routing rules",
-        subtitle: "Which callers get which voice and instruction.",
-    },
-    SettingsRow {
-        section: WorkspaceSection::Directory,
-        group: SettingsGroup::Studio,
-        title: "Transfer directory",
-        subtitle: "Who it can put a live caller through to.",
-    },
-    SettingsRow {
-        section: WorkspaceSection::Tools,
-        group: SettingsGroup::Studio,
-        title: "Skills",
-        subtitle: "What it may do on a call, and outside research on contacts.",
-    },
-    SettingsRow {
-        section: WorkspaceSection::Knowledge,
-        group: SettingsGroup::Studio,
-        title: "Knowledge",
-        subtitle: "The documents it answers from, and where answers come from.",
-    },
-    SettingsRow {
-        section: WorkspaceSection::Messaging,
-        group: SettingsGroup::Workspace,
-        title: "Messaging accounts",
-        subtitle: "The carrier accounts this workspace sends from.",
-    },
-    SettingsRow {
-        section: WorkspaceSection::Members,
-        group: SettingsGroup::Workspace,
-        title: "Members",
-        subtitle: "Who belongs to this workspace, their roles, and its name.",
-    },
-    SettingsRow {
-        section: WorkspaceSection::Numbers,
-        group: SettingsGroup::Workspace,
-        title: "Phone numbers",
-        subtitle: "The numbers this workspace uses.",
-    },
-];
+fn rows() -> [SettingsRow; 10] {
+    [
+        SettingsRow {
+            section: WorkspaceSection::Persona,
+            group: SettingsGroup::Studio,
+            title: s::settings_row_persona(l()),
+            subtitle: s::settings_row_persona_body(l()),
+        },
+        SettingsRow {
+            section: WorkspaceSection::VoiceStudio,
+            group: SettingsGroup::Studio,
+            title: s::settings_row_voice(l()),
+            subtitle: s::settings_row_voice_body(l()),
+        },
+        SettingsRow {
+            section: WorkspaceSection::CallHandling,
+            group: SettingsGroup::Studio,
+            title: s::settings_row_call_handling(l()),
+            subtitle: s::settings_row_call_handling_body(l()),
+        },
+        SettingsRow {
+            section: WorkspaceSection::Routing,
+            group: SettingsGroup::Studio,
+            title: s::settings_row_routing(l()),
+            subtitle: s::settings_row_routing_body(l()),
+        },
+        SettingsRow {
+            section: WorkspaceSection::Directory,
+            group: SettingsGroup::Studio,
+            title: s::settings_row_directory(l()),
+            subtitle: s::settings_row_directory_body(l()),
+        },
+        SettingsRow {
+            section: WorkspaceSection::Tools,
+            group: SettingsGroup::Studio,
+            title: s::settings_row_tools(l()),
+            subtitle: s::settings_row_tools_body(l()),
+        },
+        SettingsRow {
+            section: WorkspaceSection::Knowledge,
+            group: SettingsGroup::Studio,
+            title: s::settings_row_knowledge(l()),
+            subtitle: s::settings_row_knowledge_body(l()),
+        },
+        SettingsRow {
+            section: WorkspaceSection::Messaging,
+            group: SettingsGroup::Workspace,
+            title: s::settings_row_messaging(l()),
+            subtitle: s::settings_row_messaging_body(l()),
+        },
+        SettingsRow {
+            section: WorkspaceSection::Members,
+            group: SettingsGroup::Workspace,
+            title: s::settings_row_members(l()),
+            subtitle: s::settings_row_members_body(l()),
+        },
+        SettingsRow {
+            section: WorkspaceSection::Numbers,
+            group: SettingsGroup::Workspace,
+            title: s::settings_row_numbers(l()),
+            subtitle: s::settings_row_numbers_body(l()),
+        },
+    ]
+}
 
 /// The note under the hub for a member who can change the settings.
-pub const SETTINGS_MORE_ON_WEB: &str = "District Studio's Integrations and Video, and the \
-    outbound campaign, are changed on the District AI website.";
+pub const SETTINGS_MORE_ON_WEB: &str = district_l10n::english::SETTINGS_MORE_ON_WEB;
 
 /// The note under the hub for a viewer, who sees three sections of ten.
-pub const SETTINGS_VIEWER_NOTE: &str = "You have read-only access to this workspace. These \
-    are the settings you may read; an agency or client member can change them.";
+pub const SETTINGS_VIEWER_NOTE: &str = district_l10n::english::SETTINGS_VIEWER_NOTE;
 
 /// The hub's rows a member with `capabilities` may open, in order.
 ///
@@ -337,7 +337,8 @@ pub const SETTINGS_VIEWER_NOTE: &str = "You have read-only access to this worksp
 /// worse than none. A viewer gets call handling, the knowledge base and
 /// messaging, whose reads admit a viewer.
 pub fn settings_rows(capabilities: &Capabilities) -> Vec<SettingsRow> {
-    ROWS.into_iter()
+    rows()
+        .into_iter()
         .filter(|row| capabilities.allows(&Route::Workspace(row.section)))
         .collect()
 }
@@ -345,9 +346,9 @@ pub fn settings_rows(capabilities: &Capabilities) -> Vec<SettingsRow> {
 /// The note under the hub for a member with `capabilities`.
 pub fn settings_note(capabilities: &Capabilities) -> &'static str {
     if capabilities.can_change {
-        SETTINGS_MORE_ON_WEB
+        s::settings_more_on_web(l())
     } else {
-        SETTINGS_VIEWER_NOTE
+        s::settings_viewer_note(l())
     }
 }
 

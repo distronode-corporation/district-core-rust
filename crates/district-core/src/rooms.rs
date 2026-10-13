@@ -28,6 +28,7 @@ use crate::failure::FailureText;
 use crate::media::{DisconnectReason, MediaCredential, MediaOwner, MediaSession};
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// The status of a meeting still running.
 const IN_PROGRESS: &str = "in-progress";
@@ -59,18 +60,15 @@ pub struct RoomsScreen {
 
 impl RoomsScreen {
     /// The form's heading.
-    pub const START_TITLE: &'static str = "Start or join a room";
+    pub const START_TITLE: &'static str = district_l10n::english::ROOMS_START_TITLE;
     /// The note under the form: everyone typing the same name meets.
-    pub const NAME_HINT: &'static str =
-        "Name the room. Anyone in this workspace who types the same name joins you.";
+    pub const NAME_HINT: &'static str = district_l10n::english::ROOMS_NAME_HINT;
     /// The note that the note-taker is in every room.
-    pub const COMPANION_NOTE: &'static str =
-        "The Companion joins every room and writes up the minutes.";
+    pub const COMPANION_NOTE: &'static str = district_l10n::english::ROOMS_COMPANION_NOTE;
     /// The note while a call or an audition holds the microphone.
-    pub const BUSY_NOTE: &'static str = "Finish the call you are on to join a room.";
+    pub const BUSY_NOTE: &'static str = district_l10n::english::ROOMS_BUSY_NOTE;
     /// The note for a viewer, who joins to listen.
-    pub const LISTENER_NOTE: &'static str =
-        "You are in this workspace as a viewer, so you join rooms to listen.";
+    pub const LISTENER_NOTE: &'static str = district_l10n::english::ROOMS_LISTENER_NOTE;
 
     /// What the typed name makes the room's name: letters, digits and hyphens,
     /// in lower case. Empty when nothing usable was typed.
@@ -87,8 +85,7 @@ impl RoomsScreen {
     /// that leads to none.
     pub fn name_preview(&self) -> Option<String> {
         let suffix = self.room_suffix();
-        (!suffix.is_empty())
-            .then(|| format!("Everyone who joins \"{suffix}\" meets in the same room."))
+        (!suffix.is_empty()).then(|| s::rooms_name_preview(l(), &suffix))
     }
 }
 
@@ -115,14 +112,13 @@ pub enum MeetingList {
 
 impl MeetingList {
     /// The heading for no meetings.
-    pub const EMPTY_TITLE: &'static str = "No meetings yet";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::ROOMS_EMPTY_TITLE;
     /// The body for no meetings.
-    pub const EMPTY_BODY: &'static str =
-        "Meetings appear here once one has been held, with the minutes when it ends.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::ROOMS_EMPTY_BODY;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load meetings";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::ROOMS_FAILED_TITLE;
     /// The line for a meeting still running, whose minutes are not written yet.
-    pub const NO_MINUTES_YET: &'static str = "Minutes are written when the meeting ends.";
+    pub const NO_MINUTES_YET: &'static str = district_l10n::english::ROOMS_NO_MINUTES_YET;
 }
 
 /// Whether a listed meeting is still running.
@@ -144,7 +140,7 @@ pub enum MeetingRecord {
 
 impl MeetingRecord {
     /// The line for a finished meeting with no minutes.
-    pub const NO_MINUTES: &'static str = "No minutes were saved for this meeting.";
+    pub const NO_MINUTES: &'static str = district_l10n::english::ROOMS_NO_MINUTES;
 }
 
 /// A room joined: its name and the credential for it, for the call engine.

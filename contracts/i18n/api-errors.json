@@ -1,0 +1,578 @@
+{
+  "source": [
+    "distronode-website/src/lib/api-error-codes.ts",
+    "distronode-website/src/lib/i18n/api-errors.ts"
+  ],
+  "header": "X-Distronode-Error-Code",
+  "itemsPlaceholder": "{items}",
+  "listSeparator": ", ",
+  "fallbackCode": "unknown",
+  "codes": {
+    "unauthorized": {
+      "en": "Please sign in to continue.",
+      "fr": "Veuillez vous connecter pour continuer."
+    },
+    "session_expired": {
+      "en": "Your session has expired. Please sign in again.",
+      "fr": "Votre session a expiré. Veuillez vous reconnecter."
+    },
+    "invalid_credentials": {
+      "en": "That email address and password do not match an account.",
+      "fr": "Ce courriel et ce mot de passe ne correspondent à aucun compte."
+    },
+    "EMAIL_NOT_VERIFIED": {
+      "en": "Confirm your email address before signing in.",
+      "fr": "Confirmez votre adresse courriel avant de vous connecter."
+    },
+    "no_password": {
+      "en": "This account signs in with Google or Microsoft and has no password to re-enter. Set a password on the web first.",
+      "fr": "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le web."
+    },
+    "NO_PASSWORD_SET": {
+      "en": "Set a password on this account before changing this setting.",
+      "fr": "Définissez un mot de passe sur ce compte avant de modifier ce réglage."
+    },
+    "incorrect_password": {
+      "en": "That password is not correct.",
+      "fr": "Ce mot de passe n'est pas le bon."
+    },
+    "token_invalid": {
+      "en": "That link is no longer valid. Request a new one.",
+      "fr": "Ce lien n'est plus valide. Demandez-en un nouveau."
+    },
+    "MFA_REQUIRED": {
+      "en": "Enter the code from your authenticator app.",
+      "fr": "Entrez le code de votre application d'authentification."
+    },
+    "MFA_ENROL_REQUIRED": {
+      "en": "Set up two-step verification to continue.",
+      "fr": "Activez la vérification en deux étapes pour continuer."
+    },
+    "MFA_ALREADY_ENABLED": {
+      "en": "Two-step verification is already on for this account.",
+      "fr": "La vérification en deux étapes est déjà active sur ce compte."
+    },
+    "MFA_NOT_PENDING": {
+      "en": "There is no second factor waiting to be confirmed.",
+      "fr": "Aucun deuxième facteur n'attend d'être confirmé."
+    },
+    "MFA_NOT_STARTED": {
+      "en": "Start setting up two-step verification before confirming it.",
+      "fr": "Commencez la configuration de la vérification en deux étapes avant de la confirmer."
+    },
+    "mfa_code_invalid": {
+      "en": "That code is not valid, or it has already been used.",
+      "fr": "Ce code n'est pas valide, ou il a déjà été utilisé."
+    },
+    "browser_session_required": {
+      "en": "This can only be changed from a browser signed in to this account.",
+      "fr": "Ce réglage ne peut être modifié que depuis un navigateur connecté à ce compte."
+    },
+    "region_elsewhere": {
+      "en": "Your account is hosted in another region. Sign in there.",
+      "fr": "Votre compte est hébergé dans une autre région. Connectez-vous dans cette région."
+    },
+    "forbidden": {
+      "en": "You do not have permission to do that.",
+      "fr": "Vous n'avez pas la permission de faire cela."
+    },
+    "workspace_access_denied": {
+      "en": "You are not a member of that workspace.",
+      "fr": "Vous n'êtes pas membre de cet espace de travail."
+    },
+    "no_workspace": {
+      "en": "This account is not a member of any workspace yet.",
+      "fr": "Ce compte n'est encore membre d'aucun espace de travail."
+    },
+    "member_exists": {
+      "en": "That email address is already a member of this workspace.",
+      "fr": "Ce courriel est déjà membre de cet espace de travail."
+    },
+    "last_agency_member": {
+      "en": "This is the last administrator of the workspace, so it cannot be removed or demoted.",
+      "fr": "Il s'agit de la dernière personne administratrice de l'espace de travail, elle ne peut donc être ni retirée ni rétrogradée."
+    },
+    "member_not_found": {
+      "en": "That person is not a member of this workspace.",
+      "fr": "Cette personne n'est pas membre de cet espace de travail."
+    },
+    "security_check_failed": {
+      "en": "The security check did not pass. Please try again.",
+      "fr": "La vérification de sécurité a échoué. Veuillez réessayer."
+    },
+    "security_check_required": {
+      "en": "Complete the security check and try again.",
+      "fr": "Complétez la vérification de sécurité, puis réessayez."
+    },
+    "workspace_owner_only": {
+      "en": "Only the owner of this workspace can do that.",
+      "fr": "Seule la personne propriétaire de cet espace de travail peut faire cela."
+    },
+    "not_found": {
+      "en": "We could not find what you asked for.",
+      "fr": "Nous n'avons pas trouvé ce que vous demandez."
+    },
+    "workspace_not_found": {
+      "en": "That workspace could not be found.",
+      "fr": "Cet espace de travail est introuvable."
+    },
+    "workspace_owner_not_found": {
+      "en": "The owner of that workspace could not be found.",
+      "fr": "La personne propriétaire de cet espace de travail est introuvable."
+    },
+    "account_not_found": {
+      "en": "That account could not be found.",
+      "fr": "Ce compte est introuvable."
+    },
+    "call_not_found": {
+      "en": "That call could not be found.",
+      "fr": "Cet appel est introuvable."
+    },
+    "contact_not_found": {
+      "en": "That contact could not be found in this workspace.",
+      "fr": "Ce contact est introuvable dans cet espace de travail."
+    },
+    "message_not_found": {
+      "en": "That message could not be found.",
+      "fr": "Ce message est introuvable."
+    },
+    "ticket_not_found": {
+      "en": "That support request could not be found.",
+      "fr": "Cette demande d'assistance est introuvable."
+    },
+    "phone_number_not_found": {
+      "en": "That phone number is not one of this workspace's numbers.",
+      "fr": "Ce numéro de téléphone ne fait pas partie des numéros de cet espace de travail."
+    },
+    "media_not_found": {
+      "en": "That file could not be found.",
+      "fr": "Ce fichier est introuvable."
+    },
+    "room_not_found": {
+      "en": "That call room could not be found.",
+      "fr": "Cette salle d'appel est introuvable."
+    },
+    "connector_not_found": {
+      "en": "That connector could not be found.",
+      "fr": "Ce connecteur est introuvable."
+    },
+    "mailbox_not_found": {
+      "en": "No mailbox is connected to this workspace.",
+      "fr": "Aucune boîte de réception n'est connectée à cet espace de travail."
+    },
+    "VALIDATION_ERROR": {
+      "en": "Some of what you entered is not valid. Please check it and try again.",
+      "fr": "Une partie de ce que vous avez saisi n'est pas valide. Vérifiez, puis réessayez."
+    },
+    "MISSING_ID": {
+      "en": "That request was missing something it needed.",
+      "fr": "Il manquait un élément nécessaire à cette requête."
+    },
+    "FORBIDDEN": {
+      "en": "You do not have permission to do that.",
+      "fr": "Vous n'avez pas la permission de faire cela."
+    },
+    "NOT_FOUND": {
+      "en": "We could not find what you asked for.",
+      "fr": "Nous n'avons pas trouvé ce que vous demandez."
+    },
+    "invalid_request": {
+      "en": "That request was not valid. Please check the details and try again.",
+      "fr": "Cette requête n'est pas valide. Vérifiez les renseignements, puis réessayez."
+    },
+    "INVALID_REQUEST": {
+      "en": "That request was not valid. Please check the details and try again.",
+      "fr": "Cette requête n'est pas valide. Vérifiez les renseignements, puis réessayez."
+    },
+    "validation_failed": {
+      "en": "Some of what you entered is not valid. Please check it and try again.",
+      "fr": "Une partie de ce que vous avez saisi n'est pas valide. Vérifiez, puis réessayez."
+    },
+    "invalid_params": {
+      "en": "Check these fields and try again: {items}.",
+      "fr": "Vérifiez ces champs, puis réessayez : {items}.",
+      "listField": "fields",
+      "enWithoutList": "Some of what you entered is not valid. Please check it and try again.",
+      "frWithoutList": "Une partie de ce que vous avez saisi n'est pas valide. Vérifiez, puis réessayez."
+    },
+    "invalid_json": {
+      "en": "That request could not be read. Please try again.",
+      "fr": "Cette requête n'a pas pu être lue. Veuillez réessayer."
+    },
+    "invalid_phone_number": {
+      "en": "That does not look like a valid phone number.",
+      "fr": "Cela ne ressemble pas à un numéro de téléphone valide."
+    },
+    "nothing_to_update": {
+      "en": "There was nothing to change in that request.",
+      "fr": "Cette requête ne contenait rien à modifier."
+    },
+    "file_required": {
+      "en": "Choose a file to upload.",
+      "fr": "Choisissez un fichier à téléverser."
+    },
+    "file_too_large": {
+      "en": "That file is too large.",
+      "fr": "Ce fichier est trop volumineux."
+    },
+    "payload_too_large": {
+      "en": "That request is too large.",
+      "fr": "Cette requête est trop volumineuse."
+    },
+    "unsupported_media_type": {
+      "en": "That file type is not supported here.",
+      "fr": "Ce type de fichier n'est pas pris en charge ici."
+    },
+    "invalid_multipart": {
+      "en": "That upload could not be read. Please try again.",
+      "fr": "Ce téléversement n'a pas pu être lu. Veuillez réessayer."
+    },
+    "attachment_unsupported": {
+      "en": "That kind of attachment cannot be sent on this channel.",
+      "fr": "Ce type de pièce jointe ne peut pas être envoyé sur ce canal."
+    },
+    "message_too_long": {
+      "en": "That message is too long.",
+      "fr": "Ce message est trop long."
+    },
+    "rate_limited": {
+      "en": "That has been tried several times just now. Please wait a moment and try again.",
+      "fr": "Cette action a été tentée plusieurs fois à l'instant. Attendez un moment, puis réessayez."
+    },
+    "subscription_inactive": {
+      "en": "This workspace's subscription is not active. Update billing to resume calls and messaging.",
+      "fr": "L'abonnement de cet espace de travail n'est pas actif. Mettez la facturation à jour pour reprendre les appels et la messagerie."
+    },
+    "overage_cap_reached": {
+      "en": "This workspace has reached the usage limit on its plan.",
+      "fr": "Cet espace de travail a atteint la limite d'utilisation de son forfait."
+    },
+    "overage_spend_cap_reached": {
+      "en": "This workspace has reached the spending limit set on its plan.",
+      "fr": "Cet espace de travail a atteint la limite de dépenses fixée sur son forfait."
+    },
+    "phone_number_limit_reached": {
+      "en": "This workspace already holds every phone number its plan includes. Upgrade the plan to add more.",
+      "fr": "Cet espace de travail détient déjà tous les numéros de téléphone inclus dans son forfait. Passez à un forfait supérieur pour en ajouter."
+    },
+    "dgi_requires_studio": {
+      "en": "Lead enrichment is included with Voice Studio. Upgrade to turn it on.",
+      "fr": "L'enrichissement des pistes est inclus avec Voice Studio. Passez à ce forfait pour l'activer."
+    },
+    "plan_upgrade_required": {
+      "en": "That feature is not included in this workspace's plan.",
+      "fr": "Cette fonction n'est pas incluse dans le forfait de cet espace de travail."
+    },
+    "managed_billing_required": {
+      "en": "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan.",
+      "fr": "La facturation gérée auprès des opérateurs n'est pas activée pour cet espace de travail. Communiquez avec l'assistance pour passer à un forfait géré."
+    },
+    "eu_vat_required": {
+      "en": "In the European Union we sell to businesses only. Enter your VAT number and we invoice you under the reverse-charge rule.",
+      "fr": "Dans l'Union européenne, nous vendons uniquement aux entreprises. Saisissez votre numéro de TVA et nous vous facturons selon le régime de l'autoliquidation."
+    },
+    "business_account_required": {
+      "en": "In Canada we sell to businesses only. Choose Business and enter your business name.",
+      "fr": "Au Canada, nous vendons uniquement aux entreprises. Choisissez Entreprise et saisissez le nom de votre entreprise."
+    },
+    "checkout_setup_in_progress": {
+      "en": "Your plan is already paid for. Finish setting up your receptionist from your dashboard before buying another plan.",
+      "fr": "Votre forfait est déjà payé. Terminez la configuration de votre réceptionniste depuis votre tableau de bord avant d'acheter un autre forfait."
+    },
+    "checkout_subscription_exists": {
+      "en": "You already have an active plan. Change it from Billing in your dashboard instead of buying a second one.",
+      "fr": "Vous avez déjà un forfait actif. Modifiez-le depuis la section Facturation de votre tableau de bord plutôt que d'en acheter un deuxième."
+    },
+    "region_handoff": {
+      "en": "This checkout continues on the site for the data region you chose.",
+      "fr": "Ce paiement se poursuit sur le site de la région des données que vous avez choisie."
+    },
+    "default_card_in_use": {
+      "en": "Set another card as default before removing this one.",
+      "fr": "Définissez une autre carte comme carte par défaut avant de retirer celle-ci."
+    },
+    "workspace_dormant": {
+      "en": "This workspace has been quiet long enough that outbound calling and messaging are paused pending an account review. Request reactivation from your dashboard.",
+      "fr": "Cet espace de travail est inactif depuis assez longtemps pour que les appels et les messages sortants soient suspendus en attendant une révision du compte. Demandez la réactivation depuis votre tableau de bord."
+    },
+    "REGIONS_DEGRADED": {
+      "en": "Your workspaces could not all be listed because some regions are unreachable right now ({items}). Nothing about your account has changed.",
+      "fr": "Vos espaces de travail n'ont pas tous pu être listés, car certaines régions sont injoignables en ce moment ({items}). Rien n'a changé dans votre compte.",
+      "listField": "degradedRegions",
+      "enWithoutList": "Your workspaces could not all be listed because some regions are unreachable right now. Nothing about your account has changed.",
+      "frWithoutList": "Vos espaces de travail n'ont pas tous pu être listés, car certaines régions sont injoignables en ce moment. Rien n'a changé dans votre compte."
+    },
+    "region_unavailable": {
+      "en": "That workspace's region cannot be reached right now. Please try again shortly.",
+      "fr": "La région de cet espace de travail est injoignable en ce moment. Veuillez réessayer sous peu."
+    },
+    "region_move_pending": {
+      "en": "A region move has already been requested for this workspace.",
+      "fr": "Un changement de région est déjà demandé pour cet espace de travail."
+    },
+    "region_move_not_found": {
+      "en": "There is no open region move request for this workspace.",
+      "fr": "Aucune demande de changement de région n'est en cours pour cet espace de travail."
+    },
+    "workspace_already_in_region": {
+      "en": "That workspace is already in this region.",
+      "fr": "Cet espace de travail est déjà dans cette région."
+    },
+    "disclosure_required_in_region": {
+      "en": "Callers in this region must be told they are speaking with an automated assistant, so this setting cannot be turned off.",
+      "fr": "Dans cette région, les appelants doivent être informés qu'ils parlent avec une assistante automatisée. Ce paramètre ne peut donc pas être désactivé."
+    },
+    "model_unavailable_in_region": {
+      "en": "This voice engine is not available for workspaces in this region. Choose another engine.",
+      "fr": "Ce moteur vocal n'est pas offert aux espaces de travail de cette région. Choisissez un autre moteur."
+    },
+    "invalid_engine_mix": {
+      "en": "This voice chain could not be saved: one of its models, voices or locations is not available for this workspace and language. Choose another and save again.",
+      "fr": "Cette chaîne vocale n'a pas pu être enregistrée : un de ses modèles, voix ou emplacements n'est pas offert pour cet espace de travail et cette langue. Choisissez-en un autre et enregistrez de nouveau."
+    },
+    "language_unavailable": {
+      "en": "This language is not available for this workspace yet. Choose another language.",
+      "fr": "Cette langue n'est pas encore offerte pour cet espace de travail. Choisissez une autre langue."
+    },
+    "setup_not_available": {
+      "en": "Guided setup is not available for this workspace.",
+      "fr": "La configuration guidée n'est pas offerte pour cet espace de travail."
+    },
+    "forwarding_check_unavailable": {
+      "en": "The forwarding check is not available right now. You can still test by calling your business line.",
+      "fr": "La vérification du renvoi n'est pas offerte en ce moment. Vous pouvez tout de même tester en appelant votre ligne d'affaires."
+    },
+    "forwarding_check_in_progress": {
+      "en": "A forwarding check is already ringing. Wait for it to finish.",
+      "fr": "Une vérification du renvoi est déjà en cours. Attendez qu'elle se termine."
+    },
+    "forwarding_check_daily_limit": {
+      "en": "You have used today's five forwarding checks. Try again tomorrow.",
+      "fr": "Vous avez utilisé les cinq vérifications du renvoi d'aujourd'hui. Réessayez demain."
+    },
+    "forwarding_check_destination": {
+      "en": "We cannot place a check call to that number. Enter your business's own phone line.",
+      "fr": "Nous ne pouvons pas appeler ce numéro pour la vérification. Entrez la ligne téléphonique de votre entreprise."
+    },
+    "website_unreadable": {
+      "en": "We could not read that website. Check the address, or enter your details yourself.",
+      "fr": "Nous n'avons pas pu lire ce site Web. Vérifiez l'adresse, ou saisissez vos renseignements vous-même."
+    },
+    "business_extraction_failed": {
+      "en": "We could not draft your details from that website. Please try again, or enter them yourself.",
+      "fr": "Nous n'avons pas pu préparer vos renseignements à partir de ce site Web. Veuillez réessayer, ou les saisir vous-même."
+    },
+    "emergency_number": {
+      "en": "Emergency numbers cannot be dialled from this app. Use your phone's own dialer.",
+      "fr": "Les numéros d'urgence ne peuvent pas être composés depuis cette application. Utilisez le composeur de votre téléphone."
+    },
+    "direct_dial_disabled": {
+      "en": "Direct dialling is not available for this workspace yet. Contact support to ask about it.",
+      "fr": "La composition directe n'est pas encore offerte pour cet espace de travail. Communiquez avec l'assistance pour vous renseigner."
+    },
+    "do_not_call": {
+      "en": "That number has opted out of contact from this workspace.",
+      "fr": "Ce numéro a retiré son consentement aux communications de cet espace de travail."
+    },
+    "number_in_use": {
+      "en": "That number is already assigned to another workspace.",
+      "fr": "Ce numéro est déjà attribué à un autre espace de travail."
+    },
+    "provider_not_configured": {
+      "en": "No provider is connected to this workspace for that.",
+      "fr": "Aucun fournisseur n'est connecté à cet espace de travail pour cela."
+    },
+    "provider_unsupported": {
+      "en": "That provider is not supported here.",
+      "fr": "Ce fournisseur n'est pas pris en charge ici."
+    },
+    "provider_requires_twilio": {
+      "en": "That feature currently needs a Twilio account connected to this workspace.",
+      "fr": "Cette fonction exige pour l'instant un compte Twilio connecté à cet espace de travail."
+    },
+    "provider_requires_sinch": {
+      "en": "That feature currently needs a Sinch account connected to this workspace.",
+      "fr": "Cette fonction exige pour l'instant un compte Sinch connecté à cet espace de travail."
+    },
+    "sip_provider_required": {
+      "en": "That needs a SIP-capable provider, which means Twilio or Telnyx on this workspace.",
+      "fr": "Cela exige un fournisseur compatible SIP, c'est-à-dire Twilio ou Telnyx sur cet espace de travail."
+    },
+    "messaging_provider_not_configured": {
+      "en": "No messaging provider is connected to this workspace.",
+      "fr": "Aucun fournisseur de messagerie n'est connecté à cet espace de travail."
+    },
+    "no_sending_number": {
+      "en": "This workspace has no texting number yet. Add or buy one in Messaging settings.",
+      "fr": "Cet espace de travail n'a pas encore de numéro pour les textos. Ajoutez-en un ou achetez-en un dans les paramètres de messagerie."
+    },
+    "sending_domain_missing": {
+      "en": "No sending domain is connected to this workspace.",
+      "fr": "Aucun domaine d'envoi n'est connecté à cet espace de travail."
+    },
+    "whatsapp_unsupported": {
+      "en": "WhatsApp is not available on this workspace's messaging account.",
+      "fr": "WhatsApp n'est pas offert sur le compte de messagerie de cet espace de travail."
+    },
+    "verify_not_enabled": {
+      "en": "One-time passcodes are not turned on for this workspace.",
+      "fr": "Les codes à usage unique ne sont pas activés pour cet espace de travail."
+    },
+    "TRUST_BUNDLES_NOT_APPROVED": {
+      "en": "This workspace's carrier registration has not been approved yet. That has to finish first.",
+      "fr": "L'inscription de cet espace de travail auprès de l'opérateur n'est pas encore approuvée. Cette étape doit d'abord être terminée."
+    },
+    "carrier_rejected": {
+      "en": "The carrier refused this registration. Fix the items listed and submit again.",
+      "fr": "L'opérateur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau."
+    },
+    "carrier_error": {
+      "en": "The carrier could not complete that. Please try again or contact support.",
+      "fr": "L'opérateur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec l'assistance."
+    },
+    "carrier_funding": {
+      "en": "The carrier account could not fund that purchase. Contact support.",
+      "fr": "Le compte auprès de l'opérateur n'a pas pu financer cet achat. Communiquez avec l'assistance."
+    },
+    "provider_credentials_rejected": {
+      "en": "The provider did not accept these credentials. Check them and test the connection again.",
+      "fr": "Le fournisseur n'a pas accepté ces identifiants. Vérifiez-les, puis testez la connexion de nouveau."
+    },
+    "emergency_acknowledgement_required": {
+      "en": "Confirm that you understand this number cannot be used to call 911 or other emergency services, then try again.",
+      "fr": "Confirmez que vous comprenez que ce numéro ne peut pas servir à appeler le 9-1-1 ni aucun autre service d'urgence, puis réessayez."
+    },
+    "auto_dial_country_not_permitted": {
+      "en": "Automated calls are not permitted to this contact's country.",
+      "fr": "Les appels automatisés ne sont pas permis vers le pays de ce contact."
+    },
+    "auto_dial_outside_hours": {
+      "en": "Automated calls can only be placed from 09:00 to 20:00 on weekdays and from 10:00 to 18:00 on weekends, in the contact's local time. Try again within those hours.",
+      "fr": "Les appels automatisés ne peuvent être faits que de 9 h à 20 h en semaine et de 10 h à 18 h la fin de semaine, à l'heure locale du contact. Réessayez pendant ces heures."
+    },
+    "auto_dial_contact_opted_out": {
+      "en": "This contact has opted out of calls from this workspace (DNC).",
+      "fr": "Ce contact a choisi de ne plus recevoir d'appels de cet espace de travail (liste d'exclusion)."
+    },
+    "call_not_in_progress": {
+      "en": "That call is not in progress.",
+      "fr": "Cet appel n'est pas en cours."
+    },
+    "call_has_no_room": {
+      "en": "That call has no room to join.",
+      "fr": "Cet appel n'a aucune salle à joindre."
+    },
+    "call_not_direct_dial": {
+      "en": "That call is not a direct call from this app and cannot be hung up here.",
+      "fr": "Cet appel n'est pas un appel direct passé depuis cette application et ne peut pas être raccroché ici."
+    },
+    "call_predates_feature": {
+      "en": "That call started before this feature existed, so it is not available on it.",
+      "fr": "Cet appel a commencé avant l'existence de cette fonction, elle n'est donc pas offerte pour lui."
+    },
+    "room_inactive": {
+      "en": "That meeting room is not active.",
+      "fr": "Cette salle de réunion n'est pas active."
+    },
+    "demo_lines_busy": {
+      "en": "Every demo line is busy right now. Please try again in a few minutes.",
+      "fr": "Toutes les lignes de démonstration sont occupées en ce moment. Réessayez dans quelques minutes."
+    },
+    "test_call_limit_reached": {
+      "en": "You have used today's three test calls. You can place another one tomorrow, or call your number yourself.",
+      "fr": "Vous avez utilisé les trois appels d'essai d'aujourd'hui. Vous pourrez en faire un autre demain, ou appeler vous-même votre numéro."
+    },
+    "test_call_in_progress": {
+      "en": "A test call is already under way. Wait for it to end before starting another.",
+      "fr": "Un appel d'essai est déjà en cours. Attendez qu'il se termine avant d'en lancer un autre."
+    },
+    "test_call_needs_number": {
+      "en": "Choose a phone number for this workspace first, so the test call has a number to come from.",
+      "fr": "Choisissez d'abord un numéro de téléphone pour cet espace de travail, afin que l'appel d'essai ait un numéro d'origine."
+    },
+    "scheduling_not_enabled": {
+      "en": "Scheduling is not turned on for this workspace.",
+      "fr": "La prise de rendez-vous n'est pas activée pour cet espace de travail."
+    },
+    "scheduling_not_ready": {
+      "en": "Scheduling is still being set up for this workspace.",
+      "fr": "La prise de rendez-vous est encore en cours de configuration pour cet espace de travail."
+    },
+    "scheduler_console_retired": {
+      "en": "That scheduling console is no longer available.",
+      "fr": "Cette console de prise de rendez-vous n'est plus offerte."
+    },
+    "calendar_unreachable": {
+      "en": "The calendar could not be reached just now. Please try again in a few minutes.",
+      "fr": "Le calendrier n'a pas pu être joint à l'instant. Veuillez réessayer dans quelques minutes."
+    },
+    "already_cancelled": {
+      "en": "That booking was already cancelled.",
+      "fr": "Ce rendez-vous a déjà été annulé."
+    },
+    "ticket_not_closable": {
+      "en": "This request cannot be closed from here. Reply to let us know it is resolved and we will close it.",
+      "fr": "Cette demande ne peut pas être fermée ici. Répondez pour nous dire qu'elle est réglée et nous la fermerons."
+    },
+    "ticket_opening": {
+      "en": "This request is still being opened. Please try again in a moment.",
+      "fr": "Cette demande est encore en cours d'ouverture. Veuillez réessayer dans un moment."
+    },
+    "ticket_create_failed": {
+      "en": "That request could not be created. Please try again.",
+      "fr": "Cette demande n'a pas pu être créée. Veuillez réessayer."
+    },
+    "reply_failed": {
+      "en": "Your reply could not be posted. Please try again.",
+      "fr": "Votre réponse n'a pas pu être publiée. Veuillez réessayer."
+    },
+    "status_change_failed": {
+      "en": "The status could not be changed. Please try again.",
+      "fr": "Le statut n'a pas pu être modifié. Veuillez réessayer."
+    },
+    "jira_not_connected": {
+      "en": "No support project is connected to this workspace.",
+      "fr": "Aucun projet d'assistance n'est connecté à cet espace de travail."
+    },
+    "service_not_configured": {
+      "en": "That is not set up on this deployment yet.",
+      "fr": "Cela n'est pas encore configuré sur ce déploiement."
+    },
+    "service_unavailable": {
+      "en": "That is temporarily unavailable. Please try again shortly.",
+      "fr": "Cela est temporairement indisponible. Veuillez réessayer sous peu."
+    },
+    "upstream_error": {
+      "en": "Something upstream did not answer. Please try again.",
+      "fr": "Un service en amont n'a pas répondu. Veuillez réessayer."
+    },
+    "server_error": {
+      "en": "Something went wrong on our side. Please try again.",
+      "fr": "Une erreur est survenue de notre côté. Veuillez réessayer."
+    },
+    "INTERNAL_ERROR": {
+      "en": "Something went wrong on our side. Please try again.",
+      "fr": "Une erreur est survenue de notre côté. Veuillez réessayer."
+    },
+    "unknown": {
+      "en": "Something went wrong. Please try again.",
+      "fr": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "breached_password": {
+      "en": "That password has appeared in a known data breach. Please choose a different one.",
+      "fr": "Ce mot de passe figure dans une fuite de données connue. Veuillez en choisir un autre."
+    },
+    "password_policy": {
+      "en": "Passwords must be 12 to 200 characters long. Please choose a different one.",
+      "fr": "Les mots de passe doivent compter de 12 à 200 caractères. Veuillez en choisir un autre."
+    },
+    "stripe_test_mode_refused": {
+      "en": "Test checkout is not available for this account on this site.",
+      "fr": "Le paiement de test n'est pas offert pour ce compte sur ce site."
+    },
+    "workspace_elsewhere": {
+      "en": "That workspace is hosted in another region. Open it from that region's site.",
+      "fr": "Cet espace de travail est hébergé dans une autre région. Ouvrez-le depuis le site de cette région."
+    }
+  }
+}

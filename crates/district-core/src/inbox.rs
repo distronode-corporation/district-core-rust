@@ -91,7 +91,7 @@ pub enum ConversationList {
 
 impl ConversationList {
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load your conversations";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::INBOX_FAILED_TITLE;
 }
 
 /// A read list of threads.
@@ -110,12 +110,11 @@ pub struct Conversations {
 
 impl Conversations {
     /// The note for a [`partial`](Self::partial) list.
-    pub const PARTIAL_NOTE: &'static str =
-        "Showing recent conversations. Older, quieter threads are not listed.";
+    pub const PARTIAL_NOTE: &'static str = district_l10n::english::INBOX_PARTIAL_NOTE;
     /// The heading for an empty list.
-    pub const EMPTY_TITLE: &'static str = "No conversations yet";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::INBOX_EMPTY_TITLE;
     /// The body for an empty list.
-    pub const EMPTY_BODY: &'static str = "Texts and emails from your customers will appear here.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::INBOX_EMPTY_BODY;
 
     fn new(response: ConversationsResponse) -> Self {
         Self {
@@ -145,13 +144,11 @@ pub struct SearchState {
 
 impl SearchState {
     /// The heading when a search found nothing.
-    pub const NONE_TITLE: &'static str = "No matches";
+    pub const NONE_TITLE: &'static str = district_l10n::english::INBOX_SEARCH_NONE_TITLE;
     /// The body when a search found nothing.
-    pub const NONE_BODY: &'static str =
-        "Search looks inside every message in this workspace, including older threads.";
+    pub const NONE_BODY: &'static str = district_l10n::english::INBOX_SEARCH_NONE_BODY;
     /// The note for a [`truncated`](Self::truncated) result.
-    pub const TRUNCATED_NOTE: &'static str =
-        "Showing the newest matches. Older ones are not listed.";
+    pub const TRUNCATED_NOTE: &'static str = district_l10n::english::INBOX_SEARCH_TRUNCATED;
 
     /// Whether the query is long enough to search, counted after trimming the
     /// way the service counts it. A shorter one shows the list, not "no

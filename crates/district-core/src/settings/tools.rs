@@ -22,25 +22,60 @@ use district_model::{PersonaPatch, WorkspaceConfigResponse};
 use super::{ConfigLoad, SaveState, after_save, read_config, settle};
 use crate::model::{Effect, Slot, Tickets};
 use crate::signed_in::{Next, SignedIn};
+use crate::text::{l, s};
 
-/// The tools this app can name, in the web console's order, with their names.
+/// The tools this app can name, in the web console's order, with their names
+/// in English ([`capability_label`] gives each in the locale's language).
 ///
 /// A display list, not what is stored: the stored list can hold ids that are not
 /// here, which [`ToolsSection::rows`] shows and keeps.
 pub const CAPABILITY_CATALOG: [(&str, &str); 13] = [
-    ("transfer_to_person", "Transfer to a person"),
-    ("transfer_to_agent", "Transfer to a person (fallback)"),
-    ("dispatch_email", "Email dispatcher"),
-    ("check_availability", "Check availability"),
-    ("book_appointment", "Book appointments"),
-    ("create_or_update_contact", "Update contacts"),
-    ("leave_message", "Take a message"),
-    ("search_knowledge_base", "Knowledge base"),
-    ("send_sms", "Text the caller"),
-    ("list_event_types", "List appointment types"),
-    ("list_appointments", "Read back appointments"),
-    ("cancel_appointment", "Cancel appointments"),
-    ("reschedule_appointment", "Reschedule appointments"),
+    (
+        "transfer_to_person",
+        district_l10n::english::TOOLS_TRANSFER_TO_PERSON,
+    ),
+    (
+        "transfer_to_agent",
+        district_l10n::english::TOOLS_TRANSFER_TO_AGENT,
+    ),
+    (
+        "dispatch_email",
+        district_l10n::english::TOOLS_DISPATCH_EMAIL,
+    ),
+    (
+        "check_availability",
+        district_l10n::english::TOOLS_CHECK_AVAILABILITY,
+    ),
+    (
+        "book_appointment",
+        district_l10n::english::TOOLS_BOOK_APPOINTMENT,
+    ),
+    (
+        "create_or_update_contact",
+        district_l10n::english::TOOLS_UPDATE_CONTACT,
+    ),
+    ("leave_message", district_l10n::english::TOOLS_LEAVE_MESSAGE),
+    (
+        "search_knowledge_base",
+        district_l10n::english::TOOLS_SEARCH_KNOWLEDGE_BASE,
+    ),
+    ("send_sms", district_l10n::english::TOOLS_SEND_SMS),
+    (
+        "list_event_types",
+        district_l10n::english::TOOLS_LIST_EVENT_TYPES,
+    ),
+    (
+        "list_appointments",
+        district_l10n::english::TOOLS_LIST_APPOINTMENTS,
+    ),
+    (
+        "cancel_appointment",
+        district_l10n::english::TOOLS_CANCEL_APPOINTMENT,
+    ),
+    (
+        "reschedule_appointment",
+        district_l10n::english::TOOLS_RESCHEDULE_APPOINTMENT,
+    ),
 ];
 
 /// The booking pages' tools, off for a workspace that never chose, as on the web.
@@ -54,12 +89,25 @@ pub const SCHEDULING_TOOLS: [&str; 4] = [
 /// The tool that transfers to the workspace's support number.
 const TRANSFER_TO_AGENT: &str = "transfer_to_agent";
 
-/// The name of a tool this app knows, or `None`.
+/// The name of a tool this app knows, or `None`. [`CAPABILITY_CATALOG`] holds
+/// the same names in English.
 pub fn capability_label(id: &str) -> Option<&'static str> {
-    CAPABILITY_CATALOG
-        .iter()
-        .find(|(known, _)| *known == id)
-        .map(|(_, label)| *label)
+    Some(match id {
+        "transfer_to_person" => s::tools_transfer_to_person(l()),
+        "transfer_to_agent" => s::tools_transfer_to_agent(l()),
+        "dispatch_email" => s::tools_dispatch_email(l()),
+        "check_availability" => s::tools_check_availability(l()),
+        "book_appointment" => s::tools_book_appointment(l()),
+        "create_or_update_contact" => s::tools_update_contact(l()),
+        "leave_message" => s::tools_leave_message(l()),
+        "search_knowledge_base" => s::tools_search_knowledge_base(l()),
+        "send_sms" => s::tools_send_sms(l()),
+        "list_event_types" => s::tools_list_event_types(l()),
+        "list_appointments" => s::tools_list_appointments(l()),
+        "cancel_appointment" => s::tools_cancel_appointment(l()),
+        "reschedule_appointment" => s::tools_reschedule_appointment(l()),
+        _ => return None,
+    })
 }
 
 /// What a workspace that never stored a list has on: every tool but the
@@ -104,17 +152,14 @@ pub struct ToolsSection {
 
 impl ToolsSection {
     /// The note on a stored tool this app has no name for.
-    pub const UNKNOWN_TOOL: &'static str = "Stored for this workspace. This version of the app \
-        has no name for it, and leaving it on keeps it.";
+    pub const UNKNOWN_TOOL: &'static str = district_l10n::english::TOOLS_UNKNOWN_TOOL;
     /// The note on the fallback transfer when no support number is stored.
     pub const NEEDS_SUPPORT_NUMBER: &'static str =
-        "Needs a support team number, which is set on the District AI website.";
+        district_l10n::english::TOOLS_NEEDS_SUPPORT_NUMBER;
     /// The research switch's title.
-    pub const ENRICHMENT_TITLE: &'static str = "Outside research on contacts";
+    pub const ENRICHMENT_TITLE: &'static str = district_l10n::english::TOOLS_ENRICHMENT_TITLE;
     /// What the research switch does.
-    pub const ENRICHMENT_BODY: &'static str = "When on, contacts can be researched with \
-        business details from licensed providers and public web search. Off unless someone \
-        turns it on; calls and contacts work normally without it.";
+    pub const ENRICHMENT_BODY: &'static str = district_l10n::english::TOOLS_ENRICHMENT_BODY;
 
     fn loading() -> Self {
         Self {
@@ -162,9 +207,9 @@ impl ToolsSection {
             .map(|id| {
                 let label = capability_label(&id);
                 let note = if id == TRANSFER_TO_AGENT && !support_number {
-                    Some(Self::NEEDS_SUPPORT_NUMBER)
+                    Some(s::tools_needs_support_number(l()))
                 } else {
-                    label.is_none().then_some(Self::UNKNOWN_TOOL)
+                    label.is_none().then_some(s::tools_unknown_tool(l()))
                 };
                 CapabilityRow {
                     enabled: self

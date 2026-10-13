@@ -37,6 +37,7 @@ use crate::failure::FailureText;
 use crate::media::{DisconnectReason, MediaCredential, MediaOwner};
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 use crate::transcript::LiveTranscript;
 
 /// How often the duration moves on.
@@ -108,20 +109,19 @@ pub enum CallEnd {
 
 impl ActiveCall {
     /// The title of an answered call, for which nothing names the caller.
-    pub const CALLER: &'static str = "Caller";
+    pub const CALLER: &'static str = district_l10n::english::CALL_CALLER;
     /// The line while the dial is on its way.
-    pub const DIALING: &'static str = "Placing the call.";
+    pub const DIALING: &'static str = district_l10n::english::CALL_DIALING;
     /// The line while the room is joined.
-    pub const CONNECTING: &'static str = "Connecting.";
+    pub const CONNECTING: &'static str = district_l10n::english::CALL_CONNECTING;
     /// The line while a placed call rings.
-    pub const RINGING: &'static str = "Calling.";
+    pub const RINGING: &'static str = district_l10n::english::CALL_RINGING;
     /// The line after a call ended.
-    pub const ENDED: &'static str = "Call ended.";
+    pub const ENDED: &'static str = district_l10n::english::CALL_ENDED;
     /// The failure of a room that could not be joined.
-    pub const CONNECT_FAILED: &'static str = "The call could not be connected.";
+    pub const CONNECT_FAILED: &'static str = district_l10n::english::CALL_CONNECT_FAILED;
     /// The note under an ended call: the call log is the record.
-    pub const ENDED_NOTE: &'static str =
-        "The call log has the record of this call. The length here is this app's own count.";
+    pub const ENDED_NOTE: &'static str = district_l10n::english::CALL_ENDED_NOTE;
 
     pub(crate) fn outbound(workspace_id: String, number: String) -> Self {
         Self {
@@ -182,26 +182,24 @@ impl ActiveCall {
     pub fn title(&self) -> String {
         match &self.direction {
             CallDirection::Outbound { number } => crate::dialer::format_dial_entry(number),
-            CallDirection::Inbound => Self::CALLER.to_owned(),
+            CallDirection::Inbound => s::call_caller(l()).to_owned(),
         }
     }
 
     /// The line under the title: what is happening, or the duration.
     pub fn status(&self) -> String {
         match &self.phase {
-            CallPhase::Dialing => Self::DIALING.to_owned(),
-            CallPhase::Connecting => Self::CONNECTING.to_owned(),
-            CallPhase::Ringing => Self::RINGING.to_owned(),
+            CallPhase::Dialing => s::call_dialing(l()).to_owned(),
+            CallPhase::Connecting => s::call_connecting(l()).to_owned(),
+            CallPhase::Ringing => s::call_ringing(l()).to_owned(),
             CallPhase::InCall => format_call_duration(self.elapsed_secs),
             CallPhase::Ended(CallEnd::NotPlaced(failure) | CallEnd::Failed(failure)) => {
                 failure.message.clone()
             }
-            CallPhase::Ended(CallEnd::HungUp | CallEnd::Remote) if self.answered => format!(
-                "{} It lasted {}.",
-                Self::ENDED,
-                format_call_duration(self.elapsed_secs)
-            ),
-            CallPhase::Ended(CallEnd::HungUp | CallEnd::Remote) => Self::ENDED.to_owned(),
+            CallPhase::Ended(CallEnd::HungUp | CallEnd::Remote) if self.answered => {
+                s::call_ended_lasted(l(), &format_call_duration(self.elapsed_secs))
+            }
+            CallPhase::Ended(CallEnd::HungUp | CallEnd::Remote) => s::call_ended(l()).to_owned(),
         }
     }
 
@@ -394,10 +392,10 @@ impl SignedIn {
     ) -> Vec<Effect> {
         let end = match self.active_call.as_ref().map(|call| &call.phase) {
             _ if reason == DisconnectReason::Unavailable => {
-                CallEnd::Failed(FailureText::final_(DisconnectReason::UNAVAILABLE))
+                CallEnd::Failed(FailureText::final_(s::media_unavailable(l())))
             }
             Some(CallPhase::Connecting) if reason == DisconnectReason::ConnectFailed => {
-                CallEnd::Failed(FailureText::final_(ActiveCall::CONNECT_FAILED))
+                CallEnd::Failed(FailureText::final_(s::call_connect_failed(l())))
             }
             _ => CallEnd::Remote,
         };

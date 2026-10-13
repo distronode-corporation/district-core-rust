@@ -32,6 +32,7 @@ use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// How many runs one page of a workflow's history asks for: the service's own
 /// default. Runs are tall rows.
@@ -122,23 +123,21 @@ pub enum CampaignCard {
 
 impl CampaignCard {
     /// The card's heading.
-    pub const TITLE: &'static str = "Outbound campaign";
+    pub const TITLE: &'static str = district_l10n::english::WORKFLOWS_CAMPAIGN_TITLE;
     /// The badge of a campaign that is calling.
-    pub const ACTIVE: &'static str = "Active";
+    pub const ACTIVE: &'static str = district_l10n::english::WORKFLOWS_CAMPAIGN_ACTIVE;
     /// The badge of one that is not, which is also one never set up.
-    pub const PAUSED: &'static str = "Paused";
+    pub const PAUSED: &'static str = district_l10n::english::WORKFLOWS_CAMPAIGN_PAUSED;
     /// The line for a batch size never set.
-    pub const NO_BATCH: &'static str = "No batch size set yet.";
+    pub const NO_BATCH: &'static str = district_l10n::english::WORKFLOWS_CAMPAIGN_NO_BATCH;
     /// The line for a goal never set.
-    pub const NO_GOAL: &'static str = "No goal set yet.";
+    pub const NO_GOAL: &'static str = district_l10n::english::WORKFLOWS_CAMPAIGN_NO_GOAL;
     /// The note saying what is still changed on the web.
-    pub const WEB_ONLY: &'static str =
-        "The campaign's goal and batch size are changed on the District AI website.";
+    pub const WEB_ONLY: &'static str = district_l10n::english::WORKFLOWS_CAMPAIGN_WEB_ONLY;
     /// The note for a viewer.
-    pub const VIEWER: &'static str = "You are a viewer in this workspace. Ask an agency or client \
-        member to change the campaign.";
+    pub const VIEWER: &'static str = district_l10n::english::WORKFLOWS_CAMPAIGN_VIEWER;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load the campaign";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::WORKFLOWS_CAMPAIGN_FAILED_TITLE;
 }
 
 /// A pause or resume asked for and not yet confirmed.
@@ -154,29 +153,27 @@ impl CampaignConfirm {
     /// The question's heading.
     pub fn title(self) -> &'static str {
         if self.enable {
-            "Resume the outbound campaign?"
+            s::workflows_confirm_resume_title(l())
         } else {
-            "Pause the outbound campaign?"
+            s::workflows_confirm_pause_title(l())
         }
     }
 
     /// What it would do.
     pub fn body(self) -> &'static str {
         if self.enable {
-            "The campaign starts calling and messaging your contacts again, which spends call \
-             and message credit."
+            s::workflows_confirm_resume_body(l())
         } else {
-            "The campaign stops working through your contacts. Nothing is deleted, and its goal \
-             and batch size are kept, so resuming picks up where it left off."
+            s::workflows_confirm_pause_body(l())
         }
     }
 
     /// The confirming button's label.
     pub fn action(self) -> &'static str {
         if self.enable {
-            "Resume campaign"
+            s::workflows_confirm_resume_action(l())
         } else {
-            "Pause campaign"
+            s::workflows_confirm_pause_action(l())
         }
     }
 }
@@ -198,12 +195,11 @@ pub enum WorkflowList {
 
 impl WorkflowList {
     /// The heading for no workflows.
-    pub const EMPTY_TITLE: &'static str = "No workflows yet";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::WORKFLOWS_EMPTY_TITLE;
     /// The body for no workflows.
-    pub const EMPTY_BODY: &'static str = "Workflows run an action after a call, a message or a new \
-        contact. They are built on the District AI website.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::WORKFLOWS_EMPTY_BODY;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load workflows";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::WORKFLOWS_FAILED_TITLE;
 }
 
 /// One workflow's runs, as far as they have been read.
@@ -228,7 +224,7 @@ pub struct RunHistory {
 
 impl RunHistory {
     /// The line for a workflow that has never run.
-    pub const EMPTY: &'static str = "This workflow has not run yet.";
+    pub const EMPTY: &'static str = district_l10n::english::WORKFLOWS_RUNS_EMPTY;
 
     /// Whether to offer "More runs".
     pub fn can_load_more(&self) -> bool {
@@ -241,16 +237,16 @@ impl RunHistory {
 /// workflow on a new one is still a workflow.
 pub fn trigger_label(trigger: &str) -> Option<&'static str> {
     Some(match trigger {
-        "call_ended" => "After any call ends",
-        "call_ended_answered" => "After an answered call",
-        "call_ended_unanswered" => "After a missed call",
-        "negative_sentiment" => "Negative sentiment",
-        "positive_sentiment" => "Positive sentiment",
-        "neutral_sentiment" => "Neutral sentiment",
-        "intent_detected" => "Intent detected",
-        "sms_received" => "Message received",
-        "contact_created" => "New contact",
-        "dnc_registered" => "Added to do-not-call",
+        "call_ended" => s::workflows_trigger_call_ended(l()),
+        "call_ended_answered" => s::workflows_trigger_call_answered(l()),
+        "call_ended_unanswered" => s::workflows_trigger_call_missed(l()),
+        "negative_sentiment" => s::workflows_trigger_negative_sentiment(l()),
+        "positive_sentiment" => s::workflows_trigger_positive_sentiment(l()),
+        "neutral_sentiment" => s::workflows_trigger_neutral_sentiment(l()),
+        "intent_detected" => s::workflows_trigger_intent_detected(l()),
+        "sms_received" => s::workflows_trigger_sms_received(l()),
+        "contact_created" => s::workflows_trigger_contact_created(l()),
+        "dnc_registered" => s::workflows_trigger_dnc_registered(l()),
         _ => return None,
     })
 }

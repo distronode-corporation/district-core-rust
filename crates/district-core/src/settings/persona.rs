@@ -60,17 +60,15 @@ use district_model::{
 };
 
 use super::{ConfigLoad, SaveState, after_save, read_config, settle};
-use crate::failure::{FailureText, PREVIEW_UNENCRYPTED};
+use crate::failure::FailureText;
 use crate::media::{DisconnectReason, MediaCredential, MediaOwner};
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::studio::refit;
+use crate::text::{l, s};
 
 /// How long after an audition ends, or fails to start, before another may start.
 pub const PREVIEW_COOLDOWN: Duration = Duration::from_secs(5);
-
-/// An audition whose room could not be joined.
-const PREVIEW_NOT_JOINED: &str = "The audition could not be joined. Try again in a moment.";
 
 /// One of the persona's three texts.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -228,19 +226,15 @@ pub enum PersonaRefit {
 
 impl PersonaRefit {
     /// The line while it is under way.
-    pub const CHECKING: &'static str = "Checking that the voice chain speaks the new language.";
+    pub const CHECKING: &'static str = district_l10n::english::PERSONA_REFIT_CHECKING;
     /// The line once moved.
-    pub const REFITTED: &'static str = "The voice chain was moved to models that speak the new \
-        language. Voice Studio shows it.";
+    pub const REFITTED: &'static str = district_l10n::english::PERSONA_REFIT_REFITTED;
     /// The line when nothing fits.
-    pub const NO_FIT: &'static str = "No model this workspace may use speaks the new language \
-        for every part of the voice chain. Choose them in Voice Studio.";
+    pub const NO_FIT: &'static str = district_l10n::english::PERSONA_REFIT_NO_FIT;
     /// The line when it failed.
-    pub const FAILED: &'static str = "The voice chain could not be moved to the new language. \
-        Fit it in Voice Studio.";
+    pub const FAILED: &'static str = district_l10n::english::PERSONA_REFIT_FAILED;
     /// The line when the read after the move does not show it fitting.
-    pub const NOT_SEEN: &'static str = "The voice chain was saved, but Voice Studio does not \
-        show it fitting the new language. Check it there.";
+    pub const NOT_SEEN: &'static str = district_l10n::english::PERSONA_REFIT_NOT_SEEN;
 
     /// Whether it is still under way.
     pub fn is_running(&self) -> bool {
@@ -250,11 +244,13 @@ impl PersonaRefit {
     /// What to say.
     pub fn line(&self) -> String {
         match self {
-            Self::Checking | Self::Saving | Self::Verifying => Self::CHECKING.to_owned(),
-            Self::Refitted => Self::REFITTED.to_owned(),
-            Self::NoFit => Self::NO_FIT.to_owned(),
-            Self::Failed(failure) => format!("{} {}", Self::FAILED, failure.message),
-            Self::NotSeen => Self::NOT_SEEN.to_owned(),
+            Self::Checking | Self::Saving | Self::Verifying => {
+                s::persona_refit_checking(l()).to_owned()
+            }
+            Self::Refitted => s::persona_refit_refitted(l()).to_owned(),
+            Self::NoFit => s::persona_refit_no_fit(l()).to_owned(),
+            Self::Failed(failure) => s::persona_refit_failed_reason(l(), &failure.message),
+            Self::NotSeen => s::persona_refit_not_seen(l()).to_owned(),
         }
     }
 }
@@ -309,19 +305,15 @@ pub struct PersonaSection {
 
 impl PersonaSection {
     /// The line under the texts.
-    pub const CLEAR_HINT: &'static str = "Clearing a box saves it as empty. Anything you do not \
-        change is kept as it is.";
+    pub const CLEAR_HINT: &'static str = district_l10n::english::PERSONA_CLEAR_HINT;
     /// The line when the options could not be read.
-    pub const ENGINE_READ_ONLY: &'static str = "The languages and answer lengths this workspace \
-        may use could not be read, so they cannot be changed right now.";
+    pub const ENGINE_READ_ONLY: &'static str = district_l10n::english::PERSONA_ENGINE_READ_ONLY;
     /// Where the engine and the voice are changed.
-    pub const STUDIO_HINT: &'static str = "The voice, the engine and how it is tuned are \
-        changed in Voice Studio.";
+    pub const STUDIO_HINT: &'static str = district_l10n::english::PERSONA_STUDIO_HINT;
     /// The audition dialog's heading.
-    pub const PREVIEW_TITLE: &'static str = "Try this receptionist";
+    pub const PREVIEW_TITLE: &'static str = district_l10n::english::PERSONA_PREVIEW_TITLE;
     /// What the audition is, shown before it starts.
-    pub const PREVIEW_BILLED: &'static str = "This places a real call to your receptionist, \
-        with the settings on screen whether or not they are saved. It is billed like any call.";
+    pub const PREVIEW_BILLED: &'static str = district_l10n::english::PERSONA_PREVIEW_BILLED;
 
     fn loading(preview_cooling: bool) -> Self {
         Self {
@@ -620,7 +612,7 @@ impl PersonaSection {
                 self.preview = Some(PersonaPreview::Ready(Box::new(credential)));
                 return Vec::new();
             }
-            Ok(_) => FailureText::final_(PREVIEW_UNENCRYPTED),
+            Ok(_) => FailureText::final_(s::failure_preview_unencrypted(l())),
             Err(error) => FailureText::from_api_error(&error),
         };
         self.preview = Some(PersonaPreview::Failed(failure));
@@ -814,7 +806,7 @@ impl SignedIn {
                 .filter(|section| can_change && section.can_start_preview())
             {
                 section.preview = Some(PersonaPreview::Failed(FailureText::final_(
-                    DisconnectReason::UNAVAILABLE,
+                    s::media_unavailable(l()),
                 )));
             }
             return stay();
@@ -869,10 +861,10 @@ impl SignedIn {
         // The section is there: leaving it leaves the audition's room first.
         let ended = match reason {
             DisconnectReason::ConnectFailed => {
-                PersonaPreview::Failed(FailureText::final_(PREVIEW_NOT_JOINED))
+                PersonaPreview::Failed(FailureText::final_(s::persona_preview_not_joined(l())))
             }
             DisconnectReason::Unavailable => {
-                PersonaPreview::Failed(FailureText::final_(DisconnectReason::UNAVAILABLE))
+                PersonaPreview::Failed(FailureText::final_(s::media_unavailable(l())))
             }
             _ => PersonaPreview::Ended,
         };

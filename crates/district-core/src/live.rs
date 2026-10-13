@@ -36,10 +36,11 @@ use district_model::{MessageThreadResponse, TelemetryEnvelope, TelemetryEventTyp
 
 use crate::failure::FailureText;
 use crate::model::{Effect, Event, Slot, Ticket, Tickets};
-use crate::ringing::{IncomingRing, RingEvent};
+use crate::ringing::RingEvent;
 use crate::role::Capabilities;
 use crate::route::Route;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 use crate::workspaces::WorkspacesState;
 
 /// The live updates: the open workspace's, and those of the other workspaces
@@ -129,7 +130,7 @@ impl LiveStatus {
     /// A line for the status bar, or `None` while there is nothing to say.
     pub fn message(&self) -> Option<String> {
         match self {
-            Self::Reconnecting => Some("Reconnecting to live updates.".to_owned()),
+            Self::Reconnecting => Some(s::live_reconnecting(l()).to_owned()),
             Self::Stopped(Some(failure)) => Some(failure.message.clone()),
             Self::Off | Self::Connecting | Self::Connected | Self::Stopped(None) => None,
         }
@@ -189,8 +190,8 @@ impl NotificationAction {
     /// The button's label.
     pub fn label(&self) -> &'static str {
         match self {
-            Self::Answer { .. } => "Answer",
-            Self::Decline { .. } => "Decline",
+            Self::Answer { .. } => s::live_action_answer(l()),
+            Self::Decline { .. } => s::live_action_decline(l()),
         }
     }
 
@@ -209,22 +210,22 @@ impl NotificationAction {
 
 impl Notification {
     /// The heading of a new message's notification.
-    pub const MESSAGE_TITLE: &'static str = "New message";
+    pub const MESSAGE_TITLE: &'static str = district_l10n::english::LIVE_MESSAGE_TITLE;
     /// The body of a new message's notification.
-    pub const MESSAGE_BODY: &'static str = "Open District AI to read it.";
+    pub const MESSAGE_BODY: &'static str = district_l10n::english::LIVE_MESSAGE_BODY;
     /// The heading of a call that rang behind another.
-    pub const WAITING_TITLE: &'static str = "Another call is ringing";
+    pub const WAITING_TITLE: &'static str = district_l10n::english::LIVE_WAITING_TITLE;
     /// The heading of a missed call's notification.
-    pub const MISSED_TITLE: &'static str = "Missed call";
+    pub const MISSED_TITLE: &'static str = district_l10n::english::LIVE_MISSED_TITLE;
     /// The body of a missed call's notification.
-    pub const MISSED_BODY: &'static str = "Open District AI to see it in the call log.";
+    pub const MISSED_BODY: &'static str = district_l10n::english::LIVE_MISSED_BODY;
 
     /// The notification for the message `message_id`.
     pub(crate) fn message(workspace_id: String, message_id: String) -> Self {
         Self {
             id: format!("message:{message_id}"),
-            title: Self::MESSAGE_TITLE.to_owned(),
-            body: Self::MESSAGE_BODY.to_owned(),
+            title: s::live_message_title(l()).to_owned(),
+            body: s::live_message_body(l()).to_owned(),
             urgency: Urgency::Normal,
             actions: Vec::new(),
             target: NotificationTarget::Message {
@@ -243,8 +244,8 @@ impl Notification {
     pub(crate) fn incoming_call(workspace_id: &str, call_id: &str) -> Self {
         Self {
             id: Self::call_id(call_id),
-            title: IncomingRing::TITLE.to_owned(),
-            body: IncomingRing::BODY.to_owned(),
+            title: s::ringing_title(l()).to_owned(),
+            body: s::ringing_body(l()).to_owned(),
             urgency: Urgency::Urgent,
             actions: vec![
                 NotificationAction::Answer {
@@ -265,8 +266,8 @@ impl Notification {
     pub(crate) fn call_waiting(workspace_id: &str, call_id: &str) -> Self {
         Self {
             id: Self::call_id(call_id),
-            title: Self::WAITING_TITLE.to_owned(),
-            body: IncomingRing::WAITING_BODY.to_owned(),
+            title: s::live_waiting_title(l()).to_owned(),
+            body: s::ringing_waiting_body(l()).to_owned(),
             urgency: Urgency::Normal,
             actions: vec![NotificationAction::Decline {
                 call_id: call_id.to_owned(),
@@ -282,8 +283,8 @@ impl Notification {
     pub(crate) fn missed_call(workspace_id: &str, call_id: &str) -> Self {
         Self {
             id: Self::call_id(call_id),
-            title: Self::MISSED_TITLE.to_owned(),
-            body: Self::MISSED_BODY.to_owned(),
+            title: s::live_missed_title(l()).to_owned(),
+            body: s::live_missed_body(l()).to_owned(),
             urgency: Urgency::Normal,
             actions: Vec::new(),
             target: NotificationTarget::Call {

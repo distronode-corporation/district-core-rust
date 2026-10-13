@@ -18,6 +18,7 @@
 use std::time::Duration;
 
 use district_api::ApiError;
+use district_l10n::{Locale, format};
 use district_model::{
     AvailableNumber, NumberSearch, NumberSearchResponse, OwnedNumber, OwnedNumbersResponse,
 };
@@ -26,6 +27,7 @@ use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{self, l, s};
 
 /// The web dashboard's number marketplace, below the service's origin.
 pub const MARKETPLACE_WEB_PATH: &str = "/dashboard/district/marketplace";
@@ -54,23 +56,20 @@ pub struct MarketplaceScreen {
 impl MarketplaceScreen {
     /// The note saying the screen changes nothing, for a member whose role could
     /// buy on the web.
-    pub const READ_ONLY: &'static str =
-        "Numbers cannot be bought, released or changed in this app, so this screen is read only.";
+    pub const READ_ONLY: &'static str = district_l10n::english::MARKETPLACE_READ_ONLY;
     /// The same note for a viewer, who could not change them anywhere.
-    pub const READ_ONLY_VIEWER: &'static str = "This screen is read only. Ask an agency or client \
-        member of this workspace to add or release a number.";
+    pub const READ_ONLY_VIEWER: &'static str = district_l10n::english::MARKETPLACE_READ_ONLY_VIEWER;
     /// The link to the web marketplace.
-    pub const WEB_ACTION: &'static str = "Open the number marketplace on the web";
+    pub const WEB_ACTION: &'static str = district_l10n::english::MARKETPLACE_WEB_ACTION;
     /// The caption under the link.
-    pub const WEB_CAPTION: &'static str =
-        "Numbers are bought on the District AI website. This opens it in your browser.";
+    pub const WEB_CAPTION: &'static str = district_l10n::english::MARKETPLACE_WEB_CAPTION;
 
     /// The read-only note for a member with `capabilities`.
     pub fn read_only_note(capabilities: &Capabilities) -> &'static str {
         if capabilities.can_change {
-            Self::READ_ONLY
+            s::marketplace_read_only(l())
         } else {
-            Self::READ_ONLY_VIEWER
+            s::marketplace_read_only_viewer(l())
         }
     }
 
@@ -104,12 +103,31 @@ pub struct NumberSearchForm {
 }
 
 impl NumberSearchForm {
-    /// The number types the service accepts, each with its label.
+    /// The number types the service accepts, each with its label in English.
+    /// A screen shows [`number_types`](Self::number_types).
     pub const NUMBER_TYPES: [(&'static str, &'static str); 3] = [
-        ("local", "Local"),
-        ("tollFree", "Toll-free"),
-        ("mobile", "Mobile"),
+        (
+            "local",
+            district_l10n::english::MARKETPLACE_NUMBER_TYPE_LOCAL,
+        ),
+        (
+            "tollFree",
+            district_l10n::english::MARKETPLACE_NUMBER_TYPE_TOLL_FREE,
+        ),
+        (
+            "mobile",
+            district_l10n::english::MARKETPLACE_NUMBER_TYPE_MOBILE,
+        ),
     ];
+
+    /// The number types the service accepts, each with its label.
+    pub fn number_types() -> [(&'static str, &'static str); 3] {
+        [
+            ("local", s::marketplace_number_type_local(l())),
+            ("tollFree", s::marketplace_number_type_toll_free(l())),
+            ("mobile", s::marketplace_number_type_mobile(l())),
+        ]
+    }
 
     /// The search this form asks for. A blank filter is left out.
     fn search(&self) -> NumberSearch {
@@ -161,13 +179,14 @@ pub enum NumberSearchState {
 
 impl NumberSearchState {
     /// The heading for a search that found nothing.
-    pub const NONE_TITLE: &'static str = "No matches";
+    pub const NONE_TITLE: &'static str = district_l10n::english::MARKETPLACE_SEARCH_NONE_TITLE;
     /// The body for a search that found nothing.
-    pub const NONE_BODY: &'static str = "The carrier has no numbers matching these filters.";
+    pub const NONE_BODY: &'static str = district_l10n::english::MARKETPLACE_SEARCH_NONE_BODY;
     /// The heading for a workspace with no carrier connected.
-    pub const NOT_CONFIGURED_TITLE: &'static str = "No carrier connected";
+    pub const NOT_CONFIGURED_TITLE: &'static str =
+        district_l10n::english::MARKETPLACE_NOT_CONFIGURED_TITLE;
     /// The heading for a failed search.
-    pub const FAILED_TITLE: &'static str = "Could not search for numbers";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::MARKETPLACE_SEARCH_FAILED_TITLE;
 }
 
 /// The numbers the workspace holds.
@@ -186,11 +205,11 @@ pub enum OwnedNumbersList {
 
 impl OwnedNumbersList {
     /// The heading for a workspace with no numbers.
-    pub const EMPTY_TITLE: &'static str = "No numbers yet";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::MARKETPLACE_OWNED_EMPTY_TITLE;
     /// The body for a workspace with no numbers.
-    pub const EMPTY_BODY: &'static str = "This workspace has no active phone numbers.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::MARKETPLACE_OWNED_EMPTY_BODY;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load this workspace's numbers";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::MARKETPLACE_OWNED_FAILED_TITLE;
 }
 
 /// The numbers read.
@@ -212,12 +231,11 @@ impl OwnedNumbers {
     /// `None` for a complete one.
     pub fn partial_note(&self) -> Option<String> {
         self.partial.then(|| {
-            let who = if self.failed_providers.is_empty() {
-                "a carrier".to_owned()
+            if self.failed_providers.is_empty() {
+                s::marketplace_partial_note_unnamed(l()).to_owned()
             } else {
-                self.failed_providers.join(", ")
-            };
-            format!("Could not reach {who}, so this list may be missing numbers.")
+                s::marketplace_partial_note(l(), &self.failed_providers.join(", "))
+            }
         })
     }
 }
@@ -228,8 +246,9 @@ impl OwnedNumbers {
 pub fn price_label(monthly_price: Option<f64>, currency: Option<&str>) -> Option<String> {
     let price = monthly_price?;
     Some(match currency.map(str::trim).filter(|c| !c.is_empty()) {
+        Some(currency) if l() == Locale::FrCa => format::iso_amount(Locale::FrCa, price, currency),
         Some(currency) => format!("{price} {currency}"),
-        None => price.to_string(),
+        None => text::number(price),
     })
 }
 

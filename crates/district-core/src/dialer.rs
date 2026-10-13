@@ -39,12 +39,11 @@ pub struct DialerScreen {
 
 impl DialerScreen {
     /// The line above the keypad.
-    pub const HINT: &'static str =
-        "Enter a number with its country code, for example +1 212 555 0142.";
+    pub const HINT: &'static str = district_l10n::english::DIALER_HINT;
     /// The note that placing a call turns the microphone on.
-    pub const MICROPHONE_NOTE: &'static str = "Placing a call turns on your microphone.";
+    pub const MICROPHONE_NOTE: &'static str = district_l10n::english::DIALER_MICROPHONE_NOTE;
     /// The note for a member who cannot place a call right now.
-    pub const BUSY_NOTE: &'static str = "Finish the call or meeting you are in first.";
+    pub const BUSY_NOTE: &'static str = district_l10n::english::DIALER_BUSY_NOTE;
 
     /// The number as it reads: its digits grouped, nothing removed.
     pub fn formatted(&self) -> String {

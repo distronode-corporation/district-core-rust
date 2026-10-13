@@ -1,0 +1,1944 @@
+{
+  "categories": [
+    {
+      "category": "money",
+      "source": "distronode-website/src/lib/i18n/money.ts",
+      "intlTag": {
+        "en": "en-US",
+        "fr": "fr-CA"
+      },
+      "notes": "formatMoney takes minor units (cents); formatIsoAmount takes major units. The default display is \"symbol\", which is the only one that gives French Canadian dollars the \"$ CA\" suffix. formatMoneyOrBare with a null currency prints the number with no currency at all.",
+      "vectors": [
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "$0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "USD 0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "CA$0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "CAD 0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "€0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "€0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "EUR 0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "US$0.00"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 0,
+          "currency": null,
+          "locale": "en",
+          "options": {},
+          "output": "0.00"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0,
+          "isoCode": "XYZ",
+          "locale": "en",
+          "options": {},
+          "output": "XYZ 0.00"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0,
+          "isoCode": "bogus",
+          "locale": "en",
+          "options": {},
+          "output": "BOGUS 0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "0,00 $ US"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "0,00 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "0,00 USD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "0,00 $ CA"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "0,00 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "0,00 CAD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "0,00 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "0,00 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "0,00 EUR"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 0,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "0,00 $ US"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 0,
+          "currency": null,
+          "locale": "fr",
+          "options": {},
+          "output": "0,00"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0,
+          "isoCode": "XYZ",
+          "locale": "fr",
+          "options": {},
+          "output": "0,00 XYZ"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0,
+          "isoCode": "bogus",
+          "locale": "fr",
+          "options": {},
+          "output": "BOGUS 0.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "$0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "USD 0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "CA$0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "CAD 0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "€0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "€0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "EUR 0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "US$0.01"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 1,
+          "currency": null,
+          "locale": "en",
+          "options": {},
+          "output": "0.01"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0.01,
+          "isoCode": "XYZ",
+          "locale": "en",
+          "options": {},
+          "output": "XYZ 0.01"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0.01,
+          "isoCode": "bogus",
+          "locale": "en",
+          "options": {},
+          "output": "BOGUS 0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "0,01 $ US"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "0,01 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "0,01 USD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "0,01 $ CA"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "0,01 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "0,01 CAD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "0,01 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "0,01 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "0,01 EUR"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 1,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "0,01 $ US"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 1,
+          "currency": null,
+          "locale": "fr",
+          "options": {},
+          "output": "0,01"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0.01,
+          "isoCode": "XYZ",
+          "locale": "fr",
+          "options": {},
+          "output": "0,01 XYZ"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0.01,
+          "isoCode": "bogus",
+          "locale": "fr",
+          "options": {},
+          "output": "BOGUS 0.01"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "$0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "USD 0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "CA$0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "CAD 0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "€0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "€0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "EUR 0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "US$0.99"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 99,
+          "currency": null,
+          "locale": "en",
+          "options": {},
+          "output": "0.99"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0.99,
+          "isoCode": "XYZ",
+          "locale": "en",
+          "options": {},
+          "output": "XYZ 0.99"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0.99,
+          "isoCode": "bogus",
+          "locale": "en",
+          "options": {},
+          "output": "BOGUS 0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "0,99 $ US"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "0,99 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "0,99 USD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "0,99 $ CA"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "0,99 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "0,99 CAD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "0,99 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "0,99 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "0,99 EUR"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 99,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "0,99 $ US"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 99,
+          "currency": null,
+          "locale": "fr",
+          "options": {},
+          "output": "0,99"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0.99,
+          "isoCode": "XYZ",
+          "locale": "fr",
+          "options": {},
+          "output": "0,99 XYZ"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 0.99,
+          "isoCode": "bogus",
+          "locale": "fr",
+          "options": {},
+          "output": "BOGUS 0.99"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "$249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "USD 249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "CA$249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "CAD 249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "€249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "€249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "EUR 249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "US$249.00"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 24900,
+          "currency": null,
+          "locale": "en",
+          "options": {},
+          "output": "249.00"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 249,
+          "isoCode": "XYZ",
+          "locale": "en",
+          "options": {},
+          "output": "XYZ 249.00"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 249,
+          "isoCode": "bogus",
+          "locale": "en",
+          "options": {},
+          "output": "BOGUS 249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "249,00 $ US"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "249,00 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "249,00 USD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "249,00 $ CA"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "249,00 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "249,00 CAD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "249,00 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "249,00 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "249,00 EUR"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 24900,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "249,00 $ US"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 24900,
+          "currency": null,
+          "locale": "fr",
+          "options": {},
+          "output": "249,00"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 249,
+          "isoCode": "XYZ",
+          "locale": "fr",
+          "options": {},
+          "output": "249,00 XYZ"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 249,
+          "isoCode": "bogus",
+          "locale": "fr",
+          "options": {},
+          "output": "BOGUS 249.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "$1,204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$1,204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "USD 1,204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "CA$1,204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$1,204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "CAD 1,204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "€1,204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "€1,204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "EUR 1,204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "US$1,204.25"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 120425,
+          "currency": null,
+          "locale": "en",
+          "options": {},
+          "output": "1,204.25"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 1204.25,
+          "isoCode": "XYZ",
+          "locale": "en",
+          "options": {},
+          "output": "XYZ 1,204.25"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 1204.25,
+          "isoCode": "bogus",
+          "locale": "en",
+          "options": {},
+          "output": "BOGUS 1204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "1 204,25 $ US"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "1 204,25 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "1 204,25 USD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "1 204,25 $ CA"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "1 204,25 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "1 204,25 CAD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "1 204,25 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "1 204,25 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "1 204,25 EUR"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 120425,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "1 204,25 $ US"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 120425,
+          "currency": null,
+          "locale": "fr",
+          "options": {},
+          "output": "1 204,25"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 1204.25,
+          "isoCode": "XYZ",
+          "locale": "fr",
+          "options": {},
+          "output": "1 204,25 XYZ"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 1204.25,
+          "isoCode": "bogus",
+          "locale": "fr",
+          "options": {},
+          "output": "BOGUS 1204.25"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "$1,000,000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$1,000,000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "USD 1,000,000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "CA$1,000,000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "$1,000,000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "cad",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "CAD 1,000,000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "€1,000,000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "€1,000,000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "eur",
+          "locale": "en",
+          "options": {
+            "display": "code"
+          },
+          "output": "EUR 1,000,000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "usd",
+          "locale": "en",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "US$1,000,000.00"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 100000000,
+          "currency": null,
+          "locale": "en",
+          "options": {},
+          "output": "1,000,000.00"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 1000000,
+          "isoCode": "XYZ",
+          "locale": "en",
+          "options": {},
+          "output": "XYZ 1,000,000.00"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 1000000,
+          "isoCode": "bogus",
+          "locale": "en",
+          "options": {},
+          "output": "BOGUS 1000000.00"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "1 000 000,00 $ US"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "1 000 000,00 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "1 000 000,00 USD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "1 000 000,00 $ CA"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "1 000 000,00 $"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "cad",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "1 000 000,00 CAD"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "symbol"
+          },
+          "output": "1 000 000,00 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "narrow"
+          },
+          "output": "1 000 000,00 €"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "eur",
+          "locale": "fr",
+          "options": {
+            "display": "code"
+          },
+          "output": "1 000 000,00 EUR"
+        },
+        {
+          "fn": "formatMoney",
+          "minorUnits": 100000000,
+          "currency": "usd",
+          "locale": "fr",
+          "options": {
+            "disambiguateDollar": true
+          },
+          "output": "1 000 000,00 $ US"
+        },
+        {
+          "fn": "formatMoneyOrBare",
+          "minorUnits": 100000000,
+          "currency": null,
+          "locale": "fr",
+          "options": {},
+          "output": "1 000 000,00"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 1000000,
+          "isoCode": "XYZ",
+          "locale": "fr",
+          "options": {},
+          "output": "1 000 000,00 XYZ"
+        },
+        {
+          "fn": "formatIsoAmount",
+          "major": 1000000,
+          "isoCode": "bogus",
+          "locale": "fr",
+          "options": {},
+          "output": "BOGUS 1000000.00"
+        }
+      ]
+    },
+    {
+      "category": "dates",
+      "source": "distronode-website/src/lib/i18n/format.ts",
+      "intlTag": {
+        "en": "en-CA",
+        "fr": "fr-CA"
+      },
+      "vectors": [
+        {
+          "fn": "formatDate",
+          "input": "2026-08-01T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "short",
+          "en": "2026-08-01",
+          "fr": "2026-08-01"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-08-01T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "medium",
+          "en": "Aug 1, 2026",
+          "fr": "1er août 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-08-01T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "long",
+          "en": "August 1, 2026",
+          "fr": "1er août 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-08-01T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "full",
+          "en": "Saturday, August 1, 2026",
+          "fr": "samedi 1er août 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-08-15T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "short",
+          "en": "2026-08-15",
+          "fr": "2026-08-15"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-08-15T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "medium",
+          "en": "Aug 15, 2026",
+          "fr": "15 août 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-08-15T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "long",
+          "en": "August 15, 2026",
+          "fr": "15 août 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-08-15T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "full",
+          "en": "Saturday, August 15, 2026",
+          "fr": "samedi 15 août 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-12-01T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "short",
+          "en": "2026-12-01",
+          "fr": "2026-12-01"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-12-01T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "medium",
+          "en": "Dec 1, 2026",
+          "fr": "1er déc. 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-12-01T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "long",
+          "en": "December 1, 2026",
+          "fr": "1er décembre 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-12-01T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "full",
+          "en": "Tuesday, December 1, 2026",
+          "fr": "mardi 1er décembre 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-12-25T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "short",
+          "en": "2026-12-25",
+          "fr": "2026-12-25"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-12-25T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "medium",
+          "en": "Dec 25, 2026",
+          "fr": "25 déc. 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-12-25T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "long",
+          "en": "December 25, 2026",
+          "fr": "25 décembre 2026"
+        },
+        {
+          "fn": "formatDate",
+          "input": "2026-12-25T12:00:00.000Z",
+          "timezone": "America/Toronto",
+          "style": "full",
+          "en": "Friday, December 25, 2026",
+          "fr": "vendredi 25 décembre 2026"
+        }
+      ]
+    },
+    {
+      "category": "times",
+      "source": "distronode-website/src/lib/i18n/format.ts",
+      "intlTag": {
+        "en": "en-CA",
+        "fr": "fr-CA"
+      },
+      "notes": "English reads a 12-hour clock only in an America/ or Australia/ zone; French is always 24-hour (hourCycleFor).",
+      "vectors": [
+        {
+          "fn": "formatTime",
+          "local": "00:05",
+          "input": "2026-09-21T04:05:00.000Z",
+          "timezone": "America/Toronto",
+          "en": "12:05 a.m.",
+          "fr": "0 h 05"
+        },
+        {
+          "fn": "formatDateTime",
+          "local": "00:05",
+          "input": "2026-09-21T04:05:00.000Z",
+          "timezone": "America/Toronto",
+          "en": "Sep 21, 2026, 12:05 a.m.",
+          "fr": "21 sept. 2026, 0 h 05"
+        },
+        {
+          "fn": "formatTime",
+          "local": "09:00",
+          "input": "2026-09-21T13:00:00.000Z",
+          "timezone": "America/Toronto",
+          "en": "9:00 a.m.",
+          "fr": "9 h"
+        },
+        {
+          "fn": "formatDateTime",
+          "local": "09:00",
+          "input": "2026-09-21T13:00:00.000Z",
+          "timezone": "America/Toronto",
+          "en": "Sep 21, 2026, 9:00 a.m.",
+          "fr": "21 sept. 2026, 9 h"
+        },
+        {
+          "fn": "formatTime",
+          "local": "13:30",
+          "input": "2026-09-21T17:30:00.000Z",
+          "timezone": "America/Toronto",
+          "en": "1:30 p.m.",
+          "fr": "13 h 30"
+        },
+        {
+          "fn": "formatDateTime",
+          "local": "13:30",
+          "input": "2026-09-21T17:30:00.000Z",
+          "timezone": "America/Toronto",
+          "en": "Sep 21, 2026, 1:30 p.m.",
+          "fr": "21 sept. 2026, 13 h 30"
+        },
+        {
+          "fn": "formatTime",
+          "local": "15:04",
+          "input": "2026-09-21T19:04:00.000Z",
+          "timezone": "America/Toronto",
+          "en": "3:04 p.m.",
+          "fr": "15 h 04"
+        },
+        {
+          "fn": "formatDateTime",
+          "local": "15:04",
+          "input": "2026-09-21T19:04:00.000Z",
+          "timezone": "America/Toronto",
+          "en": "Sep 21, 2026, 3:04 p.m.",
+          "fr": "21 sept. 2026, 15 h 04"
+        },
+        {
+          "fn": "formatTime",
+          "local": "00:05",
+          "input": "2026-09-20T22:05:00.000Z",
+          "timezone": "Europe/Berlin",
+          "en": "00:05",
+          "fr": "0 h 05"
+        },
+        {
+          "fn": "formatDateTime",
+          "local": "00:05",
+          "input": "2026-09-20T22:05:00.000Z",
+          "timezone": "Europe/Berlin",
+          "en": "Sep 21, 2026, 00:05",
+          "fr": "21 sept. 2026, 0 h 05"
+        },
+        {
+          "fn": "formatTime",
+          "local": "09:00",
+          "input": "2026-09-21T07:00:00.000Z",
+          "timezone": "Europe/Berlin",
+          "en": "09:00",
+          "fr": "9 h"
+        },
+        {
+          "fn": "formatDateTime",
+          "local": "09:00",
+          "input": "2026-09-21T07:00:00.000Z",
+          "timezone": "Europe/Berlin",
+          "en": "Sep 21, 2026, 09:00",
+          "fr": "21 sept. 2026, 9 h"
+        },
+        {
+          "fn": "formatTime",
+          "local": "13:30",
+          "input": "2026-09-21T11:30:00.000Z",
+          "timezone": "Europe/Berlin",
+          "en": "13:30",
+          "fr": "13 h 30"
+        },
+        {
+          "fn": "formatDateTime",
+          "local": "13:30",
+          "input": "2026-09-21T11:30:00.000Z",
+          "timezone": "Europe/Berlin",
+          "en": "Sep 21, 2026, 13:30",
+          "fr": "21 sept. 2026, 13 h 30"
+        },
+        {
+          "fn": "formatTime",
+          "local": "15:04",
+          "input": "2026-09-21T13:04:00.000Z",
+          "timezone": "Europe/Berlin",
+          "en": "15:04",
+          "fr": "15 h 04"
+        },
+        {
+          "fn": "formatDateTime",
+          "local": "15:04",
+          "input": "2026-09-21T13:04:00.000Z",
+          "timezone": "Europe/Berlin",
+          "en": "Sep 21, 2026, 15:04",
+          "fr": "21 sept. 2026, 15 h 04"
+        }
+      ]
+    },
+    {
+      "category": "durations",
+      "source": [
+        "distronode-website/src/lib/district/duration-label.ts",
+        "distronode-website/src/lib/district/call-summary.ts"
+      ],
+      "notes": "formatMinutesSeconds is the portal's localized reading. formatCallDuration is the wire `duration` string on a call row, the same in every language.",
+      "vectors": [
+        {
+          "fn": "formatMinutesSeconds",
+          "seconds": 0,
+          "en": "0m",
+          "fr": "0 min"
+        },
+        {
+          "fn": "formatCallDuration",
+          "seconds": 0,
+          "output": "0s"
+        },
+        {
+          "fn": "formatMinutesSeconds",
+          "seconds": 5,
+          "en": "5s",
+          "fr": "5 s"
+        },
+        {
+          "fn": "formatCallDuration",
+          "seconds": 5,
+          "output": "0m 5s"
+        },
+        {
+          "fn": "formatMinutesSeconds",
+          "seconds": 65,
+          "en": "1m 5s",
+          "fr": "1 min 5 s"
+        },
+        {
+          "fn": "formatCallDuration",
+          "seconds": 65,
+          "output": "1m 5s"
+        },
+        {
+          "fn": "formatMinutesSeconds",
+          "seconds": 3600,
+          "en": "60m",
+          "fr": "60 min"
+        },
+        {
+          "fn": "formatCallDuration",
+          "seconds": 3600,
+          "output": "60m 0s"
+        },
+        {
+          "fn": "formatMinutesSeconds",
+          "seconds": 3725,
+          "en": "62m 5s",
+          "fr": "62 min 5 s"
+        },
+        {
+          "fn": "formatCallDuration",
+          "seconds": 3725,
+          "output": "62m 5s"
+        }
+      ]
+    },
+    {
+      "category": "numbers",
+      "source": "distronode-website/src/lib/i18n/format.ts",
+      "intlTag": {
+        "en": "en-CA",
+        "fr": "fr-CA"
+      },
+      "vectors": [
+        {
+          "fn": "formatNumber",
+          "value": 0,
+          "en": "0",
+          "fr": "0"
+        },
+        {
+          "fn": "formatNumber",
+          "value": 7,
+          "en": "7",
+          "fr": "7"
+        },
+        {
+          "fn": "formatNumber",
+          "value": 1204,
+          "en": "1,204",
+          "fr": "1 204"
+        },
+        {
+          "fn": "formatNumber",
+          "value": 1000000,
+          "en": "1,000,000",
+          "fr": "1 000 000"
+        },
+        {
+          "fn": "formatNumber",
+          "value": 1204.25,
+          "en": "1,204.25",
+          "fr": "1 204,25"
+        },
+        {
+          "fn": "formatNumber",
+          "value": 0.5,
+          "en": "0.5",
+          "fr": "0,5"
+        },
+        {
+          "fn": "formatNumber",
+          "value": -1204.25,
+          "en": "-1,204.25",
+          "fr": "-1 204,25"
+        }
+      ]
+    },
+    {
+      "category": "percentages",
+      "source": "distronode-website/src/lib/i18n/format.ts",
+      "intlTag": {
+        "en": "en-CA",
+        "fr": "fr-CA"
+      },
+      "notes": "The input is a ratio (0 to 1), not a percentage.",
+      "vectors": [
+        {
+          "fn": "formatPercent",
+          "percent": 0,
+          "ratio": 0,
+          "en": "0%",
+          "fr": "0 %"
+        },
+        {
+          "fn": "formatPercent",
+          "percent": 38,
+          "ratio": 0.38,
+          "en": "38%",
+          "fr": "38 %"
+        },
+        {
+          "fn": "formatPercent",
+          "percent": 99.9,
+          "ratio": 0.999,
+          "en": "99.9%",
+          "fr": "99,9 %"
+        },
+        {
+          "fn": "formatPercent",
+          "percent": 100,
+          "ratio": 1,
+          "en": "100%",
+          "fr": "100 %"
+        }
+      ]
+    },
+    {
+      "category": "lists",
+      "source": null
+    },
+    {
+      "category": "plurals",
+      "source": null
+    }
+  ]
+}

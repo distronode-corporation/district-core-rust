@@ -5,6 +5,7 @@ use district_model::OverviewResponse;
 
 use crate::failure::FailureText;
 use crate::role::Capabilities;
+use crate::text::{l, s};
 
 /// The web dashboard's page where the setup wizard runs, below the service's
 /// origin. The wizard decides what the business's receptionist says and which
@@ -50,24 +51,20 @@ impl OverviewContent {
     /// "Read-only access", for a member who can change nothing here, said up front
     /// rather than discovered by a refusal. `None` for everyone else.
     pub fn read_only_badge(&self) -> Option<&'static str> {
-        (!self.capabilities.can_change).then_some("Read-only access")
+        (!self.capabilities.can_change).then_some(s::overview_read_only_badge(l()))
     }
 }
 
 /// The finish-setup card's heading.
-pub const FINISH_SETUP_TITLE: &str = "Finish setting up on the web";
+pub const FINISH_SETUP_TITLE: &str = district_l10n::english::OVERVIEW_FINISH_SETUP_TITLE;
 /// The finish-setup card's body.
-pub const FINISH_SETUP_BODY: &str = "Your receptionist is not live yet. Pick your number, set up \
-    how it answers, and go live from the web dashboard.";
+pub const FINISH_SETUP_BODY: &str = district_l10n::english::OVERVIEW_FINISH_SETUP_BODY;
 /// The finish-setup card's button.
-pub const FINISH_SETUP_ACTION: &str = "Open the web dashboard";
+pub const FINISH_SETUP_ACTION: &str = district_l10n::english::OVERVIEW_FINISH_SETUP_ACTION;
 
 /// The failure for an overview that answered about a different workspace than
 /// the one asked for. The fix is to read the workspace list again, which is
 /// what trying again does.
 pub(crate) fn workspace_mismatch() -> FailureText {
-    FailureText::retryable(
-        "The workspace you selected is no longer the one District AI can report on. Try again \
-         to reload your workspaces.",
-    )
+    FailureText::retryable(s::overview_workspace_mismatch(l()))
 }
