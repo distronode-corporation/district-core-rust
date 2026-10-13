@@ -191,10 +191,30 @@ fn managing_billing_opens_the_web_for_a_member_who_could_use_it() {
     );
 }
 
+/// The four tiers the service sells read as its pricing page names them (the
+/// service's `PLAN_TIER_LABELS`), never as stored; any other tier as the service
+/// spells it; no tier as the line for a workspace with none.
+#[test]
+fn the_plan_is_named_as_the_pricing_page_names_it_not_as_stored() {
+    let named = |tier: Option<&str>| {
+        let billing = WorkspaceBilling {
+            subscription_tier: tier.map(str::to_owned),
+            ..plan()
+        };
+        plan_name(&billing).to_owned()
+    };
+    assert_eq!(named(Some("VoiceSolo")), "Voice Solo");
+    assert_eq!(named(Some("VoiceStarter")), "Voice Starter");
+    assert_eq!(named(Some("VoicePro")), "Voice Pro");
+    assert_eq!(named(Some("VoiceStudio")), "Voice Studio");
+    assert_eq!(named(Some("VoiceEnterprise")), "VoiceEnterprise");
+    assert_eq!(named(None), "No plan on this workspace");
+}
+
 #[test]
 fn the_plan_says_its_name_its_status_and_what_happens_past_the_minutes() {
     let mut billing = plan();
-    assert_eq!(plan_name(&billing), "VoicePro");
+    assert_eq!(plan_name(&billing), "Voice Pro");
     billing.subscription_tier = None;
     assert_eq!(plan_name(&billing), "No plan on this workspace");
 

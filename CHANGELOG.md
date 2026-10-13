@@ -17,6 +17,16 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-10-13
+
+### Fixed
+
+- Billing names the plan as the service's pricing page does (`plan_name`): "Voice Solo",
+  "Voice Starter", "Voice Pro" and "Voice Studio", not the tier as the service stores it
+  ("VoicePro"). A tier this build does not know is still shown as the service spells it,
+  and a workspace with no tier still reads "No plan on this workspace". A backport to the
+  1.2 line, for the apps that pin it; nothing an app calls or implements changes.
+
 ## [1.2.0] - 2026-10-08
 
 ### Changed
