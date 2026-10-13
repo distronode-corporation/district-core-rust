@@ -17,6 +17,16 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [3.1.1] - 2026-10-13
+
+### Fixed
+
+- `plan_name` names the plan ("Voice Pro") instead of returning the key the
+  service stores it under ("VoicePro"). A key one of `PlanTier::ALL` publishes
+  reads as its `PlanTier::label`, the name the service's own plan chooser shows;
+  any other tier is shown as sent, and a workspace with none still reads "No plan
+  on this workspace".
+
 ## [3.1.0] - 2026-10-09
 
 ### Added
