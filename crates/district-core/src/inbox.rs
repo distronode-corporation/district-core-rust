@@ -6,6 +6,8 @@
 //! list says when it may be short ([`Conversations::partial`]) rather than
 //! implying it is everything.
 //!
+//! A new conversation is started from here too ([`ComposeScreen`]).
+//!
 //! Search is a separate question from the list: it looks inside every message
 //! the workspace holds, where the list covers recent threads only, so filtering
 //! the list would answer "no matches" for messages the workspace has.
@@ -19,6 +21,7 @@ use district_model::{
     MessageSearchHit, MessageSearchResponse, UnreadCountResponse,
 };
 
+use crate::compose::{ComposeEvent, ComposeScreen};
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
@@ -40,6 +43,8 @@ pub struct InboxScreen {
     pub draft_keys: BTreeSet<String>,
     /// The message search.
     pub search: SearchState,
+    /// The form starting a new conversation, while it is open.
+    pub compose: Option<ComposeScreen>,
 }
 
 impl InboxScreen {
@@ -167,6 +172,8 @@ pub enum InboxEvent {
     Search(String),
     /// The search was closed.
     ClearSearch,
+    /// Something in the form starting a new conversation.
+    Compose(ComposeEvent),
 }
 
 impl SignedIn {
@@ -314,6 +321,7 @@ impl SignedIn {
                 self.inbox.search = SearchState::default();
                 stay()
             }
+            InboxEvent::Compose(event) => self.compose_event(event, tickets),
         }
     }
 

@@ -10,6 +10,7 @@ mod analytics;
 mod billing;
 mod call_handling;
 mod calls;
+mod compose;
 mod contacts;
 mod desk;
 mod devices;

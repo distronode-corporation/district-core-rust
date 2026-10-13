@@ -1607,6 +1607,150 @@ pub fn hq_thinking(l: Locale) -> &'static str {
     }
 }
 
+/// `inbox.compose_action`
+#[must_use]
+pub fn inbox_compose_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "New message",
+        Locale::FrCa => "New message",
+    }
+}
+
+/// `inbox.compose_cancel`
+#[must_use]
+pub fn inbox_compose_cancel(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Cancel",
+        Locale::FrCa => "Cancel",
+    }
+}
+
+/// `inbox.compose_change`
+#[must_use]
+pub fn inbox_compose_change(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Change",
+        Locale::FrCa => "Change",
+    }
+}
+
+/// `inbox.compose_channel_email`
+#[must_use]
+pub fn inbox_compose_channel_email(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Email",
+        Locale::FrCa => "Email",
+    }
+}
+
+/// `inbox.compose_channel_sms`
+#[must_use]
+pub fn inbox_compose_channel_sms(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Text message",
+        Locale::FrCa => "Text message",
+    }
+}
+
+/// `inbox.compose_message`
+#[must_use]
+pub fn inbox_compose_message(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Message",
+        Locale::FrCa => "Message",
+    }
+}
+
+/// `inbox.compose_message_address`
+#[must_use]
+pub fn inbox_compose_message_address(l: Locale, address: &str) -> String {
+    match l {
+        Locale::En => format!("Message {address}"),
+        Locale::FrCa => format!("Message {address}"),
+    }
+}
+
+/// `inbox.compose_no_address`
+#[must_use]
+pub fn inbox_compose_no_address(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This contact has no phone number or email address on file.",
+        Locale::FrCa => "This contact has no phone number or email address on file.",
+    }
+}
+
+/// `inbox.compose_recent_contacts`
+#[must_use]
+pub fn inbox_compose_recent_contacts(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Showing your most recent contacts. For anyone else, type their number or email.",
+        Locale::FrCa => "Showing your most recent contacts. For anyone else, type their number or email.",
+    }
+}
+
+/// `inbox.compose_send`
+#[must_use]
+pub fn inbox_compose_send(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Send",
+        Locale::FrCa => "Send",
+    }
+}
+
+/// `inbox.compose_send_on`
+#[must_use]
+pub fn inbox_compose_send_on(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Send on",
+        Locale::FrCa => "Send on",
+    }
+}
+
+/// `inbox.compose_sending`
+#[must_use]
+pub fn inbox_compose_sending(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sending…",
+        Locale::FrCa => "Sending…",
+    }
+}
+
+/// `inbox.compose_subject`
+#[must_use]
+pub fn inbox_compose_subject(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Subject",
+        Locale::FrCa => "Subject",
+    }
+}
+
+/// `inbox.compose_suggestions_failed`
+#[must_use]
+pub fn inbox_compose_suggestions_failed(l: Locale, message: &str) -> String {
+    match l {
+        Locale::En => format!("{message} You can still enter a number or an email address above."),
+        Locale::FrCa => format!("{message} You can still enter a number or an email address above."),
+    }
+}
+
+/// `inbox.compose_title`
+#[must_use]
+pub fn inbox_compose_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "New message",
+        Locale::FrCa => "New message",
+    }
+}
+
+/// `inbox.compose_to`
+#[must_use]
+pub fn inbox_compose_to(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "To",
+        Locale::FrCa => "To",
+    }
+}
+
 /// `inbox.empty_body`
 #[must_use]
 pub fn inbox_empty_body(l: Locale) -> &'static str {

@@ -1256,6 +1256,120 @@ screen = "District HQ"
 tier = "T3"
 note = "While District HQ is answering."
 
+[inbox.compose_action]
+en = "New message"
+ctx = "button"
+screen = "inbox compose"
+tier = "T3"
+note = "The inbox's button that starts a conversation with somebody: a contact, or a phone number or email address typed in."
+
+[inbox.compose_cancel]
+en = "Cancel"
+ctx = "button"
+screen = "inbox compose"
+tier = "T3"
+note = "Closes the new message form without sending."
+
+[inbox.compose_change]
+en = "Change"
+ctx = "button"
+screen = "inbox compose"
+tier = "T3"
+note = "Beside the chosen recipient of a new message: choose somebody else."
+
+[inbox.compose_channel_email]
+en = "Email"
+ctx = "label"
+screen = "inbox compose"
+tier = "T3"
+note = "One of the channels a new message can be sent on: an email."
+
+[inbox.compose_channel_sms]
+en = "Text message"
+ctx = "label"
+screen = "inbox compose"
+tier = "T3"
+note = "One of the channels a new message can be sent on: a text message (SMS)."
+
+[inbox.compose_message]
+en = "Message"
+ctx = "label"
+screen = "inbox compose"
+tier = "T3"
+note = "The label of the new message's text field."
+
+[inbox.compose_message_address]
+en = "Message {address}"
+ctx = "button"
+screen = "inbox compose"
+tier = "T3"
+args = { address = "str" }
+note = "Under the recipient field of a new message: send to what was typed. {address} is the phone number or email address being typed."
+
+[inbox.compose_no_address]
+en = "This contact has no phone number or email address on file."
+ctx = "body"
+screen = "inbox compose"
+tier = "T3"
+note = "Shown when the contact chosen for a new message has nothing to send to."
+
+[inbox.compose_recent_contacts]
+en = "Showing your most recent contacts. For anyone else, type their number or email."
+ctx = "body"
+screen = "inbox compose"
+tier = "T3"
+note = "Under the contacts offered for a new message: only the most recent are listed, and anybody else can be reached by typing their number or email address."
+
+[inbox.compose_send]
+en = "Send"
+ctx = "button"
+screen = "inbox compose"
+tier = "T2"
+note = "Sends the new message. A text message or an email costs the workspace money, so it is sent once."
+
+[inbox.compose_send_on]
+en = "Send on"
+ctx = "label"
+screen = "inbox compose"
+tier = "T3"
+note = "Above the choice of channel for a new message, followed by 'Text message' or 'Email'."
+
+[inbox.compose_sending]
+en = "Sending…"
+ctx = "label"
+screen = "inbox compose"
+tier = "T3"
+note = "On the send button while the new message is on its way."
+
+[inbox.compose_subject]
+en = "Subject"
+ctx = "placeholder"
+screen = "inbox compose"
+tier = "T3"
+note = "The subject field of a new message sent as an email. Required for an email."
+
+[inbox.compose_suggestions_failed]
+en = "{message} You can still enter a number or an email address above."
+ctx = "error"
+screen = "inbox compose"
+tier = "T3"
+args = { message = "str" }
+note = "When the contacts could not be read for a new message. {message} is the failure's own sentence; the form still works with a number or address typed in."
+
+[inbox.compose_title]
+en = "New message"
+ctx = "title"
+screen = "inbox compose"
+tier = "T3"
+note = "The title of the form that starts a conversation."
+
+[inbox.compose_to]
+en = "To"
+ctx = "label"
+screen = "inbox compose"
+tier = "T3"
+note = "The recipient field of a new message: a contact, or a phone number or email address."
+
 [inbox.empty_body]
 en = "Texts and emails from your customers will appear here."
 ctx = "body"

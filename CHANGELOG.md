@@ -38,6 +38,16 @@ variant, or a field of one. Those take a new major version.
   entries) and names the app it came from; the dialog's words and the outcome's
   sentence are translatable.
 - `district-l10n`: `support_strings`, generated from the new `catalog/support.toml`.
+- Starting a conversation from the inbox, as the iOS and Mac apps do:
+  `InboxEvent::Compose(ComposeEvent)` and `InboxScreen::compose`, a
+  `ComposeScreen` with the most recent contacts (`COMPOSE_CONTACT_WINDOW`)
+  filtered by name, number or address, a recipient that is a contact or a typed
+  number or address (`ComposeRecipient`), its channels a text message first, a
+  subject required for an email, and the form's words. The first message is sent
+  once (`messages/send`); its thread is then asked for by the message's id and
+  opened, with its reply going where the service says the thread is reached. A
+  message that went out and whose thread cannot be found still closes the form.
+  No new endpoint: contacts, send and the message's thread were already called.
 
 ### Changed
 
@@ -48,6 +58,8 @@ variant, or a field of one. Those take a new major version.
 - Breaking: `WireCategory` has 20 new variants, and `WireCategory::ALL` 31 entries.
 - Breaking: `SupportScreen` has a new field, `reporting`, and `SupportEvent` two new
   variants.
+- Breaking: `InboxScreen` has a new field, `compose`, and `InboxEvent` a new
+  variant.
 
 ## [4.0.0-beta.1] - 2026-10-13
 

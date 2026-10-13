@@ -43,7 +43,8 @@
 //!   the account screen ([`AccountView`]) and the devices list
 //!   ([`DevicesScreen`]).
 //! - The screens of the second: the inbox with its search and badges
-//!   ([`InboxScreen`]), a thread with its composer ([`ThreadScreen`]), the call
+//!   ([`InboxScreen`]) and the form that starts a conversation
+//!   ([`ComposeScreen`]), a thread with its composer ([`ThreadScreen`]), the call
 //!   log and a call ([`CallLog`], [`CallDetailScreen`]), contacts, one contact
 //!   and the blocked callers ([`ContactsScreen`], [`ContactDetailScreen`],
 //!   [`BlockedScreen`]), and live updates with the notification for a new
@@ -109,6 +110,7 @@ mod analytics;
 mod billing;
 mod call;
 mod calls;
+mod compose;
 mod contacts;
 mod desk;
 mod devices;
@@ -159,6 +161,9 @@ pub use billing::{
 pub use call::{ActiveCall, CALL_TICK, CallDirection, CallEnd, CallEvent, CallPhase};
 pub use calls::{
     CALL_PAGE_SIZE, CallDetailScreen, CallLog, CallRows, CallView, CallsEvent, TranscriptView,
+};
+pub use compose::{
+    COMPOSE_CONTACT_WINDOW, ComposeContacts, ComposeEvent, ComposeRecipient, ComposeScreen,
 };
 pub use contacts::{
     BlockedList, BlockedScreen, CONTACT_PAGE_SIZE, ContactAction, ContactConfirmation,

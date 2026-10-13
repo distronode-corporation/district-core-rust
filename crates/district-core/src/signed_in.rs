@@ -22,6 +22,7 @@ use crate::analytics::AnalyticsScreen;
 use crate::billing::BillingScreen;
 use crate::call::{ActiveCall, CallEnd};
 use crate::calls::{CallDetailScreen, CallLog};
+use crate::compose::COMPOSE_SLOTS;
 use crate::contacts::{BlockedScreen, ContactDetailScreen, ContactList, ContactsScreen};
 use crate::desk::{DeskQueue, DeskScreen, DeskSettingsView, DeskTicketScreen};
 use crate::devices::{Confirmation, DeviceRow, DevicesEvent, DevicesList, DevicesScreen};
@@ -465,6 +466,7 @@ impl SignedIn {
         effects.extend(self.close_rooms(tickets));
         effects.extend(self.close_settings(tickets));
         tickets.cancel_each(&WORKSPACE_SLOTS);
+        tickets.cancel_each(&COMPOSE_SLOTS);
         self.unread = None;
         self.inbox = InboxScreen::default();
         self.calls = CallLog::default();

@@ -594,6 +594,12 @@ impl SignedIn {
         result: Result<ContactListResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
+        if tickets.accept(Slot::ComposeContacts, ticket)
+            && let Some(compose) = self.inbox.compose.as_mut()
+        {
+            compose.contacts_loaded(result);
+            return stay();
+        }
         if tickets.accept(Slot::Contacts, ticket) {
             match (result, &mut self.contacts.list) {
                 (Ok(page), list) => *list = ContactList::Ready(ContactRows::first(page)),
