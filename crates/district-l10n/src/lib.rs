@@ -9,6 +9,7 @@
 //! - [`strings`]: every sentence and label the core writes, generated from
 //!   `catalog/core.toml` by `tools/l10n/l10n.py`. Each is a function of the
 //!   locale, so a missing key fails the build rather than showing nothing.
+//! - [`support_strings`]: the support area's, from `catalog/support.toml`.
 //! - [`api_error_text`]: the sentence for an error code the service sends, from
 //!   `contracts/i18n/api-errors.json` through `catalog/api_errors.toml`.
 //! - [`wire_label`] and [`placeholder_label`]: what a screen shows for a value the
@@ -68,10 +69,19 @@ pub mod api_error_strings;
 #[path = "generated/wire.rs"]
 pub mod wire_strings;
 
+/// The support area's sentences and labels, reporting AI-generated content
+/// among them, from `catalog/support.toml`. The text a report sends to the
+/// support desk is English in both languages: it is read by Distronode's staff.
+#[rustfmt::skip]
+#[path = "generated/support.rs"]
+pub mod support_strings;
+
 /// True when every catalog has French for every entry. Until then the French
 /// arm of each generated function carries the English.
-pub const FR_COMPLETE: bool =
-    strings::FR_COMPLETE && api_error_strings::FR_COMPLETE && wire_strings::FR_COMPLETE;
+pub const FR_COMPLETE: bool = strings::FR_COMPLETE
+    && api_error_strings::FR_COMPLETE
+    && wire_strings::FR_COMPLETE
+    && support_strings::FR_COMPLETE;
 
 /// A language the core writes in.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]

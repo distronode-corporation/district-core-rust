@@ -1,0 +1,160 @@
+[meta]
+catalog = "support"
+platform = "rust"
+apple = false
+
+[report.accepted]
+en = "Reported. We'll review it."
+ctx = "body"
+screen = "report"
+tier = "T2"
+note = "Shown in the report dialog once the report reached Distronode. It must read as accepted: a dialog that closed silently looks the same as one that failed."
+
+[report.already_reported]
+en = "You have already reported this. We'll review it."
+ctx = "body"
+screen = "report"
+tier = "T2"
+note = "Shown in the report dialog when Distronode already had this report. A success, not a failure: reporting it as a failure invites a second ticket."
+
+[report.cancel]
+en = "Cancel"
+ctx = "button"
+screen = "report"
+tier = "T2"
+note = "Closes the report dialog without sending anything."
+
+[report.draft_open]
+en = "Send or discard the support request you are writing in Support, then report this."
+ctx = "error"
+screen = "report"
+tier = "T2"
+note = "Shown in the report dialog, over the note it keeps, when the member has a support request half written in the Support area: sending the report would wipe it. 'Support' is the name of that area of the app."
+
+[report.intro]
+en = "Tell us what is wrong with this AI-generated content. We will review it."
+ctx = "body"
+screen = "report"
+tier = "T2"
+note = "The first line of the report dialog, under its title. 'We' is Distronode."
+
+[report.no_note]
+en = "No note was added."
+ctx = "body"
+screen = "report"
+tier = "T2"
+fixed = true
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language, as on iOS. Says that the member added no note, so an absent note does not read as a lost one."
+
+[report.note_label]
+en = "What is wrong (optional)"
+ctx = "label"
+screen = "report"
+tier = "T2"
+note = "The label of the report dialog's note field. The note is optional."
+
+[report.pending]
+en = "Reported. We have it and it is catching up."
+ctx = "body"
+screen = "report"
+tier = "T2"
+note = "Shown in the report dialog when Distronode received the report and its ticket number is still to come. A success."
+
+[report.preamble_linux]
+en = "AI-generated content was reported from the District AI Linux app."
+ctx = "body"
+screen = "report"
+tier = "T2"
+fixed = true
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language. Its first line says where the report came from, because the same desk receives support questions."
+
+[report.preamble_windows]
+en = "AI-generated content was reported from the District AI Windows app."
+ctx = "body"
+screen = "report"
+tier = "T2"
+fixed = true
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language. Its first line says where the report came from, because the same desk receives support questions."
+
+[report.reference_ai_draft]
+en = "Conversation reply drafted with AI"
+ctx = "label"
+screen = "report"
+tier = "T2"
+fixed = true
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language. Names what was reported: a reply the model wrote, which has no id of its own."
+
+[report.reference_call]
+en = "Call: {call_id}"
+ctx = "label"
+screen = "report"
+tier = "T2"
+fixed = true
+args = { call_id = "str" }
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language. {call_id} is the call's internal id."
+
+[report.reference_contact]
+en = "Contact: {contact_id}"
+ctx = "label"
+screen = "report"
+tier = "T2"
+fixed = true
+args = { contact_id = "str" }
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language. {contact_id} is the contact's internal id."
+
+[report.reference_conversation_event]
+en = "Conversation event: {event_id}"
+ctx = "label"
+screen = "report"
+tier = "T2"
+fixed = true
+args = { event_id = "str" }
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language. {event_id} is the internal id of an event in a conversation's timeline."
+
+[report.reference_hq_answer]
+en = "District HQ answer"
+ctx = "label"
+screen = "report"
+tier = "T2"
+fixed = true
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language. Names what was reported: an answer District HQ gave, which has no id of its own."
+
+[report.reference_meeting_action_items]
+en = "Meeting action items: {meeting_id}"
+ctx = "label"
+screen = "report"
+tier = "T2"
+fixed = true
+args = { meeting_id = "str" }
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language. {meeting_id} is the meeting's internal id."
+
+[report.reference_meeting_minutes]
+en = "Meeting minutes: {meeting_id}"
+ctx = "label"
+screen = "report"
+tier = "T2"
+fixed = true
+args = { meeting_id = "str" }
+note = "Sent to the District support desk inside the ticket, never shown on screen: it stays English for staff in every language. {meeting_id} is the meeting's internal id."
+
+[report.send]
+en = "Send"
+ctx = "button"
+screen = "report"
+tier = "T2"
+note = "Sends the report from the report dialog."
+
+[report.subject]
+en = "Report: AI-generated content"
+ctx = "label"
+screen = "report"
+tier = "T2"
+fixed = true
+note = "Sent to the District support desk as the ticket's subject, never shown on screen: it stays English for staff in every language. The desk sorts reports on it. 3 to 200 characters."
+
+[report.title]
+en = "Report AI-generated content"
+ctx = "title"
+screen = "report"
+tier = "T2"
+note = "The title of the dialog that reports a call summary, a contact's dossier, a reply or an answer the AI wrote."

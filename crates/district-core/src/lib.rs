@@ -55,8 +55,9 @@
 //!   switch ([`WorkflowsScreen`]), booking pages with the hand-off to the web
 //!   ([`SchedulingScreen`], [`OneTimeUrl`]), the help desk ([`DeskScreen`],
 //!   [`DeskTicketScreen`], [`DeskSettingsView`]), support requests
-//!   ([`SupportScreen`], [`SupportRequestScreen`]) and the rooms lobby with its
-//!   meeting records ([`RoomsScreen`]).
+//!   ([`SupportScreen`], [`SupportRequestScreen`]), reporting AI-generated
+//!   content from any screen through them ([`ReportTarget`], [`ReportStatus`])
+//!   and the rooms lobby with its meeting records ([`RoomsScreen`]).
 //! - Buying in the app, for an app built with
 //!   [`CoreConfig::in_app_purchases`] (District AI for Windows): choosing a
 //!   plan and managing billing on the service's own pages inside the app
@@ -124,6 +125,7 @@ mod paging;
 pub mod palette;
 mod presence;
 mod purchase;
+mod report;
 mod ringing;
 mod role;
 mod rooms;
@@ -211,6 +213,9 @@ pub use presence::{
 pub use purchase::{
     BillingDestination, CHECKOUT_PATH, EmbeddedView, PlanChoice, PlanTerm, PlanTier, PromoCode,
     PurchaseSetting, PurchaseState, PurchaseSurface, WORKSPACE_SETUP_WAITS,
+};
+pub use report::{
+    REPORT_NOTE_LIMIT, ReportDialog, ReportStatus, ReportTarget, report_message, report_subject,
 };
 pub use ringing::{IncomingRing, RING_DEADLINE, RingController, RingEnd, RingEvent, RingPhase};
 pub use role::{Capabilities, WorkspaceRole};

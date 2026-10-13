@@ -14,7 +14,7 @@ What it writes, under crates/district-l10n/:
                             contracts/i18n/wire-vocabulary.json, its server
                             placeholders, and the generic labels for a value
                             this build does not know
-  src/generated/core.rs, api_errors.rs, wire.rs
+  src/generated/core.rs, api_errors.rs, wire.rs, support.rs
                             the accessors, by `tools/l10n/l10n.py gen --backend
                             rust`, one module per catalog
   src/generated/api_error_table.rs, wire_table.rs
@@ -27,7 +27,7 @@ What it writes, under crates/district-l10n/:
                             to its catalog's text (tests/accessors.rs includes
                             it, unformatted)
 
-catalog/core.toml is written by hand. The two catalogs written here keep any
+catalog/core.toml and catalog/support.toml are written by hand. The two catalogs written here keep any
 `fr`, `state` and the other translation fields an entry already has, as long as
 its English has not changed: `l10n.py import` writes French into them like into
 any other catalog, and a regeneration does not lose it.
@@ -61,6 +61,7 @@ MODULES = (
     ("core", "strings"),
     ("api_errors", "api_error_strings"),
     ("wire", "wire_strings"),
+    ("support", "support_strings"),
 )
 GEN_OPTS = ("--opt", "locale_path=crate::Locale", "--opt", "int_fmt=crate::format::integer")
 
@@ -380,7 +381,8 @@ def call(module: str, entry, locale: str, values: dict) -> str:
 
 def accessor_test(cats) -> str:
     lines = [HEADER.format(source="the catalogs in crates/district-l10n/catalog/"), ""]
-    lines.append("use district_l10n::{Locale, api_error_strings, strings, wire_strings};")
+    modules = ", ".join(sorted(module for _, module in MODULES))
+    lines.append(f"use district_l10n::{{Locale, {modules}}};")
     for name, module in MODULES:
         cat = cats[name]
         lines.append("")
@@ -404,7 +406,10 @@ def accessor_test(cats) -> str:
     lines.append("")
     lines.append("#[test]")
     lines.append("fn french_is_complete_only_when_every_entry_has_it() {")
-    complete = all(e.fr is not None for cat in cats.values() for e in cat.entries.values())
+    # A fixed entry is never translated, so it never holds French back.
+    complete = all(
+        e.fr is not None or e.fixed for cat in cats.values() for e in cat.entries.values()
+    )
     lines.append(f"    assert!({'' if complete else '!'}std::hint::black_box(district_l10n::FR_COMPLETE));")
     lines.append("}")
     return "\n".join(lines) + "\n"
