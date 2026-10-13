@@ -65,6 +65,7 @@ use crate::failure::FailureText;
 use crate::live::Notification;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// How long a ring lasts: the longest the service holds a caller for an answer
 /// (thirty seconds, which is also the longest ring a workspace may choose).
@@ -122,17 +123,17 @@ pub enum RingEnd {
 
 impl IncomingRing {
     /// The heading of a ring.
-    pub const TITLE: &'static str = "Incoming call";
+    pub const TITLE: &'static str = district_l10n::english::RINGING_TITLE;
     /// What a ring says: where it came from, and nothing about the caller.
-    pub const BODY: &'static str = "Transferred from your AI receptionist.";
+    pub const BODY: &'static str = district_l10n::english::RINGING_BODY;
     /// What a ring behind a call in progress says.
-    pub const WAITING_BODY: &'static str = "Hang up to answer it.";
+    pub const WAITING_BODY: &'static str = district_l10n::english::RINGING_WAITING_BODY;
     /// The line after a missed ring.
-    pub const MISSED: &'static str = "You missed a call.";
+    pub const MISSED: &'static str = district_l10n::english::RINGING_MISSED;
     /// The line after a call that ended before it was answered.
-    pub const CALL_ENDED: &'static str = "That call ended before you could answer it.";
+    pub const CALL_ENDED: &'static str = district_l10n::english::RINGING_CALL_ENDED;
     /// The note beside Answer: answering uses the microphone.
-    pub const MICROPHONE_NOTE: &'static str = "Answering puts your microphone on this call.";
+    pub const MICROPHONE_NOTE: &'static str = district_l10n::english::RINGING_MICROPHONE_NOTE;
 
     /// Whether Answer works.
     pub fn can_answer(&self) -> bool {
@@ -152,10 +153,10 @@ impl IncomingRing {
     /// The line to show under the heading.
     pub fn message(&self) -> String {
         match &self.phase {
-            RingPhase::Ringing | RingPhase::Answering => Self::BODY.to_owned(),
-            RingPhase::Waiting => Self::WAITING_BODY.to_owned(),
-            RingPhase::Ended(RingEnd::Missed) => Self::MISSED.to_owned(),
-            RingPhase::Ended(RingEnd::CallEnded) => Self::CALL_ENDED.to_owned(),
+            RingPhase::Ringing | RingPhase::Answering => s::ringing_body(l()).to_owned(),
+            RingPhase::Waiting => s::ringing_waiting_body(l()).to_owned(),
+            RingPhase::Ended(RingEnd::Missed) => s::ringing_missed(l()).to_owned(),
+            RingPhase::Ended(RingEnd::CallEnded) => s::ringing_call_ended(l()).to_owned(),
             RingPhase::Ended(RingEnd::AnswerFailed(failure)) => failure.message.clone(),
         }
     }

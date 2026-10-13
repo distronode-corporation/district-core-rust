@@ -7,6 +7,7 @@
 use district_model::{NativeDevice, Platform};
 
 use crate::failure::FailureText;
+use crate::text::{l, s};
 
 /// The devices screen.
 ///
@@ -33,8 +34,7 @@ pub struct DevicesScreen {
 
 impl DevicesScreen {
     /// The notice for [`nothing_revoked`](Self::nothing_revoked).
-    pub const NOTHING_REVOKED: &'static str =
-        "That device was already signed out. The list has been refreshed.";
+    pub const NOTHING_REVOKED: &'static str = district_l10n::english::DEVICES_NOTHING_REVOKED;
 }
 
 /// The list itself.
@@ -53,12 +53,11 @@ pub enum DevicesList {
 
 impl DevicesList {
     /// The heading for an empty list.
-    pub const EMPTY_TITLE: &'static str = "No other devices";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::DEVICES_EMPTY_TITLE;
     /// The body for an empty list.
-    pub const EMPTY_BODY: &'static str = "Nothing else is signed in to this account right now. \
-        A device that just signed in can take a few minutes to appear.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::DEVICES_EMPTY_BODY;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not list your devices";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::DEVICES_FAILED_TITLE;
 }
 
 /// One signed-in installation.
@@ -75,7 +74,7 @@ pub struct DeviceRow {
 
 impl DeviceRow {
     /// The marker for this installation's own row.
-    pub const THIS_DEVICE: &'static str = "This device";
+    pub const THIS_DEVICE: &'static str = district_l10n::english::DEVICES_THIS_DEVICE;
 
     /// The name to show. The name is whatever the installation said about itself
     /// at sign-in and may be absent; the id is never shown instead, because an
@@ -83,7 +82,7 @@ impl DeviceRow {
     pub fn name(&self) -> &str {
         match self.device.device_name.as_deref().map(str::trim) {
             Some(name) if !name.is_empty() => name,
-            _ => "Unnamed device",
+            _ => s::devices_unnamed(l()),
         }
     }
 
@@ -93,7 +92,7 @@ impl DeviceRow {
         match self.device.platform.as_str() {
             "android" => "Android",
             "ios" => "iOS",
-            "" => "Unknown platform",
+            "" => s::devices_platform_unknown(l()),
             other => Platform::ALL
                 .into_iter()
                 .find(|platform| platform.wire() == other)
@@ -110,8 +109,8 @@ impl DeviceRow {
     /// sign-in rather than as missing data.
     pub fn last_active(&self) -> String {
         match &self.device.last_used_at {
-            Some(when) => format!("Last active {when}"),
-            None => "Signed in recently".to_owned(),
+            Some(when) => s::devices_last_active(l(), when),
+            None => s::devices_signed_in_recently(l()).to_owned(),
         }
     }
 }
@@ -136,24 +135,19 @@ impl Confirmation {
     /// The question.
     pub fn question(&self) -> &'static str {
         match self {
-            Self::Device { .. } => {
-                "Sign this device out? It will need to sign in again to use District AI."
-            }
+            Self::Device { .. } => s::devices_confirm_device(l()),
             // Its own wording, because this one ends the session in the user's
             // hands, which the general sentence would not warn about.
-            Self::ThisDevice => {
-                "This is the device you are using. Signing it out will return you to the \
-                 sign-in screen."
-            }
+            Self::ThisDevice => s::devices_confirm_this_device(l()),
             // "Including this one", because the service's "all" means all: it
             // does not spare the device that asked.
-            Self::Everywhere => "Sign out of District AI on every device, including this one?",
+            Self::Everywhere => s::devices_confirm_everywhere(l()),
         }
     }
 
     /// The confirming button's label.
     pub fn action(&self) -> &'static str {
-        "Sign out"
+        s::devices_action_sign_out(l())
     }
 }
 

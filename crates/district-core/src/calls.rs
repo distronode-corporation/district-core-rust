@@ -37,11 +37,11 @@ pub enum CallLog {
 
 impl CallLog {
     /// The heading for an empty log.
-    pub const EMPTY_TITLE: &'static str = "No calls yet";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::CALLS_EMPTY_TITLE;
     /// The body for an empty log.
-    pub const EMPTY_BODY: &'static str = "Calls your receptionist answers will appear here.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::CALLS_EMPTY_BODY;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load the call log";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::CALLS_FAILED_TITLE;
 }
 
 /// The calls read so far.
@@ -110,7 +110,7 @@ pub enum TranscriptView {
 
 impl TranscriptView {
     /// The line for a call with no transcript.
-    pub const ABSENT: &'static str = "No transcript for this call.";
+    pub const ABSENT: &'static str = district_l10n::english::CALLS_TRANSCRIPT_ABSENT;
 }
 
 /// What the user does on the call log.

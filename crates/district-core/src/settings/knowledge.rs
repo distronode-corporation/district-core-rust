@@ -26,26 +26,21 @@ use super::SaveState;
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// A mode's name.
 pub fn knowledge_mode_label(mode: KnowledgeMode) -> &'static str {
     match mode {
-        KnowledgeMode::Internal => "Your own knowledge base",
-        KnowledgeMode::Linked => "Linked support knowledge base",
+        KnowledgeMode::Internal => s::knowledge_mode_internal(l()),
+        KnowledgeMode::Linked => s::knowledge_mode_linked(l()),
     }
 }
 
 /// What a mode means.
 pub fn knowledge_mode_body(mode: KnowledgeMode) -> &'static str {
     match mode {
-        KnowledgeMode::Internal => {
-            "Answers come only from the documents added here, searched \
-            in this workspace's own region."
-        }
-        KnowledgeMode::Linked => {
-            "Callers' questions are sent to Atlassian, whose assistant \
-            writes the answers."
-        }
+        KnowledgeMode::Internal => s::knowledge_mode_internal_body(l()),
+        KnowledgeMode::Linked => s::knowledge_mode_linked_body(l()),
     }
 }
 
@@ -101,30 +96,24 @@ impl KnowledgeConfirm {
     /// The question's heading.
     pub fn title(&self) -> &'static str {
         match self {
-            Self::Delete { .. } => "Delete this document?",
-            Self::Linked => "Send questions to Atlassian?",
+            Self::Delete { .. } => s::knowledge_confirm_delete_title(l()),
+            Self::Linked => s::knowledge_confirm_linked_title(l()),
         }
     }
 
     /// What the write does.
     pub fn body(&self) -> String {
         match self {
-            Self::Delete { title, .. } => format!(
-                "\"{title}\" and everything the receptionist learned from it are deleted. \
-                 Getting it back means adding it again, which is billed again."
-            ),
-            Self::Linked => "Callers' questions will be sent to Atlassian, outside this \
-                workspace's region, and answered by its assistant instead of from the documents \
-                added here."
-                .to_owned(),
+            Self::Delete { title, .. } => s::knowledge_confirm_delete_body(l(), title),
+            Self::Linked => s::knowledge_confirm_linked_body(l()).to_owned(),
         }
     }
 
     /// The confirming button's label.
     pub fn action(&self) -> &'static str {
         match self {
-            Self::Delete { .. } => "Delete",
-            Self::Linked => "Send questions to Atlassian",
+            Self::Delete { .. } => s::knowledge_confirm_delete_action(l()),
+            Self::Linked => s::knowledge_confirm_linked_action(l()),
         }
     }
 }
@@ -152,21 +141,17 @@ pub struct KnowledgeSection {
 
 impl KnowledgeSection {
     /// The line for a failed "Add".
-    pub const ADD_REJECTED: &'static str = "A title and some text are both needed.";
+    pub const ADD_REJECTED: &'static str = district_l10n::english::KNOWLEDGE_ADD_REJECTED;
     /// The note about the cost of adding.
-    pub const ADD_BILLED: &'static str =
-        "Adding a document is billed by its length. It is added once, when you press Add.";
+    pub const ADD_BILLED: &'static str = district_l10n::english::KNOWLEDGE_ADD_BILLED;
     /// The line when the mode could not be read.
-    pub const MODE_UNAVAILABLE: &'static str = "Where this workspace's answers come from could \
-        not be read, so it cannot be changed right now.";
+    pub const MODE_UNAVAILABLE: &'static str = district_l10n::english::KNOWLEDGE_MODE_UNAVAILABLE;
     /// The note for a viewer.
-    pub const VIEWER: &'static str = "You have read-only access to this workspace. An agency or \
-        client member can add documents and change where answers come from.";
+    pub const VIEWER: &'static str = district_l10n::english::KNOWLEDGE_VIEWER;
     /// The heading for no documents.
-    pub const EMPTY_TITLE: &'static str = "No documents yet";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::KNOWLEDGE_EMPTY_TITLE;
     /// The body for no documents.
-    pub const EMPTY_BODY: &'static str = "The receptionist has nothing of your own to answer \
-        from. Add a document above.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::KNOWLEDGE_EMPTY_BODY;
 
     fn loading() -> Self {
         Self {

@@ -1,0 +1,681 @@
+{
+  "source": "distronode-website/src/lib/contracts/__tests__/i18n-contracts.test.ts",
+  "categories": {
+    "callStatus": {
+      "description": "`status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent.",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/calls/callsI18n.ts statusLabels",
+      "values": [
+        {
+          "value": "completed",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-status.ts"
+          ],
+          "en": "Completed",
+          "fr": "Terminé"
+        },
+        {
+          "value": "in-progress",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-status.ts"
+          ],
+          "en": "In progress",
+          "fr": "En cours"
+        },
+        {
+          "value": "ringing",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-status.ts"
+          ],
+          "en": "Ringing",
+          "fr": "Sonnerie"
+        },
+        {
+          "value": "no-answer",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-status.ts"
+          ],
+          "en": "No answer",
+          "fr": "Sans réponse"
+        },
+        {
+          "value": "failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-status.ts"
+          ],
+          "en": "Failed",
+          "fr": "Échec"
+        },
+        {
+          "value": "busy",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-status.ts"
+          ],
+          "en": "Busy",
+          "fr": "Occupé"
+        },
+        {
+          "value": "canceled",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-status.ts"
+          ],
+          "en": "Canceled",
+          "fr": "Annulé"
+        },
+        {
+          "value": "abandoned",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Abandoned",
+          "fr": "Abandonné"
+        },
+        {
+          "value": "unknown",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-status.ts"
+          ],
+          "en": "Unknown",
+          "fr": "Inconnu"
+        }
+      ]
+    },
+    "callDirection": {
+      "description": "`direction` on a call or message row, as stored (Call.direction, Message.direction).",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/calls/callsI18n.ts",
+      "values": [
+        {
+          "value": "inbound",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/lib/district/call-summary.ts"
+          ],
+          "en": "Inbound",
+          "fr": "Entrant"
+        },
+        {
+          "value": "outbound",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/lib/district/call-summary.ts"
+          ],
+          "en": "Outbound",
+          "fr": "Sortant"
+        }
+      ]
+    },
+    "callType": {
+      "description": "`type` on a call row (calls, overview) and `direction` on a timeline call event: the direction, with an unanswered inbound call read as \"missed\".",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/calls/callsI18n.ts",
+      "values": [
+        {
+          "value": "inbound",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-summary.ts",
+            "distronode-website/src/lib/district/timeline.ts"
+          ],
+          "en": "Inbound",
+          "fr": "Entrant"
+        },
+        {
+          "value": "outbound",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-summary.ts",
+            "distronode-website/src/lib/district/timeline.ts"
+          ],
+          "en": "Outbound",
+          "fr": "Sortant"
+        },
+        {
+          "value": "missed",
+          "definedIn": [
+            "distronode-website/src/lib/district/call-summary.ts",
+            "distronode-website/src/lib/district/timeline.ts"
+          ],
+          "en": "Missed",
+          "fr": "Manqué"
+        }
+      ]
+    },
+    "sentiment": {
+      "description": "`sentiment` on a call row, written by the voice agent's post-call analysis. The portal labels \"negative\" as friction.",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/calls/callsI18n.ts",
+      "values": [
+        {
+          "value": "positive",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Positive",
+          "fr": "Positif"
+        },
+        {
+          "value": "neutral",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Neutral",
+          "fr": "Neutre"
+        },
+        {
+          "value": "negative",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Friction",
+          "fr": "Friction"
+        }
+      ]
+    },
+    "disposition": {
+      "description": "`disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them.",
+      "labelSource": null,
+      "values": [
+        {
+          "value": "booked",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "interested",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "not-interested",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "callback",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "info",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "voicemail",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "wrong-number",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "escalated",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "other",
+          "definedIn": [
+            "district-voice-agent/src/call_analyzer.py",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "transferStatus": {
+      "description": "`transferStatus` on a call row: the real outcome of a hand-off to a person.",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/calls/callsI18n.ts",
+      "values": [
+        {
+          "value": "success",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Transferred",
+          "fr": "Transféré"
+        },
+        {
+          "value": "failed",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Transfer failed",
+          "fr": "Échec du transfert"
+        }
+      ]
+    },
+    "transferReason": {
+      "description": "`transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`.",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/calls/callsI18n.ts transferReasonLabel",
+      "values": [
+        {
+          "value": "ring_timeout",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Target didn't answer (rang out)",
+          "fr": "Le poste n'a pas répondu (sonnerie expirée)"
+        },
+        {
+          "value": "no_answer",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Target didn't answer",
+          "fr": "Le poste n'a pas répondu"
+        },
+        {
+          "value": "auth_error",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Transfer authorization error",
+          "fr": "Erreur d'autorisation du transfert"
+        },
+        {
+          "value": "trunk_not_configured",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Transfer route not configured",
+          "fr": "Voie de transfert non configurée"
+        },
+        {
+          "value": "error",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Transfer failed",
+          "fr": "Échec du transfert"
+        }
+      ],
+      "fallback": {
+        "en": "Transfer attempted but not connected",
+        "fr": "Transfert tenté, sans connexion"
+      }
+    },
+    "funnelStage": {
+      "description": "`funnelData[].name` in GET /api/district/analytics: an English display name that is a key.",
+      "labelSource": "distronode-website/src/components/district/analytics/chartI18n.ts funnelStageLabels",
+      "values": [
+        {
+          "value": "Total Dials",
+          "definedIn": [
+            "distronode-website/src/app/api/district/analytics/route.ts",
+            "distronode-website/src/components/district/analytics/chartI18n.ts"
+          ],
+          "en": "Total Dials",
+          "fr": "Composions totales"
+        },
+        {
+          "value": "Connected Calls",
+          "definedIn": [
+            "distronode-website/src/app/api/district/analytics/route.ts",
+            "distronode-website/src/components/district/analytics/chartI18n.ts"
+          ],
+          "en": "Connected Calls",
+          "fr": "Appels connectés"
+        },
+        {
+          "value": "Successful Leads",
+          "definedIn": [
+            "distronode-website/src/app/api/district/analytics/route.ts",
+            "distronode-website/src/components/district/analytics/chartI18n.ts"
+          ],
+          "en": "Successful Leads",
+          "fr": "Clients potentiels obtenus"
+        }
+      ]
+    },
+    "analyticsSentiment": {
+      "description": "`sentimentDistribution[].name` in GET /api/district/analytics: an English display name that is a key.",
+      "labelSource": "distronode-website/src/components/district/analytics/chartI18n.ts sentimentLabels",
+      "values": [
+        {
+          "value": "Positive Sentiment",
+          "definedIn": [
+            "distronode-website/src/app/api/district/analytics/route.ts",
+            "distronode-website/src/components/district/analytics/chartI18n.ts"
+          ],
+          "en": "Positive Sentiment",
+          "fr": "Sentiment positif"
+        },
+        {
+          "value": "Neutral Sentiment",
+          "definedIn": [
+            "distronode-website/src/app/api/district/analytics/route.ts",
+            "distronode-website/src/components/district/analytics/chartI18n.ts"
+          ],
+          "en": "Neutral Sentiment",
+          "fr": "Sentiment neutre"
+        },
+        {
+          "value": "Friction Sentiment",
+          "definedIn": [
+            "distronode-website/src/app/api/district/analytics/route.ts",
+            "distronode-website/src/components/district/analytics/chartI18n.ts"
+          ],
+          "en": "Friction Sentiment",
+          "fr": "Sentiment de friction"
+        }
+      ]
+    },
+    "memberRole": {
+      "description": "`role` on a workspace member (GET /api/district/workspace/members, the workspace list).",
+      "labelSource": "distronode-website/src/components/district/workspaceAdminI18n.ts roleLabels",
+      "values": [
+        {
+          "value": "agency",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/members/route.ts",
+            "distronode-website/src/components/district/workspaceAdminI18n.ts"
+          ],
+          "en": "Administrator",
+          "fr": "Administrateur"
+        },
+        {
+          "value": "client",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/members/route.ts",
+            "distronode-website/src/components/district/workspaceAdminI18n.ts"
+          ],
+          "en": "Member",
+          "fr": "Membre"
+        },
+        {
+          "value": "viewer",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/members/route.ts",
+            "distronode-website/src/components/district/workspaceAdminI18n.ts"
+          ],
+          "en": "Viewer",
+          "fr": "Lecteur"
+        }
+      ]
+    },
+    "region": {
+      "description": "A workspace's data region. `en`/`fr` are the short names (chips, sentences); the long names add the datacenter. An unrecognised id is shown upper-cased, never as a default region.",
+      "labelSource": "distronode-website/src/lib/i18n/region-names.ts",
+      "values": [
+        {
+          "value": "us",
+          "definedIn": [
+            "distronode-website/src/lib/content/workspace-regions.ts"
+          ],
+          "en": "United States",
+          "fr": "États-Unis",
+          "enLong": "United States (us-east4)",
+          "frLong": "États-Unis (us-east4)"
+        },
+        {
+          "value": "ca",
+          "definedIn": [
+            "distronode-website/src/lib/content/workspace-regions.ts"
+          ],
+          "en": "Canada",
+          "fr": "Canada",
+          "enLong": "Canada (Montreal)",
+          "frLong": "Canada (Montréal)"
+        },
+        {
+          "value": "eu",
+          "definedIn": [
+            "distronode-website/src/lib/content/workspace-regions.ts"
+          ],
+          "en": "Europe",
+          "fr": "Europe",
+          "enLong": "Europe (Frankfurt)",
+          "frLong": "Europe (Francfort)"
+        },
+        {
+          "value": "apac",
+          "definedIn": [
+            "distronode-website/src/lib/content/workspace-regions.ts"
+          ],
+          "en": "Asia-Pacific",
+          "fr": "Asie-Pacifique",
+          "enLong": "Asia-Pacific (Singapore)",
+          "frLong": "Asie-Pacifique (Singapour)"
+        }
+      ]
+    }
+  },
+  "placeholders": [
+    {
+      "value": "Unknown",
+      "kind": "stored",
+      "fields": [
+        "Contact.name",
+        "Call.callerName",
+        "Call.from",
+        "calls[].number and calls[].callerName (GET /api/district/calls, /overview recentCalls)"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/contacts/create/route.ts",
+        "distronode-website/src/app/api/district/contacts/update/route.ts",
+        "distronode-website/src/app/api/district/actions/post-call-followup/route.ts",
+        "distronode-website/src/app/api/district/webhooks/livekit/route.ts",
+        "distronode-website/src/lib/district/sinch-inbound-bridge.ts",
+        "distronode-website/src/lib/district/call-summary.ts"
+      ],
+      "fr": "Inconnu",
+      "frSource": "distronode-website/src/components/district/contacts/contactsI18n.ts unknownName (CONTACT_NAME_SENTINEL)"
+    },
+    {
+      "value": "Unknown Caller",
+      "kind": "stored",
+      "fields": [
+        "Contact.name"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/actions/post-call-followup/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "Customer",
+      "kind": "stored",
+      "fields": [
+        "Call.callerName (outbound campaign calls)"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/calls/outbound/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "Test call",
+      "kind": "stored",
+      "fields": [
+        "Call.callerName (setup test call)"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/setup/test-call/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "No summary available.",
+      "kind": "response",
+      "fields": [
+        "calls[].aiSummary (GET /api/district/calls, /overview recentCalls)"
+      ],
+      "definedIn": [
+        "distronode-website/src/lib/district/call-summary.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "AI call completed.",
+      "kind": "response",
+      "fields": [
+        "events[].body of a call event (GET /api/district/timeline)"
+      ],
+      "definedIn": [
+        "distronode-website/src/lib/district/timeline.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "AI Voice session active...",
+      "kind": "stored",
+      "fields": [
+        "Call.summary while an inbound call is live"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/webhooks/livekit/route.ts",
+        "distronode-website/src/lib/district/sinch-inbound-bridge.ts",
+        "distronode-website/src/app/api/webhooks/twilio/stream/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "AI Outbound Voice session active...",
+      "kind": "stored",
+      "fields": [
+        "Call.summary while an outbound call is live"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/webhooks/livekit/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "Voice session completed.",
+      "kind": "stored",
+      "fields": [
+        "Call.summary when the agent wrote none"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/webhooks/livekit/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "No answer - no conversation took place.",
+      "kind": "stored",
+      "fields": [
+        "Call.summary of an unanswered call"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/webhooks/livekit/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "New manually added contact.",
+      "kind": "stored",
+      "fields": [
+        "Contact.latestContextSummary"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/contacts/create/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "Manual edit update.",
+      "kind": "stored",
+      "fields": [
+        "Contact.latestContextSummary"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/contacts/update/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "Consultation",
+      "kind": "stored",
+      "fields": [
+        "the booking name inside a scheduling timeline message"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/scheduling/webhook/[workspaceId]/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    },
+    {
+      "value": "Distronode Support",
+      "kind": "response",
+      "fields": [
+        "request.messages[].author of an agent reply (GET /api/district/support/requests/{key})"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/support/requests/[key]/route.ts"
+      ],
+      "fr": "Soutien Distronode",
+      "frSource": "distronode-website/src/components/support/threadsI18n.ts authorAgent"
+    },
+    {
+      "value": "You",
+      "kind": "response",
+      "fields": [
+        "request.messages[].author of the customer's own message (GET /api/district/support/requests/{key})"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/district/support/requests/[key]/route.ts"
+      ],
+      "fr": "Vous",
+      "frSource": "distronode-website/src/components/support/threadsI18n.ts authorCustomer"
+    },
+    {
+      "value": "Free",
+      "kind": "response",
+      "fields": [
+        "subscription.tier (GET /api/settings) when the workspace has none"
+      ],
+      "definedIn": [
+        "distronode-website/src/app/api/settings/route.ts"
+      ],
+      "fr": null,
+      "frSource": null
+    }
+  ]
+}

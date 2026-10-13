@@ -33,13 +33,10 @@ use district_model::{
     SchedulingHandOffResponse, SchedulingStatusResponse, SchedulingTenant,
 };
 
-use crate::failure::{
-    FailureText, HAND_OFF_ELSEWHERE, HAND_OFF_NONCE_REFUSED, HAND_OFF_PAGE_REFUSED,
-    HAND_OFF_REFUSED, HAND_OFF_TOO_MANY, HAND_OFF_UPDATE_NEEDED, SCHEDULING_NOT_OFFERED,
-    SCHEDULING_SETUP_FAILED, SCHEDULING_TOO_MANY,
-};
+use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{english_only, l, s};
 
 /// Where the hand-off lands: the web dashboard's booking pages. The service
 /// replaces anything that is not a path under `/dashboard` with its own default,
@@ -140,7 +137,7 @@ pub enum SchedulingStatus {
 
 impl SchedulingStatus {
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load booking pages";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::SCHEDULING_FAILED_TITLE;
 
     /// What the card shows, once read.
     pub fn presentation(&self) -> Option<SchedulingPresentation> {
@@ -199,25 +196,16 @@ impl SchedulingPresentation {
     /// The card's main sentence.
     pub fn message(&self) -> &'static str {
         match self {
-            Self::NotOffered => "Booking pages are not offered to this workspace.",
-            Self::NotSetUp => {
-                "Booking pages are available to this workspace. Turn them on to give customers \
-                 a page to book on."
-            }
-            Self::Provisioning(_) => {
-                "Your booking page is being set up. This usually takes under a minute, and it \
-                 is checked again every hour if anything stalls."
-            }
+            Self::NotOffered => s::scheduling_not_offered(l()),
+            Self::NotSetUp => s::scheduling_not_set_up(l()),
+            Self::Provisioning(_) => s::scheduling_provisioning(l()),
             Self::Live(tenant) if tenant.booking_url.is_none() => {
-                "This workspace has a booking page, but District AI did not send its address."
+                s::scheduling_live_without_url(l())
             }
-            Self::Live(_) => "Your booking page is live.",
-            Self::SetupFailed(_) => "Setting up your booking page did not finish.",
-            Self::SwitchedOff(_) => "Booking pages are switched off for this workspace.",
-            Self::Unknown(_) => {
-                "This workspace has a booking page, and this version of the app does not \
-                 recognise its state. Updating the app should fix it."
-            }
+            Self::Live(_) => s::scheduling_live(l()),
+            Self::SetupFailed(_) => s::scheduling_setup_failed(l()),
+            Self::SwitchedOff(_) => s::scheduling_switched_off(l()),
+            Self::Unknown(_) => s::scheduling_unknown(l()),
         }
     }
 
@@ -351,12 +339,15 @@ impl SignedIn {
         self.scheduling.notice = match result {
             Ok(answer) if answer.ok => None,
             Ok(answer) => Some(FailureText::final_(
-                answer
-                    .error
-                    .unwrap_or_else(|| SCHEDULING_SETUP_FAILED.to_owned()),
+                english_only(answer.error)
+                    .unwrap_or_else(|| s::failure_scheduling_setup_failed(l()).to_owned()),
             )),
-            Err(ApiError::Forbidden(_)) => Some(FailureText::final_(SCHEDULING_NOT_OFFERED)),
-            Err(ApiError::RateLimited { .. }) => Some(FailureText::retryable(SCHEDULING_TOO_MANY)),
+            Err(ApiError::Forbidden(_)) => {
+                Some(FailureText::final_(s::failure_scheduling_not_offered(l())))
+            }
+            Err(ApiError::RateLimited { .. }) => {
+                Some(FailureText::retryable(s::failure_scheduling_too_many(l())))
+            }
             Err(error) => Some(FailureText::from_api_error(&error)),
         };
         Next::Stay(self.enter_scheduling(tickets))
@@ -451,24 +442,26 @@ fn answer_to(leg: &HandOffLeg, link: &OneTimeUrl) -> Option<HandOffNonce> {
 /// `None`, answered with a link that is not on the service's own address.
 pub(crate) fn hand_off_failure(error: Option<&ApiError>) -> FailureText {
     match error {
-        None => FailureText::final_(HAND_OFF_ELSEWHERE),
+        None => FailureText::final_(s::failure_hand_off_elsewhere(l())),
         // On these routes a 403 is the sign-in the request carried, not the
         // role and not the workspace's offer.
-        Some(ApiError::Forbidden(_)) => FailureText::final_(HAND_OFF_REFUSED),
-        Some(ApiError::RateLimited { .. }) => FailureText::retryable(HAND_OFF_TOO_MANY),
+        Some(ApiError::Forbidden(_)) => FailureText::final_(s::failure_hand_off_refused(l())),
+        Some(ApiError::RateLimited { .. }) => {
+            FailureText::retryable(s::failure_hand_off_too_many(l()))
+        }
         // The service wants a bound hand-off and this one was not, because the
         // browser did not answer in time. Pressing again binds it if the
         // browser answers.
         Some(error) if error.code() == Some(CODE_NONCE_REQUIRED) => {
-            FailureText::retryable(HAND_OFF_UPDATE_NEEDED)
+            FailureText::retryable(s::failure_hand_off_update_needed(l()))
         }
         Some(error) if error.code() == Some(CODE_INVALID_NONCE) => {
-            FailureText::retryable(HAND_OFF_NONCE_REFUSED)
+            FailureText::retryable(s::failure_hand_off_nonce_refused(l()))
         }
         // Only the billing hand-off refuses a destination; the scheduling one
         // falls back to its own.
         Some(error) if error.code() == Some(CODE_INVALID_NEXT) => {
-            FailureText::final_(HAND_OFF_PAGE_REFUSED)
+            FailureText::final_(s::failure_hand_off_page_refused(l()))
         }
         Some(error) => FailureText::from_api_error(error),
     }

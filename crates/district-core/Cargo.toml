@@ -12,6 +12,7 @@ publish.workspace = true
 [dependencies]
 district-api = { workspace = true }
 district-auth = { workspace = true }
+district-l10n = { workspace = true }
 district-live = { workspace = true }
 district-model = { workspace = true }
 # Reads the ids a `call_ringing` event carries.

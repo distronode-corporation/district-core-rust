@@ -1,0 +1,23 @@
+[package]
+name = "district-l10n"
+description = "The District AI desktop apps' words in English and Canadian French: the locale, the generated string catalogs, the API error sentences, the wire value labels and the number, money, date and duration formats."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish.workspace = true
+
+# No dependencies: the catalogs are generated Rust (tools/l10n/l10n.py, run by
+# scripts/gen-l10n.py) and the formats are hand-written tables, so the same
+# input gives the same bytes on every operating system and every version of it.
+[dependencies]
+
+[dev-dependencies]
+# The vendored contracts in contracts/i18n/, which the tests hold the formats,
+# the error table and the wire labels to.
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

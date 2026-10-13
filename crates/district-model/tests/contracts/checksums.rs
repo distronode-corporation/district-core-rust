@@ -1,4 +1,4 @@
-//! The vendored files, in both sets, are exactly what `contracts/SHA256SUMS`
+//! The vendored files, in every set, are exactly what `contracts/SHA256SUMS`
 //! lists.
 //!
 //! The fixtures are a snapshot written by `scripts/sync-contracts.py`, and every
@@ -16,7 +16,7 @@ use crate::support::{contracts_dir, names_in};
 
 /// `contracts/SHA256SUMS` as path (under `contracts/`) to digest, checking its
 /// format on the way: `<64 lowercase hex digits>  <set>/<name>`, where `<set>` is
-/// `fixtures` or `desktop`, one per line, sorted by path, no repeats.
+/// `fixtures`, `desktop` or `i18n`, one per line, sorted by path, no repeats.
 fn listed() -> BTreeMap<String, String> {
     let path = contracts_dir().join("SHA256SUMS");
     let text = fs::read_to_string(&path)
@@ -42,7 +42,7 @@ fn listed() -> BTreeMap<String, String> {
         });
         assert!(
             in_a_set,
-            "SHA256SUMS line {}: {file:?} is not a file of fixtures/ or desktop/",
+            "SHA256SUMS line {}: {file:?} is not a file of fixtures/, desktop/ or i18n/",
             number + 1
         );
         assert!(

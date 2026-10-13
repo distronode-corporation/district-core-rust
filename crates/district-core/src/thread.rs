@@ -40,11 +40,12 @@ use district_model::{
     TimelineCursor, TimelineEvent, TimelineResponse,
 };
 
-use crate::failure::{FailureText, UNREADABLE_ATTACHMENT, UNSUPPORTED_ATTACHMENT};
+use crate::failure::FailureText;
 use crate::inbox::InboxScreen;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// How long after the last change the composer's text is saved.
 pub const DRAFT_SAVE_DEBOUNCE: Duration = Duration::from_secs(2);
@@ -57,9 +58,6 @@ pub const MAX_ATTACHMENT_BYTES: usize = 5 * 1024 * 1024;
 
 /// The only image types the service accepts as attachments.
 pub const ATTACHMENT_TYPES: [&str; 4] = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-
-/// The title of a thread with a contact the app knows nothing else about yet.
-const UNTITLED: &str = "Conversation";
 
 /// The slots of an open thread, forgotten when it closes. The draft write is
 /// not among them: a save sent as the thread closes still lands.
@@ -186,21 +184,19 @@ pub struct ThreadScreen {
 
 impl ThreadScreen {
     /// Said in place of the composer to a member whose role cannot reply.
-    pub const READ_ONLY_ROLE: &'static str =
-        "You have read-only access to this workspace, so you cannot reply here.";
+    pub const READ_ONLY_ROLE: &'static str = district_l10n::english::THREAD_READ_ONLY_ROLE;
     /// Said in place of the composer on a thread with nothing to reply on, or
     /// one opened from a search result for a thread the inbox list does not
     /// hold, whose reply address the service has not published.
-    pub const NO_REPLY_TARGET: &'static str =
-        "Replies cannot be sent on this conversation from here.";
+    pub const NO_REPLY_TARGET: &'static str = district_l10n::english::THREAD_NO_REPLY_TARGET;
 
     /// Why there is no composer, for a member with `capabilities`, or `None`
     /// when there is one.
     pub fn read_only_note(&self, capabilities: &Capabilities) -> Option<&'static str> {
         if !capabilities.can_change {
-            Some(Self::READ_ONLY_ROLE)
+            Some(s::thread_read_only_role(l()))
         } else if self.reply_target.is_none() {
-            Some(Self::NO_REPLY_TARGET)
+            Some(s::thread_no_reply_target(l()))
         } else {
             None
         }
@@ -352,15 +348,13 @@ impl PickedAttachment {
     /// constants checked, so the words cannot fall behind them.
     pub fn problem(&self, held: usize) -> Option<String> {
         if held >= MAX_ATTACHMENTS {
-            Some(format!(
-                "You can attach up to {MAX_ATTACHMENTS} images to one message."
-            ))
+            Some(s::thread_too_many_attachments(l(), MAX_ATTACHMENTS as i64))
         } else if !ATTACHMENT_TYPES.contains(&self.mime_type.as_str()) {
-            Some(UNSUPPORTED_ATTACHMENT.to_owned())
+            Some(s::failure_unsupported_attachment(l()).to_owned())
         } else if self.bytes.is_empty() || self.bytes.len() > MAX_ATTACHMENT_BYTES {
-            Some(format!(
-                "Attachments must be between 1 byte and {} MB.",
-                MAX_ATTACHMENT_BYTES / (1024 * 1024)
+            Some(s::thread_attachment_size(
+                l(),
+                (MAX_ATTACHMENT_BYTES / (1024 * 1024)) as i64,
             ))
         } else {
             None
@@ -573,7 +567,8 @@ impl SignedIn {
             ThreadEvent::LoadOlder => load_older(screen, tickets),
             ThreadEvent::Attach(picked) => attach(screen, &capabilities, picked, tickets),
             ThreadEvent::AttachFailed if screen.controls(&capabilities).can_attach => {
-                screen.composer.failure = Some(FailureText::final_(UNREADABLE_ATTACHMENT));
+                screen.composer.failure =
+                    Some(FailureText::final_(s::failure_unreadable_attachment(l())));
                 Vec::new()
             }
             ThreadEvent::RemoveAttachment(url) => {
@@ -772,7 +767,7 @@ fn title(inbox: &InboxScreen, thread_key: &str, thread: &ThreadRef) -> String {
     }
     match thread {
         ThreadRef::Address(address) => address.clone(),
-        ThreadRef::Contact(_) => UNTITLED.to_owned(),
+        ThreadRef::Contact(_) => s::thread_untitled(l()).to_owned(),
     }
 }
 

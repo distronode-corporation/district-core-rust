@@ -35,6 +35,7 @@ use district_model::{
 
 use crate::model::{Effect, Ticket, Tickets};
 use crate::signed_in::SignedIn;
+use crate::text::{l, s};
 
 /// The identity prefix of the note-taking Companion as it joined rooms before
 /// it joined as an agent. The web still treats it as one, and so does this.
@@ -282,20 +283,17 @@ impl DisconnectReason {
     pub fn message(self) -> Option<&'static str> {
         match self {
             Self::Left | Self::RoomEnded => None,
-            Self::ConnectFailed => Some("The room could not be joined. Try again."),
-            Self::Removed => Some("You were removed from the room."),
-            Self::JoinedElsewhere => Some("You joined this room from somewhere else."),
-            Self::ConnectionLost | Self::Other => {
-                Some("The connection was lost and could not be resumed.")
-            }
-            Self::Unavailable => Some(Self::UNAVAILABLE),
+            Self::ConnectFailed => Some(s::media_connect_failed(l())),
+            Self::Removed => Some(s::media_removed(l())),
+            Self::JoinedElsewhere => Some(s::media_joined_elsewhere(l())),
+            Self::ConnectionLost | Self::Other => Some(s::media_connection_lost(l())),
+            Self::Unavailable => Some(s::media_unavailable(l())),
         }
     }
 
     /// What to tell the member when this build cannot join a call or a room at
     /// all. Said plainly, because "try again" would never help.
-    pub const UNAVAILABLE: &'static str =
-        "Calls and meeting rooms are not available in this build of District AI.";
+    pub const UNAVAILABLE: &'static str = district_l10n::english::MEDIA_UNAVAILABLE;
 }
 
 /// One remote participant, as much of them as the screens need.
@@ -429,13 +427,12 @@ pub(crate) enum MediaChange {
 
 impl MediaSession {
     /// The line while the connection is being resumed.
-    pub const RECONNECTING: &'static str = "Reconnecting. The call is still here.";
+    pub const RECONNECTING: &'static str = district_l10n::english::MEDIA_RECONNECTING;
     /// The line after media could not be decrypted.
-    pub const ENCRYPTION_FAILED: &'static str = "Someone's audio could not be decrypted, so you \
-        may not hear them. Leaving and joining again may fix it.";
+    pub const ENCRYPTION_FAILED: &'static str = district_l10n::english::MEDIA_ENCRYPTION_FAILED;
     /// The line when the microphone could not be used.
     pub const MICROPHONE_UNAVAILABLE: &'static str =
-        "Your microphone could not be used, so nobody can hear you.";
+        district_l10n::english::MEDIA_MICROPHONE_UNAVAILABLE;
 
     fn new(id: Ticket, owner: MediaOwner) -> Self {
         Self {
@@ -525,11 +522,11 @@ impl MediaSession {
     /// The line to show over the session, or `None` when all is well.
     pub fn notice(&self) -> Option<&'static str> {
         if self.connection == MediaConnection::Reconnecting {
-            Some(Self::RECONNECTING)
+            Some(s::media_reconnecting(l()))
         } else if self.encryption_failed {
-            Some(Self::ENCRYPTION_FAILED)
+            Some(s::media_encryption_failed(l()))
         } else if self.microphone == MicrophoneState::Unavailable {
-            Some(Self::MICROPHONE_UNAVAILABLE)
+            Some(s::media_microphone_unavailable(l()))
         } else {
             None
         }

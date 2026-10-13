@@ -17,6 +17,37 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Added
+
+- `district-l10n`, the words the core writes, in English and Canadian French:
+  `Locale` and `Locale::from_tags`, the generated catalogs (`strings`, and the
+  English of each as a constant in `english`), `api_error_text` for every error
+  code the service sends, `wire_label`, `region_long_label` and
+  `placeholder_label` for the values it stores in English, and `format` (money,
+  dates, times, durations, numbers, percentages, lists, plural categories) held
+  to the service's own formatting vectors. There is no French yet:
+  `FR_COMPLETE` is false and the French arm carries the English.
+- `CoreConfig::locale` and `Model::set_locale`. `district_core::Locale` and
+  `district_core::l10n` re-export the new crate.
+- `currency` on `BillingSubscription` and `BillingInvoice`, read when the service
+  names one (it does not yet), and `format_money`, which writes an amount in it.
+  With no currency, `format_cents` writes what it always has.
+- `NumberSearchForm::number_types` and `SupportForm::kinds`, the localized
+  counterparts of `NUMBER_TYPES` and `KINDS`.
+- `contracts/i18n/`, a third vendored set.
+
+### Changed
+
+- Every sentence and label the core writes comes from `district-l10n`'s catalog,
+  in the configured language. The English is unchanged, byte for byte, and every
+  public string constant keeps its English value.
+- In French, a refusal is never shown in the service's English: a known error code
+  reads as the catalog's sentence for it, anything else as the screen's own words.
+
+### Breaking
+
+- `CoreConfig` has a new field, `locale` (English is `Locale::En`).
+
 ## [3.1.1] - 2026-10-13
 
 ### Fixed

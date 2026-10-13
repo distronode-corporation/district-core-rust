@@ -32,10 +32,11 @@ use district_model::{
 };
 use uuid::Uuid;
 
-use crate::failure::{FailureText, UNREADABLE_ATTACHMENT};
+use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 use crate::thread::PickedAttachment;
 
 /// The shortest subject the service takes, in characters after trimming.
@@ -68,9 +69,9 @@ pub fn desk_status(status: &str) -> Option<DeskTicketStatus> {
 /// A status's label.
 pub fn desk_status_label(status: DeskTicketStatus) -> &'static str {
     match status {
-        DeskTicketStatus::Open => "Open",
-        DeskTicketStatus::Waiting => "Waiting on the customer",
-        DeskTicketStatus::Resolved => "Resolved",
+        DeskTicketStatus::Open => s::desk_status_open(l()),
+        DeskTicketStatus::Waiting => s::desk_status_waiting(l()),
+        DeskTicketStatus::Resolved => s::desk_status_resolved(l()),
     }
 }
 
@@ -79,9 +80,9 @@ pub fn desk_status_label(status: DeskTicketStatus) -> &'static str {
 /// claim the message came from the workspace.
 pub fn desk_author_label(author_type: &str) -> &'static str {
     match author_type {
-        "team" => "Your team",
-        "assistant" => "Receptionist",
-        _ => "Customer",
+        "team" => s::desk_author_team(l()),
+        "assistant" => s::desk_author_assistant(l()),
+        _ => s::desk_author_customer(l()),
     }
 }
 
@@ -141,20 +142,19 @@ pub enum DeskQueue {
 
 impl DeskQueue {
     /// The heading for a desk that is off.
-    pub const OFF_TITLE: &'static str = "The help desk is off";
+    pub const OFF_TITLE: &'static str = district_l10n::english::DESK_OFF_TITLE;
     /// The body for a desk that is off.
-    pub const OFF_BODY: &'static str =
-        "While the desk is off, no tickets are recorded. Turn it on to start taking them.";
+    pub const OFF_BODY: &'static str = district_l10n::english::DESK_OFF_BODY;
     /// The button that turns it on.
-    pub const TURN_ON: &'static str = "Turn on the help desk";
+    pub const TURN_ON: &'static str = district_l10n::english::DESK_TURN_ON;
     /// The heading for an empty queue on a desk that is on.
-    pub const EMPTY_TITLE: &'static str = "No tickets yet";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::DESK_EMPTY_TITLE;
     /// The body for an empty queue.
-    pub const EMPTY_BODY: &'static str = "Tickets your customers raise will appear here.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::DESK_EMPTY_BODY;
     /// The line when the filter matches nothing in a queue that has tickets.
-    pub const NONE_MATCHING: &'static str = "No tickets with this status.";
+    pub const NONE_MATCHING: &'static str = district_l10n::english::DESK_NONE_MATCHING;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load the help desk";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::DESK_FAILED_TITLE;
 }
 
 /// The queue read.
@@ -245,8 +245,8 @@ impl DeskSubmitted {
     /// The confirmation.
     pub fn message(&self) -> String {
         match self {
-            Self::Raised(reference) => format!("Ticket {reference} is open."),
-            Self::AlreadyRaised => "That ticket was already raised.".to_owned(),
+            Self::Raised(reference) => s::desk_ticket_raised(l(), reference),
+            Self::AlreadyRaised => s::desk_ticket_already_raised(l()).to_owned(),
         }
     }
 }
@@ -333,7 +333,7 @@ pub enum DeskSettingsView {
 
 impl DeskSettingsView {
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load the desk's settings";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::DESK_SETTINGS_FAILED_TITLE;
 }
 
 /// The settings form, built from the settings read.
@@ -368,8 +368,7 @@ pub struct DeskSettingsForm {
 
 impl DeskSettingsForm {
     /// The note for [`logo_file_kept`](Self::logo_file_kept).
-    pub const LOGO_FILE_KEPT: &'static str = "The logo is no longer shown to customers, but its \
-        file could not be deleted and may still be reachable at its address.";
+    pub const LOGO_FILE_KEPT: &'static str = district_l10n::english::DESK_LOGO_FILE_KEPT;
 
     fn from_settings(settings: DeskSettings) -> Self {
         Self {
@@ -974,7 +973,7 @@ fn settings_event(
             }];
         }
         DeskEvent::LogoUnreadable if !form.logo_busy => {
-            form.logo_failure = Some(FailureText::final_(UNREADABLE_ATTACHMENT));
+            form.logo_failure = Some(FailureText::final_(s::failure_unreadable_attachment(l())));
         }
         DeskEvent::DeleteLogo if !writing && form.stored.public_logo_url.is_some() => {
             form.logo_busy = true;

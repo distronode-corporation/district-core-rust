@@ -8,98 +8,23 @@
 //! from here.
 
 use district_api::{
-    ApiError, CODE_REGIONS_DEGRADED, FALLBACK_MESSAGE, RetryReason, TransportKind,
-    UnauthorizedReason,
+    ApiError, CODE_REGIONS_DEGRADED, ErrorDetail, RetryReason, TransportKind, UnauthorizedReason,
 };
+use district_l10n::{Locale, api_error_text};
 use district_live::LiveError;
 use district_model::{CODE_LAST_AGENCY_MEMBER, CODE_MEMBER_EXISTS};
 
 use crate::session::SessionEnd;
-
-const SIGNED_OUT: &str = "Your session has ended.";
-const REGIONS_DEGRADED: &str =
-    "A region is unreachable, so this could not be loaded. Your account has not changed.";
-pub(crate) const OFFLINE: &str = "Could not reach District AI. Check your connection.";
-const NOT_JSON: &str = "Could not reach District AI. If this network asks you to sign in, as \
-    hotel and public networks often do, sign in to it and try again.";
-const REDIRECTED: &str = "Could not reach District AI: the request was redirected. If this \
-    network asks you to sign in, sign in to it and try again.";
-const UNEXPECTED_RESPONSE: &str = "District AI sent a response this version of the app does not \
-    understand. Updating the app should fix it.";
-const SERVER: &str = "Something went wrong on our side. Please try again shortly.";
-pub(crate) const RATE_LIMITED: &str = "Too many requests. Wait a moment and try again.";
-const FORBIDDEN: &str = "Your role in this workspace does not allow this.";
-const NOT_FOUND: &str = "That could not be found. It may have been removed.";
-const REFUSED_NOT_RETRIED: &str = "District AI did not accept that just now. Please try again.";
-const APP_BUG: &str = "Something went wrong in the app. Please report it if it keeps happening.";
-const KEYRING_UNAVAILABLE: &str = "Your sign-in could not be read because no keyring is \
-    available. Start your keyring (for example GNOME Keyring or KeePassXC), then try again.";
-const KEYRING_LOCKED: &str = "Your keyring is locked. Unlock it, then try again.";
-const STORAGE_FAILED: &str =
-    "Your sign-in could not be read or saved on this computer. Please try again.";
-const LIVE_FORBIDDEN: &str = "Live updates are not available to you in this workspace. New \
-    calls and messages appear when you refresh.";
-const LIVE_UNUSABLE: &str = "Live updates could not be started, so new calls and messages \
-    appear when you refresh. Updating the app may fix it.";
-pub(crate) const UNSUPPORTED_ATTACHMENT: &str =
-    "Only JPEG, PNG, GIF or WebP images can be attached.";
-pub(crate) const UNREADABLE_ATTACHMENT: &str =
-    "That image could not be read. Try picking it again.";
-/// Turning booking pages on, refused by the service's list of workspaces that
-/// may have them (a 403 from that route is this, not the member's role).
-pub(crate) const SCHEDULING_NOT_OFFERED: &str = "Booking pages are not offered to this workspace.";
-/// Turning booking pages on, refused because it was tried too often: the budget
-/// is a few attempts an hour for the whole workspace.
-pub(crate) const SCHEDULING_TOO_MANY: &str = "Booking pages were turned on several times in the \
-    last hour for this workspace. Try again later.";
-/// Setting up booking pages ran and failed, and the service gave no reason.
-pub(crate) const SCHEDULING_SETUP_FAILED: &str =
-    "Setting up booking pages did not finish, and no reason was given.";
-/// The web hand-off refused the session it was asked with (a 403 there is the
-/// sign-in, not the role).
-pub(crate) const HAND_OFF_REFUSED: &str = "District AI could not confirm your sign-in for the \
-    web. Sign out, sign in again, and try again.";
-/// The web hand-off asked for too often: its budget is per account, per minute.
-pub(crate) const HAND_OFF_TOO_MANY: &str =
-    "The web was opened several times just now. Wait a moment and try again.";
-/// A hand-off link that is not on the service's own address. It carries a
-/// sign-in, so it is not opened.
-pub(crate) const HAND_OFF_ELSEWHERE: &str = "District AI sent a sign-in link for another \
-    address, so it was not opened. Updating the app may fix it.";
-/// The service asks for a hand-off bound to the browser, and this one was
-/// asked for without: the browser did not answer the app in time, or the app
-/// is too old to bind one. Pressing again binds it if the browser answers.
-pub(crate) const HAND_OFF_UPDATE_NEEDED: &str = "District AI now needs your browser to answer \
-    the app before it opens the web, and it did not. Try again, and let the browser open \
-    District AI if it asks. If this keeps happening, update the app.";
-/// The service refused the nonce the browser's answer carried. A fresh
-/// hand-off gets a fresh one.
-pub(crate) const HAND_OFF_NONCE_REFUSED: &str = "District AI could not confirm the browser \
-    that was opened for the web. Please try again.";
-/// The billing hand-off refused the page it was asked to land on. The app
-/// builds only the shapes the service admits, so this is a service that has
-/// changed them.
-pub(crate) const HAND_OFF_PAGE_REFUSED: &str = "District AI did not accept the page this \
-    version of the app asked to open. Updating the app should fix it.";
-/// The app could not show a purchase page inside its window. Pressing again
-/// opens it in the browser.
-pub(crate) const PURCHASE_NOT_SHOWN: &str = "District AI could not show that page in this \
-    window. Try again, and it opens in your browser.";
-/// An audition credential with no encryption passphrase, or for a room that is
-/// not an audition room. It is not joined.
-pub(crate) const PREVIEW_UNENCRYPTED: &str = "District AI sent an audition that could not be \
-    joined securely, so it was not started. Updating the app may fix it.";
-/// Adding an address that is already a member, when the service gave no words.
-const MEMBER_EXISTS: &str = "That address is already a member of this workspace.";
-/// A change that would leave no agency member, when the service gave no words.
-const LAST_AGENCY_MEMBER: &str = "Every workspace needs at least one agency member, so this \
-    change was not made.";
+use crate::text::{l, s};
 
 /// What to tell the user about one failure.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct FailureText {
-    /// The sentence to show. The service's own wording where it wrote one for a
-    /// person to read (a 4xx), this app's otherwise. Never the body of a 5xx,
+    /// The sentence to show, in the language the core writes in. In English,
+    /// the service's own wording where it wrote one for a person to read (a
+    /// 4xx), this app's otherwise. In French, the sentence for the service's
+    /// error code where it sent one this build knows, this app's otherwise:
+    /// never the service's wording, which is English. Never the body of a 5xx,
     /// which can carry internal detail nobody can act on.
     pub message: String,
     /// The regions that did not answer, when that was the cause, so the screen
@@ -118,43 +43,45 @@ impl FailureText {
     pub fn from_api_error(error: &ApiError) -> Self {
         match error {
             ApiError::Unauthorized(UnauthorizedReason::RefusedNotRetried) => {
-                Self::retryable(REFUSED_NOT_RETRIED)
+                Self::retryable(s::failure_refused_not_retried(l()))
             }
             ApiError::Unauthorized(_) => {
                 let end = SessionEnd::from_api_error(error);
                 Self {
                     session_ended: end,
-                    ..Self::final_(SIGNED_OUT)
+                    ..Self::final_(s::failure_signed_out(l()))
                 }
             }
-            ApiError::Forbidden(detail) => Self::final_(or_ours(&detail.message, FORBIDDEN)),
-            ApiError::NotFound(detail) => Self::final_(or_ours(&detail.message, NOT_FOUND)),
+            ApiError::Forbidden(detail) => Self::final_(or_ours(detail, s::failure_forbidden(l()))),
+            ApiError::NotFound(detail) => Self::final_(or_ours(detail, s::failure_not_found(l()))),
             ApiError::Conflict(detail) | ApiError::Rejected { detail, .. } => {
-                Self::retryable(or_ours(&detail.message, FALLBACK_MESSAGE))
+                Self::retryable(or_ours(detail, s::failure_fallback(l())))
             }
             ApiError::RateLimited { detail, .. } => {
-                Self::retryable(or_ours(&detail.message, RATE_LIMITED))
+                Self::retryable(or_ours(detail, s::failure_rate_limited(l())))
             }
             ApiError::TokenUnavailable(reason) => Self::from_retry_reason(*reason),
             ApiError::Envelope { code, detail, .. } if code == CODE_REGIONS_DEGRADED => Self {
                 degraded_regions: detail.degraded_regions.clone(),
-                ..Self::retryable(REGIONS_DEGRADED)
+                ..Self::retryable(s::failure_regions_degraded(l()))
             },
             ApiError::Envelope { status, detail, .. } if *status < 500 => {
-                Self::retryable(or_ours(&detail.message, FALLBACK_MESSAGE))
+                Self::retryable(or_ours(detail, s::failure_fallback(l())))
             }
-            ApiError::Envelope { .. } | ApiError::Server { .. } => Self::retryable(SERVER),
-            ApiError::Redirect { .. } => Self::retryable(REDIRECTED),
+            ApiError::Envelope { .. } | ApiError::Server { .. } => {
+                Self::retryable(s::failure_server(l()))
+            }
+            ApiError::Redirect { .. } => Self::retryable(s::failure_redirected(l())),
             ApiError::Offline(transport) => match transport.kind {
-                TransportKind::NotJson { .. } => Self::retryable(NOT_JSON),
+                TransportKind::NotJson { .. } => Self::retryable(s::failure_not_json(l())),
                 TransportKind::Connect | TransportKind::Timeout | TransportKind::Other => {
-                    Self::retryable(OFFLINE)
+                    Self::retryable(s::failure_offline(l()))
                 }
             },
             ApiError::Decode { .. } | ApiError::Unconfirmed { .. } => {
-                Self::final_(UNEXPECTED_RESPONSE)
+                Self::final_(s::failure_unexpected_response(l()))
             }
-            ApiError::InvalidRequest(_) => Self::final_(APP_BUG),
+            ApiError::InvalidRequest(_) => Self::final_(s::failure_app_bug(l())),
         }
     }
 
@@ -166,12 +93,12 @@ impl FailureText {
     pub fn from_member_error(error: &ApiError) -> Self {
         match error {
             ApiError::Conflict(detail) if detail.code.as_deref() == Some(CODE_MEMBER_EXISTS) => {
-                Self::final_(or_ours(&detail.message, MEMBER_EXISTS))
+                Self::final_(or_ours(detail, s::failure_member_exists(l())))
             }
             ApiError::Conflict(detail)
                 if detail.code.as_deref() == Some(CODE_LAST_AGENCY_MEMBER) =>
             {
-                Self::final_(or_ours(&detail.message, LAST_AGENCY_MEMBER))
+                Self::final_(or_ours(detail, s::failure_last_agency_member(l())))
             }
             other => Self::from_api_error(other),
         }
@@ -181,11 +108,11 @@ impl FailureText {
     /// reason has its own remedy, and the sentence names it.
     pub fn from_retry_reason(reason: RetryReason) -> Self {
         Self::retryable(match reason {
-            RetryReason::RateLimited => RATE_LIMITED,
-            RetryReason::Offline => OFFLINE,
-            RetryReason::SecretStoreUnavailable => KEYRING_UNAVAILABLE,
-            RetryReason::SecretStoreLocked => KEYRING_LOCKED,
-            RetryReason::StorageFailed => STORAGE_FAILED,
+            RetryReason::RateLimited => s::failure_rate_limited(l()),
+            RetryReason::Offline => s::failure_offline(l()),
+            RetryReason::SecretStoreUnavailable => s::failure_keyring_unavailable(l()),
+            RetryReason::SecretStoreLocked => s::failure_keyring_locked(l()),
+            RetryReason::StorageFailed => s::failure_storage_failed(l()),
         })
     }
 
@@ -195,9 +122,9 @@ impl FailureText {
     pub fn from_live_error(error: &LiveError) -> Self {
         match error {
             LiveError::Mint(error) => Self::from_api_error(error),
-            LiveError::Forbidden { .. } => Self::final_(LIVE_FORBIDDEN),
+            LiveError::Forbidden { .. } => Self::final_(s::failure_live_forbidden(l())),
             LiveError::InvalidGrant | LiveError::Endpoint(_) | LiveError::Protocol => {
-                Self::final_(LIVE_UNUSABLE)
+                Self::final_(s::failure_live_unusable(l()))
             }
         }
     }
@@ -205,7 +132,7 @@ impl FailureText {
     /// "Affected regions: EU, APAC", or `None` when no region was named.
     pub fn regions_line(&self) -> Option<String> {
         (!self.degraded_regions.is_empty())
-            .then(|| format!("Affected regions: {}", regions(&self.degraded_regions)))
+            .then(|| s::failure_affected_regions(l(), &regions(&self.degraded_regions)))
     }
 
     /// A failure a retry may fix.
@@ -222,7 +149,7 @@ impl FailureText {
     /// call in it, a create with no new id. The service and this build disagree
     /// about the answer's shape.
     pub(crate) fn unexpected() -> Self {
-        Self::final_(UNEXPECTED_RESPONSE)
+        Self::final_(s::failure_unexpected_response(l()))
     }
 
     /// A failure a retry cannot fix.
@@ -234,9 +161,23 @@ impl FailureText {
     }
 }
 
-/// The service's message when it sent one, else `ours`.
-fn or_ours(theirs: &Option<String>, ours: &str) -> String {
-    theirs.clone().unwrap_or_else(|| ours.to_owned())
+/// What to say about a refusal the service may have worded itself. In English,
+/// its own sentence when it wrote one, else `ours`. In French never its
+/// sentence, which is English: the catalog's sentence for its code when the
+/// code is one the service's contract has, else `ours`.
+fn or_ours(detail: &ErrorDetail, ours: &str) -> String {
+    let theirs = match l() {
+        Locale::En => detail.message.clone(),
+        Locale::FrCa => detail.code.as_deref().and_then(|code| {
+            let regions: Vec<String> = detail
+                .degraded_regions
+                .iter()
+                .map(|r| r.to_uppercase())
+                .collect();
+            api_error_text(Locale::FrCa, code, &regions)
+        }),
+    };
+    theirs.unwrap_or_else(|| ours.to_owned())
 }
 
 /// Region codes as a reader sees them: `EU, APAC`.

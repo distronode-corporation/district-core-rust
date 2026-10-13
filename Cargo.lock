@@ -627,6 +627,7 @@ dependencies = [
  "base64 0.22.1",
  "district-api",
  "district-auth",
+ "district-l10n",
  "district-live",
  "district-model",
  "serde",
@@ -649,6 +650,13 @@ dependencies = [
  "tokio",
  "toml",
  "uuid",
+]
+
+[[package]]
+name = "district-l10n"
+version = "3.1.1"
+dependencies = [
+ "serde_json",
 ]
 
 [[package]]

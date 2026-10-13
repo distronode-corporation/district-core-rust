@@ -73,10 +73,9 @@ pub struct VoiceStudioSection {
 
 impl VoiceStudioSection {
     /// The title of a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load Voice Studio";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::VOICE_STUDIO_FAILED_TITLE;
     /// The line when a save landed and the read after it failed.
-    pub const SAVED_STALE: &'static str = "Saved, but Voice Studio could not be read back. Read \
-        it again before changing anything else.";
+    pub const SAVED_STALE: &'static str = district_l10n::english::VOICE_STUDIO_SAVED_STALE;
 
     fn loading() -> Self {
         Self {

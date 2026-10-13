@@ -18,6 +18,7 @@ mod failure;
 mod hq;
 mod inbox;
 mod knowledge;
+mod l10n;
 mod live;
 mod marketplace;
 mod members;

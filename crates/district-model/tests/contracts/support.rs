@@ -15,6 +15,9 @@ pub enum Set {
     Android,
     /// `contracts/desktop/`: the shapes only this client reads.
     Desktop,
+    /// `contracts/i18n/`: the service's localization facts, which
+    /// `district-l10n` reads. No type here decodes them.
+    I18n,
 }
 
 impl Set {
@@ -24,6 +27,7 @@ impl Set {
         match self {
             Self::Android => "fixtures",
             Self::Desktop => "desktop",
+            Self::I18n => "i18n",
         }
     }
 

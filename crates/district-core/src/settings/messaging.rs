@@ -44,6 +44,7 @@ use super::SaveState;
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// The channels a sender can be set for, which are the service's own list.
 pub const MESSAGING_CHANNELS: [MessagingChannel; 3] = [
@@ -120,14 +121,14 @@ impl CredentialField {
     /// The box's label.
     pub fn label(self) -> &'static str {
         match self {
-            Self::AccountSid => "Account SID",
-            Self::AuthToken => "Auth token",
-            Self::ProjectId => "Project ID",
-            Self::KeyId => "Key ID",
-            Self::KeySecret => "Key secret",
-            Self::ApplicationKey => "Application key",
-            Self::ApplicationSecret => "Application secret",
-            Self::ApiKey => "API key",
+            Self::AccountSid => s::messaging_field_account_sid(l()),
+            Self::AuthToken => s::messaging_field_auth_token(l()),
+            Self::ProjectId => s::messaging_field_project_id(l()),
+            Self::KeyId => s::messaging_field_key_id(l()),
+            Self::KeySecret => s::messaging_field_key_secret(l()),
+            Self::ApplicationKey => s::messaging_field_application_key(l()),
+            Self::ApplicationSecret => s::messaging_field_application_secret(l()),
+            Self::ApiKey => s::messaging_field_api_key(l()),
         }
     }
 }
@@ -144,17 +145,17 @@ pub fn provider_label(provider: MessagingProvider) -> &'static str {
 /// Whose carrier account a source is.
 pub fn credential_source_label(source: MessagingCredentialSource) -> &'static str {
     match source {
-        MessagingCredentialSource::Byok => "Your own carrier account",
-        MessagingCredentialSource::Managed => "Managed by Distronode",
+        MessagingCredentialSource::Byok => s::messaging_source_byok(l()),
+        MessagingCredentialSource::Managed => s::messaging_source_managed(l()),
     }
 }
 
 /// A channel's name.
 pub fn channel_label(channel: MessagingChannel) -> &'static str {
     match channel {
-        MessagingChannel::Sms => "SMS",
-        MessagingChannel::Voice => "Voice",
-        MessagingChannel::Whatsapp => "WhatsApp",
+        MessagingChannel::Sms => s::messaging_channel_sms(l()),
+        MessagingChannel::Voice => s::messaging_channel_voice(l()),
+        MessagingChannel::Whatsapp => s::messaging_channel_whatsapp(l()),
     }
 }
 
@@ -223,15 +224,14 @@ pub struct MessagingForm {
 
 impl MessagingForm {
     /// The line under the secret boxes of an existing account.
-    pub const SECRET_KEEP: &'static str = "Leave blank to keep the saved value.";
+    pub const SECRET_KEEP: &'static str = district_l10n::english::MESSAGING_SECRET_KEEP;
     /// The warning after changing an existing account's carrier.
-    pub const PROVIDER_SWITCH: &'static str = "Changing the carrier drops the saved keys, so \
-        enter the new carrier's keys before saving.";
+    pub const PROVIDER_SWITCH: &'static str = district_l10n::english::MESSAGING_PROVIDER_SWITCH;
     /// The line when the check cannot be offered yet.
-    pub const TEST_NEEDS_EVERY_FIELD: &'static str = "Fill in every key to check them.";
+    pub const TEST_NEEDS_EVERY_FIELD: &'static str =
+        district_l10n::english::MESSAGING_TEST_NEEDS_EVERY_FIELD;
     /// The line about the numbers box.
-    pub const NUMBERS_HELP: &'static str = "Leave this alone to keep the numbers as they are. \
-        Editing it replaces the account's numbers with the ones listed.";
+    pub const NUMBERS_HELP: &'static str = district_l10n::english::MESSAGING_NUMBERS_HELP;
 
     fn create() -> Self {
         Self {
@@ -427,17 +427,13 @@ pub struct MessagingDeleteConfirm {
 
 impl MessagingDeleteConfirm {
     /// The question's heading.
-    pub const TITLE: &'static str = "Remove this carrier account?";
+    pub const TITLE: &'static str = district_l10n::english::MESSAGING_DELETE_TITLE;
     /// The confirming button's label.
-    pub const ACTION: &'static str = "Remove and release";
+    pub const ACTION: &'static str = district_l10n::english::MESSAGING_DELETE_ACTION;
 
     /// What removing does.
     pub fn body(&self) -> String {
-        format!(
-            "\"{}\" is removed, and its phone numbers ({}) are released: another workspace can \
-             then claim a number only this account held.",
-            self.label, self.numbers
-        )
+        s::messaging_delete_body(l(), &self.label, self.numbers as i64)
     }
 }
 
@@ -460,16 +456,13 @@ pub struct MessagingSection {
 
 impl MessagingSection {
     /// The note for a viewer.
-    pub const VIEWER: &'static str = "You have read-only access to this workspace, so carrier \
-        accounts are shown and not changed.";
+    pub const VIEWER: &'static str = district_l10n::english::MESSAGING_VIEWER;
     /// The heading for no accounts.
-    pub const EMPTY_TITLE: &'static str = "No carrier connected";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::MESSAGING_EMPTY_TITLE;
     /// The body for no accounts.
-    pub const EMPTY_BODY: &'static str =
-        "This workspace has no carrier account, so it cannot send texts from its own numbers.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::MESSAGING_EMPTY_BODY;
     /// The note about the owner's mobile number.
-    pub const CREATOR_CELL_HELP: &'static str = "Where the receptionist reaches the \
-        workspace's owner. The saved number is not shown here; typing one replaces it.";
+    pub const CREATOR_CELL_HELP: &'static str = district_l10n::english::MESSAGING_CREATOR_CELL_HELP;
 
     fn loading() -> Self {
         Self {

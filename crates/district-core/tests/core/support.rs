@@ -45,6 +45,7 @@ pub fn config() -> CoreConfig {
         app_version: "0.1.0".to_owned(),
         calls_available: CALLS_AVAILABLE.get(),
         in_app_purchases: IN_APP_PURCHASES.get(),
+        locale: district_core::Locale::En,
     }
 }
 

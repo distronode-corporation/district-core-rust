@@ -27,6 +27,7 @@ use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::purchase::{PlanChoice, PlanTier};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// The web dashboard's billing page, below the service's origin.
 pub const BILLING_WEB_PATH: &str = "/dashboard/district/billing";
@@ -46,20 +47,18 @@ pub struct BillingScreen {
 impl BillingScreen {
     /// The note saying the screen changes nothing, for a member whose role could
     /// manage billing on the web.
-    pub const READ_ONLY: &'static str = "Plan changes, payment methods and cancellations are \
-        made on the District AI website. This screen is read only.";
+    pub const READ_ONLY: &'static str = district_l10n::english::BILLING_READ_ONLY;
     /// The same note for a viewer.
-    pub const READ_ONLY_VIEWER: &'static str = "This screen is read only. Ask an agency or client \
-        member of this workspace to change the plan.";
+    pub const READ_ONLY_VIEWER: &'static str = district_l10n::english::BILLING_READ_ONLY_VIEWER;
     /// The link to the web billing page.
-    pub const WEB_ACTION: &'static str = "Manage billing on the web";
+    pub const WEB_ACTION: &'static str = district_l10n::english::BILLING_WEB_ACTION;
 
     /// The read-only note for a member with `capabilities`.
     pub fn read_only_note(capabilities: &Capabilities) -> &'static str {
         if capabilities.can_change {
-            Self::READ_ONLY
+            s::billing_read_only(l())
         } else {
-            Self::READ_ONLY_VIEWER
+            s::billing_read_only_viewer(l())
         }
     }
 
@@ -104,7 +103,7 @@ pub enum PlanCard {
 
 impl PlanCard {
     /// The heading for a failed read, which is the screen's.
-    pub const FAILED_TITLE: &'static str = "Could not load billing";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::BILLING_FAILED_TITLE;
 }
 
 /// The account's subscriptions and invoices.
@@ -127,20 +126,17 @@ pub enum AccountSection {
 
 impl AccountSection {
     /// The heading for [`Unavailable`](Self::Unavailable).
-    pub const UNAVAILABLE_TITLE: &'static str = "Billing details unavailable";
+    pub const UNAVAILABLE_TITLE: &'static str = district_l10n::english::BILLING_UNAVAILABLE_TITLE;
     /// The body for [`Unavailable`](Self::Unavailable).
-    pub const UNAVAILABLE_BODY: &'static str = "The payment provider could not be reached just \
-        now, so your subscription and invoices are not shown. Your plan and usage above are \
-        current, and nothing about your account has changed.";
+    pub const UNAVAILABLE_BODY: &'static str = district_l10n::english::BILLING_UNAVAILABLE_BODY;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load your subscription and invoices";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::BILLING_ACCOUNT_FAILED_TITLE;
     /// The line for an account with no subscription.
-    pub const NO_SUBSCRIPTION: &'static str = "No subscription is attached to this account.";
+    pub const NO_SUBSCRIPTION: &'static str = district_l10n::english::BILLING_NO_SUBSCRIPTION;
     /// The line for an account with no invoices.
-    pub const NO_INVOICES: &'static str = "No invoices yet.";
+    pub const NO_INVOICES: &'static str = district_l10n::english::BILLING_NO_INVOICES;
     /// The note under a list of invoices that is not all of them.
-    pub const INVOICES_TRUNCATED: &'static str =
-        "Showing your most recent invoices. Older ones are on the website.";
+    pub const INVOICES_TRUNCATED: &'static str = district_l10n::english::BILLING_INVOICES_TRUNCATED;
 }
 
 /// Where the plan's subscription stands.
@@ -174,10 +170,10 @@ impl PlanStatus {
     /// The badge.
     pub fn label(&self) -> &str {
         match self {
-            Self::Active => "Active",
-            Self::PastDue => "Past due",
-            Self::Canceled => "Cancelled",
-            Self::None => "No subscription",
+            Self::Active => s::billing_status_active(l()),
+            Self::PastDue => s::billing_status_past_due(l()),
+            Self::Canceled => s::billing_status_cancelled(l()),
+            Self::None => s::billing_status_none(l()),
             Self::Other(status) => status,
         }
     }
@@ -185,10 +181,8 @@ impl PlanStatus {
     /// What the badge means for the member, when it needs saying.
     pub fn caption(&self) -> Option<&'static str> {
         match self {
-            Self::PastDue => {
-                Some("A payment did not go through. Service continues while it is retried.")
-            }
-            Self::Canceled => Some("This plan will not renew."),
+            Self::PastDue => Some(s::billing_status_past_due_caption(l())),
+            Self::Canceled => Some(s::billing_status_cancelled_caption(l())),
             Self::Active | Self::None | Self::Other(_) => None,
         }
     }
@@ -207,7 +201,7 @@ pub fn plan_name(billing: &WorkspaceBilling) -> &str {
             .into_iter()
             .find(|plan| plan.key() == tier)
             .map_or(tier, |plan| plan.label()),
-        None => "No plan on this workspace",
+        None => s::billing_no_plan(l()),
     }
 }
 
@@ -220,16 +214,10 @@ pub fn overage_note(billing: &WorkspaceBilling) -> Option<&'static str> {
         billing.overage_policy.as_str(),
         billing.overage_cap_exceeded,
     ) {
-        (OVERAGE_POLICY_HARD_CAP, true) => {
-            Some("Calls are being declined: your included minutes are used up.")
-        }
-        (OVERAGE_POLICY_HARD_CAP, false) => Some("Calls stop once your included minutes run out."),
-        (OVERAGE_POLICY_AUTO_BILL, true) => {
-            Some("You are over your included minutes, and the extra is being billed.")
-        }
-        (OVERAGE_POLICY_AUTO_BILL, false) => {
-            Some("Minutes beyond your plan are billed automatically.")
-        }
+        (OVERAGE_POLICY_HARD_CAP, true) => Some(s::billing_overage_hard_cap_exceeded(l())),
+        (OVERAGE_POLICY_HARD_CAP, false) => Some(s::billing_overage_hard_cap(l())),
+        (OVERAGE_POLICY_AUTO_BILL, true) => Some(s::billing_overage_auto_bill_exceeded(l())),
+        (OVERAGE_POLICY_AUTO_BILL, false) => Some(s::billing_overage_auto_bill(l())),
         _ => None,
     }
 }
@@ -252,12 +240,19 @@ pub fn meter_fraction(used: f64, included: i64) -> f64 {
     (used / included as f64).clamp(0.0, 1.0)
 }
 
-/// Cents as dollars, `$249.00`. Nothing the service sends names a currency, so
-/// the symbol is this app's assumption, as the web console's is.
+/// Cents as dollars, `$249.00` (`249,00 $` in French). Nothing the service
+/// sends names a currency yet, so the symbol is this app's assumption, as the
+/// web console's is. [`format_money`] with no currency.
 pub fn format_cents(cents: i64) -> String {
-    let sign = if cents < 0 { "-" } else { "" };
-    let cents = cents.unsigned_abs();
-    format!("{sign}${}.{:02}", cents / 100, cents % 100)
+    format_money(cents, None)
+}
+
+/// An amount in cents in `currency`, the ISO code a subscription or an invoice
+/// names (`usd`, `cad`), the way the service's own pages write it: `CA$249.00`,
+/// `249,00 $ CA`. With no currency it is [`format_cents`]'s `$249.00`, exactly as
+/// this app has always written it.
+pub fn format_money(cents: i64, currency: Option<&str>) -> String {
+    district_l10n::format::price(l(), cents, currency)
 }
 
 /// What an invoice cost: what was paid once it is paid, its total before.

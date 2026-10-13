@@ -8,8 +8,9 @@ use district_auth::{
     AccessClaims, LoginError, Persistence, RevokeStatus, SignOutReport, StoreErrorKind,
 };
 
-use crate::failure::{FailureText, OFFLINE, RATE_LIMITED};
+use crate::failure::FailureText;
 use crate::signed_in::SignedIn;
+use crate::text::{l, s};
 
 /// Where the session is.
 #[derive(Clone, Debug, PartialEq)]
@@ -47,7 +48,7 @@ impl Restoring {
     /// What to tell the user.
     pub fn message(&self) -> String {
         match self.problem {
-            None => "Resuming your session.".to_owned(),
+            None => s::session_resuming(l()).to_owned(),
             Some(reason) => FailureText::from_retry_reason(reason).message,
         }
     }
@@ -114,7 +115,7 @@ impl SessionEnd {
 
     /// The heading for the sign-in screen.
     pub fn title(&self) -> &'static str {
-        "Please sign in again"
+        s::session_ended_title(l())
     }
 
     /// What to tell the user. An interrupted or unanswered refresh ends the
@@ -122,12 +123,12 @@ impl SessionEnd {
     /// look like theft to the service), and is worded as the routine event it is.
     pub fn message(&self) -> &'static str {
         match self {
-            Self::Reauth(ReauthReason::NoSession) => "Sign in to continue.",
+            Self::Reauth(ReauthReason::NoSession) => s::session_sign_in_to_continue(l()),
             Self::Reauth(ReauthReason::InterruptedRefresh | ReauthReason::RefreshUnreachable) => {
-                "Your session ended. Signing in again will restore it."
+                s::session_ended_refresh(l())
             }
             Self::Reauth(ReauthReason::RefreshRejected | ReauthReason::RefreshTokenExpired)
-            | Self::EndedByService => "Your session is no longer valid. Please sign in again.",
+            | Self::EndedByService => s::session_no_longer_valid(l()),
         }
     }
 }
@@ -166,9 +167,9 @@ impl SignInPhase {
     /// What to tell the user.
     pub fn message(self) -> &'static str {
         match self {
-            Self::OpeningBrowser => "Opening your browser to sign in.",
-            Self::WaitingForBrowser => "Waiting for sign-in to finish in your browser.",
-            Self::Exchanging => "Finishing sign-in.",
+            Self::OpeningBrowser => s::session_opening_browser(l()),
+            Self::WaitingForBrowser => s::session_waiting_for_browser(l()),
+            Self::Exchanging => s::session_exchanging(l()),
         }
     }
 }
@@ -191,29 +192,25 @@ impl SignInError {
     /// What to tell the user.
     pub fn message(&self) -> String {
         match self {
-            Self::NoBrowser => "No browser is available, and signing in needs one.".to_owned(),
+            Self::NoBrowser => s::session_no_browser(l()).to_owned(),
             // The code-injection case: a callback this app did not ask for. Said
             // plainly rather than softened into a generic failure.
             Self::Callback(LoginError::StateMismatch | LoginError::NotOurRedirect) => {
-                "Sign-in refused: the response did not match this request.".to_owned()
+                s::session_callback_mismatch(l()).to_owned()
             }
             Self::Callback(LoginError::NoAttemptInProgress) => {
-                "That sign-in link has expired. Sign in again.".to_owned()
+                s::session_callback_expired(l()).to_owned()
             }
-            Self::Callback(LoginError::Denied { reason }) => {
-                format!("Sign-in did not complete ({reason}).")
-            }
+            Self::Callback(LoginError::Denied { reason }) => s::session_denied(l(), reason),
             Self::Callback(LoginError::MissingCode | LoginError::MalformedCallback) => {
-                "Sign-in did not complete. Sign in to try again.".to_owned()
+                s::session_callback_malformed(l()).to_owned()
             }
             Self::Exchange(ExchangeFailure::Rejected) => {
-                "Sign-in expired. Please try again.".to_owned()
+                s::session_exchange_rejected(l()).to_owned()
             }
-            Self::Exchange(ExchangeFailure::RateLimited) => RATE_LIMITED.to_owned(),
-            Self::Exchange(ExchangeFailure::Unreachable) => OFFLINE.to_owned(),
-            Self::UnreadableToken => "District AI sent a sign-in this version of the app does \
-                not understand. Updating the app should fix it."
-                .to_owned(),
+            Self::Exchange(ExchangeFailure::RateLimited) => s::failure_rate_limited(l()).to_owned(),
+            Self::Exchange(ExchangeFailure::Unreachable) => s::failure_offline(l()).to_owned(),
+            Self::UnreadableToken => s::session_unreadable_token(l()).to_owned(),
         }
     }
 }
@@ -335,8 +332,8 @@ impl SignOutOutcome {
     /// The one-line summary.
     pub fn headline(&self) -> &'static str {
         match self.scope {
-            SignOutScope::ThisDevice => "You are signed out.",
-            SignOutScope::Everywhere => "You are signed out on every device.",
+            SignOutScope::ThisDevice => s::session_signed_out(l()),
+            SignOutScope::Everywhere => s::session_signed_out_everywhere(l()),
         }
     }
 
@@ -351,31 +348,19 @@ impl SignOutOutcome {
         if self.scope == SignOutScope::ThisDevice {
             match self.service {
                 ServiceSignOut::Done => {}
-                ServiceSignOut::Deferred => details.push(
-                    "District AI could not be reached, so it will be told the next time the \
-                     app starts."
-                        .to_owned(),
-                ),
-                ServiceSignOut::Stranded(kind) => details.push(format!(
-                    "District AI could not be reached, and the sign-in could not be kept to \
-                     tell it later ({}), so it may stay valid on the service until it expires. \
-                     You can sign this device out from Devices on another device.",
-                    store_problem(kind)
-                )),
-                ServiceSignOut::NotAttempted(kind) => details.push(format!(
-                    "Your stored sign-in could not be read ({}), so District AI was not told. \
-                     It may stay valid on the service until it expires. You can sign this \
-                     device out from Devices on another device.",
-                    store_problem(kind)
-                )),
+                ServiceSignOut::Deferred => {
+                    details.push(s::session_sign_out_deferred(l()).to_owned())
+                }
+                ServiceSignOut::Stranded(kind) => {
+                    details.push(s::session_sign_out_stranded(l(), store_problem(kind)));
+                }
+                ServiceSignOut::NotAttempted(kind) => {
+                    details.push(s::session_sign_out_not_attempted(l(), store_problem(kind)));
+                }
             }
         }
         if let Err(kind) = self.removed {
-            details.push(format!(
-                "Your sign-in could not be removed from this computer ({}), so you may find \
-                 yourself signed in the next time the app starts. Try signing out again.",
-                store_problem(kind)
-            ));
+            details.push(s::session_sign_out_not_removed(l(), store_problem(kind)));
         }
         details
     }
@@ -395,12 +380,8 @@ impl Notice {
     /// What to tell the user.
     pub fn message(&self) -> String {
         match self {
-            Self::SessionNotSaved(kind) => format!(
-                "You are signed in, but your sign-in could not be saved ({}), so you will need \
-                 to sign in again the next time the app starts.",
-                store_problem(*kind)
-            ),
-            Self::NoBrowser => "No browser is available to open that page.".to_owned(),
+            Self::SessionNotSaved(kind) => s::session_not_saved(l(), store_problem(*kind)),
+            Self::NoBrowser => s::session_no_browser_for_page(l()).to_owned(),
         }
     }
 
@@ -416,9 +397,9 @@ impl Notice {
 /// A store failure, as a clause for the sentences above.
 fn store_problem(kind: StoreErrorKind) -> &'static str {
     match kind {
-        StoreErrorKind::Unavailable => "no keyring is available",
-        StoreErrorKind::Locked => "the keyring is locked",
-        StoreErrorKind::Corrupt => "what is stored could not be read",
-        StoreErrorKind::Io => "a file could not be read or written",
+        StoreErrorKind::Unavailable => s::session_store_problem_unavailable(l()),
+        StoreErrorKind::Locked => s::session_store_problem_locked(l()),
+        StoreErrorKind::Corrupt => s::session_store_problem_corrupt(l()),
+        StoreErrorKind::Io => s::session_store_problem_io(l()),
     }
 }

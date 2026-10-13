@@ -1,6 +1,7 @@
-//! The fixture manifest: every vendored file accounted for, in each of the two
-//! sets (`contracts/fixtures/`, the Android app's set, and `contracts/desktop/`,
-//! the shapes only this client reads).
+//! The fixture manifest: every vendored file accounted for, in each of the three
+//! sets (`contracts/fixtures/`, the Android app's set, `contracts/desktop/`, the
+//! shapes only this client reads, and `contracts/i18n/`, the service's
+//! localization facts).
 //!
 //! In each set, each fixture is in exactly one of three lists:
 //!
@@ -62,7 +63,7 @@ pub struct Manifest {
     pub excluded: &'static [Exclusion],
 }
 
-/// Both sets.
+/// Every set.
 pub const SETS: &[Manifest] = &[
     Manifest {
         set: Set::Android,
@@ -79,6 +80,14 @@ pub const SETS: &[Manifest] = &[
         not_yet_modelled: DESKTOP_NOT_YET_MODELLED,
         not_yet_modelled_baseline: DESKTOP_NOT_YET_MODELLED_BASELINE,
         excluded: DESKTOP_EXCLUDED_BY_DECISION,
+    },
+    Manifest {
+        set: Set::I18n,
+        expected: I18N_EXPECTED_FIXTURE_COUNT,
+        implemented: &[],
+        not_yet_modelled: &[],
+        not_yet_modelled_baseline: 0,
+        excluded: I18N_EXCLUDED_BY_DECISION,
     },
 ];
 
@@ -680,6 +689,23 @@ pub const DESKTOP_NOT_YET_MODELLED: &[&str] = &[];
 
 /// Desktop fixtures this client never decodes. None.
 pub const DESKTOP_EXCLUDED_BY_DECISION: &[Exclusion] = &[];
+
+/// Every file in `contracts/i18n/`.
+pub const I18N_EXPECTED_FIXTURE_COUNT: usize = 3;
+
+/// The localization facts. They are not response bodies, so no type here
+/// decodes them; `district-l10n`'s tests read each one.
+pub const I18N_EXCLUDED_BY_DECISION: &[Exclusion] = &[Exclusion {
+    reason: "Not response bodies: the service's error sentences by code, the labels of \
+             the wire values a screen shows, and its formatting vectors. district-l10n \
+             generates its error table and wire labels from the first two and tests its \
+             formatters against the third.",
+    fixtures: &[
+        "api-errors.json",
+        "format-vectors.json",
+        "wire-vocabulary.json",
+    ],
+}];
 
 /// Which list each fixture name appears in, counting repeats: the name, and every
 /// list label it was found under.

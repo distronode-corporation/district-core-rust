@@ -93,6 +93,11 @@
 //! [`CallEngine`] over the media library (in `district-call`), and [`Clock`],
 //! for which [`TokioClock`] will do.
 //!
+//! Every sentence and label a screen shows comes from [`l10n`]'s catalog, in the
+//! language the app chose ([`CoreConfig::locale`]). The public string constants
+//! (`FAILED_TITLE` and the rest) keep their English, from the same catalog;
+//! [`l10n::strings`] has each in the chosen language, under the constant's key.
+//!
 //! No user-facing string in this crate contains an em dash or an en dash.
 
 #![forbid(unsafe_code)]
@@ -130,6 +135,7 @@ mod settings;
 mod signed_in;
 pub mod studio;
 mod support;
+mod text;
 mod thread;
 mod transcript;
 mod workflows;
@@ -145,7 +151,8 @@ pub use analytics::{
 };
 pub use billing::{
     AccountSection, BILLING_WEB_PATH, BillingEvent, BillingScreen, PlanCard, PlanStatus, Renewal,
-    format_cents, invoice_amount, meter_fraction, minutes_used, overage_note, plan_name,
+    format_cents, format_money, invoice_amount, meter_fraction, minutes_used, overage_note,
+    plan_name,
 };
 pub use call::{ActiveCall, CALL_TICK, CallDirection, CallEnd, CallEvent, CallPhase};
 pub use calls::{
@@ -168,6 +175,9 @@ pub use dialer::{
     DialerEvent, DialerScreen, MIN_DIAL_DIGITS, format_call_duration, format_dial_entry,
     format_phone_number,
 };
+/// The words the core writes and their formats, in English and Canadian French.
+pub use district_l10n as l10n;
+pub use district_l10n::Locale;
 pub use failure::FailureText;
 pub use hq::{
     HqAuthor, HqControls, HqEvent, HqMessage, HqNote, HqPhase, HqScreen, HqText, is_web_link,

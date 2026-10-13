@@ -29,6 +29,7 @@ use uuid::Uuid;
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
 
 /// The shortest subject the service takes, in characters after trimming.
 pub const SUPPORT_SUBJECT_MIN: usize = 3;
@@ -57,12 +58,10 @@ impl SupportScreen {
     /// The confirmation of a request raised.
     pub fn submitted_message(filing: &SupportRequestFiling) -> String {
         match filing {
-            SupportRequestFiling::Filed(key) => format!("Request {key} is open with our team."),
-            SupportRequestFiling::Deduplicated => "That request was already sent.".to_owned(),
+            SupportRequestFiling::Filed(key) => s::support_filed(l(), key),
+            SupportRequestFiling::Deduplicated => s::support_deduplicated(l()).to_owned(),
             // A success: a person will see it, and only its reference is to come.
-            SupportRequestFiling::Pending => {
-                "We have your request. Its reference will appear here shortly.".to_owned()
-            }
+            SupportRequestFiling::Pending => s::support_pending(l()).to_owned(),
         }
     }
 }
@@ -83,12 +82,11 @@ pub enum SupportList {
 
 impl SupportList {
     /// The heading for no requests.
-    pub const EMPTY_TITLE: &'static str = "No requests";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::SUPPORT_EMPTY_TITLE;
     /// The body for no requests.
-    pub const EMPTY_BODY: &'static str =
-        "Requests your team raises with Distronode appear here, with our replies.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::SUPPORT_EMPTY_BODY;
     /// The heading for a failed read.
-    pub const FAILED_TITLE: &'static str = "Could not load your support requests";
+    pub const FAILED_TITLE: &'static str = district_l10n::english::SUPPORT_FAILED_TITLE;
 }
 
 /// The requests read.
@@ -104,7 +102,7 @@ pub struct SupportRequests {
 
 impl SupportRequests {
     /// The note for a list at the service's cap.
-    pub const CAPPED: &'static str = "Showing the 100 most recent requests.";
+    pub const CAPPED: &'static str = district_l10n::english::SUPPORT_CAPPED;
 
     /// The requests still open, by the status category, never the status's
     /// name, which the support desk words in its own language.
@@ -173,10 +171,32 @@ impl Default for SupportForm {
 impl SupportForm {
     /// The three kinds, each with its label.
     pub const KINDS: [(SupportRequestKind, &'static str); 3] = [
-        (SupportRequestKind::Problem, "Something is broken"),
-        (SupportRequestKind::Question, "A question"),
-        (SupportRequestKind::Suggestion, "A suggestion"),
+        (
+            SupportRequestKind::Problem,
+            district_l10n::english::SUPPORT_KIND_PROBLEM,
+        ),
+        (
+            SupportRequestKind::Question,
+            district_l10n::english::SUPPORT_KIND_QUESTION,
+        ),
+        (
+            SupportRequestKind::Suggestion,
+            district_l10n::english::SUPPORT_KIND_SUGGESTION,
+        ),
     ];
+
+    /// The three kinds, each with its label. [`KINDS`](Self::KINDS) holds the
+    /// same in English.
+    pub fn kinds() -> [(SupportRequestKind, &'static str); 3] {
+        [
+            (SupportRequestKind::Problem, s::support_kind_problem(l())),
+            (SupportRequestKind::Question, s::support_kind_question(l())),
+            (
+                SupportRequestKind::Suggestion,
+                s::support_kind_suggestion(l()),
+            ),
+        ]
+    }
 
     /// Whether the form can be sent, by the service's own bounds.
     pub fn can_submit(&self) -> bool {
@@ -225,10 +245,9 @@ pub struct SupportRequestScreen {
 
 impl SupportRequestScreen {
     /// The question before closing.
-    pub const CLOSE_QUESTION: &'static str = "Mark this request as resolved? Our team is told, and \
-        it cannot be reopened from here. You can still reply to take it up again.";
+    pub const CLOSE_QUESTION: &'static str = district_l10n::english::SUPPORT_CLOSE_QUESTION;
     /// The confirming button's label.
-    pub const CLOSE_ACTION: &'static str = "Mark as resolved";
+    pub const CLOSE_ACTION: &'static str = district_l10n::english::SUPPORT_CLOSE_ACTION;
 
     /// The request, once read.
     pub fn detail(&self) -> Option<&SupportRequestDetail> {
@@ -255,7 +274,7 @@ impl SupportRequestScreen {
 
     /// The confirmation of a close.
     pub fn closed_message(status: &str) -> String {
-        format!("Closed as {status}.")
+        s::support_closed_as(l(), status)
     }
 }
 

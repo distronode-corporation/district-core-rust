@@ -39,14 +39,22 @@ crates/district-call/     The call engine: `LiveKitCallEngine`, behind the
                           links libwebrtc; without it a build has
                           `UnavailableCallEngine`, which joins nothing and says
                           so. See "Building with calls" below.
+crates/district-l10n/     The words the core writes, in English and Canadian
+                          French: the locale, the catalogs in catalog/ and the
+                          Rust generated from them, the service's error sentences
+                          and wire value labels, and the number, money, date and
+                          duration formats. See "Strings and French" below.
 contracts/                What these crates are checked against: the server's
                           recorded responses, the Android set and the desktop-only
-                          set (vendored and sanitised by sync-contracts.py), the
+                          set, and its localization facts in i18n/ (vendored and
+                          sanitised by sync-contracts.py), the
                           Android app's endpoint snapshot (sync-endpoints.py), and
                           the brand colours from the design tokens
                           (sync-palette.py).
-scripts/                  check-version.py, check-public-hygiene.py and
-                          check-coverage.py, run by CI; fetch-libwebrtc.sh, run by
+tools/l10n/               The catalog tools (l10n.py, frcheck.py), vendored from
+                          the server repository by `l10n.py vendor`.
+scripts/                  check-version.py, check-public-hygiene.py,
+                          check-coverage.py and gen-l10n.py, run by CI; fetch-libwebrtc.sh, run by
                           voice.yml and by hand for a build with calls;
                           sync-contracts.py, sync-endpoints.py and
                           sync-palette.py (which share _common.py), run by hand,
@@ -298,7 +306,7 @@ why.
 ## Contract fixtures
 
 `contracts/` holds JSON bodies recorded from the District AI server by tests in the
-server repository, in two sets. `contracts/fixtures/` is the Android app's set,
+server repository, in three sets. `contracts/fixtures/` is the Android app's set,
 recorded from the server's own route handlers, which these crates read too.
 `contracts/desktop/` holds the shapes only the desktop apps read and no Android
 fixture records: the live telemetry credential, one frame of the telemetry socket
@@ -306,8 +314,13 @@ per event type, the call hang-up, the booking-pages hand-off and the desktop's
 presence registration. The one exception is the telemetry credential, which the
 server also writes to the Android set, byte for byte, because the mobile apps open
 the same socket for the live call transcript; a test holds the two copies equal.
+`contracts/i18n/` holds the server's localization facts: the sentence for every
+API error code, the labels of the stored values a screen shows, and the outputs of
+its money, number, date and duration formatters in English and French.
+`crates/district-l10n` generates its error table and wire labels from the first
+two and tests its formats against the third, byte for byte.
 
-`crates/district-model` decodes every file in both sets in its tests with unknown
+`crates/district-model` decodes every file in the first two sets in its tests with unknown
 fields refused (the `strict-contracts` feature, which its tests always enable), so
 a field the server renames or adds fails here rather than in an app. The files
 are a snapshot: `contracts/SOURCE.toml` says which server commit they came from,
@@ -320,7 +333,7 @@ server repository re-run
 python3 scripts/sync-contracts.py --monorepo <path to the server repository>
 ```
 
-which vendors both sets from the one commit, and refuses while either source
+which vendors every set from the one commit, and refuses while any source
 directory there has changes that commit does not hold.
 
 The fixture manifest in `crates/district-model/tests/contracts/manifest.rs`
@@ -374,3 +387,28 @@ open an issue; see [SECURITY.md](SECURITY.md). Questions go to
 By contributing you agree that your contribution is licensed under the Apache
 License 2.0, as section 5 of the licence provides. There is no CLA and no
 sign-off requirement.
+
+## Strings and French
+
+Every sentence and label the core shows comes from a catalog in
+`crates/district-l10n/catalog/` (`core.toml` for the core's own words;
+`api_errors.toml` and `wire.toml` are generated from `contracts/i18n/`). Each entry
+has its English, a context, a screen, a tier and a note for the translator; French
+is added to the same entry later. A screen never builds a sentence from pieces:
+one entry holds the whole sentence with named placeholders.
+
+The language is the app's choice, `CoreConfig::locale` (`Locale::from_tags` over
+the user's preferred languages), one per process. English is written exactly as
+it always has been. Until every entry has French, the French arm of each accessor
+carries the English and `district_l10n::FR_COMPLETE` is false.
+
+After changing a catalog, or after a sync that changed `contracts/i18n/`, run
+
+```
+python3 scripts/gen-l10n.py
+```
+
+which rewrites the generated Rust and the accessor test; CI runs it with `--check`.
+The tools in `tools/l10n/` are vendored, never edited here; maintainers re-vendor
+them from a checkout of the server repository with
+`python3 <checkout>/i18n/tools/l10n.py vendor --dest tools/l10n`.

@@ -1,0 +1,473 @@
+[meta]
+catalog = "wire"
+platform = "rust"
+apple = false
+
+[wire.analytics_sentiment.friction_sentiment]
+en = "Friction Sentiment"
+ctx = "label"
+screen = "wire analytics_sentiment"
+tier = "T3"
+note = "A label for the stored value `Friction Sentiment` of analyticsSentiment. `sentimentDistribution[].name` in GET /api/district/analytics: an English display name that is a key."
+
+[wire.analytics_sentiment.neutral_sentiment]
+en = "Neutral Sentiment"
+ctx = "label"
+screen = "wire analytics_sentiment"
+tier = "T3"
+note = "A label for the stored value `Neutral Sentiment` of analyticsSentiment. `sentimentDistribution[].name` in GET /api/district/analytics: an English display name that is a key."
+
+[wire.analytics_sentiment.positive_sentiment]
+en = "Positive Sentiment"
+ctx = "label"
+screen = "wire analytics_sentiment"
+tier = "T3"
+note = "A label for the stored value `Positive Sentiment` of analyticsSentiment. `sentimentDistribution[].name` in GET /api/district/analytics: an English display name that is a key."
+
+[wire.call_direction.inbound]
+en = "Inbound"
+ctx = "label"
+screen = "wire call_direction"
+tier = "T3"
+note = "A label for the stored value `inbound` of callDirection. `direction` on a call or message row, as stored (Call.direction, Message.direction)."
+
+[wire.call_direction.outbound]
+en = "Outbound"
+ctx = "label"
+screen = "wire call_direction"
+tier = "T3"
+note = "A label for the stored value `outbound` of callDirection. `direction` on a call or message row, as stored (Call.direction, Message.direction)."
+
+[wire.call_status.abandoned]
+en = "Abandoned"
+ctx = "label"
+screen = "wire call_status"
+tier = "T3"
+note = "A label for the stored value `abandoned` of callStatus. `status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent."
+
+[wire.call_status.busy]
+en = "Busy"
+ctx = "label"
+screen = "wire call_status"
+tier = "T3"
+note = "A label for the stored value `busy` of callStatus. `status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent."
+
+[wire.call_status.canceled]
+en = "Canceled"
+ctx = "label"
+screen = "wire call_status"
+tier = "T3"
+note = "A label for the stored value `canceled` of callStatus. `status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent."
+
+[wire.call_status.completed]
+en = "Completed"
+ctx = "label"
+screen = "wire call_status"
+tier = "T3"
+note = "A label for the stored value `completed` of callStatus. `status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent."
+
+[wire.call_status.failed]
+en = "Failed"
+ctx = "label"
+screen = "wire call_status"
+tier = "T3"
+note = "A label for the stored value `failed` of callStatus. `status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent."
+
+[wire.call_status.in_progress]
+en = "In progress"
+ctx = "label"
+screen = "wire call_status"
+tier = "T3"
+note = "A label for the stored value `in-progress` of callStatus. `status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent."
+
+[wire.call_status.no_answer]
+en = "No answer"
+ctx = "label"
+screen = "wire call_status"
+tier = "T3"
+note = "A label for the stored value `no-answer` of callStatus. `status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent."
+
+[wire.call_status.ringing]
+en = "Ringing"
+ctx = "label"
+screen = "wire call_status"
+tier = "T3"
+note = "A label for the stored value `ringing` of callStatus. `status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent."
+
+[wire.call_status.unknown]
+en = "Unknown"
+ctx = "label"
+screen = "wire call_status"
+tier = "T3"
+note = "A label for the stored value `unknown` of callStatus. `status` on a call row: normalizeCallStatus's canonical set, the voice agent's \"abandoned\" (answered, then the caller never spoke) and \"unknown\" (no status stored). A value outside this list is a raw provider status and the portal shows it as sent."
+
+[wire.call_type.inbound]
+en = "Inbound"
+ctx = "label"
+screen = "wire call_type"
+tier = "T3"
+note = "A label for the stored value `inbound` of callType. `type` on a call row (calls, overview) and `direction` on a timeline call event: the direction, with an unanswered inbound call read as \"missed\"."
+
+[wire.call_type.missed]
+en = "Missed"
+ctx = "label"
+screen = "wire call_type"
+tier = "T3"
+note = "A label for the stored value `missed` of callType. `type` on a call row (calls, overview) and `direction` on a timeline call event: the direction, with an unanswered inbound call read as \"missed\"."
+
+[wire.call_type.outbound]
+en = "Outbound"
+ctx = "label"
+screen = "wire call_type"
+tier = "T3"
+note = "A label for the stored value `outbound` of callType. `type` on a call row (calls, overview) and `direction` on a timeline call event: the direction, with an unanswered inbound call read as \"missed\"."
+
+[wire.disposition.booked]
+en = "Booked"
+ctx = "label"
+screen = "wire disposition"
+tier = "T3"
+note = "A label for the stored value `booked` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.disposition.callback]
+en = "Callback"
+ctx = "label"
+screen = "wire disposition"
+tier = "T3"
+note = "A label for the stored value `callback` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.disposition.escalated]
+en = "Escalated"
+ctx = "label"
+screen = "wire disposition"
+tier = "T3"
+note = "A label for the stored value `escalated` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.disposition.info]
+en = "Info"
+ctx = "label"
+screen = "wire disposition"
+tier = "T3"
+note = "A label for the stored value `info` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.disposition.interested]
+en = "Interested"
+ctx = "label"
+screen = "wire disposition"
+tier = "T3"
+note = "A label for the stored value `interested` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.disposition.not_interested]
+en = "Not interested"
+ctx = "label"
+screen = "wire disposition"
+tier = "T3"
+note = "A label for the stored value `not-interested` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.disposition.other]
+en = "Other"
+ctx = "label"
+screen = "wire disposition"
+tier = "T3"
+note = "A label for the stored value `other` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.disposition.voicemail]
+en = "Voicemail"
+ctx = "label"
+screen = "wire disposition"
+tier = "T3"
+note = "A label for the stored value `voicemail` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.disposition.wrong_number]
+en = "Wrong number"
+ctx = "label"
+screen = "wire disposition"
+tier = "T3"
+note = "A label for the stored value `wrong-number` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.funnel_stage.connected_calls]
+en = "Connected Calls"
+ctx = "label"
+screen = "wire funnel_stage"
+tier = "T3"
+note = "A label for the stored value `Connected Calls` of funnelStage. `funnelData[].name` in GET /api/district/analytics: an English display name that is a key."
+
+[wire.funnel_stage.successful_leads]
+en = "Successful Leads"
+ctx = "label"
+screen = "wire funnel_stage"
+tier = "T3"
+note = "A label for the stored value `Successful Leads` of funnelStage. `funnelData[].name` in GET /api/district/analytics: an English display name that is a key."
+
+[wire.funnel_stage.total_dials]
+en = "Total Dials"
+ctx = "label"
+screen = "wire funnel_stage"
+tier = "T3"
+note = "A label for the stored value `Total Dials` of funnelStage. `funnelData[].name` in GET /api/district/analytics: an English display name that is a key."
+
+[wire.generic.other]
+en = "Other"
+ctx = "label"
+screen = "wire generic"
+tier = "T3"
+note = "The label for a stored status, type or outcome this version of the app has no label for. Never the stored English itself."
+
+[wire.member_role.agency]
+en = "Administrator"
+ctx = "label"
+screen = "wire member_role"
+tier = "T3"
+note = "A label for the stored value `agency` of memberRole. `role` on a workspace member (GET /api/district/workspace/members, the workspace list)."
+
+[wire.member_role.client]
+en = "Member"
+ctx = "label"
+screen = "wire member_role"
+tier = "T3"
+note = "A label for the stored value `client` of memberRole. `role` on a workspace member (GET /api/district/workspace/members, the workspace list)."
+
+[wire.member_role.viewer]
+en = "Viewer"
+ctx = "label"
+screen = "wire member_role"
+tier = "T3"
+note = "A label for the stored value `viewer` of memberRole. `role` on a workspace member (GET /api/district/workspace/members, the workspace list)."
+
+[wire.placeholder.ai_call_completed]
+en = "AI call completed."
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in events[].body of a call event (GET /api/district/timeline). Shown where that value is shown."
+
+[wire.placeholder.ai_outbound_voice_session_active]
+en = "AI Outbound Voice session active..."
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Call.summary while an outbound call is live. Shown where that value is shown."
+
+[wire.placeholder.ai_voice_session_active]
+en = "AI Voice session active..."
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Call.summary while an inbound call is live. Shown where that value is shown."
+
+[wire.placeholder.consultation]
+en = "Consultation"
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in the booking name inside a scheduling timeline message. Shown where that value is shown."
+
+[wire.placeholder.customer]
+en = "Customer"
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Call.callerName (outbound campaign calls). Shown where that value is shown."
+
+[wire.placeholder.distronode_support]
+en = "Distronode Support"
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in request.messages[].author of an agent reply (GET /api/district/support/requests/{key}). Shown where that value is shown."
+
+[wire.placeholder.free]
+en = "Free"
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in subscription.tier (GET /api/settings) when the workspace has none. Shown where that value is shown."
+
+[wire.placeholder.manual_edit_update]
+en = "Manual edit update."
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Contact.latestContextSummary. Shown where that value is shown."
+
+[wire.placeholder.new_manually_added_contact]
+en = "New manually added contact."
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Contact.latestContextSummary. Shown where that value is shown."
+
+[wire.placeholder.no_summary_available]
+en = "No summary available."
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in calls[].aiSummary (GET /api/district/calls, /overview recentCalls). Shown where that value is shown."
+
+[wire.placeholder.test_call]
+en = "Test call"
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Call.callerName (setup test call). Shown where that value is shown."
+
+[wire.placeholder.unknown]
+en = "Unknown"
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Contact.name; Call.callerName; Call.from; calls[].number and calls[].callerName (GET /api/district/calls, /overview recentCalls). Shown where that value is shown."
+
+[wire.placeholder.unknown_caller]
+en = "Unknown Caller"
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Contact.name. Shown where that value is shown."
+
+[wire.placeholder.voice_session_completed]
+en = "Voice session completed."
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Call.summary when the agent wrote none. Shown where that value is shown."
+
+[wire.placeholder.you]
+en = "You"
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in request.messages[].author of the customer's own message (GET /api/district/support/requests/{key}). Shown where that value is shown."
+
+[wire.region.apac]
+en = "Asia-Pacific"
+ctx = "label"
+screen = "wire region"
+tier = "T3"
+note = "A label for the stored value `apac` of region. A workspace's data region. `en`/`fr` are the short names (chips, sentences); the long names add the datacenter. An unrecognised id is shown upper-cased, never as a default region."
+
+[wire.region.ca]
+en = "Canada"
+ctx = "label"
+screen = "wire region"
+tier = "T3"
+note = "A label for the stored value `ca` of region. A workspace's data region. `en`/`fr` are the short names (chips, sentences); the long names add the datacenter. An unrecognised id is shown upper-cased, never as a default region."
+
+[wire.region.eu]
+en = "Europe"
+ctx = "label"
+screen = "wire region"
+tier = "T3"
+note = "A label for the stored value `eu` of region. A workspace's data region. `en`/`fr` are the short names (chips, sentences); the long names add the datacenter. An unrecognised id is shown upper-cased, never as a default region."
+
+[wire.region.us]
+en = "United States"
+ctx = "label"
+screen = "wire region"
+tier = "T3"
+note = "A label for the stored value `us` of region. A workspace's data region. `en`/`fr` are the short names (chips, sentences); the long names add the datacenter. An unrecognised id is shown upper-cased, never as a default region."
+
+[wire.region_long.apac]
+en = "Asia-Pacific (Singapore)"
+ctx = "label"
+screen = "wire region"
+tier = "T3"
+note = "The long name of the data region `apac`, naming its datacenter."
+
+[wire.region_long.ca]
+en = "Canada (Montreal)"
+ctx = "label"
+screen = "wire region"
+tier = "T3"
+note = "The long name of the data region `ca`, naming its datacenter."
+
+[wire.region_long.eu]
+en = "Europe (Frankfurt)"
+ctx = "label"
+screen = "wire region"
+tier = "T3"
+note = "The long name of the data region `eu`, naming its datacenter."
+
+[wire.region_long.us]
+en = "United States (us-east4)"
+ctx = "label"
+screen = "wire region"
+tier = "T3"
+note = "The long name of the data region `us`, naming its datacenter."
+
+[wire.sentiment.negative]
+en = "Friction"
+ctx = "label"
+screen = "wire sentiment"
+tier = "T3"
+note = "A label for the stored value `negative` of sentiment. `sentiment` on a call row, written by the voice agent's post-call analysis. The portal labels \"negative\" as friction."
+
+[wire.sentiment.neutral]
+en = "Neutral"
+ctx = "label"
+screen = "wire sentiment"
+tier = "T3"
+note = "A label for the stored value `neutral` of sentiment. `sentiment` on a call row, written by the voice agent's post-call analysis. The portal labels \"negative\" as friction."
+
+[wire.sentiment.positive]
+en = "Positive"
+ctx = "label"
+screen = "wire sentiment"
+tier = "T3"
+note = "A label for the stored value `positive` of sentiment. `sentiment` on a call row, written by the voice agent's post-call analysis. The portal labels \"negative\" as friction."
+
+[wire.transfer_reason.auth_error]
+en = "Transfer authorization error"
+ctx = "label"
+screen = "wire transfer_reason"
+tier = "T3"
+note = "A label for the stored value `auth_error` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+
+[wire.transfer_reason.error]
+en = "Transfer failed"
+ctx = "label"
+screen = "wire transfer_reason"
+tier = "T3"
+note = "A label for the stored value `error` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+
+[wire.transfer_reason.fallback]
+en = "Transfer attempted but not connected"
+ctx = "label"
+screen = "wire transfer_reason"
+tier = "T3"
+note = "The label for a value of transferReason this build does not know, or none."
+
+[wire.transfer_reason.no_answer]
+en = "Target didn't answer"
+ctx = "label"
+screen = "wire transfer_reason"
+tier = "T3"
+note = "A label for the stored value `no_answer` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+
+[wire.transfer_reason.ring_timeout]
+en = "Target didn't answer (rang out)"
+ctx = "label"
+screen = "wire transfer_reason"
+tier = "T3"
+note = "A label for the stored value `ring_timeout` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+
+[wire.transfer_reason.trunk_not_configured]
+en = "Transfer route not configured"
+ctx = "label"
+screen = "wire transfer_reason"
+tier = "T3"
+note = "A label for the stored value `trunk_not_configured` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+
+[wire.transfer_status.failed]
+en = "Transfer failed"
+ctx = "label"
+screen = "wire transfer_status"
+tier = "T3"
+note = "A label for the stored value `failed` of transferStatus. `transferStatus` on a call row: the real outcome of a hand-off to a person."
+
+[wire.transfer_status.success]
+en = "Transferred"
+ctx = "label"
+screen = "wire transfer_status"
+tier = "T3"
+note = "A label for the stored value `success` of transferStatus. `transferStatus` on a call row: the real outcome of a hand-off to a person."

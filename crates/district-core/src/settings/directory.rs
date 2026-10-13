@@ -21,6 +21,7 @@ use district_model::{DirectoryEntry, WorkspaceConfig, WorkspaceConfigResponse};
 use super::{ConfigLoad, SaveState, after_save, read_config, settle};
 use crate::model::{Effect, Slot, Tickets};
 use crate::signed_in::{Next, SignedIn};
+use crate::text::{l, s};
 
 /// A field of a directory entry the member edits.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -61,50 +62,43 @@ impl DirectoryConfirm {
     /// The question's heading.
     pub fn title(self) -> &'static str {
         if self.entries == 0 {
-            "Remove every transfer target?"
+            s::directory_confirm_clear_title(l())
         } else {
-            "Replace the transfer directory?"
+            s::directory_confirm_replace_title(l())
         }
     }
 
     /// What saving does.
     pub fn body(self) -> String {
         match self.entries {
-            0 => "Saving an empty directory removes everyone the receptionist can put a live \
-                  caller through to."
-                .to_owned(),
-            1 => "The directory will hold exactly one entry, replacing what is stored.".to_owned(),
-            n => format!(
-                "The directory will hold exactly these {n} entries, replacing what is stored."
-            ),
+            0 => s::directory_confirm_clear_body(l()).to_owned(),
+            1 => s::directory_confirm_one_body(l()).to_owned(),
+            n => s::directory_confirm_many_body(l(), n as i64),
         }
     }
 
     /// The confirming button's label.
     pub fn action(self) -> &'static str {
         if self.entries == 0 {
-            "Remove everyone"
+            s::directory_confirm_clear_action(l())
         } else {
-            "Replace"
+            s::directory_confirm_replace_action(l())
         }
     }
 }
 
 impl DirectorySection {
     /// The heading for a directory this app cannot edit.
-    pub const UNMODELLABLE_TITLE: &'static str = "Cannot be edited here";
+    pub const UNMODELLABLE_TITLE: &'static str =
+        district_l10n::english::DIRECTORY_UNMODELLABLE_TITLE;
     /// The body for a directory this app cannot edit.
-    pub const UNMODELLABLE_BODY: &'static str = "This workspace's transfer directory is stored \
-        in a shape this app cannot change without losing part of it. Change it on the District \
-        AI website.";
+    pub const UNMODELLABLE_BODY: &'static str = district_l10n::english::DIRECTORY_UNMODELLABLE_BODY;
     /// The line for a failed "Add".
-    pub const ADD_REJECTED: &'static str = "A name and a phone number are both needed to add \
-        someone.";
+    pub const ADD_REJECTED: &'static str = district_l10n::english::DIRECTORY_ADD_REJECTED;
     /// The heading for an empty directory.
-    pub const EMPTY_TITLE: &'static str = "No transfer targets";
+    pub const EMPTY_TITLE: &'static str = district_l10n::english::DIRECTORY_EMPTY_TITLE;
     /// The body for an empty directory.
-    pub const EMPTY_BODY: &'static str = "The receptionist has nobody to put a caller through \
-        to. Add someone below.";
+    pub const EMPTY_BODY: &'static str = district_l10n::english::DIRECTORY_EMPTY_BODY;
 
     fn loading() -> Self {
         Self {

@@ -1,12 +1,14 @@
-# Where contracts/fixtures/ and contracts/desktop/ came from. Written by
-# scripts/sync-contracts.py; change the script and re-run it rather than editing
-# this file.
+# Where contracts/fixtures/, contracts/desktop/ and contracts/i18n/ came from.
+# Written by scripts/sync-contracts.py; change the script and re-run it rather
+# than editing this file.
 #
 # Each fixture is a JSON body recorded from the District AI server by a test in the
 # server repository, laid out as that test writes it (JSON.stringify(body, null, 2)
-# plus a newline). There are two sets, each with its own [sets.<name>] table below:
-# `fixtures`, the Android app's set, which this client reads too, and `desktop`,
-# the shapes only this client reads. Both come from the one commit in [source].
+# plus a newline). There are three sets, each with its own [sets.<name>] table
+# below: `fixtures`, the Android app's set, which this client reads too,
+# `desktop`, the shapes only this client reads, and `i18n`, the service's
+# localization facts, which crates/district-l10n reads. All come from the one
+# commit in [source].
 #
 # The files here are those bytes except for the substitutions below, which replace
 # data that must not appear in a public repository. A phone, email or host
@@ -17,11 +19,11 @@
 # (NPA) NXX-XXXX national form, or bare digits. Per-file counts name each file by
 # its path under contracts/.
 #
-# contracts/SHA256SUMS holds a digest of every file of both sets; from contracts/,
+# contracts/SHA256SUMS holds a digest of every file of every set; from contracts/,
 # `sha256sum -c SHA256SUMS` checks them.
 
 [source]
-commit = "e08aef5ae0410d3a8d03afdf97a2ab2351ed4a72"
+commit = "0ff171072cae20e5f5a79346fdd8d318a4d86446"
 
 [sets.fixtures]
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
@@ -33,8 +35,13 @@ source = "the desktop-only contract fixtures, recorded by the District AI server
 source_clean = true
 file_count = 13
 
+[sets.i18n]
+source = "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests"
+source_clean = true
+file_count = 3
+
 [sync]
-date = "2026-10-08"
+date = "2026-10-13"
 checksums = "SHA256SUMS"
 
 [[substitution]]
@@ -320,7 +327,7 @@ kind = "text"
 original = " \u2014 "
 replacement = " - "
 reason = "the em dash is not allowed in this repository; the fixtures use it as a spaced separator"
-count = 15
+count = 16
 
 [substitution.files]
 "fixtures/district-ai-draft.json" = 1
@@ -332,3 +339,4 @@ count = 15
 "fixtures/district-message-send-email.json" = 1
 "fixtures/district-persona-options.json" = 7
 "fixtures/district-timeline.json" = 1
+"i18n/wire-vocabulary.json" = 1

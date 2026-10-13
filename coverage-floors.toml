@@ -51,3 +51,7 @@ reason = "The default build: the crate root and UnavailableCallEngine, all of wh
 [features."district-call/livekit"]
 floor = 97
 reason = "Measured, not a target: voice.yml's tests against a real media server reach all but races (a room left as its join ends, a report racing a hang-up) and states libwebrtc never reports with the web client's key settings; races won in one run and not the next move it between 97.5 and 98.6."
+
+[crates.district-l10n]
+floor = 100
+reason = "Pure functions of a locale and a value; the generated accessor test calls every accessor in both languages, and the vectors test reaches every format."

@@ -179,6 +179,11 @@ pub struct BillingSubscription {
     /// A coupon applied to it, when there is one.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub discount: Option<BillingDiscount>,
+    /// The ISO 4217 code of the currency [`amount`](Self::amount) is in, lower
+    /// case (`usd`, `cad`), when the service names it. It does not yet, and
+    /// `None` reads as dollars, as it always has.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub currency: Option<String>,
 }
 
 /// A coupon applied to a subscription: a percentage or an amount off.
@@ -217,6 +222,11 @@ pub struct BillingInvoice {
     pub hosted_invoice_url: Option<String>,
     /// Its PDF, likewise.
     pub invoice_pdf: Option<String>,
+    /// The ISO 4217 code of the currency its amounts are in, lower case (`usd`,
+    /// `cad`), when the service names it. It does not yet, and `None` reads as
+    /// dollars, as it always has.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub currency: Option<String>,
 }
 
 #[cfg(test)]
@@ -239,6 +249,35 @@ mod tests {
         assert_eq!(none.overage_spend_cap_cents, None);
         let encoded = serde_json::to_value(&none).unwrap();
         assert!(encoded.get("billingUnavailable").is_none(), "{encoded}");
+    }
+
+    #[test]
+    fn a_currency_is_read_when_the_service_names_one_and_absent_otherwise() {
+        let body = |currency: &str| {
+            format!(
+                r#"{{"subscriptions":[{{"id":"sub_1","status":"active","current_period_end":null,
+                    "cancel_at_period_end":false,"tierName":"Voice Pro","amount":24900{currency}}}],
+                    "invoices":[{{"id":"in_1","amount_paid":0,"total":24900,"tax":0,"status":"open",
+                    "created":0,"hosted_invoice_url":null,"invoice_pdf":null{currency}}}],
+                    "paymentMethod":null,"billingAddress":null,"customerId":"cus_1"}}"#
+            )
+        };
+        let named: AccountBillingResponse =
+            serde_json::from_str(&body(r#","currency":"cad""#)).unwrap();
+        assert_eq!(named.subscriptions[0].currency.as_deref(), Some("cad"));
+        assert_eq!(named.invoices[0].currency.as_deref(), Some("cad"));
+        let unnamed: AccountBillingResponse = serde_json::from_str(&body("")).unwrap();
+        assert_eq!(unnamed.subscriptions[0].currency, None);
+        assert_eq!(unnamed.invoices[0].currency, None);
+        let encoded = serde_json::to_value(&unnamed).unwrap();
+        assert!(
+            encoded["invoices"][0].get("currency").is_none(),
+            "{encoded}"
+        );
+        assert!(
+            encoded["subscriptions"][0].get("currency").is_none(),
+            "{encoded}"
+        );
     }
 
     #[test]

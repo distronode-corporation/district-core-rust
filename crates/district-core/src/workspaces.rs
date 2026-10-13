@@ -10,6 +10,7 @@ use district_api::ApiError;
 use district_model::{WorkspaceEntry, WorkspaceListResponse};
 
 use crate::failure::{FailureText, regions};
+use crate::text::{l, s};
 
 /// The workspace list, and what it means for the screens.
 ///
@@ -42,31 +43,31 @@ impl WorkspacesState {
     /// ([`SignedIn::no_workspace_message`](crate::SignedIn::no_workspace_message)):
     /// choosing one is what sets up a workspace.
     pub const CHOOSE_PLAN_MESSAGE: &'static str =
-        "This account does not have a District workspace yet. Choose a plan to set one up.";
+        district_l10n::english::WORKSPACES_CHOOSE_PLAN_MESSAGE;
 
     /// The heading for [`NoWorkspaces`](Self::NoWorkspaces) while the workspace
     /// a checkout may have paid for is waited for
     /// ([`SignedIn::no_workspace_title`](crate::SignedIn::no_workspace_title)).
-    pub const SETTING_UP_TITLE: &'static str = "Setting up your workspace";
+    pub const SETTING_UP_TITLE: &'static str = district_l10n::english::WORKSPACES_SETTING_UP_TITLE;
 
     /// The body meanwhile, in place of [`CHOOSE_PLAN_MESSAGE`](Self::CHOOSE_PLAN_MESSAGE):
     /// no plans are offered, so nobody pays twice for one workspace.
     pub const SETTING_UP_MESSAGE: &'static str =
-        "If you completed checkout, your workspace is being set up. It appears here in a moment.";
+        district_l10n::english::WORKSPACES_SETTING_UP_MESSAGE;
 
     /// The body once that wait is over with still no workspace: the plans are
     /// offered again, and a workspace paid for may still be on its way.
-    pub const CHOOSE_PLAN_AFTER_CHECKOUT_MESSAGE: &'static str = "This account does not have a District workspace yet. Choose a plan to set one up. A \
-         workspace you paid for can take a few minutes, and appears here once it is ready.";
+    pub const CHOOSE_PLAN_AFTER_CHECKOUT_MESSAGE: &'static str =
+        district_l10n::english::WORKSPACES_CHOOSE_PLAN_AFTER_CHECKOUT_MESSAGE;
 
     /// The heading for a state that shows no workspace, or `None` for the other
     /// two.
     pub fn title(&self) -> Option<&'static str> {
         match self {
             Self::Loading | Self::Ready(_) => None,
-            Self::NoWorkspaces => Some("No workspace found"),
-            Self::BillingBlocked { .. } => Some("Subscription inactive"),
-            Self::Unavailable(_) => Some("Could not load your workspace"),
+            Self::NoWorkspaces => Some(s::workspaces_none_title(l())),
+            Self::BillingBlocked { .. } => Some(s::workspaces_billing_blocked_title(l())),
+            Self::Unavailable(_) => Some(s::workspaces_failed_title(l())),
         }
     }
 
@@ -74,16 +75,13 @@ impl WorkspacesState {
     pub fn message(&self) -> Option<String> {
         match self {
             Self::Loading | Self::Ready(_) => None,
-            Self::NoWorkspaces => Some(
-                "This account is not linked to a District workspace yet. Please contact support."
-                    .to_owned(),
-            ),
+            Self::NoWorkspaces => Some(s::workspaces_none_message(l()).to_owned()),
             Self::BillingBlocked { inactive_count: 1 } => {
-                Some("Your workspace does not have an active subscription.".to_owned())
+                Some(s::workspaces_billing_blocked_one(l()).to_owned())
             }
-            Self::BillingBlocked { inactive_count } => Some(format!(
-                "None of your {inactive_count} workspaces has an active subscription."
-            )),
+            Self::BillingBlocked { inactive_count } => {
+                Some(s::workspaces_billing_blocked_many(l(), *inactive_count))
+            }
             Self::Unavailable(failure) => Some(failure.message.clone()),
         }
     }
@@ -113,13 +111,8 @@ impl Workspaces {
 
     /// The warning to show beside the switcher when the list is short, or `None`.
     pub fn partial_warning(&self) -> Option<String> {
-        (!self.degraded_regions.is_empty()).then(|| {
-            format!(
-                "Some workspaces could not be listed ({} unreachable). This list may be \
-                 incomplete.",
-                regions(&self.degraded_regions)
-            )
-        })
+        (!self.degraded_regions.is_empty())
+            .then(|| s::workspaces_partial_warning(l(), &regions(&self.degraded_regions)))
     }
 
     /// Shows the open workspace under `name`, the name the service stored when
@@ -187,10 +180,7 @@ pub(crate) fn resolve(response: WorkspaceListResponse, remembered: Option<&str>)
         // neither of those, it is a question not yet answered.
         None if !degraded_regions.is_empty() => WorkspacesState::Unavailable(FailureText {
             degraded_regions,
-            ..FailureText::retryable(
-                "Your workspaces could not be listed because a region is unreachable. Your \
-                     account has not changed.",
-            )
+            ..FailureText::retryable(s::workspaces_regions_degraded(l()))
         }),
         None if inactive_count > 0 => WorkspacesState::BillingBlocked { inactive_count },
         None => WorkspacesState::NoWorkspaces,
