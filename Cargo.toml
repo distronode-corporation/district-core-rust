@@ -81,6 +81,13 @@ toml = "1.1.6"
 # This installation's device id, a random (version 4) UUID, and the idempotency
 # keys of the help desk's and support's creates.
 uuid = { version = "1.26.1", default-features = false, features = ["std", "v4"] }
+# The booking scheduler's times, which are shown in the zone on the member's
+# scheduler profile rather than the computer's: an RFC 3339 instant and an IANA
+# zone in, the zone's offset at that instant out. The time zone database is
+# compiled in (`tzdb-bundle-always`), so a booking reads the same hour on every
+# Linux and Windows machine, whatever zoneinfo it has; the formats themselves
+# are district-l10n's.
+jiff = { version = "0.2.37", default-features = false, features = ["std", "tzdb-bundle-always"] }
 # Test only: temporary directories, so no test reads or writes the real user's
 # files.
 tempfile = "3.27.0"

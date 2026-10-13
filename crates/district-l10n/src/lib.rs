@@ -11,6 +11,8 @@
 //!   locale, so a missing key fails the build rather than showing nothing.
 //! - [`support_strings`]: the support area's, from `catalog/support.toml`.
 //! - [`numbers_strings`]: managing phone numbers, from `catalog/numbers.toml`.
+//! - [`scheduling_strings`]: the booking scheduler's administration, from
+//!   `catalog/scheduling.toml`.
 //! - [`api_error_text`]: the sentence for an error code the service sends, from
 //!   `contracts/i18n/api-errors.json` through `catalog/api_errors.toml`.
 //! - [`wire_label`] and [`placeholder_label`]: what a screen shows for a value the
@@ -83,13 +85,20 @@ pub mod support_strings;
 #[path = "generated/numbers.rs"]
 pub mod numbers_strings;
 
+/// The booking scheduler's administration's sentences and labels, from
+/// `catalog/scheduling.toml`: a catalog of its own, beside the core's.
+#[rustfmt::skip]
+#[path = "generated/scheduling.rs"]
+pub mod scheduling_strings;
+
 /// True when every catalog has French for every entry. Until then the French
 /// arm of each generated function carries the English.
 pub const FR_COMPLETE: bool = strings::FR_COMPLETE
     && api_error_strings::FR_COMPLETE
     && wire_strings::FR_COMPLETE
     && support_strings::FR_COMPLETE
-    && numbers_strings::FR_COMPLETE;
+    && numbers_strings::FR_COMPLETE
+    && scheduling_strings::FR_COMPLETE;
 
 /// A language the core writes in.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]

@@ -55,7 +55,8 @@
 //!   managed short of buying one, which stays on the web ([`MarketplaceScreen`],
 //!   [`NumberAdmin`]), billing, read only ([`BillingScreen`]), workflows and the campaign's
 //!   switch ([`WorkflowsScreen`]), booking pages with the hand-off to the web
-//!   ([`SchedulingScreen`], [`OneTimeUrl`]), the help desk ([`DeskScreen`],
+//!   ([`SchedulingScreen`], [`OneTimeUrl`]) and their administration, every
+//!   section native ([`scheduling_admin`]), the help desk ([`DeskScreen`],
 //!   [`DeskTicketScreen`], [`DeskSettingsView`]), support requests
 //!   ([`SupportScreen`], [`SupportRequestScreen`]), reporting AI-generated
 //!   content from any screen through them ([`ReportTarget`], [`ReportStatus`])
@@ -136,6 +137,7 @@ mod rooms;
 mod route;
 mod runner;
 mod scheduling;
+pub mod scheduling_admin;
 mod session;
 mod settings;
 mod signed_in;
@@ -242,6 +244,7 @@ pub use scheduling::{
     HAND_OFF_CALLBACK_WAIT, HandOffLeg, OneTimeUrl, SCHEDULING_WEB_PATH, SchedulingEvent,
     SchedulingPresentation, SchedulingScreen, SchedulingStatus,
 };
+pub use scheduling_admin::{SchedulingAdmin, SchedulingAdminEvent, SchedulingSection};
 pub use session::{
     ExchangeFailure, Identity, Notice, RestoreError, Restoring, ServiceSignOut, SessionEnd,
     SessionState, SignInError, SignInPhase, SignOutOutcome, SignOutScope, SignedInSession,
