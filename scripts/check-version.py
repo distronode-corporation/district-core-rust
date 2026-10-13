@@ -109,7 +109,8 @@ def release_mention_errors(released: str, name: str, text: str) -> list[str]:
                     )
         for match in SERIES.finditer(line):
             found += 1
-            series = released.rsplit(".", 1)[0]
+            # The series of a pre-release is its version's: 4.0.0-beta.1 is 4.0.x.
+            series = re.split(r"[-+]", released, maxsplit=1)[0].rsplit(".", 1)[0]
             if match.group(1) != series:
                 errors.append(
                     f"{name}:{number} supports {match.group(1)}.x as the current series,"

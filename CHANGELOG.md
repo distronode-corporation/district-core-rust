@@ -17,36 +17,58 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.0-beta.1] - 2026-10-13
+
 ### Added
 
-- `district-l10n`, the words the core writes, in English and Canadian French:
-  `Locale` and `Locale::from_tags`, the generated catalogs (`strings`, and the
-  English of each as a constant in `english`), `api_error_text` for every error
-  code the service sends, `wire_label`, `region_long_label` and
-  `placeholder_label` for the values it stores in English, and `format` (money,
-  dates, times, durations, numbers, percentages, lists, plural categories) held
-  to the service's own formatting vectors. There is no French yet:
-  `FR_COMPLETE` is false and the French arm carries the English.
-- `CoreConfig::locale` and `Model::set_locale`. `district_core::Locale` and
-  `district_core::l10n` re-export the new crate.
-- `currency` on `BillingSubscription` and `BillingInvoice`, read when the service
-  names one (it does not yet), and `format_money`, which writes an amount in it.
-  With no currency, `format_cents` writes what it always has.
+- `district-l10n`, a new crate holding every sentence and label the core writes,
+  in English and Canadian French. There is no French yet: `FR_COMPLETE` is false
+  and the French arm of every accessor carries the English.
+  - `Locale` (`En`, `FrCa`) and `Locale::from_tags`: the first of the user's
+    preferred languages that the core writes decides (`fr-*` French, `en-*`
+    English, any other language passed over); none gives English.
+  - `strings`, the accessors generated from `catalog/core.toml`, and `english`,
+    the English of each one that takes no argument, as a constant.
+  - `api_error_text`: the service's sentence for each of its error codes, from
+    `contracts/i18n/api-errors.json`.
+  - `wire_label`, `region_long_label` and `placeholder_label`: what a screen shows
+    for a value the service stores in English (call status, direction, sentiment,
+    disposition, transfer outcome, funnel stage, role, region, and the server's
+    placeholders), from `contracts/i18n/wire-vocabulary.json`. A value this build
+    does not know reads as "Other", the category's own fallback, or a region's
+    code in capitals, never as the stored text turned into words. Adopting it in
+    place of the desktop apps' `humanize` changes two English labels to the
+    portal's: sentiment `negative` reads "Friction", and transfer status
+    `success` reads "Transferred".
+  - `format`: money, dates, times, durations, numbers, percentages, lists and
+    plural categories, held byte for byte to the service's formatting vectors
+    (`contracts/i18n/format-vectors.json`) in both languages.
+- `CoreConfig::locale`, the language the core writes in, and `Model::set_locale`
+  to change it. One per process. `district_core::Locale` and `district_core::l10n`
+  re-export the new crate.
+- `format_money`, an amount in cents in a named currency (`CA$249.00`,
+  `249,00 $ CA`); with no currency it is `format_cents`, which writes what it
+  always has. `district-model`: `currency` on `BillingSubscription` and
+  `BillingInvoice`, read when the service names one, which it does not yet.
 - `NumberSearchForm::number_types` and `SupportForm::kinds`, the localized
   counterparts of `NUMBER_TYPES` and `KINDS`.
-- `contracts/i18n/`, a third vendored set.
+- `contracts/i18n/`, a third set vendored by `scripts/sync-contracts.py`; the
+  catalog tools in `tools/l10n/`; `scripts/gen-l10n.py`, which CI runs with
+  `--check`.
 
 ### Changed
 
+- Breaking: `CoreConfig` has a new field, `locale`. `Locale::En` keeps every
+  word the core writes exactly as it was.
 - Every sentence and label the core writes comes from `district-l10n`'s catalog,
-  in the configured language. The English is unchanged, byte for byte, and every
-  public string constant keeps its English value.
-- In French, a refusal is never shown in the service's English: a known error code
-  reads as the catalog's sentence for it, anything else as the screen's own words.
-
-### Breaking
-
-- `CoreConfig` has a new field, `locale` (English is `Locale::En`).
+  in the configured language. The English is unchanged, byte for byte.
+- The public string constants (`FAILED_TITLE`, `EMPTY_TITLE` and the rest) keep
+  their English values, now taken from the catalog's `english` constants. A
+  screen shows the accessor of the same key from `strings`, in the chosen
+  language.
+- In French, a refusal is never shown in the service's English: a known error
+  code reads as the catalog's sentence for it, anything else as the screen's own
+  words. In English the service's own sentence is still shown where it wrote one.
 
 ## [3.1.1] - 2026-10-13
 
