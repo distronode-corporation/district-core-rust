@@ -33,7 +33,7 @@ fn every_code_reads_as_the_services_sentence() {
             };
             if locale == Locale::FrCa && FRENCH_NOT_THE_WEBSITES.contains(&code.as_str()) {
                 let text = api_error_text(locale, code, &["ignored"]).expect(code);
-                assert!(text.contains("disponible"), "{code}: {text}");
+                assert!(text.contains("disponible"), "{code}");
                 assert_ne!(text, en, "{code}");
                 continue;
             }
