@@ -257,7 +257,7 @@
       ]
     },
     "transferStatus": {
-      "description": "`transferStatus` on a call row: the real outcome of a hand-off to a person.",
+      "description": "`transferStatus` on a call row: the real outcome of a hand-off to a person. `completed` appears only in the recorded contract fixtures; the server never writes it and the portal shows no badge for it.",
       "labelSource": "distronode-website/src/app/(en)/dashboard/district/calls/callsI18n.ts",
       "values": [
         {
@@ -275,17 +275,27 @@
           ],
           "en": "Transfer failed",
           "fr": "Échec du transfert"
+        },
+        {
+          "value": "completed",
+          "definedIn": [
+            "distronode-website/contracts/mobile/district-calls.json",
+            "distronode-website/contracts/mobile/district-overview.json"
+          ],
+          "en": null,
+          "fr": null
         }
       ]
     },
     "transferReason": {
-      "description": "`transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`.",
+      "description": "`transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`, which is also what the portal shows for `room_not_found` and `provider_unsupported`, the two it has no label for. `caller_requested_human` appears only in the recorded contract fixtures, on a transfer that did not fail, where the portal shows no reason.",
       "labelSource": "distronode-website/src/app/(en)/dashboard/district/calls/callsI18n.ts transferReasonLabel",
       "values": [
         {
           "value": "ring_timeout",
           "definedIn": [
-            "distronode-website/prisma/schema.prisma"
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/actions/transfer/route.ts"
           ],
           "en": "Target didn't answer (rang out)",
           "fr": "Le poste n'a pas répondu (sonnerie expirée)"
@@ -293,7 +303,8 @@
         {
           "value": "no_answer",
           "definedIn": [
-            "distronode-website/prisma/schema.prisma"
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/actions/transfer/route.ts"
           ],
           "en": "Target didn't answer",
           "fr": "Le poste n'a pas répondu"
@@ -301,7 +312,8 @@
         {
           "value": "auth_error",
           "definedIn": [
-            "distronode-website/prisma/schema.prisma"
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/actions/transfer/route.ts"
           ],
           "en": "Transfer authorization error",
           "fr": "Erreur d'autorisation du transfert"
@@ -309,7 +321,8 @@
         {
           "value": "trunk_not_configured",
           "definedIn": [
-            "distronode-website/prisma/schema.prisma"
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/actions/transfer/route.ts"
           ],
           "en": "Transfer route not configured",
           "fr": "Voie de transfert non configurée"
@@ -317,10 +330,38 @@
         {
           "value": "error",
           "definedIn": [
-            "distronode-website/prisma/schema.prisma"
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/actions/transfer/route.ts"
           ],
           "en": "Transfer failed",
           "fr": "Échec du transfert"
+        },
+        {
+          "value": "room_not_found",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/actions/transfer/route.ts"
+          ],
+          "en": "Transfer attempted but not connected",
+          "fr": "Transfert tenté, sans connexion"
+        },
+        {
+          "value": "provider_unsupported",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/actions/transfer/route.ts"
+          ],
+          "en": "Transfer attempted but not connected",
+          "fr": "Transfert tenté, sans connexion"
+        },
+        {
+          "value": "caller_requested_human",
+          "definedIn": [
+            "distronode-website/contracts/mobile/district-calls.json",
+            "distronode-website/contracts/mobile/district-overview.json"
+          ],
+          "en": null,
+          "fr": null
         }
       ],
       "fallback": {
@@ -472,6 +513,951 @@
           "frLong": "Asie-Pacifique (Singapour)"
         }
       ]
+    },
+    "deskTicketStatus": {
+      "description": "`status` on a Desk ticket (GET /api/district/desk/tickets, /tickets/{id}).",
+      "labelSource": "distronode-website/src/components/support/status-tone.ts deskStatusLabel",
+      "values": [
+        {
+          "value": "open",
+          "definedIn": [
+            "distronode-website/src/lib/desk/desk.ts"
+          ],
+          "en": "Open",
+          "fr": "Ouverte"
+        },
+        {
+          "value": "waiting",
+          "definedIn": [
+            "distronode-website/src/lib/desk/desk.ts"
+          ],
+          "en": "Waiting",
+          "fr": "En attente"
+        },
+        {
+          "value": "resolved",
+          "definedIn": [
+            "distronode-website/src/lib/desk/desk.ts"
+          ],
+          "en": "Resolved",
+          "fr": "Réglée"
+        }
+      ],
+      "fallback": {
+        "en": "Unknown",
+        "fr": "Inconnue"
+      }
+    },
+    "deskTicketSource": {
+      "description": "`source` on a Desk ticket. The portal labels a ticket opened from a call; a manual ticket carries no source label.",
+      "labelSource": "distronode-website/src/components/district/deskI18n.ts voiceCall",
+      "values": [
+        {
+          "value": "voice-call",
+          "definedIn": [
+            "distronode-website/src/lib/desk/desk.ts"
+          ],
+          "en": "From a phone call",
+          "fr": "Depuis un appel téléphonique"
+        },
+        {
+          "value": "manual",
+          "definedIn": [
+            "distronode-website/src/lib/desk/desk.ts"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "knowledgeDocumentStatus": {
+      "description": "`documents[].status` in GET /api/district/workspace/knowledge. The portal reads `processing` as indexing; an unrecognised value is shown as sent, and an empty one as `fallback`.",
+      "labelSource": "distronode-website/src/components/district/integrationsI18n.ts docStatuses",
+      "values": [
+        {
+          "value": "processing",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Indexing",
+          "fr": "Indexation"
+        },
+        {
+          "value": "ready",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Ready",
+          "fr": "Prêt"
+        },
+        {
+          "value": "failed",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Failed",
+          "fr": "Échec"
+        }
+      ],
+      "fallback": {
+        "en": "Unknown",
+        "fr": "Inconnu"
+      }
+    },
+    "workflowTrigger": {
+      "description": "`trigger` on a workflow (GET /api/district/workflows).",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/workflows/workflowsI18n.ts triggerLabels",
+      "values": [
+        {
+          "value": "call_ended",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When Any Call Ends (answered or not)",
+          "fr": "Quand un appel se termine (répondu ou non)"
+        },
+        {
+          "value": "call_ended_answered",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When an Answered Call Ends",
+          "fr": "Quand un appel répondu se termine"
+        },
+        {
+          "value": "call_ended_unanswered",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When a Call Goes Unanswered",
+          "fr": "Quand un appel reste sans réponse"
+        },
+        {
+          "value": "negative_sentiment",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When Call Sentiment is Negative",
+          "fr": "Quand le sentiment de l'appel est négatif"
+        },
+        {
+          "value": "positive_sentiment",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When Call Sentiment is Positive",
+          "fr": "Quand le sentiment de l'appel est positif"
+        },
+        {
+          "value": "neutral_sentiment",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When Call Sentiment is Neutral",
+          "fr": "Quand le sentiment de l'appel est neutre"
+        },
+        {
+          "value": "intent_detected",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When Specific Intent Detected",
+          "fr": "Quand une intention précise est détectée"
+        },
+        {
+          "value": "sms_received",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When Inbound SMS Received",
+          "fr": "Quand un texto entrant est reçu"
+        },
+        {
+          "value": "contact_created",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When New Contact Created",
+          "fr": "Quand un contact est créé"
+        },
+        {
+          "value": "dnc_registered",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When Contact Registered DNC",
+          "fr": "Quand un contact s'inscrit à la liste d'exclusion"
+        },
+        {
+          "value": "booking_created",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When a Booking Is Made",
+          "fr": "Quand une réservation est faite"
+        },
+        {
+          "value": "booking_cancelled",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When a Booking Is Cancelled",
+          "fr": "Quand une réservation est annulée"
+        },
+        {
+          "value": "booking_rescheduled",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When a Booking Is Rescheduled",
+          "fr": "Quand une réservation est déplacée"
+        },
+        {
+          "value": "booking_reminder",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When a Booking Reminder Is Sent",
+          "fr": "Quand un rappel de réservation est envoyé"
+        }
+      ]
+    },
+    "workflowRunStatus": {
+      "description": "`status` on a workflow run and `latestRun.status` on a workflow (GET /api/district/workflows, /workflows/runs). An unrecognised value is shown as sent.",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/workflows/workflowsI18n.ts runStatusLabel",
+      "values": [
+        {
+          "value": "success",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Succeeded",
+          "fr": "Réussi"
+        },
+        {
+          "value": "partial",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Partly done",
+          "fr": "Partiellement fait"
+        },
+        {
+          "value": "failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Failed",
+          "fr": "Échec"
+        },
+        {
+          "value": "skipped",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Nothing to do",
+          "fr": "Rien à faire"
+        }
+      ]
+    },
+    "workflowAction": {
+      "description": "`actionResults[].type` on a workflow run, and `actions[].type` on a workflow.",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/workflows/workflowsI18n.ts actionLabels",
+      "values": [
+        {
+          "value": "send_sms",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Send SMS",
+          "fr": "Envoyer un texto"
+        },
+        {
+          "value": "send_email",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Send Email",
+          "fr": "Envoyer un courriel"
+        },
+        {
+          "value": "add_crm_tag",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Add CRM Tag",
+          "fr": "Ajouter une étiquette CRM"
+        },
+        {
+          "value": "remove_crm_tag",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Remove CRM Tag",
+          "fr": "Retirer une étiquette CRM"
+        },
+        {
+          "value": "register_compliance_dnc",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Register Compliance DNC",
+          "fr": "Inscrire à la liste d'exclusion"
+        },
+        {
+          "value": "notify_ops",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Notify Ops Webhook",
+          "fr": "Notifier le webhook des opérations"
+        }
+      ]
+    },
+    "workflowActionOutcome": {
+      "description": "`actionResults[].outcome` on a workflow run. The portal shows the value itself (only its colour depends on it); it has no label for any of them.",
+      "labelSource": null,
+      "values": [
+        {
+          "value": "ok",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "skipped",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "workflowActionReason": {
+      "description": "The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail.",
+      "labelSource": null,
+      "values": [
+        {
+          "value": "contact-not-found",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "dnc",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "dormant",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "empty-body",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "empty-subject",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "empty-tag",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "http-{status}",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "invalid-recipient",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "missing-webhook-url",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "no-provider-credentials",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "no-recipient",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "no-sending-number",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "postmark-missing",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "report-recipient-refused",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "report-unavailable",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "send-failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "tag-already-present",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "tag-not-present",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "unknown-action-type",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "numberType": {
+      "description": "`numbers[].type` in GET /api/district/workspace/provider/numbers (missing reads as `local`).",
+      "labelSource": "distronode-website/src/components/district/marketplace/marketplaceI18n.ts",
+      "values": [
+        {
+          "value": "local",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/workspace/provider/numbers/route.ts"
+          ],
+          "en": "Local",
+          "fr": "Local"
+        },
+        {
+          "value": "tollFree",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/workspace/provider/numbers/route.ts"
+          ],
+          "en": "Toll-Free",
+          "fr": "Sans frais"
+        },
+        {
+          "value": "mobile",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/workspace/provider/numbers/route.ts"
+          ],
+          "en": "Mobile",
+          "fr": "Mobile"
+        }
+      ]
+    },
+    "numberCapability": {
+      "description": "`numbers[].capabilities[]` in GET /api/district/workspace/provider/numbers. The portal shows the value itself; it has no label for any of them.",
+      "labelSource": null,
+      "values": [
+        {
+          "value": "sms",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "voice",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "mms",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "numberProvider": {
+      "description": "`numbers[].provider` in GET /api/district/workspace/provider/numbers, and `provider` in the number search response. `unknown` is a managed number whose carrier is not recorded.",
+      "labelSource": "distronode-website/src/components/district/telephonySettingsI18n.ts messagingProviderNames",
+      "values": [
+        {
+          "value": "twilio",
+          "definedIn": [
+            "distronode-website/src/lib/providers/types.ts",
+            "distronode-website/src/app/api/district/workspace/provider/numbers/route.ts"
+          ],
+          "en": "Twilio",
+          "fr": "Twilio"
+        },
+        {
+          "value": "sinch",
+          "definedIn": [
+            "distronode-website/src/lib/providers/types.ts",
+            "distronode-website/src/app/api/district/workspace/provider/numbers/route.ts"
+          ],
+          "en": "Sinch",
+          "fr": "Sinch"
+        },
+        {
+          "value": "telnyx",
+          "definedIn": [
+            "distronode-website/src/lib/providers/types.ts",
+            "distronode-website/src/app/api/district/workspace/provider/numbers/route.ts"
+          ],
+          "en": "Telnyx",
+          "fr": "Telnyx"
+        },
+        {
+          "value": "unknown",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/provider/numbers/route.ts"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "meetingStatus": {
+      "description": "`status` on a meeting (GET /api/district/meetings, /meetings/{id}).",
+      "labelSource": "distronode-website/src/components/district/meetings/meetingsI18n.ts",
+      "values": [
+        {
+          "value": "in-progress",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "district-voice-agent/src/db/meeting.py"
+          ],
+          "en": "In Progress",
+          "fr": "En cours"
+        },
+        {
+          "value": "completed",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "district-voice-agent/src/db/meeting.py"
+          ],
+          "en": "Completed",
+          "fr": "Terminée"
+        }
+      ]
+    },
+    "messageDeliveryStatus": {
+      "description": "`status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here.",
+      "labelSource": "distronode-website/src/components/district/inbox/inboxI18n.ts emailStatus*",
+      "values": [
+        {
+          "value": "queued",
+          "definedIn": [
+            "distronode-website/src/lib/messaging/delivery-status.ts"
+          ],
+          "en": "Sent",
+          "fr": "Envoyé"
+        },
+        {
+          "value": "sent",
+          "definedIn": [
+            "distronode-website/src/lib/messaging/delivery-status.ts"
+          ],
+          "en": "Sent",
+          "fr": "Envoyé"
+        },
+        {
+          "value": "delivered",
+          "definedIn": [
+            "distronode-website/src/lib/messaging/delivery-status.ts"
+          ],
+          "en": "Delivered",
+          "fr": "Livré"
+        },
+        {
+          "value": "failed",
+          "definedIn": [
+            "distronode-website/src/lib/messaging/delivery-status.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "received",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "researchStatus": {
+      "description": "`dgiStatus` on a contact (GET /api/district/contacts, /contacts/get): the lead research job.",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/dgi/dgiI18n.ts",
+      "values": [
+        {
+          "value": "pending",
+          "definedIn": [
+            "distronode-website/src/lib/district/types.ts"
+          ],
+          "en": "Pending queue",
+          "fr": "En file d'attente"
+        },
+        {
+          "value": "crawling",
+          "definedIn": [
+            "distronode-website/src/lib/district/types.ts"
+          ],
+          "en": "Crawling web…",
+          "fr": "Exploration du Web…"
+        },
+        {
+          "value": "complete",
+          "definedIn": [
+            "distronode-website/src/lib/district/types.ts"
+          ],
+          "en": "Complete",
+          "fr": "Terminé"
+        },
+        {
+          "value": "failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/types.ts"
+          ],
+          "en": "Enrichment failed",
+          "fr": "Échec de l'enrichissement"
+        }
+      ]
+    },
+    "contactResearchKey": {
+      "description": "The keys of `intelligence` on a contact (the lead research blob). The labels are the contact drawer's section headings for them.",
+      "labelSource": "distronode-website/src/components/district/contacts/contactsI18n.ts drawer",
+      "values": [
+        {
+          "value": "executiveSummary",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/types.ts",
+            "distronode-website/src/lib/dgi/repository.ts"
+          ],
+          "en": "Executive Dossier Summary",
+          "fr": "Résumé du dossier"
+        },
+        {
+          "value": "estimatedValue",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/types.ts",
+            "distronode-website/src/lib/dgi/repository.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "corePainPoints",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/types.ts",
+            "distronode-website/src/lib/dgi/repository.ts"
+          ],
+          "en": "Inferred CRM Key Challenges",
+          "fr": "Enjeux CRM déduits"
+        },
+        {
+          "value": "recommendedGreeting",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/types.ts",
+            "distronode-website/src/lib/dgi/repository.ts"
+          ],
+          "en": "Suggested Receptionist Greeting",
+          "fr": "Accueil suggéré pour la réceptionniste"
+        },
+        {
+          "value": "dynamicIcebreakers",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/types.ts",
+            "distronode-website/src/lib/dgi/repository.ts"
+          ],
+          "en": "CTO/CEO Conversation Starters",
+          "fr": "Amorces de conversation pour la direction"
+        },
+        {
+          "value": "person",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/repository.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "callerIntel",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/repository.ts"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "lineType": {
+      "description": "`phoneIntel.lineType` and `intelligence.callerIntel.lineType` on a contact: the carrier lookup's line type, normalised into Twilio's words. Any other value is shown as sent. The labels are the portal's words for the same line types in its forwarding guide.",
+      "labelSource": "distronode-website/src/components/district/setup/forwardingI18n.ts lineTypes",
+      "values": [
+        {
+          "value": "mobile",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/types.ts"
+          ],
+          "en": "Mobile phone",
+          "fr": "Téléphone mobile"
+        },
+        {
+          "value": "landline",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/types.ts"
+          ],
+          "en": "Home or office line",
+          "fr": "Ligne résidentielle ou de bureau"
+        },
+        {
+          "value": "voip",
+          "definedIn": [
+            "distronode-website/src/lib/dgi/types.ts"
+          ],
+          "en": "VoIP or hosted phone system",
+          "fr": "Système téléphonique IP ou hébergé"
+        }
+      ]
+    },
+    "billingSubscriptionStatus": {
+      "description": "`subscriptions[].status` in GET /api/billing: the Stripe statuses the route lists. The portal shows \"Cancels soon\" for any of them with `cancelAtPeriodEnd`, which is not a status.",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/billing/billingI18n.ts",
+      "values": [
+        {
+          "value": "active",
+          "definedIn": [
+            "distronode-website/src/lib/payments/billing-currencies.ts"
+          ],
+          "en": "Active",
+          "fr": "Actif"
+        },
+        {
+          "value": "trialing",
+          "definedIn": [
+            "distronode-website/src/lib/payments/billing-currencies.ts"
+          ],
+          "en": "Trial",
+          "fr": "Essai"
+        },
+        {
+          "value": "past_due",
+          "definedIn": [
+            "distronode-website/src/lib/payments/billing-currencies.ts"
+          ],
+          "en": "Payment past due",
+          "fr": "Paiement en retard"
+        },
+        {
+          "value": "unpaid",
+          "definedIn": [
+            "distronode-website/src/lib/payments/billing-currencies.ts"
+          ],
+          "en": "Unpaid",
+          "fr": "Impayé"
+        }
+      ]
+    },
+    "billingInvoiceStatus": {
+      "description": "`invoices[].status` in GET /api/billing: Stripe's invoice status, passed through. The portal shows the value itself; it has no label for any of them.",
+      "labelSource": null,
+      "values": [
+        {
+          "value": "draft",
+          "definedIn": [
+            "distronode-website/src/app/api/billing/route.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "open",
+          "definedIn": [
+            "distronode-website/src/app/api/billing/route.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "paid",
+          "definedIn": [
+            "distronode-website/src/app/api/billing/route.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "uncollectible",
+          "definedIn": [
+            "distronode-website/src/app/api/billing/route.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "void",
+          "definedIn": [
+            "distronode-website/src/app/api/billing/route.ts"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "messagingCarrier": {
+      "description": "`accounts[].provider` in GET /api/district/workspace/messaging.",
+      "labelSource": "distronode-website/src/components/district/telephonySettingsI18n.ts messagingProviderNames",
+      "values": [
+        {
+          "value": "twilio",
+          "definedIn": [
+            "distronode-website/src/lib/providers/types.ts",
+            "distronode-website/src/app/api/district/workspace/messaging/route.ts"
+          ],
+          "en": "Twilio",
+          "fr": "Twilio"
+        },
+        {
+          "value": "sinch",
+          "definedIn": [
+            "distronode-website/src/lib/providers/types.ts",
+            "distronode-website/src/app/api/district/workspace/messaging/route.ts"
+          ],
+          "en": "Sinch",
+          "fr": "Sinch"
+        },
+        {
+          "value": "telnyx",
+          "definedIn": [
+            "distronode-website/src/lib/providers/types.ts",
+            "distronode-website/src/app/api/district/workspace/messaging/route.ts"
+          ],
+          "en": "Telnyx",
+          "fr": "Telnyx"
+        }
+      ]
+    },
+    "messagingCredentialSource": {
+      "description": "`accounts[].credentialSource` in GET /api/district/workspace/messaging (missing reads as `byok`).",
+      "labelSource": "distronode-website/src/components/district/messaging/messagingI18n.ts",
+      "values": [
+        {
+          "value": "byok",
+          "definedIn": [
+            "distronode-website/src/lib/providers/managed.ts",
+            "distronode-website/src/app/api/district/workspace/messaging/route.ts"
+          ],
+          "en": "Bring Your Own Keys",
+          "fr": "Vos propres clés"
+        },
+        {
+          "value": "managed",
+          "definedIn": [
+            "distronode-website/src/lib/providers/managed.ts",
+            "distronode-website/src/app/api/district/workspace/messaging/route.ts"
+          ],
+          "en": "Managed Service",
+          "fr": "Service géré"
+        }
+      ]
     }
   },
   "placeholders": [
@@ -594,7 +1580,10 @@
       "frSource": null
     },
     {
-      "value": "No answer - no conversation took place.",
+      "value": "No answer, no conversation took place.",
+      "aliases": [
+        "No answer - no conversation took place."
+      ],
       "kind": "stored",
       "fields": [
         "Call.summary of an unanswered call"

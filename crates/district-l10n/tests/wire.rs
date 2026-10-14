@@ -97,25 +97,52 @@ fn an_unknown_value_never_reads_as_its_english() {
         assert_eq!(wire_label(WireCategory::Region, " mx ", locale), "MX");
         assert_eq!(region_long_label("mx", locale), "MX");
     }
+    // Every category with a fallback of its own reads an unknown value as it.
+    let vocabulary = vocabulary();
+    let mut with_fallback = 0;
+    for (name, category) in vocabulary["categories"].as_object().expect("categories") {
+        let Some(fallback) = category["fallback"]["en"].as_str() else {
+            continue;
+        };
+        let wire = WireCategory::from_name(name).expect(name);
+        assert_eq!(
+            wire_label(wire, "not-a-value", Locale::En),
+            fallback,
+            "{name}"
+        );
+        with_fallback += 1;
+    }
+    assert!(
+        with_fallback >= 3,
+        "{with_fallback} categories with a fallback"
+    );
 }
 
 #[test]
 fn a_placeholder_reads_as_its_label_and_real_data_as_nothing() {
     let vocabulary = vocabulary();
     let mut checked = 0;
+    let mut aliases = 0;
     for placeholder in vocabulary["placeholders"].as_array().expect("placeholders") {
         let value = placeholder["value"].as_str().expect("value");
-        if value.contains(" - ") {
-            // The vendored copy has its em dash replaced; see scripts/gen-l10n.py.
-            assert_eq!(placeholder_label(value, Locale::En), None);
-            continue;
-        }
         for locale in Locale::ALL {
             assert_eq!(placeholder_label(value, locale), Some(value), "{value}");
+        }
+        // An older spelling still in stored rows reads as the same placeholder.
+        // The vendored copy writes its em dash as " - "; the stored row has the
+        // dash itself.
+        for alias in placeholder["aliases"].as_array().into_iter().flatten() {
+            let alias = alias.as_str().expect("alias");
+            let stored = alias.replace(" - ", " \u{2014} ");
+            assert_ne!(stored, alias, "the alias names the dash it replaced");
+            assert_eq!(placeholder_label(&stored, Locale::En), Some(value));
+            assert_eq!(placeholder_label(alias, Locale::En), None, "{alias}");
+            aliases += 1;
         }
         checked += 1;
     }
     assert!(checked > 10, "{checked} placeholders");
+    assert!(aliases > 0, "no alias was checked");
     assert_eq!(placeholder_label("Ada Lovelace", Locale::FrCa), None);
     assert_eq!(placeholder_label("unknown", Locale::FrCa), None);
 }
