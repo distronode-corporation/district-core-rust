@@ -160,3 +160,24 @@ impl SchedulingTeam {
             .unwrap_or_default()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn left_out_and_null_lists_are_empty() {
+        let team: SchedulingTeam = serde_json::from_str(
+            r#"{"id":"t","name":"n","slug":"s","members":[{"id":"u","name":"","email":"e","routing_priority":0,"archived":false}]}"#,
+        )
+        .unwrap();
+        assert_eq!(team.members().len(), 1);
+        assert!(SchedulingTeam::default().members().is_empty());
+        let user: SchedulingUser = serde_json::from_str(
+            r#"{"id":"u","email":"e","name":"n","is_admin":false,"is_owner":false,"role":"member","archived":false,"teams":[{"id":"t","name":"Sales"}]}"#,
+        )
+        .unwrap();
+        assert_eq!(user.teams().len(), 1);
+        assert!(SchedulingUser::default().teams().is_empty());
+    }
+}

@@ -249,5 +249,11 @@ mod tests {
         assert_eq!(app.expires_at(), Some("2026"));
         let hook = SchedulingWebhook::default();
         assert!(hook.fields().is_empty());
+        let used: SchedulingOauthConnection =
+            serde_json::from_str(r#"{"id":"o","client_name":"c","last_used_at":"2026"}"#).unwrap();
+        assert_eq!(used.last_used_at(), Some("2026"));
+        let chosen: SchedulingWebhook =
+            serde_json::from_str(r#"{"id":"w","url":"u","events":[],"fields":["id"]}"#).unwrap();
+        assert_eq!(chosen.fields(), ["id"]);
     }
 }
