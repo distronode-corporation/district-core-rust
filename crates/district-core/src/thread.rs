@@ -634,6 +634,9 @@ impl SignedIn {
         result: Result<SendMessageResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
+        if tickets.accept(Slot::ComposeSend, ticket) {
+            return self.compose_sent(result, tickets);
+        }
         if !tickets.accept(Slot::Send, ticket) {
             return stay();
         }

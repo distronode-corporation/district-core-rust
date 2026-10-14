@@ -622,6 +622,9 @@ impl SignedIn {
         if tickets.accept(Slot::OpenLookup, ticket) {
             return self.notification_thread_found(result, tickets);
         }
+        if tickets.accept(Slot::ComposeLookup, ticket) {
+            return self.compose_thread_found(result, tickets);
+        }
         let Some(message_id) = tickets.accept_keyed(Slot::MessageLookup, ticket) else {
             return stay();
         };

@@ -2338,6 +2338,9 @@ pub(crate) enum Slot {
     OpenLookup,
     /// Keyed by message id.
     MessageLookup,
+    ComposeContacts,
+    ComposeSend,
+    ComposeLookup,
     CallLog,
     CallLogMore,
     CallDetail,

@@ -342,6 +342,34 @@ pub const HQ_NOTE_MISMATCHED: &str = "District AI reports a change other than th
 pub const HQ_NOTE_NOT_APPLIED: &str = "That change was not made.";
 /// `hq.thinking` in English.
 pub const HQ_THINKING: &str = "Thinking.";
+/// `inbox.compose_action` in English.
+pub const INBOX_COMPOSE_ACTION: &str = "New message";
+/// `inbox.compose_cancel` in English.
+pub const INBOX_COMPOSE_CANCEL: &str = "Cancel";
+/// `inbox.compose_change` in English.
+pub const INBOX_COMPOSE_CHANGE: &str = "Change";
+/// `inbox.compose_channel_email` in English.
+pub const INBOX_COMPOSE_CHANNEL_EMAIL: &str = "Email";
+/// `inbox.compose_channel_sms` in English.
+pub const INBOX_COMPOSE_CHANNEL_SMS: &str = "Text message";
+/// `inbox.compose_message` in English.
+pub const INBOX_COMPOSE_MESSAGE: &str = "Message";
+/// `inbox.compose_no_address` in English.
+pub const INBOX_COMPOSE_NO_ADDRESS: &str = "This contact has no phone number or email address on file.";
+/// `inbox.compose_recent_contacts` in English.
+pub const INBOX_COMPOSE_RECENT_CONTACTS: &str = "Showing your most recent contacts. For anyone else, type their number or email.";
+/// `inbox.compose_send` in English.
+pub const INBOX_COMPOSE_SEND: &str = "Send";
+/// `inbox.compose_send_on` in English.
+pub const INBOX_COMPOSE_SEND_ON: &str = "Send on";
+/// `inbox.compose_sending` in English.
+pub const INBOX_COMPOSE_SENDING: &str = "Sending…";
+/// `inbox.compose_subject` in English.
+pub const INBOX_COMPOSE_SUBJECT: &str = "Subject";
+/// `inbox.compose_title` in English.
+pub const INBOX_COMPOSE_TITLE: &str = "New message";
+/// `inbox.compose_to` in English.
+pub const INBOX_COMPOSE_TO: &str = "To";
 /// `inbox.empty_body` in English.
 pub const INBOX_EMPTY_BODY: &str = "Texts and emails from your customers will appear here.";
 /// `inbox.empty_title` in English.
