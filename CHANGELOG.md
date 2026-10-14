@@ -17,11 +17,26 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.0-beta.4] - 2026-10-14
+
+The catalogs in Canadian French, for testing French in the desktop apps. English is
+unchanged, and no app shows French until it sets `CoreConfig::locale`.
+
 ### Changed
 
-- The catalogs carry their reviewed Canadian French (fr-CA): 1,481 entries across
+- The catalogs carry their reviewed Canadian French (fr-CA, #24): 1,481 entries across
   `crates/district-l10n/catalog/*.toml`, so `district_l10n::FR_COMPLETE` is true. The
   language stays the app's choice (`CoreConfig::locale`), and the apps keep French off.
+- The scheduling formatters' French is held by tests to the service's own output: the
+  first of a month reads `1er` (`1er août 2026`), the clock is 24-hour with no
+  minutes on the hour (`12 sept. 2026, 15 h 04`, `9 h`), and a date range keeps both
+  years. They already wrote it this way through `district_l10n::format`; no output
+  changed in either language.
+
+### Security
+
+- rustls 0.23.46 in Cargo.lock (#24), for RUSTSEC-2026-0346, -0347, -0348 and -0349,
+  which 0.23.45 carries.
 
 ## [4.0.0-beta.3] - 2026-10-14
 
