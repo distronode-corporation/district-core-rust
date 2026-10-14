@@ -76,7 +76,11 @@ pub use calendar::{
     OAUTH_PROVIDERS, connect_next, provider_label,
 };
 pub use clock::{SchedulingDay, times_in};
-pub use developer::{DeveloperEvent, DeveloperSection};
+pub use developer::{
+    DeveloperDialog, DeveloperEvent, DeveloperSection, DeveloperTab, KeyDialog, MintedKey,
+    MintedSecret, Removal, RemovalState, WEBHOOK_FIELDS, WebhookEditor, delivery_outcome,
+    is_personal_data,
+};
 pub use event_types::{
     ActionsDialog, DEFAULT_LOCATION, EventTypeDialog, EventTypeEditor, EventTypeEvent,
     EventTypeForm, EventTypeRow, EventTypeSection, EventTypesEvent, EventTypesSection, HostRow,
@@ -496,6 +500,7 @@ impl SignedIn {
             SchedulingSection::Overview
                 | SchedulingSection::Bookings
                 | SchedulingSection::EventTypes
+                | SchedulingSection::Developer
         );
         let outs = match section {
             SchedulingSection::Overview => overview::enter(admin, tickets),
@@ -515,6 +520,7 @@ impl SignedIn {
         // The overview and the bookings scope their reads by whether this
         // member may manage the booking pages, which the status says, read
         // afresh: the section has to fill itself without the screen above it.
+        // The developer section takes its MCP address from it.
         if scoped {
             effects.extend(self.enter_scheduling(tickets));
         }
@@ -693,6 +699,7 @@ impl SignedIn {
         let mut outs = overview::status_arrived(admin, status.as_ref());
         outs.extend(bookings::status_arrived(admin, status.as_ref()));
         event_types::status_arrived(admin, status.as_ref());
+        developer::status_arrived(admin, status.as_ref());
         self.scheduling_admin_send(outs, tickets)
     }
 }

@@ -104,6 +104,33 @@ pub fn answers_eyebrow(l: Locale) -> &'static str {
     }
 }
 
+/// `app.revoke_action`
+#[must_use]
+pub fn app_revoke_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Revoke access",
+        Locale::FrCa => "Revoke access",
+    }
+}
+
+/// `app.revoke_confirm`
+#[must_use]
+pub fn app_revoke_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "It stops reaching this workspace's booking data now.",
+        Locale::FrCa => "It stops reaching this workspace's booking data now.",
+    }
+}
+
+/// `app.revoke_prompt`
+#[must_use]
+pub fn app_revoke_prompt(l: Locale, client_name: &str) -> String {
+    match l {
+        Locale::En => format!("Revoke {client_name}?"),
+        Locale::FrCa => format!("Revoke {client_name}?"),
+    }
+}
+
 /// `booking.answer_blank`
 #[must_use]
 pub fn booking_answer_blank(l: Locale) -> &'static str {
@@ -914,6 +941,24 @@ pub fn common_edit(l: Locale) -> &'static str {
     }
 }
 
+/// `common.off`
+#[must_use]
+pub fn common_off(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Off",
+        Locale::FrCa => "Off",
+    }
+}
+
+/// `common.on`
+#[must_use]
+pub fn common_on(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "On",
+        Locale::FrCa => "On",
+    }
+}
+
 /// `common.remove`
 #[must_use]
 pub fn common_remove(l: Locale) -> &'static str {
@@ -1130,6 +1175,258 @@ pub fn desk_no_hours(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not bookable on any day yet.",
         Locale::FrCa => "Not bookable on any day yet.",
+    }
+}
+
+/// `developer.apps_empty`
+#[must_use]
+pub fn developer_apps_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No connected apps.",
+        Locale::FrCa => "No connected apps.",
+    }
+}
+
+/// `developer.apps_eyebrow`
+#[must_use]
+pub fn developer_apps_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connected apps",
+        Locale::FrCa => "Connected apps",
+    }
+}
+
+/// `developer.apps_subtitle`
+#[must_use]
+pub fn developer_apps_subtitle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Every connected app reaches the same booking data. There are no partial permissions, so revoking is the only way to narrow one.",
+        Locale::FrCa => "Every connected app reaches the same booking data. There are no partial permissions, so revoking is the only way to narrow one.",
+    }
+}
+
+/// `developer.deliveries`
+#[must_use]
+pub fn developer_deliveries(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Deliveries",
+        Locale::FrCa => "Deliveries",
+    }
+}
+
+/// `developer.deliveries_empty`
+#[must_use]
+pub fn developer_deliveries_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Nothing delivered yet.",
+        Locale::FrCa => "Nothing delivered yet.",
+    }
+}
+
+/// `developer.delivery_delivered`
+#[must_use]
+pub fn developer_delivery_delivered(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delivered",
+        Locale::FrCa => "Delivered",
+    }
+}
+
+/// `developer.delivery_no_answer`
+#[must_use]
+pub fn developer_delivery_no_answer(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No answer",
+        Locale::FrCa => "No answer",
+    }
+}
+
+/// `developer.delivery_rejected`
+#[must_use]
+pub fn developer_delivery_rejected(l: Locale, code: &str) -> String {
+    match l {
+        Locale::En => format!("Rejected with {code}"),
+        Locale::FrCa => format!("Rejected with {code}"),
+    }
+}
+
+/// `developer.delivery_waiting`
+#[must_use]
+pub fn developer_delivery_waiting(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Waiting",
+        Locale::FrCa => "Waiting",
+    }
+}
+
+/// `developer.key_value`
+#[must_use]
+pub fn developer_key_value(l: Locale, created: &str, last_used: &str) -> String {
+    match l {
+        Locale::En => format!("Created {created} · Last used {last_used}"),
+        Locale::FrCa => format!("Created {created} · Last used {last_used}"),
+    }
+}
+
+/// `developer.keys_empty`
+#[must_use]
+pub fn developer_keys_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No API keys yet.",
+        Locale::FrCa => "No API keys yet.",
+    }
+}
+
+/// `developer.keys_eyebrow`
+#[must_use]
+pub fn developer_keys_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your API keys",
+        Locale::FrCa => "Your API keys",
+    }
+}
+
+/// `developer.keys_subtitle`
+#[must_use]
+pub fn developer_keys_subtitle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A key lets your own tools and scripts reach this workspace's booking data.",
+        Locale::FrCa => "A key lets your own tools and scripts reach this workspace's booking data.",
+    }
+}
+
+/// `developer.mcp_auth_label`
+#[must_use]
+pub fn developer_mcp_auth_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Authorization header",
+        Locale::FrCa => "Authorization header",
+    }
+}
+
+/// `developer.mcp_auth_value`
+#[must_use]
+pub fn developer_mcp_auth_value(l: Locale, key: &str) -> String {
+    match l {
+        Locale::En => format!("Bearer {key}"),
+        Locale::FrCa => format!("Bearer {key}"),
+    }
+}
+
+/// `developer.mcp_eyebrow`
+#[must_use]
+pub fn developer_mcp_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connect an AI assistant",
+        Locale::FrCa => "Connect an AI assistant",
+    }
+}
+
+/// `developer.mcp_key_placeholder`
+#[must_use]
+pub fn developer_mcp_key_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "<your API key>",
+        Locale::FrCa => "<your API key>",
+    }
+}
+
+/// `developer.mcp_no_host`
+#[must_use]
+pub fn developer_mcp_no_host(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your booking address is not ready yet. It appears here once scheduling is set up.",
+        Locale::FrCa => "Your booking address is not ready yet. It appears here once scheduling is set up.",
+    }
+}
+
+/// `developer.mcp_note`
+#[must_use]
+pub fn developer_mcp_note(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Use a key from the API keys tab. Anyone holding it can do everything on this workspace's bookings, so give each assistant its own and revoke it when you are done with it.",
+        Locale::FrCa => "Use a key from the API keys tab. Anyone holding it can do everything on this workspace's bookings, so give each assistant its own and revoke it when you are done with it.",
+    }
+}
+
+/// `developer.mcp_url_label`
+#[must_use]
+pub fn developer_mcp_url_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "MCP URL",
+        Locale::FrCa => "MCP URL",
+    }
+}
+
+/// `developer.never`
+#[must_use]
+pub fn developer_never(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Never",
+        Locale::FrCa => "Never",
+    }
+}
+
+/// `developer.not_tried_yet`
+#[must_use]
+pub fn developer_not_tried_yet(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not tried yet",
+        Locale::FrCa => "Not tried yet",
+    }
+}
+
+/// `developer.tab_apps`
+#[must_use]
+pub fn developer_tab_apps(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connected apps",
+        Locale::FrCa => "Connected apps",
+    }
+}
+
+/// `developer.tab_keys`
+#[must_use]
+pub fn developer_tab_keys(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "API keys",
+        Locale::FrCa => "API keys",
+    }
+}
+
+/// `developer.tab_webhooks`
+#[must_use]
+pub fn developer_tab_webhooks(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Webhooks",
+        Locale::FrCa => "Webhooks",
+    }
+}
+
+/// `developer.webhooks_empty`
+#[must_use]
+pub fn developer_webhooks_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No webhooks yet.",
+        Locale::FrCa => "No webhooks yet.",
+    }
+}
+
+/// `developer.webhooks_eyebrow`
+#[must_use]
+pub fn developer_webhooks_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Webhooks",
+        Locale::FrCa => "Webhooks",
+    }
+}
+
+/// `developer.webhooks_subtitle`
+#[must_use]
+pub fn developer_webhooks_subtitle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Bookings already reach your District inbox and workflows; webhooks are for other systems.",
+        Locale::FrCa => "Bookings already reach your District inbox and workflows; webhooks are for other systems.",
     }
 }
 
@@ -1895,6 +2192,132 @@ pub fn hours_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unavailable",
         Locale::FrCa => "Unavailable",
+    }
+}
+
+/// `key.copied`
+#[must_use]
+pub fn key_copied(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Copied",
+        Locale::FrCa => "Copied",
+    }
+}
+
+/// `key.copy_action`
+#[must_use]
+pub fn key_copy_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Copy key",
+        Locale::FrCa => "Copy key",
+    }
+}
+
+/// `key.create`
+#[must_use]
+pub fn key_create(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Create key",
+        Locale::FrCa => "Create key",
+    }
+}
+
+/// `key.creating`
+#[must_use]
+pub fn key_creating(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Creating…",
+        Locale::FrCa => "Creating…",
+    }
+}
+
+/// `key.done`
+#[must_use]
+pub fn key_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Done",
+        Locale::FrCa => "Done",
+    }
+}
+
+/// `key.name_hint`
+#[must_use]
+pub fn key_name_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "What will use this key. You will see it in the list and nowhere else.",
+        Locale::FrCa => "What will use this key. You will see it in the list and nowhere else.",
+    }
+}
+
+/// `key.name_label`
+#[must_use]
+pub fn key_name_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Name",
+        Locale::FrCa => "Name",
+    }
+}
+
+/// `key.name_missing`
+#[must_use]
+pub fn key_name_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Give the key a name.",
+        Locale::FrCa => "Give the key a name.",
+    }
+}
+
+/// `key.reveal_title`
+#[must_use]
+pub fn key_reveal_title(l: Locale, name: &str) -> String {
+    match l {
+        Locale::En => format!("Your key for {name}"),
+        Locale::FrCa => format!("Your key for {name}"),
+    }
+}
+
+/// `key.reveal_warning`
+#[must_use]
+pub fn key_reveal_warning(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Copy it now. It is not shown again.",
+        Locale::FrCa => "Copy it now. It is not shown again.",
+    }
+}
+
+/// `key.revoke_action`
+#[must_use]
+pub fn key_revoke_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Revoke key",
+        Locale::FrCa => "Revoke key",
+    }
+}
+
+/// `key.revoke_confirm`
+#[must_use]
+pub fn key_revoke_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Anything using it stops working now.",
+        Locale::FrCa => "Anything using it stops working now.",
+    }
+}
+
+/// `key.revoke_prompt`
+#[must_use]
+pub fn key_revoke_prompt(l: Locale, name: &str) -> String {
+    match l {
+        Locale::En => format!("Revoke {name}?"),
+        Locale::FrCa => format!("Revoke {name}?"),
+    }
+}
+
+/// `key.sheet_title`
+#[must_use]
+pub fn key_sheet_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Create key",
+        Locale::FrCa => "Create key",
     }
 }
 
@@ -3638,6 +4061,249 @@ pub fn unknown_time(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
         Locale::FrCa => "Unknown",
+    }
+}
+
+/// `webhook.add_action`
+#[must_use]
+pub fn webhook_add_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add webhook",
+        Locale::FrCa => "Add webhook",
+    }
+}
+
+/// `webhook.add_title`
+#[must_use]
+pub fn webhook_add_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add webhook",
+        Locale::FrCa => "Add webhook",
+    }
+}
+
+/// `webhook.added`
+#[must_use]
+pub fn webhook_added(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Webhook added",
+        Locale::FrCa => "Webhook added",
+    }
+}
+
+/// `webhook.delete_action`
+#[must_use]
+pub fn webhook_delete_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete webhook",
+        Locale::FrCa => "Delete webhook",
+    }
+}
+
+/// `webhook.delete_confirm`
+#[must_use]
+pub fn webhook_delete_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "It stops receiving booking changes now, and its signing secret cannot be recovered.",
+        Locale::FrCa => "It stops receiving booking changes now, and its signing secret cannot be recovered.",
+    }
+}
+
+/// `webhook.delete_prompt`
+#[must_use]
+pub fn webhook_delete_prompt(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete this webhook?",
+        Locale::FrCa => "Delete this webhook?",
+    }
+}
+
+/// `webhook.dropped_events_line`
+#[must_use]
+pub fn webhook_dropped_events_line(l: Locale, events: &str) -> String {
+    match l {
+        Locale::En => format!("Saving will stop sending {events}. This app does not know those events, so it cannot send them back."),
+        Locale::FrCa => format!("Saving will stop sending {events}. This app does not know those events, so it cannot send them back."),
+    }
+}
+
+/// `webhook.edit_title`
+#[must_use]
+pub fn webhook_edit_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Edit webhook",
+        Locale::FrCa => "Edit webhook",
+    }
+}
+
+/// `webhook.events_hint`
+#[must_use]
+pub fn webhook_events_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "What to send. Each one is a separate delivery.",
+        Locale::FrCa => "What to send. Each one is a separate delivery.",
+    }
+}
+
+/// `webhook.events_label`
+#[must_use]
+pub fn webhook_events_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Events",
+        Locale::FrCa => "Events",
+    }
+}
+
+/// `webhook.events_missing`
+#[must_use]
+pub fn webhook_events_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose at least one event.",
+        Locale::FrCa => "Choose at least one event.",
+    }
+}
+
+/// `webhook.fields_hint`
+#[must_use]
+pub fn webhook_fields_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Which parts of the booking each delivery carries.",
+        Locale::FrCa => "Which parts of the booking each delivery carries.",
+    }
+}
+
+/// `webhook.fields_label`
+#[must_use]
+pub fn webhook_fields_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Data to send",
+        Locale::FrCa => "Data to send",
+    }
+}
+
+/// `webhook.personal_data`
+#[must_use]
+pub fn webhook_personal_data(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Personal data",
+        Locale::FrCa => "Personal data",
+    }
+}
+
+/// `webhook.save_action`
+#[must_use]
+pub fn webhook_save_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save changes",
+        Locale::FrCa => "Save changes",
+    }
+}
+
+/// `webhook.saving`
+#[must_use]
+pub fn webhook_saving(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Saving…",
+        Locale::FrCa => "Saving…",
+    }
+}
+
+/// `webhook.secret_copy_action`
+#[must_use]
+pub fn webhook_secret_copy_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Copy signing secret",
+        Locale::FrCa => "Copy signing secret",
+    }
+}
+
+/// `webhook.secret_note`
+#[must_use]
+pub fn webhook_secret_note(l: Locale, url: &str) -> String {
+    match l {
+        Locale::En => format!("Every delivery to {url} is signed with it, in the X-Calnode-Signature header."),
+        Locale::FrCa => format!("Every delivery to {url} is signed with it, in the X-Calnode-Signature header."),
+    }
+}
+
+/// `webhook.secret_title`
+#[must_use]
+pub fn webhook_secret_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your signing secret",
+        Locale::FrCa => "Your signing secret",
+    }
+}
+
+/// `webhook.updated`
+#[must_use]
+pub fn webhook_updated(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Webhook updated",
+        Locale::FrCa => "Webhook updated",
+    }
+}
+
+/// `webhook.url_fixed`
+#[must_use]
+pub fn webhook_url_fixed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The URL cannot be changed. Delete this webhook and add another to move it.",
+        Locale::FrCa => "The URL cannot be changed. Delete this webhook and add another to move it.",
+    }
+}
+
+/// `webhook.url_hint`
+#[must_use]
+pub fn webhook_url_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Where each delivery is posted. https only.",
+        Locale::FrCa => "Where each delivery is posted. https only.",
+    }
+}
+
+/// `webhook.url_label`
+#[must_use]
+pub fn webhook_url_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Endpoint URL",
+        Locale::FrCa => "Endpoint URL",
+    }
+}
+
+/// `webhook.url_missing`
+#[must_use]
+pub fn webhook_url_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Give the webhook a URL.",
+        Locale::FrCa => "Give the webhook a URL.",
+    }
+}
+
+/// `webhook.url_not_a_url`
+#[must_use]
+pub fn webhook_url_not_a_url(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That is not a URL. It has to start with https://.",
+        Locale::FrCa => "That is not a URL. It has to start with https://.",
+    }
+}
+
+/// `webhook.url_not_https`
+#[must_use]
+pub fn webhook_url_not_https(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The URL has to start with https://.",
+        Locale::FrCa => "The URL has to start with https://.",
+    }
+}
+
+/// `webhook.url_private`
+#[must_use]
+pub fn webhook_url_private(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That address is not reachable from the internet. Use a public https URL.",
+        Locale::FrCa => "That address is not reachable from the internet. Use a public https URL.",
     }
 }
 
