@@ -325,7 +325,7 @@ pub fn wire_desk_ticket_source_voice_call(l: Locale) -> &'static str {
 pub fn wire_desk_ticket_status_fallback(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
-        Locale::FrCa => "Inconnu",
+        Locale::FrCa => "Inconnue",
     }
 }
 

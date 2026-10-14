@@ -320,11 +320,12 @@ note = "A label for the stored value `voice-call` of deskTicketSource. `source` 
 
 [wire.desk_ticket_status.fallback]
 en = "Unknown"
-fr = "Inconnu"
+fr = "Inconnue"
 ctx = "label"
 screen = "wire desk_ticket_status"
 tier = "T3"
 state = "reviewed"
+fr_variant = "contract fallback for a ticket status (feminine, as wire-vocabulary.json)"
 note = "The label for a value of deskTicketStatus this build does not know, or none."
 
 [wire.desk_ticket_status.open]

@@ -117,15 +117,12 @@ fn an_unknown_value_never_reads_as_its_english() {
             fallback,
             "{name}"
         );
-        let french = wire_label(wire, "not-a-value", Locale::FrCa);
         let website = category["fallback"]["fr"].as_str().expect("fr");
-        if name == "deskTicketStatus" {
-            // W3 wrote the one French of "Unknown", « Inconnu », where the website
-            // says « Inconnue » for a ticket; reported for a decision.
-            assert_eq!(french, "Inconnu", "{name}");
-        } else {
-            assert_eq!(french, website, "{name}");
-        }
+        assert_eq!(
+            wire_label(wire, "not-a-value", Locale::FrCa),
+            website,
+            "{name}"
+        );
         with_fallback += 1;
     }
     assert!(

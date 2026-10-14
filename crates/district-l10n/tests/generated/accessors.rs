@@ -1371,7 +1371,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_desk_ticket_source_voice_call(Locale::En), "From a phone call");
     assert_eq!(wire_strings::wire_desk_ticket_source_voice_call(Locale::FrCa), "Depuis un appel téléphonique");
     assert_eq!(wire_strings::wire_desk_ticket_status_fallback(Locale::En), "Unknown");
-    assert_eq!(wire_strings::wire_desk_ticket_status_fallback(Locale::FrCa), "Inconnu");
+    assert_eq!(wire_strings::wire_desk_ticket_status_fallback(Locale::FrCa), "Inconnue");
     assert_eq!(wire_strings::wire_desk_ticket_status_open(Locale::En), "Open");
     assert_eq!(wire_strings::wire_desk_ticket_status_open(Locale::FrCa), "Ouverte");
     assert_eq!(wire_strings::wire_desk_ticket_status_resolved(Locale::En), "Resolved");
