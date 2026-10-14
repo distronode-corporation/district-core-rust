@@ -3443,6 +3443,753 @@ pub fn sections_eyebrow(l: Locale) -> &'static str {
     }
 }
 
+/// `settings.assistant_enabled`
+#[must_use]
+pub fn settings_assistant_enabled(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Booking assistant",
+        Locale::FrCa => "Booking assistant",
+    }
+}
+
+/// `settings.assistant_hint`
+#[must_use]
+pub fn settings_assistant_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The assistant that answers questions on your booking page.",
+        Locale::FrCa => "The assistant that answers questions on your booking page.",
+    }
+}
+
+/// `settings.assistant_instructions`
+#[must_use]
+pub fn settings_assistant_instructions(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Extra instructions",
+        Locale::FrCa => "Extra instructions",
+    }
+}
+
+/// `settings.assistant_instructions_hint`
+#[must_use]
+pub fn settings_assistant_instructions_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Extra instructions for the booking assistant. Up to 4000 characters.",
+        Locale::FrCa => "Extra instructions for the booking assistant. Up to 4000 characters.",
+    }
+}
+
+/// `settings.assistant_instructions_label`
+#[must_use]
+pub fn settings_assistant_instructions_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Extra instructions for the booking assistant",
+        Locale::FrCa => "Extra instructions for the booking assistant",
+    }
+}
+
+/// `settings.assistant_instructions_placeholder`
+#[must_use]
+pub fn settings_assistant_instructions_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We are closed on public holidays. Always ask which location the customer means.",
+        Locale::FrCa => "We are closed on public holidays. Always ask which location the customer means.",
+    }
+}
+
+/// `settings.assistant_instructions_too_long`
+#[must_use]
+pub fn settings_assistant_instructions_too_long(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That is longer than 4000 characters.",
+        Locale::FrCa => "That is longer than 4000 characters.",
+    }
+}
+
+/// `settings.assistant_toggle`
+#[must_use]
+pub fn settings_assistant_toggle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Turn the booking assistant on",
+        Locale::FrCa => "Turn the booking assistant on",
+    }
+}
+
+/// `settings.automation_done`
+#[must_use]
+pub fn settings_automation_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Booking assistant saved",
+        Locale::FrCa => "Booking assistant saved",
+    }
+}
+
+/// `settings.automation_save`
+#[must_use]
+pub fn settings_automation_save(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save booking assistant",
+        Locale::FrCa => "Save booking assistant",
+    }
+}
+
+/// `settings.automation_title`
+#[must_use]
+pub fn settings_automation_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Booking assistant",
+        Locale::FrCa => "Booking assistant",
+    }
+}
+
+/// `settings.avatar_label`
+#[must_use]
+pub fn settings_avatar_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Profile picture",
+        Locale::FrCa => "Profile picture",
+    }
+}
+
+/// `settings.banner_opacity_label`
+#[must_use]
+pub fn settings_banner_opacity_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Banner opacity",
+        Locale::FrCa => "Banner opacity",
+    }
+}
+
+/// `settings.branding_banner`
+#[must_use]
+pub fn settings_branding_banner(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Banner",
+        Locale::FrCa => "Banner",
+    }
+}
+
+/// `settings.branding_business_name`
+#[must_use]
+pub fn settings_branding_business_name(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Business name",
+        Locale::FrCa => "Business name",
+    }
+}
+
+/// `settings.branding_done`
+#[must_use]
+pub fn settings_branding_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Booking page saved",
+        Locale::FrCa => "Booking page saved",
+    }
+}
+
+/// `settings.branding_locale`
+#[must_use]
+pub fn settings_branding_locale(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Page language",
+        Locale::FrCa => "Page language",
+    }
+}
+
+/// `settings.branding_logo`
+#[must_use]
+pub fn settings_branding_logo(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Logo",
+        Locale::FrCa => "Logo",
+    }
+}
+
+/// `settings.branding_privacy`
+#[must_use]
+pub fn settings_branding_privacy(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Privacy policy link",
+        Locale::FrCa => "Privacy policy link",
+    }
+}
+
+/// `settings.branding_save`
+#[must_use]
+pub fn settings_branding_save(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save booking page",
+        Locale::FrCa => "Save booking page",
+    }
+}
+
+/// `settings.branding_terms`
+#[must_use]
+pub fn settings_branding_terms(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Terms link",
+        Locale::FrCa => "Terms link",
+    }
+}
+
+/// `settings.branding_title`
+#[must_use]
+pub fn settings_branding_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Booking page",
+        Locale::FrCa => "Booking page",
+    }
+}
+
+/// `settings.business_name_hint`
+#[must_use]
+pub fn settings_business_name_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Shown at the top of every booking page.",
+        Locale::FrCa => "Shown at the top of every booking page.",
+    }
+}
+
+/// `settings.business_name_too_long`
+#[must_use]
+pub fn settings_business_name_too_long(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That name is longer than 200 characters.",
+        Locale::FrCa => "That name is longer than 200 characters.",
+    }
+}
+
+/// `settings.date_format_dmy`
+#[must_use]
+pub fn settings_date_format_dmy(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "31/12/2026",
+        Locale::FrCa => "31/12/2026",
+    }
+}
+
+/// `settings.date_format_mdy`
+#[must_use]
+pub fn settings_date_format_mdy(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "12/31/2026",
+        Locale::FrCa => "12/31/2026",
+    }
+}
+
+/// `settings.date_format_required`
+#[must_use]
+pub fn settings_date_format_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose how dates are written.",
+        Locale::FrCa => "Choose how dates are written.",
+    }
+}
+
+/// `settings.date_format_ymd`
+#[must_use]
+pub fn settings_date_format_ymd(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "2026-12-31",
+        Locale::FrCa => "2026-12-31",
+    }
+}
+
+/// `settings.fallback_locale_hint`
+#[must_use]
+pub fn settings_fallback_locale_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The language a visitor gets when their browser asks for one we do not have.",
+        Locale::FrCa => "The language a visitor gets when their browser asks for one we do not have.",
+    }
+}
+
+/// `settings.fallback_locale_required`
+#[must_use]
+pub fn settings_fallback_locale_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose the language the booking page falls back to.",
+        Locale::FrCa => "Choose the language the booking page falls back to.",
+    }
+}
+
+/// `settings.image_choose`
+#[must_use]
+pub fn settings_image_choose(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose image",
+        Locale::FrCa => "Choose image",
+    }
+}
+
+/// `settings.image_hint`
+#[must_use]
+pub fn settings_image_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "JPEG, PNG, GIF or WebP, up to 5 MB.",
+        Locale::FrCa => "JPEG, PNG, GIF or WebP, up to 5 MB.",
+    }
+}
+
+/// `settings.image_immediate`
+#[must_use]
+pub fn settings_image_immediate(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Images save as soon as you choose or remove them.",
+        Locale::FrCa => "Images save as soon as you choose or remove them.",
+    }
+}
+
+/// `settings.image_remove`
+#[must_use]
+pub fn settings_image_remove(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Remove",
+        Locale::FrCa => "Remove",
+    }
+}
+
+/// `settings.image_removed`
+#[must_use]
+pub fn settings_image_removed(l: Locale, label: &str) -> String {
+    match l {
+        Locale::En => format!("{label} removed"),
+        Locale::FrCa => format!("{label} removed"),
+    }
+}
+
+/// `settings.image_too_large`
+#[must_use]
+pub fn settings_image_too_large(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That image is larger than 5 MB. Choose a smaller one.",
+        Locale::FrCa => "That image is larger than 5 MB. Choose a smaller one.",
+    }
+}
+
+/// `settings.image_unreadable`
+#[must_use]
+pub fn settings_image_unreadable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That image could not be read. Choose another.",
+        Locale::FrCa => "That image could not be read. Choose another.",
+    }
+}
+
+/// `settings.image_uploaded`
+#[must_use]
+pub fn settings_image_uploaded(l: Locale, label: &str) -> String {
+    match l {
+        Locale::En => format!("{label} uploaded"),
+        Locale::FrCa => format!("{label} uploaded"),
+    }
+}
+
+/// `settings.image_wrong_type`
+#[must_use]
+pub fn settings_image_wrong_type(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That file is not an image we can use. Choose a JPEG, PNG, GIF or WebP.",
+        Locale::FrCa => "That file is not an image we can use. Choose a JPEG, PNG, GIF or WebP.",
+    }
+}
+
+/// `settings.legal_url_hint`
+#[must_use]
+pub fn settings_legal_url_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Linked in the footer of the booking page. Leave it empty for none.",
+        Locale::FrCa => "Linked in the footer of the booking page. Leave it empty for none.",
+    }
+}
+
+/// `settings.locale_not_set`
+#[must_use]
+pub fn settings_locale_not_set(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not set",
+        Locale::FrCa => "Not set",
+    }
+}
+
+/// `settings.logo_height_hint`
+#[must_use]
+pub fn settings_logo_height_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "In pixels, between 16 and 64.",
+        Locale::FrCa => "In pixels, between 16 and 64.",
+    }
+}
+
+/// `settings.logo_height_label`
+#[must_use]
+pub fn settings_logo_height_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Logo height",
+        Locale::FrCa => "Logo height",
+    }
+}
+
+/// `settings.logo_opacity_label`
+#[must_use]
+pub fn settings_logo_opacity_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Logo opacity",
+        Locale::FrCa => "Logo opacity",
+    }
+}
+
+/// `settings.name_required`
+#[must_use]
+pub fn settings_name_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Give your name.",
+        Locale::FrCa => "Give your name.",
+    }
+}
+
+/// `settings.name_too_long`
+#[must_use]
+pub fn settings_name_too_long(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That name is longer than 200 characters.",
+        Locale::FrCa => "That name is longer than 200 characters.",
+    }
+}
+
+/// `settings.not_set`
+#[must_use]
+pub fn settings_not_set(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not set",
+        Locale::FrCa => "Not set",
+    }
+}
+
+/// `settings.notifications_done`
+#[must_use]
+pub fn settings_notifications_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Notifications saved",
+        Locale::FrCa => "Notifications saved",
+    }
+}
+
+/// `settings.notifications_save`
+#[must_use]
+pub fn settings_notifications_save(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save notifications",
+        Locale::FrCa => "Save notifications",
+    }
+}
+
+/// `settings.notifications_title`
+#[must_use]
+pub fn settings_notifications_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Email notifications",
+        Locale::FrCa => "Email notifications",
+    }
+}
+
+/// `settings.notify_attendee_description`
+#[must_use]
+pub fn settings_notify_attendee_description(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When you are the one being booked into somebody else's meeting.",
+        Locale::FrCa => "When you are the one being booked into somebody else's meeting.",
+    }
+}
+
+/// `settings.notify_attendee_heading`
+#[must_use]
+pub fn settings_notify_attendee_heading(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "As an attendee",
+        Locale::FrCa => "As an attendee",
+    }
+}
+
+/// `settings.notify_cancellation`
+#[must_use]
+pub fn settings_notify_cancellation(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A booking is cancelled",
+        Locale::FrCa => "A booking is cancelled",
+    }
+}
+
+/// `settings.notify_confirmation`
+#[must_use]
+pub fn settings_notify_confirmation(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A booking is confirmed",
+        Locale::FrCa => "A booking is confirmed",
+    }
+}
+
+/// `settings.notify_host_booking`
+#[must_use]
+pub fn settings_notify_host_booking(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Somebody books you",
+        Locale::FrCa => "Somebody books you",
+    }
+}
+
+/// `settings.notify_host_cancel`
+#[must_use]
+pub fn settings_notify_host_cancel(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Somebody cancels",
+        Locale::FrCa => "Somebody cancels",
+    }
+}
+
+/// `settings.notify_host_description`
+#[must_use]
+pub fn settings_notify_host_description(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When somebody books one of your event types.",
+        Locale::FrCa => "When somebody books one of your event types.",
+    }
+}
+
+/// `settings.notify_host_heading`
+#[must_use]
+pub fn settings_notify_host_heading(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "As a host",
+        Locale::FrCa => "As a host",
+    }
+}
+
+/// `settings.notify_host_reschedule`
+#[must_use]
+pub fn settings_notify_host_reschedule(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Somebody moves their booking",
+        Locale::FrCa => "Somebody moves their booking",
+    }
+}
+
+/// `settings.notify_reminder`
+#[must_use]
+pub fn settings_notify_reminder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A booking is coming up",
+        Locale::FrCa => "A booking is coming up",
+    }
+}
+
+/// `settings.notify_reschedule`
+#[must_use]
+pub fn settings_notify_reschedule(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A booking is moved",
+        Locale::FrCa => "A booking is moved",
+    }
+}
+
+/// `settings.opacity_hint`
+#[must_use]
+pub fn settings_opacity_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A percentage, between 20 and 100.",
+        Locale::FrCa => "A percentage, between 20 and 100.",
+    }
+}
+
+/// `settings.profile_date_format`
+#[must_use]
+pub fn settings_profile_date_format(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Date format",
+        Locale::FrCa => "Date format",
+    }
+}
+
+/// `settings.profile_done`
+#[must_use]
+pub fn settings_profile_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Profile saved",
+        Locale::FrCa => "Profile saved",
+    }
+}
+
+/// `settings.profile_name`
+#[must_use]
+pub fn settings_profile_name(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Name",
+        Locale::FrCa => "Name",
+    }
+}
+
+/// `settings.profile_save`
+#[must_use]
+pub fn settings_profile_save(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save profile",
+        Locale::FrCa => "Save profile",
+    }
+}
+
+/// `settings.profile_time_format`
+#[must_use]
+pub fn settings_profile_time_format(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Time format",
+        Locale::FrCa => "Time format",
+    }
+}
+
+/// `settings.profile_timezone`
+#[must_use]
+pub fn settings_profile_timezone(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Timezone",
+        Locale::FrCa => "Timezone",
+    }
+}
+
+/// `settings.profile_title`
+#[must_use]
+pub fn settings_profile_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your scheduler profile",
+        Locale::FrCa => "Your scheduler profile",
+    }
+}
+
+/// `settings.profile_week_start`
+#[must_use]
+pub fn settings_profile_week_start(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Week starts on",
+        Locale::FrCa => "Week starts on",
+    }
+}
+
+/// `settings.set`
+#[must_use]
+pub fn settings_set(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Set",
+        Locale::FrCa => "Set",
+    }
+}
+
+/// `settings.tab_assistant`
+#[must_use]
+pub fn settings_tab_assistant(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Booking assistant",
+        Locale::FrCa => "Booking assistant",
+    }
+}
+
+/// `settings.tab_booking_page`
+#[must_use]
+pub fn settings_tab_booking_page(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Booking page",
+        Locale::FrCa => "Booking page",
+    }
+}
+
+/// `settings.tab_notifications`
+#[must_use]
+pub fn settings_tab_notifications(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your notifications",
+        Locale::FrCa => "Your notifications",
+    }
+}
+
+/// `settings.tab_profile`
+#[must_use]
+pub fn settings_tab_profile(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your profile",
+        Locale::FrCa => "Your profile",
+    }
+}
+
+/// `settings.time_format_12h`
+#[must_use]
+pub fn settings_time_format_12h(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "12-hour (2:30 pm)",
+        Locale::FrCa => "12-hour (2:30 pm)",
+    }
+}
+
+/// `settings.time_format_24h`
+#[must_use]
+pub fn settings_time_format_24h(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "24-hour (14:30)",
+        Locale::FrCa => "24-hour (14:30)",
+    }
+}
+
+/// `settings.time_format_required`
+#[must_use]
+pub fn settings_time_format_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose 12-hour or 24-hour.",
+        Locale::FrCa => "Choose 12-hour or 24-hour.",
+    }
+}
+
+/// `settings.timezone_required`
+#[must_use]
+pub fn settings_timezone_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose your timezone.",
+        Locale::FrCa => "Choose your timezone.",
+    }
+}
+
+/// `settings.url_not_absolute`
+#[must_use]
+pub fn settings_url_not_absolute(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Give the full address, starting with https://",
+        Locale::FrCa => "Give the full address, starting with https://",
+    }
+}
+
+/// `settings.url_too_long`
+#[must_use]
+pub fn settings_url_too_long(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That link is too long.",
+        Locale::FrCa => "That link is too long.",
+    }
+}
+
+/// `settings.week_start_required`
+#[must_use]
+pub fn settings_week_start_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose the day your week starts on.",
+        Locale::FrCa => "Choose the day your week starts on.",
+    }
+}
+
+/// `settings.whole_number_between`
+#[must_use]
+pub fn settings_whole_number_between(l: Locale, min: i64, max: i64) -> String {
+    match l {
+        Locale::En => format!("Give a whole number between {} and {}.", crate::format::integer(l, min), crate::format::integer(l, max)),
+        Locale::FrCa => format!("Give a whole number between {} and {}.", crate::format::integer(l, min), crate::format::integer(l, max)),
+    }
+}
+
 /// `state.active`
 #[must_use]
 pub fn state_active(l: Locale) -> &'static str {

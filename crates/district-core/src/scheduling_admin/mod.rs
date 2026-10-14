@@ -92,7 +92,14 @@ pub use hours::{
     OverrideRow, OverridesEditor, WeekEditor, weekday_name,
 };
 pub use overview::{COMING_UP_LIMIT, ComingUpRow, DeskContent, DeskRow, OverviewSection};
-pub use settings::{SettingsEvent, SettingsSection};
+pub use settings::{
+    ASSISTANT_INSTRUCTIONS_MAX, AssistantEditor, BrandingEditor, BrandingForm, DATE_FORMATS,
+    IMAGE_MAX_BYTES, IMAGE_TYPES, ImageFile, LEGAL_URL_MAX, LOGO_HEIGHTS, NOTIFICATIONS,
+    NotificationsEditor, OPACITIES, ProfileEditor, ProfileForm, SETTINGS_NAME_MAX, SettingsDialog,
+    SettingsEvent, SettingsSection, SettingsTab, TIME_FORMATS, date_format_label, locale_label,
+    notification_groups, notification_label, notification_value, set_label, time_format_label,
+    week_start_label,
+};
 pub use team::{
     ArchiveDialog, MemberRow, MemberState, TEAM_NAME_MAX, TeamDialog, TeamEditor, TeamEvent,
     TeamMembersDialog, TeamSection, workspace_role_label,

@@ -223,10 +223,7 @@ fn a_viewer_cannot_open_the_create_form_and_it_closes() {
     let mut model = listed("viewer");
     on_list(&mut model, EventTypesEvent::OpenCreate);
     assert!(list(&model).editor.is_none());
-    on_list(
-        &mut model,
-        EventTypesEvent::EditForm(Box::new(EventTypeForm::default())),
-    );
+    on_list(&mut model, EventTypesEvent::EditForm(Box::default()));
     assert!(on_list(&mut model, EventTypesEvent::Save).is_empty());
 
     let (mut model, _) = open("agency", SchedulingSection::EventTypes);
