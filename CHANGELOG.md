@@ -26,6 +26,18 @@ variant, or a field of one. Those take a new major version.
   value its label, or the category's fallback where the service has one (help desk
   ticket status, knowledge document status). A value that names a part of itself in
   braces (`http-{status}`) is written to the catalog with its braces doubled.
+- Reporting AI-generated content, lifted from District AI for Windows
+  (`district-ffi/src/report.rs`) into the core so that both desktop apps raise the
+  same report. A report is a support request raised through the support form from
+  any screen, without navigating: `SupportEvent::Report { platform, target, note }`
+  and `SupportEvent::DismissReport`, with `ReportTarget`, `ReportStatus`,
+  `SupportScreen::report_status`, `SupportScreen::report_refusal` (a report is
+  refused while the member has a support request of their own typed),
+  `ReportDialog`, `report_message`, `report_subject` and `REPORT_NOTE_LIMIT`. What
+  the support desk receives stays English in every language (fixed catalog
+  entries) and names the app it came from; the dialog's words and the outcome's
+  sentence are translatable.
+- `district-l10n`: `support_strings`, generated from the new `catalog/support.toml`.
 
 ### Changed
 
@@ -34,6 +46,8 @@ variant, or a field of one. Those take a new major version.
   comma is, read as the same placeholder. The old spelling had no label before,
   because the vendored copy replaces its em dash.
 - Breaking: `WireCategory` has 20 new variants, and `WireCategory::ALL` 31 entries.
+- Breaking: `SupportScreen` has a new field, `reporting`, and `SupportEvent` two new
+  variants.
 
 ## [4.0.0-beta.1] - 2026-10-13
 

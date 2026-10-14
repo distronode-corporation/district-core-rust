@@ -20,14 +20,15 @@
 
 use district_api::ApiError;
 use district_model::{
-    SUPPORT_STATUS_DONE, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
-    SupportRequestDetail, SupportRequestDraft, SupportRequestFiling, SupportRequestKind,
-    SupportRequestResponse, SupportRequestSummary, SupportRequestsResponse,
+    Platform, SUPPORT_STATUS_DONE, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDetail, SupportRequestDraft, SupportRequestFiling,
+    SupportRequestKind, SupportRequestResponse, SupportRequestSummary, SupportRequestsResponse,
 };
 use uuid::Uuid;
 
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
+use crate::report::{ReportTarget, raise};
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::{l, s};
 
@@ -52,6 +53,11 @@ pub struct SupportScreen {
     pub compose: Option<SupportCompose>,
     /// What the last request raised came to, until dismissed.
     pub submitted: Option<SupportRequestFiling>,
+    /// Whether a report of AI-generated content this session started is
+    /// showing, from [`SupportEvent::Report`] until
+    /// [`SupportEvent::DismissReport`]. Where it stands is
+    /// [`report_status`](Self::report_status).
+    pub reporting: bool,
 }
 
 impl SupportScreen {
@@ -322,6 +328,20 @@ pub enum SupportEvent {
     CancelClose,
     /// Dismiss the open request's failures and its closing confirmation.
     DismissFailures,
+    /// Report AI-generated content, from any screen: raises a support request
+    /// through the form above, without navigating. Refused, and nothing
+    /// touched, while [`SupportScreen::report_refusal`] says why.
+    Report {
+        /// The app the report is sent from, which its message names.
+        platform: Platform,
+        /// What is reported.
+        target: ReportTarget,
+        /// The member's note, which may be blank.
+        note: String,
+    },
+    /// Put the report's outcome away. Closes the support form only when it
+    /// holds the report's own draft, never a member's.
+    DismissReport,
 }
 
 impl SignedIn {
@@ -386,6 +406,28 @@ impl SignedIn {
         }
         let workspace_id = self.workspace_id();
         let effects = match event {
+            SupportEvent::Report {
+                platform,
+                target,
+                note,
+            } => self.report(platform, &target, &note, tickets),
+            SupportEvent::DismissReport => {
+                self.support.reporting = false;
+                if !self.support.holds_member_draft() {
+                    compose_event(
+                        &mut self.support,
+                        SupportEvent::CancelRequest,
+                        workspace_id.clone(),
+                        tickets,
+                    );
+                }
+                compose_event(
+                    &mut self.support,
+                    SupportEvent::DismissSubmitted,
+                    workspace_id,
+                    tickets,
+                )
+            }
             SupportEvent::StartRequest
             | SupportEvent::EditRequest(_)
             | SupportEvent::SubmitRequest
@@ -400,6 +442,28 @@ impl SignedIn {
                 .unwrap_or_default(),
         };
         Next::Stay(effects)
+    }
+
+    /// Raises a report, unless the member has a draft of their own typed in
+    /// the support form.
+    fn report(
+        &mut self,
+        platform: Platform,
+        target: &ReportTarget,
+        note: &str,
+        tickets: &mut Tickets,
+    ) -> Vec<Effect> {
+        if self.support.report_refusal().is_some() {
+            return Vec::new();
+        }
+        self.support.reporting = true;
+        let workspace_id = self.workspace_id();
+        raise(platform, target, note)
+            .into_iter()
+            .flat_map(|event| {
+                compose_event(&mut self.support, event, workspace_id.clone(), tickets)
+            })
+            .collect()
     }
 
     pub(crate) fn support_requests_loaded(

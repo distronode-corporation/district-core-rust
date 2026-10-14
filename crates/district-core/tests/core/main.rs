@@ -29,6 +29,7 @@ mod palette;
 mod persona;
 mod presence;
 mod purchase;
+mod report;
 mod ringing;
 mod role;
 mod rooms;

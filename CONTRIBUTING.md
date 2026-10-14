@@ -391,8 +391,11 @@ sign-off requirement.
 ## Strings and French
 
 Every sentence and label the core shows comes from a catalog in
-`crates/district-l10n/catalog/` (`core.toml` for the core's own words;
-`api_errors.toml` and `wire.toml` are generated from `contracts/i18n/`). Each entry
+`crates/district-l10n/catalog/` (`core.toml` for the core's own words,
+`support.toml` for the support area's, the report of AI-generated content among
+them; `api_errors.toml` and `wire.toml` are generated from `contracts/i18n/`).
+An entry marked `fixed = true` is never translated: the text a report sends to
+the support desk is one, because Distronode's staff read it. Each entry
 has its English, a context, a screen, a tier and a note for the translator; French
 is added to the same entry later. A screen never builds a sentence from pieces:
 one entry holds the whole sentence with named placeholders.
