@@ -44,10 +44,7 @@ macro_rules! data {
         }
     };
     ($variant:ident, boxed) => {
-        |data: district_model::SchedulingAdminData| match data {
-            district_model::SchedulingAdminData::$variant(value) => Some(*value),
-            _ => None,
-        }
+        |data: district_model::SchedulingAdminData| data!($variant)(data).map(|value| *value)
     };
 }
 
@@ -64,8 +61,8 @@ mod team;
 use district_api::{ApiError, TransportKind};
 use district_l10n::scheduling_strings as ss;
 use district_model::{
-    CODE_INVALID_PARAMS, CODE_SCHEDULING_NOT_READY, SchedulingAdminData, SchedulingAdminFailure,
-    SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
+    CODE_INVALID_PARAMS, CODE_SCHEDULING_NOT_READY, MemberListResponse, SchedulingAdminData,
+    SchedulingAdminFailure, SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
 };
 
 pub use bookings::{
@@ -92,7 +89,10 @@ pub use hours::{
 };
 pub use overview::{COMING_UP_LIMIT, ComingUpRow, DeskContent, DeskRow, OverviewSection};
 pub use settings::{SettingsEvent, SettingsSection};
-pub use team::{TeamEvent, TeamSection};
+pub use team::{
+    ArchiveDialog, MemberRow, MemberState, TEAM_NAME_MAX, TeamDialog, TeamEditor, TeamEvent,
+    TeamMembersDialog, TeamSection, workspace_role_label,
+};
 
 use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
@@ -407,6 +407,9 @@ pub struct SchedulingAdmin {
 pub(crate) enum Out {
     Send(Pending, Box<SchedulingAdminRequest>),
     SignIn(Pending, String),
+    /// The workspace's members, read through the workspace's own API: the
+    /// team section's roles.
+    Members(Pending),
     Effect(Effect),
     /// Show another screen: a deleted event type's list.
     Show(Route),
@@ -428,6 +431,14 @@ impl SchedulingAdmin {
                         ticket,
                         workspace_id: workspace_id.clone(),
                         request,
+                    })
+                }
+                Out::Members(pending) => {
+                    let ticket = tickets.issue_keyed(Slot::SchedulingAdmin, "");
+                    self.pending.push((ticket, pending));
+                    Some(Effect::LoadMembers {
+                        ticket,
+                        workspace_id: workspace_id.clone(),
                     })
                 }
                 Out::SignIn(pending, next) => {
@@ -633,6 +644,25 @@ impl SignedIn {
             Pending::Developer(pending) => developer::answered(admin, tickets, pending, answer),
         };
         Next::Stay(self.scheduling_admin_send(outs, tickets))
+    }
+
+    /// The workspace's members arrived: `None` when the team section asked
+    /// for them, and otherwise the answer handed back for the settings.
+    pub(crate) fn scheduling_members_loaded(
+        &mut self,
+        ticket: Ticket,
+        result: Result<MemberListResponse, ApiError>,
+        tickets: &mut Tickets,
+    ) -> Option<Result<MemberListResponse, ApiError>> {
+        let admin = &mut self.scheduling_admin;
+        let Some(_) = tickets
+            .accept_keyed(Slot::SchedulingAdmin, ticket)
+            .and_then(|_| admin.take(ticket))
+        else {
+            return Some(result);
+        };
+        team::members_answered(admin, result);
+        None
     }
 
     pub(crate) fn scheduling_sign_in_ready(

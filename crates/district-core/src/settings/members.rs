@@ -355,6 +355,9 @@ impl SignedIn {
         result: Result<MemberListResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
+        let Some(result) = self.scheduling_members_loaded(ticket, result, tickets) else {
+            return stay();
+        };
         if tickets.accept(Slot::Members, ticket)
             && let Some(section) = self.members.as_mut()
         {
