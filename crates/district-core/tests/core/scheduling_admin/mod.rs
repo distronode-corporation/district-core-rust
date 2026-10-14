@@ -8,6 +8,7 @@ mod developer;
 mod event_types;
 mod hours;
 mod overview;
+mod settings;
 mod team;
 
 use std::time::{Duration, SystemTime, UNIX_EPOCH};

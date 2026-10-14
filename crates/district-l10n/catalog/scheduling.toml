@@ -2645,6 +2645,535 @@ screen = "scheduling hub"
 tier = "T3"
 note = "Heading over the list of the booking scheduler's sections, under the booking page card."
 
+[settings.assistant_enabled]
+en = "Booking assistant"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.assistant_hint]
+en = "The assistant that answers questions on your booking page."
+ctx = "a11y"
+screen = "scheduling settings writes"
+tier = "T3"
+note = "No \"and writes the notes\": meeting notes were retired with recording (2026-10-03)."
+
+[settings.assistant_instructions]
+en = "Extra instructions"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.assistant_instructions_hint]
+en = "Extra instructions for the booking assistant. Up to 4000 characters."
+ctx = "a11y"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.assistant_instructions_label]
+en = "Extra instructions for the booking assistant"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.assistant_instructions_placeholder]
+en = "We are closed on public holidays. Always ask which location the customer means."
+ctx = "placeholder"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.assistant_instructions_too_long]
+en = "That is longer than 4000 characters."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+
+[settings.assistant_toggle]
+en = "Turn the booking assistant on"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.automation_done]
+en = "Booking assistant saved"
+ctx = "toast"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.automation_save]
+en = "Save booking assistant"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.automation_title]
+en = "Booking assistant"
+ctx = "title"
+screen = "scheduling settings writes"
+tier = "T3"
+note = "The recording and notetaker switches that shared this sheet were retired with meeting recording (2026-10-03), as on the web's \"Booking assistant\" tab."
+
+[settings.avatar_label]
+en = "Profile picture"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.banner_opacity_label]
+en = "Banner opacity"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.branding_banner]
+en = "Banner"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.branding_business_name]
+en = "Business name"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.branding_done]
+en = "Booking page saved"
+ctx = "toast"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.branding_locale]
+en = "Page language"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.branding_logo]
+en = "Logo"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.branding_privacy]
+en = "Privacy policy link"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.branding_save]
+en = "Save booking page"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.branding_terms]
+en = "Terms link"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.branding_title]
+en = "Booking page"
+ctx = "title"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.business_name_hint]
+en = "Shown at the top of every booking page."
+ctx = "a11y"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.business_name_too_long]
+en = "That name is longer than 200 characters."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+
+[settings.date_format_dmy]
+en = "31/12/2026"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+note = "A sample date showing the day-month-year order."
+
+[settings.date_format_mdy]
+en = "12/31/2026"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+note = "A sample date showing the month-day-year order."
+
+[settings.date_format_required]
+en = "Choose how dates are written."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+
+[settings.date_format_ymd]
+en = "2026-12-31"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+note = "A sample date showing the year-month-day order."
+
+[settings.fallback_locale_hint]
+en = "The language a visitor gets when their browser asks for one we do not have."
+ctx = "a11y"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.fallback_locale_required]
+en = "Choose the language the booking page falls back to."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+
+[settings.image_choose]
+en = "Choose image"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.image_hint]
+en = "JPEG, PNG, GIF or WebP, up to 5 MB."
+ctx = "a11y"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.image_immediate]
+en = "Images save as soon as you choose or remove them."
+ctx = "body"
+screen = "scheduling settings writes"
+tier = "T3"
+note = "Says \"takes effect now\". Upload and remove are immediate on their own ops and are not undone by closing the sheet, the web says the same, and a picture that vanished from the public booking page because somebody tapped Remove and then Cancel is the surprise this line exists to prevent."
+
+[settings.image_remove]
+en = "Remove"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.image_removed]
+en = "{label} removed"
+ctx = "toast"
+screen = "scheduling settings writes"
+tier = "T3"
+args = { label = "str" }
+
+[settings.image_too_large]
+en = "That image is larger than 5 MB. Choose a smaller one."
+ctx = "body"
+screen = "scheduling settings writes"
+tier = "T3"
+note = "The only two checks a client can make, and both buy a better message rather than a guarantee, the fork sniffs the first 512 bytes, so a renamed svg still fails there. Svg is the one an operator will want for a logo and it is a script-bearing document; the route refuses it with a 415."
+
+[settings.image_unreadable]
+en = "That image could not be read. Choose another."
+ctx = "body"
+screen = "scheduling settings writes"
+tier = "T3"
+note = "A different answer from either of those: the picker handed back nothing readable, which is not a rejected type and not a rejected size. Collapsing the three leaves an operator re-picking the same file."
+
+[settings.image_uploaded]
+en = "{label} uploaded"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+args = { label = "str" }
+
+[settings.image_wrong_type]
+en = "That file is not an image we can use. Choose a JPEG, PNG, GIF or WebP."
+ctx = "body"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.legal_url_hint]
+en = "Linked in the footer of the booking page. Leave it empty for none."
+ctx = "a11y"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.locale_not_set]
+en = "Not set"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Shown in place of the booking page language when the profile sets none."
+
+[settings.logo_height_hint]
+en = "In pixels, between 16 and 64."
+ctx = "a11y"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.logo_height_label]
+en = "Logo height"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.logo_opacity_label]
+en = "Logo opacity"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.name_required]
+en = "Give your name."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+
+[settings.name_too_long]
+en = "That name is longer than 200 characters."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+note = "The same sentence as `businessNameTooLong` and a separate constant. Two catalog fields happen to share a ceiling and a wording today; one of them moving should not silently move the other."
+
+[settings.not_set]
+en = "Not set"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.notifications_done]
+en = "Notifications saved"
+ctx = "toast"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.notifications_save]
+en = "Save notifications"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.notifications_title]
+en = "Email notifications"
+ctx = "title"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.notify_attendee_description]
+en = "When you are the one being booked into somebody else's meeting."
+ctx = "body"
+screen = "scheduling settings"
+tier = "T3"
+note = "Explains the first group of email notification switches: the ones about meetings other people book the operator into."
+
+[settings.notify_attendee_heading]
+en = "As an attendee"
+ctx = "title"
+screen = "scheduling settings"
+tier = "T3"
+note = "Heading of the first group of email notification switches."
+
+[settings.notify_cancellation]
+en = "A booking is cancelled"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Email notification switch: tell me when a booking I attend is cancelled."
+
+[settings.notify_confirmation]
+en = "A booking is confirmed"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Email notification switch: tell me when a booking I attend is confirmed."
+
+[settings.notify_host_booking]
+en = "Somebody books you"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Email notification switch: tell me when somebody books one of my event types."
+
+[settings.notify_host_cancel]
+en = "Somebody cancels"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Email notification switch: tell me when somebody cancels a booking with me."
+
+[settings.notify_host_description]
+en = "When somebody books one of your event types."
+ctx = "body"
+screen = "scheduling settings"
+tier = "T3"
+note = "Explains the second group of email notification switches: the ones about bookings made with the operator."
+
+[settings.notify_host_heading]
+en = "As a host"
+ctx = "title"
+screen = "scheduling settings"
+tier = "T3"
+note = "Heading of the second group of email notification switches."
+
+[settings.notify_host_reschedule]
+en = "Somebody moves their booking"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Email notification switch: tell me when somebody moves a booking with me to another time."
+
+[settings.notify_reminder]
+en = "A booking is coming up"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Email notification switch: remind me before a booking I attend."
+
+[settings.notify_reschedule]
+en = "A booking is moved"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Email notification switch: tell me when a booking I attend moves to another time."
+
+[settings.opacity_hint]
+en = "A percentage, between 20 and 100."
+ctx = "a11y"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.profile_date_format]
+en = "Date format"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.profile_done]
+en = "Profile saved"
+ctx = "toast"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.profile_name]
+en = "Name"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.profile_save]
+en = "Save profile"
+ctx = "label"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.profile_time_format]
+en = "Time format"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.profile_timezone]
+en = "Timezone"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.profile_title]
+en = "Your scheduler profile"
+ctx = "title"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.profile_week_start]
+en = "Week starts on"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+
+[settings.set]
+en = "Set"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "\"Set\"/\"Not set\" for an image rather than its URL. A logo's address is a long opaque string that tells an operator nothing they can act on, and the image itself is not what this read-only row is for."
+
+[settings.tab_assistant]
+en = "Booking assistant"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Tab on the scheduling settings screen: the AI assistant that answers on the booking page."
+
+[settings.tab_booking_page]
+en = "Booking page"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Tab on the scheduling settings screen: the public page customers book from."
+
+[settings.tab_notifications]
+en = "Your notifications"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Tab on the scheduling settings screen: the operator's own email notification switches."
+
+[settings.tab_profile]
+en = "Your profile"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Tab on the scheduling settings screen: the operator's own scheduling profile (name, timezone, language)."
+
+[settings.time_format_12h]
+en = "12-hour (2:30 pm)"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Choice of clock for the booking page: a 12-hour clock, with an example time in the parenthesis."
+
+[settings.time_format_24h]
+en = "24-hour (14:30)"
+ctx = "label"
+screen = "scheduling settings"
+tier = "T3"
+note = "Choice of clock for the booking page: a 24-hour clock, with an example time in the parenthesis. Keep the example in the clock's own form."
+
+[settings.time_format_required]
+en = "Choose 12-hour or 24-hour."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+
+[settings.timezone_required]
+en = "Choose your timezone."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+
+[settings.url_not_absolute]
+en = "Give the full address, starting with https://"
+ctx = "body"
+screen = "scheduling settings writes"
+tier = "T3"
+
+[settings.url_too_long]
+en = "That link is too long."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+
+[settings.week_start_required]
+en = "Choose the day your week starts on."
+ctx = "error"
+screen = "scheduling settings writes"
+tier = "T2"
+
+[settings.whole_number_between]
+en = "Give a whole number between {min} and {max}."
+ctx = "body"
+screen = "scheduling settings writes"
+tier = "T3"
+args = { min = "int", max = "int" }
+
 [state.active]
 en = "Active"
 ctx = "label"

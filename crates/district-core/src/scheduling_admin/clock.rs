@@ -135,12 +135,6 @@ pub(crate) fn date_time(text: &str, zone: &str) -> Option<String> {
     ))
 }
 
-/// `10:00 a.m.`: the time of day in `zone`, or `None` when it does not parse.
-pub(crate) fn time_of_day(text: &str, zone: &str) -> Option<String> {
-    let at = civil(text, zone)?;
-    Some(format::time(l(), at, twelve_hour(zone)))
-}
-
 /// A date and time in `zone`, or the catalog's "Unknown" for an instant that
 /// does not parse: a corrupt row, not one to hide.
 pub(crate) fn date_time_or_unknown(text: &str, zone: &str) -> String {
@@ -223,8 +217,6 @@ mod tests {
             );
             assert_eq!(date_time("yesterday", "UTC"), None);
             assert_eq!(date_time_or_unknown("yesterday", "UTC"), "Unknown");
-            assert_eq!(time_of_day(text, "UTC").as_deref(), Some("13:00"));
-            assert_eq!(time_of_day("x", "UTC"), None);
             assert_eq!(times_in("UTC"), "Times in UTC");
         });
         with_locale(Locale::FrCa, || {
