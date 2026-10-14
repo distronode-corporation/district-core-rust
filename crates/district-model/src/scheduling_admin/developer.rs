@@ -202,7 +202,7 @@ pub struct SchedulingWebhookDelivery {
     pub webhook_id: String,
     /// The event it posted.
     pub event: String,
-    /// `delivered`, `failed` or `pending`, or a status added later.
+    /// `success`, `failed` or `pending`, or a status added later.
     pub status: String,
     /// How many times it was tried.
     pub attempt_count: i64,

@@ -37,7 +37,7 @@ use crate::marketplace::OwnedNumbersList;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::l;
-use district_l10n::numbers_strings as ns;
+use district_l10n::{format, numbers_strings as ns};
 
 /// The slots of number management, forgotten with the workspace.
 pub(crate) const NUMBER_SLOTS: [Slot; 6] = [
@@ -403,21 +403,33 @@ pub fn number_actions_note(number: &OwnedNumber, can_change: bool) -> Option<&'s
     }
 }
 
-/// A carrier account's balance, with its currency when the carrier named one,
-/// or `None` when it gave no balance.
+/// A carrier account's balance, or `None` when it gave no balance. With the
+/// currency the carrier named, the amount is written as money by
+/// `district_l10n::format` (`Balance $12.50`, `Solde : 12,50 $ US`); with
+/// none, as a number with two decimals (`Balance 12.50`, `Solde : 12,50`). A
+/// balance that is not a number is shown as the carrier wrote it.
 pub fn carrier_balance(entry: &ProviderStatusEntry) -> Option<String> {
     let balance = entry.balance.as_deref()?;
-    Some(
-        match entry
-            .currency
-            .as_deref()
-            .map(str::trim)
-            .filter(|c| !c.is_empty())
-        {
-            Some(currency) => ns::numbers_carrier_balance_with_currency(l(), balance, currency),
-            None => ns::numbers_carrier_balance_amount(l(), balance),
-        },
-    )
+    let currency = entry
+        .currency
+        .as_deref()
+        .map(str::trim)
+        .filter(|c| !c.is_empty());
+    let amount = balance
+        .trim()
+        .parse::<f64>()
+        .ok()
+        .filter(|value| value.is_finite());
+    Some(match (amount, currency) {
+        (Some(amount), Some(currency)) => {
+            ns::numbers_carrier_balance_amount(l(), &format::iso_amount(l(), amount, currency))
+        }
+        (Some(amount), None) => {
+            ns::numbers_carrier_balance_amount(l(), &format::decimal(l(), amount, 2))
+        }
+        (None, Some(currency)) => ns::numbers_carrier_balance_with_currency(l(), balance, currency),
+        (None, None) => ns::numbers_carrier_balance_amount(l(), balance),
+    })
 }
 
 /// How many numbers a carrier account holds, or `None` when it did not say.

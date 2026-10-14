@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "blocked": [
+    {
+      "contactId": "contact_contract_1",
+      "name": "Contract Test Caller",
+      "phoneNumber": "+14165550142",
+      "blockedAt": "2026-08-15T14:20:00.000Z"
+    },
+    {
+      "contactId": "contact_contract_2",
+      "name": "Unknown",
+      "phoneNumber": null,
+      "blockedAt": "2026-08-14T09:00:00.000Z"
+    }
+  ]
+}

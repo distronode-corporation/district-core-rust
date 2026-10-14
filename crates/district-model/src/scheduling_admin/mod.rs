@@ -16,6 +16,8 @@ mod bookings;
 mod calendar;
 mod developer;
 mod envelope;
+
+pub(crate) use envelope::nullish;
 mod event_types;
 mod op;
 mod request;

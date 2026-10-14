@@ -159,12 +159,13 @@ pub use analytics::{
 };
 pub use billing::{
     AccountSection, BILLING_WEB_PATH, BillingEvent, BillingScreen, PlanCard, PlanStatus, Renewal,
-    format_cents, format_money, invoice_amount, meter_fraction, minutes_used, overage_note,
-    plan_name,
+    format_cents, format_money, invoice_amount, invoice_price, meter_fraction, minutes_used,
+    overage_note, plan_name, subscription_price,
 };
 pub use call::{ActiveCall, CALL_TICK, CallDirection, CallEnd, CallEvent, CallPhase};
 pub use calls::{
     CALL_PAGE_SIZE, CallDetailScreen, CallLog, CallRows, CallView, CallsEvent, TranscriptView,
+    call_duration_label,
 };
 pub use compose::{
     COMPOSE_CONTACT_WINDOW, ComposeContacts, ComposeEvent, ComposeRecipient, ComposeScreen,

@@ -1,0 +1,3593 @@
+{
+  "success": true,
+  "region": "us",
+  "engines": [
+    {
+      "id": "gemini-live-2.5-flash-native-audio",
+      "label": "Gemini 2.5 Live (Reste aux États-Unis)",
+      "inRegion": true,
+      "responseLengths": [
+        {
+          "value": "concise",
+          "label": "Concise (1 à 2 phrases, moins de 30 mots)"
+        },
+        {
+          "value": "balanced",
+          "label": "Équilibrée (jusqu'à 3 phrases, moins de 60 mots)"
+        },
+        {
+          "value": "detailed",
+          "label": "Détaillée (la réponse d'abord, puis autant qu'il le faut)"
+        }
+      ]
+    },
+    {
+      "id": "deepgram-pipeline",
+      "label": "Deepgram Pipeline (Reste aux États-Unis)",
+      "inRegion": true,
+      "responseLengths": [
+        {
+          "value": "concise",
+          "label": "Concise (1 à 2 phrases, moins de 30 mots)"
+        },
+        {
+          "value": "balanced",
+          "label": "Équilibrée (jusqu'à 3 phrases, moins de 60 mots)"
+        },
+        {
+          "value": "detailed",
+          "label": "Détaillée (la réponse d'abord, puis autant qu'il le faut)"
+        }
+      ]
+    },
+    {
+      "id": "elevenlabs-pipeline",
+      "label": "ElevenLabs Pipeline (Reste aux États-Unis)",
+      "inRegion": true,
+      "responseLengths": [
+        {
+          "value": "concise",
+          "label": "Concise (1 à 2 phrases, moins de 30 mots)"
+        },
+        {
+          "value": "balanced",
+          "label": "Équilibrée (jusqu'à 3 phrases, moins de 60 mots)"
+        },
+        {
+          "value": "detailed",
+          "label": "Détaillée (la réponse d'abord, puis autant qu'il le faut)"
+        }
+      ]
+    },
+    {
+      "id": "assemblyai-pipeline",
+      "label": "AssemblyAI Pipeline (Reste aux États-Unis)",
+      "inRegion": true,
+      "responseLengths": [
+        {
+          "value": "concise",
+          "label": "Concise (1 à 2 phrases, moins de 30 mots)"
+        },
+        {
+          "value": "balanced",
+          "label": "Équilibrée (jusqu'à 3 phrases, moins de 60 mots)"
+        },
+        {
+          "value": "detailed",
+          "label": "Détaillée (la réponse d'abord, puis autant qu'il le faut)"
+        }
+      ]
+    },
+    {
+      "id": "inworld-pipeline",
+      "label": "Inworld Pipeline (Reste aux États-Unis)",
+      "inRegion": true,
+      "responseLengths": [
+        {
+          "value": "concise",
+          "label": "Concise (1 à 2 phrases, moins de 30 mots)"
+        },
+        {
+          "value": "balanced",
+          "label": "Équilibrée (jusqu'à 3 phrases, moins de 60 mots)"
+        },
+        {
+          "value": "detailed",
+          "label": "Détaillée (la réponse d'abord, puis autant qu'il le faut)"
+        }
+      ]
+    },
+    {
+      "id": "aws-pipeline",
+      "label": "AWS Pipeline (Reste aux États-Unis)",
+      "inRegion": true,
+      "responseLengths": [
+        {
+          "value": "concise",
+          "label": "Concise (1 à 2 phrases, moins de 30 mots)"
+        },
+        {
+          "value": "balanced",
+          "label": "Équilibrée (jusqu'à 3 phrases, moins de 60 mots)"
+        },
+        {
+          "value": "detailed",
+          "label": "Détaillée (la réponse d'abord, puis autant qu'il le faut)"
+        }
+      ]
+    },
+    {
+      "id": "cartesia-pipeline",
+      "label": "Cartesia Pipeline (Reste aux États-Unis)",
+      "inRegion": true,
+      "responseLengths": [
+        {
+          "value": "concise",
+          "label": "Concise (1 à 2 phrases, moins de 30 mots)"
+        },
+        {
+          "value": "balanced",
+          "label": "Équilibrée (jusqu'à 3 phrases, moins de 60 mots)"
+        },
+        {
+          "value": "detailed",
+          "label": "Détaillée (la réponse d'abord, puis autant qu'il le faut)"
+        }
+      ]
+    }
+  ],
+  "languages": {
+    "deepgram": [
+      {
+        "value": "en-US",
+        "label": "anglais (É.-U.)"
+      },
+      {
+        "value": "es-ES",
+        "label": "espagnol (Espagne)"
+      },
+      {
+        "value": "de-DE",
+        "label": "allemand"
+      },
+      {
+        "value": "fr-CA",
+        "label": "français (Canada)"
+      },
+      {
+        "value": "fr-FR",
+        "label": "français (France)"
+      },
+      {
+        "value": "nl-NL",
+        "label": "néerlandais"
+      },
+      {
+        "value": "it-IT",
+        "label": "italien"
+      }
+    ],
+    "general": [
+      {
+        "value": "en-US",
+        "label": "anglais (É.-U.)"
+      },
+      {
+        "value": "es-ES",
+        "label": "espagnol (Espagne)"
+      },
+      {
+        "value": "fr-CA",
+        "label": "français (Canada)"
+      },
+      {
+        "value": "fr-FR",
+        "label": "français (France)"
+      },
+      {
+        "value": "de-DE",
+        "label": "allemand"
+      },
+      {
+        "value": "hi-IN",
+        "label": "hindi"
+      }
+    ]
+  },
+  "voices": [
+    {
+      "engine": "gemini-live-2.5-flash-native-audio",
+      "language": "en-US",
+      "groups": [
+        {
+          "label": "Voix",
+          "options": [
+            {
+              "value": "Puck",
+              "label": "Puck (Homme professionnel)"
+            },
+            {
+              "value": "Charon",
+              "label": "Charon (Homme chaleureux)"
+            },
+            {
+              "value": "Kore",
+              "label": "Kore (Femme amicale)"
+            },
+            {
+              "value": "Fenrir",
+              "label": "Fenrir (Homme autoritaire)"
+            },
+            {
+              "value": "Aoede",
+              "label": "Aoede (Femme professionnelle)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "gemini-live-2.5-flash-native-audio",
+      "language": "es-ES",
+      "groups": [
+        {
+          "label": "Voix",
+          "options": [
+            {
+              "value": "Puck",
+              "label": "Puck (Homme professionnel)"
+            },
+            {
+              "value": "Charon",
+              "label": "Charon (Homme chaleureux)"
+            },
+            {
+              "value": "Kore",
+              "label": "Kore (Femme amicale)"
+            },
+            {
+              "value": "Fenrir",
+              "label": "Fenrir (Homme autoritaire)"
+            },
+            {
+              "value": "Aoede",
+              "label": "Aoede (Femme professionnelle)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "gemini-live-2.5-flash-native-audio",
+      "language": "fr-CA",
+      "groups": [
+        {
+          "label": "Voix",
+          "options": [
+            {
+              "value": "Puck",
+              "label": "Puck (Homme professionnel)"
+            },
+            {
+              "value": "Charon",
+              "label": "Charon (Homme chaleureux)"
+            },
+            {
+              "value": "Kore",
+              "label": "Kore (Femme amicale)"
+            },
+            {
+              "value": "Fenrir",
+              "label": "Fenrir (Homme autoritaire)"
+            },
+            {
+              "value": "Aoede",
+              "label": "Aoede (Femme professionnelle)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "gemini-live-2.5-flash-native-audio",
+      "language": "fr-FR",
+      "groups": [
+        {
+          "label": "Voix",
+          "options": [
+            {
+              "value": "Puck",
+              "label": "Puck (Homme professionnel)"
+            },
+            {
+              "value": "Charon",
+              "label": "Charon (Homme chaleureux)"
+            },
+            {
+              "value": "Kore",
+              "label": "Kore (Femme amicale)"
+            },
+            {
+              "value": "Fenrir",
+              "label": "Fenrir (Homme autoritaire)"
+            },
+            {
+              "value": "Aoede",
+              "label": "Aoede (Femme professionnelle)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "gemini-live-2.5-flash-native-audio",
+      "language": "de-DE",
+      "groups": [
+        {
+          "label": "Voix",
+          "options": [
+            {
+              "value": "Puck",
+              "label": "Puck (Homme professionnel)"
+            },
+            {
+              "value": "Charon",
+              "label": "Charon (Homme chaleureux)"
+            },
+            {
+              "value": "Kore",
+              "label": "Kore (Femme amicale)"
+            },
+            {
+              "value": "Fenrir",
+              "label": "Fenrir (Homme autoritaire)"
+            },
+            {
+              "value": "Aoede",
+              "label": "Aoede (Femme professionnelle)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "gemini-live-2.5-flash-native-audio",
+      "language": "hi-IN",
+      "groups": [
+        {
+          "label": "Voix",
+          "options": [
+            {
+              "value": "Puck",
+              "label": "Puck (Homme professionnel)"
+            },
+            {
+              "value": "Charon",
+              "label": "Charon (Homme chaleureux)"
+            },
+            {
+              "value": "Kore",
+              "label": "Kore (Femme amicale)"
+            },
+            {
+              "value": "Fenrir",
+              "label": "Fenrir (Homme autoritaire)"
+            },
+            {
+              "value": "Aoede",
+              "label": "Aoede (Femme professionnelle)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "deepgram-pipeline",
+      "language": "en-US",
+      "groups": [
+        {
+          "label": "Anglais (voix féminines)",
+          "options": [
+            {
+              "value": "aura-2-asteria-en",
+              "label": "Asteria (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-luna-en",
+              "label": "Luna (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-stella-en",
+              "label": "Stella (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-athena-en",
+              "label": "Athena (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "aura-2-hera-en",
+              "label": "Hera (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-harmonia-en",
+              "label": "Harmonia (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-callista-en",
+              "label": "Callista (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-ophelia-en",
+              "label": "Ophelia (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-andromeda-en",
+              "label": "Andromeda (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-juno-en",
+              "label": "Juno (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-cora-en",
+              "label": "Cora (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-cordelia-en",
+              "label": "Cordelia (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-helena-en",
+              "label": "Helena (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-minerva-en",
+              "label": "Minerva (Anglais américain - Féminine)"
+            },
+            {
+              "value": "aura-2-pandora-en",
+              "label": "Pandora (Anglais américain - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Anglais (voix masculines)",
+          "options": [
+            {
+              "value": "aura-2-orion-en",
+              "label": "Orion (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-arcas-en",
+              "label": "Arcas (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-perseus-en",
+              "label": "Perseus (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-orpheus-en",
+              "label": "Orpheus (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-helios-en",
+              "label": "Helios (Anglais britannique - Masculine)"
+            },
+            {
+              "value": "aura-2-zeus-en",
+              "label": "Zeus (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-hermes-en",
+              "label": "Hermes (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-neptune-en",
+              "label": "Neptune (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-apollo-en",
+              "label": "Apollo (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-mars-en",
+              "label": "Mars (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-aries-en",
+              "label": "Aries (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-jupiter-en",
+              "label": "Jupiter (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-saturn-en",
+              "label": "Saturn (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-draco-en",
+              "label": "Draco (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-janus-en",
+              "label": "Janus (Anglais américain - Masculine)"
+            },
+            {
+              "value": "aura-2-odysseus-en",
+              "label": "Odysseus (Anglais américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "deepgram-pipeline",
+      "language": "es-ES",
+      "groups": [
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "aura-2-sirio-es",
+              "label": "Sirio (Espagnol - Masculine)"
+            },
+            {
+              "value": "aura-2-carina-es",
+              "label": "Carina (Espagnol - Féminine)"
+            },
+            {
+              "value": "aura-2-selena-es",
+              "label": "Selena (Espagnol - Féminine)"
+            },
+            {
+              "value": "aura-2-javier-es",
+              "label": "Javier (Espagnol - Masculine)"
+            },
+            {
+              "value": "aura-2-diana-es",
+              "label": "Diana (Espagnol - Féminine)"
+            },
+            {
+              "value": "aura-2-nestor-es",
+              "label": "Nestor (Espagnol - Masculine)"
+            },
+            {
+              "value": "aura-2-celeste-es",
+              "label": "Celeste (Espagnol - Féminine)"
+            },
+            {
+              "value": "aura-2-alvaro-es",
+              "label": "Alvaro (Espagnol - Masculine)"
+            },
+            {
+              "value": "aura-2-aquila-es",
+              "label": "Aquila (Espagnol - Masculine)"
+            },
+            {
+              "value": "aura-2-estrella-es",
+              "label": "Estrella (Espagnol - Féminine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "deepgram-pipeline",
+      "language": "de-DE",
+      "groups": [
+        {
+          "label": "Allemand",
+          "options": [
+            {
+              "value": "aura-2-elara-de",
+              "label": "Elara (Allemand - Féminine)"
+            },
+            {
+              "value": "aura-2-aurelia-de",
+              "label": "Aurelia (Allemand - Féminine)"
+            },
+            {
+              "value": "aura-2-lara-de",
+              "label": "Lara (Allemand - Féminine)"
+            },
+            {
+              "value": "aura-2-kara-de",
+              "label": "Kara (Allemand - Féminine)"
+            },
+            {
+              "value": "aura-2-viktoria-de",
+              "label": "Viktoria (Allemand - Féminine)"
+            },
+            {
+              "value": "aura-2-julius-de",
+              "label": "Julius (Allemand - Masculine)"
+            },
+            {
+              "value": "aura-2-fabian-de",
+              "label": "Fabian (Allemand - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "deepgram-pipeline",
+      "language": "fr-CA",
+      "groups": [
+        {
+          "label": "Français",
+          "options": [
+            {
+              "value": "aura-2-agathe-fr",
+              "label": "Agathe (Français - Féminine)"
+            },
+            {
+              "value": "aura-2-hector-fr",
+              "label": "Hector (Français - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "deepgram-pipeline",
+      "language": "fr-FR",
+      "groups": [
+        {
+          "label": "Français",
+          "options": [
+            {
+              "value": "aura-2-agathe-fr",
+              "label": "Agathe (Français - Féminine)"
+            },
+            {
+              "value": "aura-2-hector-fr",
+              "label": "Hector (Français - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "deepgram-pipeline",
+      "language": "nl-NL",
+      "groups": [
+        {
+          "label": "Néerlandais",
+          "options": [
+            {
+              "value": "aura-2-beatrix-nl",
+              "label": "Beatrix (Néerlandais - Féminine)"
+            },
+            {
+              "value": "aura-2-daphne-nl",
+              "label": "Daphne (Néerlandais - Féminine)"
+            },
+            {
+              "value": "aura-2-cornelia-nl",
+              "label": "Cornelia (Néerlandais - Féminine)"
+            },
+            {
+              "value": "aura-2-hestia-nl",
+              "label": "Hestia (Néerlandais - Féminine)"
+            },
+            {
+              "value": "aura-2-rhea-nl",
+              "label": "Rhea (Néerlandais - Féminine)"
+            },
+            {
+              "value": "aura-2-leda-nl",
+              "label": "Leda (Néerlandais - Féminine)"
+            },
+            {
+              "value": "aura-2-sander-nl",
+              "label": "Sander (Néerlandais - Masculine)"
+            },
+            {
+              "value": "aura-2-lars-nl",
+              "label": "Lars (Néerlandais - Masculine)"
+            },
+            {
+              "value": "aura-2-roman-nl",
+              "label": "Roman (Néerlandais - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "deepgram-pipeline",
+      "language": "it-IT",
+      "groups": [
+        {
+          "label": "Italien",
+          "options": [
+            {
+              "value": "aura-2-melia-it",
+              "label": "Melia (Italien - Féminine)"
+            },
+            {
+              "value": "aura-2-cinzia-it",
+              "label": "Cinzia (Italien - Féminine)"
+            },
+            {
+              "value": "aura-2-livia-it",
+              "label": "Livia (Italien - Féminine)"
+            },
+            {
+              "value": "aura-2-maia-it",
+              "label": "Maia (Italien - Féminine)"
+            },
+            {
+              "value": "aura-2-demetra-it",
+              "label": "Demetra (Italien - Féminine)"
+            },
+            {
+              "value": "aura-2-elio-it",
+              "label": "Elio (Italien - Masculine)"
+            },
+            {
+              "value": "aura-2-flavio-it",
+              "label": "Flavio (Italien - Masculine)"
+            },
+            {
+              "value": "aura-2-cesare-it",
+              "label": "Cesare (Italien - Masculine)"
+            },
+            {
+              "value": "aura-2-dionisio-it",
+              "label": "Dionisio (Italien - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "elevenlabs-pipeline",
+      "language": "en-US",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "elevenlabs-pipeline",
+      "language": "es-ES",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "elevenlabs-pipeline",
+      "language": "fr-CA",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "elevenlabs-pipeline",
+      "language": "fr-FR",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "elevenlabs-pipeline",
+      "language": "de-DE",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "elevenlabs-pipeline",
+      "language": "hi-IN",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "assemblyai-pipeline",
+      "language": "en-US",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "assemblyai-pipeline",
+      "language": "es-ES",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "assemblyai-pipeline",
+      "language": "fr-CA",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "assemblyai-pipeline",
+      "language": "fr-FR",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "assemblyai-pipeline",
+      "language": "de-DE",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "assemblyai-pipeline",
+      "language": "hi-IN",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "EXAVITQu4vr4xnSDxMaL",
+              "label": "Sarah - Mature, Rassurante, Assurée"
+            },
+            {
+              "value": "hpp4J3VqNfWAUOO0d1Us",
+              "label": "Bella - Professionnelle, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "Xb7hH8MSUJpSbSDYk0k2",
+              "label": "Alice - Claire, Éducatrice captivante"
+            },
+            {
+              "value": "XrExE9yKIg1WjnnlVkGX",
+              "label": "Matilda - Érudite, Professionnelle"
+            },
+            {
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "label": "Jessica - Enjouée, Lumineuse, Chaleureuse"
+            },
+            {
+              "value": "pFZP5JQG7iQjIQuC4Bku",
+              "label": "Lily - Actrice à la voix veloutée"
+            },
+            {
+              "value": "FGY2WhTYpPnrIDTdsKH5",
+              "label": "Laura - Enthousiaste, Attitude originale"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "pNInz6obpgDQGcFmaJgB",
+              "label": "Adam - Dominant, Firm (Par défaut)"
+            },
+            {
+              "value": "IKne3meq5aSn9XLyUdCD",
+              "label": "Charlie - Grave, Assurée, Énergique"
+            },
+            {
+              "value": "JBFqnCBsd6RMkjVDRZzb",
+              "label": "George - Chaleureuse, Conteur captivant"
+            },
+            {
+              "value": "N2lVS1w4EtoT3dr4eOWO",
+              "label": "Callum - Farceur à la voix rauque"
+            },
+            {
+              "value": "SOYHLrjzK2X1ezoPC6cr",
+              "label": "Harry - Guerrier farouche"
+            },
+            {
+              "value": "TX3LPaxmHKxFdv7VOQHJ",
+              "label": "Liam - Créateur énergique"
+            },
+            {
+              "value": "bIHbv24MWmeRgasZH58o",
+              "label": "Will - Optimiste détendu"
+            },
+            {
+              "value": "cjVigY5qzO86Huf0OWal",
+              "label": "Eric - Douce, Digne de confiance"
+            },
+            {
+              "value": "iP95p4xoKVk53GoZ742B",
+              "label": "Chris - Charmante, Terre-à-terre"
+            },
+            {
+              "value": "nPczCjzI2devNBz1zQrb",
+              "label": "Brian - Grave, Résonnante et réconfortante"
+            },
+            {
+              "value": "onwK4e9ZLuTAKqWW03F9",
+              "label": "Daniel - Animateur posé"
+            },
+            {
+              "value": "pqHfZKP75CvOlQylNhV4",
+              "label": "Bill - Sage, Mature, Équilibrée"
+            },
+            {
+              "value": "CwhRBWXzGAHq8TQ4Fs17",
+              "label": "Roger - Décontractée, Naturelle, Résonnante"
+            }
+          ]
+        },
+        {
+          "label": "Voix neutres",
+          "options": [
+            {
+              "value": "SAz9YHcvj6GT2YYXdXww",
+              "label": "River - Détendue, Neutre, Informative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "inworld-pipeline",
+      "language": "en-US",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "Ashley",
+              "label": "Ashley (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Olivia",
+              "label": "Olivia (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Sarah",
+              "label": "Sarah (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Hana",
+              "label": "Hana (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Luna",
+              "label": "Luna (Anglais américain - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "Hades",
+              "label": "Hades (Anglais américain - Masculine - Par défaut)"
+            },
+            {
+              "value": "Diego",
+              "label": "Diego (Espagnol - Masculine)"
+            },
+            {
+              "value": "Edward",
+              "label": "Edward (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Jason",
+              "label": "Jason (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Blake",
+              "label": "Blake (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Mark",
+              "label": "Mark (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Reed",
+              "label": "Reed (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Levi",
+              "label": "Levi (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Victor",
+              "label": "Victor (Anglais américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "inworld-pipeline",
+      "language": "es-ES",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "Ashley",
+              "label": "Ashley (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Olivia",
+              "label": "Olivia (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Sarah",
+              "label": "Sarah (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Hana",
+              "label": "Hana (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Luna",
+              "label": "Luna (Anglais américain - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "Hades",
+              "label": "Hades (Anglais américain - Masculine - Par défaut)"
+            },
+            {
+              "value": "Diego",
+              "label": "Diego (Espagnol - Masculine)"
+            },
+            {
+              "value": "Edward",
+              "label": "Edward (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Jason",
+              "label": "Jason (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Blake",
+              "label": "Blake (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Mark",
+              "label": "Mark (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Reed",
+              "label": "Reed (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Levi",
+              "label": "Levi (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Victor",
+              "label": "Victor (Anglais américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "inworld-pipeline",
+      "language": "fr-CA",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "Ashley",
+              "label": "Ashley (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Olivia",
+              "label": "Olivia (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Sarah",
+              "label": "Sarah (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Hana",
+              "label": "Hana (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Luna",
+              "label": "Luna (Anglais américain - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "Hades",
+              "label": "Hades (Anglais américain - Masculine - Par défaut)"
+            },
+            {
+              "value": "Diego",
+              "label": "Diego (Espagnol - Masculine)"
+            },
+            {
+              "value": "Edward",
+              "label": "Edward (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Jason",
+              "label": "Jason (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Blake",
+              "label": "Blake (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Mark",
+              "label": "Mark (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Reed",
+              "label": "Reed (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Levi",
+              "label": "Levi (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Victor",
+              "label": "Victor (Anglais américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "inworld-pipeline",
+      "language": "fr-FR",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "Ashley",
+              "label": "Ashley (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Olivia",
+              "label": "Olivia (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Sarah",
+              "label": "Sarah (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Hana",
+              "label": "Hana (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Luna",
+              "label": "Luna (Anglais américain - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "Hades",
+              "label": "Hades (Anglais américain - Masculine - Par défaut)"
+            },
+            {
+              "value": "Diego",
+              "label": "Diego (Espagnol - Masculine)"
+            },
+            {
+              "value": "Edward",
+              "label": "Edward (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Jason",
+              "label": "Jason (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Blake",
+              "label": "Blake (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Mark",
+              "label": "Mark (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Reed",
+              "label": "Reed (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Levi",
+              "label": "Levi (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Victor",
+              "label": "Victor (Anglais américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "inworld-pipeline",
+      "language": "de-DE",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "Ashley",
+              "label": "Ashley (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Olivia",
+              "label": "Olivia (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Sarah",
+              "label": "Sarah (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Hana",
+              "label": "Hana (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Luna",
+              "label": "Luna (Anglais américain - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "Hades",
+              "label": "Hades (Anglais américain - Masculine - Par défaut)"
+            },
+            {
+              "value": "Diego",
+              "label": "Diego (Espagnol - Masculine)"
+            },
+            {
+              "value": "Edward",
+              "label": "Edward (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Jason",
+              "label": "Jason (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Blake",
+              "label": "Blake (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Mark",
+              "label": "Mark (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Reed",
+              "label": "Reed (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Levi",
+              "label": "Levi (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Victor",
+              "label": "Victor (Anglais américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "inworld-pipeline",
+      "language": "hi-IN",
+      "groups": [
+        {
+          "label": "Voix féminines",
+          "options": [
+            {
+              "value": "Ashley",
+              "label": "Ashley (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Olivia",
+              "label": "Olivia (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Sarah",
+              "label": "Sarah (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Hana",
+              "label": "Hana (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Luna",
+              "label": "Luna (Anglais américain - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Voix masculines",
+          "options": [
+            {
+              "value": "Hades",
+              "label": "Hades (Anglais américain - Masculine - Par défaut)"
+            },
+            {
+              "value": "Diego",
+              "label": "Diego (Espagnol - Masculine)"
+            },
+            {
+              "value": "Edward",
+              "label": "Edward (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Jason",
+              "label": "Jason (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Blake",
+              "label": "Blake (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Mark",
+              "label": "Mark (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Reed",
+              "label": "Reed (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Levi",
+              "label": "Levi (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Victor",
+              "label": "Victor (Anglais américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "aws-pipeline",
+      "language": "en-US",
+      "groups": [
+        {
+          "label": "Anglais (voix féminines)",
+          "options": [
+            {
+              "value": "Joanna",
+              "label": "Joanna (Anglais américain - Féminine - Par défaut)"
+            },
+            {
+              "value": "Danielle",
+              "label": "Danielle (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Ruth",
+              "label": "Ruth (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Kendra",
+              "label": "Kendra (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Salli",
+              "label": "Salli (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Amy",
+              "label": "Amy (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Emma",
+              "label": "Emma (Anglais britannique - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Anglais (voix masculines)",
+          "options": [
+            {
+              "value": "Matthew",
+              "label": "Matthew (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Stephen",
+              "label": "Stephen (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Gregory",
+              "label": "Gregory (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Joey",
+              "label": "Joey (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Arthur",
+              "label": "Arthur (Anglais britannique - Masculine)"
+            },
+            {
+              "value": "Brian",
+              "label": "Brian (Anglais britannique - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "Gabrielle",
+              "label": "Gabrielle (Français canadien - Féminine)"
+            },
+            {
+              "value": "Liam",
+              "label": "Liam (Français canadien - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "Lupe",
+              "label": "Lupe (Espagnol américain - Féminine)"
+            },
+            {
+              "value": "Pedro",
+              "label": "Pedro (Espagnol américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "aws-pipeline",
+      "language": "es-ES",
+      "groups": [
+        {
+          "label": "Anglais (voix féminines)",
+          "options": [
+            {
+              "value": "Joanna",
+              "label": "Joanna (Anglais américain - Féminine - Par défaut)"
+            },
+            {
+              "value": "Danielle",
+              "label": "Danielle (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Ruth",
+              "label": "Ruth (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Kendra",
+              "label": "Kendra (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Salli",
+              "label": "Salli (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Amy",
+              "label": "Amy (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Emma",
+              "label": "Emma (Anglais britannique - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Anglais (voix masculines)",
+          "options": [
+            {
+              "value": "Matthew",
+              "label": "Matthew (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Stephen",
+              "label": "Stephen (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Gregory",
+              "label": "Gregory (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Joey",
+              "label": "Joey (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Arthur",
+              "label": "Arthur (Anglais britannique - Masculine)"
+            },
+            {
+              "value": "Brian",
+              "label": "Brian (Anglais britannique - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "Gabrielle",
+              "label": "Gabrielle (Français canadien - Féminine)"
+            },
+            {
+              "value": "Liam",
+              "label": "Liam (Français canadien - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "Lupe",
+              "label": "Lupe (Espagnol américain - Féminine)"
+            },
+            {
+              "value": "Pedro",
+              "label": "Pedro (Espagnol américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "aws-pipeline",
+      "language": "fr-CA",
+      "groups": [
+        {
+          "label": "Anglais (voix féminines)",
+          "options": [
+            {
+              "value": "Joanna",
+              "label": "Joanna (Anglais américain - Féminine - Par défaut)"
+            },
+            {
+              "value": "Danielle",
+              "label": "Danielle (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Ruth",
+              "label": "Ruth (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Kendra",
+              "label": "Kendra (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Salli",
+              "label": "Salli (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Amy",
+              "label": "Amy (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Emma",
+              "label": "Emma (Anglais britannique - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Anglais (voix masculines)",
+          "options": [
+            {
+              "value": "Matthew",
+              "label": "Matthew (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Stephen",
+              "label": "Stephen (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Gregory",
+              "label": "Gregory (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Joey",
+              "label": "Joey (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Arthur",
+              "label": "Arthur (Anglais britannique - Masculine)"
+            },
+            {
+              "value": "Brian",
+              "label": "Brian (Anglais britannique - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "Gabrielle",
+              "label": "Gabrielle (Français canadien - Féminine)"
+            },
+            {
+              "value": "Liam",
+              "label": "Liam (Français canadien - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "Lupe",
+              "label": "Lupe (Espagnol américain - Féminine)"
+            },
+            {
+              "value": "Pedro",
+              "label": "Pedro (Espagnol américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "aws-pipeline",
+      "language": "fr-FR",
+      "groups": [
+        {
+          "label": "Anglais (voix féminines)",
+          "options": [
+            {
+              "value": "Joanna",
+              "label": "Joanna (Anglais américain - Féminine - Par défaut)"
+            },
+            {
+              "value": "Danielle",
+              "label": "Danielle (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Ruth",
+              "label": "Ruth (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Kendra",
+              "label": "Kendra (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Salli",
+              "label": "Salli (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Amy",
+              "label": "Amy (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Emma",
+              "label": "Emma (Anglais britannique - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Anglais (voix masculines)",
+          "options": [
+            {
+              "value": "Matthew",
+              "label": "Matthew (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Stephen",
+              "label": "Stephen (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Gregory",
+              "label": "Gregory (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Joey",
+              "label": "Joey (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Arthur",
+              "label": "Arthur (Anglais britannique - Masculine)"
+            },
+            {
+              "value": "Brian",
+              "label": "Brian (Anglais britannique - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "Gabrielle",
+              "label": "Gabrielle (Français canadien - Féminine)"
+            },
+            {
+              "value": "Liam",
+              "label": "Liam (Français canadien - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "Lupe",
+              "label": "Lupe (Espagnol américain - Féminine)"
+            },
+            {
+              "value": "Pedro",
+              "label": "Pedro (Espagnol américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "aws-pipeline",
+      "language": "de-DE",
+      "groups": [
+        {
+          "label": "Anglais (voix féminines)",
+          "options": [
+            {
+              "value": "Joanna",
+              "label": "Joanna (Anglais américain - Féminine - Par défaut)"
+            },
+            {
+              "value": "Danielle",
+              "label": "Danielle (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Ruth",
+              "label": "Ruth (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Kendra",
+              "label": "Kendra (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Salli",
+              "label": "Salli (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Amy",
+              "label": "Amy (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Emma",
+              "label": "Emma (Anglais britannique - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Anglais (voix masculines)",
+          "options": [
+            {
+              "value": "Matthew",
+              "label": "Matthew (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Stephen",
+              "label": "Stephen (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Gregory",
+              "label": "Gregory (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Joey",
+              "label": "Joey (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Arthur",
+              "label": "Arthur (Anglais britannique - Masculine)"
+            },
+            {
+              "value": "Brian",
+              "label": "Brian (Anglais britannique - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "Gabrielle",
+              "label": "Gabrielle (Français canadien - Féminine)"
+            },
+            {
+              "value": "Liam",
+              "label": "Liam (Français canadien - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "Lupe",
+              "label": "Lupe (Espagnol américain - Féminine)"
+            },
+            {
+              "value": "Pedro",
+              "label": "Pedro (Espagnol américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "aws-pipeline",
+      "language": "hi-IN",
+      "groups": [
+        {
+          "label": "Anglais (voix féminines)",
+          "options": [
+            {
+              "value": "Joanna",
+              "label": "Joanna (Anglais américain - Féminine - Par défaut)"
+            },
+            {
+              "value": "Danielle",
+              "label": "Danielle (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Ruth",
+              "label": "Ruth (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Kendra",
+              "label": "Kendra (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Salli",
+              "label": "Salli (Anglais américain - Féminine)"
+            },
+            {
+              "value": "Amy",
+              "label": "Amy (Anglais britannique - Féminine)"
+            },
+            {
+              "value": "Emma",
+              "label": "Emma (Anglais britannique - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Anglais (voix masculines)",
+          "options": [
+            {
+              "value": "Matthew",
+              "label": "Matthew (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Stephen",
+              "label": "Stephen (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Gregory",
+              "label": "Gregory (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Joey",
+              "label": "Joey (Anglais américain - Masculine)"
+            },
+            {
+              "value": "Arthur",
+              "label": "Arthur (Anglais britannique - Masculine)"
+            },
+            {
+              "value": "Brian",
+              "label": "Brian (Anglais britannique - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "Gabrielle",
+              "label": "Gabrielle (Français canadien - Féminine)"
+            },
+            {
+              "value": "Liam",
+              "label": "Liam (Français canadien - Masculine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "Lupe",
+              "label": "Lupe (Espagnol américain - Féminine)"
+            },
+            {
+              "value": "Pedro",
+              "label": "Pedro (Espagnol américain - Masculine)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "cartesia-pipeline",
+      "language": "en-US",
+      "groups": [
+        {
+          "label": "Anglais",
+          "options": [
+            {
+              "value": "db6b0ed5-d5d3-463d-ae85-518a07d3c2b4",
+              "label": "Skylar (Guide amicale - Par défaut)"
+            },
+            {
+              "value": "47c38ca4-5f35-497b-b1a3-415245fb35e1",
+              "label": "Daniel (Assistant moderne)"
+            },
+            {
+              "value": "62ae83ad-4f6a-430b-af41-a9bede9286ca",
+              "label": "Gemma (Agente décidée)"
+            },
+            {
+              "value": "30894953-bcce-41fe-892c-15ce19c843ff",
+              "label": "Parker (Ami bienveillant)"
+            },
+            {
+              "value": "9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
+              "label": "Jacqueline (Agente rassurante)"
+            },
+            {
+              "value": "b24f41fd-00a3-4cd8-992a-a0c9f13f3ef1",
+              "label": "Clive (Expert posé)"
+            },
+            {
+              "value": "f6ff7c0c-e396-40a9-a70b-f7607edb6937",
+              "label": "Emma (Service à la clientèle)"
+            },
+            {
+              "value": "12e85709-099c-480a-ba3e-875c41a9611a",
+              "label": "Arlo (Spécialiste du service)"
+            },
+            {
+              "value": "c46cf1f6-49a1-4d67-9a57-ff859a4046d3",
+              "label": "Cora (Spécialiste du service)"
+            },
+            {
+              "value": "2f251ac3-89a9-4a77-a452-704b474ccd01",
+              "label": "Lucy (Coordonnatrice compétente)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "c6ccfe32-6bee-484a-a8a2-7a51bee93f99",
+              "label": "Étienne (Spécialiste précis - Français canadien - Masculine)"
+            },
+            {
+              "value": "f5e6c270-2aa9-463f-b48b-579a39284ce2",
+              "label": "Félix (Professionnel serviable - Français canadien - Masculine)"
+            },
+            {
+              "value": "cc4276e6-1ebc-429a-8c7d-930993d51abc",
+              "label": "Julien (Partenaire raffiné - Français canadien - Masculine)"
+            },
+            {
+              "value": "2590a84a-68cf-4b08-970d-b4ff824bf242",
+              "label": "Amelie (Concierge chaleureuse - Français canadien - Féminine)"
+            },
+            {
+              "value": "3817fdb0-7ae1-42d2-b46e-734dd9601bf2",
+              "label": "Madeleine (Résidente fiable - Français canadien - Féminine)"
+            },
+            {
+              "value": "328e0683-d1a7-4cde-ad46-0ee69a3cbd6a",
+              "label": "Roxane (Résolution de problèmes - Français canadien - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "3597a26f-80ef-4bd5-8101-9699bc764917",
+              "label": "Ximena (Guide calme)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "cartesia-pipeline",
+      "language": "es-ES",
+      "groups": [
+        {
+          "label": "Anglais",
+          "options": [
+            {
+              "value": "db6b0ed5-d5d3-463d-ae85-518a07d3c2b4",
+              "label": "Skylar (Guide amicale - Par défaut)"
+            },
+            {
+              "value": "47c38ca4-5f35-497b-b1a3-415245fb35e1",
+              "label": "Daniel (Assistant moderne)"
+            },
+            {
+              "value": "62ae83ad-4f6a-430b-af41-a9bede9286ca",
+              "label": "Gemma (Agente décidée)"
+            },
+            {
+              "value": "30894953-bcce-41fe-892c-15ce19c843ff",
+              "label": "Parker (Ami bienveillant)"
+            },
+            {
+              "value": "9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
+              "label": "Jacqueline (Agente rassurante)"
+            },
+            {
+              "value": "b24f41fd-00a3-4cd8-992a-a0c9f13f3ef1",
+              "label": "Clive (Expert posé)"
+            },
+            {
+              "value": "f6ff7c0c-e396-40a9-a70b-f7607edb6937",
+              "label": "Emma (Service à la clientèle)"
+            },
+            {
+              "value": "12e85709-099c-480a-ba3e-875c41a9611a",
+              "label": "Arlo (Spécialiste du service)"
+            },
+            {
+              "value": "c46cf1f6-49a1-4d67-9a57-ff859a4046d3",
+              "label": "Cora (Spécialiste du service)"
+            },
+            {
+              "value": "2f251ac3-89a9-4a77-a452-704b474ccd01",
+              "label": "Lucy (Coordonnatrice compétente)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "c6ccfe32-6bee-484a-a8a2-7a51bee93f99",
+              "label": "Étienne (Spécialiste précis - Français canadien - Masculine)"
+            },
+            {
+              "value": "f5e6c270-2aa9-463f-b48b-579a39284ce2",
+              "label": "Félix (Professionnel serviable - Français canadien - Masculine)"
+            },
+            {
+              "value": "cc4276e6-1ebc-429a-8c7d-930993d51abc",
+              "label": "Julien (Partenaire raffiné - Français canadien - Masculine)"
+            },
+            {
+              "value": "2590a84a-68cf-4b08-970d-b4ff824bf242",
+              "label": "Amelie (Concierge chaleureuse - Français canadien - Féminine)"
+            },
+            {
+              "value": "3817fdb0-7ae1-42d2-b46e-734dd9601bf2",
+              "label": "Madeleine (Résidente fiable - Français canadien - Féminine)"
+            },
+            {
+              "value": "328e0683-d1a7-4cde-ad46-0ee69a3cbd6a",
+              "label": "Roxane (Résolution de problèmes - Français canadien - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "3597a26f-80ef-4bd5-8101-9699bc764917",
+              "label": "Ximena (Guide calme)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "cartesia-pipeline",
+      "language": "fr-CA",
+      "groups": [
+        {
+          "label": "Anglais",
+          "options": [
+            {
+              "value": "db6b0ed5-d5d3-463d-ae85-518a07d3c2b4",
+              "label": "Skylar (Guide amicale - Par défaut)"
+            },
+            {
+              "value": "47c38ca4-5f35-497b-b1a3-415245fb35e1",
+              "label": "Daniel (Assistant moderne)"
+            },
+            {
+              "value": "62ae83ad-4f6a-430b-af41-a9bede9286ca",
+              "label": "Gemma (Agente décidée)"
+            },
+            {
+              "value": "30894953-bcce-41fe-892c-15ce19c843ff",
+              "label": "Parker (Ami bienveillant)"
+            },
+            {
+              "value": "9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
+              "label": "Jacqueline (Agente rassurante)"
+            },
+            {
+              "value": "b24f41fd-00a3-4cd8-992a-a0c9f13f3ef1",
+              "label": "Clive (Expert posé)"
+            },
+            {
+              "value": "f6ff7c0c-e396-40a9-a70b-f7607edb6937",
+              "label": "Emma (Service à la clientèle)"
+            },
+            {
+              "value": "12e85709-099c-480a-ba3e-875c41a9611a",
+              "label": "Arlo (Spécialiste du service)"
+            },
+            {
+              "value": "c46cf1f6-49a1-4d67-9a57-ff859a4046d3",
+              "label": "Cora (Spécialiste du service)"
+            },
+            {
+              "value": "2f251ac3-89a9-4a77-a452-704b474ccd01",
+              "label": "Lucy (Coordonnatrice compétente)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "c6ccfe32-6bee-484a-a8a2-7a51bee93f99",
+              "label": "Étienne (Spécialiste précis - Français canadien - Masculine)"
+            },
+            {
+              "value": "f5e6c270-2aa9-463f-b48b-579a39284ce2",
+              "label": "Félix (Professionnel serviable - Français canadien - Masculine)"
+            },
+            {
+              "value": "cc4276e6-1ebc-429a-8c7d-930993d51abc",
+              "label": "Julien (Partenaire raffiné - Français canadien - Masculine)"
+            },
+            {
+              "value": "2590a84a-68cf-4b08-970d-b4ff824bf242",
+              "label": "Amelie (Concierge chaleureuse - Français canadien - Féminine)"
+            },
+            {
+              "value": "3817fdb0-7ae1-42d2-b46e-734dd9601bf2",
+              "label": "Madeleine (Résidente fiable - Français canadien - Féminine)"
+            },
+            {
+              "value": "328e0683-d1a7-4cde-ad46-0ee69a3cbd6a",
+              "label": "Roxane (Résolution de problèmes - Français canadien - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "3597a26f-80ef-4bd5-8101-9699bc764917",
+              "label": "Ximena (Guide calme)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "cartesia-pipeline",
+      "language": "fr-FR",
+      "groups": [
+        {
+          "label": "Anglais",
+          "options": [
+            {
+              "value": "db6b0ed5-d5d3-463d-ae85-518a07d3c2b4",
+              "label": "Skylar (Guide amicale - Par défaut)"
+            },
+            {
+              "value": "47c38ca4-5f35-497b-b1a3-415245fb35e1",
+              "label": "Daniel (Assistant moderne)"
+            },
+            {
+              "value": "62ae83ad-4f6a-430b-af41-a9bede9286ca",
+              "label": "Gemma (Agente décidée)"
+            },
+            {
+              "value": "30894953-bcce-41fe-892c-15ce19c843ff",
+              "label": "Parker (Ami bienveillant)"
+            },
+            {
+              "value": "9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
+              "label": "Jacqueline (Agente rassurante)"
+            },
+            {
+              "value": "b24f41fd-00a3-4cd8-992a-a0c9f13f3ef1",
+              "label": "Clive (Expert posé)"
+            },
+            {
+              "value": "f6ff7c0c-e396-40a9-a70b-f7607edb6937",
+              "label": "Emma (Service à la clientèle)"
+            },
+            {
+              "value": "12e85709-099c-480a-ba3e-875c41a9611a",
+              "label": "Arlo (Spécialiste du service)"
+            },
+            {
+              "value": "c46cf1f6-49a1-4d67-9a57-ff859a4046d3",
+              "label": "Cora (Spécialiste du service)"
+            },
+            {
+              "value": "2f251ac3-89a9-4a77-a452-704b474ccd01",
+              "label": "Lucy (Coordonnatrice compétente)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "c6ccfe32-6bee-484a-a8a2-7a51bee93f99",
+              "label": "Étienne (Spécialiste précis - Français canadien - Masculine)"
+            },
+            {
+              "value": "f5e6c270-2aa9-463f-b48b-579a39284ce2",
+              "label": "Félix (Professionnel serviable - Français canadien - Masculine)"
+            },
+            {
+              "value": "cc4276e6-1ebc-429a-8c7d-930993d51abc",
+              "label": "Julien (Partenaire raffiné - Français canadien - Masculine)"
+            },
+            {
+              "value": "2590a84a-68cf-4b08-970d-b4ff824bf242",
+              "label": "Amelie (Concierge chaleureuse - Français canadien - Féminine)"
+            },
+            {
+              "value": "3817fdb0-7ae1-42d2-b46e-734dd9601bf2",
+              "label": "Madeleine (Résidente fiable - Français canadien - Féminine)"
+            },
+            {
+              "value": "328e0683-d1a7-4cde-ad46-0ee69a3cbd6a",
+              "label": "Roxane (Résolution de problèmes - Français canadien - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "3597a26f-80ef-4bd5-8101-9699bc764917",
+              "label": "Ximena (Guide calme)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "cartesia-pipeline",
+      "language": "de-DE",
+      "groups": [
+        {
+          "label": "Anglais",
+          "options": [
+            {
+              "value": "db6b0ed5-d5d3-463d-ae85-518a07d3c2b4",
+              "label": "Skylar (Guide amicale - Par défaut)"
+            },
+            {
+              "value": "47c38ca4-5f35-497b-b1a3-415245fb35e1",
+              "label": "Daniel (Assistant moderne)"
+            },
+            {
+              "value": "62ae83ad-4f6a-430b-af41-a9bede9286ca",
+              "label": "Gemma (Agente décidée)"
+            },
+            {
+              "value": "30894953-bcce-41fe-892c-15ce19c843ff",
+              "label": "Parker (Ami bienveillant)"
+            },
+            {
+              "value": "9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
+              "label": "Jacqueline (Agente rassurante)"
+            },
+            {
+              "value": "b24f41fd-00a3-4cd8-992a-a0c9f13f3ef1",
+              "label": "Clive (Expert posé)"
+            },
+            {
+              "value": "f6ff7c0c-e396-40a9-a70b-f7607edb6937",
+              "label": "Emma (Service à la clientèle)"
+            },
+            {
+              "value": "12e85709-099c-480a-ba3e-875c41a9611a",
+              "label": "Arlo (Spécialiste du service)"
+            },
+            {
+              "value": "c46cf1f6-49a1-4d67-9a57-ff859a4046d3",
+              "label": "Cora (Spécialiste du service)"
+            },
+            {
+              "value": "2f251ac3-89a9-4a77-a452-704b474ccd01",
+              "label": "Lucy (Coordonnatrice compétente)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "c6ccfe32-6bee-484a-a8a2-7a51bee93f99",
+              "label": "Étienne (Spécialiste précis - Français canadien - Masculine)"
+            },
+            {
+              "value": "f5e6c270-2aa9-463f-b48b-579a39284ce2",
+              "label": "Félix (Professionnel serviable - Français canadien - Masculine)"
+            },
+            {
+              "value": "cc4276e6-1ebc-429a-8c7d-930993d51abc",
+              "label": "Julien (Partenaire raffiné - Français canadien - Masculine)"
+            },
+            {
+              "value": "2590a84a-68cf-4b08-970d-b4ff824bf242",
+              "label": "Amelie (Concierge chaleureuse - Français canadien - Féminine)"
+            },
+            {
+              "value": "3817fdb0-7ae1-42d2-b46e-734dd9601bf2",
+              "label": "Madeleine (Résidente fiable - Français canadien - Féminine)"
+            },
+            {
+              "value": "328e0683-d1a7-4cde-ad46-0ee69a3cbd6a",
+              "label": "Roxane (Résolution de problèmes - Français canadien - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "3597a26f-80ef-4bd5-8101-9699bc764917",
+              "label": "Ximena (Guide calme)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "engine": "cartesia-pipeline",
+      "language": "hi-IN",
+      "groups": [
+        {
+          "label": "Anglais",
+          "options": [
+            {
+              "value": "db6b0ed5-d5d3-463d-ae85-518a07d3c2b4",
+              "label": "Skylar (Guide amicale - Par défaut)"
+            },
+            {
+              "value": "47c38ca4-5f35-497b-b1a3-415245fb35e1",
+              "label": "Daniel (Assistant moderne)"
+            },
+            {
+              "value": "62ae83ad-4f6a-430b-af41-a9bede9286ca",
+              "label": "Gemma (Agente décidée)"
+            },
+            {
+              "value": "30894953-bcce-41fe-892c-15ce19c843ff",
+              "label": "Parker (Ami bienveillant)"
+            },
+            {
+              "value": "9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
+              "label": "Jacqueline (Agente rassurante)"
+            },
+            {
+              "value": "b24f41fd-00a3-4cd8-992a-a0c9f13f3ef1",
+              "label": "Clive (Expert posé)"
+            },
+            {
+              "value": "f6ff7c0c-e396-40a9-a70b-f7607edb6937",
+              "label": "Emma (Service à la clientèle)"
+            },
+            {
+              "value": "12e85709-099c-480a-ba3e-875c41a9611a",
+              "label": "Arlo (Spécialiste du service)"
+            },
+            {
+              "value": "c46cf1f6-49a1-4d67-9a57-ff859a4046d3",
+              "label": "Cora (Spécialiste du service)"
+            },
+            {
+              "value": "2f251ac3-89a9-4a77-a452-704b474ccd01",
+              "label": "Lucy (Coordonnatrice compétente)"
+            }
+          ]
+        },
+        {
+          "label": "Français (Canada)",
+          "options": [
+            {
+              "value": "c6ccfe32-6bee-484a-a8a2-7a51bee93f99",
+              "label": "Étienne (Spécialiste précis - Français canadien - Masculine)"
+            },
+            {
+              "value": "f5e6c270-2aa9-463f-b48b-579a39284ce2",
+              "label": "Félix (Professionnel serviable - Français canadien - Masculine)"
+            },
+            {
+              "value": "cc4276e6-1ebc-429a-8c7d-930993d51abc",
+              "label": "Julien (Partenaire raffiné - Français canadien - Masculine)"
+            },
+            {
+              "value": "2590a84a-68cf-4b08-970d-b4ff824bf242",
+              "label": "Amelie (Concierge chaleureuse - Français canadien - Féminine)"
+            },
+            {
+              "value": "3817fdb0-7ae1-42d2-b46e-734dd9601bf2",
+              "label": "Madeleine (Résidente fiable - Français canadien - Féminine)"
+            },
+            {
+              "value": "328e0683-d1a7-4cde-ad46-0ee69a3cbd6a",
+              "label": "Roxane (Résolution de problèmes - Français canadien - Féminine)"
+            }
+          ]
+        },
+        {
+          "label": "Espagnol",
+          "options": [
+            {
+              "value": "3597a26f-80ef-4bd5-8101-9699bc764917",
+              "label": "Ximena (Guide calme)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "voiceStyles": [
+    {
+      "value": "en-GB-Studio-B",
+      "label": "Studio anglais britannique - Homme (par défaut)"
+    },
+    {
+      "value": "en-US-Journey-F",
+      "label": "Journey anglais américain - Femme"
+    },
+    {
+      "value": "en-US-Journey-O",
+      "label": "Journey anglais américain - Homme"
+    },
+    {
+      "value": "en-US-News-K",
+      "label": "News anglais américain - Homme"
+    },
+    {
+      "value": "en-US-Wavenet-D",
+      "label": "Wavenet anglais américain - Homme"
+    },
+    {
+      "value": "en-GB-Wavenet-C",
+      "label": "Wavenet anglais britannique - Femme"
+    },
+    {
+      "value": "en-AU-Standard-B",
+      "label": "Standard anglais australien - Homme"
+    },
+    {
+      "value": "en-IN-Wavenet-D",
+      "label": "Wavenet anglais indien - Homme"
+    }
+  ],
+  "defaults": {
+    "voiceByEngine": {
+      "gemini-live-2.5-flash-native-audio": "Puck",
+      "deepgram-pipeline": "aura-2-asteria-en",
+      "elevenlabs-pipeline": "pNInz6obpgDQGcFmaJgB",
+      "assemblyai-pipeline": "pNInz6obpgDQGcFmaJgB",
+      "inworld-pipeline": "Hades",
+      "aws-pipeline": "Joanna",
+      "cartesia-pipeline": "db6b0ed5-d5d3-463d-ae85-518a07d3c2b4"
+    },
+    "voiceByDeepgramLanguage": {
+      "en-US": "aura-2-asteria-en",
+      "es-ES": "aura-2-selena-es",
+      "de-DE": "aura-2-elara-de",
+      "fr-CA": "aura-2-agathe-fr",
+      "fr-FR": "aura-2-agathe-fr",
+      "nl-NL": "aura-2-beatrix-nl",
+      "it-IT": "aura-2-melia-it"
+    },
+    "responseLength": "concise",
+    "temperature": 0.7
+  }
+}

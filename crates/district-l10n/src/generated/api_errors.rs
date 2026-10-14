@@ -154,7 +154,7 @@ pub fn api_error_call_predates_feature(l: Locale) -> &'static str {
 pub fn api_error_carrier_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier could not complete that. Please try again or contact support.",
-        Locale::FrCa => "L'opérateur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec l'assistance.",
+        Locale::FrCa => "Le transporteur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec notre équipe de soutien.",
     }
 }
 
@@ -163,7 +163,7 @@ pub fn api_error_carrier_error(l: Locale) -> &'static str {
 pub fn api_error_carrier_funding(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier account could not fund that purchase. Contact support.",
-        Locale::FrCa => "Le compte auprès de l'opérateur n'a pas pu financer cet achat. Communiquez avec l'assistance.",
+        Locale::FrCa => "Le compte auprès du transporteur n'a pas pu financer cet achat. Communiquez avec notre équipe de soutien.",
     }
 }
 
@@ -172,7 +172,7 @@ pub fn api_error_carrier_funding(l: Locale) -> &'static str {
 pub fn api_error_carrier_rejected(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier refused this registration. Fix the items listed and submit again.",
-        Locale::FrCa => "L'opérateur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau.",
+        Locale::FrCa => "Le transporteur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau.",
     }
 }
 
@@ -235,7 +235,7 @@ pub fn api_error_demo_lines_busy(l: Locale) -> &'static str {
 pub fn api_error_dgi_requires_studio(l: Locale) -> &'static str {
     match l {
         Locale::En => "Lead enrichment is included with Voice Studio. Upgrade to turn it on.",
-        Locale::FrCa => "L'enrichissement des pistes est inclus avec Voice Studio. Passez à ce forfait pour l'activer.",
+        Locale::FrCa => "L'enrichissement des prospects est inclus avec Voice Studio. Passez à ce forfait pour l'activer.",
     }
 }
 
@@ -244,7 +244,7 @@ pub fn api_error_dgi_requires_studio(l: Locale) -> &'static str {
 pub fn api_error_direct_dial_disabled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Direct dialling is not available for this workspace yet. Contact support to ask about it.",
-        Locale::FrCa => "La composition directe n'est pas encore disponible pour cet espace de travail. Communiquez avec l'assistance pour vous renseigner.",
+        Locale::FrCa => "La composition directe n'est pas encore offerte pour cet espace de travail. Communiquez avec notre équipe de soutien pour vous renseigner.",
     }
 }
 
@@ -442,7 +442,7 @@ pub fn api_error_invalid_request(l: Locale) -> &'static str {
 pub fn api_error_jira_not_connected(l: Locale) -> &'static str {
     match l {
         Locale::En => "No support project is connected to this workspace.",
-        Locale::FrCa => "Aucun projet d'assistance n'est connecté à cet espace de travail.",
+        Locale::FrCa => "Aucun projet de soutien n'est connecté à cet espace de travail.",
     }
 }
 
@@ -478,7 +478,7 @@ pub fn api_error_mailbox_not_found(l: Locale) -> &'static str {
 pub fn api_error_managed_billing_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan.",
-        Locale::FrCa => "La facturation gérée auprès des opérateurs n'est pas activée pour cet espace de travail. Communiquez avec l'assistance pour passer à un forfait géré.",
+        Locale::FrCa => "La facturation gérée auprès des transporteurs n'est pas activée pour cet espace de travail. Communiquez avec notre équipe de soutien pour passer à un forfait géré.",
     }
 }
 
@@ -559,7 +559,7 @@ pub fn api_error_model_unavailable_in_region(l: Locale) -> &'static str {
 pub fn api_error_no_password(l: Locale) -> &'static str {
     match l {
         Locale::En => "This account signs in with Google or Microsoft and has no password to re-enter. Set a password on the web first.",
-        Locale::FrCa => "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le web.",
+        Locale::FrCa => "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le Web.",
     }
 }
 
@@ -892,7 +892,7 @@ pub fn api_error_session_expired(l: Locale) -> &'static str {
 pub fn api_error_setup_not_available(l: Locale) -> &'static str {
     match l {
         Locale::En => "Guided setup is not available for this workspace.",
-        Locale::FrCa => "La configuration guidée n'est pas disponible pour cet espace de travail.",
+        Locale::FrCa => "La configuration guidée n'est pas offerte pour cet espace de travail.",
     }
 }
 
@@ -982,7 +982,7 @@ pub fn api_error_ticket_not_closable(l: Locale) -> &'static str {
 pub fn api_error_ticket_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That support request could not be found.",
-        Locale::FrCa => "Cette demande d'assistance est introuvable.",
+        Locale::FrCa => "Cette demande de soutien est introuvable.",
     }
 }
 
@@ -1270,7 +1270,7 @@ pub fn api_error_caps_regions_degraded_without_list(l: Locale) -> &'static str {
 pub fn api_error_caps_trust_bundles_not_approved(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace's carrier registration has not been approved yet. That has to finish first.",
-        Locale::FrCa => "L'inscription de cet espace de travail auprès de l'opérateur n'est pas encore approuvée. Cette étape doit d'abord être terminée.",
+        Locale::FrCa => "L'inscription de cet espace de travail auprès du transporteur n'est pas encore approuvée. Cette étape doit d'abord être terminée.",
     }
 }
 

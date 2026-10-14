@@ -388,7 +388,7 @@ pub fn wire_desk_ticket_source_voice_call(l: Locale) -> &'static str {
 pub fn wire_desk_ticket_status_fallback(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
-        Locale::FrCa => "Inconnue",
+        Locale::FrCa => "Inconnu",
     }
 }
 
@@ -397,7 +397,7 @@ pub fn wire_desk_ticket_status_fallback(l: Locale) -> &'static str {
 pub fn wire_desk_ticket_status_open(l: Locale) -> &'static str {
     match l {
         Locale::En => "Open",
-        Locale::FrCa => "Ouverte",
+        Locale::FrCa => "Ouvert",
     }
 }
 
@@ -406,7 +406,7 @@ pub fn wire_desk_ticket_status_open(l: Locale) -> &'static str {
 pub fn wire_desk_ticket_status_resolved(l: Locale) -> &'static str {
     match l {
         Locale::En => "Resolved",
-        Locale::FrCa => "Réglée",
+        Locale::FrCa => "Réglé",
     }
 }
 
@@ -523,7 +523,7 @@ pub fn wire_funnel_stage_successful_leads(l: Locale) -> &'static str {
 pub fn wire_funnel_stage_total_dials(l: Locale) -> &'static str {
     match l {
         Locale::En => "Total Dials",
-        Locale::FrCa => "Composions totales",
+        Locale::FrCa => "Appels composés au total",
     }
 }
 

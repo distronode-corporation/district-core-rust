@@ -901,7 +901,7 @@ pub fn desk_settings_failed_title(l: Locale) -> &'static str {
 pub fn desk_status_open(l: Locale) -> &'static str {
     match l {
         Locale::En => "Open",
-        Locale::FrCa => "Ouverte",
+        Locale::FrCa => "Ouvert",
     }
 }
 
@@ -910,7 +910,7 @@ pub fn desk_status_open(l: Locale) -> &'static str {
 pub fn desk_status_resolved(l: Locale) -> &'static str {
     match l {
         Locale::En => "Resolved",
-        Locale::FrCa => "Réglée",
+        Locale::FrCa => "Réglé",
     }
 }
 

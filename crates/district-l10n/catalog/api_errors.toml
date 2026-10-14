@@ -149,7 +149,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.carrier_error]
 en = "The carrier could not complete that. Please try again or contact support."
-fr = "L'opérateur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec l'assistance."
+fr = "Le transporteur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec notre équipe de soutien."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -158,7 +158,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.carrier_funding]
 en = "The carrier account could not fund that purchase. Contact support."
-fr = "Le compte auprès de l'opérateur n'a pas pu financer cet achat. Communiquez avec l'assistance."
+fr = "Le compte auprès du transporteur n'a pas pu financer cet achat. Communiquez avec notre équipe de soutien."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -167,7 +167,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.carrier_rejected]
 en = "The carrier refused this registration. Fix the items listed and submit again."
-fr = "L'opérateur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau."
+fr = "Le transporteur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -230,7 +230,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.dgi_requires_studio]
 en = "Lead enrichment is included with Voice Studio. Upgrade to turn it on."
-fr = "L'enrichissement des pistes est inclus avec Voice Studio. Passez à ce forfait pour l'activer."
+fr = "L'enrichissement des prospects est inclus avec Voice Studio. Passez à ce forfait pour l'activer."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -239,7 +239,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.direct_dial_disabled]
 en = "Direct dialling is not available for this workspace yet. Contact support to ask about it."
-fr = "La composition directe n'est pas encore disponible pour cet espace de travail. Communiquez avec l'assistance pour vous renseigner."
+fr = "La composition directe n'est pas encore offerte pour cet espace de travail. Communiquez avec notre équipe de soutien pour vous renseigner."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -438,7 +438,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.jira_not_connected]
 en = "No support project is connected to this workspace."
-fr = "Aucun projet d'assistance n'est connecté à cet espace de travail."
+fr = "Aucun projet de soutien n'est connecté à cet espace de travail."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -474,7 +474,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.managed_billing_required]
 en = "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan."
-fr = "La facturation gérée auprès des opérateurs n'est pas activée pour cet espace de travail. Communiquez avec l'assistance pour passer à un forfait géré."
+fr = "La facturation gérée auprès des transporteurs n'est pas activée pour cet espace de travail. Communiquez avec notre équipe de soutien pour passer à un forfait géré."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -555,7 +555,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.no_password]
 en = "This account signs in with Google or Microsoft and has no password to re-enter. Set a password on the web first."
-fr = "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le web."
+fr = "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le Web."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -888,7 +888,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.setup_not_available]
 en = "Guided setup is not available for this workspace."
-fr = "La configuration guidée n'est pas disponible pour cet espace de travail."
+fr = "La configuration guidée n'est pas offerte pour cet espace de travail."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -978,7 +978,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.ticket_not_found]
 en = "That support request could not be found."
-fr = "Cette demande d'assistance est introuvable."
+fr = "Cette demande de soutien est introuvable."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -1267,7 +1267,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error_caps.trust_bundles_not_approved]
 en = "This workspace's carrier registration has not been approved yet. That has to finish first."
-fr = "L'inscription de cet espace de travail auprès de l'opérateur n'est pas encore approuvée. Cette étape doit d'abord être terminée."
+fr = "L'inscription de cet espace de travail auprès du transporteur n'est pas encore approuvée. Cette étape doit d'abord être terminée."
 ctx = "error"
 screen = "api_error"
 tier = "T2"

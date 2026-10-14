@@ -175,12 +175,21 @@ class Substitution:
     kind   "phone", "email" or "host", whose `key` is the SHA-256 of
            `<kind>:<canonical original>`; or "text", whose `key` is the literal
            original (only for text that is not itself sensitive).
+    files  the fixtures it applies to, by path under contracts/; empty for
+           every fixture of every set. A scoped entry is for a value the
+           server already writes as a stand-in this table writes elsewhere,
+           which must be told apart in the one file that holds it without
+           touching the sets that use it as written.
     """
 
     kind: str
     key: str
     replacement: str
     reason: str
+    files: tuple[str, ...] = ()
+
+    def applies_to(self, name: str) -> bool:
+        return not self.files or name in self.files
 
 
 # Alphabetical by replacement within each kind. Each line's reason says why the
@@ -189,6 +198,9 @@ SUBSTITUTIONS: tuple[Substitution, ...] = (
     # Phone numbers. 555 numbers outside 0100..0199 are not reserved for fiction.
     Substitution("phone", "da624dd9d311d5fc6f92bfdeeb818e6525a505be2793a2c45083be744a9b1ee3", "+14165550142",
                  "the recurring caller across the call, contact, message, desk and booking fixtures; outside the fictional range"),
+    Substitution("phone", "806f0c0f923e353dfefba1cf4412cf300610d9496dbfa9148233093ea1502efc", "+14165550143",
+                 "the looked-up number in the number lookup fixture, which the server records as the stand-in this table writes for the recurring caller",
+                 ("fixtures/district-number-lookup.json",)),
     Substitution("phone", "c33fce29b76bb9d1770311320605fd9764c6198eb3130756abd2ccd08d03a7b6", "+14165550161",
                  "a busy caller in the call feed; outside the fictional range"),
     Substitution("phone", "11ec3c877ff91b9937cb8fa2e87e79807bcacc94d1912869ccb9ac518f5130e3", "+14165550171",
@@ -324,11 +336,12 @@ def validate_table(table: tuple[Substitution, ...]) -> None:
 # Substitution.
 
 
-def substitute(text: str, table: tuple[Substitution, ...]) -> tuple[str, Counter]:
-    """Apply the table to one file's text. Returns the new text and a Counter of
-    table index to the number of replacements made in this file."""
+def substitute(text: str, table: tuple[Substitution, ...], name: str) -> tuple[str, Counter]:
+    """Apply the entries of the table that apply to `name` to that file's text.
+    Returns the new text and a Counter of table index to the number of
+    replacements made in this file."""
     counts: Counter = Counter()
-    by_key = {(sub.kind, sub.key): index for index, sub in enumerate(table)}
+    by_key = {(sub.kind, sub.key): index for index, sub in enumerate(table) if sub.applies_to(name)}
 
     def lookup(kind: str, canonical: str) -> int | None:
         return by_key.get((kind, digest(kind, canonical)))
@@ -458,19 +471,27 @@ def check_replacements_are_new(
     stand-ins this table writes into the Android set (the same fictional caller in
     both), which is a coincidence across sets, not a merge within one. For the
     Android set every entry substitutes something, so there the rule is what it
-    has always been: every replacement is new to the whole set."""
+    has always been: every replacement is new to the whole set.
+
+    A value the table itself replaces in the file that holds it is not counted as
+    present: it does not survive into the output, so it cannot merge with
+    anything there."""
     clashes = []
     for fixture_set in SETS:
         names = [name for name in sources if name.startswith(f"{fixture_set.name}/")]
         applied = [sub for index, sub in enumerate(table) if any(per_file[index][name] for name in names)]
         phones: set[str] = set()
         emails: set[str] = set()
+        for name in names:
+            replaced = {(sub.kind, sub.key) for sub in table if sub.applies_to(name)}
+            for m in NANP.finditer(sources[name]):
+                _, area, exchange, line = nanp_parts(m)
+                if ("phone", digest("phone", f"1{area}{exchange}{line}")) not in replaced:
+                    phones.add(f"+1{area}{exchange}{line}")
+            for m in HYGIENE.EMAIL.finditer(sources[name]):
+                if ("email", digest("email", m.group(0).lower())) not in replaced:
+                    emails.add(m.group(0).lower())
         corpus = "\n".join(sources[name] for name in names)
-        for m in NANP.finditer(corpus):
-            _, area, exchange, line = nanp_parts(m)
-            phones.add(f"+1{area}{exchange}{line}")
-        for m in HYGIENE.EMAIL.finditer(corpus):
-            emails.add(m.group(0).lower())
         lowered = corpus.lower()
         for sub in applied:
             if sub.kind == "phone" and sub.replacement in phones:
@@ -652,6 +673,8 @@ def render_source(
             lines.append(f"original_sha256 = {toml_string(sub.key)}")
         lines.append(f"replacement = {toml_string(sub.replacement)}")
         lines.append(f"reason = {toml_string(sub.reason)}")
+        if sub.files:
+            lines.append("only_in = [" + ", ".join(toml_string(name) for name in sub.files) + "]")
         lines.append(f"count = {sum(files.values())}")
         lines.append("")
         lines.append("[substitution.files]")
@@ -701,7 +724,7 @@ def sync(monorepo: Path, allow_dirty: bool, today: str, only: tuple[str, ...] = 
     outputs: dict[str, str] = {}
     per_file: dict[int, Counter] = {index: Counter() for index in range(len(SUBSTITUTIONS))}
     for name, text in sources.items():
-        output, counts = substitute(text, SUBSTITUTIONS)
+        output, counts = substitute(text, SUBSTITUTIONS, name)
         for index, count in counts.items():
             per_file[index][name] += count
         problems += check_output(name, text, output)

@@ -1,0 +1,21 @@
+{
+  "connected": true,
+  "providers": {
+    "telnyx": {
+      "connected": true,
+      "managed": true
+    },
+    "twilio": {
+      "connected": true,
+      "accountName": "Contract Test Ltd",
+      "status": "active",
+      "balance": "12.50",
+      "currency": "USD",
+      "numberCount": 1
+    },
+    "sinch": {
+      "connected": false,
+      "error": "Invalid credentials"
+    }
+  }
+}

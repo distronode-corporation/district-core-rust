@@ -6,7 +6,7 @@
         "id": "whd-contract-1",
         "webhook_id": "wh-contract-1",
         "event": "booking.created",
-        "status": "delivered",
+        "status": "success",
         "attempt_count": 1,
         "booking_id": "bk-contract-1",
         "response_status": 200,

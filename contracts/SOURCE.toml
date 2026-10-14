@@ -23,19 +23,19 @@
 # `sha256sum -c SHA256SUMS` checks them.
 
 [sets.fixtures]
-commit = "46e1740a6fb0d78c34f6a216545e557f5a08af2b"
+commit = "43eed5fd611d96fcceb1702b56719b577c7f6d7d"
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
-file_count = 166
+file_count = 187
 
 [sets.desktop]
-commit = "46e1740a6fb0d78c34f6a216545e557f5a08af2b"
+commit = "43eed5fd611d96fcceb1702b56719b577c7f6d7d"
 source = "the desktop-only contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
 file_count = 13
 
 [sets.i18n]
-commit = "2528233a95df57c65a7e06bbdf6a93b61b9baf62"
+commit = "43eed5fd611d96fcceb1702b56719b577c7f6d7d"
 source = "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests"
 source_clean = true
 file_count = 3
@@ -49,12 +49,15 @@ kind = "phone"
 original_sha256 = "da624dd9d311d5fc6f92bfdeeb818e6525a505be2793a2c45083be744a9b1ee3"
 replacement = "+14165550142"
 reason = "the recurring caller across the call, contact, message, desk and booking fixtures; outside the fictional range"
-count = 26
+count = 29
 
 [substitution.files]
 "fixtures/district-call-detail.json" = 3
 "fixtures/district-calls.json" = 3
+"fixtures/district-contact-block.json" = 1
 "fixtures/district-contact-detail.json" = 3
+"fixtures/district-contact-unblock.json" = 1
+"fixtures/district-contacts-blocked.json" = 1
 "fixtures/district-contacts.json" = 1
 "fixtures/district-conversations.json" = 2
 "fixtures/district-desk-ticket-create.json" = 1
@@ -69,6 +72,17 @@ count = 26
 "fixtures/district-scheduling-booking.json" = 1
 "fixtures/district-scheduling-bookings.json" = 1
 "fixtures/district-scheduling-event-types.json" = 1
+
+[[substitution]]
+kind = "phone"
+original_sha256 = "806f0c0f923e353dfefba1cf4412cf300610d9496dbfa9148233093ea1502efc"
+replacement = "+14165550143"
+reason = "the looked-up number in the number lookup fixture, which the server records as the stand-in this table writes for the recurring caller"
+only_in = ["fixtures/district-number-lookup.json"]
+count = 1
+
+[substitution.files]
+"fixtures/district-number-lookup.json" = 1
 
 [[substitution]]
 kind = "phone"
@@ -190,7 +204,7 @@ kind = "email"
 original_sha256 = "6af1521778a24650da09dc7de13bcc62b197fb2694f55a1b508aa84fd3992404"
 replacement = "contract@example.com"
 reason = "the scheduling account's own user in the scheduling fixtures"
-count = 8
+count = 10
 
 [substitution.files]
 "fixtures/district-scheduling-calendar-status.json" = 1
@@ -201,6 +215,8 @@ count = 8
 "fixtures/district-scheduling-teams.json" = 1
 "fixtures/district-scheduling-test-email.json" = 1
 "fixtures/district-scheduling-users.json" = 1
+"fixtures/district-settings-unset.json" = 1
+"fixtures/district-settings.json" = 1
 
 [[substitution]]
 kind = "email"

@@ -20,7 +20,7 @@ use district_api::ApiError;
 use district_l10n::{Locale, WireCategory, format};
 use district_model::{
     AnalyticsRange, AnalyticsResponse, CallVolumeDelta, DIRECTION_DOWN, DIRECTION_UP,
-    UsageHistoryResponse, UsageMonth, UsageResponse,
+    EngagementPoint, UsageHistoryResponse, UsageMonth, UsageResponse,
 };
 
 use crate::failure::FailureText;
@@ -140,11 +140,13 @@ impl AnalyticsReport {
     }
 
     /// Calls per day (or per week, for the longest window), each scaled against
-    /// the busiest, for a bar chart.
+    /// the busiest, for a bar chart. Each bar is labelled by its day: the
+    /// service's own label in English (`Aug 9`), and in French the day of its
+    /// `isoDate` written by `district_l10n::format` (`9 août`).
     pub fn trend(&self) -> Vec<ChartBar> {
         let points = &self.response.engagement_trends;
         let values: Vec<i64> = points.iter().map(|point| point.calls).collect();
-        let labels = points.iter().map(|point| point.date.clone()).collect();
+        let labels = points.iter().map(trend_label).collect();
         bars(labels, &values)
     }
 
@@ -184,6 +186,19 @@ impl AnalyticsReport {
                 color: parse_hex_color(&slice.color),
             })
             .collect()
+    }
+}
+
+/// A trend point's label: the service's in English, and in French its
+/// `isoDate`'s day and month. An `isoDate` that is not a `YYYY-MM-DD` day
+/// reads as it came, which names the day in digits in any language.
+fn trend_label(point: &EngagementPoint) -> String {
+    match l() {
+        Locale::En => point.date.clone(),
+        Locale::FrCa => point.iso_date.parse::<jiff::civil::Date>().map_or_else(
+            |_| point.iso_date.clone(),
+            |day| format::day_month(Locale::FrCa, day.month() as u8, day.day() as u8),
+        ),
     }
 }
 

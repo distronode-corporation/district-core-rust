@@ -9,7 +9,7 @@
 
 use std::collections::BTreeMap;
 
-use district_l10n::scheduling_strings as ss;
+use district_l10n::{WireCategory, scheduling_strings as ss, wire_label};
 use district_model::{
     SCHEDULING_WEBHOOK_EVENTS, SchedulingAdminData, SchedulingAdminRequest, SchedulingApiKey,
     SchedulingOauthConnection, SchedulingSecret, SchedulingStatusResponse, SchedulingWebhook,
@@ -25,6 +25,18 @@ use crate::failure::FailureText;
 use crate::model::Tickets;
 use crate::text::l;
 use crate::workflows::Tone;
+
+/// The events the form offers, as the web portal offers them: the four about
+/// bookings. The scheduler also knows `recording.completed`,
+/// `transcript.ready` and `notes.ready` ([`SCHEDULING_WEBHOOK_EVENTS`]), which
+/// never fire, since no meeting is recorded. A webhook already subscribed to
+/// one of those keeps it when saved here; it is not offered to tick.
+pub const WEBHOOK_EVENTS: [&str; 4] = [
+    "booking.created",
+    "booking.cancelled",
+    "booking.rescheduled",
+    "booking.reminder",
+];
 
 /// Every part of a booking a webhook delivery can carry, in the order the
 /// form lists them.
@@ -93,7 +105,8 @@ impl DeveloperTab {
 }
 
 /// What a delivery came to, as (label, tone): delivered, waiting, no answer,
-/// rejected with the code the endpoint answered, or the status as it came.
+/// rejected with the code the endpoint answered, or for a status this build
+/// does not know the generic label ("Other"), never the status as it came.
 pub fn delivery_outcome(delivery: &SchedulingWebhookDelivery) -> (String, Tone) {
     match delivery.status.as_str() {
         "success" => (
@@ -114,7 +127,10 @@ pub fn delivery_outcome(delivery: &SchedulingWebhookDelivery) -> (String, Tone) 
                 Tone::Danger,
             ),
         },
-        other => (other.to_owned(), Tone::Neutral),
+        other => (
+            wire_label(WireCategory::SchedulingWebhookDeliveryStatus, other, l()),
+            Tone::Neutral,
+        ),
     }
 }
 
@@ -279,7 +295,9 @@ pub struct WebhookEditor {
     pub editing: Option<SchedulingWebhook>,
     /// The address, as typed (an add only).
     pub url: String,
-    /// The events chosen, in the scheduler's order.
+    /// The events chosen, in the scheduler's order: those ticked among
+    /// [`WEBHOOK_EVENTS`], and any other event the scheduler knows that the
+    /// webhook already sends, which a save keeps.
     pub events: Vec<String>,
     /// The fields chosen, in the form's order.
     pub fields: Vec<String>,
@@ -347,6 +365,16 @@ impl WebhookEditor {
     /// Whether the save can be pressed.
     pub fn can_submit(&self) -> bool {
         !self.write.busy() && !self.events.is_empty()
+    }
+
+    /// The events this webhook sends that the scheduler knows but the form does
+    /// not offer ([`WEBHOOK_EVENTS`]): a save keeps them.
+    pub fn kept_events(&self) -> Vec<&str> {
+        self.events
+            .iter()
+            .filter(|e| !WEBHOOK_EVENTS.contains(&e.as_str()))
+            .map(String::as_str)
+            .collect()
     }
 
     /// The events this webhook sends that this build does not know: a save
@@ -704,7 +732,9 @@ fn read_into<T>(
     vec![send(pending, request)]
 }
 
-/// The tab shown, read again: after a write, or asked for.
+/// The tab shown, read again: after a write, or asked for. Every webhook's
+/// deliveries are dropped with the webhooks, and the open one's are read again
+/// beside them, so an open list never waits on a read nobody sent.
 fn reread(section: &mut DeveloperSection) -> Vec<Out> {
     match section.tab {
         DeveloperTab::Keys => section.keys = None,
@@ -714,7 +744,20 @@ fn reread(section: &mut DeveloperSection) -> Vec<Out> {
             section.deliveries.clear();
         }
     }
-    read_tab(section)
+    let mut out = read_tab(section);
+    if let (DeveloperTab::Webhooks, Some(id)) = (section.tab, section.open_webhook.clone()) {
+        out.push(read_deliveries(section, id));
+    }
+    out
+}
+
+/// The deliveries of webhook `id`, marked as reading.
+fn read_deliveries(section: &mut DeveloperSection, id: String) -> Out {
+    section.deliveries.insert(id.clone(), SectionLoad::Loading);
+    send(
+        Pending::Deliveries(id.clone()),
+        SchedulingAdminRequest::WebhookDeliveries { id },
+    )
 }
 
 /// The pending read of `tab`.
@@ -764,11 +807,7 @@ fn section_event(
             } else {
                 section.open_webhook = Some(id.clone());
                 if !section.deliveries.contains_key(&id) {
-                    section.deliveries.insert(id.clone(), SectionLoad::Loading);
-                    return vec![send(
-                        Pending::Deliveries(id.clone()),
-                        SchedulingAdminRequest::WebhookDeliveries { id },
-                    )];
+                    return vec![read_deliveries(section, id)];
                 }
             }
         }
@@ -884,7 +923,9 @@ fn webhook_event(editor: &mut WebhookEditor, event: DeveloperEvent) -> Vec<Out> 
             editor.url = url;
             editor.url_rejected = None;
         }
-        DeveloperEvent::ToggleEvent(name) => {
+        // Only an offered event can be ticked or unticked; one the webhook
+        // already sends and the form does not offer stays as it is.
+        DeveloperEvent::ToggleEvent(name) if WEBHOOK_EVENTS.contains(&name.as_str()) => {
             toggle(&SCHEDULING_WEBHOOK_EVENTS, &mut editor.events, &name);
             editor.events_rejected = None;
         }
@@ -943,7 +984,17 @@ fn developer_answer(section: &mut DeveloperSection, pending: Pending, answer: An
         }
         (Pending::Keys, _) => section.keys = Some(load(answer, data!(ApiKeys))),
         (Pending::Apps, _) => section.apps = Some(load(answer, data!(OauthConnections))),
-        (Pending::Webhooks, _) => section.webhooks = Some(load(answer, data!(Webhooks))),
+        (Pending::Webhooks, _) => {
+            let webhooks = load(answer, data!(Webhooks));
+            // A webhook deleted since its deliveries were opened closes them.
+            if let (Some(listed), Some(open)) = (webhooks.value(), section.open_webhook.clone())
+                && !listed.iter().any(|w| w.id == open)
+            {
+                section.open_webhook = None;
+                section.deliveries.remove(&open);
+            }
+            section.webhooks = Some(webhooks);
+        }
         (Pending::Deliveries(id), _) => {
             section
                 .deliveries

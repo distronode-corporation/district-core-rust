@@ -203,9 +203,9 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::desk_settings_failed_title(Locale::En), "Could not load the desk's settings");
     assert_eq!(strings::desk_settings_failed_title(Locale::FrCa), "Paramètres du comptoir indisponibles");
     assert_eq!(strings::desk_status_open(Locale::En), "Open");
-    assert_eq!(strings::desk_status_open(Locale::FrCa), "Ouverte");
+    assert_eq!(strings::desk_status_open(Locale::FrCa), "Ouvert");
     assert_eq!(strings::desk_status_resolved(Locale::En), "Resolved");
-    assert_eq!(strings::desk_status_resolved(Locale::FrCa), "Réglée");
+    assert_eq!(strings::desk_status_resolved(Locale::FrCa), "Réglé");
     assert_eq!(strings::desk_status_waiting(Locale::En), "Waiting on the customer");
     assert_eq!(strings::desk_status_waiting(Locale::FrCa), "En attente du client");
     assert_eq!(strings::desk_ticket_already_raised(Locale::En), "That ticket was already raised.");
@@ -1045,11 +1045,11 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_call_predates_feature(Locale::En), "That call started before this feature existed, so it is not available on it.");
     assert_eq!(api_error_strings::api_error_call_predates_feature(Locale::FrCa), "Cet appel a commencé avant l'existence de cette fonction, elle n'est donc pas offerte pour lui.");
     assert_eq!(api_error_strings::api_error_carrier_error(Locale::En), "The carrier could not complete that. Please try again or contact support.");
-    assert_eq!(api_error_strings::api_error_carrier_error(Locale::FrCa), "L'opérateur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec l'assistance.");
+    assert_eq!(api_error_strings::api_error_carrier_error(Locale::FrCa), "Le transporteur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec notre équipe de soutien.");
     assert_eq!(api_error_strings::api_error_carrier_funding(Locale::En), "The carrier account could not fund that purchase. Contact support.");
-    assert_eq!(api_error_strings::api_error_carrier_funding(Locale::FrCa), "Le compte auprès de l'opérateur n'a pas pu financer cet achat. Communiquez avec l'assistance.");
+    assert_eq!(api_error_strings::api_error_carrier_funding(Locale::FrCa), "Le compte auprès du transporteur n'a pas pu financer cet achat. Communiquez avec notre équipe de soutien.");
     assert_eq!(api_error_strings::api_error_carrier_rejected(Locale::En), "The carrier refused this registration. Fix the items listed and submit again.");
-    assert_eq!(api_error_strings::api_error_carrier_rejected(Locale::FrCa), "L'opérateur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau.");
+    assert_eq!(api_error_strings::api_error_carrier_rejected(Locale::FrCa), "Le transporteur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau.");
     assert_eq!(api_error_strings::api_error_checkout_setup_in_progress(Locale::En), "Your plan is already paid for. Finish setting up your receptionist from your dashboard before buying another plan.");
     assert_eq!(api_error_strings::api_error_checkout_setup_in_progress(Locale::FrCa), "Votre forfait est déjà payé. Terminez la configuration de votre réceptionniste depuis votre tableau de bord avant d'acheter un autre forfait.");
     assert_eq!(api_error_strings::api_error_checkout_subscription_exists(Locale::En), "You already have an active plan. Change it from Billing in your dashboard instead of buying a second one.");
@@ -1063,9 +1063,9 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_demo_lines_busy(Locale::En), "Every demo line is busy right now. Please try again in a few minutes.");
     assert_eq!(api_error_strings::api_error_demo_lines_busy(Locale::FrCa), "Toutes les lignes de démonstration sont occupées en ce moment. Réessayez dans quelques minutes.");
     assert_eq!(api_error_strings::api_error_dgi_requires_studio(Locale::En), "Lead enrichment is included with Voice Studio. Upgrade to turn it on.");
-    assert_eq!(api_error_strings::api_error_dgi_requires_studio(Locale::FrCa), "L'enrichissement des pistes est inclus avec Voice Studio. Passez à ce forfait pour l'activer.");
+    assert_eq!(api_error_strings::api_error_dgi_requires_studio(Locale::FrCa), "L'enrichissement des prospects est inclus avec Voice Studio. Passez à ce forfait pour l'activer.");
     assert_eq!(api_error_strings::api_error_direct_dial_disabled(Locale::En), "Direct dialling is not available for this workspace yet. Contact support to ask about it.");
-    assert_eq!(api_error_strings::api_error_direct_dial_disabled(Locale::FrCa), "La composition directe n'est pas encore disponible pour cet espace de travail. Communiquez avec l'assistance pour vous renseigner.");
+    assert_eq!(api_error_strings::api_error_direct_dial_disabled(Locale::FrCa), "La composition directe n'est pas encore offerte pour cet espace de travail. Communiquez avec notre équipe de soutien pour vous renseigner.");
     assert_eq!(api_error_strings::api_error_disclosure_required_in_region(Locale::En), "Callers in this region must be told they are speaking with an automated assistant, so this setting cannot be turned off.");
     assert_eq!(api_error_strings::api_error_disclosure_required_in_region(Locale::FrCa), "Dans cette région, les appelants doivent être informés qu'ils parlent avec une assistante automatisée. Ce paramètre ne peut donc pas être désactivé.");
     assert_eq!(api_error_strings::api_error_do_not_call(Locale::En), "That number has opted out of contact from this workspace.");
@@ -1109,7 +1109,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_invalid_request(Locale::En), "That request was not valid. Please check the details and try again.");
     assert_eq!(api_error_strings::api_error_invalid_request(Locale::FrCa), "Cette requête n'est pas valide. Vérifiez les renseignements, puis réessayez.");
     assert_eq!(api_error_strings::api_error_jira_not_connected(Locale::En), "No support project is connected to this workspace.");
-    assert_eq!(api_error_strings::api_error_jira_not_connected(Locale::FrCa), "Aucun projet d'assistance n'est connecté à cet espace de travail.");
+    assert_eq!(api_error_strings::api_error_jira_not_connected(Locale::FrCa), "Aucun projet de soutien n'est connecté à cet espace de travail.");
     assert_eq!(api_error_strings::api_error_language_unavailable(Locale::En), "This language is not available for this workspace yet. Choose another language.");
     assert_eq!(api_error_strings::api_error_language_unavailable(Locale::FrCa), "Cette langue n'est pas encore offerte pour cet espace de travail. Choisissez une autre langue.");
     assert_eq!(api_error_strings::api_error_last_agency_member(Locale::En), "This is the last administrator of the workspace, so it cannot be removed or demoted.");
@@ -1117,7 +1117,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_mailbox_not_found(Locale::En), "No mailbox is connected to this workspace.");
     assert_eq!(api_error_strings::api_error_mailbox_not_found(Locale::FrCa), "Aucune boîte de réception n'est connectée à cet espace de travail.");
     assert_eq!(api_error_strings::api_error_managed_billing_required(Locale::En), "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan.");
-    assert_eq!(api_error_strings::api_error_managed_billing_required(Locale::FrCa), "La facturation gérée auprès des opérateurs n'est pas activée pour cet espace de travail. Communiquez avec l'assistance pour passer à un forfait géré.");
+    assert_eq!(api_error_strings::api_error_managed_billing_required(Locale::FrCa), "La facturation gérée auprès des transporteurs n'est pas activée pour cet espace de travail. Communiquez avec notre équipe de soutien pour passer à un forfait géré.");
     assert_eq!(api_error_strings::api_error_media_not_found(Locale::En), "That file could not be found.");
     assert_eq!(api_error_strings::api_error_media_not_found(Locale::FrCa), "Ce fichier est introuvable.");
     assert_eq!(api_error_strings::api_error_member_exists(Locale::En), "That email address is already a member of this workspace.");
@@ -1135,7 +1135,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_model_unavailable_in_region(Locale::En), "This voice engine is not available for workspaces in this region. Choose another engine.");
     assert_eq!(api_error_strings::api_error_model_unavailable_in_region(Locale::FrCa), "Ce moteur vocal n'est pas offert aux espaces de travail de cette région. Choisissez un autre moteur.");
     assert_eq!(api_error_strings::api_error_no_password(Locale::En), "This account signs in with Google or Microsoft and has no password to re-enter. Set a password on the web first.");
-    assert_eq!(api_error_strings::api_error_no_password(Locale::FrCa), "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le web.");
+    assert_eq!(api_error_strings::api_error_no_password(Locale::FrCa), "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le Web.");
     assert_eq!(api_error_strings::api_error_no_sending_number(Locale::En), "This workspace has no texting number yet. Add or buy one in Messaging settings.");
     assert_eq!(api_error_strings::api_error_no_sending_number(Locale::FrCa), "Cet espace de travail n'a pas encore de numéro pour les textos. Ajoutez-en un ou achetez-en un dans les paramètres de messagerie.");
     assert_eq!(api_error_strings::api_error_no_workspace(Locale::En), "This account is not a member of any workspace yet.");
@@ -1209,7 +1209,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_session_expired(Locale::En), "Your session has expired. Please sign in again.");
     assert_eq!(api_error_strings::api_error_session_expired(Locale::FrCa), "Votre session a expiré. Veuillez vous reconnecter.");
     assert_eq!(api_error_strings::api_error_setup_not_available(Locale::En), "Guided setup is not available for this workspace.");
-    assert_eq!(api_error_strings::api_error_setup_not_available(Locale::FrCa), "La configuration guidée n'est pas disponible pour cet espace de travail.");
+    assert_eq!(api_error_strings::api_error_setup_not_available(Locale::FrCa), "La configuration guidée n'est pas offerte pour cet espace de travail.");
     assert_eq!(api_error_strings::api_error_sip_provider_required(Locale::En), "That needs a SIP-capable provider, which means Twilio or Telnyx on this workspace.");
     assert_eq!(api_error_strings::api_error_sip_provider_required(Locale::FrCa), "Cela exige un fournisseur compatible SIP, c'est-à-dire Twilio ou Telnyx sur cet espace de travail.");
     assert_eq!(api_error_strings::api_error_status_change_failed(Locale::En), "The status could not be changed. Please try again.");
@@ -1229,7 +1229,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_ticket_not_closable(Locale::En), "This request cannot be closed from here. Reply to let us know it is resolved and we will close it.");
     assert_eq!(api_error_strings::api_error_ticket_not_closable(Locale::FrCa), "Cette demande ne peut pas être fermée ici. Répondez pour nous dire qu'elle est réglée et nous la fermerons.");
     assert_eq!(api_error_strings::api_error_ticket_not_found(Locale::En), "That support request could not be found.");
-    assert_eq!(api_error_strings::api_error_ticket_not_found(Locale::FrCa), "Cette demande d'assistance est introuvable.");
+    assert_eq!(api_error_strings::api_error_ticket_not_found(Locale::FrCa), "Cette demande de soutien est introuvable.");
     assert_eq!(api_error_strings::api_error_ticket_opening(Locale::En), "This request is still being opened. Please try again in a moment.");
     assert_eq!(api_error_strings::api_error_ticket_opening(Locale::FrCa), "Cette demande est encore en cours d'ouverture. Veuillez réessayer dans un moment.");
     assert_eq!(api_error_strings::api_error_token_invalid(Locale::En), "That link is no longer valid. Request a new one.");
@@ -1293,7 +1293,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_caps_regions_degraded_without_list(Locale::En), "Your workspaces could not all be listed because some regions are unreachable right now. Nothing about your account has changed.");
     assert_eq!(api_error_strings::api_error_caps_regions_degraded_without_list(Locale::FrCa), "Vos espaces de travail n'ont pas tous pu être listés, car certaines régions sont injoignables en ce moment. Rien n'a changé dans votre compte.");
     assert_eq!(api_error_strings::api_error_caps_trust_bundles_not_approved(Locale::En), "This workspace's carrier registration has not been approved yet. That has to finish first.");
-    assert_eq!(api_error_strings::api_error_caps_trust_bundles_not_approved(Locale::FrCa), "L'inscription de cet espace de travail auprès de l'opérateur n'est pas encore approuvée. Cette étape doit d'abord être terminée.");
+    assert_eq!(api_error_strings::api_error_caps_trust_bundles_not_approved(Locale::FrCa), "L'inscription de cet espace de travail auprès du transporteur n'est pas encore approuvée. Cette étape doit d'abord être terminée.");
     assert_eq!(api_error_strings::api_error_caps_validation_error(Locale::En), "Some of what you entered is not valid. Please check it and try again.");
     assert_eq!(api_error_strings::api_error_caps_validation_error(Locale::FrCa), "Une partie de ce que vous avez saisi n'est pas valide. Vérifiez, puis réessayez.");
 }
@@ -1385,11 +1385,11 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_desk_ticket_source_voice_call(Locale::En), "From a phone call");
     assert_eq!(wire_strings::wire_desk_ticket_source_voice_call(Locale::FrCa), "Depuis un appel téléphonique");
     assert_eq!(wire_strings::wire_desk_ticket_status_fallback(Locale::En), "Unknown");
-    assert_eq!(wire_strings::wire_desk_ticket_status_fallback(Locale::FrCa), "Inconnue");
+    assert_eq!(wire_strings::wire_desk_ticket_status_fallback(Locale::FrCa), "Inconnu");
     assert_eq!(wire_strings::wire_desk_ticket_status_open(Locale::En), "Open");
-    assert_eq!(wire_strings::wire_desk_ticket_status_open(Locale::FrCa), "Ouverte");
+    assert_eq!(wire_strings::wire_desk_ticket_status_open(Locale::FrCa), "Ouvert");
     assert_eq!(wire_strings::wire_desk_ticket_status_resolved(Locale::En), "Resolved");
-    assert_eq!(wire_strings::wire_desk_ticket_status_resolved(Locale::FrCa), "Réglée");
+    assert_eq!(wire_strings::wire_desk_ticket_status_resolved(Locale::FrCa), "Réglé");
     assert_eq!(wire_strings::wire_desk_ticket_status_waiting(Locale::En), "Waiting");
     assert_eq!(wire_strings::wire_desk_ticket_status_waiting(Locale::FrCa), "En attente");
     assert_eq!(wire_strings::wire_disposition_booked(Locale::En), "Booked");
@@ -1415,7 +1415,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_funnel_stage_successful_leads(Locale::En), "Successful Leads");
     assert_eq!(wire_strings::wire_funnel_stage_successful_leads(Locale::FrCa), "Clients potentiels obtenus");
     assert_eq!(wire_strings::wire_funnel_stage_total_dials(Locale::En), "Total Dials");
-    assert_eq!(wire_strings::wire_funnel_stage_total_dials(Locale::FrCa), "Composions totales");
+    assert_eq!(wire_strings::wire_funnel_stage_total_dials(Locale::FrCa), "Appels composés au total");
     assert_eq!(wire_strings::wire_generic_other(Locale::En), "Other");
     assert_eq!(wire_strings::wire_generic_other(Locale::FrCa), "Autre");
     assert_eq!(wire_strings::wire_knowledge_document_status_failed(Locale::En), "Failed");

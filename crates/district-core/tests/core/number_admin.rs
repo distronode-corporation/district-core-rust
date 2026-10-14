@@ -25,6 +25,11 @@ use crate::support::{
     AGENCY, CLIENT, VIEWER, fixture, last_ticket, loaded, server_error, signed_in, signed_out_error,
 };
 
+/// `f` with the core writing French, on this thread only.
+fn french<T>(f: impl FnOnce() -> T) -> T {
+    district_core::l10n::with_locale(district_core::l10n::Locale::FrCa, f)
+}
+
 /// A number the fixture's workspace holds on its own carrier account.
 const OWN: &str = "+14165550100";
 /// A number Distronode holds for it.
@@ -740,18 +745,44 @@ fn the_carrier_tab_says_each_thing_in_words() {
     assert_eq!(carrier_balance(&twilio).as_deref(), Some("Balance 12.50"));
     twilio.currency = Some(" ".to_owned());
     assert_eq!(carrier_balance(&twilio).as_deref(), Some("Balance 12.50"));
+    assert_eq!(
+        french(|| carrier_balance(&twilio)).as_deref(),
+        Some("Solde\u{a0}: 12,50")
+    );
+    // With its currency, money as the service writes it (formatIsoAmount).
     twilio.currency = Some("USD".to_owned());
+    assert_eq!(carrier_balance(&twilio).as_deref(), Some("Balance $12.50"));
+    assert_eq!(
+        french(|| carrier_balance(&twilio)).as_deref(),
+        Some("Solde\u{a0}: 12,50\u{a0}$\u{a0}US")
+    );
+    twilio.balance = Some("1500".to_owned());
+    twilio.currency = Some("CAD".to_owned());
     assert_eq!(
         carrier_balance(&twilio).as_deref(),
-        Some("Balance 12.50 USD")
+        Some("Balance CA$1,500.00")
     );
+    assert_eq!(
+        french(|| carrier_balance(&twilio)).as_deref(),
+        Some("Solde\u{a0}: 1\u{a0}500,00\u{a0}$\u{a0}CA")
+    );
+    // A balance that is not a number is shown as the carrier wrote it.
+    twilio.balance = Some("n/a".to_owned());
+    assert_eq!(carrier_balance(&twilio).as_deref(), Some("Balance n/a CAD"));
     for (count, said) in [
         (1, "1 number on this account"),
         (3, "3 numbers on this account"),
+        (1500, "1500 numbers on this account"),
     ] {
         twilio.number_count = Some(count);
         assert_eq!(carrier_number_count(&twilio).as_deref(), Some(said));
     }
+    // A count in a French sentence is grouped, with a no-break space.
+    twilio.number_count = Some(1500);
+    assert_eq!(
+        french(|| carrier_number_count(&twilio)).as_deref(),
+        Some("1\u{a0}500 num\u{e9}ros dans ce compte")
+    );
     assert!(carrier_state(&entry(false)).starts_with("These credentials were refused."));
     let managed = ProviderStatusEntry {
         managed: Some(true),

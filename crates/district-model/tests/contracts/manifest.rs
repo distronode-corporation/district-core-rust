@@ -22,6 +22,11 @@
 use std::collections::BTreeMap;
 
 use district_model::{
+    A2pRegistrationResponse, BlockedContactsResponse, ContactBlockResponse,
+    NumberConfigureResponse, NumberLookupResponse, NumberReleaseResponse, ProviderStatusResponse,
+    SipTrunkCreateResponse, SipTrunksResponse, TollFreeVerificationResponse, VerifyServiceResponse,
+};
+use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CallAnswerResponse,
     CallDetailResponse, CallHangUpResponse, CallSummary, CallTranscriptResponse,
     CampaignStatusResponse, ClearIntelResponse, ContactDetailResponse, ContactListResponse,
@@ -108,11 +113,16 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 166;
+pub const EXPECTED_FIXTURE_COUNT: usize = 187;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
 pub const IMPLEMENTED: &[(&str, Codec)] = &[
+    // POST /api/district/workspace/a2p: the carrier's answer to an A2P 10DLC registration.
+    (
+        "district-a2p-registration.json",
+        codec::<A2pRegistrationResponse>,
+    ),
     // POST /api/district/messages/draft: a reply written by a model.
     ("district-ai-draft.json", codec::<AiDraftResponse>),
     // GET /api/district/analytics for a workspace with no calls: zeros, and no
@@ -164,6 +174,8 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ),
     // POST /api/district/contacts/clear-intel.
     ("district-clear-intel.json", codec::<ClearIntelResponse>),
+    // POST /api/district/contacts/block: a caller blocked.
+    ("district-contact-block.json", codec::<ContactBlockResponse>),
     // DELETE /api/district/contacts/delete.
     (
         "district-contact-delete.json",
@@ -174,10 +186,20 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
         "district-contact-detail.json",
         codec::<ContactDetailResponse>,
     ),
+    // POST /api/district/contacts/block with `block: false`: a caller unblocked.
+    (
+        "district-contact-unblock.json",
+        codec::<ContactBlockResponse>,
+    ),
     // PATCH /api/district/contacts/update.
     (
         "district-contact-update.json",
         codec::<ContactMutationResponse>,
+    ),
+    // GET /api/district/contacts/blocked: every blocked caller.
+    (
+        "district-contacts-blocked.json",
+        codec::<BlockedContactsResponse>,
     ),
     // GET /api/district/contacts: a full row and a sparse, phone-less one.
     ("district-contacts.json", codec::<ContactListResponse>),
@@ -369,6 +391,28 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ("district-messaging.json", codec::<MessagingResponse>),
     // POST /api/auth/native/revoke: this installation signing itself out.
     ("district-native-revoke.json", codec::<NativeRevokeResponse>),
+    // POST /api/district/workspace/numbers/configure.
+    (
+        "district-number-configure.json",
+        codec::<NumberConfigureResponse>,
+    ),
+    // GET /api/district/workspace/lookup for a number the carrier does not know.
+    (
+        "district-number-lookup-invalid.json",
+        codec::<NumberLookupResponse>,
+    ),
+    // GET /api/district/workspace/lookup: the billed carrier lookup.
+    ("district-number-lookup.json", codec::<NumberLookupResponse>),
+    // POST /api/district/workspace/numbers/release when the charge could not be ended.
+    (
+        "district-number-release-warnings.json",
+        codec::<NumberReleaseResponse>,
+    ),
+    // POST /api/district/workspace/numbers/release.
+    (
+        "district-number-release.json",
+        codec::<NumberReleaseResponse>,
+    ),
     // GET /api/district/workspace/numbers/search: a priced and an unpriced number.
     (
         "district-numbers-search.json",
@@ -376,6 +420,11 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ),
     // GET /api/district/overview.
     ("district-overview.json", codec::<OverviewResponse>),
+    // GET /api/district/workspace/persona/options for a French request.
+    (
+        "district-persona-options-fr.json",
+        codec::<PersonaOptionsResponse>,
+    ),
     // GET /api/district/workspace/persona/options.
     (
         "district-persona-options.json",
@@ -402,6 +451,16 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     (
         "district-provider-numbers.json",
         codec::<OwnedNumbersResponse>,
+    ),
+    // GET /api/district/workspace/provider/status with no carrier at all.
+    (
+        "district-provider-status-none.json",
+        codec::<ProviderStatusResponse>,
+    ),
+    // GET /api/district/workspace/provider/status: a managed, a connected and a failing carrier.
+    (
+        "district-provider-status.json",
+        codec::<ProviderStatusResponse>,
     ),
     // PATCH /api/district/workspace/rename.
     ("district-rename.json", codec::<RenameResponse>),
@@ -641,6 +700,13 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ),
     // GET /api/district/setup.
     ("district-setup.json", codec::<SetupResponse>),
+    // POST /api/district/workspace/sip: the trunk created.
+    (
+        "district-sip-trunk-create.json",
+        codec::<SipTrunkCreateResponse>,
+    ),
+    // GET /api/district/workspace/sip.
+    ("district-sip-trunks.json", codec::<SipTrunksResponse>),
     // POST /api/district/support/requests/{key}/close.
     ("district-support-close.json", codec::<SupportCloseResponse>),
     // POST /api/district/support/requests/{key}/reply.
@@ -664,6 +730,11 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     // service also writes here, byte for byte, because every app opens the same
     // socket for the live call transcript.
     ("district-telemetry-token.json", codec::<TelemetryToken>),
+    // POST /api/district/workspace/tfv: the carrier's answer to a toll-free verification.
+    (
+        "district-tfv-submission.json",
+        codec::<TollFreeVerificationResponse>,
+    ),
     // GET /api/district/timeline, an older page that fills its window.
     ("district-timeline-page.json", codec::<TimelineResponse>),
     // GET /api/district/timeline: messages of each channel and calls, interleaved.
@@ -677,6 +748,18 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ("district-usage-history.json", codec::<UsageHistoryResponse>),
     // GET /api/district/workspace/usage.
     ("district-usage.json", codec::<UsageResponse>),
+    // POST /api/district/workspace/verify, switching it off.
+    (
+        "district-verify-disable.json",
+        codec::<VerifyServiceResponse>,
+    ),
+    // POST /api/district/workspace/verify, switching it on.
+    (
+        "district-verify-enable.json",
+        codec::<VerifyServiceResponse>,
+    ),
+    // GET /api/district/workspace/verify.
+    ("district-verify.json", codec::<VerifyServiceResponse>),
     // GET /api/district/workspace/persona/voice-studio: the Studio, read.
     ("district-voice-studio.json", codec::<VoiceStudioResponse>),
     // GET /api/district/workflows/runs: a run of each status.
@@ -765,18 +848,31 @@ pub struct Exclusion {
 }
 
 /// Fixtures of endpoints this client will not use, by decision.
-pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[Exclusion {
-    reason: "Sign in with Apple's native sheet and its second step belong to the \
+pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
+    Exclusion {
+        reason: "Sign in with Apple's native sheet and its second step belong to the \
                  Apple apps: `POST /api/auth/native/apple` answering that the account \
                  needs its authenticator code, and `POST /api/auth/native/mfa` trading \
                  the ticket and the code for the grant. A desktop signs in through the \
                  browser, which asks for the second factor itself, and reads the grant \
                  from `POST /api/auth/native/token` (district-auth).",
-    fixtures: &[
-        "district-native-apple-mfa-required.json",
-        "district-native-mfa.json",
-    ],
-}];
+        fixtures: &[
+            "district-native-apple-mfa-required.json",
+            "district-native-mfa.json",
+        ],
+    },
+    Exclusion {
+        reason: "The account's saved language, `GET` and `POST /api/settings`, which \
+                 the mobile apps read and write. The core takes its language from \
+                 `CoreConfig::locale`, which the desktop app chooses, and no desktop \
+                 screen reads or saves the account's.",
+        fixtures: &[
+            "district-settings-save.json",
+            "district-settings-unset.json",
+            "district-settings.json",
+        ],
+    },
+];
 
 /// Every file in `contracts/desktop/`. Asserted exactly, for the same reason as
 /// [`EXPECTED_FIXTURE_COUNT`].

@@ -1,0 +1,14 @@
+{
+  "profile": {
+    "email": "contract@example.com",
+    "displayName": "Contract Operator",
+    "timezone": "America/Toronto",
+    "locale": "fr"
+  },
+  "subscription": {
+    "tier": "VoicePro",
+    "status": "active",
+    "updatedAt": "2026-08-15T14:30:00.000Z"
+  },
+  "region": "ca"
+}
