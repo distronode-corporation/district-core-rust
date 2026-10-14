@@ -76,7 +76,10 @@ pub use event_types::{
     HostsDialog, OFFERED_LOCATIONS, QuestionForm, QuestionsDialog, location_label, minutes_label,
     slug_from_name, state_label, unique_slug,
 };
-pub use hours::{HoursEvent, HoursSection};
+pub use hours::{
+    DEFAULT_END, DEFAULT_START, HoursDialog, HoursEvent, HoursRange, HoursSection, OverrideForm,
+    OverrideRow, OverridesEditor, WeekEditor, weekday_name,
+};
 pub use overview::{COMING_UP_LIMIT, ComingUpRow, DeskContent, DeskRow, OverviewSection};
 pub use settings::{SettingsEvent, SettingsSection};
 pub use team::{TeamEvent, TeamSection};

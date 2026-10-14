@@ -4,6 +4,7 @@
 mod bookings;
 mod common;
 mod event_types;
+mod hours;
 mod overview;
 
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
