@@ -70,7 +70,12 @@ pub use bookings::{
 pub use calendar::{CalendarEvent, CalendarSection, provider_label};
 pub use clock::{SchedulingDay, times_in};
 pub use developer::{DeveloperEvent, DeveloperSection};
-pub use event_types::{EventTypeEvent, EventTypeSection, EventTypesEvent, EventTypesSection};
+pub use event_types::{
+    ActionsDialog, DEFAULT_LOCATION, EventTypeDialog, EventTypeEditor, EventTypeEvent,
+    EventTypeForm, EventTypeRow, EventTypeSection, EventTypesEvent, EventTypesSection, HostRow,
+    HostsDialog, OFFERED_LOCATIONS, QuestionForm, QuestionsDialog, location_label, minutes_label,
+    slug_from_name, state_label, unique_slug,
+};
 pub use hours::{HoursEvent, HoursSection};
 pub use overview::{COMING_UP_LIMIT, ComingUpRow, DeskContent, DeskRow, OverviewSection};
 pub use settings::{SettingsEvent, SettingsSection};
@@ -464,7 +469,9 @@ impl SignedIn {
         let admin = &mut self.scheduling_admin;
         let scoped = matches!(
             section,
-            SchedulingSection::Overview | SchedulingSection::Bookings
+            SchedulingSection::Overview
+                | SchedulingSection::Bookings
+                | SchedulingSection::EventTypes
         );
         let outs = match section {
             SchedulingSection::Overview => overview::enter(admin, tickets),
@@ -642,6 +649,7 @@ impl SignedIn {
         let admin = &mut self.scheduling_admin;
         let mut outs = overview::status_arrived(admin, status.as_ref());
         outs.extend(bookings::status_arrived(admin, status.as_ref()));
+        event_types::status_arrived(admin, status.as_ref());
         self.scheduling_admin_send(outs, tickets)
     }
 }

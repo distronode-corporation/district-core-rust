@@ -3,6 +3,76 @@ catalog = "scheduling"
 platform = "rust"
 apple = false
 
+[actions.archive]
+en = "Archive"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "One of an event type's state actions, or what it says once done."
+
+[actions.archived]
+en = "Event type archived"
+ctx = "toast"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "One of an event type's state actions, or what it says once done."
+
+[actions.manage]
+en = "Manage"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "Opens an event type's state actions: on or off, archive, a test email, delete."
+
+[actions.restore]
+en = "Restore"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "One of an event type's state actions, or what it says once done."
+
+[actions.restored]
+en = "Event type restored"
+ctx = "toast"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "One of an event type's state actions, or what it says once done."
+
+[actions.send_test_email]
+en = "Send test email"
+ctx = "label"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "One of an event type's state actions, or what it says once done."
+
+[actions.turn_off]
+en = "Turn off"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "One of an event type's state actions, or what it says once done."
+
+[actions.turn_on]
+en = "Turn on"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "One of an event type's state actions, or what it says once done."
+
+[actions.turned_off]
+en = "Event type turned off"
+ctx = "toast"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "One of an event type's state actions, or what it says once done."
+
+[actions.turned_on]
+en = "Event type turned on"
+ctx = "toast"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "One of an event type's state actions, or what it says once done."
+
 [answers.eyebrow]
 en = "Answers"
 ctx = "label"
@@ -23,6 +93,21 @@ ctx = "label"
 screen = "scheduling booking"
 tier = "T3"
 note = "Heading over the cancel button on one booking."
+
+[booking.minutes]
+en = "{minutes} min"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+args = { minutes = "int" }
+note = "A length in minutes, e.g. \"30 min\": a meeting's duration, a buffer, a notice."
+
+[booking.minutes_not_set]
+en = "Not set"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "In place of a length in minutes the event type does not set."
 
 [booking.no_host]
 en = "No host"
@@ -244,6 +329,85 @@ tier = "T3"
 args = { who = "str", event_type = "str" }
 note = "Second line of an upcoming booking: who booked, and the kind of meeting, separated by a middle dot."
 
+[common.add]
+en = "Add"
+ctx = "button"
+screen = "scheduling"
+tier = "T3"
+note = "Adds the chosen item (a host, a team member) to a list."
+
+[common.cancel]
+en = "Cancel"
+ctx = "button"
+screen = "scheduling"
+tier = "T3"
+note = "Closes a form or dialog without saving."
+
+[common.delete]
+en = "Delete"
+ctx = "button"
+screen = "scheduling"
+tier = "T3"
+note = "Deletes an item; a confirmation follows."
+
+[common.edit]
+en = "Edit"
+ctx = "button"
+screen = "scheduling"
+tier = "T3"
+note = "Opens an item's editor."
+
+[common.remove]
+en = "Remove"
+ctx = "button"
+screen = "scheduling"
+tier = "T3"
+note = "Takes an item off a list in a form; nothing is saved until the form is."
+
+[common.save]
+en = "Save"
+ctx = "button"
+screen = "scheduling"
+tier = "T3"
+note = "Saves a form in the booking scheduler."
+
+[common.saving]
+en = "Saving…"
+ctx = "button"
+screen = "scheduling"
+tier = "T3"
+note = "A save button while the save is on its way."
+
+[days.label]
+en.one = "{days} day ahead"
+en.other = "{days} days ahead"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+args = { days = "int" }
+note = "How far ahead an event type can be booked, e.g. \"60 days ahead\"."
+
+[delete.event_type_body]
+en = "Its booking page stops working. Existing bookings keep their times."
+ctx = "body"
+screen = "scheduling event type actions"
+tier = "T2"
+note = "What deleting an event type does, and what survives it."
+
+[delete.event_type_confirm]
+en = "Delete event type"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T2"
+note = "Deletes the event type: the button, and the confirmation's. Destructive."
+
+[delete.event_type_title]
+en = "Delete event type?"
+ctx = "title"
+screen = "scheduling event type actions"
+tier = "T2"
+note = "Heading of the confirmation before an event type is deleted."
+
 [desk.booking_page]
 en = "Booking page"
 ctx = "label"
@@ -321,12 +485,377 @@ screen = "scheduling overview"
 tier = "T3"
 note = "The hours row when no weekly hours are set."
 
+[editor.active_toggle]
+en = "Active"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.address]
+en = "Address"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.at_least_one_minute]
+en = "Has to be a whole number of minutes, at least 1."
+ctx = "error"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book). A refusal before anything was sent."
+
+[editor.at_least_zero]
+en = "Has to be a whole number, 0 or more."
+ctx = "error"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book). A refusal before anything was sent."
+
+[editor.booking_page_hint]
+en = "The address customers use. It cannot be changed: links you have already shared point at it."
+ctx = "body"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.booking_page_label]
+en = "Booking page"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.buffer_after_hint]
+en = "Minutes kept free after a booking."
+ctx = "body"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.buffer_after_label]
+en = "Buffer after"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.buffer_before_hint]
+en = "Minutes kept free before a booking."
+ctx = "body"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.buffer_before_label]
+en = "Buffer before"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.create_duration_invalid]
+en = "The duration has to be a whole number of minutes, at least 1."
+ctx = "error"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book). A refusal before anything was sent."
+
+[editor.create_title]
+en = "Create event type"
+ctx = "title"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.description_hint]
+en = "Shown on the booking page."
+ctx = "body"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.description_label]
+en = "Description"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.duration_hint]
+en = "How long the meeting runs, in minutes."
+ctx = "body"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.duration_label]
+en = "Duration"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.edit_title]
+en = "Edit event type"
+ctx = "title"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.interval_hint]
+en = "How often a booking may start. Independent of the duration."
+ctx = "body"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.interval_label]
+en = "Starts every"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.listed_toggle]
+en = "Listed on your booking page"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.location_label]
+en = "Location"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.max_active_label]
+en = "Active bookings per attendee"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.max_future_label]
+en = "Bookable ahead"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.meeting_link]
+en = "Meeting link"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.min_notice_hint]
+en = "Minutes. How soon from now a customer may book."
+ctx = "body"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.min_notice_label]
+en = "Minimum notice"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.name_label]
+en = "Name"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.name_missing]
+en = "Give the event type a name."
+ctx = "error"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book). A refusal before anything was sent."
+
+[editor.name_placeholder]
+en = "Phone consultation"
+ctx = "placeholder"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.no_limit_hint]
+en = "0 means no limit."
+ctx = "body"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.phone_number]
+en = "Phone number"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[editor.show_taken_toggle]
+en = "Show taken times as taken"
+ctx = "label"
+screen = "scheduling event type editor"
+tier = "T3"
+note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
+
+[email.template_cancellation]
+en = "Cancellation"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "The kind of email a test send uses: it goes to the member's own address."
+
+[email.template_confirmation]
+en = "Confirmation"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "The kind of email a test send uses: it goes to the member's own address."
+
+[email.template_reminder]
+en = "Reminder"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "The kind of email a test send uses: it goes to the member's own address."
+
+[email.template_reschedule]
+en = "Reschedule"
+ctx = "button"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "The kind of email a test send uses: it goes to the member's own address."
+
+[event.type_details_eyebrow]
+en = "Details"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "Heading of an event type's details."
+
+[event.type_hosts_eyebrow]
+en = "Hosts"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "Heading of an event type's hosts (the people who can be booked for it)."
+
+[event.type_no_hosts]
+en = "No hosts are assigned, so this event type cannot be booked."
+ctx = "body"
+screen = "scheduling event type"
+tier = "T3"
+note = "Said when an event type has no host."
+
 [event.type_no_questions]
 en = "This event type asks no questions."
 ctx = "body"
 screen = "scheduling booking"
 tier = "T3"
 note = "Said when the kind of meeting asks the booker no questions."
+
+[event.type_questions_eyebrow]
+en = "Questions"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "Heading of the questions the booking page asks."
+
+[event.type_subtitle]
+en = "{duration} · {location}"
+ctx = "format"
+screen = "scheduling event types"
+tier = "T3"
+args = { duration = "str", location = "str" }
+note = "An event type's second line: how long it runs and where, separated by a middle dot."
+
+[event.types_empty_body]
+en = "An event type is a page a customer can book. Create one and its booking page goes live."
+ctx = "body"
+screen = "scheduling event types"
+tier = "T3"
+note = "The empty event types list. An event type is a kind of meeting with its own booking page."
+
+[event.types_empty_title]
+en = "No event types yet"
+ctx = "title"
+screen = "scheduling event types"
+tier = "T3"
+note = "Heading of the empty event types list."
+
+[fact.buffer_after]
+en = "Buffer after"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "The label of one of an event type's details."
+
+[fact.buffer_before]
+en = "Buffer before"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "The label of one of an event type's details."
+
+[fact.duration]
+en = "Duration"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "The label of one of an event type's details."
+
+[fact.horizon]
+en = "Bookable up to"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "The label of one of an event type's details."
+
+[fact.interval]
+en = "Starts every"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "The label of one of an event type's details."
+
+[fact.location]
+en = "Location"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "The label of one of an event type's details."
+
+[fact.location_value]
+en = "Address"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "The label of one of an event type's details."
+
+[fact.notice]
+en = "Minimum notice"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "The label of one of an event type's details."
+
+[fact.state]
+en = "State"
+ctx = "label"
+screen = "scheduling event type"
+tier = "T3"
+note = "The label of one of an event type's details."
 
 [failure.forbidden]
 en = "You can view this but not change it."
@@ -377,6 +906,119 @@ screen = "scheduling failure"
 tier = "T2"
 note = "Any other refusal of a change or a read in the booking scheduler."
 
+[host.archived]
+en = "{role} · archived"
+ctx = "format"
+screen = "scheduling event type"
+tier = "T3"
+args = { role = "str" }
+note = "A host's role, for a host whose account is archived. {role} is the role."
+
+[host.priority_invalid]
+en = "A host's priority has to be a whole number, 0 or more."
+ctx = "error"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "A host's priority is not a whole number of 0 or more. Nothing was sent."
+
+[host.role_optional]
+en = "Optional"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "A host's role on an event type."
+
+[host.role_required]
+en = "Required"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "A host's role on an event type."
+
+[host.role_rotation]
+en = "Rotation"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "A host's role on an event type."
+
+[hosts.empty]
+en = "No hosts yet. Add at least one or nobody can be booked."
+ctx = "body"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "The hosts dialog with no host in it."
+
+[hosts.need_one]
+en = "An event type needs at least one host."
+ctx = "error"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "A save with no host. Nothing was sent."
+
+[hosts.title]
+en = "Hosts"
+ctx = "title"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "The hosts dialog's title, and the button that opens it."
+
+[location.built_in_video]
+en = "Built-in video"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
+
+[location.custom_video]
+en = "Video link"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
+
+[location.google_meet]
+en = "Google Meet"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
+
+[location.in_person]
+en = "In person"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
+
+[location.link]
+en = "Link"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
+
+[location.not_set]
+en = "Not set"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
+
+[location.phone]
+en = "Phone"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
+
+[location.teams]
+en = "Microsoft Teams"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
+
 [next.booking_line]
 en = "{when}, {who}, {event_type}"
 ctx = "format"
@@ -384,6 +1026,13 @@ screen = "scheduling overview"
 tier = "T3"
 args = { when = "str", who = "str", event_type = "str" }
 note = "The next booking, e.g. \"Today 2:30 p.m., Ada, Intro call\". {when} is when it starts, {who} who booked, {event_type} the kind of meeting."
+
+[not.public]
+en = "Not public"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "In place of an event type's booking link when it has none: archived, switched off, unlisted, or the booking pages have no address yet. A state, not a missing value."
 
 [overview.booking]
 en = "Booking"
@@ -447,6 +1096,210 @@ screen = "scheduling overview"
 tier = "T3"
 args = { start = "str", end = "str" }
 note = "One window of working hours, e.g. \"9:00 a.m. to 5:00 p.m.\". {start} and {end} are times of day."
+
+[priority.label]
+en = "Priority"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "Label of a host's place in the rotation."
+
+[question.add_option]
+en = "Add option"
+ctx = "button"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.add_title]
+en = "Add question"
+ctx = "title"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.added]
+en = "Question added"
+ctx = "toast"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.delete_body]
+en = "Customers stop being asked it. Answers already given stay on their bookings."
+ctx = "body"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.delete_confirm]
+en = "Delete question"
+ctx = "button"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.delete_title]
+en = "Delete question?"
+ctx = "title"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.deleted]
+en = "Question deleted"
+ctx = "toast"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.edit_title]
+en = "Edit question"
+ctx = "title"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.label_label]
+en = "Label"
+ctx = "label"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.label_missing]
+en = "Give the question a label."
+ctx = "error"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.label_placeholder]
+en = "What would you like to talk about?"
+ctx = "placeholder"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.needs_option]
+en = "A Select question needs at least one option."
+ctx = "error"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.option_placeholder]
+en = "Add an option"
+ctx = "placeholder"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.options_hint]
+en = "What the customer can choose from."
+ctx = "body"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.options_label]
+en = "Options"
+ctx = "label"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.position_hint]
+en = "Lower numbers are asked first."
+ctx = "body"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.position_invalid]
+en = "Position has to be a whole number, 0 or more."
+ctx = "error"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.position_label]
+en = "Position"
+ctx = "label"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.required]
+en = "{type} · required"
+ctx = "format"
+screen = "scheduling event type"
+tier = "T3"
+args = { type = "str" }
+note = "A booking question's kind, for a question that must be answered. {type} is the kind."
+
+[question.required_toggle]
+en = "Required"
+ctx = "label"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.save_button]
+en = "Save question"
+ctx = "button"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.saved]
+en = "Question saved"
+ctx = "toast"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.type_checkbox]
+en = "Checkbox"
+ctx = "label"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.type_label]
+en = "Type"
+ctx = "label"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.type_select]
+en = "Select"
+ctx = "label"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[question.type_text]
+en = "Text"
+ctx = "label"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "In the dialog that edits the questions a booking page asks."
+
+[questions.empty]
+en = "No questions yet. Customers give their name, email and nothing else."
+ctx = "body"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "The questions dialog with no question: the booking page asks for a name and an address only."
+
+[questions.title]
+en = "Questions"
+ctx = "title"
+screen = "scheduling event type questions"
+tier = "T3"
+note = "The questions dialog's title, and the button that opens it."
 
 [reassign.body]
 en = "The booking keeps its time. Both hosts get an email about the change."
@@ -567,6 +1420,69 @@ ctx = "title"
 screen = "scheduling booking writes"
 tier = "T3"
 note = "Heading of the dialog that moves a booking to another time."
+
+[rotation.hint]
+en = "Which host the next booking goes to."
+ctx = "body"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "Under the rotation."
+
+[rotation.label]
+en = "Rotation"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "Label of how round-robin hosts take turns."
+
+[rotation.strategy_even]
+en = "Even"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "How round-robin hosts take turns."
+
+[rotation.strategy_priority]
+en = "Priority"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "How round-robin hosts take turns."
+
+[rotation.strategy_soonest]
+en = "Soonest"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "How round-robin hosts take turns."
+
+[routing.mode_collective]
+en = "Collective"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "How a booking is routed among an event type's hosts."
+
+[routing.mode_fixed]
+en = "Fixed"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "How a booking is routed among an event type's hosts."
+
+[routing.mode_label]
+en = "Routing"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "Label of how bookings are routed among the hosts."
+
+[routing.mode_round_robin]
+en = "Round robin"
+ctx = "label"
+screen = "scheduling event type hosts"
+tier = "T3"
+note = "How a booking is routed among an event type's hosts."
 
 [section.subtitle_bookings]
 en = "Every booking in this workspace, upcoming and past"
@@ -700,6 +1616,42 @@ ctx = "label"
 screen = "scheduling hub"
 tier = "T3"
 note = "Heading over the list of the booking scheduler's sections, under the booking page card."
+
+[state.active]
+en = "Active"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Badge: the event type can be booked."
+
+[state.archived]
+en = "Archived"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Badge: the event type is archived."
+
+[state.inactive]
+en = "Inactive"
+ctx = "label"
+screen = "scheduling event types"
+tier = "T3"
+note = "Badge: the event type is switched off."
+
+[test.email_not_sent]
+en = "The booking system did not send the test email."
+ctx = "toast"
+screen = "scheduling event type actions"
+tier = "T3"
+note = "The booking system answered but did not send the test email."
+
+[test.email_sent]
+en = "Test email sent to {address}"
+ctx = "toast"
+screen = "scheduling event type actions"
+tier = "T3"
+args = { address = "str" }
+note = "The test email was handed over for sending. {address} is where it went."
 
 [times.in]
 en = "Times in {zone}"
