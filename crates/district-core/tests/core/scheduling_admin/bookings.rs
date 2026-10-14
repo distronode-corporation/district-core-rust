@@ -5,10 +5,11 @@
 use std::time::Duration;
 
 use district_api::ApiError;
+use district_core::Tone;
 use district_core::scheduling_admin::{
     BOOKINGS_PAGE_SIZE, BookingDetailSection, BookingDialog, BookingEvent, BookingsEvent,
     BookingsSection, BookingsView, CANCEL_REASON_MAX, ReassignDialog, RescheduleDialog,
-    SchedulingDay, SectionLoad, WriteState,
+    SchedulingDay, SectionLoad, WriteState, status_label,
 };
 use district_core::{Effect, Event, Model, Route, SchedulingAdminEvent, SchedulingSection};
 use district_model::{
@@ -1020,4 +1021,58 @@ fn the_dialogs_say_what_the_attendee_gets() {
     assert_eq!(ReassignDialog::host_label(), "New host");
     assert_eq!(ReassignDialog::confirm_label(), "Change host");
     assert_eq!(ReassignDialog::cancel_label(), "Cancel");
+}
+
+#[test]
+fn the_remaining_labels_and_reads_superseded_or_landing_late() {
+    assert_eq!(
+        status_label("rescheduled"),
+        ("Rescheduled".to_owned(), Tone::Neutral)
+    );
+    assert_eq!(
+        status_label("no_show"),
+        ("no_show".to_owned(), Tone::Neutral)
+    );
+    assert!(!BookingsSection::empty_title().is_empty());
+    assert!(!BookingDetailSection::manage_heading().is_empty());
+    let mut model = listed();
+    let mut paging = section(&model).clone();
+    assert_eq!(paging.load_more_label(), "Load more");
+    paging.paging.loading_more = true;
+    assert_eq!(paging.load_more_label(), "Loading…");
+
+    // A day picked while the last day's times are on their way: those are
+    // dropped. Times that land after the dialog closed land nowhere.
+    let first = open_reschedule(&mut model, "bk-contract-1");
+    let next = SchedulingDay::parse("2026-09-15").unwrap();
+    let second = bookings(&mut model, BookingsEvent::PickDay(next));
+    assert!(answer(&mut model, sent(&first)[0].0, slots()).is_empty());
+    assert!(reschedule(&model).slots.value().is_none());
+    bookings(&mut model, BookingsEvent::CloseDialog);
+    answer(&mut model, sent(&second)[0].0, slots());
+    assert!(section(&model).dialog.is_none());
+
+    // A booking opened while the list still waits for times: the list's read
+    // is kept.
+    let third = open_reschedule(&mut model, "bk-contract-1");
+    model.update(Event::Navigate(Route::SchedulingAdmin(
+        SchedulingSection::Booking {
+            id: "bk-contract-1".into(),
+        },
+    )));
+    answer(&mut model, sent(&third)[0].0, slots());
+    assert!(reschedule(&model).slots.value().is_some());
+
+    // Times that land after another dialog took the move's place land nowhere.
+    let mut model = listed();
+    let fourth = open_reschedule(&mut model, "bk-contract-1");
+    bookings(
+        &mut model,
+        BookingsEvent::OpenCancel {
+            booking_id: "bk-contract-1".into(),
+            now: now(),
+        },
+    );
+    answer(&mut model, sent(&fourth)[0].0, slots());
+    assert!(matches!(dialog(&model), BookingDialog::Cancel(_)));
 }

@@ -955,45 +955,54 @@ fn page_answered(section: &mut BookingsSection, first: bool, answer: Answer) {
     }
 }
 
+/// The dialog open over the list says what came of its write.
+fn dialog_answered(section: &mut BookingsSection, answer: &Answer) -> Vec<Out> {
+    let mut outs = Vec::new();
+    match &mut section.dialog {
+        Some(BookingDialog::Cancel(dialog)) => dialog.answered(answer),
+        Some(BookingDialog::Reschedule(dialog)) => {
+            let when = match answer {
+                Ok(SchedulingAdminData::Booking(booking)) => {
+                    clock::date_time(&booking.start_at, &dialog.timezone)
+                }
+                _ => None,
+            };
+            dialog.write = match answer {
+                Ok(_) => WriteState::Done(when.map_or_else(
+                    || ss::reschedule_done(l()).to_owned(),
+                    |when| ss::reschedule_done_at(l(), &when),
+                )),
+                Err(failure) => WriteState::Failed(failure.clone()),
+            };
+            if let Err(failure) = answer
+                && is_slot_taken(failure)
+            {
+                dialog.slots = SectionLoad::Loading;
+                dialog.selected = None;
+                outs.push(send(Pending::Slots, dialog.slots_request()));
+            }
+        }
+        Some(BookingDialog::Reassign(dialog)) => {
+            dialog.write = match answer {
+                Ok(_) => WriteState::Done(ss::reassign_done(l()).to_owned()),
+                Err(failure) => WriteState::Failed(failure.clone()),
+            };
+        }
+        None => {}
+    }
+    outs
+}
+
 /// A write landed or failed: the dialog says so, and on success the list is
 /// read again (the dialog may have been closed meanwhile). A time someone else
 /// took means the times shown are stale: they are read again.
 fn write_answered(admin: &mut SchedulingAdmin, tickets: &mut Tickets, answer: Answer) -> Vec<Out> {
-    let mut outs = Vec::new();
-    if let Some(section) = admin.bookings.as_mut() {
-        match &mut section.dialog {
-            Some(BookingDialog::Cancel(dialog)) => dialog.answered(&answer),
-            Some(BookingDialog::Reschedule(dialog)) => {
-                let when = match &answer {
-                    Ok(SchedulingAdminData::Booking(booking)) => {
-                        clock::date_time(&booking.start_at, &dialog.timezone)
-                    }
-                    _ => None,
-                };
-                dialog.write = match &answer {
-                    Ok(_) => WriteState::Done(when.map_or_else(
-                        || ss::reschedule_done(l()).to_owned(),
-                        |when| ss::reschedule_done_at(l(), &when),
-                    )),
-                    Err(failure) => WriteState::Failed(failure.clone()),
-                };
-                if let Err(failure) = &answer
-                    && is_slot_taken(failure)
-                {
-                    dialog.slots = SectionLoad::Loading;
-                    dialog.selected = None;
-                    outs.push(send(Pending::Slots, dialog.slots_request()));
-                }
-            }
-            Some(BookingDialog::Reassign(dialog)) => {
-                dialog.write = match &answer {
-                    Ok(_) => WriteState::Done(ss::reassign_done(l()).to_owned()),
-                    Err(failure) => WriteState::Failed(failure.clone()),
-                };
-            }
-            None => {}
-        }
-    }
+    // The list is open: leaving it stops the write being awaited.
+    let mut outs = admin
+        .bookings
+        .as_mut()
+        .map(|section| dialog_answered(section, &answer))
+        .unwrap_or_default();
     if answer.is_ok() {
         outs.extend(reload(admin, tickets));
     }

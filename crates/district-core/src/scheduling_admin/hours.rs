@@ -970,5 +970,6 @@ mod tests {
             (0..7).map(wire_day).collect::<Vec<_>>(),
             [1, 2, 3, 4, 5, 6, 0]
         );
+        assert_eq!(day_label("someday"), "someday");
     }
 }

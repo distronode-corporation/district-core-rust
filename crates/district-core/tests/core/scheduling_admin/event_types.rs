@@ -1210,3 +1210,71 @@ fn an_event_for_a_closed_section_does_nothing() {
     assert!(one(&mut model, EventTypeEvent::Save).is_empty());
     let _ = Event::Back;
 }
+
+#[test]
+fn hosts_named_or_not_and_answers_for_dialogs_that_moved_on() {
+    let mut model = opened("agency");
+    let effects = one(&mut model, EventTypeEvent::OpenHosts);
+    let mut blank = hosts();
+    blank[0].name = String::new();
+    let effects2 = answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Hosts(blank.clone())),
+    );
+    assert_eq!(hosts_dialog(&model).rows[0].name, blank[0].email);
+    // A named user added keeps their name.
+    let mut candidates = users();
+    candidates.push(SchedulingUser {
+        id: "ann".into(),
+        name: "Ann".into(),
+        email: "ann@example.com".into(),
+        ..SchedulingUser::default()
+    });
+    answer(
+        &mut model,
+        sent(&effects2)[0].0,
+        done(SchedulingAdminData::Users(candidates)),
+    );
+    one(&mut model, EventTypeEvent::AddHost("ann".into()));
+    assert!(hosts_dialog(&model).rows.iter().any(|r| r.name == "Ann"));
+
+    // The users arrive after the dialog closed.
+    let mut model = opened("agency");
+    let effects = one(&mut model, EventTypeEvent::OpenHosts);
+    let effects = answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Hosts(hosts())),
+    );
+    one(&mut model, EventTypeEvent::CloseDialog);
+    answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Users(users())),
+    );
+    assert!(section(&model).dialog.is_none());
+
+    // The editor ignores what is not its own.
+    one(&mut model, EventTypeEvent::OpenEditor);
+    assert!(one(&mut model, EventTypeEvent::SetRotation("priority".into())).is_empty());
+    assert!(matches!(dialog(&model), EventTypeDialog::Edit(_)));
+}
+
+#[test]
+fn hosts_of_a_type_with_no_routing_stored_route_fixed() {
+    let (mut model, effects) = open("agency", SchedulingSection::EventType { slug: SLUG.into() });
+    let mut bare = types()[0].clone();
+    bare.routing_mode = None;
+    bare.rr_strategy = None;
+    answer(
+        &mut model,
+        ticket_for(&effects, |r| {
+            matches!(r, SchedulingAdminRequest::EventType { .. })
+        }),
+        done(SchedulingAdminData::EventType(Box::new(bare))),
+    );
+    one(&mut model, EventTypeEvent::OpenHosts);
+    assert_eq!(hosts_dialog(&model).routing_mode, "fixed");
+    assert_eq!(hosts_dialog(&model).rotation, "even");
+}

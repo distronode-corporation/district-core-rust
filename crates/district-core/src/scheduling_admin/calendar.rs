@@ -870,6 +870,12 @@ mod tests {
     use super::*;
 
     #[test]
+    fn a_name_that_only_starts_like_a_hex_address_is_a_name() {
+        assert_eq!(server_url_issue("https://0xzz.example.com/dav"), None);
+        assert!(server_url_issue("https://0x7f/dav").is_some());
+    }
+
+    #[test]
     fn the_return_address_travels_encoded_inside_next() {
         assert_eq!(
             connect_next("google", "https://www.example.com/dashboard/x?a=b c"),

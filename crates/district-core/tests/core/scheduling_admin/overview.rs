@@ -258,3 +258,22 @@ fn a_booking_whose_start_cannot_be_read_says_unknown() {
     assert_eq!(lines, ["Unknown, Dana Booker, phone-consultation"]);
     assert_eq!(section(&model).coming_up(now())[0].when, "Unknown");
 }
+
+#[test]
+fn event_types_all_switched_off_are_counted_and_none_named() {
+    let (mut model, effects) = open("agency", SchedulingSection::Overview);
+    let mut types: Vec<district_model::SchedulingEventType> =
+        data::<SchedulingItems<_>>("district-scheduling-event-types.json").items;
+    for t in &mut types {
+        t.is_active = Some(false);
+    }
+    answer(
+        &mut model,
+        ticket_for(&effects, |r| *r == SchedulingAdminRequest::EventTypes),
+        done(SchedulingAdminData::EventTypes(types)),
+    );
+    let DeskContent::Lines(lines) = content(&model, 3) else {
+        panic!("{:?}", rows(&model));
+    };
+    assert_eq!(lines.len(), 1, "{lines:?}");
+}

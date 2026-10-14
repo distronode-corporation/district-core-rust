@@ -537,7 +537,7 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
         )
         .mount(&server)
         .await;
-    let routes: [(&str, &str, serde_json::Value); 33] = [
+    let routes: [(&str, &str, serde_json::Value); 34] = [
         (
             "POST",
             "/api/district/hq",
@@ -608,6 +608,11 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
             "POST",
             "/api/district/scheduling/handoff",
             desktop_fixture("district-scheduling-handoff.json"),
+        ),
+        (
+            "POST",
+            "/api/district/scheduling/admin",
+            fixture("district-scheduling-ok.json"),
         ),
         (
             "POST",
@@ -831,6 +836,33 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
             .unwrap()
             .expires_in,
         60
+    );
+    assert_eq!(
+        DistrictApi::scheduling_admin(
+            &client,
+            ws,
+            &district_model::SchedulingAdminRequest::DeleteApiKey { id: "key-1".into() },
+        )
+        .await
+        .unwrap(),
+        district_model::SchedulingAdminReply::Done(district_model::SchedulingAdminData::Done(
+            district_model::SchedulingOk { ok: true }
+        ))
+    );
+    Mock::given(method("GET"))
+        .and(path("/api/district/scheduling/sso"))
+        .respond_with(
+            ResponseTemplate::new(302)
+                .insert_header("Location", "https://book.example.com/v1/auth/sso?token=t"),
+        )
+        .mount(&server)
+        .await;
+    assert_eq!(
+        DistrictApi::scheduling_sign_in(&client, ws, "/v1/calendar")
+            .await
+            .unwrap()
+            .expose(),
+        "https://book.example.com/v1/auth/sso?token=t"
     );
     assert_eq!(
         DistrictApi::billing_hand_off(&client, Some(ws), "/dashboard/district/billing", None)

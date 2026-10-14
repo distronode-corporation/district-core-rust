@@ -485,12 +485,10 @@ impl SchedulingAdmin {
 
     /// Whether `route`'s section was never read here, so going back to it reads
     /// it.
+    /// Only a detail's list is ever gone back to ([`SchedulingSection::parent`]).
     pub(crate) fn never_read(&self, section: &SchedulingSection) -> bool {
-        match section {
-            SchedulingSection::Bookings => self.bookings.is_none(),
-            SchedulingSection::EventTypes => self.event_types.is_none(),
-            _ => false,
-        }
+        (*section == SchedulingSection::Bookings && self.bookings.is_none())
+            || (*section == SchedulingSection::EventTypes && self.event_types.is_none())
     }
 }
 

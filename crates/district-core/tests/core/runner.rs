@@ -2196,6 +2196,34 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             },
         ),
         (
+            Effect::SchedulingAdmin {
+                ticket,
+                workspace_id: ws(),
+                request: Box::new(district_model::SchedulingAdminRequest::ApiKeys),
+            },
+            Event::SchedulingAdminAnswered {
+                ticket,
+                result: Ok(district_model::SchedulingAdminReply::Done(
+                    district_model::SchedulingAdminData::Done(district_model::SchedulingOk {
+                        ok: true,
+                    }),
+                )),
+            },
+        ),
+        (
+            Effect::SchedulingSignIn {
+                ticket,
+                workspace_id: ws(),
+                next: "/v1/calendar".into(),
+            },
+            Event::SchedulingSignInReady {
+                ticket,
+                result: Ok(district_model::SchedulingSecret::new(
+                    "https://book.example.com/v1/auth/sso?token=t",
+                )),
+            },
+        ),
+        (
             Effect::LoadDeskSettings {
                 ticket,
                 workspace_id: ws(),
@@ -2409,6 +2437,8 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             "scheduling ws-contract-active",
             "enable scheduling ws-contract-active",
             "hand-off ws-contract-active Some(\"/dashboard/district/scheduling\") None",
+            "scheduling admin ws-contract-active Some(\"apiKeys.list\")",
+            "scheduling sign-in ws-contract-active /v1/calendar",
             "desk settings ws-contract-active",
             "save desk settings ws-contract-active Some(false)",
             "desk logo ws-contract-active logo.png image/png 4",
