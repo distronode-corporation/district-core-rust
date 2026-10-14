@@ -5,6 +5,96 @@ use crate::Locale;
 /// True when every entry has French; until then the French arm carries the English.
 pub const FR_COMPLETE: bool = false;
 
+/// `actions.archive`
+#[must_use]
+pub fn actions_archive(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Archive",
+        Locale::FrCa => "Archive",
+    }
+}
+
+/// `actions.archived`
+#[must_use]
+pub fn actions_archived(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Event type archived",
+        Locale::FrCa => "Event type archived",
+    }
+}
+
+/// `actions.manage`
+#[must_use]
+pub fn actions_manage(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Manage",
+        Locale::FrCa => "Manage",
+    }
+}
+
+/// `actions.restore`
+#[must_use]
+pub fn actions_restore(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Restore",
+        Locale::FrCa => "Restore",
+    }
+}
+
+/// `actions.restored`
+#[must_use]
+pub fn actions_restored(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Event type restored",
+        Locale::FrCa => "Event type restored",
+    }
+}
+
+/// `actions.send_test_email`
+#[must_use]
+pub fn actions_send_test_email(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Send test email",
+        Locale::FrCa => "Send test email",
+    }
+}
+
+/// `actions.turn_off`
+#[must_use]
+pub fn actions_turn_off(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Turn off",
+        Locale::FrCa => "Turn off",
+    }
+}
+
+/// `actions.turn_on`
+#[must_use]
+pub fn actions_turn_on(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Turn on",
+        Locale::FrCa => "Turn on",
+    }
+}
+
+/// `actions.turned_off`
+#[must_use]
+pub fn actions_turned_off(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Event type turned off",
+        Locale::FrCa => "Event type turned off",
+    }
+}
+
+/// `actions.turned_on`
+#[must_use]
+pub fn actions_turned_on(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Event type turned on",
+        Locale::FrCa => "Event type turned on",
+    }
+}
+
 /// `answers.eyebrow`
 #[must_use]
 pub fn answers_eyebrow(l: Locale) -> &'static str {
@@ -29,6 +119,24 @@ pub fn booking_manage(l: Locale) -> &'static str {
     match l {
         Locale::En => "Manage",
         Locale::FrCa => "Manage",
+    }
+}
+
+/// `booking.minutes`
+#[must_use]
+pub fn booking_minutes(l: Locale, minutes: i64) -> String {
+    match l {
+        Locale::En => format!("{} min", crate::format::integer(l, minutes)),
+        Locale::FrCa => format!("{} min", crate::format::integer(l, minutes)),
+    }
+}
+
+/// `booking.minutes_not_set`
+#[must_use]
+pub fn booking_minutes_not_set(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not set",
+        Locale::FrCa => "Not set",
     }
 }
 
@@ -311,6 +419,117 @@ pub fn coming_up_subtitle(l: Locale, who: &str, event_type: &str) -> String {
     }
 }
 
+/// `common.add`
+#[must_use]
+pub fn common_add(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add",
+        Locale::FrCa => "Add",
+    }
+}
+
+/// `common.cancel`
+#[must_use]
+pub fn common_cancel(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Cancel",
+        Locale::FrCa => "Cancel",
+    }
+}
+
+/// `common.delete`
+#[must_use]
+pub fn common_delete(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete",
+        Locale::FrCa => "Delete",
+    }
+}
+
+/// `common.edit`
+#[must_use]
+pub fn common_edit(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Edit",
+        Locale::FrCa => "Edit",
+    }
+}
+
+/// `common.remove`
+#[must_use]
+pub fn common_remove(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Remove",
+        Locale::FrCa => "Remove",
+    }
+}
+
+/// `common.save`
+#[must_use]
+pub fn common_save(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save",
+        Locale::FrCa => "Save",
+    }
+}
+
+/// `common.saving`
+#[must_use]
+pub fn common_saving(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Saving…",
+        Locale::FrCa => "Saving…",
+    }
+}
+
+/// `days.label`
+#[must_use]
+pub fn days_label(l: Locale, days: i64) -> String {
+    match l {
+        Locale::En => {
+            if days == 1 {
+                format!("{} day ahead", crate::format::integer(l, days))
+            } else {
+                format!("{} days ahead", crate::format::integer(l, days))
+            }
+        }
+        Locale::FrCa => {
+            if days == 1 {
+                format!("{} day ahead", crate::format::integer(l, days))
+            } else {
+                format!("{} days ahead", crate::format::integer(l, days))
+            }
+        }
+    }
+}
+
+/// `delete.event_type_body`
+#[must_use]
+pub fn delete_event_type_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Its booking page stops working. Existing bookings keep their times.",
+        Locale::FrCa => "Its booking page stops working. Existing bookings keep their times.",
+    }
+}
+
+/// `delete.event_type_confirm`
+#[must_use]
+pub fn delete_event_type_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete event type",
+        Locale::FrCa => "Delete event type",
+    }
+}
+
+/// `delete.event_type_title`
+#[must_use]
+pub fn delete_event_type_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete event type?",
+        Locale::FrCa => "Delete event type?",
+    }
+}
+
 /// `desk.booking_page`
 #[must_use]
 pub fn desk_booking_page(l: Locale) -> &'static str {
@@ -410,12 +629,480 @@ pub fn desk_no_hours(l: Locale) -> &'static str {
     }
 }
 
+/// `editor.active_toggle`
+#[must_use]
+pub fn editor_active_toggle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Active",
+        Locale::FrCa => "Active",
+    }
+}
+
+/// `editor.address`
+#[must_use]
+pub fn editor_address(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Address",
+        Locale::FrCa => "Address",
+    }
+}
+
+/// `editor.at_least_one_minute`
+#[must_use]
+pub fn editor_at_least_one_minute(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Has to be a whole number of minutes, at least 1.",
+        Locale::FrCa => "Has to be a whole number of minutes, at least 1.",
+    }
+}
+
+/// `editor.at_least_zero`
+#[must_use]
+pub fn editor_at_least_zero(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Has to be a whole number, 0 or more.",
+        Locale::FrCa => "Has to be a whole number, 0 or more.",
+    }
+}
+
+/// `editor.booking_page_hint`
+#[must_use]
+pub fn editor_booking_page_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The address customers use. It cannot be changed: links you have already shared point at it.",
+        Locale::FrCa => "The address customers use. It cannot be changed: links you have already shared point at it.",
+    }
+}
+
+/// `editor.booking_page_label`
+#[must_use]
+pub fn editor_booking_page_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Booking page",
+        Locale::FrCa => "Booking page",
+    }
+}
+
+/// `editor.buffer_after_hint`
+#[must_use]
+pub fn editor_buffer_after_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Minutes kept free after a booking.",
+        Locale::FrCa => "Minutes kept free after a booking.",
+    }
+}
+
+/// `editor.buffer_after_label`
+#[must_use]
+pub fn editor_buffer_after_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Buffer after",
+        Locale::FrCa => "Buffer after",
+    }
+}
+
+/// `editor.buffer_before_hint`
+#[must_use]
+pub fn editor_buffer_before_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Minutes kept free before a booking.",
+        Locale::FrCa => "Minutes kept free before a booking.",
+    }
+}
+
+/// `editor.buffer_before_label`
+#[must_use]
+pub fn editor_buffer_before_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Buffer before",
+        Locale::FrCa => "Buffer before",
+    }
+}
+
+/// `editor.create_duration_invalid`
+#[must_use]
+pub fn editor_create_duration_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The duration has to be a whole number of minutes, at least 1.",
+        Locale::FrCa => "The duration has to be a whole number of minutes, at least 1.",
+    }
+}
+
+/// `editor.create_title`
+#[must_use]
+pub fn editor_create_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Create event type",
+        Locale::FrCa => "Create event type",
+    }
+}
+
+/// `editor.description_hint`
+#[must_use]
+pub fn editor_description_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Shown on the booking page.",
+        Locale::FrCa => "Shown on the booking page.",
+    }
+}
+
+/// `editor.description_label`
+#[must_use]
+pub fn editor_description_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Description",
+        Locale::FrCa => "Description",
+    }
+}
+
+/// `editor.duration_hint`
+#[must_use]
+pub fn editor_duration_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "How long the meeting runs, in minutes.",
+        Locale::FrCa => "How long the meeting runs, in minutes.",
+    }
+}
+
+/// `editor.duration_label`
+#[must_use]
+pub fn editor_duration_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Duration",
+        Locale::FrCa => "Duration",
+    }
+}
+
+/// `editor.edit_title`
+#[must_use]
+pub fn editor_edit_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Edit event type",
+        Locale::FrCa => "Edit event type",
+    }
+}
+
+/// `editor.interval_hint`
+#[must_use]
+pub fn editor_interval_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "How often a booking may start. Independent of the duration.",
+        Locale::FrCa => "How often a booking may start. Independent of the duration.",
+    }
+}
+
+/// `editor.interval_label`
+#[must_use]
+pub fn editor_interval_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Starts every",
+        Locale::FrCa => "Starts every",
+    }
+}
+
+/// `editor.listed_toggle`
+#[must_use]
+pub fn editor_listed_toggle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Listed on your booking page",
+        Locale::FrCa => "Listed on your booking page",
+    }
+}
+
+/// `editor.location_label`
+#[must_use]
+pub fn editor_location_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Location",
+        Locale::FrCa => "Location",
+    }
+}
+
+/// `editor.max_active_label`
+#[must_use]
+pub fn editor_max_active_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Active bookings per attendee",
+        Locale::FrCa => "Active bookings per attendee",
+    }
+}
+
+/// `editor.max_future_label`
+#[must_use]
+pub fn editor_max_future_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Bookable ahead",
+        Locale::FrCa => "Bookable ahead",
+    }
+}
+
+/// `editor.meeting_link`
+#[must_use]
+pub fn editor_meeting_link(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Meeting link",
+        Locale::FrCa => "Meeting link",
+    }
+}
+
+/// `editor.min_notice_hint`
+#[must_use]
+pub fn editor_min_notice_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Minutes. How soon from now a customer may book.",
+        Locale::FrCa => "Minutes. How soon from now a customer may book.",
+    }
+}
+
+/// `editor.min_notice_label`
+#[must_use]
+pub fn editor_min_notice_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Minimum notice",
+        Locale::FrCa => "Minimum notice",
+    }
+}
+
+/// `editor.name_label`
+#[must_use]
+pub fn editor_name_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Name",
+        Locale::FrCa => "Name",
+    }
+}
+
+/// `editor.name_missing`
+#[must_use]
+pub fn editor_name_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Give the event type a name.",
+        Locale::FrCa => "Give the event type a name.",
+    }
+}
+
+/// `editor.name_placeholder`
+#[must_use]
+pub fn editor_name_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Phone consultation",
+        Locale::FrCa => "Phone consultation",
+    }
+}
+
+/// `editor.no_limit_hint`
+#[must_use]
+pub fn editor_no_limit_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "0 means no limit.",
+        Locale::FrCa => "0 means no limit.",
+    }
+}
+
+/// `editor.phone_number`
+#[must_use]
+pub fn editor_phone_number(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Phone number",
+        Locale::FrCa => "Phone number",
+    }
+}
+
+/// `editor.show_taken_toggle`
+#[must_use]
+pub fn editor_show_taken_toggle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Show taken times as taken",
+        Locale::FrCa => "Show taken times as taken",
+    }
+}
+
+/// `email.template_cancellation`
+#[must_use]
+pub fn email_template_cancellation(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Cancellation",
+        Locale::FrCa => "Cancellation",
+    }
+}
+
+/// `email.template_confirmation`
+#[must_use]
+pub fn email_template_confirmation(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Confirmation",
+        Locale::FrCa => "Confirmation",
+    }
+}
+
+/// `email.template_reminder`
+#[must_use]
+pub fn email_template_reminder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Reminder",
+        Locale::FrCa => "Reminder",
+    }
+}
+
+/// `email.template_reschedule`
+#[must_use]
+pub fn email_template_reschedule(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Reschedule",
+        Locale::FrCa => "Reschedule",
+    }
+}
+
+/// `event.type_details_eyebrow`
+#[must_use]
+pub fn event_type_details_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Details",
+        Locale::FrCa => "Details",
+    }
+}
+
+/// `event.type_hosts_eyebrow`
+#[must_use]
+pub fn event_type_hosts_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Hosts",
+        Locale::FrCa => "Hosts",
+    }
+}
+
+/// `event.type_no_hosts`
+#[must_use]
+pub fn event_type_no_hosts(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No hosts are assigned, so this event type cannot be booked.",
+        Locale::FrCa => "No hosts are assigned, so this event type cannot be booked.",
+    }
+}
+
 /// `event.type_no_questions`
 #[must_use]
 pub fn event_type_no_questions(l: Locale) -> &'static str {
     match l {
         Locale::En => "This event type asks no questions.",
         Locale::FrCa => "This event type asks no questions.",
+    }
+}
+
+/// `event.type_questions_eyebrow`
+#[must_use]
+pub fn event_type_questions_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Questions",
+        Locale::FrCa => "Questions",
+    }
+}
+
+/// `event.type_subtitle`
+#[must_use]
+pub fn event_type_subtitle(l: Locale, duration: &str, location: &str) -> String {
+    match l {
+        Locale::En => format!("{duration} · {location}"),
+        Locale::FrCa => format!("{duration} · {location}"),
+    }
+}
+
+/// `event.types_empty_body`
+#[must_use]
+pub fn event_types_empty_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "An event type is a page a customer can book. Create one and its booking page goes live.",
+        Locale::FrCa => "An event type is a page a customer can book. Create one and its booking page goes live.",
+    }
+}
+
+/// `event.types_empty_title`
+#[must_use]
+pub fn event_types_empty_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No event types yet",
+        Locale::FrCa => "No event types yet",
+    }
+}
+
+/// `fact.buffer_after`
+#[must_use]
+pub fn fact_buffer_after(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Buffer after",
+        Locale::FrCa => "Buffer after",
+    }
+}
+
+/// `fact.buffer_before`
+#[must_use]
+pub fn fact_buffer_before(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Buffer before",
+        Locale::FrCa => "Buffer before",
+    }
+}
+
+/// `fact.duration`
+#[must_use]
+pub fn fact_duration(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Duration",
+        Locale::FrCa => "Duration",
+    }
+}
+
+/// `fact.horizon`
+#[must_use]
+pub fn fact_horizon(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Bookable up to",
+        Locale::FrCa => "Bookable up to",
+    }
+}
+
+/// `fact.interval`
+#[must_use]
+pub fn fact_interval(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Starts every",
+        Locale::FrCa => "Starts every",
+    }
+}
+
+/// `fact.location`
+#[must_use]
+pub fn fact_location(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Location",
+        Locale::FrCa => "Location",
+    }
+}
+
+/// `fact.location_value`
+#[must_use]
+pub fn fact_location_value(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Address",
+        Locale::FrCa => "Address",
+    }
+}
+
+/// `fact.notice`
+#[must_use]
+pub fn fact_notice(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Minimum notice",
+        Locale::FrCa => "Minimum notice",
+    }
+}
+
+/// `fact.state`
+#[must_use]
+pub fn fact_state(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "State",
+        Locale::FrCa => "State",
     }
 }
 
@@ -482,12 +1169,165 @@ pub fn failure_unknown(l: Locale) -> &'static str {
     }
 }
 
+/// `host.archived`
+#[must_use]
+pub fn host_archived(l: Locale, role: &str) -> String {
+    match l {
+        Locale::En => format!("{role} · archived"),
+        Locale::FrCa => format!("{role} · archived"),
+    }
+}
+
+/// `host.priority_invalid`
+#[must_use]
+pub fn host_priority_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A host's priority has to be a whole number, 0 or more.",
+        Locale::FrCa => "A host's priority has to be a whole number, 0 or more.",
+    }
+}
+
+/// `host.role_optional`
+#[must_use]
+pub fn host_role_optional(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Optional",
+        Locale::FrCa => "Optional",
+    }
+}
+
+/// `host.role_required`
+#[must_use]
+pub fn host_role_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Required",
+        Locale::FrCa => "Required",
+    }
+}
+
+/// `host.role_rotation`
+#[must_use]
+pub fn host_role_rotation(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Rotation",
+        Locale::FrCa => "Rotation",
+    }
+}
+
+/// `hosts.empty`
+#[must_use]
+pub fn hosts_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No hosts yet. Add at least one or nobody can be booked.",
+        Locale::FrCa => "No hosts yet. Add at least one or nobody can be booked.",
+    }
+}
+
+/// `hosts.need_one`
+#[must_use]
+pub fn hosts_need_one(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "An event type needs at least one host.",
+        Locale::FrCa => "An event type needs at least one host.",
+    }
+}
+
+/// `hosts.title`
+#[must_use]
+pub fn hosts_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Hosts",
+        Locale::FrCa => "Hosts",
+    }
+}
+
+/// `location.built_in_video`
+#[must_use]
+pub fn location_built_in_video(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Built-in video",
+        Locale::FrCa => "Built-in video",
+    }
+}
+
+/// `location.custom_video`
+#[must_use]
+pub fn location_custom_video(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Video link",
+        Locale::FrCa => "Video link",
+    }
+}
+
+/// `location.google_meet`
+#[must_use]
+pub fn location_google_meet(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Google Meet",
+        Locale::FrCa => "Google Meet",
+    }
+}
+
+/// `location.in_person`
+#[must_use]
+pub fn location_in_person(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "In person",
+        Locale::FrCa => "In person",
+    }
+}
+
+/// `location.link`
+#[must_use]
+pub fn location_link(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Link",
+        Locale::FrCa => "Link",
+    }
+}
+
+/// `location.not_set`
+#[must_use]
+pub fn location_not_set(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not set",
+        Locale::FrCa => "Not set",
+    }
+}
+
+/// `location.phone`
+#[must_use]
+pub fn location_phone(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Phone",
+        Locale::FrCa => "Phone",
+    }
+}
+
+/// `location.teams`
+#[must_use]
+pub fn location_teams(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Microsoft Teams",
+        Locale::FrCa => "Microsoft Teams",
+    }
+}
+
 /// `next.booking_line`
 #[must_use]
 pub fn next_booking_line(l: Locale, when: &str, who: &str, event_type: &str) -> String {
     match l {
         Locale::En => format!("{when}, {who}, {event_type}"),
         Locale::FrCa => format!("{when}, {who}, {event_type}"),
+    }
+}
+
+/// `not.public`
+#[must_use]
+pub fn not_public(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not public",
+        Locale::FrCa => "Not public",
     }
 }
 
@@ -572,6 +1412,267 @@ pub fn overview_window(l: Locale, start: &str, end: &str) -> String {
     match l {
         Locale::En => format!("{start} to {end}"),
         Locale::FrCa => format!("{start} to {end}"),
+    }
+}
+
+/// `priority.label`
+#[must_use]
+pub fn priority_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Priority",
+        Locale::FrCa => "Priority",
+    }
+}
+
+/// `question.add_option`
+#[must_use]
+pub fn question_add_option(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add option",
+        Locale::FrCa => "Add option",
+    }
+}
+
+/// `question.add_title`
+#[must_use]
+pub fn question_add_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add question",
+        Locale::FrCa => "Add question",
+    }
+}
+
+/// `question.added`
+#[must_use]
+pub fn question_added(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Question added",
+        Locale::FrCa => "Question added",
+    }
+}
+
+/// `question.delete_body`
+#[must_use]
+pub fn question_delete_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Customers stop being asked it. Answers already given stay on their bookings.",
+        Locale::FrCa => "Customers stop being asked it. Answers already given stay on their bookings.",
+    }
+}
+
+/// `question.delete_confirm`
+#[must_use]
+pub fn question_delete_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete question",
+        Locale::FrCa => "Delete question",
+    }
+}
+
+/// `question.delete_title`
+#[must_use]
+pub fn question_delete_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete question?",
+        Locale::FrCa => "Delete question?",
+    }
+}
+
+/// `question.deleted`
+#[must_use]
+pub fn question_deleted(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Question deleted",
+        Locale::FrCa => "Question deleted",
+    }
+}
+
+/// `question.edit_title`
+#[must_use]
+pub fn question_edit_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Edit question",
+        Locale::FrCa => "Edit question",
+    }
+}
+
+/// `question.label_label`
+#[must_use]
+pub fn question_label_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Label",
+        Locale::FrCa => "Label",
+    }
+}
+
+/// `question.label_missing`
+#[must_use]
+pub fn question_label_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Give the question a label.",
+        Locale::FrCa => "Give the question a label.",
+    }
+}
+
+/// `question.label_placeholder`
+#[must_use]
+pub fn question_label_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "What would you like to talk about?",
+        Locale::FrCa => "What would you like to talk about?",
+    }
+}
+
+/// `question.needs_option`
+#[must_use]
+pub fn question_needs_option(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A Select question needs at least one option.",
+        Locale::FrCa => "A Select question needs at least one option.",
+    }
+}
+
+/// `question.option_placeholder`
+#[must_use]
+pub fn question_option_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add an option",
+        Locale::FrCa => "Add an option",
+    }
+}
+
+/// `question.options_hint`
+#[must_use]
+pub fn question_options_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "What the customer can choose from.",
+        Locale::FrCa => "What the customer can choose from.",
+    }
+}
+
+/// `question.options_label`
+#[must_use]
+pub fn question_options_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Options",
+        Locale::FrCa => "Options",
+    }
+}
+
+/// `question.position_hint`
+#[must_use]
+pub fn question_position_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Lower numbers are asked first.",
+        Locale::FrCa => "Lower numbers are asked first.",
+    }
+}
+
+/// `question.position_invalid`
+#[must_use]
+pub fn question_position_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Position has to be a whole number, 0 or more.",
+        Locale::FrCa => "Position has to be a whole number, 0 or more.",
+    }
+}
+
+/// `question.position_label`
+#[must_use]
+pub fn question_position_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Position",
+        Locale::FrCa => "Position",
+    }
+}
+
+/// `question.required`
+#[must_use]
+pub fn question_required(l: Locale, type_: &str) -> String {
+    match l {
+        Locale::En => format!("{type_} · required"),
+        Locale::FrCa => format!("{type_} · required"),
+    }
+}
+
+/// `question.required_toggle`
+#[must_use]
+pub fn question_required_toggle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Required",
+        Locale::FrCa => "Required",
+    }
+}
+
+/// `question.save_button`
+#[must_use]
+pub fn question_save_button(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save question",
+        Locale::FrCa => "Save question",
+    }
+}
+
+/// `question.saved`
+#[must_use]
+pub fn question_saved(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Question saved",
+        Locale::FrCa => "Question saved",
+    }
+}
+
+/// `question.type_checkbox`
+#[must_use]
+pub fn question_type_checkbox(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Checkbox",
+        Locale::FrCa => "Checkbox",
+    }
+}
+
+/// `question.type_label`
+#[must_use]
+pub fn question_type_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Type",
+        Locale::FrCa => "Type",
+    }
+}
+
+/// `question.type_select`
+#[must_use]
+pub fn question_type_select(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Select",
+        Locale::FrCa => "Select",
+    }
+}
+
+/// `question.type_text`
+#[must_use]
+pub fn question_type_text(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Text",
+        Locale::FrCa => "Text",
+    }
+}
+
+/// `questions.empty`
+#[must_use]
+pub fn questions_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No questions yet. Customers give their name, email and nothing else.",
+        Locale::FrCa => "No questions yet. Customers give their name, email and nothing else.",
+    }
+}
+
+/// `questions.title`
+#[must_use]
+pub fn questions_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Questions",
+        Locale::FrCa => "Questions",
     }
 }
 
@@ -725,6 +1826,87 @@ pub fn reschedule_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reschedule this booking?",
         Locale::FrCa => "Reschedule this booking?",
+    }
+}
+
+/// `rotation.hint`
+#[must_use]
+pub fn rotation_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Which host the next booking goes to.",
+        Locale::FrCa => "Which host the next booking goes to.",
+    }
+}
+
+/// `rotation.label`
+#[must_use]
+pub fn rotation_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Rotation",
+        Locale::FrCa => "Rotation",
+    }
+}
+
+/// `rotation.strategy_even`
+#[must_use]
+pub fn rotation_strategy_even(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Even",
+        Locale::FrCa => "Even",
+    }
+}
+
+/// `rotation.strategy_priority`
+#[must_use]
+pub fn rotation_strategy_priority(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Priority",
+        Locale::FrCa => "Priority",
+    }
+}
+
+/// `rotation.strategy_soonest`
+#[must_use]
+pub fn rotation_strategy_soonest(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Soonest",
+        Locale::FrCa => "Soonest",
+    }
+}
+
+/// `routing.mode_collective`
+#[must_use]
+pub fn routing_mode_collective(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Collective",
+        Locale::FrCa => "Collective",
+    }
+}
+
+/// `routing.mode_fixed`
+#[must_use]
+pub fn routing_mode_fixed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Fixed",
+        Locale::FrCa => "Fixed",
+    }
+}
+
+/// `routing.mode_label`
+#[must_use]
+pub fn routing_mode_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Routing",
+        Locale::FrCa => "Routing",
+    }
+}
+
+/// `routing.mode_round_robin`
+#[must_use]
+pub fn routing_mode_round_robin(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Round robin",
+        Locale::FrCa => "Round robin",
     }
 }
 
@@ -896,6 +2078,51 @@ pub fn sections_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Manage",
         Locale::FrCa => "Manage",
+    }
+}
+
+/// `state.active`
+#[must_use]
+pub fn state_active(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Active",
+        Locale::FrCa => "Active",
+    }
+}
+
+/// `state.archived`
+#[must_use]
+pub fn state_archived(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Archived",
+        Locale::FrCa => "Archived",
+    }
+}
+
+/// `state.inactive`
+#[must_use]
+pub fn state_inactive(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Inactive",
+        Locale::FrCa => "Inactive",
+    }
+}
+
+/// `test.email_not_sent`
+#[must_use]
+pub fn test_email_not_sent(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The booking system did not send the test email.",
+        Locale::FrCa => "The booking system did not send the test email.",
+    }
+}
+
+/// `test.email_sent`
+#[must_use]
+pub fn test_email_sent(l: Locale, address: &str) -> String {
+    match l {
+        Locale::En => format!("Test email sent to {address}"),
+        Locale::FrCa => format!("Test email sent to {address}"),
     }
 }
 
