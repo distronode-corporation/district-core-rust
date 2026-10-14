@@ -24,6 +24,69 @@ screen = "wire analytics_sentiment"
 tier = "T3"
 note = "A label for the stored value `Positive Sentiment` of analyticsSentiment. `sentimentDistribution[].name` in GET /api/district/analytics: an English display name that is a key."
 
+[wire.billing_invoice_status.draft]
+en = "Draft"
+ctx = "label"
+screen = "wire billing_invoice_status"
+tier = "T3"
+note = "A label for the stored value `draft` of billingInvoiceStatus. `invoices[].status` in GET /api/billing: Stripe's invoice status, passed through. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.billing_invoice_status.open]
+en = "Open"
+ctx = "label"
+screen = "wire billing_invoice_status"
+tier = "T3"
+note = "A label for the stored value `open` of billingInvoiceStatus. `invoices[].status` in GET /api/billing: Stripe's invoice status, passed through. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.billing_invoice_status.paid]
+en = "Paid"
+ctx = "label"
+screen = "wire billing_invoice_status"
+tier = "T3"
+note = "A label for the stored value `paid` of billingInvoiceStatus. `invoices[].status` in GET /api/billing: Stripe's invoice status, passed through. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.billing_invoice_status.uncollectible]
+en = "Uncollectible"
+ctx = "label"
+screen = "wire billing_invoice_status"
+tier = "T3"
+note = "A label for the stored value `uncollectible` of billingInvoiceStatus. `invoices[].status` in GET /api/billing: Stripe's invoice status, passed through. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.billing_invoice_status.void]
+en = "Void"
+ctx = "label"
+screen = "wire billing_invoice_status"
+tier = "T3"
+note = "A label for the stored value `void` of billingInvoiceStatus. `invoices[].status` in GET /api/billing: Stripe's invoice status, passed through. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.billing_subscription_status.active]
+en = "Active"
+ctx = "label"
+screen = "wire billing_subscription_status"
+tier = "T3"
+note = "A label for the stored value `active` of billingSubscriptionStatus. `subscriptions[].status` in GET /api/billing: the Stripe statuses the route lists. The portal shows \"Cancels soon\" for any of them with `cancelAtPeriodEnd`, which is not a status."
+
+[wire.billing_subscription_status.past_due]
+en = "Payment past due"
+ctx = "label"
+screen = "wire billing_subscription_status"
+tier = "T3"
+note = "A label for the stored value `past_due` of billingSubscriptionStatus. `subscriptions[].status` in GET /api/billing: the Stripe statuses the route lists. The portal shows \"Cancels soon\" for any of them with `cancelAtPeriodEnd`, which is not a status."
+
+[wire.billing_subscription_status.trialing]
+en = "Trial"
+ctx = "label"
+screen = "wire billing_subscription_status"
+tier = "T3"
+note = "A label for the stored value `trialing` of billingSubscriptionStatus. `subscriptions[].status` in GET /api/billing: the Stripe statuses the route lists. The portal shows \"Cancels soon\" for any of them with `cancelAtPeriodEnd`, which is not a status."
+
+[wire.billing_subscription_status.unpaid]
+en = "Unpaid"
+ctx = "label"
+screen = "wire billing_subscription_status"
+tier = "T3"
+note = "A label for the stored value `unpaid` of billingSubscriptionStatus. `subscriptions[].status` in GET /api/billing: the Stripe statuses the route lists. The portal shows \"Cancels soon\" for any of them with `cancelAtPeriodEnd`, which is not a status."
+
 [wire.call_direction.inbound]
 en = "Inbound"
 ctx = "label"
@@ -122,6 +185,97 @@ screen = "wire call_type"
 tier = "T3"
 note = "A label for the stored value `outbound` of callType. `type` on a call row (calls, overview) and `direction` on a timeline call event: the direction, with an unanswered inbound call read as \"missed\"."
 
+[wire.contact_research_key.callerintel]
+en = "CallerIntel"
+ctx = "label"
+screen = "wire contact_research_key"
+tier = "T3"
+note = "A label for the stored value `callerIntel` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the contact drawer's section headings for them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.contact_research_key.corepainpoints]
+en = "Inferred CRM Key Challenges"
+ctx = "label"
+screen = "wire contact_research_key"
+tier = "T3"
+note = "A label for the stored value `corePainPoints` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the contact drawer's section headings for them."
+
+[wire.contact_research_key.dynamicicebreakers]
+en = "CTO/CEO Conversation Starters"
+ctx = "label"
+screen = "wire contact_research_key"
+tier = "T3"
+note = "A label for the stored value `dynamicIcebreakers` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the contact drawer's section headings for them."
+
+[wire.contact_research_key.estimatedvalue]
+en = "EstimatedValue"
+ctx = "label"
+screen = "wire contact_research_key"
+tier = "T3"
+note = "A label for the stored value `estimatedValue` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the contact drawer's section headings for them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.contact_research_key.executivesummary]
+en = "Executive Dossier Summary"
+ctx = "label"
+screen = "wire contact_research_key"
+tier = "T3"
+note = "A label for the stored value `executiveSummary` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the contact drawer's section headings for them."
+
+[wire.contact_research_key.person]
+en = "Person"
+ctx = "label"
+screen = "wire contact_research_key"
+tier = "T3"
+note = "A label for the stored value `person` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the contact drawer's section headings for them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.contact_research_key.recommendedgreeting]
+en = "Suggested Receptionist Greeting"
+ctx = "label"
+screen = "wire contact_research_key"
+tier = "T3"
+note = "A label for the stored value `recommendedGreeting` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the contact drawer's section headings for them."
+
+[wire.desk_ticket_source.manual]
+en = "Manual"
+ctx = "label"
+screen = "wire desk_ticket_source"
+tier = "T3"
+note = "A label for the stored value `manual` of deskTicketSource. `source` on a Desk ticket. The portal labels a ticket opened from a call; a manual ticket carries no source label. The service has no label for it; the English is the value as the apps show it."
+
+[wire.desk_ticket_source.voice_call]
+en = "From a phone call"
+ctx = "label"
+screen = "wire desk_ticket_source"
+tier = "T3"
+note = "A label for the stored value `voice-call` of deskTicketSource. `source` on a Desk ticket. The portal labels a ticket opened from a call; a manual ticket carries no source label."
+
+[wire.desk_ticket_status.fallback]
+en = "Unknown"
+ctx = "label"
+screen = "wire desk_ticket_status"
+tier = "T3"
+note = "The label for a value of deskTicketStatus this build does not know, or none."
+
+[wire.desk_ticket_status.open]
+en = "Open"
+ctx = "label"
+screen = "wire desk_ticket_status"
+tier = "T3"
+note = "A label for the stored value `open` of deskTicketStatus. `status` on a Desk ticket (GET /api/district/desk/tickets, /tickets/{id})."
+
+[wire.desk_ticket_status.resolved]
+en = "Resolved"
+ctx = "label"
+screen = "wire desk_ticket_status"
+tier = "T3"
+note = "A label for the stored value `resolved` of deskTicketStatus. `status` on a Desk ticket (GET /api/district/desk/tickets, /tickets/{id})."
+
+[wire.desk_ticket_status.waiting]
+en = "Waiting"
+ctx = "label"
+screen = "wire desk_ticket_status"
+tier = "T3"
+note = "A label for the stored value `waiting` of deskTicketStatus. `status` on a Desk ticket (GET /api/district/desk/tickets, /tickets/{id})."
+
 [wire.disposition.booked]
 en = "Booked"
 ctx = "label"
@@ -213,6 +367,69 @@ screen = "wire generic"
 tier = "T3"
 note = "The label for a stored status, type or outcome this version of the app has no label for. Never the stored English itself."
 
+[wire.knowledge_document_status.failed]
+en = "Failed"
+ctx = "label"
+screen = "wire knowledge_document_status"
+tier = "T3"
+note = "A label for the stored value `failed` of knowledgeDocumentStatus. `documents[].status` in GET /api/district/workspace/knowledge. The portal reads `processing` as indexing; an unrecognised value is shown as sent, and an empty one as `fallback`."
+
+[wire.knowledge_document_status.fallback]
+en = "Unknown"
+ctx = "label"
+screen = "wire knowledge_document_status"
+tier = "T3"
+note = "The label for a value of knowledgeDocumentStatus this build does not know, or none."
+
+[wire.knowledge_document_status.processing]
+en = "Indexing"
+ctx = "label"
+screen = "wire knowledge_document_status"
+tier = "T3"
+note = "A label for the stored value `processing` of knowledgeDocumentStatus. `documents[].status` in GET /api/district/workspace/knowledge. The portal reads `processing` as indexing; an unrecognised value is shown as sent, and an empty one as `fallback`."
+
+[wire.knowledge_document_status.ready]
+en = "Ready"
+ctx = "label"
+screen = "wire knowledge_document_status"
+tier = "T3"
+note = "A label for the stored value `ready` of knowledgeDocumentStatus. `documents[].status` in GET /api/district/workspace/knowledge. The portal reads `processing` as indexing; an unrecognised value is shown as sent, and an empty one as `fallback`."
+
+[wire.line_type.landline]
+en = "Home or office line"
+ctx = "label"
+screen = "wire line_type"
+tier = "T3"
+note = "A label for the stored value `landline` of lineType. `phoneIntel.lineType` and `intelligence.callerIntel.lineType` on a contact: the carrier lookup's line type, normalised into Twilio's words. Any other value is shown as sent. The labels are the portal's words for the same line types in its forwarding guide."
+
+[wire.line_type.mobile]
+en = "Mobile phone"
+ctx = "label"
+screen = "wire line_type"
+tier = "T3"
+note = "A label for the stored value `mobile` of lineType. `phoneIntel.lineType` and `intelligence.callerIntel.lineType` on a contact: the carrier lookup's line type, normalised into Twilio's words. Any other value is shown as sent. The labels are the portal's words for the same line types in its forwarding guide."
+
+[wire.line_type.voip]
+en = "VoIP or hosted phone system"
+ctx = "label"
+screen = "wire line_type"
+tier = "T3"
+note = "A label for the stored value `voip` of lineType. `phoneIntel.lineType` and `intelligence.callerIntel.lineType` on a contact: the carrier lookup's line type, normalised into Twilio's words. Any other value is shown as sent. The labels are the portal's words for the same line types in its forwarding guide."
+
+[wire.meeting_status.completed]
+en = "Completed"
+ctx = "label"
+screen = "wire meeting_status"
+tier = "T3"
+note = "A label for the stored value `completed` of meetingStatus. `status` on a meeting (GET /api/district/meetings, /meetings/{id})."
+
+[wire.meeting_status.in_progress]
+en = "In Progress"
+ctx = "label"
+screen = "wire meeting_status"
+tier = "T3"
+note = "A label for the stored value `in-progress` of meetingStatus. `status` on a meeting (GET /api/district/meetings, /meetings/{id})."
+
 [wire.member_role.agency]
 en = "Administrator"
 ctx = "label"
@@ -233,6 +450,146 @@ ctx = "label"
 screen = "wire member_role"
 tier = "T3"
 note = "A label for the stored value `viewer` of memberRole. `role` on a workspace member (GET /api/district/workspace/members, the workspace list)."
+
+[wire.message_delivery_status.delivered]
+en = "Delivered"
+ctx = "label"
+screen = "wire message_delivery_status"
+tier = "T3"
+note = "A label for the stored value `delivered` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here."
+
+[wire.message_delivery_status.failed]
+en = "Failed"
+ctx = "label"
+screen = "wire message_delivery_status"
+tier = "T3"
+note = "A label for the stored value `failed` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. The service has no label for it; the English is the value as the apps show it."
+
+[wire.message_delivery_status.queued]
+en = "Sent"
+ctx = "label"
+screen = "wire message_delivery_status"
+tier = "T3"
+note = "A label for the stored value `queued` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here."
+
+[wire.message_delivery_status.received]
+en = "Received"
+ctx = "label"
+screen = "wire message_delivery_status"
+tier = "T3"
+note = "A label for the stored value `received` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. The service has no label for it; the English is the value as the apps show it."
+
+[wire.message_delivery_status.sent]
+en = "Sent"
+ctx = "label"
+screen = "wire message_delivery_status"
+tier = "T3"
+note = "A label for the stored value `sent` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here."
+
+[wire.messaging_carrier.sinch]
+en = "Sinch"
+ctx = "label"
+screen = "wire messaging_carrier"
+tier = "T3"
+note = "A label for the stored value `sinch` of messagingCarrier. `accounts[].provider` in GET /api/district/workspace/messaging."
+
+[wire.messaging_carrier.telnyx]
+en = "Telnyx"
+ctx = "label"
+screen = "wire messaging_carrier"
+tier = "T3"
+note = "A label for the stored value `telnyx` of messagingCarrier. `accounts[].provider` in GET /api/district/workspace/messaging."
+
+[wire.messaging_carrier.twilio]
+en = "Twilio"
+ctx = "label"
+screen = "wire messaging_carrier"
+tier = "T3"
+note = "A label for the stored value `twilio` of messagingCarrier. `accounts[].provider` in GET /api/district/workspace/messaging."
+
+[wire.messaging_credential_source.byok]
+en = "Bring Your Own Keys"
+ctx = "label"
+screen = "wire messaging_credential_source"
+tier = "T3"
+note = "A label for the stored value `byok` of messagingCredentialSource. `accounts[].credentialSource` in GET /api/district/workspace/messaging (missing reads as `byok`)."
+
+[wire.messaging_credential_source.managed]
+en = "Managed Service"
+ctx = "label"
+screen = "wire messaging_credential_source"
+tier = "T3"
+note = "A label for the stored value `managed` of messagingCredentialSource. `accounts[].credentialSource` in GET /api/district/workspace/messaging (missing reads as `byok`)."
+
+[wire.number_capability.mms]
+en = "Mms"
+ctx = "label"
+screen = "wire number_capability"
+tier = "T3"
+note = "A label for the stored value `mms` of numberCapability. `numbers[].capabilities[]` in GET /api/district/workspace/provider/numbers. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.number_capability.sms]
+en = "Sms"
+ctx = "label"
+screen = "wire number_capability"
+tier = "T3"
+note = "A label for the stored value `sms` of numberCapability. `numbers[].capabilities[]` in GET /api/district/workspace/provider/numbers. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.number_capability.voice]
+en = "Voice"
+ctx = "label"
+screen = "wire number_capability"
+tier = "T3"
+note = "A label for the stored value `voice` of numberCapability. `numbers[].capabilities[]` in GET /api/district/workspace/provider/numbers. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.number_provider.sinch]
+en = "Sinch"
+ctx = "label"
+screen = "wire number_provider"
+tier = "T3"
+note = "A label for the stored value `sinch` of numberProvider. `numbers[].provider` in GET /api/district/workspace/provider/numbers, and `provider` in the number search response. `unknown` is a managed number whose carrier is not recorded."
+
+[wire.number_provider.telnyx]
+en = "Telnyx"
+ctx = "label"
+screen = "wire number_provider"
+tier = "T3"
+note = "A label for the stored value `telnyx` of numberProvider. `numbers[].provider` in GET /api/district/workspace/provider/numbers, and `provider` in the number search response. `unknown` is a managed number whose carrier is not recorded."
+
+[wire.number_provider.twilio]
+en = "Twilio"
+ctx = "label"
+screen = "wire number_provider"
+tier = "T3"
+note = "A label for the stored value `twilio` of numberProvider. `numbers[].provider` in GET /api/district/workspace/provider/numbers, and `provider` in the number search response. `unknown` is a managed number whose carrier is not recorded."
+
+[wire.number_provider.unknown]
+en = "Unknown"
+ctx = "label"
+screen = "wire number_provider"
+tier = "T3"
+note = "A label for the stored value `unknown` of numberProvider. `numbers[].provider` in GET /api/district/workspace/provider/numbers, and `provider` in the number search response. `unknown` is a managed number whose carrier is not recorded. The service has no label for it; the English is the value as the apps show it."
+
+[wire.number_type.local]
+en = "Local"
+ctx = "label"
+screen = "wire number_type"
+tier = "T3"
+note = "A label for the stored value `local` of numberType. `numbers[].type` in GET /api/district/workspace/provider/numbers (missing reads as `local`)."
+
+[wire.number_type.mobile]
+en = "Mobile"
+ctx = "label"
+screen = "wire number_type"
+tier = "T3"
+note = "A label for the stored value `mobile` of numberType. `numbers[].type` in GET /api/district/workspace/provider/numbers (missing reads as `local`)."
+
+[wire.number_type.tollfree]
+en = "Toll-Free"
+ctx = "label"
+screen = "wire number_type"
+tier = "T3"
+note = "A label for the stored value `tollFree` of numberType. `numbers[].type` in GET /api/district/workspace/provider/numbers (missing reads as `local`)."
 
 [wire.placeholder.ai_call_completed]
 en = "AI call completed."
@@ -296,6 +653,13 @@ ctx = "label"
 screen = "wire placeholder"
 tier = "T3"
 note = "Text the service stores or sends in English in place of a real value, in Contact.latestContextSummary. Shown where that value is shown."
+
+[wire.placeholder.no_answer_no_conversation_took_place]
+en = "No answer, no conversation took place."
+ctx = "label"
+screen = "wire placeholder"
+tier = "T3"
+note = "Text the service stores or sends in English in place of a real value, in Call.summary of an unanswered call. Shown where that value is shown."
 
 [wire.placeholder.no_summary_available]
 en = "No summary available."
@@ -395,6 +759,34 @@ screen = "wire region"
 tier = "T3"
 note = "The long name of the data region `us`, naming its datacenter."
 
+[wire.research_status.complete]
+en = "Complete"
+ctx = "label"
+screen = "wire research_status"
+tier = "T3"
+note = "A label for the stored value `complete` of researchStatus. `dgiStatus` on a contact (GET /api/district/contacts, /contacts/get): the lead research job."
+
+[wire.research_status.crawling]
+en = "Crawling web…"
+ctx = "label"
+screen = "wire research_status"
+tier = "T3"
+note = "A label for the stored value `crawling` of researchStatus. `dgiStatus` on a contact (GET /api/district/contacts, /contacts/get): the lead research job."
+
+[wire.research_status.failed]
+en = "Enrichment failed"
+ctx = "label"
+screen = "wire research_status"
+tier = "T3"
+note = "A label for the stored value `failed` of researchStatus. `dgiStatus` on a contact (GET /api/district/contacts, /contacts/get): the lead research job."
+
+[wire.research_status.pending]
+en = "Pending queue"
+ctx = "label"
+screen = "wire research_status"
+tier = "T3"
+note = "A label for the stored value `pending` of researchStatus. `dgiStatus` on a contact (GET /api/district/contacts, /contacts/get): the lead research job."
+
 [wire.sentiment.negative]
 en = "Friction"
 ctx = "label"
@@ -421,14 +813,21 @@ en = "Transfer authorization error"
 ctx = "label"
 screen = "wire transfer_reason"
 tier = "T3"
-note = "A label for the stored value `auth_error` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+note = "A label for the stored value `auth_error` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`, which is also what the portal shows for `room_not_found` and `provider_unsupported`, the two it has no label for. `caller_requested_human` appears only in the recorded contract fixtures, on a transfer that did not fail, where the portal shows no reason."
+
+[wire.transfer_reason.caller_requested_human]
+en = "Caller requested human"
+ctx = "label"
+screen = "wire transfer_reason"
+tier = "T3"
+note = "A label for the stored value `caller_requested_human` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`, which is also what the portal shows for `room_not_found` and `provider_unsupported`, the two it has no label for. `caller_requested_human` appears only in the recorded contract fixtures, on a transfer that did not fail, where the portal shows no reason. The service has no label for it; the English is the value as the apps show it."
 
 [wire.transfer_reason.error]
 en = "Transfer failed"
 ctx = "label"
 screen = "wire transfer_reason"
 tier = "T3"
-note = "A label for the stored value `error` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+note = "A label for the stored value `error` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`, which is also what the portal shows for `room_not_found` and `provider_unsupported`, the two it has no label for. `caller_requested_human` appears only in the recorded contract fixtures, on a transfer that did not fail, where the portal shows no reason."
 
 [wire.transfer_reason.fallback]
 en = "Transfer attempted but not connected"
@@ -442,32 +841,375 @@ en = "Target didn't answer"
 ctx = "label"
 screen = "wire transfer_reason"
 tier = "T3"
-note = "A label for the stored value `no_answer` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+note = "A label for the stored value `no_answer` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`, which is also what the portal shows for `room_not_found` and `provider_unsupported`, the two it has no label for. `caller_requested_human` appears only in the recorded contract fixtures, on a transfer that did not fail, where the portal shows no reason."
+
+[wire.transfer_reason.provider_unsupported]
+en = "Transfer attempted but not connected"
+ctx = "label"
+screen = "wire transfer_reason"
+tier = "T3"
+note = "A label for the stored value `provider_unsupported` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`, which is also what the portal shows for `room_not_found` and `provider_unsupported`, the two it has no label for. `caller_requested_human` appears only in the recorded contract fixtures, on a transfer that did not fail, where the portal shows no reason."
 
 [wire.transfer_reason.ring_timeout]
 en = "Target didn't answer (rang out)"
 ctx = "label"
 screen = "wire transfer_reason"
 tier = "T3"
-note = "A label for the stored value `ring_timeout` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+note = "A label for the stored value `ring_timeout` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`, which is also what the portal shows for `room_not_found` and `provider_unsupported`, the two it has no label for. `caller_requested_human` appears only in the recorded contract fixtures, on a transfer that did not fail, where the portal shows no reason."
+
+[wire.transfer_reason.room_not_found]
+en = "Transfer attempted but not connected"
+ctx = "label"
+screen = "wire transfer_reason"
+tier = "T3"
+note = "A label for the stored value `room_not_found` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`, which is also what the portal shows for `room_not_found` and `provider_unsupported`, the two it has no label for. `caller_requested_human` appears only in the recorded contract fixtures, on a transfer that did not fail, where the portal shows no reason."
 
 [wire.transfer_reason.trunk_not_configured]
 en = "Transfer route not configured"
 ctx = "label"
 screen = "wire transfer_reason"
 tier = "T3"
-note = "A label for the stored value `trunk_not_configured` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`."
+note = "A label for the stored value `trunk_not_configured` of transferReason. `transferReason` on a call row whose transfer failed. A missing or unrecognised bucket reads as `fallback`, which is also what the portal shows for `room_not_found` and `provider_unsupported`, the two it has no label for. `caller_requested_human` appears only in the recorded contract fixtures, on a transfer that did not fail, where the portal shows no reason."
+
+[wire.transfer_status.completed]
+en = "Completed"
+ctx = "label"
+screen = "wire transfer_status"
+tier = "T3"
+note = "A label for the stored value `completed` of transferStatus. `transferStatus` on a call row: the real outcome of a hand-off to a person. `completed` appears only in the recorded contract fixtures; the server never writes it and the portal shows no badge for it. The service has no label for it; the English is the value as the apps show it."
 
 [wire.transfer_status.failed]
 en = "Transfer failed"
 ctx = "label"
 screen = "wire transfer_status"
 tier = "T3"
-note = "A label for the stored value `failed` of transferStatus. `transferStatus` on a call row: the real outcome of a hand-off to a person."
+note = "A label for the stored value `failed` of transferStatus. `transferStatus` on a call row: the real outcome of a hand-off to a person. `completed` appears only in the recorded contract fixtures; the server never writes it and the portal shows no badge for it."
 
 [wire.transfer_status.success]
 en = "Transferred"
 ctx = "label"
 screen = "wire transfer_status"
 tier = "T3"
-note = "A label for the stored value `success` of transferStatus. `transferStatus` on a call row: the real outcome of a hand-off to a person."
+note = "A label for the stored value `success` of transferStatus. `transferStatus` on a call row: the real outcome of a hand-off to a person. `completed` appears only in the recorded contract fixtures; the server never writes it and the portal shows no badge for it."
+
+[wire.workflow_action.add_crm_tag]
+en = "Add CRM Tag"
+ctx = "label"
+screen = "wire workflow_action"
+tier = "T3"
+note = "A label for the stored value `add_crm_tag` of workflowAction. `actionResults[].type` on a workflow run, and `actions[].type` on a workflow."
+
+[wire.workflow_action.notify_ops]
+en = "Notify Ops Webhook"
+ctx = "label"
+screen = "wire workflow_action"
+tier = "T3"
+note = "A label for the stored value `notify_ops` of workflowAction. `actionResults[].type` on a workflow run, and `actions[].type` on a workflow."
+
+[wire.workflow_action.register_compliance_dnc]
+en = "Register Compliance DNC"
+ctx = "label"
+screen = "wire workflow_action"
+tier = "T3"
+note = "A label for the stored value `register_compliance_dnc` of workflowAction. `actionResults[].type` on a workflow run, and `actions[].type` on a workflow."
+
+[wire.workflow_action.remove_crm_tag]
+en = "Remove CRM Tag"
+ctx = "label"
+screen = "wire workflow_action"
+tier = "T3"
+note = "A label for the stored value `remove_crm_tag` of workflowAction. `actionResults[].type` on a workflow run, and `actions[].type` on a workflow."
+
+[wire.workflow_action.send_email]
+en = "Send Email"
+ctx = "label"
+screen = "wire workflow_action"
+tier = "T3"
+note = "A label for the stored value `send_email` of workflowAction. `actionResults[].type` on a workflow run, and `actions[].type` on a workflow."
+
+[wire.workflow_action.send_sms]
+en = "Send SMS"
+ctx = "label"
+screen = "wire workflow_action"
+tier = "T3"
+note = "A label for the stored value `send_sms` of workflowAction. `actionResults[].type` on a workflow run, and `actions[].type` on a workflow."
+
+[wire.workflow_action_outcome.failed]
+en = "Failed"
+ctx = "label"
+screen = "wire workflow_action_outcome"
+tier = "T3"
+note = "A label for the stored value `failed` of workflowActionOutcome. `actionResults[].outcome` on a workflow run. The portal shows the value itself (only its colour depends on it); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_outcome.ok]
+en = "Ok"
+ctx = "label"
+screen = "wire workflow_action_outcome"
+tier = "T3"
+note = "A label for the stored value `ok` of workflowActionOutcome. `actionResults[].outcome` on a workflow run. The portal shows the value itself (only its colour depends on it); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_outcome.skipped]
+en = "Skipped"
+ctx = "label"
+screen = "wire workflow_action_outcome"
+tier = "T3"
+note = "A label for the stored value `skipped` of workflowActionOutcome. `actionResults[].outcome` on a workflow run. The portal shows the value itself (only its colour depends on it); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.contact_not_found]
+en = "Contact not found"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `contact-not-found` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.dnc]
+en = "Dnc"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `dnc` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.dormant]
+en = "Dormant"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `dormant` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.empty_body]
+en = "Empty body"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `empty-body` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.empty_subject]
+en = "Empty subject"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `empty-subject` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.empty_tag]
+en = "Empty tag"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `empty-tag` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.http_status]
+en = "Http {{status}}"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `http-{status}` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.invalid_recipient]
+en = "Invalid recipient"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `invalid-recipient` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.missing_webhook_url]
+en = "Missing webhook url"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `missing-webhook-url` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.no_provider_credentials]
+en = "No provider credentials"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `no-provider-credentials` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.no_recipient]
+en = "No recipient"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `no-recipient` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.no_sending_number]
+en = "No sending number"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `no-sending-number` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.postmark_missing]
+en = "Postmark missing"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `postmark-missing` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.report_recipient_refused]
+en = "Report recipient refused"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `report-recipient-refused` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.report_unavailable]
+en = "Report unavailable"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `report-unavailable` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.send_failed]
+en = "Send failed"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `send-failed` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.tag_already_present]
+en = "Tag already present"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `tag-already-present` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.tag_not_present]
+en = "Tag not present"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `tag-not-present` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.unknown_action_type]
+en = "Unknown action type"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+note = "A label for the stored value `unknown-action-type` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_run_status.failed]
+en = "Failed"
+ctx = "label"
+screen = "wire workflow_run_status"
+tier = "T3"
+note = "A label for the stored value `failed` of workflowRunStatus. `status` on a workflow run and `latestRun.status` on a workflow (GET /api/district/workflows, /workflows/runs). An unrecognised value is shown as sent."
+
+[wire.workflow_run_status.partial]
+en = "Partly done"
+ctx = "label"
+screen = "wire workflow_run_status"
+tier = "T3"
+note = "A label for the stored value `partial` of workflowRunStatus. `status` on a workflow run and `latestRun.status` on a workflow (GET /api/district/workflows, /workflows/runs). An unrecognised value is shown as sent."
+
+[wire.workflow_run_status.skipped]
+en = "Nothing to do"
+ctx = "label"
+screen = "wire workflow_run_status"
+tier = "T3"
+note = "A label for the stored value `skipped` of workflowRunStatus. `status` on a workflow run and `latestRun.status` on a workflow (GET /api/district/workflows, /workflows/runs). An unrecognised value is shown as sent."
+
+[wire.workflow_run_status.success]
+en = "Succeeded"
+ctx = "label"
+screen = "wire workflow_run_status"
+tier = "T3"
+note = "A label for the stored value `success` of workflowRunStatus. `status` on a workflow run and `latestRun.status` on a workflow (GET /api/district/workflows, /workflows/runs). An unrecognised value is shown as sent."
+
+[wire.workflow_trigger.booking_cancelled]
+en = "When a Booking Is Cancelled"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `booking_cancelled` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.booking_created]
+en = "When a Booking Is Made"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `booking_created` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.booking_reminder]
+en = "When a Booking Reminder Is Sent"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `booking_reminder` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.booking_rescheduled]
+en = "When a Booking Is Rescheduled"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `booking_rescheduled` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.call_ended]
+en = "When Any Call Ends (answered or not)"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `call_ended` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.call_ended_answered]
+en = "When an Answered Call Ends"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `call_ended_answered` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.call_ended_unanswered]
+en = "When a Call Goes Unanswered"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `call_ended_unanswered` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.contact_created]
+en = "When New Contact Created"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `contact_created` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.dnc_registered]
+en = "When Contact Registered DNC"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `dnc_registered` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.intent_detected]
+en = "When Specific Intent Detected"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `intent_detected` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.negative_sentiment]
+en = "When Call Sentiment is Negative"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `negative_sentiment` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.neutral_sentiment]
+en = "When Call Sentiment is Neutral"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `neutral_sentiment` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.positive_sentiment]
+en = "When Call Sentiment is Positive"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `positive_sentiment` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.sms_received]
+en = "When Inbound SMS Received"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+note = "A label for the stored value `sms_received` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."

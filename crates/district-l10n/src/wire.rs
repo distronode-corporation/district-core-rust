@@ -44,11 +44,51 @@ pub enum WireCategory {
     MemberRole,
     /// A workspace's data region.
     Region,
+    /// `status` on a help desk ticket.
+    DeskTicketStatus,
+    /// `source` on a help desk ticket.
+    DeskTicketSource,
+    /// `status` on a knowledge base document.
+    KnowledgeDocumentStatus,
+    /// `trigger` on a workflow.
+    WorkflowTrigger,
+    /// `status` on a workflow run, and on a workflow's latest run.
+    WorkflowRunStatus,
+    /// `type` of a workflow's action and of an action's result in a run.
+    WorkflowAction,
+    /// `outcome` of an action's result in a workflow run.
+    WorkflowActionOutcome,
+    /// The code that opens `reason` of an action's result in a workflow run.
+    WorkflowActionReason,
+    /// `type` on a phone number.
+    NumberType,
+    /// One of `capabilities` on a phone number.
+    NumberCapability,
+    /// `provider` on a phone number, and in the number search.
+    NumberProvider,
+    /// `status` on a meeting.
+    MeetingStatus,
+    /// `status` on a message: its delivery receipt, or `received`.
+    MessageDeliveryStatus,
+    /// `dgiStatus` on a contact: the lead research job.
+    ResearchStatus,
+    /// A key of `intelligence` on a contact: a section of the research.
+    ContactResearchKey,
+    /// The line type of a contact's phone number, from the carrier lookup.
+    LineType,
+    /// `status` on a subscription in the account's billing.
+    BillingSubscriptionStatus,
+    /// `status` on an invoice in the account's billing.
+    BillingInvoiceStatus,
+    /// `provider` on a messaging account.
+    MessagingCarrier,
+    /// `credentialSource` on a messaging account.
+    MessagingCredentialSource,
 }
 
 impl WireCategory {
     /// Every category.
-    pub const ALL: [Self; 11] = [
+    pub const ALL: [Self; 31] = [
         Self::CallStatus,
         Self::CallDirection,
         Self::CallType,
@@ -60,6 +100,26 @@ impl WireCategory {
         Self::AnalyticsSentiment,
         Self::MemberRole,
         Self::Region,
+        Self::DeskTicketStatus,
+        Self::DeskTicketSource,
+        Self::KnowledgeDocumentStatus,
+        Self::WorkflowTrigger,
+        Self::WorkflowRunStatus,
+        Self::WorkflowAction,
+        Self::WorkflowActionOutcome,
+        Self::WorkflowActionReason,
+        Self::NumberType,
+        Self::NumberCapability,
+        Self::NumberProvider,
+        Self::MeetingStatus,
+        Self::MessageDeliveryStatus,
+        Self::ResearchStatus,
+        Self::ContactResearchKey,
+        Self::LineType,
+        Self::BillingSubscriptionStatus,
+        Self::BillingInvoiceStatus,
+        Self::MessagingCarrier,
+        Self::MessagingCredentialSource,
     ];
 
     /// The name the vocabulary gives the category (`callStatus`).
@@ -76,6 +136,26 @@ impl WireCategory {
             Self::AnalyticsSentiment => "analyticsSentiment",
             Self::MemberRole => "memberRole",
             Self::Region => "region",
+            Self::DeskTicketStatus => "deskTicketStatus",
+            Self::DeskTicketSource => "deskTicketSource",
+            Self::KnowledgeDocumentStatus => "knowledgeDocumentStatus",
+            Self::WorkflowTrigger => "workflowTrigger",
+            Self::WorkflowRunStatus => "workflowRunStatus",
+            Self::WorkflowAction => "workflowAction",
+            Self::WorkflowActionOutcome => "workflowActionOutcome",
+            Self::WorkflowActionReason => "workflowActionReason",
+            Self::NumberType => "numberType",
+            Self::NumberCapability => "numberCapability",
+            Self::NumberProvider => "numberProvider",
+            Self::MeetingStatus => "meetingStatus",
+            Self::MessageDeliveryStatus => "messageDeliveryStatus",
+            Self::ResearchStatus => "researchStatus",
+            Self::ContactResearchKey => "contactResearchKey",
+            Self::LineType => "lineType",
+            Self::BillingSubscriptionStatus => "billingSubscriptionStatus",
+            Self::BillingInvoiceStatus => "billingInvoiceStatus",
+            Self::MessagingCarrier => "messagingCarrier",
+            Self::MessagingCredentialSource => "messagingCredentialSource",
         }
     }
 

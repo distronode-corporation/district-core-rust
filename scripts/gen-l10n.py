@@ -164,6 +164,9 @@ def wire_entries(doc: dict) -> tuple[dict, list, list, list, list]:
         for value in category["values"]:
             key = f"wire.{group}.{slug(value['value'])}"
             en = value["en"] if value["en"] is not None else humanize(value["value"])
+            # A value can name a part of itself in braces (`http-{status}`): the
+            # catalog writes a literal brace doubled.
+            en = en.replace("{", "{{").replace("}", "}}")
             note = f"A label for the stored value `{value['value']}` of {name}. {category['description']}"
             if value["en"] is None:
                 note += " The service has no label for it; the English is the value as the apps show it."
@@ -191,18 +194,32 @@ def wire_entries(doc: dict) -> tuple[dict, list, list, list, list]:
     placeholders = []
     for placeholder in doc["placeholders"]:
         value = placeholder["value"]
-        # The vendored copy has its em dash replaced (scripts/sync-contracts.py), so
-        # it no longer equals the stored value, and the catalog may not hold one.
-        if " - " in value:
-            continue
         key = f"wire.placeholder.{slug(value)}"
         entries[key] = entry(
             value, "label", "wire placeholder", "T3",
             f"Text the service stores or sends in English in place of a real value, in "
             f"{'; '.join(placeholder['fields'])}. Shown where that value is shown.",
         )
-        placeholders.append((value, key))
+        placeholders.append((stored(value), key))
+        # A spelling the service wrote before, still in stored rows, reads as
+        # the same placeholder.
+        for alias in placeholder.get("aliases", []):
+            placeholders.append((stored(alias), key))
     return entries, labels, fallbacks, longs, placeholders
+
+
+EM_DASH = "\u2014"
+
+
+def stored(text: str) -> str:
+    """The text as the service stores it: the vendored copy writes the em dash
+    as " - " (scripts/sync-contracts.py), which no stored row holds."""
+    return text.replace(" - ", f" {EM_DASH} ")
+
+
+def rust_stored(text: str) -> str:
+    """A Rust literal for stored text, its em dash written as an escape."""
+    return rust_str(text).replace(EM_DASH, "\\u{2014}")
 
 
 def render_catalog(name: str, entries: dict, previous: Path) -> str:
@@ -301,7 +318,7 @@ def wire_table(labels, fallbacks, longs, placeholders) -> str:
     lines.append("pub(crate) fn placeholder(locale: Locale, value: &str) -> Option<&'static str> {")
     lines.append("    Some(match value {")
     for value, key in placeholders:
-        lines.append(f"        {rust_str(value)} => s::{key.replace('.', '_')}(locale),")
+        lines.append(f"        {rust_stored(value)} => s::{key.replace('.', '_')}(locale),")
     lines.append("        _ => return None,")
     lines.append("    })")
     lines.append("}")

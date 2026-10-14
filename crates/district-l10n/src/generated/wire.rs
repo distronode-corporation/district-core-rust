@@ -32,6 +32,87 @@ pub fn wire_analytics_sentiment_positive_sentiment(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.billing_invoice_status.draft`
+#[must_use]
+pub fn wire_billing_invoice_status_draft(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Draft",
+        Locale::FrCa => "Draft",
+    }
+}
+
+/// `wire.billing_invoice_status.open`
+#[must_use]
+pub fn wire_billing_invoice_status_open(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Open",
+        Locale::FrCa => "Open",
+    }
+}
+
+/// `wire.billing_invoice_status.paid`
+#[must_use]
+pub fn wire_billing_invoice_status_paid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Paid",
+        Locale::FrCa => "Paid",
+    }
+}
+
+/// `wire.billing_invoice_status.uncollectible`
+#[must_use]
+pub fn wire_billing_invoice_status_uncollectible(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Uncollectible",
+        Locale::FrCa => "Uncollectible",
+    }
+}
+
+/// `wire.billing_invoice_status.void`
+#[must_use]
+pub fn wire_billing_invoice_status_void(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Void",
+        Locale::FrCa => "Void",
+    }
+}
+
+/// `wire.billing_subscription_status.active`
+#[must_use]
+pub fn wire_billing_subscription_status_active(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Active",
+        Locale::FrCa => "Active",
+    }
+}
+
+/// `wire.billing_subscription_status.past_due`
+#[must_use]
+pub fn wire_billing_subscription_status_past_due(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Payment past due",
+        Locale::FrCa => "Payment past due",
+    }
+}
+
+/// `wire.billing_subscription_status.trialing`
+#[must_use]
+pub fn wire_billing_subscription_status_trialing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Trial",
+        Locale::FrCa => "Trial",
+    }
+}
+
+/// `wire.billing_subscription_status.unpaid`
+#[must_use]
+pub fn wire_billing_subscription_status_unpaid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unpaid",
+        Locale::FrCa => "Unpaid",
+    }
+}
+
 /// `wire.call_direction.inbound`
 #[must_use]
 pub fn wire_call_direction_inbound(l: Locale) -> &'static str {
@@ -158,6 +239,123 @@ pub fn wire_call_type_outbound(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.contact_research_key.callerintel`
+#[must_use]
+pub fn wire_contact_research_key_callerintel(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "CallerIntel",
+        Locale::FrCa => "CallerIntel",
+    }
+}
+
+/// `wire.contact_research_key.corepainpoints`
+#[must_use]
+pub fn wire_contact_research_key_corepainpoints(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Inferred CRM Key Challenges",
+        Locale::FrCa => "Inferred CRM Key Challenges",
+    }
+}
+
+/// `wire.contact_research_key.dynamicicebreakers`
+#[must_use]
+pub fn wire_contact_research_key_dynamicicebreakers(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "CTO/CEO Conversation Starters",
+        Locale::FrCa => "CTO/CEO Conversation Starters",
+    }
+}
+
+/// `wire.contact_research_key.estimatedvalue`
+#[must_use]
+pub fn wire_contact_research_key_estimatedvalue(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "EstimatedValue",
+        Locale::FrCa => "EstimatedValue",
+    }
+}
+
+/// `wire.contact_research_key.executivesummary`
+#[must_use]
+pub fn wire_contact_research_key_executivesummary(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Executive Dossier Summary",
+        Locale::FrCa => "Executive Dossier Summary",
+    }
+}
+
+/// `wire.contact_research_key.person`
+#[must_use]
+pub fn wire_contact_research_key_person(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Person",
+        Locale::FrCa => "Person",
+    }
+}
+
+/// `wire.contact_research_key.recommendedgreeting`
+#[must_use]
+pub fn wire_contact_research_key_recommendedgreeting(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Suggested Receptionist Greeting",
+        Locale::FrCa => "Suggested Receptionist Greeting",
+    }
+}
+
+/// `wire.desk_ticket_source.manual`
+#[must_use]
+pub fn wire_desk_ticket_source_manual(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Manual",
+        Locale::FrCa => "Manual",
+    }
+}
+
+/// `wire.desk_ticket_source.voice_call`
+#[must_use]
+pub fn wire_desk_ticket_source_voice_call(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "From a phone call",
+        Locale::FrCa => "From a phone call",
+    }
+}
+
+/// `wire.desk_ticket_status.fallback`
+#[must_use]
+pub fn wire_desk_ticket_status_fallback(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unknown",
+        Locale::FrCa => "Unknown",
+    }
+}
+
+/// `wire.desk_ticket_status.open`
+#[must_use]
+pub fn wire_desk_ticket_status_open(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Open",
+        Locale::FrCa => "Open",
+    }
+}
+
+/// `wire.desk_ticket_status.resolved`
+#[must_use]
+pub fn wire_desk_ticket_status_resolved(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Resolved",
+        Locale::FrCa => "Resolved",
+    }
+}
+
+/// `wire.desk_ticket_status.waiting`
+#[must_use]
+pub fn wire_desk_ticket_status_waiting(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Waiting",
+        Locale::FrCa => "Waiting",
+    }
+}
+
 /// `wire.disposition.booked`
 #[must_use]
 pub fn wire_disposition_booked(l: Locale) -> &'static str {
@@ -275,6 +473,87 @@ pub fn wire_generic_other(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.knowledge_document_status.failed`
+#[must_use]
+pub fn wire_knowledge_document_status_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Failed",
+        Locale::FrCa => "Failed",
+    }
+}
+
+/// `wire.knowledge_document_status.fallback`
+#[must_use]
+pub fn wire_knowledge_document_status_fallback(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unknown",
+        Locale::FrCa => "Unknown",
+    }
+}
+
+/// `wire.knowledge_document_status.processing`
+#[must_use]
+pub fn wire_knowledge_document_status_processing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Indexing",
+        Locale::FrCa => "Indexing",
+    }
+}
+
+/// `wire.knowledge_document_status.ready`
+#[must_use]
+pub fn wire_knowledge_document_status_ready(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Ready",
+        Locale::FrCa => "Ready",
+    }
+}
+
+/// `wire.line_type.landline`
+#[must_use]
+pub fn wire_line_type_landline(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Home or office line",
+        Locale::FrCa => "Home or office line",
+    }
+}
+
+/// `wire.line_type.mobile`
+#[must_use]
+pub fn wire_line_type_mobile(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Mobile phone",
+        Locale::FrCa => "Mobile phone",
+    }
+}
+
+/// `wire.line_type.voip`
+#[must_use]
+pub fn wire_line_type_voip(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "VoIP or hosted phone system",
+        Locale::FrCa => "VoIP or hosted phone system",
+    }
+}
+
+/// `wire.meeting_status.completed`
+#[must_use]
+pub fn wire_meeting_status_completed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Completed",
+        Locale::FrCa => "Completed",
+    }
+}
+
+/// `wire.meeting_status.in_progress`
+#[must_use]
+pub fn wire_meeting_status_in_progress(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "In Progress",
+        Locale::FrCa => "In Progress",
+    }
+}
+
 /// `wire.member_role.agency`
 #[must_use]
 pub fn wire_member_role_agency(l: Locale) -> &'static str {
@@ -299,6 +578,186 @@ pub fn wire_member_role_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Viewer",
         Locale::FrCa => "Viewer",
+    }
+}
+
+/// `wire.message_delivery_status.delivered`
+#[must_use]
+pub fn wire_message_delivery_status_delivered(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delivered",
+        Locale::FrCa => "Delivered",
+    }
+}
+
+/// `wire.message_delivery_status.failed`
+#[must_use]
+pub fn wire_message_delivery_status_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Failed",
+        Locale::FrCa => "Failed",
+    }
+}
+
+/// `wire.message_delivery_status.queued`
+#[must_use]
+pub fn wire_message_delivery_status_queued(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sent",
+        Locale::FrCa => "Sent",
+    }
+}
+
+/// `wire.message_delivery_status.received`
+#[must_use]
+pub fn wire_message_delivery_status_received(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Received",
+        Locale::FrCa => "Received",
+    }
+}
+
+/// `wire.message_delivery_status.sent`
+#[must_use]
+pub fn wire_message_delivery_status_sent(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sent",
+        Locale::FrCa => "Sent",
+    }
+}
+
+/// `wire.messaging_carrier.sinch`
+#[must_use]
+pub fn wire_messaging_carrier_sinch(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sinch",
+        Locale::FrCa => "Sinch",
+    }
+}
+
+/// `wire.messaging_carrier.telnyx`
+#[must_use]
+pub fn wire_messaging_carrier_telnyx(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Telnyx",
+        Locale::FrCa => "Telnyx",
+    }
+}
+
+/// `wire.messaging_carrier.twilio`
+#[must_use]
+pub fn wire_messaging_carrier_twilio(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Twilio",
+        Locale::FrCa => "Twilio",
+    }
+}
+
+/// `wire.messaging_credential_source.byok`
+#[must_use]
+pub fn wire_messaging_credential_source_byok(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Bring Your Own Keys",
+        Locale::FrCa => "Bring Your Own Keys",
+    }
+}
+
+/// `wire.messaging_credential_source.managed`
+#[must_use]
+pub fn wire_messaging_credential_source_managed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Managed Service",
+        Locale::FrCa => "Managed Service",
+    }
+}
+
+/// `wire.number_capability.mms`
+#[must_use]
+pub fn wire_number_capability_mms(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Mms",
+        Locale::FrCa => "Mms",
+    }
+}
+
+/// `wire.number_capability.sms`
+#[must_use]
+pub fn wire_number_capability_sms(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sms",
+        Locale::FrCa => "Sms",
+    }
+}
+
+/// `wire.number_capability.voice`
+#[must_use]
+pub fn wire_number_capability_voice(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Voice",
+        Locale::FrCa => "Voice",
+    }
+}
+
+/// `wire.number_provider.sinch`
+#[must_use]
+pub fn wire_number_provider_sinch(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sinch",
+        Locale::FrCa => "Sinch",
+    }
+}
+
+/// `wire.number_provider.telnyx`
+#[must_use]
+pub fn wire_number_provider_telnyx(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Telnyx",
+        Locale::FrCa => "Telnyx",
+    }
+}
+
+/// `wire.number_provider.twilio`
+#[must_use]
+pub fn wire_number_provider_twilio(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Twilio",
+        Locale::FrCa => "Twilio",
+    }
+}
+
+/// `wire.number_provider.unknown`
+#[must_use]
+pub fn wire_number_provider_unknown(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unknown",
+        Locale::FrCa => "Unknown",
+    }
+}
+
+/// `wire.number_type.local`
+#[must_use]
+pub fn wire_number_type_local(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Local",
+        Locale::FrCa => "Local",
+    }
+}
+
+/// `wire.number_type.mobile`
+#[must_use]
+pub fn wire_number_type_mobile(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Mobile",
+        Locale::FrCa => "Mobile",
+    }
+}
+
+/// `wire.number_type.tollfree`
+#[must_use]
+pub fn wire_number_type_tollfree(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Toll-Free",
+        Locale::FrCa => "Toll-Free",
     }
 }
 
@@ -380,6 +839,15 @@ pub fn wire_placeholder_new_manually_added_contact(l: Locale) -> &'static str {
     match l {
         Locale::En => "New manually added contact.",
         Locale::FrCa => "New manually added contact.",
+    }
+}
+
+/// `wire.placeholder.no_answer_no_conversation_took_place`
+#[must_use]
+pub fn wire_placeholder_no_answer_no_conversation_took_place(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No answer, no conversation took place.",
+        Locale::FrCa => "No answer, no conversation took place.",
     }
 }
 
@@ -509,6 +977,42 @@ pub fn wire_region_long_us(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.research_status.complete`
+#[must_use]
+pub fn wire_research_status_complete(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Complete",
+        Locale::FrCa => "Complete",
+    }
+}
+
+/// `wire.research_status.crawling`
+#[must_use]
+pub fn wire_research_status_crawling(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Crawling web…",
+        Locale::FrCa => "Crawling web…",
+    }
+}
+
+/// `wire.research_status.failed`
+#[must_use]
+pub fn wire_research_status_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Enrichment failed",
+        Locale::FrCa => "Enrichment failed",
+    }
+}
+
+/// `wire.research_status.pending`
+#[must_use]
+pub fn wire_research_status_pending(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Pending queue",
+        Locale::FrCa => "Pending queue",
+    }
+}
+
 /// `wire.sentiment.negative`
 #[must_use]
 pub fn wire_sentiment_negative(l: Locale) -> &'static str {
@@ -545,6 +1049,15 @@ pub fn wire_transfer_reason_auth_error(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.transfer_reason.caller_requested_human`
+#[must_use]
+pub fn wire_transfer_reason_caller_requested_human(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Caller requested human",
+        Locale::FrCa => "Caller requested human",
+    }
+}
+
 /// `wire.transfer_reason.error`
 #[must_use]
 pub fn wire_transfer_reason_error(l: Locale) -> &'static str {
@@ -572,6 +1085,15 @@ pub fn wire_transfer_reason_no_answer(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.transfer_reason.provider_unsupported`
+#[must_use]
+pub fn wire_transfer_reason_provider_unsupported(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Transfer attempted but not connected",
+        Locale::FrCa => "Transfer attempted but not connected",
+    }
+}
+
 /// `wire.transfer_reason.ring_timeout`
 #[must_use]
 pub fn wire_transfer_reason_ring_timeout(l: Locale) -> &'static str {
@@ -581,12 +1103,30 @@ pub fn wire_transfer_reason_ring_timeout(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.transfer_reason.room_not_found`
+#[must_use]
+pub fn wire_transfer_reason_room_not_found(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Transfer attempted but not connected",
+        Locale::FrCa => "Transfer attempted but not connected",
+    }
+}
+
 /// `wire.transfer_reason.trunk_not_configured`
 #[must_use]
 pub fn wire_transfer_reason_trunk_not_configured(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer route not configured",
         Locale::FrCa => "Transfer route not configured",
+    }
+}
+
+/// `wire.transfer_status.completed`
+#[must_use]
+pub fn wire_transfer_status_completed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Completed",
+        Locale::FrCa => "Completed",
     }
 }
 
@@ -605,5 +1145,419 @@ pub fn wire_transfer_status_success(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transferred",
         Locale::FrCa => "Transferred",
+    }
+}
+
+/// `wire.workflow_action.add_crm_tag`
+#[must_use]
+pub fn wire_workflow_action_add_crm_tag(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add CRM Tag",
+        Locale::FrCa => "Add CRM Tag",
+    }
+}
+
+/// `wire.workflow_action.notify_ops`
+#[must_use]
+pub fn wire_workflow_action_notify_ops(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Notify Ops Webhook",
+        Locale::FrCa => "Notify Ops Webhook",
+    }
+}
+
+/// `wire.workflow_action.register_compliance_dnc`
+#[must_use]
+pub fn wire_workflow_action_register_compliance_dnc(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Register Compliance DNC",
+        Locale::FrCa => "Register Compliance DNC",
+    }
+}
+
+/// `wire.workflow_action.remove_crm_tag`
+#[must_use]
+pub fn wire_workflow_action_remove_crm_tag(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Remove CRM Tag",
+        Locale::FrCa => "Remove CRM Tag",
+    }
+}
+
+/// `wire.workflow_action.send_email`
+#[must_use]
+pub fn wire_workflow_action_send_email(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Send Email",
+        Locale::FrCa => "Send Email",
+    }
+}
+
+/// `wire.workflow_action.send_sms`
+#[must_use]
+pub fn wire_workflow_action_send_sms(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Send SMS",
+        Locale::FrCa => "Send SMS",
+    }
+}
+
+/// `wire.workflow_action_outcome.failed`
+#[must_use]
+pub fn wire_workflow_action_outcome_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Failed",
+        Locale::FrCa => "Failed",
+    }
+}
+
+/// `wire.workflow_action_outcome.ok`
+#[must_use]
+pub fn wire_workflow_action_outcome_ok(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Ok",
+        Locale::FrCa => "Ok",
+    }
+}
+
+/// `wire.workflow_action_outcome.skipped`
+#[must_use]
+pub fn wire_workflow_action_outcome_skipped(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Skipped",
+        Locale::FrCa => "Skipped",
+    }
+}
+
+/// `wire.workflow_action_reason.contact_not_found`
+#[must_use]
+pub fn wire_workflow_action_reason_contact_not_found(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Contact not found",
+        Locale::FrCa => "Contact not found",
+    }
+}
+
+/// `wire.workflow_action_reason.dnc`
+#[must_use]
+pub fn wire_workflow_action_reason_dnc(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Dnc",
+        Locale::FrCa => "Dnc",
+    }
+}
+
+/// `wire.workflow_action_reason.dormant`
+#[must_use]
+pub fn wire_workflow_action_reason_dormant(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Dormant",
+        Locale::FrCa => "Dormant",
+    }
+}
+
+/// `wire.workflow_action_reason.empty_body`
+#[must_use]
+pub fn wire_workflow_action_reason_empty_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Empty body",
+        Locale::FrCa => "Empty body",
+    }
+}
+
+/// `wire.workflow_action_reason.empty_subject`
+#[must_use]
+pub fn wire_workflow_action_reason_empty_subject(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Empty subject",
+        Locale::FrCa => "Empty subject",
+    }
+}
+
+/// `wire.workflow_action_reason.empty_tag`
+#[must_use]
+pub fn wire_workflow_action_reason_empty_tag(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Empty tag",
+        Locale::FrCa => "Empty tag",
+    }
+}
+
+/// `wire.workflow_action_reason.http_status`
+#[must_use]
+pub fn wire_workflow_action_reason_http_status(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Http {status}",
+        Locale::FrCa => "Http {status}",
+    }
+}
+
+/// `wire.workflow_action_reason.invalid_recipient`
+#[must_use]
+pub fn wire_workflow_action_reason_invalid_recipient(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Invalid recipient",
+        Locale::FrCa => "Invalid recipient",
+    }
+}
+
+/// `wire.workflow_action_reason.missing_webhook_url`
+#[must_use]
+pub fn wire_workflow_action_reason_missing_webhook_url(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Missing webhook url",
+        Locale::FrCa => "Missing webhook url",
+    }
+}
+
+/// `wire.workflow_action_reason.no_provider_credentials`
+#[must_use]
+pub fn wire_workflow_action_reason_no_provider_credentials(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No provider credentials",
+        Locale::FrCa => "No provider credentials",
+    }
+}
+
+/// `wire.workflow_action_reason.no_recipient`
+#[must_use]
+pub fn wire_workflow_action_reason_no_recipient(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No recipient",
+        Locale::FrCa => "No recipient",
+    }
+}
+
+/// `wire.workflow_action_reason.no_sending_number`
+#[must_use]
+pub fn wire_workflow_action_reason_no_sending_number(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No sending number",
+        Locale::FrCa => "No sending number",
+    }
+}
+
+/// `wire.workflow_action_reason.postmark_missing`
+#[must_use]
+pub fn wire_workflow_action_reason_postmark_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Postmark missing",
+        Locale::FrCa => "Postmark missing",
+    }
+}
+
+/// `wire.workflow_action_reason.report_recipient_refused`
+#[must_use]
+pub fn wire_workflow_action_reason_report_recipient_refused(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Report recipient refused",
+        Locale::FrCa => "Report recipient refused",
+    }
+}
+
+/// `wire.workflow_action_reason.report_unavailable`
+#[must_use]
+pub fn wire_workflow_action_reason_report_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Report unavailable",
+        Locale::FrCa => "Report unavailable",
+    }
+}
+
+/// `wire.workflow_action_reason.send_failed`
+#[must_use]
+pub fn wire_workflow_action_reason_send_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Send failed",
+        Locale::FrCa => "Send failed",
+    }
+}
+
+/// `wire.workflow_action_reason.tag_already_present`
+#[must_use]
+pub fn wire_workflow_action_reason_tag_already_present(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Tag already present",
+        Locale::FrCa => "Tag already present",
+    }
+}
+
+/// `wire.workflow_action_reason.tag_not_present`
+#[must_use]
+pub fn wire_workflow_action_reason_tag_not_present(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Tag not present",
+        Locale::FrCa => "Tag not present",
+    }
+}
+
+/// `wire.workflow_action_reason.unknown_action_type`
+#[must_use]
+pub fn wire_workflow_action_reason_unknown_action_type(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unknown action type",
+        Locale::FrCa => "Unknown action type",
+    }
+}
+
+/// `wire.workflow_run_status.failed`
+#[must_use]
+pub fn wire_workflow_run_status_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Failed",
+        Locale::FrCa => "Failed",
+    }
+}
+
+/// `wire.workflow_run_status.partial`
+#[must_use]
+pub fn wire_workflow_run_status_partial(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Partly done",
+        Locale::FrCa => "Partly done",
+    }
+}
+
+/// `wire.workflow_run_status.skipped`
+#[must_use]
+pub fn wire_workflow_run_status_skipped(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Nothing to do",
+        Locale::FrCa => "Nothing to do",
+    }
+}
+
+/// `wire.workflow_run_status.success`
+#[must_use]
+pub fn wire_workflow_run_status_success(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Succeeded",
+        Locale::FrCa => "Succeeded",
+    }
+}
+
+/// `wire.workflow_trigger.booking_cancelled`
+#[must_use]
+pub fn wire_workflow_trigger_booking_cancelled(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When a Booking Is Cancelled",
+        Locale::FrCa => "When a Booking Is Cancelled",
+    }
+}
+
+/// `wire.workflow_trigger.booking_created`
+#[must_use]
+pub fn wire_workflow_trigger_booking_created(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When a Booking Is Made",
+        Locale::FrCa => "When a Booking Is Made",
+    }
+}
+
+/// `wire.workflow_trigger.booking_reminder`
+#[must_use]
+pub fn wire_workflow_trigger_booking_reminder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When a Booking Reminder Is Sent",
+        Locale::FrCa => "When a Booking Reminder Is Sent",
+    }
+}
+
+/// `wire.workflow_trigger.booking_rescheduled`
+#[must_use]
+pub fn wire_workflow_trigger_booking_rescheduled(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When a Booking Is Rescheduled",
+        Locale::FrCa => "When a Booking Is Rescheduled",
+    }
+}
+
+/// `wire.workflow_trigger.call_ended`
+#[must_use]
+pub fn wire_workflow_trigger_call_ended(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When Any Call Ends (answered or not)",
+        Locale::FrCa => "When Any Call Ends (answered or not)",
+    }
+}
+
+/// `wire.workflow_trigger.call_ended_answered`
+#[must_use]
+pub fn wire_workflow_trigger_call_ended_answered(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When an Answered Call Ends",
+        Locale::FrCa => "When an Answered Call Ends",
+    }
+}
+
+/// `wire.workflow_trigger.call_ended_unanswered`
+#[must_use]
+pub fn wire_workflow_trigger_call_ended_unanswered(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When a Call Goes Unanswered",
+        Locale::FrCa => "When a Call Goes Unanswered",
+    }
+}
+
+/// `wire.workflow_trigger.contact_created`
+#[must_use]
+pub fn wire_workflow_trigger_contact_created(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When New Contact Created",
+        Locale::FrCa => "When New Contact Created",
+    }
+}
+
+/// `wire.workflow_trigger.dnc_registered`
+#[must_use]
+pub fn wire_workflow_trigger_dnc_registered(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When Contact Registered DNC",
+        Locale::FrCa => "When Contact Registered DNC",
+    }
+}
+
+/// `wire.workflow_trigger.intent_detected`
+#[must_use]
+pub fn wire_workflow_trigger_intent_detected(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When Specific Intent Detected",
+        Locale::FrCa => "When Specific Intent Detected",
+    }
+}
+
+/// `wire.workflow_trigger.negative_sentiment`
+#[must_use]
+pub fn wire_workflow_trigger_negative_sentiment(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When Call Sentiment is Negative",
+        Locale::FrCa => "When Call Sentiment is Negative",
+    }
+}
+
+/// `wire.workflow_trigger.neutral_sentiment`
+#[must_use]
+pub fn wire_workflow_trigger_neutral_sentiment(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When Call Sentiment is Neutral",
+        Locale::FrCa => "When Call Sentiment is Neutral",
+    }
+}
+
+/// `wire.workflow_trigger.positive_sentiment`
+#[must_use]
+pub fn wire_workflow_trigger_positive_sentiment(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When Call Sentiment is Positive",
+        Locale::FrCa => "When Call Sentiment is Positive",
+    }
+}
+
+/// `wire.workflow_trigger.sms_received`
+#[must_use]
+pub fn wire_workflow_trigger_sms_received(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When Inbound SMS Received",
+        Locale::FrCa => "When Inbound SMS Received",
     }
 }

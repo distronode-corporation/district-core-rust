@@ -17,6 +17,24 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Added
+
+- `district-l10n`: the wire vocabulary synced to the server at `46e1740a6`, from 11
+  categories to 31. `WireCategory` names the 20 new ones (help desk tickets, knowledge
+  documents, workflows and their runs, numbers, meetings, message delivery, contact
+  research, line types, billing, messaging accounts), and `wire_label` gives each
+  value its label, or the category's fallback where the service has one (help desk
+  ticket status, knowledge document status). A value that names a part of itself in
+  braces (`http-{status}`) is written to the catalog with its braces doubled.
+
+### Changed
+
+- `placeholder_label`: the summary of an unanswered call is now "No answer, no
+  conversation took place."; rows stored with the old spelling, an em dash where the
+  comma is, read as the same placeholder. The old spelling had no label before,
+  because the vendored copy replaces its em dash.
+- Breaking: `WireCategory` has 20 new variants, and `WireCategory::ALL` 31 entries.
+
 ## [4.0.0-beta.1] - 2026-10-13
 
 ### Added
