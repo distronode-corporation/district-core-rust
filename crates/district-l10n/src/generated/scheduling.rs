@@ -482,6 +482,15 @@ pub fn common_saving(l: Locale) -> &'static str {
     }
 }
 
+/// `day.not_bookable`
+#[must_use]
+pub fn day_not_bookable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not bookable",
+        Locale::FrCa => "Not bookable",
+    }
+}
+
 /// `days.label`
 #[must_use]
 pub fn days_label(l: Locale, days: i64) -> String {
@@ -1241,6 +1250,114 @@ pub fn hosts_title(l: Locale) -> &'static str {
     }
 }
 
+/// `hours.add_range`
+#[must_use]
+pub fn hours_add_range(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add range",
+        Locale::FrCa => "Add range",
+    }
+}
+
+/// `hours.copy_to_weekdays`
+#[must_use]
+pub fn hours_copy_to_weekdays(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Copy to all weekdays",
+        Locale::FrCa => "Copy to all weekdays",
+    }
+}
+
+/// `hours.date_range`
+#[must_use]
+pub fn hours_date_range(l: Locale, start: &str, end: &str) -> String {
+    match l {
+        Locale::En => format!("{start} to {end}"),
+        Locale::FrCa => format!("{start} to {end}"),
+    }
+}
+
+/// `hours.none_at_all`
+#[must_use]
+pub fn hours_none_at_all(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not bookable on any day yet.",
+        Locale::FrCa => "Not bookable on any day yet.",
+    }
+}
+
+/// `hours.not_bookable`
+#[must_use]
+pub fn hours_not_bookable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not bookable",
+        Locale::FrCa => "Not bookable",
+    }
+}
+
+/// `hours.nothing_to_save`
+#[must_use]
+pub fn hours_nothing_to_save(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Nothing to save.",
+        Locale::FrCa => "Nothing to save.",
+    }
+}
+
+/// `hours.out_of_office`
+#[must_use]
+pub fn hours_out_of_office(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Out of office",
+        Locale::FrCa => "Out of office",
+    }
+}
+
+/// `hours.range`
+#[must_use]
+pub fn hours_range(l: Locale, start: &str, end: &str) -> String {
+    match l {
+        Locale::En => format!("{start} to {end}"),
+        Locale::FrCa => format!("{start} to {end}"),
+    }
+}
+
+/// `hours.saved`
+#[must_use]
+pub fn hours_saved(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Working hours saved",
+        Locale::FrCa => "Working hours saved",
+    }
+}
+
+/// `hours.time_range`
+#[must_use]
+pub fn hours_time_range(l: Locale, start: &str, end: &str) -> String {
+    match l {
+        Locale::En => format!("{start} to {end}"),
+        Locale::FrCa => format!("{start} to {end}"),
+    }
+}
+
+/// `hours.title`
+#[must_use]
+pub fn hours_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your working hours",
+        Locale::FrCa => "Your working hours",
+    }
+}
+
+/// `hours.unavailable`
+#[must_use]
+pub fn hours_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unavailable",
+        Locale::FrCa => "Unavailable",
+    }
+}
+
 /// `location.built_in_video`
 #[must_use]
 pub fn location_built_in_video(l: Locale) -> &'static str {
@@ -1328,6 +1445,222 @@ pub fn not_public(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not public",
         Locale::FrCa => "Not public",
+    }
+}
+
+/// `override.add_button`
+#[must_use]
+pub fn override_add_button(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add override",
+        Locale::FrCa => "Add override",
+    }
+}
+
+/// `override.add_title`
+#[must_use]
+pub fn override_add_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add an override",
+        Locale::FrCa => "Add an override",
+    }
+}
+
+/// `override.added`
+#[must_use]
+pub fn override_added(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Override added",
+        Locale::FrCa => "Override added",
+    }
+}
+
+/// `override.custom_hours`
+#[must_use]
+pub fn override_custom_hours(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Custom hours",
+        Locale::FrCa => "Custom hours",
+    }
+}
+
+/// `override.date_label`
+#[must_use]
+pub fn override_date_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Date",
+        Locale::FrCa => "Date",
+    }
+}
+
+/// `override.date_missing`
+#[must_use]
+pub fn override_date_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Pick a date.",
+        Locale::FrCa => "Pick a date.",
+    }
+}
+
+/// `override.delete_confirm`
+#[must_use]
+pub fn override_delete_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete override",
+        Locale::FrCa => "Delete override",
+    }
+}
+
+/// `override.delete_group_body`
+#[must_use]
+pub fn override_delete_group_body(l: Locale, days: i64) -> String {
+    match l {
+        Locale::En => format!("All {} days go back to your weekly hours.", crate::format::integer(l, days)),
+        Locale::FrCa => format!("All {} days go back to your weekly hours.", crate::format::integer(l, days)),
+    }
+}
+
+/// `override.delete_single_body`
+#[must_use]
+pub fn override_delete_single_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That day goes back to your weekly hours.",
+        Locale::FrCa => "That day goes back to your weekly hours.",
+    }
+}
+
+/// `override.delete_title`
+#[must_use]
+pub fn override_delete_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete this override?",
+        Locale::FrCa => "Delete this override?",
+    }
+}
+
+/// `override.deleted`
+#[must_use]
+pub fn override_deleted(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Override deleted",
+        Locale::FrCa => "Override deleted",
+    }
+}
+
+/// `override.end_before_start`
+#[must_use]
+pub fn override_end_before_start(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The last day has to be on or after the first.",
+        Locale::FrCa => "The last day has to be on or after the first.",
+    }
+}
+
+/// `override.first_day_label`
+#[must_use]
+pub fn override_first_day_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "First day",
+        Locale::FrCa => "First day",
+    }
+}
+
+/// `override.hours_label`
+#[must_use]
+pub fn override_hours_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Hours that day",
+        Locale::FrCa => "Hours that day",
+    }
+}
+
+/// `override.kind_label`
+#[must_use]
+pub fn override_kind_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "What happens that day",
+        Locale::FrCa => "What happens that day",
+    }
+}
+
+/// `override.last_day_hint`
+#[must_use]
+pub fn override_last_day_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Leave blank for a single day.",
+        Locale::FrCa => "Leave blank for a single day.",
+    }
+}
+
+/// `override.last_day_label`
+#[must_use]
+pub fn override_last_day_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Last day",
+        Locale::FrCa => "Last day",
+    }
+}
+
+/// `override.unavailable`
+#[must_use]
+pub fn override_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unavailable",
+        Locale::FrCa => "Unavailable",
+    }
+}
+
+/// `overrides.empty`
+#[must_use]
+pub fn overrides_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No overrides ahead.",
+        Locale::FrCa => "No overrides ahead.",
+    }
+}
+
+/// `overrides.eyebrow`
+#[must_use]
+pub fn overrides_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Date overrides",
+        Locale::FrCa => "Date overrides",
+    }
+}
+
+/// `overrides.hint`
+#[must_use]
+pub fn overrides_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Days you are away, or working different hours from usual.",
+        Locale::FrCa => "Days you are away, or working different hours from usual.",
+    }
+}
+
+/// `overrides.subtitle`
+#[must_use]
+pub fn overrides_subtitle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Days you are away, or working different hours from usual.",
+        Locale::FrCa => "Days you are away, or working different hours from usual.",
+    }
+}
+
+/// `overrides.title`
+#[must_use]
+pub fn overrides_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Date overrides",
+        Locale::FrCa => "Date overrides",
+    }
+}
+
+/// `overrides.write_empty`
+#[must_use]
+pub fn overrides_write_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No overrides ahead. Add one for a day off or different hours.",
+        Locale::FrCa => "No overrides ahead. Add one for a day off or different hours.",
     }
 }
 
@@ -1673,6 +2006,15 @@ pub fn questions_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Questions",
         Locale::FrCa => "Questions",
+    }
+}
+
+/// `range.to`
+#[must_use]
+pub fn range_to(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "to",
+        Locale::FrCa => "to",
     }
 }
 
@@ -2126,6 +2468,33 @@ pub fn test_email_sent(l: Locale, address: &str) -> String {
     }
 }
 
+/// `time.format_error`
+#[must_use]
+pub fn time_format_error(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Enter a time as HH:MM.",
+        Locale::FrCa => "Enter a time as HH:MM.",
+    }
+}
+
+/// `time.order_error`
+#[must_use]
+pub fn time_order_error(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The end has to be after the start.",
+        Locale::FrCa => "The end has to be after the start.",
+    }
+}
+
+/// `time.overlap_error`
+#[must_use]
+pub fn time_overlap_error(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "These hours overlap another range on this day.",
+        Locale::FrCa => "These hours overlap another range on this day.",
+    }
+}
+
 /// `times.in`
 #[must_use]
 pub fn times_in(l: Locale, zone: &str) -> String {
@@ -2141,6 +2510,33 @@ pub fn unknown_time(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
         Locale::FrCa => "Unknown",
+    }
+}
+
+/// `weekday.friday`
+#[must_use]
+pub fn weekday_friday(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Friday",
+        Locale::FrCa => "Friday",
+    }
+}
+
+/// `weekday.monday`
+#[must_use]
+pub fn weekday_monday(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Monday",
+        Locale::FrCa => "Monday",
+    }
+}
+
+/// `weekday.saturday`
+#[must_use]
+pub fn weekday_saturday(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Saturday",
+        Locale::FrCa => "Saturday",
     }
 }
 
@@ -2204,5 +2600,41 @@ pub fn weekday_short_wed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Wed",
         Locale::FrCa => "Wed",
+    }
+}
+
+/// `weekday.sunday`
+#[must_use]
+pub fn weekday_sunday(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sunday",
+        Locale::FrCa => "Sunday",
+    }
+}
+
+/// `weekday.thursday`
+#[must_use]
+pub fn weekday_thursday(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Thursday",
+        Locale::FrCa => "Thursday",
+    }
+}
+
+/// `weekday.tuesday`
+#[must_use]
+pub fn weekday_tuesday(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Tuesday",
+        Locale::FrCa => "Tuesday",
+    }
+}
+
+/// `weekday.wednesday`
+#[must_use]
+pub fn weekday_wednesday(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Wednesday",
+        Locale::FrCa => "Wednesday",
     }
 }

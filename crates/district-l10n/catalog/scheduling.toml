@@ -378,6 +378,13 @@ screen = "scheduling"
 tier = "T3"
 note = "A save button while the save is on its way."
 
+[day.not_bookable]
+en = "Not bookable"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A day with no working hours."
+
 [days.label]
 en.one = "{days} day ahead"
 en.other = "{days} days ahead"
@@ -963,6 +970,93 @@ screen = "scheduling event type hosts"
 tier = "T3"
 note = "The hosts dialog's title, and the button that opens it."
 
+[hours.add_range]
+en = "Add range"
+ctx = "button"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "Adds a window to a day, 9 to 5."
+
+[hours.copy_to_weekdays]
+en = "Copy to all weekdays"
+ctx = "button"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "Gives every other weekday this day's windows."
+
+[hours.date_range]
+en = "{start} to {end}"
+ctx = "format"
+screen = "scheduling hours"
+tier = "T3"
+args = { start = "str", end = "str" }
+note = "A run of days off or changed hours, e.g. \"Dec 24, 2026 to Dec 31, 2026\". {start} and {end} are dates."
+
+[hours.none_at_all]
+en = "Not bookable on any day yet."
+ctx = "body"
+screen = "scheduling hours"
+tier = "T3"
+note = "The working hours summary when no day has hours."
+
+[hours.not_bookable]
+en = "Not bookable"
+ctx = "label"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "A day with no window in the week editor."
+
+[hours.nothing_to_save]
+en = "Nothing to save."
+ctx = "toast"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "A save with no change: nothing was sent."
+
+[hours.out_of_office]
+en = "Out of office"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A date override on which the member is away and takes no bookings."
+
+[hours.range]
+en = "{start} to {end}"
+ctx = "format"
+screen = "scheduling hours"
+tier = "T3"
+args = { start = "str", end = "str" }
+note = "One window of working hours, e.g. \"9:00 a.m. to 5:00 p.m.\". {start} and {end} are times of day; several are joined with commas."
+
+[hours.saved]
+en = "Working hours saved"
+ctx = "toast"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "The week was saved."
+
+[hours.time_range]
+en = "{start} to {end}"
+ctx = "format"
+screen = "scheduling hours"
+tier = "T3"
+args = { start = "str", end = "str" }
+note = "The hours on a date override, e.g. \"12:00 p.m. to 4:00 p.m.\". {start} and {end} are times of day."
+
+[hours.title]
+en = "Your working hours"
+ctx = "title"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "The week editor's title, and the button that opens it."
+
+[hours.unavailable]
+en = "Unavailable"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A date override on which the member takes no bookings."
+
 [location.built_in_video]
 en = "Built-in video"
 ctx = "label"
@@ -1033,6 +1127,175 @@ ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
 note = "In place of an event type's booking link when it has none: archived, switched off, unlisted, or the booking pages have no address yet. A state, not a missing value."
+
+[override.add_button]
+en = "Add override"
+ctx = "button"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.add_title]
+en = "Add an override"
+ctx = "title"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.added]
+en = "Override added"
+ctx = "toast"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.custom_hours]
+en = "Custom hours"
+ctx = "label"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.date_label]
+en = "Date"
+ctx = "label"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.date_missing]
+en = "Pick a date."
+ctx = "error"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day). Nothing was sent."
+
+[override.delete_confirm]
+en = "Delete override"
+ctx = "button"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.delete_group_body]
+en = "All {days} days go back to your weekly hours."
+ctx = "body"
+screen = "scheduling hours editor"
+tier = "T3"
+args = { days = "int" }
+note = "What deleting a run of days off does: all {days} days go back to the weekly hours."
+
+[override.delete_single_body]
+en = "That day goes back to your weekly hours."
+ctx = "body"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.delete_title]
+en = "Delete this override?"
+ctx = "title"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.deleted]
+en = "Override deleted"
+ctx = "toast"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.end_before_start]
+en = "The last day has to be on or after the first."
+ctx = "error"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day). Nothing was sent."
+
+[override.first_day_label]
+en = "First day"
+ctx = "label"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.hours_label]
+en = "Hours that day"
+ctx = "label"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.kind_label]
+en = "What happens that day"
+ctx = "label"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.last_day_hint]
+en = "Leave blank for a single day."
+ctx = "body"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.last_day_label]
+en = "Last day"
+ctx = "label"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[override.unavailable]
+en = "Unavailable"
+ctx = "label"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
+
+[overrides.empty]
+en = "No overrides ahead."
+ctx = "body"
+screen = "scheduling hours"
+tier = "T3"
+note = "No override still to come."
+
+[overrides.eyebrow]
+en = "Date overrides"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "Heading of the dated overrides of the working hours."
+
+[overrides.hint]
+en = "Days you are away, or working different hours from usual."
+ctx = "body"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "Under the overrides editor's title."
+
+[overrides.subtitle]
+en = "Days you are away, or working different hours from usual."
+ctx = "body"
+screen = "scheduling hours"
+tier = "T3"
+note = "Under the overrides' heading: what an override is."
+
+[overrides.title]
+en = "Date overrides"
+ctx = "title"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "The overrides editor's title, and the button that opens it."
+
+[overrides.write_empty]
+en = "No overrides ahead. Add one for a day off or different hours."
+ctx = "body"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "The overrides editor with nothing still to come."
 
 [overview.booking]
 en = "Booking"
@@ -1300,6 +1563,13 @@ ctx = "title"
 screen = "scheduling event type questions"
 tier = "T3"
 note = "The questions dialog's title, and the button that opens it."
+
+[range.to]
+en = "to"
+ctx = "label"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "Between a start and an end time field, as in \"9:00 to 17:00\"."
 
 [reassign.body]
 en = "The booking keeps its time. Both hosts get an email about the change."
@@ -1653,6 +1923,27 @@ tier = "T3"
 args = { address = "str" }
 note = "The test email was handed over for sending. {address} is where it went."
 
+[time.format_error]
+en = "Enter a time as HH:MM."
+ctx = "error"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "A time is not written as HH:MM. Nothing was sent."
+
+[time.order_error]
+en = "The end has to be after the start."
+ctx = "error"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "A window ends before it starts. Nothing was sent."
+
+[time.overlap_error]
+en = "These hours overlap another range on this day."
+ctx = "error"
+screen = "scheduling hours editor"
+tier = "T3"
+note = "A window overlaps another on the same day. Nothing was sent."
+
 [times.in]
 en = "Times in {zone}"
 ctx = "label"
@@ -1667,6 +1958,27 @@ ctx = "label"
 screen = "scheduling"
 tier = "T3"
 note = "Shown in place of a date and time the service sent in a form that cannot be read."
+
+[weekday.friday]
+en = "Friday"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A day of the week, standing alone, as a row of the working hours."
+
+[weekday.monday]
+en = "Monday"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A day of the week, standing alone, as a row of the working hours."
+
+[weekday.saturday]
+en = "Saturday"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A day of the week, standing alone, as a row of the working hours."
 
 [weekday.short_fri]
 en = "Fri"
@@ -1716,3 +2028,31 @@ ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
 note = "The abbreviated weekday name (Wed), in the working hours summary (\"Mon to Fri, 9:00 to 17:00\")."
+
+[weekday.sunday]
+en = "Sunday"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A day of the week, standing alone, as a row of the working hours."
+
+[weekday.thursday]
+en = "Thursday"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A day of the week, standing alone, as a row of the working hours."
+
+[weekday.tuesday]
+en = "Tuesday"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A day of the week, standing alone, as a row of the working hours."
+
+[weekday.wednesday]
+en = "Wednesday"
+ctx = "label"
+screen = "scheduling hours"
+tier = "T3"
+note = "A day of the week, standing alone, as a row of the working hours."
