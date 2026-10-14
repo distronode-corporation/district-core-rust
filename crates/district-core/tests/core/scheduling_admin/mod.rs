@@ -7,6 +7,7 @@ mod common;
 mod event_types;
 mod hours;
 mod overview;
+mod team;
 
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 

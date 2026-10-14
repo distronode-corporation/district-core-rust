@@ -1970,6 +1970,63 @@ pub fn location_teams(l: Locale) -> &'static str {
     }
 }
 
+/// `member.count`
+#[must_use]
+pub fn member_count(l: Locale, count: i64) -> String {
+    match l {
+        Locale::En => {
+            if count == 1 {
+                format!("{} member", crate::format::integer(l, count))
+            } else {
+                format!("{} members", crate::format::integer(l, count))
+            }
+        }
+        Locale::FrCa => {
+            if count == 1 {
+                format!("{} member", crate::format::integer(l, count))
+            } else {
+                format!("{} members", crate::format::integer(l, count))
+            }
+        }
+    }
+}
+
+/// `member.subtitle_with_role`
+#[must_use]
+pub fn member_subtitle_with_role(l: Locale, email: &str, role: &str) -> String {
+    match l {
+        Locale::En => format!("{email} · {role}"),
+        Locale::FrCa => format!("{email} · {role}"),
+    }
+}
+
+/// `members.degraded`
+#[must_use]
+pub fn members_degraded(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The workspace's members could not be read, so roles are not shown.",
+        Locale::FrCa => "The workspace's members could not be read, so roles are not shown.",
+    }
+}
+
+/// `members.empty`
+#[must_use]
+pub fn members_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Nobody else is in this workspace yet.",
+        Locale::FrCa => "Nobody else is in this workspace yet.",
+    }
+}
+
+/// `members.eyebrow`
+#[must_use]
+pub fn members_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Members",
+        Locale::FrCa => "Members",
+    }
+}
+
 /// `next.booking_line`
 #[must_use]
 pub fn next_booking_line(l: Locale, when: &str, who: &str, event_type: &str) -> String {
@@ -2987,6 +3044,537 @@ pub fn state_inactive(l: Locale) -> &'static str {
     match l {
         Locale::En => "Inactive",
         Locale::FrCa => "Inactive",
+    }
+}
+
+/// `stranded.eyebrow`
+#[must_use]
+pub fn stranded_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Someone who has left still has bookings",
+        Locale::FrCa => "Someone who has left still has bookings",
+    }
+}
+
+/// `team.add`
+#[must_use]
+pub fn team_add(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add member",
+        Locale::FrCa => "Add member",
+    }
+}
+
+/// `team.add_done`
+#[must_use]
+pub fn team_add_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Host added to the team",
+        Locale::FrCa => "Host added to the team",
+    }
+}
+
+/// `team.add_label`
+#[must_use]
+pub fn team_add_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Host",
+        Locale::FrCa => "Host",
+    }
+}
+
+/// `team.add_none`
+#[must_use]
+pub fn team_add_none(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Every host is already in this team.",
+        Locale::FrCa => "Every host is already in this team.",
+    }
+}
+
+/// `team.add_placeholder`
+#[must_use]
+pub fn team_add_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose a host",
+        Locale::FrCa => "Choose a host",
+    }
+}
+
+/// `team.add_required`
+#[must_use]
+pub fn team_add_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose a host to add.",
+        Locale::FrCa => "Choose a host to add.",
+    }
+}
+
+/// `team.archive`
+#[must_use]
+pub fn team_archive(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Archive account",
+        Locale::FrCa => "Archive account",
+    }
+}
+
+/// `team.archive_blocked`
+#[must_use]
+pub fn team_archive_blocked(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Reassign or cancel their upcoming bookings first.",
+        Locale::FrCa => "Reassign or cancel their upcoming bookings first.",
+    }
+}
+
+/// `team.archive_body`
+#[must_use]
+pub fn team_archive_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "They can no longer sign in, they are skipped in routing, and their event types stop taking bookings. The account is kept.",
+        Locale::FrCa => "They can no longer sign in, they are skipped in routing, and their event types stop taking bookings. The account is kept.",
+    }
+}
+
+/// `team.archive_confirm`
+#[must_use]
+pub fn team_archive_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Archive account",
+        Locale::FrCa => "Archive account",
+    }
+}
+
+/// `team.archive_counting`
+#[must_use]
+pub fn team_archive_counting(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Checking their upcoming bookings…",
+        Locale::FrCa => "Checking their upcoming bookings…",
+    }
+}
+
+/// `team.archive_done`
+#[must_use]
+pub fn team_archive_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Scheduler account closed",
+        Locale::FrCa => "Scheduler account closed",
+    }
+}
+
+/// `team.archive_done_named`
+#[must_use]
+pub fn team_archive_done_named(l: Locale, name: &str) -> String {
+    match l {
+        Locale::En => format!("{name}'s scheduler account is closed"),
+        Locale::FrCa => format!("{name}'s scheduler account is closed"),
+    }
+}
+
+/// `team.archive_keep`
+#[must_use]
+pub fn team_archive_keep(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Keep account",
+        Locale::FrCa => "Keep account",
+    }
+}
+
+/// `team.archive_refused`
+#[must_use]
+pub fn team_archive_refused(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That account could not be archived. It may still hold upcoming bookings, it may be the workspace owner, or it may be archived already.",
+        Locale::FrCa => "That account could not be archived. It may still hold upcoming bookings, it may be the workspace owner, or it may be archived already.",
+    }
+}
+
+/// `team.archive_title`
+#[must_use]
+pub fn team_archive_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Archive this account?",
+        Locale::FrCa => "Archive this account?",
+    }
+}
+
+/// `team.archive_title_named`
+#[must_use]
+pub fn team_archive_title_named(l: Locale, name: &str) -> String {
+    match l {
+        Locale::En => format!("Archive {name}'s account?"),
+        Locale::FrCa => format!("Archive {name}'s account?"),
+    }
+}
+
+/// `team.close`
+#[must_use]
+pub fn team_close(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Done",
+        Locale::FrCa => "Done",
+    }
+}
+
+/// `team.create`
+#[must_use]
+pub fn team_create(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Create team",
+        Locale::FrCa => "Create team",
+    }
+}
+
+/// `team.create_done`
+#[must_use]
+pub fn team_create_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Team created",
+        Locale::FrCa => "Team created",
+    }
+}
+
+/// `team.create_title`
+#[must_use]
+pub fn team_create_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "New team",
+        Locale::FrCa => "New team",
+    }
+}
+
+/// `team.delete_body`
+#[must_use]
+pub fn team_delete_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Event types that route to this team stop rotating through it.",
+        Locale::FrCa => "Event types that route to this team stop rotating through it.",
+    }
+}
+
+/// `team.delete_confirm`
+#[must_use]
+pub fn team_delete_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete team",
+        Locale::FrCa => "Delete team",
+    }
+}
+
+/// `team.delete_done`
+#[must_use]
+pub fn team_delete_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Team deleted",
+        Locale::FrCa => "Team deleted",
+    }
+}
+
+/// `team.delete_keep`
+#[must_use]
+pub fn team_delete_keep(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Keep team",
+        Locale::FrCa => "Keep team",
+    }
+}
+
+/// `team.delete_title`
+#[must_use]
+pub fn team_delete_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete this team?",
+        Locale::FrCa => "Delete this team?",
+    }
+}
+
+/// `team.delete_title_named`
+#[must_use]
+pub fn team_delete_title_named(l: Locale, name: &str) -> String {
+    match l {
+        Locale::En => format!("Delete {name}?"),
+        Locale::FrCa => format!("Delete {name}?"),
+    }
+}
+
+/// `team.members_button`
+#[must_use]
+pub fn team_members_button(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Hosts",
+        Locale::FrCa => "Hosts",
+    }
+}
+
+/// `team.members_empty`
+#[must_use]
+pub fn team_members_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No hosts yet. Nothing routes through this team until one is added.",
+        Locale::FrCa => "No hosts yet. Nothing routes through this team until one is added.",
+    }
+}
+
+/// `team.members_hint`
+#[must_use]
+pub fn team_members_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A lower routing priority is offered a booking first.",
+        Locale::FrCa => "A lower routing priority is offered a booking first.",
+    }
+}
+
+/// `team.name_label`
+#[must_use]
+pub fn team_name_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Name",
+        Locale::FrCa => "Name",
+    }
+}
+
+/// `team.name_placeholder`
+#[must_use]
+pub fn team_name_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Front desk",
+        Locale::FrCa => "Front desk",
+    }
+}
+
+/// `team.name_required`
+#[must_use]
+pub fn team_name_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Give the team a name.",
+        Locale::FrCa => "Give the team a name.",
+    }
+}
+
+/// `team.name_too_long`
+#[must_use]
+pub fn team_name_too_long(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That name is longer than 200 characters.",
+        Locale::FrCa => "That name is longer than 200 characters.",
+    }
+}
+
+/// `team.priority_done`
+#[must_use]
+pub fn team_priority_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Routing priority saved",
+        Locale::FrCa => "Routing priority saved",
+    }
+}
+
+/// `team.priority_invalid`
+#[must_use]
+pub fn team_priority_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A routing priority is a whole number, zero or more.",
+        Locale::FrCa => "A routing priority is a whole number, zero or more.",
+    }
+}
+
+/// `team.priority_label`
+#[must_use]
+pub fn team_priority_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Routing priority",
+        Locale::FrCa => "Routing priority",
+    }
+}
+
+/// `team.remove`
+#[must_use]
+pub fn team_remove(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Remove",
+        Locale::FrCa => "Remove",
+    }
+}
+
+/// `team.remove_body`
+#[must_use]
+pub fn team_remove_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Bookings stop routing to them through this team. Their routing priority is not kept.",
+        Locale::FrCa => "Bookings stop routing to them through this team. Their routing priority is not kept.",
+    }
+}
+
+/// `team.remove_done`
+#[must_use]
+pub fn team_remove_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Host removed from the team",
+        Locale::FrCa => "Host removed from the team",
+    }
+}
+
+/// `team.remove_keep`
+#[must_use]
+pub fn team_remove_keep(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Keep them",
+        Locale::FrCa => "Keep them",
+    }
+}
+
+/// `team.remove_title`
+#[must_use]
+pub fn team_remove_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Remove this host?",
+        Locale::FrCa => "Remove this host?",
+    }
+}
+
+/// `team.rename`
+#[must_use]
+pub fn team_rename(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save name",
+        Locale::FrCa => "Save name",
+    }
+}
+
+/// `team.rename_done`
+#[must_use]
+pub fn team_rename_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Team renamed",
+        Locale::FrCa => "Team renamed",
+    }
+}
+
+/// `team.role_agency`
+#[must_use]
+pub fn team_role_agency(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Agency",
+        Locale::FrCa => "Agency",
+    }
+}
+
+/// `team.role_client`
+#[must_use]
+pub fn team_role_client(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Client",
+        Locale::FrCa => "Client",
+    }
+}
+
+/// `team.role_removed`
+#[must_use]
+pub fn team_role_removed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Removed from the workspace",
+        Locale::FrCa => "Removed from the workspace",
+    }
+}
+
+/// `team.role_viewer`
+#[must_use]
+pub fn team_role_viewer(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Viewer",
+        Locale::FrCa => "Viewer",
+    }
+}
+
+/// `team.save_priority`
+#[must_use]
+pub fn team_save_priority(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save priority",
+        Locale::FrCa => "Save priority",
+    }
+}
+
+/// `team.slug_read_only_hint`
+#[must_use]
+pub fn team_slug_read_only_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The booking-page address cannot be changed here.",
+        Locale::FrCa => "The booking-page address cannot be changed here.",
+    }
+}
+
+/// `team.state_absent`
+#[must_use]
+pub fn team_state_absent(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not set up yet",
+        Locale::FrCa => "Not set up yet",
+    }
+}
+
+/// `team.state_archived`
+#[must_use]
+pub fn team_state_archived(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Archived",
+        Locale::FrCa => "Archived",
+    }
+}
+
+/// `team.state_host`
+#[must_use]
+pub fn team_state_host(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Host",
+        Locale::FrCa => "Host",
+    }
+}
+
+/// `team.stranded_many`
+#[must_use]
+pub fn team_stranded_many(l: Locale, subject: &str) -> String {
+    match l {
+        Locale::En => format!("{subject} are no longer in this workspace but still hold upcoming bookings, so the scheduler kept their accounts open. Reassign or cancel those bookings, then archive the accounts."),
+        Locale::FrCa => format!("{subject} are no longer in this workspace but still hold upcoming bookings, so the scheduler kept their accounts open. Reassign or cancel those bookings, then archive the accounts."),
+    }
+}
+
+/// `team.stranded_one`
+#[must_use]
+pub fn team_stranded_one(l: Locale, subject: &str) -> String {
+    match l {
+        Locale::En => format!("{subject} is no longer in this workspace but still holds upcoming bookings, so the scheduler kept their account open. Reassign or cancel those bookings, then archive the account."),
+        Locale::FrCa => format!("{subject} is no longer in this workspace but still holds upcoming bookings, so the scheduler kept their account open. Reassign or cancel those bookings, then archive the account."),
+    }
+}
+
+/// `teams.empty`
+#[must_use]
+pub fn teams_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No teams yet.",
+        Locale::FrCa => "No teams yet.",
+    }
+}
+
+/// `teams.eyebrow`
+#[must_use]
+pub fn teams_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Teams",
+        Locale::FrCa => "Teams",
+    }
+}
+
+/// `teams.subtitle`
+#[must_use]
+pub fn teams_subtitle(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A team rotates bookings through its hosts, in routing-priority order.",
+        Locale::FrCa => "A team rotates bookings through its hosts, in routing-priority order.",
     }
 }
 

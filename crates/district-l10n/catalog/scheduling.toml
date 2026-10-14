@@ -1537,6 +1537,40 @@ screen = "scheduling event types"
 tier = "T3"
 note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
 
+[member.count]
+en.one = "{count} member"
+en.other = "{count} members"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+args = { count = "int" }
+
+[member.subtitle_with_role]
+en = "{email} · {role}"
+ctx = "format"
+screen = "scheduling team"
+tier = "T3"
+args = { email = "str", role = "str" }
+
+[members.degraded]
+en = "The workspace's members could not be read, so roles are not shown."
+ctx = "body"
+screen = "scheduling team"
+tier = "T3"
+note = "Shown instead of role labels when the membership read failed. Without it every host would be captioned \"Removed from the workspace\", which is a false accusation drawn from an absent read rather than from a fact."
+
+[members.empty]
+en = "Nobody else is in this workspace yet."
+ctx = "body"
+screen = "scheduling team"
+tier = "T3"
+
+[members.eyebrow]
+en = "Members"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+
 [next.booking_line]
 en = "{when}, {who}, {event_type}"
 ctx = "format"
@@ -2331,6 +2365,387 @@ ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
 note = "Badge: the event type is switched off."
+
+[stranded.eyebrow]
+en = "Someone who has left still has bookings"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+
+[team.add]
+en = "Add member"
+ctx = "button"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.add_done]
+en = "Host added to the team"
+ctx = "toast"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.add_label]
+en = "Host"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.add_none]
+en = "Every host is already in this team."
+ctx = "body"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.add_placeholder]
+en = "Choose a host"
+ctx = "placeholder"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.add_required]
+en = "Choose a host to add."
+ctx = "error"
+screen = "scheduling team writes"
+tier = "T2"
+
+[team.archive]
+en = "Archive account"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.archive_blocked]
+en = "Reassign or cancel their upcoming bookings first."
+ctx = "body"
+screen = "scheduling team writes"
+tier = "T2"
+note = "The archive is blocked until the upcoming-booking count has been read and is zero, which is the web's `canArchive` and not a caution of our own. The fork refuses with a 409 while the user still hosts anything, so offering the button before the read has landed offers a refusal."
+
+[team.archive_body]
+en = "They can no longer sign in, they are skipped in routing, and their event types stop taking bookings. The account is kept."
+ctx = "body"
+screen = "scheduling team writes"
+tier = "T2"
+note = "Says what a soft delete actually does. The row and its links survive; the member cannot sign in, is skipped in routing, and their event types are deactivated."
+
+[team.archive_confirm]
+en = "Archive account"
+ctx = "button"
+screen = "scheduling team writes"
+tier = "T2"
+
+[team.archive_counting]
+en = "Checking their upcoming bookings…"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.archive_done]
+en = "Scheduler account closed"
+ctx = "toast"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.archive_done_named]
+en = "{name}'s scheduler account is closed"
+ctx = "toast"
+screen = "scheduling team writes"
+tier = "T3"
+args = { name = "str" }
+note = "{name} is a person's name."
+
+[team.archive_keep]
+en = "Keep account"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.archive_refused]
+en = "That account could not be archived. It may still hold upcoming bookings, it may be the workspace owner, or it may be archived already."
+ctx = "error"
+screen = "scheduling team writes"
+tier = "T2"
+note = "Enumerates because this client cannot tell the four refusals apart. The fork answers 409 (still hosting bookings), 403 (not the owner), 400 (is the workspace owner, or already archived) and 404 (gone), and every one of them arrives as `SchedulingAdminError/unknown`, the status is collapsed by `error(forStatus:code:)` before a screen sees it."
+
+[team.archive_title]
+en = "Archive this account?"
+ctx = "title"
+screen = "scheduling team writes"
+tier = "T2"
+
+[team.archive_title_named]
+en = "Archive {name}'s account?"
+ctx = "title"
+screen = "scheduling team writes"
+tier = "T2"
+args = { name = "str" }
+note = "{name} is a person's name."
+
+[team.close]
+en = "Done"
+ctx = "button"
+screen = "scheduling team writes"
+tier = "T3"
+note = "The edit sheet's way out is \"Done\", not \"Cancel\", because its writes have already landed. Every control on it saves on its own button; calling the dismissal \"Cancel\" would promise an undo that does not exist."
+
+[team.create]
+en = "Create team"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.create_done]
+en = "Team created"
+ctx = "toast"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.create_title]
+en = "New team"
+ctx = "title"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.delete_body]
+en = "Event types that route to this team stop rotating through it."
+ctx = "body"
+screen = "scheduling team writes"
+tier = "T2"
+
+[team.delete_confirm]
+en = "Delete team"
+ctx = "button"
+screen = "scheduling team writes"
+tier = "T2"
+
+[team.delete_done]
+en = "Team deleted"
+ctx = "toast"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.delete_keep]
+en = "Keep team"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.delete_title]
+en = "Delete this team?"
+ctx = "title"
+screen = "scheduling team writes"
+tier = "T2"
+
+[team.delete_title_named]
+en = "Delete {name}?"
+ctx = "title"
+screen = "scheduling team writes"
+tier = "T2"
+args = { name = "str" }
+note = "{name} is a scheduling team's name."
+
+[team.members_button]
+en = "Hosts"
+ctx = "button"
+screen = "scheduling team writes"
+tier = "T3"
+note = "The word on the control that opens the member editor. The sheet itself is titled with the team's name, so the button has to say what it leads to rather than repeat the row it sits on."
+
+[team.members_empty]
+en = "No hosts yet. Nothing routes through this team until one is added."
+ctx = "body"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.members_hint]
+en = "A lower routing priority is offered a booking first."
+ctx = "a11y"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.name_label]
+en = "Name"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.name_placeholder]
+en = "Front desk"
+ctx = "placeholder"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.name_required]
+en = "Give the team a name."
+ctx = "error"
+screen = "scheduling team writes"
+tier = "T2"
+note = "The one client-side rule, and it is the web's: trimmed, non-empty."
+
+[team.name_too_long]
+en = "That name is longer than 200 characters."
+ctx = "error"
+screen = "scheduling team writes"
+tier = "T2"
+note = "The catalog's own ceiling (`z.string().min(1).max(200)`), mirrored so the button is honest rather than to re-validate the server."
+
+[team.priority_done]
+en = "Routing priority saved"
+ctx = "toast"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.priority_invalid]
+en = "A routing priority is a whole number, zero or more."
+ctx = "error"
+screen = "scheduling team writes"
+tier = "T2"
+note = "Refuses an empty field and a decimal rather than coercing either, which is the web's `parsePriority` rule. `Int(\"\")` is nil in Swift and `Number(\"\")` is 0 in JavaScript, so the web needs an explicit empty check where this does not, the sentence is what has to match."
+
+[team.priority_label]
+en = "Routing priority"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.remove]
+en = "Remove"
+ctx = "button"
+screen = "scheduling team writes"
+tier = "T2"
+
+[team.remove_body]
+en = "Bookings stop routing to them through this team. Their routing priority is not kept."
+ctx = "body"
+screen = "scheduling team writes"
+tier = "T2"
+
+[team.remove_done]
+en = "Host removed from the team"
+ctx = "toast"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.remove_keep]
+en = "Keep them"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.remove_title]
+en = "Remove this host?"
+ctx = "title"
+screen = "scheduling team writes"
+tier = "T2"
+note = "A confirmation the web does not have, and the divergence is deliberate. The web team page removes a member on one click."
+
+[team.rename]
+en = "Save name"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.rename_done]
+en = "Team renamed"
+ctx = "toast"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.role_agency]
+en = "Agency"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+note = "A workspace member's role, as the scheduling team screen names it: the agency that runs the workspace (an administrator)."
+
+[team.role_client]
+en = "Client"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+note = "A workspace member's role, as the scheduling team screen names it: a member of the client business."
+
+[team.role_removed]
+en = "Removed from the workspace"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+note = "Shown in the role column for a scheduling host who is no longer a member of the workspace."
+
+[team.role_viewer]
+en = "Viewer"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+note = "A workspace member's role, as the scheduling team screen names it: read-only access."
+
+[team.save_priority]
+en = "Save priority"
+ctx = "label"
+screen = "scheduling team writes"
+tier = "T3"
+
+[team.slug_read_only_hint]
+en = "The booking-page address cannot be changed here."
+ctx = "a11y"
+screen = "scheduling team writes"
+tier = "T3"
+note = "The slug is not editable here, and that is the web's decision carried over rather than an unfinished form. `teams.patch` accepts a slug, and the fork routes public team booking pages by slug, so re-slugging breaks every link already handed out."
+
+[team.state_absent]
+en = "Not set up yet"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+note = "Badge on a workspace member who has no scheduling account yet."
+
+[team.state_archived]
+en = "Archived"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+note = "Badge on a scheduling host whose account is archived and takes no bookings."
+
+[team.state_host]
+en = "Host"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+note = "Badge on a member whose scheduling account takes bookings."
+
+[team.stranded_many]
+en = "{subject} are no longer in this workspace but still hold upcoming bookings, so the scheduler kept their accounts open. Reassign or cancel those bookings, then archive the accounts."
+ctx = "body"
+screen = "scheduling team writes"
+tier = "T3"
+args = { subject = "str" }
+note = "{subject} is two or more names joined as a list (A, B and C)."
+
+[team.stranded_one]
+en = "{subject} is no longer in this workspace but still holds upcoming bookings, so the scheduler kept their account open. Reassign or cancel those bookings, then archive the account."
+ctx = "body"
+screen = "scheduling team writes"
+tier = "T3"
+args = { subject = "str" }
+note = "{subject} is one person's name."
+
+[teams.empty]
+en = "No teams yet."
+ctx = "body"
+screen = "scheduling team"
+tier = "T3"
+
+[teams.eyebrow]
+en = "Teams"
+ctx = "label"
+screen = "scheduling team"
+tier = "T3"
+
+[teams.subtitle]
+en = "A team rotates bookings through its hosts, in routing-priority order."
+ctx = "title"
+screen = "scheduling team"
+tier = "T3"
 
 [test.email_not_sent]
 en = "The booking system did not send the test email."
