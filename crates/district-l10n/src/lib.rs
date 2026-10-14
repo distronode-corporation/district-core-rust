@@ -10,6 +10,7 @@
 //!   `catalog/core.toml` by `tools/l10n/l10n.py`. Each is a function of the
 //!   locale, so a missing key fails the build rather than showing nothing.
 //! - [`support_strings`]: the support area's, from `catalog/support.toml`.
+//! - [`numbers_strings`]: managing phone numbers, from `catalog/numbers.toml`.
 //! - [`api_error_text`]: the sentence for an error code the service sends, from
 //!   `contracts/i18n/api-errors.json` through `catalog/api_errors.toml`.
 //! - [`wire_label`] and [`placeholder_label`]: what a screen shows for a value the
@@ -76,12 +77,19 @@ pub mod wire_strings;
 #[path = "generated/support.rs"]
 pub mod support_strings;
 
+/// The phone numbers screen's sentences and labels for managing the numbers a
+/// workspace holds and its carrier account, from `catalog/numbers.toml`.
+#[rustfmt::skip]
+#[path = "generated/numbers.rs"]
+pub mod numbers_strings;
+
 /// True when every catalog has French for every entry. Until then the French
 /// arm of each generated function carries the English.
 pub const FR_COMPLETE: bool = strings::FR_COMPLETE
     && api_error_strings::FR_COMPLETE
     && wire_strings::FR_COMPLETE
-    && support_strings::FR_COMPLETE;
+    && support_strings::FR_COMPLETE
+    && numbers_strings::FR_COMPLETE;
 
 /// A language the core writes in.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]

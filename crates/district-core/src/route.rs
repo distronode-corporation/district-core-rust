@@ -71,7 +71,8 @@ pub enum Route {
     Hq,
     /// Call analytics and metered usage.
     Analytics,
-    /// The workspace's phone numbers and the numbers for sale, read only.
+    /// The workspace's phone numbers, the numbers for sale, and the carrier
+    /// account behind them. Buying a number stays on the web.
     Marketplace,
     /// The workspace's plan and the account's subscriptions and invoices, read
     /// only.

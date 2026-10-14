@@ -51,8 +51,9 @@
 //!   message ([`LiveState`], [`Notification`]).
 //! - The screens of the third: District HQ with its confirmation in front of
 //!   every change ([`HqScreen`]), analytics and usage with their charts'
-//!   arithmetic ([`AnalyticsScreen`]), phone numbers and billing, read only
-//!   ([`MarketplaceScreen`], [`BillingScreen`]), workflows and the campaign's
+//!   arithmetic ([`AnalyticsScreen`]), phone numbers with the numbers held
+//!   managed short of buying one, which stays on the web ([`MarketplaceScreen`],
+//!   [`NumberAdmin`]), billing, read only ([`BillingScreen`]), workflows and the campaign's
 //!   switch ([`WorkflowsScreen`]), booking pages with the hand-off to the web
 //!   ([`SchedulingScreen`], [`OneTimeUrl`]), the help desk ([`DeskScreen`],
 //!   [`DeskTicketScreen`], [`DeskSettingsView`]), support requests
@@ -122,6 +123,7 @@ mod live;
 mod marketplace;
 mod media;
 mod model;
+mod number_admin;
 mod overview;
 mod paging;
 pub mod palette;
@@ -205,6 +207,12 @@ pub use media::{
     MediaSession, MediaUpdate, MicrophoneState, Participant, TrackKind,
 };
 pub use model::{CoreConfig, Effect, Event, Model, RESTORE_RETRY_FIRST, RESTORE_RETRY_MAX, Ticket};
+pub use number_admin::{
+    A2pForm, CarrierStatus, NumberAdmin, NumberAdminEvent, NumberAnswer, NumberCall,
+    NumberConfirmation, NumberWrite, SipTrunkForm, SipTrunks, TollFreeForm, VerifyService,
+    carrier_balance, carrier_number_count, carrier_state, number_actions_note, numbers_scope_note,
+    sip_trunk_meta, verify_state,
+};
 pub use overview::{
     FINISH_SETUP_ACTION, FINISH_SETUP_BODY, FINISH_SETUP_TITLE, OverviewContent, OverviewScreen,
     SETUP_WEB_PATH,

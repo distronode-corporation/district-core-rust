@@ -270,14 +270,13 @@ fn the_web_marketplace_opens_for_a_member_who_could_buy_there() {
     let viewer = Capabilities::for_role(Some("viewer"));
     assert!(MarketplaceScreen::offers_web(&agency));
     assert!(!MarketplaceScreen::offers_web(&viewer));
+    // Buying is on the web; everything else about a number is here.
     assert_eq!(
-        MarketplaceScreen::read_only_note(&agency),
-        MarketplaceScreen::READ_ONLY
+        MarketplaceScreen::scope_note(&agency),
+        "New numbers cannot be bought in this app. Everything else about a number, \
+         including releasing it, is here."
     );
-    assert_eq!(
-        MarketplaceScreen::read_only_note(&viewer),
-        MarketplaceScreen::READ_ONLY_VIEWER
-    );
+    assert!(MarketplaceScreen::scope_note(&viewer).starts_with("Carrier setup and number changes"));
 }
 
 #[test]

@@ -392,7 +392,8 @@ sign-off requirement.
 
 Every sentence and label the core shows comes from a catalog in
 `crates/district-l10n/catalog/` (`core.toml` for the core's own words,
-`support.toml` for the support area's, the report of AI-generated content among
+`numbers.toml` for managing phone numbers, `support.toml` for the support
+area's, the report of AI-generated content among
 them; `api_errors.toml` and `wire.toml` are generated from `contracts/i18n/`).
 An entry marked `fixed = true` is never translated: the text a report sends to
 the support desk is one, because Distronode's staff read it. Each entry

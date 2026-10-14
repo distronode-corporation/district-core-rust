@@ -1,6 +1,6 @@
-//! Typed calls for phone numbers, read only: the ones for sale and the ones the
-//! workspace holds. Buying and releasing numbers stays on the web, so there is
-//! no call for either here.
+//! Typed calls for phone numbers: the ones for sale and the ones the workspace
+//! holds. Buying a number stays on the web, so there is no call for it here;
+//! managing a number the workspace holds is in `number_admin.rs`.
 
 use district_model::{NumberSearch, NumberSearchResponse, OwnedNumbersResponse};
 

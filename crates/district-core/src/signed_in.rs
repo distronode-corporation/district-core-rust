@@ -34,6 +34,7 @@ use crate::live::LiveState;
 use crate::marketplace::MarketplaceScreen;
 use crate::media::MediaSession;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets, WORKSPACE_SLOTS};
+use crate::number_admin::NUMBER_SLOTS;
 use crate::overview::{OverviewContent, OverviewScreen, SETUP_WEB_PATH, workspace_mismatch};
 use crate::presence::PresenceState;
 use crate::purchase::PurchaseState;
@@ -467,6 +468,7 @@ impl SignedIn {
         effects.extend(self.close_settings(tickets));
         tickets.cancel_each(&WORKSPACE_SLOTS);
         tickets.cancel_each(&COMPOSE_SLOTS);
+        tickets.cancel_each(&NUMBER_SLOTS);
         self.unread = None;
         self.inbox = InboxScreen::default();
         self.calls = CallLog::default();

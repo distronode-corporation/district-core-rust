@@ -351,7 +351,8 @@ endpoint_table! {
     Hq => Post "/api/district/hq",
         workspace: Body, body: Json, retry: Never;
 
-    // Phone numbers. Read only: buying and releasing numbers stays on the web.
+    // Phone numbers. Buying one stays on the web: a number is a recurring
+    // carrier charge, so there is no purchase here.
 
     /// Numbers available to buy.
     NumberSearch => Get "/api/district/workspace/numbers/search",
@@ -359,6 +360,41 @@ endpoint_table! {
     /// The workspace's numbers.
     OwnedNumbers => Get "/api/district/workspace/provider/numbers",
         workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// Points a held number's calls and messages back at the workspace.
+    NumberConfigure => Post "/api/district/workspace/numbers/configure",
+        workspace: Body, body: Json, retry: Never;
+    /// Gives a held number back to the carrier. Cannot be undone.
+    NumberRelease => Post "/api/district/workspace/numbers/release",
+        workspace: Body, body: Json, retry: Never;
+    /// What the carrier knows about a number, named by `phoneNumber`. Billed by
+    /// the carrier for every call, so never repeated.
+    NumberLookup => Get "/api/district/workspace/lookup",
+        workspace: Query, body: Empty, retry: Never;
+    /// Which carriers the workspace has credentials for, and whether each
+    /// accepts them.
+    ProviderStatus => Get "/api/district/workspace/provider/status",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// The workspace's SIP trunks.
+    SipTrunks => Get "/api/district/workspace/sip",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// Creates a SIP trunk, which the carrier bills monthly. There is no route
+    /// that removes one.
+    SipTrunkCreate => Post "/api/district/workspace/sip",
+        workspace: Body, body: Json, retry: Never;
+    /// Whether the one-time passcode sender is in use.
+    VerifyService => Get "/api/district/workspace/verify",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// Turns the one-time passcode sender on (creating one the carrier bills
+    /// for) or off.
+    VerifyServiceSet => Post "/api/district/workspace/verify",
+        workspace: Body, body: Json, retry: Never;
+    /// Files an A2P 10DLC brand and campaign registration, which the carrier
+    /// charges for.
+    A2pRegistration => Post "/api/district/workspace/a2p",
+        workspace: Body, body: Json, retry: Never;
+    /// Files a toll-free number's verification for the carrier's review.
+    TollFreeVerification => Post "/api/district/workspace/tfv",
+        workspace: Body, body: Json, retry: Never;
 
     // Push and presence for this installation. The service identifies the
     // installation from the access token, so no device id is sent.

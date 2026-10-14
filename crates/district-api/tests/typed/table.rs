@@ -22,6 +22,7 @@ const NO_SUCCESS_FLAG: &[&str] = &[
     "enable_scheduling",
     "scheduling_hand_off",
     "billing_hand_off",
+    "provider_status",
 ];
 
 /// Whether two JSON values are the same, numbers compared by value: a total the
@@ -156,7 +157,7 @@ fn assert_sent_as_android_sends(case: &Case, request: &wiremock::Request) {
 #[tokio::test]
 async fn every_method_sends_what_android_sends_and_decodes_the_answer() {
     let cases = cases();
-    assert_eq!(cases.len(), 94, "a method without a row is not tested");
+    assert_eq!(cases.len(), 104, "a method without a row is not tested");
     let names: BTreeSet<&str> = cases.iter().map(|case| case.name).collect();
     assert_eq!(names.len(), cases.len(), "two rows share a name");
     for case in &cases {

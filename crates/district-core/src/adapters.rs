@@ -47,6 +47,7 @@ use tokio::sync::mpsc::UnboundedReceiver;
 use url::Url;
 
 use crate::model::Ticket;
+use crate::number_admin::{NumberAnswer, NumberCall};
 use crate::presence::{Presence, PresenceApi, PresenceSignOut};
 use crate::runner::{Auth, DistrictApi, LiveUpdates};
 use crate::session::{ExchangeFailure, RestoreError, SignInError, SignedInSession};
@@ -345,6 +346,45 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         workspace_id: &str,
     ) -> impl Future<Output = Result<OwnedNumbersResponse, ApiError>> + Send {
         ApiClient::owned_numbers(self, workspace_id)
+    }
+
+    async fn number_call(
+        &self,
+        workspace_id: &str,
+        call: &NumberCall,
+    ) -> Result<NumberAnswer, ApiError> {
+        let ws = workspace_id;
+        Ok(match call {
+            NumberCall::CarrierStatus => {
+                NumberAnswer::CarrierStatus(self.provider_status(ws).await?)
+            }
+            NumberCall::SipTrunks => NumberAnswer::SipTrunks(self.sip_trunks(ws).await?),
+            NumberCall::CreateSipTrunk(draft) => {
+                NumberAnswer::SipTrunkCreated(self.create_sip_trunk(ws, draft).await?)
+            }
+            NumberCall::VerifyService => {
+                NumberAnswer::VerifyService(self.verify_service(ws).await?)
+            }
+            NumberCall::SetVerifyService(enabled) => {
+                NumberAnswer::VerifyService(self.set_verify_service(ws, *enabled).await?)
+            }
+            NumberCall::Configure(number) => {
+                self.configure_number(ws, number).await?;
+                NumberAnswer::Configured
+            }
+            NumberCall::Release(number) => {
+                NumberAnswer::Released(self.release_number(ws, number).await?)
+            }
+            NumberCall::Lookup(number) => {
+                NumberAnswer::LookedUp(self.lookup_number(ws, number).await?)
+            }
+            NumberCall::RegisterA2p(draft) => {
+                NumberAnswer::A2pRegistered(self.register_a2p(ws, draft).await?)
+            }
+            NumberCall::VerifyTollFree(draft) => {
+                NumberAnswer::TollFreeFiled(self.verify_toll_free(ws, draft).await?)
+            }
+        })
     }
 
     fn workspace_billing(

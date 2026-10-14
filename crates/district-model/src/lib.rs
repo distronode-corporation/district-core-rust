@@ -49,6 +49,7 @@ mod inbox;
 mod knowledge;
 mod members;
 mod messaging;
+mod number_admin;
 mod numbers;
 mod overview;
 mod persona;
@@ -129,6 +130,13 @@ pub use messaging::{
     MessagingMetaResponse, MessagingProvider, MessagingResponse, MessagingSetChannelDefault,
     MessagingSetDefault, MessagingTestDetails, MessagingTestResponse, SinchCredentials,
     TelnyxCredentials, TwilioCredentials,
+};
+pub use number_admin::{
+    A2P_CAMPAIGN_TYPES, A2pRegistrationDraft, A2pRegistrationResponse, NumberConfigureResponse,
+    NumberLookupInfo, NumberLookupResponse, NumberReleaseResponse, ProviderStatusEntry,
+    ProviderStatusResponse, SipTrunk, SipTrunkCreateResponse, SipTrunkDraft, SipTrunksResponse,
+    TOLL_FREE_USE_CASES, TollFreeVerificationDraft, TollFreeVerificationResponse,
+    VerifyServiceResponse,
 };
 pub use numbers::{
     AvailableNumber, NumberSearch, NumberSearchResponse, OwnedNumber, OwnedNumbersResponse,

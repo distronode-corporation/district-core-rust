@@ -75,6 +75,7 @@ use crate::inbox::InboxEvent;
 use crate::live::{Notification, NotificationTarget};
 use crate::marketplace::MarketplaceEvent;
 use crate::media::{MediaCredential, MediaUpdate};
+use crate::number_admin::{NumberAnswer, NumberCall};
 use crate::purchase::{BillingDestination, EmbeddedView, PurchaseSetting};
 use crate::ringing::RingEvent;
 use crate::role::Capabilities;
@@ -574,6 +575,13 @@ pub enum Event {
         /// The service's answer.
         result: Result<OwnedNumbersResponse, ApiError>,
     },
+    /// A call managing a held number or the carrier account answered.
+    NumberAdminDone {
+        /// The ticket of [`Effect::NumberAdmin`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<NumberAnswer, ApiError>,
+    },
     /// The workspace's plan was read.
     WorkspaceBillingLoaded {
         /// The ticket of [`Effect::LoadWorkspaceBilling`].
@@ -1050,6 +1058,10 @@ impl Event {
                 result: Err(error),
             }
             | Event::OwnedNumbersLoaded {
+                ticket,
+                result: Err(error),
+            }
+            | Event::NumberAdminDone {
                 ticket,
                 result: Err(error),
             }
@@ -1619,6 +1631,16 @@ pub enum Effect {
         ticket: Ticket,
         /// The workspace.
         workspace_id: String,
+    },
+    /// Make a call managing a held number or the carrier account. The writes
+    /// among them are sent once and never repeated.
+    NumberAdmin {
+        /// Returned in [`Event::NumberAdminDone`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The call.
+        call: NumberCall,
     },
     /// Read the workspace's plan.
     LoadWorkspaceBilling {
@@ -2228,6 +2250,7 @@ impl Effect {
             | Self::LoadUsageHistory { ticket, .. }
             | Self::SearchNumbers { ticket, .. }
             | Self::LoadOwnedNumbers { ticket, .. }
+            | Self::NumberAdmin { ticket, .. }
             | Self::LoadWorkspaceBilling { ticket, .. }
             | Self::LoadAccountBilling { ticket }
             | Self::LoadWorkflows { ticket, .. }
@@ -2362,6 +2385,12 @@ pub(crate) enum Slot {
     NumberSearch,
     NumberSearchTimer,
     OwnedNumbers,
+    NumberCarrier,
+    NumberSip,
+    NumberVerify,
+    NumberWrite,
+    NumberCarrierWrite,
+    NumberLookup,
     WorkspaceBilling,
     AccountBilling,
     Campaign,
@@ -2951,6 +2980,9 @@ impl Model {
             }
             Event::OwnedNumbersLoaded { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.owned_numbers_loaded(ticket, result, tickets))
+            }
+            Event::NumberAdminDone { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.number_admin_done(ticket, result, tickets))
             }
             Event::WorkspaceBillingLoaded { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.workspace_billing_loaded(ticket, result, tickets))

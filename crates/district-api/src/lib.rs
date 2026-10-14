@@ -47,8 +47,15 @@
 //!   change the member confirmed);
 //! - analytics and usage ([`ApiClient::analytics`], [`ApiClient::usage`],
 //!   [`ApiClient::usage_history`]);
-//! - phone numbers and billing, read only ([`ApiClient::number_search`],
-//!   [`ApiClient::owned_numbers`], [`ApiClient::workspace_billing`],
+//! - phone numbers ([`ApiClient::number_search`], [`ApiClient::owned_numbers`]),
+//!   and managing the ones the workspace holds, short of buying one, which
+//!   stays on the web ([`ApiClient::configure_number`],
+//!   [`ApiClient::release_number`], [`ApiClient::lookup_number`],
+//!   [`ApiClient::provider_status`], [`ApiClient::sip_trunks`],
+//!   [`ApiClient::create_sip_trunk`], [`ApiClient::verify_service`],
+//!   [`ApiClient::set_verify_service`], [`ApiClient::register_a2p`],
+//!   [`ApiClient::verify_toll_free`]);
+//! - billing, read only ([`ApiClient::workspace_billing`],
 //!   [`ApiClient::account_billing`]), and the hand-off to the service's
 //!   checkout and billing pages for an app that buys in the app
 //!   ([`ApiClient::billing_hand_off`]);
@@ -117,6 +124,7 @@ mod knowledge;
 mod members;
 mod messaging;
 mod methods;
+mod number_admin;
 mod numbers;
 mod persona;
 mod presence;

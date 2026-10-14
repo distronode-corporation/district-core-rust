@@ -1,11 +1,11 @@
-//! Phone numbers, read only: the numbers the workspace holds, and a search of
-//! the numbers for sale.
+//! Phone numbers: the numbers the workspace holds, a search of the numbers for
+//! sale, and the carrier account behind them.
 //!
-//! Nothing here buys, releases or changes a number. A number is a recurring
-//! carrier charge and a live line, and a released one cannot be had back, so the
-//! app shows and the web dashboard changes: "buy" opens the web dashboard's
-//! marketplace in the browser, signed in as the browser is, for a member whose
-//! role could buy there. A viewer is told who can.
+//! Nothing here buys a number. A number is a recurring carrier charge, so it is
+//! bought on the web: "buy" opens the web dashboard's marketplace in the
+//! browser, signed in as the browser is, for a member whose role could buy
+//! there. A viewer is told who can. Everything else about a held number,
+//! releasing it among it, is managed here ([`NumberAdmin`]).
 //!
 //! The held numbers are read on entering the screen; a search is not, because it
 //! asks a carrier's inventory about filters only the member can supply. The
@@ -25,6 +25,7 @@ use district_model::{
 
 use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
+use crate::number_admin::{CarrierStatus, NumberAdmin, NumberAdminEvent, numbers_scope_note};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::{self, l, s};
@@ -51,26 +52,20 @@ pub struct MarketplaceScreen {
     pub search: NumberSearchState,
     /// The numbers the workspace holds.
     pub owned: OwnedNumbersList,
+    /// Managing the numbers held and the carrier account.
+    pub admin: NumberAdmin,
 }
 
 impl MarketplaceScreen {
-    /// The note saying the screen changes nothing, for a member whose role could
-    /// buy on the web.
-    pub const READ_ONLY: &'static str = district_l10n::english::MARKETPLACE_READ_ONLY;
-    /// The same note for a viewer, who could not change them anywhere.
-    pub const READ_ONLY_VIEWER: &'static str = district_l10n::english::MARKETPLACE_READ_ONLY_VIEWER;
     /// The link to the web marketplace.
     pub const WEB_ACTION: &'static str = district_l10n::english::MARKETPLACE_WEB_ACTION;
     /// The caption under the link.
     pub const WEB_CAPTION: &'static str = district_l10n::english::MARKETPLACE_WEB_CAPTION;
 
-    /// The read-only note for a member with `capabilities`.
-    pub fn read_only_note(capabilities: &Capabilities) -> &'static str {
-        if capabilities.can_change {
-            s::marketplace_read_only(l())
-        } else {
-            s::marketplace_read_only_viewer(l())
-        }
+    /// The note saying what the screen does and does not do, for a member with
+    /// `capabilities`: buying is on the web, and a viewer changes nothing.
+    pub fn scope_note(capabilities: &Capabilities) -> &'static str {
+        numbers_scope_note(capabilities.can_change)
     }
 
     /// Whether to offer the link to the web marketplace: only to a role that
@@ -88,6 +83,16 @@ pub enum MarketplaceTab {
     Owned,
     /// The numbers for sale.
     Search,
+    /// The carrier accounts, SIP trunks, one-time passcodes and messaging
+    /// registrations.
+    Carrier,
+}
+
+impl MarketplaceTab {
+    /// The carrier tab's label.
+    pub fn carrier_label() -> &'static str {
+        district_l10n::numbers_strings::numbers_tab_carrier(l())
+    }
 }
 
 /// The number search's filters. The service fixes the page size and the
@@ -264,19 +269,26 @@ pub enum MarketplaceEvent {
     Search,
     /// Open the web marketplace, for a role that can buy there.
     OpenWeb,
+    /// Manage a held number or the carrier account.
+    Numbers(NumberAdminEvent),
 }
 
 impl SignedIn {
-    /// Reads the held numbers: on entering the screen, and at a refresh.
+    /// Reads the held numbers, and the carrier tab's when it shows: on
+    /// entering the screen, and at a refresh.
     pub(crate) fn enter_marketplace(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         match &mut self.marketplace.owned {
             OwnedNumbersList::Ready(owned) => owned.refreshing = true,
             other => *other = OwnedNumbersList::Loading,
         }
-        vec![Effect::LoadOwnedNumbers {
+        let mut effects = vec![Effect::LoadOwnedNumbers {
             ticket: tickets.issue(Slot::OwnedNumbers),
             workspace_id: self.workspace_id(),
-        }]
+        }];
+        if self.marketplace.tab == MarketplaceTab::Carrier {
+            effects.extend(self.enter_carrier_tab(tickets));
+        }
+        effects
     }
 
     pub(crate) fn marketplace_event(
@@ -288,7 +300,12 @@ impl SignedIn {
         let effects = match event {
             MarketplaceEvent::SelectTab(tab) => {
                 self.marketplace.tab = tab;
-                Vec::new()
+                let unread = self.marketplace.admin.carrier == CarrierStatus::NotLoaded;
+                if tab == MarketplaceTab::Carrier && unread {
+                    self.enter_carrier_tab(tickets)
+                } else {
+                    Vec::new()
+                }
             }
             MarketplaceEvent::EditSearch(form) => {
                 // A search on its way is for the old filters: its answer must not
@@ -311,6 +328,7 @@ impl SignedIn {
                 }]
             }
             MarketplaceEvent::OpenWeb => Vec::new(),
+            MarketplaceEvent::Numbers(event) => return self.number_admin_event(event, tickets),
         };
         Next::Stay(effects)
     }
