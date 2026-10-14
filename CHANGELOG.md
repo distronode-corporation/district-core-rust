@@ -48,6 +48,27 @@ variant, or a field of one. Those take a new major version.
   opened, with its reply going where the service says the thread is reached. A
   message that went out and whose thread cannot be found still closes the form.
   No new endpoint: contacts, send and the message's thread were already called.
+- Managing the numbers a workspace holds, as the iOS and Mac apps do; buying a number
+  stays on the web. On the phone numbers screen (`MarketplaceScreen::admin`, a
+  `NumberAdmin`, and `MarketplaceEvent::Numbers(NumberAdminEvent)`): reapplying a
+  number's routing; releasing it behind a confirmation, which reads the numbers again;
+  the billed lookup behind a confirmation; and a new carrier tab
+  (`MarketplaceTab::Carrier`) with the carrier accounts' status, the SIP trunks (list
+  and create), the one-time passcode sender on or off, and the A2P 10DLC and toll-free
+  registrations, both behind a confirmation. Each write has its own `NumberWrite`; a
+  write that costs money or cannot be undone is offered again after a failure only
+  when the failure proves it did not happen. One effect and one event carry every call
+  (`Effect::NumberAdmin` with a `NumberCall`, `Event::NumberAdminDone` with a
+  `NumberAnswer`), run by the new `DistrictApi::number_call`.
+- `district-api`: ten endpoints and their typed calls (`configure_number`,
+  `release_number`, `lookup_number`, `provider_status`, `sip_trunks`,
+  `create_sip_trunk`, `verify_service`, `set_verify_service`, `register_a2p`,
+  `verify_toll_free`), each in `DESKTOP_ONLY`. The lookup is a read that is never
+  repeated, because the carrier bills it.
+- `district-model`: their types (`NumberReleaseResponse`, `ProviderStatusResponse`,
+  `SipTrunk`, `A2pRegistrationDraft` and the rest). No contract fixture records them
+  yet; their shapes are the routes'.
+- `district-l10n`: `numbers_strings`, generated from the new `catalog/numbers.toml`.
 
 ### Changed
 
@@ -60,6 +81,13 @@ variant, or a field of one. Those take a new major version.
   variants.
 - Breaking: `InboxScreen` has a new field, `compose`, and `InboxEvent` a new
   variant.
+- Breaking: `DistrictApi` has a new method, `number_call`; `MarketplaceScreen` a new
+  field, `admin`; `MarketplaceTab` and `MarketplaceEvent` new variants; `Effect` and
+  `Event` one new variant each.
+- Breaking: `MarketplaceScreen::read_only_note`, `READ_ONLY` and `READ_ONLY_VIEWER`
+  are gone, with the catalog entries `marketplace.read_only` and
+  `marketplace.read_only_viewer`: the screen is no longer read only.
+  `MarketplaceScreen::scope_note` says what it does instead.
 
 ## [4.0.0-beta.1] - 2026-10-13
 

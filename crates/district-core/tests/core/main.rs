@@ -25,6 +25,7 @@ mod marketplace;
 mod members;
 mod messaging;
 mod no_calls;
+mod number_admin;
 mod overview;
 mod palette;
 mod persona;

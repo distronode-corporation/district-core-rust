@@ -163,6 +163,56 @@ pub const DESKTOP_ONLY: &[Addition] = &[
         reason: "The blocked callers list on the contacts page, for the same reason as blocking.",
     },
     Addition {
+        endpoint: Endpoint::NumberConfigure,
+        reason: "Pointing a held number back at the workspace. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
+        endpoint: Endpoint::NumberRelease,
+        reason: "Releasing a held number, behind a confirmation. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
+        endpoint: Endpoint::NumberLookup,
+        reason: "The billed number lookup, behind a confirmation. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
+        endpoint: Endpoint::ProviderStatus,
+        reason: "The carrier accounts' status on the phone numbers screen. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
+        endpoint: Endpoint::SipTrunks,
+        reason: "The SIP trunks on the phone numbers screen. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
+        endpoint: Endpoint::SipTrunkCreate,
+        reason: "Creating a SIP trunk. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
+        endpoint: Endpoint::VerifyService,
+        reason: "Whether the one-time passcode sender is in use. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
+        endpoint: Endpoint::VerifyServiceSet,
+        reason: "Turning the one-time passcode sender on or off. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
+        endpoint: Endpoint::A2pRegistration,
+        reason: "Filing an A2P 10DLC registration, behind a confirmation. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
+        endpoint: Endpoint::TollFreeVerification,
+        reason: "Filing a toll-free number's verification, behind a confirmation. Number management, as in the iOS and \
+                 Mac apps; the Android app has no screen for it yet.",
+    },
+    Addition {
         endpoint: Endpoint::BillingHandOff,
         reason: "Checkout and the billing page inside District AI for Windows, the one app that \
                  buys in the app. Every other app's billing is read only.",

@@ -2035,3 +2035,163 @@ async fn signing_out_unregisters_the_presence_first_as_its_own_change() {
     assert!(!report.presence_unregistered);
     assert_eq!(report.cleared, Ok(()));
 }
+
+/// Number management goes through the API client's own calls, each answer in
+/// its own variant, and a failure as it came.
+#[tokio::test]
+async fn the_api_client_manages_numbers() {
+    use district_core::{NumberAnswer, NumberCall};
+    use district_model::{A2pRegistrationDraft, SipTrunkDraft, TollFreeVerificationDraft};
+
+    let trunk = json!({
+        "id": "item_1", "name": "Office", "domain": "office.sip.twilio.com",
+        "ipAccessControlList": ["203.0.113.7"], "domainSid": "SD1", "ipAclSid": "AL1",
+        "status": "active"
+    });
+    let routes = [
+        (
+            "GET",
+            "/api/district/workspace/provider/status",
+            json!({"connected": false, "provider": null}),
+        ),
+        (
+            "GET",
+            "/api/district/workspace/sip",
+            json!({"success": true, "trunks": [trunk]}),
+        ),
+        (
+            "POST",
+            "/api/district/workspace/sip",
+            json!({"success": true, "trunk": trunk}),
+        ),
+        (
+            "GET",
+            "/api/district/workspace/verify",
+            json!({"success": true, "enabled": false, "verifyServiceSid": null}),
+        ),
+        (
+            "POST",
+            "/api/district/workspace/verify",
+            json!({"success": true, "enabled": true, "verifyServiceSid": "VA1"}),
+        ),
+        (
+            "POST",
+            "/api/district/workspace/numbers/configure",
+            json!({"success": true}),
+        ),
+        (
+            "POST",
+            "/api/district/workspace/numbers/release",
+            json!({"success": true}),
+        ),
+        (
+            "GET",
+            "/api/district/workspace/lookup",
+            json!({"success": true, "info": {
+            "valid": true, "phoneNumber": "+12125550142", "country": "US", "type": null, "carrier": null}}),
+        ),
+        (
+            "POST",
+            "/api/district/workspace/a2p",
+            json!({"success": true, "status": "IN_PROGRESS",
+            "brandSid": "BN1", "messagingServiceSid": "MG1", "campaignSid": "CM1"}),
+        ),
+        (
+            "POST",
+            "/api/district/workspace/tfv",
+            json!({"success": true, "status": "PENDING_REVIEW", "tfvSid": "HH1"}),
+        ),
+    ];
+    let server = MockServer::start().await;
+    for (verb, route, body) in routes {
+        serve(&server, verb, route, body).await;
+    }
+    let calls = [
+        NumberCall::CarrierStatus,
+        NumberCall::SipTrunks,
+        NumberCall::CreateSipTrunk(SipTrunkDraft {
+            name: "Office".to_owned(),
+            domain: "office".to_owned(),
+            ip_access_control_list: vec!["203.0.113.7".to_owned()],
+        }),
+        NumberCall::VerifyService,
+        NumberCall::SetVerifyService(true),
+        NumberCall::Configure("+12125550142".to_owned()),
+        NumberCall::Release("+12125550142".to_owned()),
+        NumberCall::Lookup("+12125550142".to_owned()),
+        NumberCall::RegisterA2p(A2pRegistrationDraft {
+            business_name: "Acme".to_owned(),
+            ein: None,
+            website: None,
+            vertical: None,
+            campaign_type: "CUSTOMER_CARE".to_owned(),
+            campaign_description: "Reminders".to_owned(),
+            sample_message_1: "One".to_owned(),
+            sample_message_2: "Two".to_owned(),
+        }),
+        NumberCall::VerifyTollFree(TollFreeVerificationDraft {
+            phone_number: "+18005550188".to_owned(),
+            business_name: "Acme".to_owned(),
+            website: None,
+            use_case: "Customer Support".to_owned(),
+            message_content: None,
+            opt_in_flow: None,
+            opt_in_image_urls: vec!["https://example.com/opt-in.png".to_owned()],
+        }),
+    ];
+    let api = ApiClient::new(local(&server), OneToken).unwrap();
+    let mut kinds = Vec::new();
+    for call in &calls {
+        let answer = api.number_call("ws-1", call).await.expect("answered");
+        kinds.push(match answer {
+            NumberAnswer::CarrierStatus(status) => {
+                assert!(!status.connected);
+                "carrier"
+            }
+            NumberAnswer::SipTrunks(list) => {
+                assert_eq!(list.trunks.len(), 1);
+                "trunks"
+            }
+            NumberAnswer::SipTrunkCreated(_) => "created",
+            NumberAnswer::VerifyService(state) if state.enabled => "verify on",
+            NumberAnswer::VerifyService(_) => "verify off",
+            NumberAnswer::Configured => "configured",
+            NumberAnswer::Released(_) => "released",
+            NumberAnswer::LookedUp(found) => {
+                assert!(found.info.valid);
+                "looked up"
+            }
+            NumberAnswer::A2pRegistered(_) => "a2p",
+            NumberAnswer::TollFreeFiled(_) => "tfv",
+        });
+    }
+    assert_eq!(
+        kinds,
+        [
+            "carrier",
+            "trunks",
+            "created",
+            "verify off",
+            "verify on",
+            "configured",
+            "released",
+            "looked up",
+            "a2p",
+            "tfv"
+        ]
+    );
+
+    let down = MockServer::start().await;
+    Mock::given(wiremock::matchers::any())
+        .respond_with(ResponseTemplate::new(503))
+        .mount(&down)
+        .await;
+    let api = ApiClient::new(local(&down), OneToken).unwrap();
+    for call in &calls {
+        let outcome = api.number_call("ws-1", call).await;
+        assert!(
+            matches!(outcome, Err(ApiError::Server { status: 503, .. })),
+            "{call:?}: {outcome:?}"
+        );
+    }
+}

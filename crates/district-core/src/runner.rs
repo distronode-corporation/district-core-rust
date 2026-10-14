@@ -54,6 +54,7 @@ use crate::contacts::{ContactWrite, ContactWritten};
 use crate::live::Notification;
 use crate::media::CallEngine;
 use crate::model::{Effect, Event, Ticket};
+use crate::number_admin::{NumberAnswer, NumberCall};
 use crate::presence::Presence;
 use crate::purchase::{EmbeddedView, PurchaseSetting};
 use crate::scheduling::SCHEDULING_WEB_PATH;
@@ -282,6 +283,13 @@ pub trait DistrictApi: Send + Sync {
         &self,
         workspace_id: &str,
     ) -> impl Future<Output = Result<OwnedNumbersResponse, ApiError>> + Send;
+    /// A call managing a held number or the carrier account. The answer is the
+    /// [`NumberAnswer`] variant of `call`.
+    fn number_call(
+        &self,
+        workspace_id: &str,
+        call: &NumberCall,
+    ) -> impl Future<Output = Result<NumberAnswer, ApiError>> + Send;
     /// The workspace's plan.
     fn workspace_billing(
         &self,
@@ -1196,6 +1204,14 @@ where
             } => Event::OwnedNumbersLoaded {
                 ticket,
                 result: self.api.owned_numbers(&workspace_id).await,
+            },
+            Effect::NumberAdmin {
+                ticket,
+                workspace_id,
+                call,
+            } => Event::NumberAdminDone {
+                ticket,
+                result: self.api.number_call(&workspace_id, &call).await,
             },
             Effect::LoadWorkspaceBilling {
                 ticket,

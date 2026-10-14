@@ -20,6 +20,7 @@ use district_core::{
     CallEnd, CallEvent, CallPhase, DialerEvent, MediaEvent, MediaUpdate, MemberWrite,
     MessagingWrite, MicrophoneState,
 };
+use district_core::{NumberAnswer, NumberCall};
 use district_model::BillingHandOffResponse;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse, BlockTarget,
@@ -419,6 +420,15 @@ impl DistrictApi for FakeApi {
     async fn owned_numbers(&self, workspace_id: &str) -> Result<OwnedNumbersResponse, ApiError> {
         self.0.push(format!("owned numbers {workspace_id}"));
         Ok(fixture("district-provider-numbers.json"))
+    }
+
+    async fn number_call(
+        &self,
+        workspace_id: &str,
+        call: &NumberCall,
+    ) -> Result<NumberAnswer, ApiError> {
+        self.0.push(format!("number call {workspace_id} {call:?}"));
+        Ok(NumberAnswer::Configured)
     }
 
     async fn workspace_billing(
@@ -2041,6 +2051,17 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             },
         ),
         (
+            Effect::NumberAdmin {
+                ticket,
+                workspace_id: ws(),
+                call: NumberCall::Configure("+12125550142".to_owned()),
+            },
+            Event::NumberAdminDone {
+                ticket,
+                result: Ok(NumberAnswer::Configured),
+            },
+        ),
+        (
             Effect::LoadWorkspaceBilling {
                 ticket,
                 workspace_id: ws(),
@@ -2347,6 +2368,7 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             "usage history ws-contract-active 3",
             "number search ws-contract-active Some(\"416\")",
             "owned numbers ws-contract-active",
+            "number call ws-contract-active Configure(\"+12125550142\")",
             "workspace billing ws-contract-active",
             "account billing",
             "workflows ws-contract-active",

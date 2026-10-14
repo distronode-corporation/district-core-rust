@@ -446,10 +446,6 @@ pub const MARKETPLACE_OWNED_EMPTY_TITLE: &str = "No numbers yet";
 pub const MARKETPLACE_OWNED_FAILED_TITLE: &str = "Could not load this workspace's numbers";
 /// `marketplace.partial_note_unnamed` in English.
 pub const MARKETPLACE_PARTIAL_NOTE_UNNAMED: &str = "Could not reach a carrier, so this list may be missing numbers.";
-/// `marketplace.read_only` in English.
-pub const MARKETPLACE_READ_ONLY: &str = "Numbers cannot be bought, released or changed in this app, so this screen is read only.";
-/// `marketplace.read_only_viewer` in English.
-pub const MARKETPLACE_READ_ONLY_VIEWER: &str = "This screen is read only. Ask an agency or client member of this workspace to add or release a number.";
 /// `marketplace.search_failed_title` in English.
 pub const MARKETPLACE_SEARCH_FAILED_TITLE: &str = "Could not search for numbers";
 /// `marketplace.search_none_body` in English.

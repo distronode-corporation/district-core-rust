@@ -2111,24 +2111,6 @@ pub fn marketplace_partial_note_unnamed(l: Locale) -> &'static str {
     }
 }
 
-/// `marketplace.read_only`
-#[must_use]
-pub fn marketplace_read_only(l: Locale) -> &'static str {
-    match l {
-        Locale::En => "Numbers cannot be bought, released or changed in this app, so this screen is read only.",
-        Locale::FrCa => "Numbers cannot be bought, released or changed in this app, so this screen is read only.",
-    }
-}
-
-/// `marketplace.read_only_viewer`
-#[must_use]
-pub fn marketplace_read_only_viewer(l: Locale) -> &'static str {
-    match l {
-        Locale::En => "This screen is read only. Ask an agency or client member of this workspace to add or release a number.",
-        Locale::FrCa => "This screen is read only. Ask an agency or client member of this workspace to add or release a number.",
-    }
-}
-
 /// `marketplace.search_failed_title`
 #[must_use]
 pub fn marketplace_search_failed_title(l: Locale) -> &'static str {

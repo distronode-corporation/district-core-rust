@@ -74,7 +74,10 @@ fn paths_are_well_formed() {
                 );
             } else {
                 assert!(
-                    segment.chars().all(|c| c.is_ascii_lowercase() || c == '-'),
+                    // A digit appears in one route's name: `a2p`.
+                    segment
+                        .chars()
+                        .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-'),
                     "{name}: segment {segment} in {path}"
                 );
             }
@@ -84,12 +87,14 @@ fn paths_are_well_formed() {
 
 /// Only reads are repeated after a refused token, plus the two endpoints that
 /// mint a short-lived token and store nothing. Everything with a side effect or a
-/// cost is sent at most once.
+/// cost is sent at most once, the one read a carrier bills for among them.
 #[test]
 fn reads_may_repeat_and_writes_may_not() {
     let token_mints = [Endpoint::CallRoomToken, Endpoint::TelemetryToken];
+    let billed_reads = [Endpoint::NumberLookup];
     for spec in ALL_ENDPOINTS {
-        let expected = if spec.method == HttpMethod::Get || token_mints.contains(&spec.id) {
+        let read = spec.method == HttpMethod::Get && !billed_reads.contains(&spec.id);
+        let expected = if read || token_mints.contains(&spec.id) {
             RetryPolicy::OnceAfterRefresh
         } else {
             RetryPolicy::Never
@@ -132,6 +137,13 @@ fn calls_with_side_effects_or_cost_never_repeat() {
         Endpoint::NativeDeviceRevoke,
         Endpoint::NativeRevokeAll,
         Endpoint::PushRegister,
+        Endpoint::NumberConfigure,
+        Endpoint::NumberRelease,
+        Endpoint::NumberLookup,
+        Endpoint::SipTrunkCreate,
+        Endpoint::VerifyServiceSet,
+        Endpoint::A2pRegistration,
+        Endpoint::TollFreeVerification,
     ];
     for endpoint in never {
         assert_eq!(

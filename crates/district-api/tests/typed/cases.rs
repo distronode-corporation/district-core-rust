@@ -7,15 +7,16 @@ use std::pin::Pin;
 
 use district_api::{ApiClient, ApiError, Endpoint};
 use district_model::{
-    AnalyticsRange, BlockTarget, CHANNEL_SMS, CallHandlingMode, CallHandlingPatch,
-    CreateContactRequest, DeskBrandName, DeskSettingsPatch, DeskTicketDraft, DeskTicketStatus,
-    DirectoryEntry, DraftSaveRequest, HqPendingWrite, HqRole, HqTurn, KnowledgeDocumentDraft,
-    KnowledgeMode, MeetRoomName, MemberRole, MessagingAccountSave, MessagingChannel,
-    MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials, MessagingDelete,
-    MessagingSetChannelDefault, MessagingSetDefault, NumberSearch, PersonaEngineChoice,
-    PersonaPatch, PersonaPreviewForm, Platform, PresenceRegistration, RoutingRule,
-    RoutingRuleField, SendMessageRequest, SupportRequestDraft, SupportRequestKind, ThreadRef,
-    TwilioCredentials, UpdateContactRequest, WorkspaceConfig, WorkspaceConfigResponse,
+    A2pRegistrationDraft, AnalyticsRange, BlockTarget, CHANNEL_SMS, CallHandlingMode,
+    CallHandlingPatch, CreateContactRequest, DeskBrandName, DeskSettingsPatch, DeskTicketDraft,
+    DeskTicketStatus, DirectoryEntry, DraftSaveRequest, HqPendingWrite, HqRole, HqTurn,
+    KnowledgeDocumentDraft, KnowledgeMode, MeetRoomName, MemberRole, MessagingAccountSave,
+    MessagingChannel, MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials,
+    MessagingDelete, MessagingSetChannelDefault, MessagingSetDefault, NumberSearch,
+    PersonaEngineChoice, PersonaPatch, PersonaPreviewForm, Platform, PresenceRegistration,
+    RoutingRule, RoutingRuleField, SendMessageRequest, SipTrunkDraft, SupportRequestDraft,
+    SupportRequestKind, ThreadRef, TollFreeVerificationDraft, TwilioCredentials,
+    UpdateContactRequest, WorkspaceConfig, WorkspaceConfigResponse,
 };
 use serde_json::{Value, json};
 
@@ -90,6 +91,19 @@ pub struct Case {
     pub query: Vec<(&'static str, &'static str)>,
     /// Android's body.
     pub body: Sent,
+}
+
+/// A SIP trunk as `workspace/sip` answers it.
+fn sip_trunk() -> Value {
+    json!({
+        "id": "billing_item_1",
+        "name": "Office",
+        "domain": "office.sip.twilio.com",
+        "ipAccessControlList": ["203.0.113.7"],
+        "domainSid": "SD0001",
+        "ipAclSid": "AL0001",
+        "status": "active",
+    })
 }
 
 /// A recorded response from `contracts/fixtures/`.
@@ -799,6 +813,191 @@ pub fn cases() -> Vec<Case> {
             path: "/api/district/workspace/provider/numbers",
             query: vec![("workspaceId", WS)],
             body: Sent::Nothing,
+        },
+        // Managing a held number and the carrier account. The Android app has
+        // no screen for these, so the service records no response of theirs:
+        // each answer is written from its route, as the route builds it.
+        Case {
+            name: "configure_number",
+            endpoint: Endpoint::NumberConfigure,
+            retried: false,
+            answer: json!({"success": true}),
+            call: call!(c => c.configure_number(WS, "+12125550142")),
+            method: "POST",
+            path: "/api/district/workspace/numbers/configure",
+            query: vec![],
+            body: Sent::Json(json!({"workspaceId": WS, "phoneNumber": "+12125550142"})),
+        },
+        Case {
+            name: "release_number",
+            endpoint: Endpoint::NumberRelease,
+            retried: false,
+            answer: json!({
+                "success": true,
+                "warnings": ["The number's monthly charge could not be ended."],
+            }),
+            call: call!(c => c.release_number(WS, "+12125550142")),
+            method: "POST",
+            path: "/api/district/workspace/numbers/release",
+            query: vec![],
+            body: Sent::Json(json!({"workspaceId": WS, "phoneNumber": "+12125550142"})),
+        },
+        Case {
+            name: "lookup_number",
+            endpoint: Endpoint::NumberLookup,
+            retried: false,
+            answer: json!({
+                "success": true,
+                "info": {
+                    "valid": true,
+                    "phoneNumber": "+12125550142",
+                    "country": "US",
+                    "type": "mobile",
+                    "carrier": null,
+                },
+            }),
+            call: call!(c => c.lookup_number(WS, "+12125550142")),
+            method: "GET",
+            path: "/api/district/workspace/lookup",
+            query: vec![("workspaceId", WS), ("phoneNumber", "+12125550142")],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "provider_status",
+            endpoint: Endpoint::ProviderStatus,
+            retried: true,
+            answer: json!({
+                "connected": true,
+                "providers": {
+                    "twilio": {
+                        "connected": true,
+                        "accountName": "Main account",
+                        "status": "active",
+                        "balance": "12.50",
+                        "currency": "USD",
+                        "numberCount": 3,
+                    },
+                    "telnyx": {"connected": false, "error": "Invalid credentials"},
+                },
+            }),
+            call: call!(c => c.provider_status(WS)),
+            method: "GET",
+            path: "/api/district/workspace/provider/status",
+            query: vec![("workspaceId", WS)],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "sip_trunks",
+            endpoint: Endpoint::SipTrunks,
+            retried: true,
+            answer: json!({"success": true, "trunks": [sip_trunk()]}),
+            call: call!(c => c.sip_trunks(WS)),
+            method: "GET",
+            path: "/api/district/workspace/sip",
+            query: vec![("workspaceId", WS)],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "create_sip_trunk",
+            endpoint: Endpoint::SipTrunkCreate,
+            retried: false,
+            answer: json!({"success": true, "trunk": sip_trunk()}),
+            call: call!(c => c.create_sip_trunk(WS, &SipTrunkDraft {
+                name: "Office".to_owned(),
+                domain: "office".to_owned(),
+                ip_access_control_list: vec!["203.0.113.7".to_owned()],
+            })),
+            method: "POST",
+            path: "/api/district/workspace/sip",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "name": "Office",
+                "domain": "office",
+                "ipAccessControlList": ["203.0.113.7"],
+            })),
+        },
+        Case {
+            name: "verify_service",
+            endpoint: Endpoint::VerifyService,
+            retried: true,
+            answer: json!({"success": true, "enabled": true, "verifyServiceSid": "VA0001"}),
+            call: call!(c => c.verify_service(WS)),
+            method: "GET",
+            path: "/api/district/workspace/verify",
+            query: vec![("workspaceId", WS)],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "set_verify_service",
+            endpoint: Endpoint::VerifyServiceSet,
+            retried: false,
+            // Turning it off answers without the sender's id.
+            answer: json!({"success": true, "enabled": false}),
+            call: call!(c => c.set_verify_service(WS, false)),
+            method: "POST",
+            path: "/api/district/workspace/verify",
+            query: vec![],
+            body: Sent::Json(json!({"workspaceId": WS, "enabled": false})),
+        },
+        Case {
+            name: "register_a2p",
+            endpoint: Endpoint::A2pRegistration,
+            retried: false,
+            answer: json!({
+                "success": true,
+                "status": "IN_PROGRESS",
+                "brandSid": "BN0001",
+                "messagingServiceSid": "MG0001",
+                "campaignSid": "CM0001",
+            }),
+            call: call!(c => c.register_a2p(WS, &A2pRegistrationDraft {
+                business_name: "Acme Roofing".to_owned(),
+                ein: None,
+                website: Some("https://example.com".to_owned()),
+                vertical: None,
+                campaign_type: "CUSTOMER_CARE".to_owned(),
+                campaign_description: "Appointment reminders".to_owned(),
+                sample_message_1: "Your appointment is tomorrow.".to_owned(),
+                sample_message_2: "Reply STOP to opt out.".to_owned(),
+            })),
+            method: "POST",
+            path: "/api/district/workspace/a2p",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "businessName": "Acme Roofing",
+                "website": "https://example.com",
+                "campaignType": "CUSTOMER_CARE",
+                "campaignDescription": "Appointment reminders",
+                "sampleMessage1": "Your appointment is tomorrow.",
+                "sampleMessage2": "Reply STOP to opt out.",
+            })),
+        },
+        Case {
+            name: "verify_toll_free",
+            endpoint: Endpoint::TollFreeVerification,
+            retried: false,
+            answer: json!({"success": true, "status": "PENDING_REVIEW", "tfvSid": "HH0001"}),
+            call: call!(c => c.verify_toll_free(WS, &TollFreeVerificationDraft {
+                phone_number: "+18005550142".to_owned(),
+                business_name: "Acme Roofing".to_owned(),
+                website: None,
+                use_case: "Customer Support".to_owned(),
+                message_content: None,
+                opt_in_flow: None,
+                opt_in_image_urls: vec!["https://example.com/opt-in.png".to_owned()],
+            })),
+            method: "POST",
+            path: "/api/district/workspace/tfv",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "phoneNumber": "+18005550142",
+                "businessName": "Acme Roofing",
+                "useCase": "Customer Support",
+                "optInImageUrls": ["https://example.com/opt-in.png"],
+            })),
         },
         // Billing.
         Case {

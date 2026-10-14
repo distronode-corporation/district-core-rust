@@ -1,6 +1,8 @@
 //! Phone numbers: the ones for sale, and the ones the workspace holds.
 //!
-//! Read only. Buying, releasing and configuring numbers stays on the web.
+//! Buying a number stays on the web. Configuring, releasing and looking up a
+//! number, and the carrier account behind them, have types of their own
+//! ([`NumberReleaseResponse`](crate::NumberReleaseResponse) and the rest).
 
 use serde::{Deserialize, Serialize};
 
