@@ -17,6 +17,15 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Added
+
+- `district-api`: `ApiClient::scheduling_admin` (`POST /api/district/scheduling/admin`
+  and its upload route) and `ApiClient::scheduling_sign_in`
+  (`GET /api/district/scheduling/sso`, read for its `Location`, never followed).
+- `district-model`: the admin RPC's wire types (`SchedulingAdminRequest`,
+  `SchedulingAdminReply`, `SchedulingAdminData` and every payload), held strictly to
+  the 39 `district-scheduling-*` fixtures.
+
 ### Changed
 
 - The presence going away (the setting off, sleep, quitting) unregisters the

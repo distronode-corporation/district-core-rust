@@ -728,7 +728,7 @@ pub enum SchedulingAdminData {
     /// `eventTypes.list`
     EventTypes(Vec<SchedulingEventType>),
     /// `eventTypes.get`, `.create`, `.patch`
-    EventType(SchedulingEventType),
+    EventType(Box<SchedulingEventType>),
     /// `eventTypes.hosts.get`, `.put`
     Hosts(Vec<SchedulingHost>),
     /// `eventTypes.testEmail`
@@ -754,7 +754,7 @@ pub enum SchedulingAdminData {
     /// `bookings.answers`
     Answers(Vec<SchedulingBookingAnswer>),
     /// `bookings.cancel`, `.reschedule`, `.reassign`: the booking as it now is.
-    Booking(SchedulingBooking),
+    Booking(Box<SchedulingBooking>),
     /// `calendar.status`
     CalendarStatus(SchedulingCalendarStatus),
     /// `calendar.caldav.connect`
@@ -835,15 +835,17 @@ fn with<T: Serialize>(
     extra: impl IntoIterator<Item = (&'static str, Option<Value>)>,
 ) -> Value {
     // Every `T` here is a struct of plain fields, which encodes as an object.
-    let mut value = json(fields).unwrap_or_default();
-    if let Value::Object(map) = &mut value {
-        map.extend(
-            extra
-                .into_iter()
-                .filter_map(|(key, value)| value.map(|value| (key.to_owned(), value))),
-        );
-    }
-    value
+    let mut map = json(fields)
+        .as_ref()
+        .and_then(Value::as_object)
+        .cloned()
+        .unwrap_or_default();
+    map.extend(
+        extra
+            .into_iter()
+            .filter_map(|(key, value)| value.map(|value| (key.to_owned(), value))),
+    );
+    Value::Object(map)
 }
 
 fn items<T: DeserializeOwned>(data: Value) -> Result<Vec<T>, serde_json::Error> {
@@ -1134,7 +1136,7 @@ impl SchedulingAdminRequest {
             Self::Me | Self::PatchMe(_) => D::Me(serde_json::from_value(data)?),
             Self::EventTypes => D::EventTypes(items(data)?),
             Self::EventType { .. } | Self::CreateEventType { .. } | Self::PatchEventType { .. } => {
-                D::EventType(serde_json::from_value(data)?)
+                D::EventType(Box::new(serde_json::from_value(data)?))
             }
             Self::Hosts { .. } | Self::SetHosts { .. } => D::Hosts(items(data)?),
             Self::SendTestEmail { .. } => D::TestEmail(serde_json::from_value(data)?),
@@ -1161,7 +1163,7 @@ impl SchedulingAdminRequest {
             Self::BookingAnswers { .. } => D::Answers(items(data)?),
             Self::CancelBooking { .. }
             | Self::RescheduleBooking { .. }
-            | Self::ReassignBooking { .. } => D::Booking(serde_json::from_value(data)?),
+            | Self::ReassignBooking { .. } => D::Booking(Box::new(serde_json::from_value(data)?)),
             Self::CalendarStatus => D::CalendarStatus(serde_json::from_value(data)?),
             Self::ConnectCaldav { .. } => D::CaldavConnected(serde_json::from_value(data)?),
             Self::Calendars { .. } => D::Calendars(
