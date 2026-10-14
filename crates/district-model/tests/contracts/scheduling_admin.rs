@@ -419,7 +419,7 @@ fn every_request_reads_its_operations_answer() {
             (_, D::Uploaded(result)) => result.published_url().is_some(),
             _ => false,
         };
-        assert!(matches, "{name} read as {answer:?} for {request:?}");
+        assert!(matches, "{name} is not what {request:?} answers");
     }
     assert_eq!(ops.len(), 64, "every operation is read from a fixture");
 }
