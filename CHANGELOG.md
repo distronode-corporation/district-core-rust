@@ -17,6 +17,12 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Changed
+
+- The catalogs carry their reviewed Canadian French (fr-CA): 1,481 entries across
+  `crates/district-l10n/catalog/*.toml`, so `district_l10n::FR_COMPLETE` is true. The
+  language stays the app's choice (`CoreConfig::locale`), and the apps keep French off.
+
 ## [4.0.0-beta.3] - 2026-10-14
 
 Scheduling administration in the core for both desktop apps, and a presence that no

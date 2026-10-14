@@ -1,5 +1,5 @@
 //! The error table: every code in `contracts/i18n/api-errors.json`, with its
-//! English, and nothing for a code it does not have.
+//! English and its French, and nothing for a code it does not have.
 
 use std::fs;
 use std::path::PathBuf;
@@ -13,8 +13,12 @@ fn contract() -> Value {
     serde_json::from_str(&fs::read_to_string(path).expect("api-errors.json")).expect("JSON")
 }
 
+/// Codes whose reviewed French says « disponible » where the website's says
+/// « offerte »: the W3 review chose it, and the website follows later.
+const FRENCH_NOT_THE_WEBSITES: [&str; 2] = ["direct_dial_disabled", "setup_not_available"];
+
 #[test]
-fn every_code_reads_as_the_services_english() {
+fn every_code_reads_as_the_services_sentence() {
     let contract = contract();
     let codes = contract["codes"].as_object().expect("codes");
     assert!(codes.len() >= 140, "{} codes", codes.len());
@@ -23,23 +27,33 @@ fn every_code_reads_as_the_services_english() {
     for (code, sentence) in codes {
         let en = sentence["en"].as_str().expect("en");
         for locale in Locale::ALL {
-            // No French yet: the French arm carries the English.
+            let (field, without) = match locale {
+                Locale::En => ("en", "enWithoutList"),
+                Locale::FrCa => ("fr", "frWithoutList"),
+            };
+            if locale == Locale::FrCa && FRENCH_NOT_THE_WEBSITES.contains(&code.as_str()) {
+                let text = api_error_text(locale, code, &["ignored"]).expect(code);
+                assert!(text.contains("disponible"), "{code}: {text}");
+                assert_ne!(text, en, "{code}");
+                continue;
+            }
+            let text = sentence[field].as_str().expect(field);
             if sentence.get("listField").is_some() {
                 let items = ["eu", "apac"];
-                let listed = en.replace(placeholder, &items.join(separator));
+                let listed = text.replace(placeholder, &items.join(separator));
                 assert_eq!(
                     api_error_text(locale, code, &items).as_deref(),
                     Some(listed.as_str())
                 );
                 assert_eq!(
                     api_error_text::<&str>(locale, code, &[]).as_deref(),
-                    sentence["enWithoutList"].as_str(),
+                    sentence[without].as_str(),
                     "{code}"
                 );
             } else {
                 assert_eq!(
                     api_error_text(locale, code, &["ignored"]).as_deref(),
-                    Some(en),
+                    Some(text),
                     "{code}"
                 );
             }

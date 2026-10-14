@@ -3,14 +3,14 @@
 use crate::Locale;
 
 /// True when every entry has French; until then the French arm carries the English.
-pub const FR_COMPLETE: bool = false;
+pub const FR_COMPLETE: bool = true;
 
 /// `account.delete_account_caption`
 #[must_use]
 pub fn account_delete_account_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "Request deletion of your account and its data. Opens in your browser.",
-        Locale::FrCa => "Request deletion of your account and its data. Opens in your browser.",
+        Locale::FrCa => "Demander la suppression de votre compte et de ses données. S'ouvre dans votre navigateur.",
     }
 }
 
@@ -19,7 +19,7 @@ pub fn account_delete_account_caption(l: Locale) -> &'static str {
 pub fn account_devices_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "See where you are signed in, and sign out a device you no longer have.",
-        Locale::FrCa => "See where you are signed in, and sign out a device you no longer have.",
+        Locale::FrCa => "Voyez où votre compte est connecté et déconnectez un appareil que vous n'avez plus.",
     }
 }
 
@@ -28,7 +28,7 @@ pub fn account_devices_caption(l: Locale) -> &'static str {
 pub fn account_sign_out_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign out of District AI on this device.",
-        Locale::FrCa => "Sign out of District AI on this device.",
+        Locale::FrCa => "Se déconnecter de District AI sur cet appareil.",
     }
 }
 
@@ -37,7 +37,7 @@ pub fn account_sign_out_caption(l: Locale) -> &'static str {
 pub fn analytics_change_down(l: Locale, pct: i64) -> String {
     match l {
         Locale::En => format!("Down {}% on the previous period.", crate::format::integer(l, pct)),
-        Locale::FrCa => format!("Down {}% on the previous period.", crate::format::integer(l, pct)),
+        Locale::FrCa => format!("Baisse de {}\u{00A0}% par rapport à la période précédente.", crate::format::integer(l, pct)),
     }
 }
 
@@ -46,7 +46,7 @@ pub fn analytics_change_down(l: Locale, pct: i64) -> String {
 pub fn analytics_change_flat(l: Locale) -> &'static str {
     match l {
         Locale::En => "No change on the previous period.",
-        Locale::FrCa => "No change on the previous period.",
+        Locale::FrCa => "Aucun changement par rapport à la période précédente.",
     }
 }
 
@@ -55,7 +55,7 @@ pub fn analytics_change_flat(l: Locale) -> &'static str {
 pub fn analytics_change_new(l: Locale) -> &'static str {
     match l {
         Locale::En => "New: no calls in the previous period to compare with.",
-        Locale::FrCa => "New: no calls in the previous period to compare with.",
+        Locale::FrCa => "Nouveau\u{00A0}: aucun appel à comparer durant la période précédente.",
     }
 }
 
@@ -64,7 +64,7 @@ pub fn analytics_change_new(l: Locale) -> &'static str {
 pub fn analytics_change_up(l: Locale, pct: i64) -> String {
     match l {
         Locale::En => format!("Up {}% on the previous period.", crate::format::integer(l, pct)),
-        Locale::FrCa => format!("Up {}% on the previous period.", crate::format::integer(l, pct)),
+        Locale::FrCa => format!("Hausse de {}\u{00A0}% par rapport à la période précédente.", crate::format::integer(l, pct)),
     }
 }
 
@@ -73,7 +73,7 @@ pub fn analytics_change_up(l: Locale, pct: i64) -> String {
 pub fn analytics_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load analytics",
-        Locale::FrCa => "Could not load analytics",
+        Locale::FrCa => "Impossible de charger l'analytique",
     }
 }
 
@@ -82,7 +82,7 @@ pub fn analytics_failed_title(l: Locale) -> &'static str {
 pub fn analytics_history_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "The bars compare metered call minutes across these months.",
-        Locale::FrCa => "The bars compare metered call minutes across these months.",
+        Locale::FrCa => "Les barres comparent les minutes d'appel mesurées pour ces mois.",
     }
 }
 
@@ -91,7 +91,7 @@ pub fn analytics_history_caption(l: Locale) -> &'static str {
 pub fn analytics_history_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load usage history",
-        Locale::FrCa => "Could not load usage history",
+        Locale::FrCa => "Impossible de charger l'historique d'utilisation",
     }
 }
 
@@ -100,7 +100,7 @@ pub fn analytics_history_failed_title(l: Locale) -> &'static str {
 pub fn analytics_history_none(l: Locale) -> &'static str {
     match l {
         Locale::En => "No usage has been recorded in recent months.",
-        Locale::FrCa => "No usage has been recorded in recent months.",
+        Locale::FrCa => "Aucune utilisation n'a été mesurée ces derniers mois.",
     }
 }
 
@@ -109,7 +109,7 @@ pub fn analytics_history_none(l: Locale) -> &'static str {
 pub fn analytics_no_calls(l: Locale) -> &'static str {
     match l {
         Locale::En => "No calls in this window.",
-        Locale::FrCa => "No calls in this window.",
+        Locale::FrCa => "Aucun appel pour cette période.",
     }
 }
 
@@ -118,7 +118,7 @@ pub fn analytics_no_calls(l: Locale) -> &'static str {
 pub fn analytics_no_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "No calls to analyse yet.",
-        Locale::FrCa => "No calls to analyse yet.",
+        Locale::FrCa => "Aucun appel analysé pour l'instant.",
     }
 }
 
@@ -127,7 +127,7 @@ pub fn analytics_no_sentiment(l: Locale) -> &'static str {
 pub fn analytics_not_recorded(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not recorded",
-        Locale::FrCa => "Not recorded",
+        Locale::FrCa => "Non mesuré",
     }
 }
 
@@ -136,7 +136,7 @@ pub fn analytics_not_recorded(l: Locale) -> &'static str {
 pub fn analytics_range_30_days(l: Locale) -> &'static str {
     match l {
         Locale::En => "30 days",
-        Locale::FrCa => "30 days",
+        Locale::FrCa => "30 jours",
     }
 }
 
@@ -145,7 +145,7 @@ pub fn analytics_range_30_days(l: Locale) -> &'static str {
 pub fn analytics_range_7_days(l: Locale) -> &'static str {
     match l {
         Locale::En => "7 days",
-        Locale::FrCa => "7 days",
+        Locale::FrCa => "7 jours",
     }
 }
 
@@ -154,7 +154,7 @@ pub fn analytics_range_7_days(l: Locale) -> &'static str {
 pub fn analytics_range_90_days(l: Locale) -> &'static str {
     match l {
         Locale::En => "90 days",
-        Locale::FrCa => "90 days",
+        Locale::FrCa => "90 jours",
     }
 }
 
@@ -163,7 +163,7 @@ pub fn analytics_range_90_days(l: Locale) -> &'static str {
 pub fn analytics_report_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load call analytics",
-        Locale::FrCa => "Could not load call analytics",
+        Locale::FrCa => "Impossible de charger l'analytique des appels",
     }
 }
 
@@ -172,7 +172,7 @@ pub fn analytics_report_failed_title(l: Locale) -> &'static str {
 pub fn analytics_usage_avatar_minutes(l: Locale) -> &'static str {
     match l {
         Locale::En => "Video minutes",
-        Locale::FrCa => "Video minutes",
+        Locale::FrCa => "Minutes de vidéo",
     }
 }
 
@@ -181,7 +181,7 @@ pub fn analytics_usage_avatar_minutes(l: Locale) -> &'static str {
 pub fn analytics_usage_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load usage",
-        Locale::FrCa => "Could not load usage",
+        Locale::FrCa => "Impossible de charger l'utilisation",
     }
 }
 
@@ -190,7 +190,7 @@ pub fn analytics_usage_failed_title(l: Locale) -> &'static str {
 pub fn analytics_usage_inbound_minutes(l: Locale) -> &'static str {
     match l {
         Locale::En => "Inbound call minutes",
-        Locale::FrCa => "Inbound call minutes",
+        Locale::FrCa => "Minutes d'appels entrants",
     }
 }
 
@@ -199,7 +199,7 @@ pub fn analytics_usage_inbound_minutes(l: Locale) -> &'static str {
 pub fn analytics_usage_none(l: Locale) -> &'static str {
     match l {
         Locale::En => "No usage has been recorded this month yet.",
-        Locale::FrCa => "No usage has been recorded this month yet.",
+        Locale::FrCa => "Aucune utilisation n'a encore été mesurée ce mois-ci.",
     }
 }
 
@@ -208,7 +208,7 @@ pub fn analytics_usage_none(l: Locale) -> &'static str {
 pub fn analytics_usage_outbound_minutes(l: Locale) -> &'static str {
     match l {
         Locale::En => "Outbound call minutes",
-        Locale::FrCa => "Outbound call minutes",
+        Locale::FrCa => "Minutes d'appels sortants",
     }
 }
 
@@ -217,7 +217,7 @@ pub fn analytics_usage_outbound_minutes(l: Locale) -> &'static str {
 pub fn analytics_usage_phone_numbers(l: Locale) -> &'static str {
     match l {
         Locale::En => "Phone numbers",
-        Locale::FrCa => "Phone numbers",
+        Locale::FrCa => "Numéros de téléphone",
     }
 }
 
@@ -226,7 +226,7 @@ pub fn analytics_usage_phone_numbers(l: Locale) -> &'static str {
 pub fn analytics_usage_picture_messages_sent(l: Locale) -> &'static str {
     match l {
         Locale::En => "Picture messages sent",
-        Locale::FrCa => "Picture messages sent",
+        Locale::FrCa => "Messages multimédias envoyés",
     }
 }
 
@@ -235,7 +235,7 @@ pub fn analytics_usage_picture_messages_sent(l: Locale) -> &'static str {
 pub fn analytics_usage_texts_received(l: Locale) -> &'static str {
     match l {
         Locale::En => "Texts received",
-        Locale::FrCa => "Texts received",
+        Locale::FrCa => "Textos reçus",
     }
 }
 
@@ -244,7 +244,7 @@ pub fn analytics_usage_texts_received(l: Locale) -> &'static str {
 pub fn analytics_usage_texts_sent(l: Locale) -> &'static str {
     match l {
         Locale::En => "Texts sent",
-        Locale::FrCa => "Texts sent",
+        Locale::FrCa => "Textos envoyés",
     }
 }
 
@@ -253,7 +253,7 @@ pub fn analytics_usage_texts_sent(l: Locale) -> &'static str {
 pub fn analytics_usage_whatsapp_received(l: Locale) -> &'static str {
     match l {
         Locale::En => "WhatsApp messages received",
-        Locale::FrCa => "WhatsApp messages received",
+        Locale::FrCa => "Messages WhatsApp reçus",
     }
 }
 
@@ -262,7 +262,7 @@ pub fn analytics_usage_whatsapp_received(l: Locale) -> &'static str {
 pub fn analytics_usage_whatsapp_sent(l: Locale) -> &'static str {
     match l {
         Locale::En => "WhatsApp messages sent",
-        Locale::FrCa => "WhatsApp messages sent",
+        Locale::FrCa => "Messages WhatsApp envoyés",
     }
 }
 
@@ -271,7 +271,7 @@ pub fn analytics_usage_whatsapp_sent(l: Locale) -> &'static str {
 pub fn billing_account_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load your subscription and invoices",
-        Locale::FrCa => "Could not load your subscription and invoices",
+        Locale::FrCa => "Impossible de charger votre abonnement et vos factures",
     }
 }
 
@@ -280,7 +280,7 @@ pub fn billing_account_failed_title(l: Locale) -> &'static str {
 pub fn billing_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load billing",
-        Locale::FrCa => "Could not load billing",
+        Locale::FrCa => "Impossible de charger la facturation",
     }
 }
 
@@ -289,7 +289,7 @@ pub fn billing_failed_title(l: Locale) -> &'static str {
 pub fn billing_invoices_truncated(l: Locale) -> &'static str {
     match l {
         Locale::En => "Showing your most recent invoices. Older ones are on the website.",
-        Locale::FrCa => "Showing your most recent invoices. Older ones are on the website.",
+        Locale::FrCa => "Vos dernières factures sont affichées. Les plus anciennes sont sur le site Web.",
     }
 }
 
@@ -298,7 +298,7 @@ pub fn billing_invoices_truncated(l: Locale) -> &'static str {
 pub fn billing_no_invoices(l: Locale) -> &'static str {
     match l {
         Locale::En => "No invoices yet.",
-        Locale::FrCa => "No invoices yet.",
+        Locale::FrCa => "Aucune facture pour l'instant.",
     }
 }
 
@@ -307,7 +307,7 @@ pub fn billing_no_invoices(l: Locale) -> &'static str {
 pub fn billing_no_plan(l: Locale) -> &'static str {
     match l {
         Locale::En => "No plan on this workspace",
-        Locale::FrCa => "No plan on this workspace",
+        Locale::FrCa => "Aucun forfait pour cet espace de travail",
     }
 }
 
@@ -316,7 +316,7 @@ pub fn billing_no_plan(l: Locale) -> &'static str {
 pub fn billing_no_subscription(l: Locale) -> &'static str {
     match l {
         Locale::En => "No subscription is attached to this account.",
-        Locale::FrCa => "No subscription is attached to this account.",
+        Locale::FrCa => "Aucun abonnement n'est associé à ce compte.",
     }
 }
 
@@ -325,7 +325,7 @@ pub fn billing_no_subscription(l: Locale) -> &'static str {
 pub fn billing_overage_auto_bill(l: Locale) -> &'static str {
     match l {
         Locale::En => "Minutes beyond your plan are billed automatically.",
-        Locale::FrCa => "Minutes beyond your plan are billed automatically.",
+        Locale::FrCa => "Les minutes hors forfait sont facturées automatiquement.",
     }
 }
 
@@ -334,7 +334,7 @@ pub fn billing_overage_auto_bill(l: Locale) -> &'static str {
 pub fn billing_overage_auto_bill_exceeded(l: Locale) -> &'static str {
     match l {
         Locale::En => "You are over your included minutes, and the extra is being billed.",
-        Locale::FrCa => "You are over your included minutes, and the extra is being billed.",
+        Locale::FrCa => "Vous avez dépassé vos minutes incluses, et l'excédent est facturé.",
     }
 }
 
@@ -343,7 +343,7 @@ pub fn billing_overage_auto_bill_exceeded(l: Locale) -> &'static str {
 pub fn billing_overage_hard_cap(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calls stop once your included minutes run out.",
-        Locale::FrCa => "Calls stop once your included minutes run out.",
+        Locale::FrCa => "Les appels cessent une fois vos minutes incluses épuisées.",
     }
 }
 
@@ -352,7 +352,7 @@ pub fn billing_overage_hard_cap(l: Locale) -> &'static str {
 pub fn billing_overage_hard_cap_exceeded(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calls are being declined: your included minutes are used up.",
-        Locale::FrCa => "Calls are being declined: your included minutes are used up.",
+        Locale::FrCa => "Les appels sont refusés\u{00A0}: vos minutes incluses sont épuisées.",
     }
 }
 
@@ -361,7 +361,7 @@ pub fn billing_overage_hard_cap_exceeded(l: Locale) -> &'static str {
 pub fn billing_read_only(l: Locale) -> &'static str {
     match l {
         Locale::En => "Plan changes, payment methods and cancellations are made on the District AI website. This screen is read only.",
-        Locale::FrCa => "Plan changes, payment methods and cancellations are made on the District AI website. This screen is read only.",
+        Locale::FrCa => "Les changements de forfait, moyens de paiement et résiliations se gèrent sur le site Web de District AI. Cet écran est en lecture seule.",
     }
 }
 
@@ -370,7 +370,7 @@ pub fn billing_read_only(l: Locale) -> &'static str {
 pub fn billing_read_only_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "This screen is read only. Ask an agency or client member of this workspace to change the plan.",
-        Locale::FrCa => "This screen is read only. Ask an agency or client member of this workspace to change the plan.",
+        Locale::FrCa => "Cet écran est en lecture seule. Demandez à un membre ayant le rôle Agence ou Client de cet espace de travail de changer de forfait.",
     }
 }
 
@@ -379,7 +379,7 @@ pub fn billing_read_only_viewer(l: Locale) -> &'static str {
 pub fn billing_status_active(l: Locale) -> &'static str {
     match l {
         Locale::En => "Active",
-        Locale::FrCa => "Active",
+        Locale::FrCa => "Actif",
     }
 }
 
@@ -388,7 +388,7 @@ pub fn billing_status_active(l: Locale) -> &'static str {
 pub fn billing_status_cancelled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancelled",
-        Locale::FrCa => "Cancelled",
+        Locale::FrCa => "Annulé",
     }
 }
 
@@ -397,7 +397,7 @@ pub fn billing_status_cancelled(l: Locale) -> &'static str {
 pub fn billing_status_cancelled_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "This plan will not renew.",
-        Locale::FrCa => "This plan will not renew.",
+        Locale::FrCa => "Ce forfait ne sera pas renouvelé.",
     }
 }
 
@@ -406,7 +406,7 @@ pub fn billing_status_cancelled_caption(l: Locale) -> &'static str {
 pub fn billing_status_none(l: Locale) -> &'static str {
     match l {
         Locale::En => "No subscription",
-        Locale::FrCa => "No subscription",
+        Locale::FrCa => "Aucun abonnement",
     }
 }
 
@@ -415,7 +415,7 @@ pub fn billing_status_none(l: Locale) -> &'static str {
 pub fn billing_status_past_due(l: Locale) -> &'static str {
     match l {
         Locale::En => "Past due",
-        Locale::FrCa => "Past due",
+        Locale::FrCa => "En retard",
     }
 }
 
@@ -424,7 +424,7 @@ pub fn billing_status_past_due(l: Locale) -> &'static str {
 pub fn billing_status_past_due_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "A payment did not go through. Service continues while it is retried.",
-        Locale::FrCa => "A payment did not go through. Service continues while it is retried.",
+        Locale::FrCa => "Un paiement n'a pas abouti. Le service continue pendant les nouvelles tentatives de paiement.",
     }
 }
 
@@ -433,7 +433,7 @@ pub fn billing_status_past_due_caption(l: Locale) -> &'static str {
 pub fn billing_unavailable_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The payment provider could not be reached just now, so your subscription and invoices are not shown. Your plan and usage above are current, and nothing about your account has changed.",
-        Locale::FrCa => "The payment provider could not be reached just now, so your subscription and invoices are not shown. Your plan and usage above are current, and nothing about your account has changed.",
+        Locale::FrCa => "Le fournisseur de paiement est injoignable pour le moment, alors votre abonnement et vos factures ne sont pas affichés. Votre forfait et votre utilisation ci-dessus sont à jour, et rien n'a changé dans votre compte.",
     }
 }
 
@@ -442,7 +442,7 @@ pub fn billing_unavailable_body(l: Locale) -> &'static str {
 pub fn billing_unavailable_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Billing details unavailable",
-        Locale::FrCa => "Billing details unavailable",
+        Locale::FrCa => "Données de facturation indisponibles",
     }
 }
 
@@ -451,7 +451,7 @@ pub fn billing_unavailable_title(l: Locale) -> &'static str {
 pub fn billing_web_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Manage billing on the web",
-        Locale::FrCa => "Manage billing on the web",
+        Locale::FrCa => "Gérer la facturation sur le Web",
     }
 }
 
@@ -460,7 +460,7 @@ pub fn billing_web_action(l: Locale) -> &'static str {
 pub fn call_caller(l: Locale) -> &'static str {
     match l {
         Locale::En => "Caller",
-        Locale::FrCa => "Caller",
+        Locale::FrCa => "Appelant",
     }
 }
 
@@ -469,7 +469,7 @@ pub fn call_caller(l: Locale) -> &'static str {
 pub fn call_connect_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "The call could not be connected.",
-        Locale::FrCa => "The call could not be connected.",
+        Locale::FrCa => "L'appel n'a pas pu être établi.",
     }
 }
 
@@ -478,7 +478,7 @@ pub fn call_connect_failed(l: Locale) -> &'static str {
 pub fn call_connecting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connecting.",
-        Locale::FrCa => "Connecting.",
+        Locale::FrCa => "Connexion en cours.",
     }
 }
 
@@ -487,7 +487,7 @@ pub fn call_connecting(l: Locale) -> &'static str {
 pub fn call_dialing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Placing the call.",
-        Locale::FrCa => "Placing the call.",
+        Locale::FrCa => "Lancement de l'appel.",
     }
 }
 
@@ -496,7 +496,7 @@ pub fn call_dialing(l: Locale) -> &'static str {
 pub fn call_ended(l: Locale) -> &'static str {
     match l {
         Locale::En => "Call ended.",
-        Locale::FrCa => "Call ended.",
+        Locale::FrCa => "Appel terminé.",
     }
 }
 
@@ -505,7 +505,7 @@ pub fn call_ended(l: Locale) -> &'static str {
 pub fn call_ended_lasted(l: Locale, duration: &str) -> String {
     match l {
         Locale::En => format!("Call ended. It lasted {duration}."),
-        Locale::FrCa => format!("Call ended. It lasted {duration}."),
+        Locale::FrCa => format!("Appel terminé. Durée\u{00A0}: {duration}."),
     }
 }
 
@@ -514,7 +514,7 @@ pub fn call_ended_lasted(l: Locale, duration: &str) -> String {
 pub fn call_ended_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "The call log has the record of this call. The length here is this app's own count.",
-        Locale::FrCa => "The call log has the record of this call. The length here is this app's own count.",
+        Locale::FrCa => "Le journal des appels contient le dossier de cet appel. Cette durée est mesurée par l'application.",
     }
 }
 
@@ -523,7 +523,7 @@ pub fn call_ended_note(l: Locale) -> &'static str {
 pub fn call_ringing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calling.",
-        Locale::FrCa => "Calling.",
+        Locale::FrCa => "Appel en cours.",
     }
 }
 
@@ -532,7 +532,7 @@ pub fn call_ringing(l: Locale) -> &'static str {
 pub fn call_handling_mode_ai_first(l: Locale) -> &'static str {
     match l {
         Locale::En => "The receptionist answers",
-        Locale::FrCa => "The receptionist answers",
+        Locale::FrCa => "La réceptionniste répond",
     }
 }
 
@@ -541,7 +541,7 @@ pub fn call_handling_mode_ai_first(l: Locale) -> &'static str {
 pub fn call_handling_mode_ai_first_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The receptionist takes every incoming call.",
-        Locale::FrCa => "The receptionist takes every incoming call.",
+        Locale::FrCa => "La réceptionniste prend tous les appels entrants.",
     }
 }
 
@@ -550,7 +550,7 @@ pub fn call_handling_mode_ai_first_body(l: Locale) -> &'static str {
 pub fn call_handling_mode_ai_then_app(l: Locale) -> &'static str {
     match l {
         Locale::En => "The receptionist answers, then your devices ring",
-        Locale::FrCa => "The receptionist answers, then your devices ring",
+        Locale::FrCa => "La réceptionniste répond, puis vos appareils sonnent",
     }
 }
 
@@ -559,7 +559,7 @@ pub fn call_handling_mode_ai_then_app(l: Locale) -> &'static str {
 pub fn call_handling_mode_ai_then_app_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The receptionist takes the call and can hand it to the members' devices.",
-        Locale::FrCa => "The receptionist takes the call and can hand it to the members' devices.",
+        Locale::FrCa => "La réceptionniste prend l'appel et peut le transférer aux appareils des membres.",
     }
 }
 
@@ -568,7 +568,7 @@ pub fn call_handling_mode_ai_then_app_body(l: Locale) -> &'static str {
 pub fn call_handling_mode_app_first(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your devices ring first",
-        Locale::FrCa => "Your devices ring first",
+        Locale::FrCa => "Vos appareils sonnent d'abord",
     }
 }
 
@@ -577,7 +577,7 @@ pub fn call_handling_mode_app_first(l: Locale) -> &'static str {
 pub fn call_handling_mode_app_first_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The members' devices ring before the receptionist answers.",
-        Locale::FrCa => "The members' devices ring before the receptionist answers.",
+        Locale::FrCa => "Les appareils des membres sonnent avant que la réceptionniste réponde.",
     }
 }
 
@@ -586,7 +586,7 @@ pub fn call_handling_mode_app_first_body(l: Locale) -> &'static str {
 pub fn call_handling_ring_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Between 5 and 30 seconds.",
-        Locale::FrCa => "Between 5 and 30 seconds.",
+        Locale::FrCa => "Entre 5 et 30 secondes.",
     }
 }
 
@@ -595,7 +595,7 @@ pub fn call_handling_ring_hint(l: Locale) -> &'static str {
 pub fn call_handling_unavailable_other(l: Locale) -> &'static str {
     match l {
         Locale::En => "You cannot be made available for calls in this workspace.",
-        Locale::FrCa => "You cannot be made available for calls in this workspace.",
+        Locale::FrCa => "Impossible de vous rendre disponible pour les appels dans cet espace de travail.",
     }
 }
 
@@ -604,7 +604,7 @@ pub fn call_handling_unavailable_other(l: Locale) -> &'static str {
 pub fn call_handling_unavailable_owner(l: Locale) -> &'static str {
     match l {
         Locale::En => "You hold your role as this workspace's owner, with no membership to set this on, so it cannot be changed here.",
-        Locale::FrCa => "You hold your role as this workspace's owner, with no membership to set this on, so it cannot be changed here.",
+        Locale::FrCa => "Votre rôle de propriétaire de cet espace de travail ne s'accompagne d'aucun profil de membre où appliquer ce réglage; il ne peut donc pas être modifié ici.",
     }
 }
 
@@ -613,7 +613,7 @@ pub fn call_handling_unavailable_owner(l: Locale) -> &'static str {
 pub fn call_handling_unavailable_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Viewers are not rung for calls.",
-        Locale::FrCa => "Viewers are not rung for calls.",
+        Locale::FrCa => "Le rôle Lecteur ne reçoit pas d'appels.",
     }
 }
 
@@ -622,7 +622,7 @@ pub fn call_handling_unavailable_viewer(l: Locale) -> &'static str {
 pub fn call_handling_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Only agency and client members can change how this workspace answers calls.",
-        Locale::FrCa => "Only agency and client members can change how this workspace answers calls.",
+        Locale::FrCa => "Seuls les membres Agence et Client peuvent modifier la façon dont cet espace de travail répond aux appels.",
     }
 }
 
@@ -631,7 +631,7 @@ pub fn call_handling_viewer(l: Locale) -> &'static str {
 pub fn calls_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calls your receptionist answers will appear here.",
-        Locale::FrCa => "Calls your receptionist answers will appear here.",
+        Locale::FrCa => "Les appels que prend votre réceptionniste apparaîtront ici.",
     }
 }
 
@@ -640,7 +640,7 @@ pub fn calls_empty_body(l: Locale) -> &'static str {
 pub fn calls_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No calls yet",
-        Locale::FrCa => "No calls yet",
+        Locale::FrCa => "Aucun appel",
     }
 }
 
@@ -649,7 +649,7 @@ pub fn calls_empty_title(l: Locale) -> &'static str {
 pub fn calls_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load the call log",
-        Locale::FrCa => "Could not load the call log",
+        Locale::FrCa => "Impossible de charger le journal des appels",
     }
 }
 
@@ -658,7 +658,7 @@ pub fn calls_failed_title(l: Locale) -> &'static str {
 pub fn calls_transcript_absent(l: Locale) -> &'static str {
     match l {
         Locale::En => "No transcript for this call.",
-        Locale::FrCa => "No transcript for this call.",
+        Locale::FrCa => "Aucune transcription pour cet appel.",
     }
 }
 
@@ -667,7 +667,7 @@ pub fn calls_transcript_absent(l: Locale) -> &'static str {
 pub fn contacts_action_block(l: Locale) -> &'static str {
     match l {
         Locale::En => "Block",
-        Locale::FrCa => "Block",
+        Locale::FrCa => "Bloquer",
     }
 }
 
@@ -676,7 +676,7 @@ pub fn contacts_action_block(l: Locale) -> &'static str {
 pub fn contacts_action_clear_intel(l: Locale) -> &'static str {
     match l {
         Locale::En => "Clear research",
-        Locale::FrCa => "Clear research",
+        Locale::FrCa => "Effacer la recherche externe",
     }
 }
 
@@ -685,7 +685,7 @@ pub fn contacts_action_clear_intel(l: Locale) -> &'static str {
 pub fn contacts_action_delete(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete",
-        Locale::FrCa => "Delete",
+        Locale::FrCa => "Supprimer",
     }
 }
 
@@ -694,7 +694,7 @@ pub fn contacts_action_delete(l: Locale) -> &'static str {
 pub fn contacts_action_unblock(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unblock",
-        Locale::FrCa => "Unblock",
+        Locale::FrCa => "Débloquer",
     }
 }
 
@@ -703,7 +703,7 @@ pub fn contacts_action_unblock(l: Locale) -> &'static str {
 pub fn contacts_blocked_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No blocked callers",
-        Locale::FrCa => "No blocked callers",
+        Locale::FrCa => "Aucun appelant bloqué",
     }
 }
 
@@ -712,7 +712,7 @@ pub fn contacts_blocked_empty_title(l: Locale) -> &'static str {
 pub fn contacts_blocked_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load blocked callers",
-        Locale::FrCa => "Could not load blocked callers",
+        Locale::FrCa => "Impossible de charger les appelants bloqués",
     }
 }
 
@@ -721,7 +721,7 @@ pub fn contacts_blocked_failed_title(l: Locale) -> &'static str {
 pub fn contacts_confirm_block(l: Locale) -> &'static str {
     match l {
         Locale::En => "Block this caller? Their conversations and calls stop appearing in this workspace. You can unblock them at any time.",
-        Locale::FrCa => "Block this caller? Their conversations and calls stop appearing in this workspace. You can unblock them at any time.",
+        Locale::FrCa => "Bloquer cet appelant? Ses conversations et ses appels cessent d'apparaître dans cet espace de travail. Vous pouvez le débloquer en tout temps.",
     }
 }
 
@@ -730,7 +730,7 @@ pub fn contacts_confirm_block(l: Locale) -> &'static str {
 pub fn contacts_confirm_clear_intel(l: Locale) -> &'static str {
     match l {
         Locale::En => "Clear this contact's research? The contact, its phone number, email and history are kept. Getting the research back means running it again.",
-        Locale::FrCa => "Clear this contact's research? The contact, its phone number, email and history are kept. Getting the research back means running it again.",
+        Locale::FrCa => "Effacer la recherche externe sur ce contact? Le contact, son numéro de téléphone, son courriel et sa chronologie sont conservés. Pour récupérer la recherche, il faut la relancer.",
     }
 }
 
@@ -739,7 +739,7 @@ pub fn contacts_confirm_clear_intel(l: Locale) -> &'static str {
 pub fn contacts_confirm_delete(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete this contact? This cannot be undone.",
-        Locale::FrCa => "Delete this contact? This cannot be undone.",
+        Locale::FrCa => "Supprimer ce contact? Cette action est irréversible.",
     }
 }
 
@@ -748,7 +748,7 @@ pub fn contacts_confirm_delete(l: Locale) -> &'static str {
 pub fn contacts_confirm_unblock(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unblock this caller? Their conversations and calls start appearing in this workspace again.",
-        Locale::FrCa => "Unblock this caller? Their conversations and calls start appearing in this workspace again.",
+        Locale::FrCa => "Débloquer cet appelant? Ses conversations et ses appels recommencent à apparaître dans cet espace de travail.",
     }
 }
 
@@ -757,7 +757,7 @@ pub fn contacts_confirm_unblock(l: Locale) -> &'static str {
 pub fn contacts_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Callers are added automatically as they come in.",
-        Locale::FrCa => "Callers are added automatically as they come in.",
+        Locale::FrCa => "Les appelants sont ajoutés automatiquement au fil des appels.",
     }
 }
 
@@ -766,7 +766,7 @@ pub fn contacts_empty_body(l: Locale) -> &'static str {
 pub fn contacts_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No contacts yet",
-        Locale::FrCa => "No contacts yet",
+        Locale::FrCa => "Aucun contact",
     }
 }
 
@@ -775,7 +775,7 @@ pub fn contacts_empty_title(l: Locale) -> &'static str {
 pub fn contacts_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load contacts",
-        Locale::FrCa => "Could not load contacts",
+        Locale::FrCa => "Impossible de charger les contacts",
     }
 }
 
@@ -784,7 +784,7 @@ pub fn contacts_failed_title(l: Locale) -> &'static str {
 pub fn contacts_needs_phone_or_email(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter a phone number or an email address.",
-        Locale::FrCa => "Enter a phone number or an email address.",
+        Locale::FrCa => "Entrez un numéro de téléphone ou un courriel.",
     }
 }
 
@@ -793,7 +793,7 @@ pub fn contacts_needs_phone_or_email(l: Locale) -> &'static str {
 pub fn contacts_unnamed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unnamed contact",
-        Locale::FrCa => "Unnamed contact",
+        Locale::FrCa => "Contact sans nom",
     }
 }
 
@@ -802,7 +802,7 @@ pub fn contacts_unnamed(l: Locale) -> &'static str {
 pub fn desk_author_assistant(l: Locale) -> &'static str {
     match l {
         Locale::En => "Receptionist",
-        Locale::FrCa => "Receptionist",
+        Locale::FrCa => "Réceptionniste",
     }
 }
 
@@ -811,7 +811,7 @@ pub fn desk_author_assistant(l: Locale) -> &'static str {
 pub fn desk_author_customer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Customer",
-        Locale::FrCa => "Customer",
+        Locale::FrCa => "Client",
     }
 }
 
@@ -820,7 +820,7 @@ pub fn desk_author_customer(l: Locale) -> &'static str {
 pub fn desk_author_team(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your team",
-        Locale::FrCa => "Your team",
+        Locale::FrCa => "Votre équipe",
     }
 }
 
@@ -829,7 +829,7 @@ pub fn desk_author_team(l: Locale) -> &'static str {
 pub fn desk_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Tickets your customers raise will appear here.",
-        Locale::FrCa => "Tickets your customers raise will appear here.",
+        Locale::FrCa => "Les billets soumis par vos clients apparaîtront ici.",
     }
 }
 
@@ -838,7 +838,7 @@ pub fn desk_empty_body(l: Locale) -> &'static str {
 pub fn desk_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No tickets yet",
-        Locale::FrCa => "No tickets yet",
+        Locale::FrCa => "Aucun billet pour l'instant",
     }
 }
 
@@ -847,7 +847,7 @@ pub fn desk_empty_title(l: Locale) -> &'static str {
 pub fn desk_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load the help desk",
-        Locale::FrCa => "Could not load the help desk",
+        Locale::FrCa => "Impossible de charger le comptoir",
     }
 }
 
@@ -856,7 +856,7 @@ pub fn desk_failed_title(l: Locale) -> &'static str {
 pub fn desk_logo_file_kept(l: Locale) -> &'static str {
     match l {
         Locale::En => "The logo is no longer shown to customers, but its file could not be deleted and may still be reachable at its address.",
-        Locale::FrCa => "The logo is no longer shown to customers, but its file could not be deleted and may still be reachable at its address.",
+        Locale::FrCa => "Le logo n'est plus affiché aux clients, mais son fichier n'a pas pu être supprimé et pourrait encore être accessible à son adresse.",
     }
 }
 
@@ -865,7 +865,7 @@ pub fn desk_logo_file_kept(l: Locale) -> &'static str {
 pub fn desk_none_matching(l: Locale) -> &'static str {
     match l {
         Locale::En => "No tickets with this status.",
-        Locale::FrCa => "No tickets with this status.",
+        Locale::FrCa => "Aucun billet avec cet état.",
     }
 }
 
@@ -874,7 +874,7 @@ pub fn desk_none_matching(l: Locale) -> &'static str {
 pub fn desk_off_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "While the desk is off, no tickets are recorded. Turn it on to start taking them.",
-        Locale::FrCa => "While the desk is off, no tickets are recorded. Turn it on to start taking them.",
+        Locale::FrCa => "Tant que le comptoir est désactivé, aucun billet n'est consigné. Activez-le pour en recevoir.",
     }
 }
 
@@ -883,7 +883,7 @@ pub fn desk_off_body(l: Locale) -> &'static str {
 pub fn desk_off_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "The help desk is off",
-        Locale::FrCa => "The help desk is off",
+        Locale::FrCa => "Le comptoir est désactivé",
     }
 }
 
@@ -892,7 +892,7 @@ pub fn desk_off_title(l: Locale) -> &'static str {
 pub fn desk_settings_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load the desk's settings",
-        Locale::FrCa => "Could not load the desk's settings",
+        Locale::FrCa => "Paramètres du comptoir indisponibles",
     }
 }
 
@@ -901,7 +901,7 @@ pub fn desk_settings_failed_title(l: Locale) -> &'static str {
 pub fn desk_status_open(l: Locale) -> &'static str {
     match l {
         Locale::En => "Open",
-        Locale::FrCa => "Open",
+        Locale::FrCa => "Ouverte",
     }
 }
 
@@ -910,7 +910,7 @@ pub fn desk_status_open(l: Locale) -> &'static str {
 pub fn desk_status_resolved(l: Locale) -> &'static str {
     match l {
         Locale::En => "Resolved",
-        Locale::FrCa => "Resolved",
+        Locale::FrCa => "Réglée",
     }
 }
 
@@ -919,7 +919,7 @@ pub fn desk_status_resolved(l: Locale) -> &'static str {
 pub fn desk_status_waiting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Waiting on the customer",
-        Locale::FrCa => "Waiting on the customer",
+        Locale::FrCa => "En attente du client",
     }
 }
 
@@ -928,7 +928,7 @@ pub fn desk_status_waiting(l: Locale) -> &'static str {
 pub fn desk_ticket_already_raised(l: Locale) -> &'static str {
     match l {
         Locale::En => "That ticket was already raised.",
-        Locale::FrCa => "That ticket was already raised.",
+        Locale::FrCa => "Ce billet a déjà été créé.",
     }
 }
 
@@ -937,7 +937,7 @@ pub fn desk_ticket_already_raised(l: Locale) -> &'static str {
 pub fn desk_ticket_raised(l: Locale, reference: &str) -> String {
     match l {
         Locale::En => format!("Ticket {reference} is open."),
-        Locale::FrCa => format!("Ticket {reference} is open."),
+        Locale::FrCa => format!("Le billet {reference} a été créé."),
     }
 }
 
@@ -946,7 +946,7 @@ pub fn desk_ticket_raised(l: Locale, reference: &str) -> String {
 pub fn desk_turn_on(l: Locale) -> &'static str {
     match l {
         Locale::En => "Turn on the help desk",
-        Locale::FrCa => "Turn on the help desk",
+        Locale::FrCa => "Activer le comptoir",
     }
 }
 
@@ -955,7 +955,7 @@ pub fn desk_turn_on(l: Locale) -> &'static str {
 pub fn devices_action_sign_out(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign out",
-        Locale::FrCa => "Sign out",
+        Locale::FrCa => "Se déconnecter",
     }
 }
 
@@ -964,7 +964,7 @@ pub fn devices_action_sign_out(l: Locale) -> &'static str {
 pub fn devices_confirm_device(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign this device out? It will need to sign in again to use District AI.",
-        Locale::FrCa => "Sign this device out? It will need to sign in again to use District AI.",
+        Locale::FrCa => "Déconnecter cet appareil? Il devra se reconnecter pour utiliser District AI.",
     }
 }
 
@@ -973,7 +973,7 @@ pub fn devices_confirm_device(l: Locale) -> &'static str {
 pub fn devices_confirm_everywhere(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign out of District AI on every device, including this one?",
-        Locale::FrCa => "Sign out of District AI on every device, including this one?",
+        Locale::FrCa => "Vous déconnecter de District AI sur tous les appareils, y compris celui-ci?",
     }
 }
 
@@ -982,7 +982,7 @@ pub fn devices_confirm_everywhere(l: Locale) -> &'static str {
 pub fn devices_confirm_this_device(l: Locale) -> &'static str {
     match l {
         Locale::En => "This is the device you are using. Signing it out will return you to the sign-in screen.",
-        Locale::FrCa => "This is the device you are using. Signing it out will return you to the sign-in screen.",
+        Locale::FrCa => "C'est l'appareil que vous utilisez. Si vous le déconnectez, vous reviendrez à l'écran de connexion.",
     }
 }
 
@@ -991,7 +991,7 @@ pub fn devices_confirm_this_device(l: Locale) -> &'static str {
 pub fn devices_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing else is signed in to this account right now. A device that just signed in can take a few minutes to appear.",
-        Locale::FrCa => "Nothing else is signed in to this account right now. A device that just signed in can take a few minutes to appear.",
+        Locale::FrCa => "Aucun autre appareil n'est connecté à ce compte pour le moment. Un appareil qui vient de se connecter peut mettre quelques minutes à apparaître.",
     }
 }
 
@@ -1000,7 +1000,7 @@ pub fn devices_empty_body(l: Locale) -> &'static str {
 pub fn devices_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No other devices",
-        Locale::FrCa => "No other devices",
+        Locale::FrCa => "Aucun autre appareil",
     }
 }
 
@@ -1009,7 +1009,7 @@ pub fn devices_empty_title(l: Locale) -> &'static str {
 pub fn devices_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not list your devices",
-        Locale::FrCa => "Could not list your devices",
+        Locale::FrCa => "Impossible d'afficher vos appareils",
     }
 }
 
@@ -1018,7 +1018,7 @@ pub fn devices_failed_title(l: Locale) -> &'static str {
 pub fn devices_last_active(l: Locale, when: &str) -> String {
     match l {
         Locale::En => format!("Last active {when}"),
-        Locale::FrCa => format!("Last active {when}"),
+        Locale::FrCa => format!("Dernière activité\u{00A0}: {when}"),
     }
 }
 
@@ -1027,7 +1027,7 @@ pub fn devices_last_active(l: Locale, when: &str) -> String {
 pub fn devices_nothing_revoked(l: Locale) -> &'static str {
     match l {
         Locale::En => "That device was already signed out. The list has been refreshed.",
-        Locale::FrCa => "That device was already signed out. The list has been refreshed.",
+        Locale::FrCa => "Cet appareil était déjà déconnecté. La liste a été actualisée.",
     }
 }
 
@@ -1036,7 +1036,7 @@ pub fn devices_nothing_revoked(l: Locale) -> &'static str {
 pub fn devices_platform_unknown(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown platform",
-        Locale::FrCa => "Unknown platform",
+        Locale::FrCa => "Plateforme inconnue",
     }
 }
 
@@ -1045,7 +1045,7 @@ pub fn devices_platform_unknown(l: Locale) -> &'static str {
 pub fn devices_signed_in_recently(l: Locale) -> &'static str {
     match l {
         Locale::En => "Signed in recently",
-        Locale::FrCa => "Signed in recently",
+        Locale::FrCa => "Connecté récemment",
     }
 }
 
@@ -1054,7 +1054,7 @@ pub fn devices_signed_in_recently(l: Locale) -> &'static str {
 pub fn devices_this_device(l: Locale) -> &'static str {
     match l {
         Locale::En => "This device",
-        Locale::FrCa => "This device",
+        Locale::FrCa => "Cet appareil",
     }
 }
 
@@ -1063,7 +1063,7 @@ pub fn devices_this_device(l: Locale) -> &'static str {
 pub fn devices_unnamed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unnamed device",
-        Locale::FrCa => "Unnamed device",
+        Locale::FrCa => "Appareil sans nom",
     }
 }
 
@@ -1072,7 +1072,7 @@ pub fn devices_unnamed(l: Locale) -> &'static str {
 pub fn dialer_busy_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Finish the call or meeting you are in first.",
-        Locale::FrCa => "Finish the call or meeting you are in first.",
+        Locale::FrCa => "Terminez d'abord votre appel ou votre réunion en cours.",
     }
 }
 
@@ -1081,7 +1081,7 @@ pub fn dialer_busy_note(l: Locale) -> &'static str {
 pub fn dialer_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter a number with its country code, for example +1 212 555 0142.",
-        Locale::FrCa => "Enter a number with its country code, for example +1 212 555 0142.",
+        Locale::FrCa => "Indiquez un numéro avec l'indicatif du pays, par exemple +1 212 555 0142.",
     }
 }
 
@@ -1090,7 +1090,7 @@ pub fn dialer_hint(l: Locale) -> &'static str {
 pub fn dialer_microphone_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Placing a call turns on your microphone.",
-        Locale::FrCa => "Placing a call turns on your microphone.",
+        Locale::FrCa => "Passer un appel active votre microphone.",
     }
 }
 
@@ -1099,7 +1099,7 @@ pub fn dialer_microphone_note(l: Locale) -> &'static str {
 pub fn directory_add_rejected(l: Locale) -> &'static str {
     match l {
         Locale::En => "A name and a phone number are both needed to add someone.",
-        Locale::FrCa => "A name and a phone number are both needed to add someone.",
+        Locale::FrCa => "Un nom et un numéro de téléphone sont requis pour ajouter une personne.",
     }
 }
 
@@ -1108,7 +1108,7 @@ pub fn directory_add_rejected(l: Locale) -> &'static str {
 pub fn directory_confirm_clear_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove everyone",
-        Locale::FrCa => "Remove everyone",
+        Locale::FrCa => "Tout retirer",
     }
 }
 
@@ -1117,7 +1117,7 @@ pub fn directory_confirm_clear_action(l: Locale) -> &'static str {
 pub fn directory_confirm_clear_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Saving an empty directory removes everyone the receptionist can put a live caller through to.",
-        Locale::FrCa => "Saving an empty directory removes everyone the receptionist can put a live caller through to.",
+        Locale::FrCa => "Enregistrer un répertoire vide retire toutes les personnes vers qui la réceptionniste peut transférer un appel en cours.",
     }
 }
 
@@ -1126,7 +1126,7 @@ pub fn directory_confirm_clear_body(l: Locale) -> &'static str {
 pub fn directory_confirm_clear_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove every transfer target?",
-        Locale::FrCa => "Remove every transfer target?",
+        Locale::FrCa => "Retirer toutes les destinations?",
     }
 }
 
@@ -1135,7 +1135,7 @@ pub fn directory_confirm_clear_title(l: Locale) -> &'static str {
 pub fn directory_confirm_many_body(l: Locale, count: i64) -> String {
     match l {
         Locale::En => format!("The directory will hold exactly these {} entries, replacing what is stored.", crate::format::integer(l, count)),
-        Locale::FrCa => format!("The directory will hold exactly these {} entries, replacing what is stored.", crate::format::integer(l, count)),
+        Locale::FrCa => format!("Le répertoire contiendra exactement ces {} entrées, qui remplaceront ce qui est enregistré.", crate::format::integer(l, count)),
     }
 }
 
@@ -1144,7 +1144,7 @@ pub fn directory_confirm_many_body(l: Locale, count: i64) -> String {
 pub fn directory_confirm_one_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The directory will hold exactly one entry, replacing what is stored.",
-        Locale::FrCa => "The directory will hold exactly one entry, replacing what is stored.",
+        Locale::FrCa => "Le répertoire contiendra exactement une entrée, qui remplacera ce qui est enregistré.",
     }
 }
 
@@ -1153,7 +1153,7 @@ pub fn directory_confirm_one_body(l: Locale) -> &'static str {
 pub fn directory_confirm_replace_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Replace",
-        Locale::FrCa => "Replace",
+        Locale::FrCa => "Remplacer",
     }
 }
 
@@ -1162,7 +1162,7 @@ pub fn directory_confirm_replace_action(l: Locale) -> &'static str {
 pub fn directory_confirm_replace_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Replace the transfer directory?",
-        Locale::FrCa => "Replace the transfer directory?",
+        Locale::FrCa => "Remplacer le répertoire de transfert?",
     }
 }
 
@@ -1171,7 +1171,7 @@ pub fn directory_confirm_replace_title(l: Locale) -> &'static str {
 pub fn directory_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The receptionist has nobody to put a caller through to. Add someone below.",
-        Locale::FrCa => "The receptionist has nobody to put a caller through to. Add someone below.",
+        Locale::FrCa => "La réceptionniste n'a personne vers qui transférer un appelant. Ajoutez quelqu'un ci-dessous.",
     }
 }
 
@@ -1180,7 +1180,7 @@ pub fn directory_empty_body(l: Locale) -> &'static str {
 pub fn directory_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No transfer targets",
-        Locale::FrCa => "No transfer targets",
+        Locale::FrCa => "Aucune destination",
     }
 }
 
@@ -1189,7 +1189,7 @@ pub fn directory_empty_title(l: Locale) -> &'static str {
 pub fn directory_unmodellable_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace's transfer directory is stored in a shape this app cannot change without losing part of it. Change it on the District AI website.",
-        Locale::FrCa => "This workspace's transfer directory is stored in a shape this app cannot change without losing part of it. Change it on the District AI website.",
+        Locale::FrCa => "Le répertoire de transfert de cet espace de travail est stocké dans un format que cette application ne peut modifier sans en perdre une partie. Modifiez-le sur le site Web de District AI.",
     }
 }
 
@@ -1198,7 +1198,7 @@ pub fn directory_unmodellable_body(l: Locale) -> &'static str {
 pub fn directory_unmodellable_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cannot be edited here",
-        Locale::FrCa => "Cannot be edited here",
+        Locale::FrCa => "Modification impossible ici",
     }
 }
 
@@ -1207,7 +1207,7 @@ pub fn directory_unmodellable_title(l: Locale) -> &'static str {
 pub fn failure_affected_regions(l: Locale, regions: &str) -> String {
     match l {
         Locale::En => format!("Affected regions: {regions}"),
-        Locale::FrCa => format!("Affected regions: {regions}"),
+        Locale::FrCa => format!("Régions touchées\u{00A0}: {regions}"),
     }
 }
 
@@ -1216,7 +1216,7 @@ pub fn failure_affected_regions(l: Locale, regions: &str) -> String {
 pub fn failure_app_bug(l: Locale) -> &'static str {
     match l {
         Locale::En => "Something went wrong in the app. Please report it if it keeps happening.",
-        Locale::FrCa => "Something went wrong in the app. Please report it if it keeps happening.",
+        Locale::FrCa => "Une erreur est survenue dans l'application. Veuillez la signaler si elle se reproduit.",
     }
 }
 
@@ -1225,7 +1225,7 @@ pub fn failure_app_bug(l: Locale) -> &'static str {
 pub fn failure_fallback(l: Locale) -> &'static str {
     match l {
         Locale::En => "Something went wrong. Please try again.",
-        Locale::FrCa => "Something went wrong. Please try again.",
+        Locale::FrCa => "Une erreur est survenue. Veuillez réessayer.",
     }
 }
 
@@ -1234,7 +1234,7 @@ pub fn failure_fallback(l: Locale) -> &'static str {
 pub fn failure_forbidden(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your role in this workspace does not allow this.",
-        Locale::FrCa => "Your role in this workspace does not allow this.",
+        Locale::FrCa => "Votre rôle dans cet espace de travail ne le permet pas.",
     }
 }
 
@@ -1243,7 +1243,7 @@ pub fn failure_forbidden(l: Locale) -> &'static str {
 pub fn failure_hand_off_elsewhere(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI sent a sign-in link for another address, so it was not opened. Updating the app may fix it.",
-        Locale::FrCa => "District AI sent a sign-in link for another address, so it was not opened. Updating the app may fix it.",
+        Locale::FrCa => "District AI a envoyé un lien de connexion qui pointe vers une autre adresse Web; il n'a pas été ouvert. Une mise à jour de l'application pourrait régler le problème.",
     }
 }
 
@@ -1252,7 +1252,7 @@ pub fn failure_hand_off_elsewhere(l: Locale) -> &'static str {
 pub fn failure_hand_off_nonce_refused(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI could not confirm the browser that was opened for the web. Please try again.",
-        Locale::FrCa => "District AI could not confirm the browser that was opened for the web. Please try again.",
+        Locale::FrCa => "District AI n'a pas pu vérifier la fenêtre de navigateur ouverte pour la version Web. Veuillez réessayer.",
     }
 }
 
@@ -1261,7 +1261,7 @@ pub fn failure_hand_off_nonce_refused(l: Locale) -> &'static str {
 pub fn failure_hand_off_page_refused(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI did not accept the page this version of the app asked to open. Updating the app should fix it.",
-        Locale::FrCa => "District AI did not accept the page this version of the app asked to open. Updating the app should fix it.",
+        Locale::FrCa => "District AI a refusé la page demandée par cette version de l'application. Une mise à jour devrait régler le problème.",
     }
 }
 
@@ -1270,7 +1270,7 @@ pub fn failure_hand_off_page_refused(l: Locale) -> &'static str {
 pub fn failure_hand_off_refused(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI could not confirm your sign-in for the web. Sign out, sign in again, and try again.",
-        Locale::FrCa => "District AI could not confirm your sign-in for the web. Sign out, sign in again, and try again.",
+        Locale::FrCa => "District AI n'a pas pu confirmer votre connexion pour la version Web. Déconnectez-vous, reconnectez-vous, puis réessayez.",
     }
 }
 
@@ -1279,7 +1279,7 @@ pub fn failure_hand_off_refused(l: Locale) -> &'static str {
 pub fn failure_hand_off_too_many(l: Locale) -> &'static str {
     match l {
         Locale::En => "The web was opened several times just now. Wait a moment and try again.",
-        Locale::FrCa => "The web was opened several times just now. Wait a moment and try again.",
+        Locale::FrCa => "La version Web a été ouverte plusieurs fois à l'instant. Attendez un instant, puis réessayez.",
     }
 }
 
@@ -1288,7 +1288,7 @@ pub fn failure_hand_off_too_many(l: Locale) -> &'static str {
 pub fn failure_hand_off_update_needed(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app.",
-        Locale::FrCa => "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app.",
+        Locale::FrCa => "District AI exige désormais que votre navigateur réponde à l'application avant d'ouvrir la version Web, et il ne l'a pas fait. Réessayez et laissez le navigateur ouvrir District AI s'il le demande. Si le problème persiste, mettez à jour l'application.",
     }
 }
 
@@ -1297,7 +1297,7 @@ pub fn failure_hand_off_update_needed(l: Locale) -> &'static str {
 pub fn failure_keyring_locked(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your keyring is locked. Unlock it, then try again.",
-        Locale::FrCa => "Your keyring is locked. Unlock it, then try again.",
+        Locale::FrCa => "Votre trousseau est verrouillé. Déverrouillez-le, puis réessayez.",
     }
 }
 
@@ -1306,7 +1306,7 @@ pub fn failure_keyring_locked(l: Locale) -> &'static str {
 pub fn failure_keyring_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your sign-in could not be read because no keyring is available. Start your keyring (for example GNOME Keyring or KeePassXC), then try again.",
-        Locale::FrCa => "Your sign-in could not be read because no keyring is available. Start your keyring (for example GNOME Keyring or KeePassXC), then try again.",
+        Locale::FrCa => "Vos informations de connexion n'ont pas pu être lues, car aucun trousseau n'est disponible. Démarrez votre trousseau (par exemple GNOME Keyring ou KeePassXC), puis réessayez.",
     }
 }
 
@@ -1315,7 +1315,7 @@ pub fn failure_keyring_unavailable(l: Locale) -> &'static str {
 pub fn failure_last_agency_member(l: Locale) -> &'static str {
     match l {
         Locale::En => "Every workspace needs at least one agency member, so this change was not made.",
-        Locale::FrCa => "Every workspace needs at least one agency member, so this change was not made.",
+        Locale::FrCa => "Chaque espace de travail doit avoir au moins un membre ayant le rôle Agence; ce changement n'a donc pas été fait.",
     }
 }
 
@@ -1324,7 +1324,7 @@ pub fn failure_last_agency_member(l: Locale) -> &'static str {
 pub fn failure_live_forbidden(l: Locale) -> &'static str {
     match l {
         Locale::En => "Live updates are not available to you in this workspace. New calls and messages appear when you refresh.",
-        Locale::FrCa => "Live updates are not available to you in this workspace. New calls and messages appear when you refresh.",
+        Locale::FrCa => "Les mises à jour en direct vous sont inaccessibles dans cet espace de travail. Actualisez pour voir les nouveaux appels et messages.",
     }
 }
 
@@ -1333,7 +1333,7 @@ pub fn failure_live_forbidden(l: Locale) -> &'static str {
 pub fn failure_live_unusable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Live updates could not be started, so new calls and messages appear when you refresh. Updating the app may fix it.",
-        Locale::FrCa => "Live updates could not be started, so new calls and messages appear when you refresh. Updating the app may fix it.",
+        Locale::FrCa => "Les mises à jour en direct n'ont pas pu démarrer\u{00A0}: actualisez pour voir les nouveaux appels et messages. Une mise à jour de l'application pourrait régler le problème.",
     }
 }
 
@@ -1342,7 +1342,7 @@ pub fn failure_live_unusable(l: Locale) -> &'static str {
 pub fn failure_member_exists(l: Locale) -> &'static str {
     match l {
         Locale::En => "That address is already a member of this workspace.",
-        Locale::FrCa => "That address is already a member of this workspace.",
+        Locale::FrCa => "Cette adresse appartient déjà à un membre de cet espace de travail.",
     }
 }
 
@@ -1351,7 +1351,7 @@ pub fn failure_member_exists(l: Locale) -> &'static str {
 pub fn failure_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That could not be found. It may have been removed.",
-        Locale::FrCa => "That could not be found. It may have been removed.",
+        Locale::FrCa => "Cet élément est introuvable. Il a peut-être été supprimé.",
     }
 }
 
@@ -1360,7 +1360,7 @@ pub fn failure_not_found(l: Locale) -> &'static str {
 pub fn failure_not_json(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not reach District AI. If this network asks you to sign in, as hotel and public networks often do, sign in to it and try again.",
-        Locale::FrCa => "Could not reach District AI. If this network asks you to sign in, as hotel and public networks often do, sign in to it and try again.",
+        Locale::FrCa => "Impossible de joindre District AI. Si ce réseau vous demande de vous connecter, comme souvent dans les hôtels et les lieux publics, connectez-vous-y, puis réessayez.",
     }
 }
 
@@ -1369,7 +1369,7 @@ pub fn failure_not_json(l: Locale) -> &'static str {
 pub fn failure_offline(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not reach District AI. Check your connection.",
-        Locale::FrCa => "Could not reach District AI. Check your connection.",
+        Locale::FrCa => "Impossible de joindre District AI. Vérifiez votre connexion Internet.",
     }
 }
 
@@ -1378,7 +1378,7 @@ pub fn failure_offline(l: Locale) -> &'static str {
 pub fn failure_preview_unencrypted(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI sent an audition that could not be joined securely, so it was not started. Updating the app may fix it.",
-        Locale::FrCa => "District AI sent an audition that could not be joined securely, so it was not started. Updating the app may fix it.",
+        Locale::FrCa => "District AI a envoyé un aperçu impossible à rejoindre de façon sécurisée\u{00A0}: il n'a pas été lancé. Une mise à jour de l'application pourrait régler le problème.",
     }
 }
 
@@ -1387,7 +1387,7 @@ pub fn failure_preview_unencrypted(l: Locale) -> &'static str {
 pub fn failure_purchase_not_shown(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI could not show that page in this window. Try again, and it opens in your browser.",
-        Locale::FrCa => "District AI could not show that page in this window. Try again, and it opens in your browser.",
+        Locale::FrCa => "District AI n'a pas pu afficher cette page dans cette fenêtre. Réessayez\u{00A0}: elle s'ouvrira dans votre navigateur.",
     }
 }
 
@@ -1396,7 +1396,7 @@ pub fn failure_purchase_not_shown(l: Locale) -> &'static str {
 pub fn failure_rate_limited(l: Locale) -> &'static str {
     match l {
         Locale::En => "Too many requests. Wait a moment and try again.",
-        Locale::FrCa => "Too many requests. Wait a moment and try again.",
+        Locale::FrCa => "Trop de requêtes. Attendez un instant, puis réessayez.",
     }
 }
 
@@ -1405,7 +1405,7 @@ pub fn failure_rate_limited(l: Locale) -> &'static str {
 pub fn failure_redirected(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not reach District AI: the request was redirected. If this network asks you to sign in, sign in to it and try again.",
-        Locale::FrCa => "Could not reach District AI: the request was redirected. If this network asks you to sign in, sign in to it and try again.",
+        Locale::FrCa => "Impossible de joindre District AI\u{00A0}: la requête a été redirigée. Si ce réseau vous demande de vous connecter, connectez-vous-y, puis réessayez.",
     }
 }
 
@@ -1414,7 +1414,7 @@ pub fn failure_redirected(l: Locale) -> &'static str {
 pub fn failure_refused_not_retried(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI did not accept that just now. Please try again.",
-        Locale::FrCa => "District AI did not accept that just now. Please try again.",
+        Locale::FrCa => "District AI n'a pas accepté cette action à l'instant. Veuillez réessayer.",
     }
 }
 
@@ -1423,7 +1423,7 @@ pub fn failure_refused_not_retried(l: Locale) -> &'static str {
 pub fn failure_regions_degraded(l: Locale) -> &'static str {
     match l {
         Locale::En => "A region is unreachable, so this could not be loaded. Your account has not changed.",
-        Locale::FrCa => "A region is unreachable, so this could not be loaded. Your account has not changed.",
+        Locale::FrCa => "Une région est injoignable\u{00A0}: impossible de charger ce contenu. Votre compte n'a pas été modifié.",
     }
 }
 
@@ -1432,7 +1432,7 @@ pub fn failure_regions_degraded(l: Locale) -> &'static str {
 pub fn failure_scheduling_not_offered(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking pages are not offered to this workspace.",
-        Locale::FrCa => "Booking pages are not offered to this workspace.",
+        Locale::FrCa => "Cet espace de travail n'a pas accès aux pages de réservation.",
     }
 }
 
@@ -1441,7 +1441,7 @@ pub fn failure_scheduling_not_offered(l: Locale) -> &'static str {
 pub fn failure_scheduling_setup_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Setting up booking pages did not finish, and no reason was given.",
-        Locale::FrCa => "Setting up booking pages did not finish, and no reason was given.",
+        Locale::FrCa => "La configuration des pages de réservation a échoué, et aucune raison n'a été donnée.",
     }
 }
 
@@ -1450,7 +1450,7 @@ pub fn failure_scheduling_setup_failed(l: Locale) -> &'static str {
 pub fn failure_scheduling_too_many(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking pages were turned on several times in the last hour for this workspace. Try again later.",
-        Locale::FrCa => "Booking pages were turned on several times in the last hour for this workspace. Try again later.",
+        Locale::FrCa => "Les pages de réservation ont été activées plusieurs fois depuis une heure pour cet espace de travail. Réessayez plus tard.",
     }
 }
 
@@ -1459,7 +1459,7 @@ pub fn failure_scheduling_too_many(l: Locale) -> &'static str {
 pub fn failure_server(l: Locale) -> &'static str {
     match l {
         Locale::En => "Something went wrong on our side. Please try again shortly.",
-        Locale::FrCa => "Something went wrong on our side. Please try again shortly.",
+        Locale::FrCa => "Une erreur est survenue du côté de District AI. Veuillez réessayer sous peu.",
     }
 }
 
@@ -1468,7 +1468,7 @@ pub fn failure_server(l: Locale) -> &'static str {
 pub fn failure_signed_out(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your session has ended.",
-        Locale::FrCa => "Your session has ended.",
+        Locale::FrCa => "Votre session a pris fin.",
     }
 }
 
@@ -1477,7 +1477,7 @@ pub fn failure_signed_out(l: Locale) -> &'static str {
 pub fn failure_storage_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your sign-in could not be read or saved on this computer. Please try again.",
-        Locale::FrCa => "Your sign-in could not be read or saved on this computer. Please try again.",
+        Locale::FrCa => "Vos informations de connexion n'ont pas pu être lues ni sauvegardées sur cet ordinateur. Veuillez réessayer.",
     }
 }
 
@@ -1486,7 +1486,7 @@ pub fn failure_storage_failed(l: Locale) -> &'static str {
 pub fn failure_unexpected_response(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI sent a response this version of the app does not understand. Updating the app should fix it.",
-        Locale::FrCa => "District AI sent a response this version of the app does not understand. Updating the app should fix it.",
+        Locale::FrCa => "District AI a envoyé une réponse que cette version de l'application ne comprend pas. Une mise à jour devrait régler le problème.",
     }
 }
 
@@ -1495,7 +1495,7 @@ pub fn failure_unexpected_response(l: Locale) -> &'static str {
 pub fn failure_unreadable_attachment(l: Locale) -> &'static str {
     match l {
         Locale::En => "That image could not be read. Try picking it again.",
-        Locale::FrCa => "That image could not be read. Try picking it again.",
+        Locale::FrCa => "Impossible de lire cette image. Sélectionnez-la de nouveau.",
     }
 }
 
@@ -1504,7 +1504,7 @@ pub fn failure_unreadable_attachment(l: Locale) -> &'static str {
 pub fn failure_unsupported_attachment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Only JPEG, PNG, GIF or WebP images can be attached.",
-        Locale::FrCa => "Only JPEG, PNG, GIF or WebP images can be attached.",
+        Locale::FrCa => "Seules les images JPEG, PNG, GIF ou WebP peuvent être jointes.",
     }
 }
 
@@ -1513,7 +1513,7 @@ pub fn failure_unsupported_attachment(l: Locale) -> &'static str {
 pub fn hq_applying(l: Locale) -> &'static str {
     match l {
         Locale::En => "Applying the change.",
-        Locale::FrCa => "Applying the change.",
+        Locale::FrCa => "Modification en cours.",
     }
 }
 
@@ -1522,7 +1522,7 @@ pub fn hq_applying(l: Locale) -> &'static str {
 pub fn hq_confirm_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Confirm",
-        Locale::FrCa => "Confirm",
+        Locale::FrCa => "Confirmer",
     }
 }
 
@@ -1531,7 +1531,7 @@ pub fn hq_confirm_action(l: Locale) -> &'static str {
 pub fn hq_confirm_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing has been changed yet.",
-        Locale::FrCa => "Nothing has been changed yet.",
+        Locale::FrCa => "Rien n'a encore été modifié.",
     }
 }
 
@@ -1540,7 +1540,7 @@ pub fn hq_confirm_note(l: Locale) -> &'static str {
 pub fn hq_confirm_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Confirm this change",
-        Locale::FrCa => "Confirm this change",
+        Locale::FrCa => "Confirmer ce changement",
     }
 }
 
@@ -1549,7 +1549,7 @@ pub fn hq_confirm_title(l: Locale) -> &'static str {
 pub fn hq_dismiss_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Dismiss",
-        Locale::FrCa => "Dismiss",
+        Locale::FrCa => "Fermer",
     }
 }
 
@@ -1558,7 +1558,7 @@ pub fn hq_dismiss_action(l: Locale) -> &'static str {
 pub fn hq_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Ask about your calls, contacts, the receptionist or your knowledge base.",
-        Locale::FrCa => "Ask about your calls, contacts, the receptionist or your knowledge base.",
+        Locale::FrCa => "Posez une question sur vos appels et contacts, la réceptionniste ou la base de connaissances.",
     }
 }
 
@@ -1567,7 +1567,7 @@ pub fn hq_empty_body(l: Locale) -> &'static str {
 pub fn hq_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Ask District HQ",
-        Locale::FrCa => "Ask District HQ",
+        Locale::FrCa => "Poser une question à District HQ",
     }
 }
 
@@ -1576,7 +1576,7 @@ pub fn hq_empty_title(l: Locale) -> &'static str {
 pub fn hq_note_applied(l: Locale) -> &'static str {
     match l {
         Locale::En => "Done. The change is in place.",
-        Locale::FrCa => "Done. The change is in place.",
+        Locale::FrCa => "Terminé. Le changement est en place.",
     }
 }
 
@@ -1585,7 +1585,7 @@ pub fn hq_note_applied(l: Locale) -> &'static str {
 pub fn hq_note_mismatched(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI reports a change other than the one you confirmed. Check your workspace settings before relying on it.",
-        Locale::FrCa => "District AI reports a change other than the one you confirmed. Check your workspace settings before relying on it.",
+        Locale::FrCa => "District AI signale un changement autre que celui que vous avez confirmé. Vérifiez les paramètres de votre espace de travail avant de vous fier à ce changement.",
     }
 }
 
@@ -1594,7 +1594,7 @@ pub fn hq_note_mismatched(l: Locale) -> &'static str {
 pub fn hq_note_not_applied(l: Locale) -> &'static str {
     match l {
         Locale::En => "That change was not made.",
-        Locale::FrCa => "That change was not made.",
+        Locale::FrCa => "Ce changement n'a pas été fait.",
     }
 }
 
@@ -1603,7 +1603,7 @@ pub fn hq_note_not_applied(l: Locale) -> &'static str {
 pub fn hq_thinking(l: Locale) -> &'static str {
     match l {
         Locale::En => "Thinking.",
-        Locale::FrCa => "Thinking.",
+        Locale::FrCa => "Réflexion en cours.",
     }
 }
 
@@ -1612,7 +1612,7 @@ pub fn hq_thinking(l: Locale) -> &'static str {
 pub fn inbox_compose_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "New message",
-        Locale::FrCa => "New message",
+        Locale::FrCa => "Nouveau message",
     }
 }
 
@@ -1621,7 +1621,7 @@ pub fn inbox_compose_action(l: Locale) -> &'static str {
 pub fn inbox_compose_cancel(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel",
-        Locale::FrCa => "Cancel",
+        Locale::FrCa => "Annuler",
     }
 }
 
@@ -1630,7 +1630,7 @@ pub fn inbox_compose_cancel(l: Locale) -> &'static str {
 pub fn inbox_compose_change(l: Locale) -> &'static str {
     match l {
         Locale::En => "Change",
-        Locale::FrCa => "Change",
+        Locale::FrCa => "Changer",
     }
 }
 
@@ -1639,7 +1639,7 @@ pub fn inbox_compose_change(l: Locale) -> &'static str {
 pub fn inbox_compose_channel_email(l: Locale) -> &'static str {
     match l {
         Locale::En => "Email",
-        Locale::FrCa => "Email",
+        Locale::FrCa => "Courriel",
     }
 }
 
@@ -1648,7 +1648,7 @@ pub fn inbox_compose_channel_email(l: Locale) -> &'static str {
 pub fn inbox_compose_channel_sms(l: Locale) -> &'static str {
     match l {
         Locale::En => "Text message",
-        Locale::FrCa => "Text message",
+        Locale::FrCa => "Texto",
     }
 }
 
@@ -1666,7 +1666,7 @@ pub fn inbox_compose_message(l: Locale) -> &'static str {
 pub fn inbox_compose_message_address(l: Locale, address: &str) -> String {
     match l {
         Locale::En => format!("Message {address}"),
-        Locale::FrCa => format!("Message {address}"),
+        Locale::FrCa => format!("Écrire à {address}"),
     }
 }
 
@@ -1675,7 +1675,7 @@ pub fn inbox_compose_message_address(l: Locale, address: &str) -> String {
 pub fn inbox_compose_no_address(l: Locale) -> &'static str {
     match l {
         Locale::En => "This contact has no phone number or email address on file.",
-        Locale::FrCa => "This contact has no phone number or email address on file.",
+        Locale::FrCa => "Ce contact n'a aucun numéro de téléphone ni adresse courriel au dossier.",
     }
 }
 
@@ -1684,7 +1684,7 @@ pub fn inbox_compose_no_address(l: Locale) -> &'static str {
 pub fn inbox_compose_recent_contacts(l: Locale) -> &'static str {
     match l {
         Locale::En => "Showing your most recent contacts. For anyone else, type their number or email.",
-        Locale::FrCa => "Showing your most recent contacts. For anyone else, type their number or email.",
+        Locale::FrCa => "Voici vos contacts les plus récents. Pour joindre quelqu'un d'autre, tapez son numéro ou son courriel.",
     }
 }
 
@@ -1693,7 +1693,7 @@ pub fn inbox_compose_recent_contacts(l: Locale) -> &'static str {
 pub fn inbox_compose_send(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send",
-        Locale::FrCa => "Send",
+        Locale::FrCa => "Envoyer",
     }
 }
 
@@ -1702,7 +1702,7 @@ pub fn inbox_compose_send(l: Locale) -> &'static str {
 pub fn inbox_compose_send_on(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send on",
-        Locale::FrCa => "Send on",
+        Locale::FrCa => "Envoyer par",
     }
 }
 
@@ -1711,7 +1711,7 @@ pub fn inbox_compose_send_on(l: Locale) -> &'static str {
 pub fn inbox_compose_sending(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sending…",
-        Locale::FrCa => "Sending…",
+        Locale::FrCa => "Envoi en cours…",
     }
 }
 
@@ -1720,7 +1720,7 @@ pub fn inbox_compose_sending(l: Locale) -> &'static str {
 pub fn inbox_compose_subject(l: Locale) -> &'static str {
     match l {
         Locale::En => "Subject",
-        Locale::FrCa => "Subject",
+        Locale::FrCa => "Objet",
     }
 }
 
@@ -1729,7 +1729,7 @@ pub fn inbox_compose_subject(l: Locale) -> &'static str {
 pub fn inbox_compose_suggestions_failed(l: Locale, message: &str) -> String {
     match l {
         Locale::En => format!("{message} You can still enter a number or an email address above."),
-        Locale::FrCa => format!("{message} You can still enter a number or an email address above."),
+        Locale::FrCa => format!("{message} Vous pouvez quand même saisir un numéro ou une adresse courriel ci-dessus."),
     }
 }
 
@@ -1738,7 +1738,7 @@ pub fn inbox_compose_suggestions_failed(l: Locale, message: &str) -> String {
 pub fn inbox_compose_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "New message",
-        Locale::FrCa => "New message",
+        Locale::FrCa => "Nouveau message",
     }
 }
 
@@ -1747,7 +1747,7 @@ pub fn inbox_compose_title(l: Locale) -> &'static str {
 pub fn inbox_compose_to(l: Locale) -> &'static str {
     match l {
         Locale::En => "To",
-        Locale::FrCa => "To",
+        Locale::FrCa => "À",
     }
 }
 
@@ -1756,7 +1756,7 @@ pub fn inbox_compose_to(l: Locale) -> &'static str {
 pub fn inbox_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Texts and emails from your customers will appear here.",
-        Locale::FrCa => "Texts and emails from your customers will appear here.",
+        Locale::FrCa => "Les textos et les courriels de vos clients apparaîtront ici.",
     }
 }
 
@@ -1765,7 +1765,7 @@ pub fn inbox_empty_body(l: Locale) -> &'static str {
 pub fn inbox_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No conversations yet",
-        Locale::FrCa => "No conversations yet",
+        Locale::FrCa => "Aucune conversation",
     }
 }
 
@@ -1774,7 +1774,7 @@ pub fn inbox_empty_title(l: Locale) -> &'static str {
 pub fn inbox_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load your conversations",
-        Locale::FrCa => "Could not load your conversations",
+        Locale::FrCa => "Impossible de charger vos conversations",
     }
 }
 
@@ -1783,7 +1783,7 @@ pub fn inbox_failed_title(l: Locale) -> &'static str {
 pub fn inbox_partial_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Showing recent conversations. Older, quieter threads are not listed.",
-        Locale::FrCa => "Showing recent conversations. Older, quieter threads are not listed.",
+        Locale::FrCa => "Voici les conversations récentes. Les plus anciennes et moins actives n'y figurent pas.",
     }
 }
 
@@ -1792,7 +1792,7 @@ pub fn inbox_partial_note(l: Locale) -> &'static str {
 pub fn inbox_search_none_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Search looks inside every message in this workspace, including older threads.",
-        Locale::FrCa => "Search looks inside every message in this workspace, including older threads.",
+        Locale::FrCa => "La recherche couvre tous les messages de cet espace de travail, même les anciennes conversations.",
     }
 }
 
@@ -1801,7 +1801,7 @@ pub fn inbox_search_none_body(l: Locale) -> &'static str {
 pub fn inbox_search_none_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No matches",
-        Locale::FrCa => "No matches",
+        Locale::FrCa => "Aucun résultat",
     }
 }
 
@@ -1810,7 +1810,7 @@ pub fn inbox_search_none_title(l: Locale) -> &'static str {
 pub fn inbox_search_truncated(l: Locale) -> &'static str {
     match l {
         Locale::En => "Showing the newest matches. Older ones are not listed.",
-        Locale::FrCa => "Showing the newest matches. Older ones are not listed.",
+        Locale::FrCa => "Voici les derniers résultats. Les plus anciens ne sont pas affichés.",
     }
 }
 
@@ -1819,7 +1819,7 @@ pub fn inbox_search_truncated(l: Locale) -> &'static str {
 pub fn knowledge_add_billed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Adding a document is billed by its length. It is added once, when you press Add.",
-        Locale::FrCa => "Adding a document is billed by its length. It is added once, when you press Add.",
+        Locale::FrCa => "L'ajout d'un document est facturé selon sa longueur, une seule fois, quand vous appuyez sur Ajouter.",
     }
 }
 
@@ -1828,7 +1828,7 @@ pub fn knowledge_add_billed(l: Locale) -> &'static str {
 pub fn knowledge_add_rejected(l: Locale) -> &'static str {
     match l {
         Locale::En => "A title and some text are both needed.",
-        Locale::FrCa => "A title and some text are both needed.",
+        Locale::FrCa => "Un titre et un texte sont tous deux requis.",
     }
 }
 
@@ -1837,7 +1837,7 @@ pub fn knowledge_add_rejected(l: Locale) -> &'static str {
 pub fn knowledge_confirm_delete_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete",
-        Locale::FrCa => "Delete",
+        Locale::FrCa => "Supprimer",
     }
 }
 
@@ -1846,7 +1846,7 @@ pub fn knowledge_confirm_delete_action(l: Locale) -> &'static str {
 pub fn knowledge_confirm_delete_body(l: Locale, title: &str) -> String {
     match l {
         Locale::En => format!("\"{title}\" and everything the receptionist learned from it are deleted. Getting it back means adding it again, which is billed again."),
-        Locale::FrCa => format!("\"{title}\" and everything the receptionist learned from it are deleted. Getting it back means adding it again, which is billed again."),
+        Locale::FrCa => format!("«\u{00A0}{title}\u{00A0}» et tout ce que la réceptionniste en a appris seront supprimés. Pour le récupérer, il faudra l'ajouter de nouveau, et l'ajout sera facturé encore une fois."),
     }
 }
 
@@ -1855,7 +1855,7 @@ pub fn knowledge_confirm_delete_body(l: Locale, title: &str) -> String {
 pub fn knowledge_confirm_delete_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete this document?",
-        Locale::FrCa => "Delete this document?",
+        Locale::FrCa => "Supprimer ce document?",
     }
 }
 
@@ -1864,7 +1864,7 @@ pub fn knowledge_confirm_delete_title(l: Locale) -> &'static str {
 pub fn knowledge_confirm_linked_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send questions to Atlassian",
-        Locale::FrCa => "Send questions to Atlassian",
+        Locale::FrCa => "Envoyer les questions à Atlassian",
     }
 }
 
@@ -1873,7 +1873,7 @@ pub fn knowledge_confirm_linked_action(l: Locale) -> &'static str {
 pub fn knowledge_confirm_linked_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Callers' questions will be sent to Atlassian, outside this workspace's region, and answered by its assistant instead of from the documents added here.",
-        Locale::FrCa => "Callers' questions will be sent to Atlassian, outside this workspace's region, and answered by its assistant instead of from the documents added here.",
+        Locale::FrCa => "Les questions des appelants seront envoyées à Atlassian, hors de la région de cet espace de travail, et son assistant y répondra au lieu de s'appuyer sur les documents ajoutés ici.",
     }
 }
 
@@ -1882,7 +1882,7 @@ pub fn knowledge_confirm_linked_body(l: Locale) -> &'static str {
 pub fn knowledge_confirm_linked_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send questions to Atlassian?",
-        Locale::FrCa => "Send questions to Atlassian?",
+        Locale::FrCa => "Envoyer les questions à Atlassian?",
     }
 }
 
@@ -1891,7 +1891,7 @@ pub fn knowledge_confirm_linked_title(l: Locale) -> &'static str {
 pub fn knowledge_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The receptionist has nothing of your own to answer from. Add a document above.",
-        Locale::FrCa => "The receptionist has nothing of your own to answer from. Add a document above.",
+        Locale::FrCa => "La réceptionniste n'a aucun de vos documents pour répondre. Ajoutez-en un ci-dessus.",
     }
 }
 
@@ -1900,7 +1900,7 @@ pub fn knowledge_empty_body(l: Locale) -> &'static str {
 pub fn knowledge_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No documents yet",
-        Locale::FrCa => "No documents yet",
+        Locale::FrCa => "Aucun document",
     }
 }
 
@@ -1909,7 +1909,7 @@ pub fn knowledge_empty_title(l: Locale) -> &'static str {
 pub fn knowledge_mode_internal(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your own knowledge base",
-        Locale::FrCa => "Your own knowledge base",
+        Locale::FrCa => "Votre propre base de connaissances",
     }
 }
 
@@ -1918,7 +1918,7 @@ pub fn knowledge_mode_internal(l: Locale) -> &'static str {
 pub fn knowledge_mode_internal_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Answers come only from the documents added here, searched in this workspace's own region.",
-        Locale::FrCa => "Answers come only from the documents added here, searched in this workspace's own region.",
+        Locale::FrCa => "Les réponses proviennent uniquement des documents ajoutés ici, consultés dans la région de cet espace de travail.",
     }
 }
 
@@ -1927,7 +1927,7 @@ pub fn knowledge_mode_internal_body(l: Locale) -> &'static str {
 pub fn knowledge_mode_linked(l: Locale) -> &'static str {
     match l {
         Locale::En => "Linked support knowledge base",
-        Locale::FrCa => "Linked support knowledge base",
+        Locale::FrCa => "Base de connaissances du soutien liée",
     }
 }
 
@@ -1936,7 +1936,7 @@ pub fn knowledge_mode_linked(l: Locale) -> &'static str {
 pub fn knowledge_mode_linked_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Callers' questions are sent to Atlassian, whose assistant writes the answers.",
-        Locale::FrCa => "Callers' questions are sent to Atlassian, whose assistant writes the answers.",
+        Locale::FrCa => "Les questions des appelants sont envoyées à Atlassian, dont l'assistant rédige les réponses.",
     }
 }
 
@@ -1945,7 +1945,7 @@ pub fn knowledge_mode_linked_body(l: Locale) -> &'static str {
 pub fn knowledge_mode_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Where this workspace's answers come from could not be read, so it cannot be changed right now.",
-        Locale::FrCa => "Where this workspace's answers come from could not be read, so it cannot be changed right now.",
+        Locale::FrCa => "La source des réponses de cet espace de travail n'a pas pu être lue; elle ne peut donc pas être modifiée pour l'instant.",
     }
 }
 
@@ -1954,7 +1954,7 @@ pub fn knowledge_mode_unavailable(l: Locale) -> &'static str {
 pub fn knowledge_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "You have read-only access to this workspace. An agency or client member can add documents and change where answers come from.",
-        Locale::FrCa => "You have read-only access to this workspace. An agency or client member can add documents and change where answers come from.",
+        Locale::FrCa => "Votre accès à cet espace de travail est en lecture seule. Un membre ayant le rôle Agence ou Client peut ajouter des documents et changer la source des réponses.",
     }
 }
 
@@ -1963,7 +1963,7 @@ pub fn knowledge_viewer(l: Locale) -> &'static str {
 pub fn live_action_answer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Answer",
-        Locale::FrCa => "Answer",
+        Locale::FrCa => "Répondre",
     }
 }
 
@@ -1972,7 +1972,7 @@ pub fn live_action_answer(l: Locale) -> &'static str {
 pub fn live_action_decline(l: Locale) -> &'static str {
     match l {
         Locale::En => "Decline",
-        Locale::FrCa => "Decline",
+        Locale::FrCa => "Refuser",
     }
 }
 
@@ -1981,7 +1981,7 @@ pub fn live_action_decline(l: Locale) -> &'static str {
 pub fn live_message_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Open District AI to read it.",
-        Locale::FrCa => "Open District AI to read it.",
+        Locale::FrCa => "Ouvrez District AI pour le lire.",
     }
 }
 
@@ -1990,7 +1990,7 @@ pub fn live_message_body(l: Locale) -> &'static str {
 pub fn live_message_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "New message",
-        Locale::FrCa => "New message",
+        Locale::FrCa => "Nouveau message",
     }
 }
 
@@ -1999,7 +1999,7 @@ pub fn live_message_title(l: Locale) -> &'static str {
 pub fn live_missed_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Open District AI to see it in the call log.",
-        Locale::FrCa => "Open District AI to see it in the call log.",
+        Locale::FrCa => "Consultez-le dans le journal des appels de District AI.",
     }
 }
 
@@ -2008,7 +2008,7 @@ pub fn live_missed_body(l: Locale) -> &'static str {
 pub fn live_missed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Missed call",
-        Locale::FrCa => "Missed call",
+        Locale::FrCa => "Appel manqué",
     }
 }
 
@@ -2017,7 +2017,7 @@ pub fn live_missed_title(l: Locale) -> &'static str {
 pub fn live_reconnecting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reconnecting to live updates.",
-        Locale::FrCa => "Reconnecting to live updates.",
+        Locale::FrCa => "Reconnexion aux mises à jour en direct.",
     }
 }
 
@@ -2026,7 +2026,7 @@ pub fn live_reconnecting(l: Locale) -> &'static str {
 pub fn live_waiting_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Another call is ringing",
-        Locale::FrCa => "Another call is ringing",
+        Locale::FrCa => "Un autre appel entrant",
     }
 }
 
@@ -2035,7 +2035,7 @@ pub fn live_waiting_title(l: Locale) -> &'static str {
 pub fn marketplace_not_configured_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No carrier connected",
-        Locale::FrCa => "No carrier connected",
+        Locale::FrCa => "Aucun transporteur connecté",
     }
 }
 
@@ -2062,7 +2062,7 @@ pub fn marketplace_number_type_mobile(l: Locale) -> &'static str {
 pub fn marketplace_number_type_toll_free(l: Locale) -> &'static str {
     match l {
         Locale::En => "Toll-free",
-        Locale::FrCa => "Toll-free",
+        Locale::FrCa => "Sans frais",
     }
 }
 
@@ -2071,7 +2071,7 @@ pub fn marketplace_number_type_toll_free(l: Locale) -> &'static str {
 pub fn marketplace_owned_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has no active phone numbers.",
-        Locale::FrCa => "This workspace has no active phone numbers.",
+        Locale::FrCa => "Cet espace de travail n'a aucun numéro actif.",
     }
 }
 
@@ -2080,7 +2080,7 @@ pub fn marketplace_owned_empty_body(l: Locale) -> &'static str {
 pub fn marketplace_owned_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No numbers yet",
-        Locale::FrCa => "No numbers yet",
+        Locale::FrCa => "Aucun numéro",
     }
 }
 
@@ -2089,7 +2089,7 @@ pub fn marketplace_owned_empty_title(l: Locale) -> &'static str {
 pub fn marketplace_owned_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load this workspace's numbers",
-        Locale::FrCa => "Could not load this workspace's numbers",
+        Locale::FrCa => "Impossible de charger les numéros de cet espace",
     }
 }
 
@@ -2098,7 +2098,7 @@ pub fn marketplace_owned_failed_title(l: Locale) -> &'static str {
 pub fn marketplace_partial_note(l: Locale, carriers: &str) -> String {
     match l {
         Locale::En => format!("Could not reach {carriers}, so this list may be missing numbers."),
-        Locale::FrCa => format!("Could not reach {carriers}, so this list may be missing numbers."),
+        Locale::FrCa => format!("Impossible de joindre {carriers}; il manque peut-être des numéros à cette liste."),
     }
 }
 
@@ -2107,7 +2107,7 @@ pub fn marketplace_partial_note(l: Locale, carriers: &str) -> String {
 pub fn marketplace_partial_note_unnamed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not reach a carrier, so this list may be missing numbers.",
-        Locale::FrCa => "Could not reach a carrier, so this list may be missing numbers.",
+        Locale::FrCa => "Un transporteur est injoignable; il manque peut-être des numéros à cette liste.",
     }
 }
 
@@ -2116,7 +2116,7 @@ pub fn marketplace_partial_note_unnamed(l: Locale) -> &'static str {
 pub fn marketplace_search_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not search for numbers",
-        Locale::FrCa => "Could not search for numbers",
+        Locale::FrCa => "Impossible de rechercher des numéros",
     }
 }
 
@@ -2125,7 +2125,7 @@ pub fn marketplace_search_failed_title(l: Locale) -> &'static str {
 pub fn marketplace_search_none_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier has no numbers matching these filters.",
-        Locale::FrCa => "The carrier has no numbers matching these filters.",
+        Locale::FrCa => "Le transporteur n'a aucun numéro correspondant à ces filtres.",
     }
 }
 
@@ -2134,7 +2134,7 @@ pub fn marketplace_search_none_body(l: Locale) -> &'static str {
 pub fn marketplace_search_none_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No matches",
-        Locale::FrCa => "No matches",
+        Locale::FrCa => "Aucun résultat",
     }
 }
 
@@ -2143,7 +2143,7 @@ pub fn marketplace_search_none_title(l: Locale) -> &'static str {
 pub fn marketplace_web_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Open the number marketplace on the web",
-        Locale::FrCa => "Open the number marketplace on the web",
+        Locale::FrCa => "Ouvrir la place de marché des numéros sur le Web",
     }
 }
 
@@ -2152,7 +2152,7 @@ pub fn marketplace_web_action(l: Locale) -> &'static str {
 pub fn marketplace_web_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "Numbers are bought on the District AI website. This opens it in your browser.",
-        Locale::FrCa => "Numbers are bought on the District AI website. This opens it in your browser.",
+        Locale::FrCa => "Les numéros s'achètent sur le site Web de District AI. Ce bouton l'ouvre dans votre navigateur.",
     }
 }
 
@@ -2161,7 +2161,7 @@ pub fn marketplace_web_caption(l: Locale) -> &'static str {
 pub fn media_connect_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "The room could not be joined. Try again.",
-        Locale::FrCa => "The room could not be joined. Try again.",
+        Locale::FrCa => "Impossible de rejoindre la salle. Réessayez.",
     }
 }
 
@@ -2170,7 +2170,7 @@ pub fn media_connect_failed(l: Locale) -> &'static str {
 pub fn media_connection_lost(l: Locale) -> &'static str {
     match l {
         Locale::En => "The connection was lost and could not be resumed.",
-        Locale::FrCa => "The connection was lost and could not be resumed.",
+        Locale::FrCa => "La connexion a été perdue et n'a pas pu être rétablie.",
     }
 }
 
@@ -2179,7 +2179,7 @@ pub fn media_connection_lost(l: Locale) -> &'static str {
 pub fn media_encryption_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Someone's audio could not be decrypted, so you may not hear them. Leaving and joining again may fix it.",
-        Locale::FrCa => "Someone's audio could not be decrypted, so you may not hear them. Leaving and joining again may fix it.",
+        Locale::FrCa => "Le son d'une personne n'a pas pu être déchiffré; vous pourriez ne pas l'entendre. Quitter et revenir pourrait régler le problème.",
     }
 }
 
@@ -2188,7 +2188,7 @@ pub fn media_encryption_failed(l: Locale) -> &'static str {
 pub fn media_joined_elsewhere(l: Locale) -> &'static str {
     match l {
         Locale::En => "You joined this room from somewhere else.",
-        Locale::FrCa => "You joined this room from somewhere else.",
+        Locale::FrCa => "Vous avez rejoint cette salle ailleurs.",
     }
 }
 
@@ -2197,7 +2197,7 @@ pub fn media_joined_elsewhere(l: Locale) -> &'static str {
 pub fn media_microphone_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your microphone could not be used, so nobody can hear you.",
-        Locale::FrCa => "Your microphone could not be used, so nobody can hear you.",
+        Locale::FrCa => "Impossible d'utiliser votre micro\u{00A0}: personne ne peut vous entendre.",
     }
 }
 
@@ -2206,7 +2206,7 @@ pub fn media_microphone_unavailable(l: Locale) -> &'static str {
 pub fn media_reconnecting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reconnecting. The call is still here.",
-        Locale::FrCa => "Reconnecting. The call is still here.",
+        Locale::FrCa => "Reconnexion en cours. L'appel se poursuit.",
     }
 }
 
@@ -2215,7 +2215,7 @@ pub fn media_reconnecting(l: Locale) -> &'static str {
 pub fn media_removed(l: Locale) -> &'static str {
     match l {
         Locale::En => "You were removed from the room.",
-        Locale::FrCa => "You were removed from the room.",
+        Locale::FrCa => "On vous a retiré de la salle.",
     }
 }
 
@@ -2224,7 +2224,7 @@ pub fn media_removed(l: Locale) -> &'static str {
 pub fn media_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calls and meeting rooms are not available in this build of District AI.",
-        Locale::FrCa => "Calls and meeting rooms are not available in this build of District AI.",
+        Locale::FrCa => "Les appels et salles de réunion ne sont pas disponibles dans cette version de District AI.",
     }
 }
 
@@ -2233,7 +2233,7 @@ pub fn media_unavailable(l: Locale) -> &'static str {
 pub fn members_add_rejected(l: Locale) -> &'static str {
     match l {
         Locale::En => "That does not look like an email address.",
-        Locale::FrCa => "That does not look like an email address.",
+        Locale::FrCa => "Ceci ne ressemble pas à une adresse courriel.",
     }
 }
 
@@ -2242,7 +2242,7 @@ pub fn members_add_rejected(l: Locale) -> &'static str {
 pub fn members_no_invitation(l: Locale) -> &'static str {
     match l {
         Locale::En => "Adding someone sends no invitation. They get access when they sign in with this address.",
-        Locale::FrCa => "Adding someone sends no invitation. They get access when they sign in with this address.",
+        Locale::FrCa => "L'ajout d'une personne n'envoie aucune invitation. Elle obtient l'accès en se connectant avec cette adresse.",
     }
 }
 
@@ -2251,7 +2251,7 @@ pub fn members_no_invitation(l: Locale) -> &'static str {
 pub fn members_remove_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove",
-        Locale::FrCa => "Remove",
+        Locale::FrCa => "Retirer",
     }
 }
 
@@ -2260,7 +2260,7 @@ pub fn members_remove_action(l: Locale) -> &'static str {
 pub fn members_remove_body(l: Locale, email: &str) -> String {
     match l {
         Locale::En => format!("{email} loses access to this workspace at once. Adding them again makes a new membership."),
-        Locale::FrCa => format!("{email} loses access to this workspace at once. Adding them again makes a new membership."),
+        Locale::FrCa => format!("{email} perd aussitôt l'accès à cet espace de travail. L'ajouter de nouveau crée une nouvelle adhésion."),
     }
 }
 
@@ -2269,7 +2269,7 @@ pub fn members_remove_body(l: Locale, email: &str) -> String {
 pub fn members_remove_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove this member?",
-        Locale::FrCa => "Remove this member?",
+        Locale::FrCa => "Retirer ce membre?",
     }
 }
 
@@ -2278,7 +2278,7 @@ pub fn members_remove_title(l: Locale) -> &'static str {
 pub fn members_role_agency(l: Locale) -> &'static str {
     match l {
         Locale::En => "Agency",
-        Locale::FrCa => "Agency",
+        Locale::FrCa => "Agence",
     }
 }
 
@@ -2287,7 +2287,7 @@ pub fn members_role_agency(l: Locale) -> &'static str {
 pub fn members_role_agency_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Full access, including who belongs here and what each member may do.",
-        Locale::FrCa => "Full access, including who belongs here and what each member may do.",
+        Locale::FrCa => "Accès complet, y compris qui fait partie de l'espace et ce que chaque membre peut faire.",
     }
 }
 
@@ -2305,7 +2305,7 @@ pub fn members_role_client(l: Locale) -> &'static str {
 pub fn members_role_client_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Everyday use: calls, contacts, messages and the workspace's settings.",
-        Locale::FrCa => "Everyday use: calls, contacts, messages and the workspace's settings.",
+        Locale::FrCa => "Usage courant\u{00A0}: appels, contacts, messages et paramètres de l'espace de travail.",
     }
 }
 
@@ -2314,7 +2314,7 @@ pub fn members_role_client_body(l: Locale) -> &'static str {
 pub fn members_role_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Viewer",
-        Locale::FrCa => "Viewer",
+        Locale::FrCa => "Lecteur",
     }
 }
 
@@ -2323,7 +2323,7 @@ pub fn members_role_viewer(l: Locale) -> &'static str {
 pub fn members_role_viewer_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Read only: sees calls, contacts and messages, and changes nothing.",
-        Locale::FrCa => "Read only: sees calls, contacts and messages, and changes nothing.",
+        Locale::FrCa => "Lecture seule\u{00A0}: voit les appels, les contacts et les messages, sans rien modifier.",
     }
 }
 
@@ -2341,7 +2341,7 @@ pub fn messaging_channel_sms(l: Locale) -> &'static str {
 pub fn messaging_channel_voice(l: Locale) -> &'static str {
     match l {
         Locale::En => "Voice",
-        Locale::FrCa => "Voice",
+        Locale::FrCa => "Voix",
     }
 }
 
@@ -2359,7 +2359,7 @@ pub fn messaging_channel_whatsapp(l: Locale) -> &'static str {
 pub fn messaging_creator_cell_help(l: Locale) -> &'static str {
     match l {
         Locale::En => "Where the receptionist reaches the workspace's owner. The saved number is not shown here; typing one replaces it.",
-        Locale::FrCa => "Where the receptionist reaches the workspace's owner. The saved number is not shown here; typing one replaces it.",
+        Locale::FrCa => "Le numéro où la réceptionniste joint le propriétaire de l'espace de travail. Le numéro actuel n'est pas affiché; en saisir un nouveau le remplace.",
     }
 }
 
@@ -2368,7 +2368,7 @@ pub fn messaging_creator_cell_help(l: Locale) -> &'static str {
 pub fn messaging_delete_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove and release",
-        Locale::FrCa => "Remove and release",
+        Locale::FrCa => "Retirer et libérer",
     }
 }
 
@@ -2377,7 +2377,7 @@ pub fn messaging_delete_action(l: Locale) -> &'static str {
 pub fn messaging_delete_body(l: Locale, account: &str, count: i64) -> String {
     match l {
         Locale::En => format!("\"{account}\" is removed, and its phone numbers ({}) are released: another workspace can then claim a number only this account held.", crate::format::integer(l, count)),
-        Locale::FrCa => format!("\"{account}\" is removed, and its phone numbers ({}) are released: another workspace can then claim a number only this account held.", crate::format::integer(l, count)),
+        Locale::FrCa => format!("Le compte «\u{00A0}{account}\u{00A0}» sera retiré et ses numéros ({}) seront libérés\u{00A0}: un autre espace de travail pourra alors réclamer un numéro que seul ce compte détenait.", crate::format::integer(l, count)),
     }
 }
 
@@ -2386,7 +2386,7 @@ pub fn messaging_delete_body(l: Locale, account: &str, count: i64) -> String {
 pub fn messaging_delete_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove this carrier account?",
-        Locale::FrCa => "Remove this carrier account?",
+        Locale::FrCa => "Retirer ce compte de transporteur?",
     }
 }
 
@@ -2395,7 +2395,7 @@ pub fn messaging_delete_title(l: Locale) -> &'static str {
 pub fn messaging_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has no carrier account, so it cannot send texts from its own numbers.",
-        Locale::FrCa => "This workspace has no carrier account, so it cannot send texts from its own numbers.",
+        Locale::FrCa => "Sans compte de transporteur, cet espace de travail ne peut pas envoyer de textos depuis ses propres numéros.",
     }
 }
 
@@ -2404,7 +2404,7 @@ pub fn messaging_empty_body(l: Locale) -> &'static str {
 pub fn messaging_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No carrier connected",
-        Locale::FrCa => "No carrier connected",
+        Locale::FrCa => "Aucun transporteur connecté",
     }
 }
 
@@ -2422,7 +2422,7 @@ pub fn messaging_field_account_sid(l: Locale) -> &'static str {
 pub fn messaging_field_api_key(l: Locale) -> &'static str {
     match l {
         Locale::En => "API key",
-        Locale::FrCa => "API key",
+        Locale::FrCa => "Clé d'API",
     }
 }
 
@@ -2431,7 +2431,7 @@ pub fn messaging_field_api_key(l: Locale) -> &'static str {
 pub fn messaging_field_application_key(l: Locale) -> &'static str {
     match l {
         Locale::En => "Application key",
-        Locale::FrCa => "Application key",
+        Locale::FrCa => "Clé d'application",
     }
 }
 
@@ -2440,7 +2440,7 @@ pub fn messaging_field_application_key(l: Locale) -> &'static str {
 pub fn messaging_field_application_secret(l: Locale) -> &'static str {
     match l {
         Locale::En => "Application secret",
-        Locale::FrCa => "Application secret",
+        Locale::FrCa => "Secret d'application",
     }
 }
 
@@ -2449,7 +2449,7 @@ pub fn messaging_field_application_secret(l: Locale) -> &'static str {
 pub fn messaging_field_auth_token(l: Locale) -> &'static str {
     match l {
         Locale::En => "Auth token",
-        Locale::FrCa => "Auth token",
+        Locale::FrCa => "Jeton d'authentification",
     }
 }
 
@@ -2458,7 +2458,7 @@ pub fn messaging_field_auth_token(l: Locale) -> &'static str {
 pub fn messaging_field_key_id(l: Locale) -> &'static str {
     match l {
         Locale::En => "Key ID",
-        Locale::FrCa => "Key ID",
+        Locale::FrCa => "ID de clé",
     }
 }
 
@@ -2467,7 +2467,7 @@ pub fn messaging_field_key_id(l: Locale) -> &'static str {
 pub fn messaging_field_key_secret(l: Locale) -> &'static str {
     match l {
         Locale::En => "Key secret",
-        Locale::FrCa => "Key secret",
+        Locale::FrCa => "Secret de clé",
     }
 }
 
@@ -2476,7 +2476,7 @@ pub fn messaging_field_key_secret(l: Locale) -> &'static str {
 pub fn messaging_field_project_id(l: Locale) -> &'static str {
     match l {
         Locale::En => "Project ID",
-        Locale::FrCa => "Project ID",
+        Locale::FrCa => "ID de projet",
     }
 }
 
@@ -2485,7 +2485,7 @@ pub fn messaging_field_project_id(l: Locale) -> &'static str {
 pub fn messaging_numbers_help(l: Locale) -> &'static str {
     match l {
         Locale::En => "Leave this alone to keep the numbers as they are. Editing it replaces the account's numbers with the ones listed.",
-        Locale::FrCa => "Leave this alone to keep the numbers as they are. Editing it replaces the account's numbers with the ones listed.",
+        Locale::FrCa => "Ne modifiez pas ce champ pour garder les numéros tels quels. Le modifier remplace les numéros du compte par ceux de la liste.",
     }
 }
 
@@ -2494,7 +2494,7 @@ pub fn messaging_numbers_help(l: Locale) -> &'static str {
 pub fn messaging_provider_switch(l: Locale) -> &'static str {
     match l {
         Locale::En => "Changing the carrier drops the saved keys, so enter the new carrier's keys before saving.",
-        Locale::FrCa => "Changing the carrier drops the saved keys, so enter the new carrier's keys before saving.",
+        Locale::FrCa => "Changer de transporteur efface les clés enregistrées; saisissez celles du nouveau transporteur avant d'enregistrer.",
     }
 }
 
@@ -2503,7 +2503,7 @@ pub fn messaging_provider_switch(l: Locale) -> &'static str {
 pub fn messaging_secret_keep(l: Locale) -> &'static str {
     match l {
         Locale::En => "Leave blank to keep the saved value.",
-        Locale::FrCa => "Leave blank to keep the saved value.",
+        Locale::FrCa => "Laissez vide pour garder la valeur actuelle.",
     }
 }
 
@@ -2512,7 +2512,7 @@ pub fn messaging_secret_keep(l: Locale) -> &'static str {
 pub fn messaging_source_byok(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your own carrier account",
-        Locale::FrCa => "Your own carrier account",
+        Locale::FrCa => "Votre propre compte",
     }
 }
 
@@ -2521,7 +2521,7 @@ pub fn messaging_source_byok(l: Locale) -> &'static str {
 pub fn messaging_source_managed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Managed by Distronode",
-        Locale::FrCa => "Managed by Distronode",
+        Locale::FrCa => "Géré par Distronode",
     }
 }
 
@@ -2530,7 +2530,7 @@ pub fn messaging_source_managed(l: Locale) -> &'static str {
 pub fn messaging_test_needs_every_field(l: Locale) -> &'static str {
     match l {
         Locale::En => "Fill in every key to check them.",
-        Locale::FrCa => "Fill in every key to check them.",
+        Locale::FrCa => "Pour vérifier, saisissez chaque clé.",
     }
 }
 
@@ -2539,7 +2539,7 @@ pub fn messaging_test_needs_every_field(l: Locale) -> &'static str {
 pub fn messaging_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "You have read-only access to this workspace, so carrier accounts are shown and not changed.",
-        Locale::FrCa => "You have read-only access to this workspace, so carrier accounts are shown and not changed.",
+        Locale::FrCa => "Accès en lecture seule à cet espace de travail\u{00A0}: les comptes de transporteur sont affichés, mais non modifiables.",
     }
 }
 
@@ -2548,7 +2548,7 @@ pub fn messaging_viewer(l: Locale) -> &'static str {
 pub fn overview_finish_setup_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Open the web dashboard",
-        Locale::FrCa => "Open the web dashboard",
+        Locale::FrCa => "Ouvrir le tableau de bord Web",
     }
 }
 
@@ -2557,7 +2557,7 @@ pub fn overview_finish_setup_action(l: Locale) -> &'static str {
 pub fn overview_finish_setup_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your receptionist is not live yet. Pick your number, set up how it answers, and go live from the web dashboard.",
-        Locale::FrCa => "Your receptionist is not live yet. Pick your number, set up how it answers, and go live from the web dashboard.",
+        Locale::FrCa => "Votre réceptionniste n'est pas encore active. Choisissez votre numéro, réglez sa façon de répondre et activez-la depuis le tableau de bord Web.",
     }
 }
 
@@ -2566,7 +2566,7 @@ pub fn overview_finish_setup_body(l: Locale) -> &'static str {
 pub fn overview_finish_setup_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Finish setting up on the web",
-        Locale::FrCa => "Finish setting up on the web",
+        Locale::FrCa => "Terminer la configuration sur le Web",
     }
 }
 
@@ -2575,7 +2575,7 @@ pub fn overview_finish_setup_title(l: Locale) -> &'static str {
 pub fn overview_read_only_badge(l: Locale) -> &'static str {
     match l {
         Locale::En => "Read-only access",
-        Locale::FrCa => "Read-only access",
+        Locale::FrCa => "Lecture seule",
     }
 }
 
@@ -2584,7 +2584,7 @@ pub fn overview_read_only_badge(l: Locale) -> &'static str {
 pub fn overview_workspace_mismatch(l: Locale) -> &'static str {
     match l {
         Locale::En => "The workspace you selected is no longer the one District AI can report on. Try again to reload your workspaces.",
-        Locale::FrCa => "The workspace you selected is no longer the one District AI can report on. Try again to reload your workspaces.",
+        Locale::FrCa => "L'espace de travail sélectionné n'est plus accessible à District AI. Réessayez pour actualiser vos espaces de travail.",
     }
 }
 
@@ -2593,7 +2593,7 @@ pub fn overview_workspace_mismatch(l: Locale) -> &'static str {
 pub fn persona_clear_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Clearing a box saves it as empty. Anything you do not change is kept as it is.",
-        Locale::FrCa => "Clearing a box saves it as empty. Anything you do not change is kept as it is.",
+        Locale::FrCa => "Un champ vidé est enregistré vide. Tout ce que vous ne modifiez pas reste tel quel.",
     }
 }
 
@@ -2602,7 +2602,7 @@ pub fn persona_clear_hint(l: Locale) -> &'static str {
 pub fn persona_engine_read_only(l: Locale) -> &'static str {
     match l {
         Locale::En => "The languages and answer lengths this workspace may use could not be read, so they cannot be changed right now.",
-        Locale::FrCa => "The languages and answer lengths this workspace may use could not be read, so they cannot be changed right now.",
+        Locale::FrCa => "Impossible de lire les langues et longueurs de réponse permises pour cet espace de travail; elles ne peuvent pas être modifiées pour l'instant.",
     }
 }
 
@@ -2611,7 +2611,7 @@ pub fn persona_engine_read_only(l: Locale) -> &'static str {
 pub fn persona_preview_billed(l: Locale) -> &'static str {
     match l {
         Locale::En => "This places a real call to your receptionist, with the settings on screen whether or not they are saved. It is billed like any call.",
-        Locale::FrCa => "This places a real call to your receptionist, with the settings on screen whether or not they are saved. It is billed like any call.",
+        Locale::FrCa => "Cette action passe un véritable appel à votre réceptionniste, avec les paramètres affichés, enregistrés ou non. Il est facturé comme tout autre appel.",
     }
 }
 
@@ -2620,7 +2620,7 @@ pub fn persona_preview_billed(l: Locale) -> &'static str {
 pub fn persona_preview_not_joined(l: Locale) -> &'static str {
     match l {
         Locale::En => "The audition could not be joined. Try again in a moment.",
-        Locale::FrCa => "The audition could not be joined. Try again in a moment.",
+        Locale::FrCa => "Impossible de rejoindre l'aperçu. Réessayez dans un moment.",
     }
 }
 
@@ -2629,7 +2629,7 @@ pub fn persona_preview_not_joined(l: Locale) -> &'static str {
 pub fn persona_preview_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Try this receptionist",
-        Locale::FrCa => "Try this receptionist",
+        Locale::FrCa => "Appeler la réceptionniste",
     }
 }
 
@@ -2638,7 +2638,7 @@ pub fn persona_preview_title(l: Locale) -> &'static str {
 pub fn persona_refit_checking(l: Locale) -> &'static str {
     match l {
         Locale::En => "Checking that the voice chain speaks the new language.",
-        Locale::FrCa => "Checking that the voice chain speaks the new language.",
+        Locale::FrCa => "Nous vérifions que la chaîne vocale parle la nouvelle langue.",
     }
 }
 
@@ -2647,7 +2647,7 @@ pub fn persona_refit_checking(l: Locale) -> &'static str {
 pub fn persona_refit_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "The voice chain could not be moved to the new language. Fit it in Voice Studio.",
-        Locale::FrCa => "The voice chain could not be moved to the new language. Fit it in Voice Studio.",
+        Locale::FrCa => "La chaîne vocale n'a pas pu être adaptée à la nouvelle langue. Ajustez-la dans Voice Studio.",
     }
 }
 
@@ -2656,7 +2656,7 @@ pub fn persona_refit_failed(l: Locale) -> &'static str {
 pub fn persona_refit_failed_reason(l: Locale, reason: &str) -> String {
     match l {
         Locale::En => format!("The voice chain could not be moved to the new language. Fit it in Voice Studio. {reason}"),
-        Locale::FrCa => format!("The voice chain could not be moved to the new language. Fit it in Voice Studio. {reason}"),
+        Locale::FrCa => format!("La chaîne vocale n'a pas pu être adaptée à la nouvelle langue. Ajustez-la dans Voice Studio. {reason}"),
     }
 }
 
@@ -2665,7 +2665,7 @@ pub fn persona_refit_failed_reason(l: Locale, reason: &str) -> String {
 pub fn persona_refit_no_fit(l: Locale) -> &'static str {
     match l {
         Locale::En => "No model this workspace may use speaks the new language for every part of the voice chain. Choose them in Voice Studio.",
-        Locale::FrCa => "No model this workspace may use speaks the new language for every part of the voice chain. Choose them in Voice Studio.",
+        Locale::FrCa => "Pour au moins une étape de la chaîne vocale, aucun modèle permis dans cet espace de travail ne parle la nouvelle langue. Choisissez les modèles dans Voice Studio.",
     }
 }
 
@@ -2674,7 +2674,7 @@ pub fn persona_refit_no_fit(l: Locale) -> &'static str {
 pub fn persona_refit_not_seen(l: Locale) -> &'static str {
     match l {
         Locale::En => "The voice chain was saved, but Voice Studio does not show it fitting the new language. Check it there.",
-        Locale::FrCa => "The voice chain was saved, but Voice Studio does not show it fitting the new language. Check it there.",
+        Locale::FrCa => "La chaîne vocale a été enregistrée, mais Voice Studio ne la montre pas adaptée à la nouvelle langue. Vérifiez-la dans Voice Studio.",
     }
 }
 
@@ -2683,7 +2683,7 @@ pub fn persona_refit_not_seen(l: Locale) -> &'static str {
 pub fn persona_refit_refitted(l: Locale) -> &'static str {
     match l {
         Locale::En => "The voice chain was moved to models that speak the new language. Voice Studio shows it.",
-        Locale::FrCa => "The voice chain was moved to models that speak the new language. Voice Studio shows it.",
+        Locale::FrCa => "La chaîne vocale est passée à des modèles qui parlent la nouvelle langue. Elle est visible dans Voice Studio.",
     }
 }
 
@@ -2692,7 +2692,7 @@ pub fn persona_refit_refitted(l: Locale) -> &'static str {
 pub fn persona_studio_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "The voice, the engine and how it is tuned are changed in Voice Studio.",
-        Locale::FrCa => "The voice, the engine and how it is tuned are changed in Voice Studio.",
+        Locale::FrCa => "La voix, le moteur et leurs ajustements se modifient dans Voice Studio.",
     }
 }
 
@@ -2701,7 +2701,7 @@ pub fn persona_studio_hint(l: Locale) -> &'static str {
 pub fn presence_failed(l: Locale, reason: &str) -> String {
     match l {
         Locale::En => format!("Calls cannot ring here right now. {reason}"),
-        Locale::FrCa => format!("Calls cannot ring here right now. {reason}"),
+        Locale::FrCa => format!("Aucun appel ne peut sonner ici pour l'instant. {reason}"),
     }
 }
 
@@ -2710,7 +2710,7 @@ pub fn presence_failed(l: Locale, reason: &str) -> String {
 pub fn presence_setting_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calls handed to you ring here while District AI is running and you are signed in. Your availability for calls is set in Call handling.",
-        Locale::FrCa => "Calls handed to you ring here while District AI is running and you are signed in. Your availability for calls is set in Call handling.",
+        Locale::FrCa => "Les appels qui vous sont transférés sonnent ici quand District AI est ouvert et votre session active. Vos disponibilités pour les appels se règlent dans Gestion des appels.",
     }
 }
 
@@ -2719,7 +2719,7 @@ pub fn presence_setting_body(l: Locale) -> &'static str {
 pub fn presence_setting_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Ring on this computer",
-        Locale::FrCa => "Ring on this computer",
+        Locale::FrCa => "Faire sonner cet ordinateur",
     }
 }
 
@@ -2728,7 +2728,7 @@ pub fn presence_setting_label(l: Locale) -> &'static str {
 pub fn purchase_cancel_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel",
-        Locale::FrCa => "Cancel",
+        Locale::FrCa => "Annuler",
     }
 }
 
@@ -2737,7 +2737,7 @@ pub fn purchase_cancel_action(l: Locale) -> &'static str {
 pub fn purchase_choose_plan_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose a plan",
-        Locale::FrCa => "Choose a plan",
+        Locale::FrCa => "Choisir un forfait",
     }
 }
 
@@ -2746,7 +2746,7 @@ pub fn purchase_choose_plan_action(l: Locale) -> &'static str {
 pub fn purchase_confirm_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Continue to checkout",
-        Locale::FrCa => "Continue to checkout",
+        Locale::FrCa => "Passer au paiement",
     }
 }
 
@@ -2755,7 +2755,7 @@ pub fn purchase_confirm_action(l: Locale) -> &'static str {
 pub fn purchase_confirm_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Payment is handled by Stripe, District AI's payment processor. Checkout opens in a private window inside District AI, signed in for this purchase only. Your card details go to Stripe, not to District AI, and the price is shown before you pay.",
-        Locale::FrCa => "Payment is handled by Stripe, District AI's payment processor. Checkout opens in a private window inside District AI, signed in for this purchase only. Your card details go to Stripe, not to District AI, and the price is shown before you pay.",
+        Locale::FrCa => "Le paiement est traité par Stripe, le fournisseur de paiement de District AI. La page de paiement s'ouvre dans une fenêtre privée de District AI, connectée pour cet achat seulement. Les renseignements de votre carte sont transmis à Stripe, et non à District AI, et le prix est affiché avant le paiement.",
     }
 }
 
@@ -2764,7 +2764,7 @@ pub fn purchase_confirm_body(l: Locale) -> &'static str {
 pub fn purchase_confirm_body_browser(l: Locale) -> &'static str {
     match l {
         Locale::En => "Payment is handled by Stripe, District AI's payment processor. Checkout opens in your browser, signed in to District AI. Your card details go to Stripe, not to District AI, and the price is shown before you pay.",
-        Locale::FrCa => "Payment is handled by Stripe, District AI's payment processor. Checkout opens in your browser, signed in to District AI. Your card details go to Stripe, not to District AI, and the price is shown before you pay.",
+        Locale::FrCa => "Le paiement est traité par Stripe, le fournisseur de paiement de District AI. La page de paiement s'ouvre dans votre navigateur, connectée à District AI. Les renseignements de votre carte sont transmis à Stripe, et non à District AI, et le prix est affiché avant le paiement.",
     }
 }
 
@@ -2773,7 +2773,7 @@ pub fn purchase_confirm_body_browser(l: Locale) -> &'static str {
 pub fn purchase_confirm_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Continue to checkout with Stripe",
-        Locale::FrCa => "Continue to checkout with Stripe",
+        Locale::FrCa => "Passer au paiement avec Stripe",
     }
 }
 
@@ -2782,7 +2782,7 @@ pub fn purchase_confirm_title(l: Locale) -> &'static str {
 pub fn purchase_in_app_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose or change your plan here. Checkout and payment are handled by Stripe, and open inside District AI.",
-        Locale::FrCa => "Choose or change your plan here. Checkout and payment are handled by Stripe, and open inside District AI.",
+        Locale::FrCa => "Choisissez ou changez votre forfait ici. Le paiement est géré par Stripe et s'ouvre dans District AI.",
     }
 }
 
@@ -2791,7 +2791,7 @@ pub fn purchase_in_app_note(l: Locale) -> &'static str {
 pub fn purchase_in_browser(l: Locale) -> &'static str {
     match l {
         Locale::En => "This computer cannot show checkout inside District AI, so it opens in your browser.",
-        Locale::FrCa => "This computer cannot show checkout inside District AI, so it opens in your browser.",
+        Locale::FrCa => "Cet ordinateur ne peut pas afficher la page de paiement dans District AI\u{00A0}: elle s'ouvre donc dans votre navigateur.",
     }
 }
 
@@ -2800,7 +2800,7 @@ pub fn purchase_in_browser(l: Locale) -> &'static str {
 pub fn purchase_manage_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Manage billing",
-        Locale::FrCa => "Manage billing",
+        Locale::FrCa => "Gérer la facturation",
     }
 }
 
@@ -2809,7 +2809,7 @@ pub fn purchase_manage_action(l: Locale) -> &'static str {
 pub fn purchase_opening(l: Locale) -> &'static str {
     match l {
         Locale::En => "Opening a secure page",
-        Locale::FrCa => "Opening a secure page",
+        Locale::FrCa => "Ouverture d'une page sécurisée",
     }
 }
 
@@ -2818,7 +2818,7 @@ pub fn purchase_opening(l: Locale) -> &'static str {
 pub fn purchase_prices_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Prices, and any promotion, are shown at checkout before you pay.",
-        Locale::FrCa => "Prices, and any promotion, are shown at checkout before you pay.",
+        Locale::FrCa => "Les prix et toute promotion figurent sur la page de paiement, avant que vous payiez.",
     }
 }
 
@@ -2827,7 +2827,7 @@ pub fn purchase_prices_note(l: Locale) -> &'static str {
 pub fn purchase_promo_invalid(l: Locale) -> &'static str {
     match l {
         Locale::En => "A promotion code has only letters, digits, hyphens and underscores, up to 40 of them.",
-        Locale::FrCa => "A promotion code has only letters, digits, hyphens and underscores, up to 40 of them.",
+        Locale::FrCa => "Un code promotionnel se limite à 40 lettres, chiffres, traits d'union ou traits de soulignement.",
     }
 }
 
@@ -2836,7 +2836,7 @@ pub fn purchase_promo_invalid(l: Locale) -> &'static str {
 pub fn purchase_promo_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Promotion code (optional)",
-        Locale::FrCa => "Promotion code (optional)",
+        Locale::FrCa => "Code promotionnel (facultatif)",
     }
 }
 
@@ -2845,7 +2845,7 @@ pub fn purchase_promo_label(l: Locale) -> &'static str {
 pub fn purchase_setting_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "With Sign in every time, choosing a plan or managing billing signs you in afresh, in a private window inside District AI that keeps nothing once it closes. Off hides plans and billing actions on this computer.",
-        Locale::FrCa => "With Sign in every time, choosing a plan or managing billing signs you in afresh, in a private window inside District AI that keeps nothing once it closes. Off hides plans and billing actions on this computer.",
+        Locale::FrCa => "Avec «\u{00A0}Se connecter chaque fois\u{00A0}», choisir un forfait ou gérer la facturation vous connecte de nouveau, dans une fenêtre privée de District AI qui ne conserve rien une fois fermée. «\u{00A0}Désactivé\u{00A0}» masque les forfaits et les actions de facturation sur cet ordinateur.",
     }
 }
 
@@ -2854,7 +2854,7 @@ pub fn purchase_setting_body(l: Locale) -> &'static str {
 pub fn purchase_setting_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Purchases on this computer",
-        Locale::FrCa => "Purchases on this computer",
+        Locale::FrCa => "Achats sur cet ordinateur",
     }
 }
 
@@ -2863,7 +2863,7 @@ pub fn purchase_setting_label(l: Locale) -> &'static str {
 pub fn purchase_setting_off(l: Locale) -> &'static str {
     match l {
         Locale::En => "Off",
-        Locale::FrCa => "Off",
+        Locale::FrCa => "Désactivé",
     }
 }
 
@@ -2872,7 +2872,7 @@ pub fn purchase_setting_off(l: Locale) -> &'static str {
 pub fn purchase_setting_sign_in_every_time(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign in every time",
-        Locale::FrCa => "Sign in every time",
+        Locale::FrCa => "Se connecter chaque fois",
     }
 }
 
@@ -2881,7 +2881,7 @@ pub fn purchase_setting_sign_in_every_time(l: Locale) -> &'static str {
 pub fn purchase_term_annual(l: Locale) -> &'static str {
     match l {
         Locale::En => "Annual",
-        Locale::FrCa => "Annual",
+        Locale::FrCa => "Annuel",
     }
 }
 
@@ -2890,7 +2890,7 @@ pub fn purchase_term_annual(l: Locale) -> &'static str {
 pub fn purchase_term_monthly(l: Locale) -> &'static str {
     match l {
         Locale::En => "Monthly",
-        Locale::FrCa => "Monthly",
+        Locale::FrCa => "Mensuel",
     }
 }
 
@@ -2899,7 +2899,7 @@ pub fn purchase_term_monthly(l: Locale) -> &'static str {
 pub fn ringing_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transferred from your AI receptionist.",
-        Locale::FrCa => "Transferred from your AI receptionist.",
+        Locale::FrCa => "Appel transféré par votre réceptionniste IA.",
     }
 }
 
@@ -2908,7 +2908,7 @@ pub fn ringing_body(l: Locale) -> &'static str {
 pub fn ringing_call_ended(l: Locale) -> &'static str {
     match l {
         Locale::En => "That call ended before you could answer it.",
-        Locale::FrCa => "That call ended before you could answer it.",
+        Locale::FrCa => "Cet appel a pris fin avant que vous puissiez y répondre.",
     }
 }
 
@@ -2917,7 +2917,7 @@ pub fn ringing_call_ended(l: Locale) -> &'static str {
 pub fn ringing_microphone_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Answering puts your microphone on this call.",
-        Locale::FrCa => "Answering puts your microphone on this call.",
+        Locale::FrCa => "Répondre active votre microphone pour cet appel.",
     }
 }
 
@@ -2926,7 +2926,7 @@ pub fn ringing_microphone_note(l: Locale) -> &'static str {
 pub fn ringing_missed(l: Locale) -> &'static str {
     match l {
         Locale::En => "You missed a call.",
-        Locale::FrCa => "You missed a call.",
+        Locale::FrCa => "Vous avez manqué un appel.",
     }
 }
 
@@ -2935,7 +2935,7 @@ pub fn ringing_missed(l: Locale) -> &'static str {
 pub fn ringing_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Incoming call",
-        Locale::FrCa => "Incoming call",
+        Locale::FrCa => "Appel entrant",
     }
 }
 
@@ -2944,7 +2944,7 @@ pub fn ringing_title(l: Locale) -> &'static str {
 pub fn ringing_waiting_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Hang up to answer it.",
-        Locale::FrCa => "Hang up to answer it.",
+        Locale::FrCa => "Raccrochez pour y répondre.",
     }
 }
 
@@ -2953,7 +2953,7 @@ pub fn ringing_waiting_body(l: Locale) -> &'static str {
 pub fn rooms_busy_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Finish the call you are on to join a room.",
-        Locale::FrCa => "Finish the call you are on to join a room.",
+        Locale::FrCa => "Terminez votre appel en cours pour rejoindre une salle.",
     }
 }
 
@@ -2962,7 +2962,7 @@ pub fn rooms_busy_note(l: Locale) -> &'static str {
 pub fn rooms_companion_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "The Companion joins every room and writes up the minutes.",
-        Locale::FrCa => "The Companion joins every room and writes up the minutes.",
+        Locale::FrCa => "Le Compagnon se joint à chaque salle et en rédige le procès-verbal.",
     }
 }
 
@@ -2971,7 +2971,7 @@ pub fn rooms_companion_note(l: Locale) -> &'static str {
 pub fn rooms_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Meetings appear here once one has been held, with the minutes when it ends.",
-        Locale::FrCa => "Meetings appear here once one has been held, with the minutes when it ends.",
+        Locale::FrCa => "Les réunions s'affichent ici dès qu'elles ont lieu, avec leur procès-verbal une fois terminées.",
     }
 }
 
@@ -2980,7 +2980,7 @@ pub fn rooms_empty_body(l: Locale) -> &'static str {
 pub fn rooms_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No meetings yet",
-        Locale::FrCa => "No meetings yet",
+        Locale::FrCa => "Aucune réunion pour l'instant",
     }
 }
 
@@ -2989,7 +2989,7 @@ pub fn rooms_empty_title(l: Locale) -> &'static str {
 pub fn rooms_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load meetings",
-        Locale::FrCa => "Could not load meetings",
+        Locale::FrCa => "Impossible de charger les réunions",
     }
 }
 
@@ -2998,7 +2998,7 @@ pub fn rooms_failed_title(l: Locale) -> &'static str {
 pub fn rooms_listener_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "You are in this workspace as a viewer, so you join rooms to listen.",
-        Locale::FrCa => "You are in this workspace as a viewer, so you join rooms to listen.",
+        Locale::FrCa => "Avec le rôle Lecteur dans cet espace de travail, vous rejoignez les salles seulement pour écouter.",
     }
 }
 
@@ -3007,7 +3007,7 @@ pub fn rooms_listener_note(l: Locale) -> &'static str {
 pub fn rooms_name_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Name the room. Anyone in this workspace who types the same name joins you.",
-        Locale::FrCa => "Name the room. Anyone in this workspace who types the same name joins you.",
+        Locale::FrCa => "Nommez la salle. Toute personne de cet espace de travail qui saisit le même nom vous rejoint.",
     }
 }
 
@@ -3016,7 +3016,7 @@ pub fn rooms_name_hint(l: Locale) -> &'static str {
 pub fn rooms_name_preview(l: Locale, room: &str) -> String {
     match l {
         Locale::En => format!("Everyone who joins \"{room}\" meets in the same room."),
-        Locale::FrCa => format!("Everyone who joins \"{room}\" meets in the same room."),
+        Locale::FrCa => format!("Quiconque rejoint «\u{00A0}{room}\u{00A0}» se retrouve dans cette même salle."),
     }
 }
 
@@ -3025,7 +3025,7 @@ pub fn rooms_name_preview(l: Locale, room: &str) -> String {
 pub fn rooms_no_minutes(l: Locale) -> &'static str {
     match l {
         Locale::En => "No minutes were saved for this meeting.",
-        Locale::FrCa => "No minutes were saved for this meeting.",
+        Locale::FrCa => "Aucun procès-verbal n'a été conservé pour cette réunion.",
     }
 }
 
@@ -3034,7 +3034,7 @@ pub fn rooms_no_minutes(l: Locale) -> &'static str {
 pub fn rooms_no_minutes_yet(l: Locale) -> &'static str {
     match l {
         Locale::En => "Minutes are written when the meeting ends.",
-        Locale::FrCa => "Minutes are written when the meeting ends.",
+        Locale::FrCa => "Le procès-verbal est rédigé à la fin de la réunion.",
     }
 }
 
@@ -3043,7 +3043,7 @@ pub fn rooms_no_minutes_yet(l: Locale) -> &'static str {
 pub fn rooms_start_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Start or join a room",
-        Locale::FrCa => "Start or join a room",
+        Locale::FrCa => "Créer ou rejoindre une salle",
     }
 }
 
@@ -3052,7 +3052,7 @@ pub fn rooms_start_title(l: Locale) -> &'static str {
 pub fn routing_confirm_clear_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove all rules",
-        Locale::FrCa => "Remove all rules",
+        Locale::FrCa => "Supprimer les règles",
     }
 }
 
@@ -3061,7 +3061,7 @@ pub fn routing_confirm_clear_action(l: Locale) -> &'static str {
 pub fn routing_confirm_clear_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Saving with no rules removes every override: every caller gets the workspace's persona.",
-        Locale::FrCa => "Saving with no rules removes every override: every caller gets the workspace's persona.",
+        Locale::FrCa => "Enregistrer sans règle supprime tous les remplacements\u{00A0}: chaque appelant aura la persona de l'espace de travail.",
     }
 }
 
@@ -3070,7 +3070,7 @@ pub fn routing_confirm_clear_body(l: Locale) -> &'static str {
 pub fn routing_confirm_clear_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove every routing rule?",
-        Locale::FrCa => "Remove every routing rule?",
+        Locale::FrCa => "Supprimer toutes les règles?",
     }
 }
 
@@ -3079,7 +3079,7 @@ pub fn routing_confirm_clear_title(l: Locale) -> &'static str {
 pub fn routing_confirm_many_body(l: Locale, count: i64) -> String {
     match l {
         Locale::En => format!("There will be exactly these {} rules, in this order, replacing what is stored.", crate::format::integer(l, count)),
-        Locale::FrCa => format!("There will be exactly these {} rules, in this order, replacing what is stored.", crate::format::integer(l, count)),
+        Locale::FrCa => format!("Il y aura exactement ces {} règles, dans cet ordre, qui remplaceront ce qui est enregistré.", crate::format::integer(l, count)),
     }
 }
 
@@ -3088,7 +3088,7 @@ pub fn routing_confirm_many_body(l: Locale, count: i64) -> String {
 pub fn routing_confirm_one_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "There will be exactly one rule, replacing what is stored.",
-        Locale::FrCa => "There will be exactly one rule, replacing what is stored.",
+        Locale::FrCa => "Il y aura exactement une règle, qui remplacera ce qui est enregistré.",
     }
 }
 
@@ -3097,7 +3097,7 @@ pub fn routing_confirm_one_body(l: Locale) -> &'static str {
 pub fn routing_confirm_replace_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Replace",
-        Locale::FrCa => "Replace",
+        Locale::FrCa => "Remplacer",
     }
 }
 
@@ -3106,7 +3106,7 @@ pub fn routing_confirm_replace_action(l: Locale) -> &'static str {
 pub fn routing_confirm_replace_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Replace the routing rules?",
-        Locale::FrCa => "Replace the routing rules?",
+        Locale::FrCa => "Remplacer les règles?",
     }
 }
 
@@ -3115,7 +3115,7 @@ pub fn routing_confirm_replace_title(l: Locale) -> &'static str {
 pub fn routing_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Every caller gets the workspace's persona. Add a rule to give some callers another voice or instruction.",
-        Locale::FrCa => "Every caller gets the workspace's persona. Add a rule to give some callers another voice or instruction.",
+        Locale::FrCa => "Chaque appelant a la persona de l'espace de travail. Ajoutez une règle pour donner à certains appelants une autre voix ou consigne.",
     }
 }
 
@@ -3124,7 +3124,7 @@ pub fn routing_empty_body(l: Locale) -> &'static str {
 pub fn routing_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No routing rules",
-        Locale::FrCa => "No routing rules",
+        Locale::FrCa => "Aucune règle d'acheminement",
     }
 }
 
@@ -3133,7 +3133,7 @@ pub fn routing_empty_title(l: Locale) -> &'static str {
 pub fn routing_unmodellable_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace's routing rules are stored in a shape this app cannot change without losing part of them. Change them on the District AI website.",
-        Locale::FrCa => "This workspace's routing rules are stored in a shape this app cannot change without losing part of them. Change them on the District AI website.",
+        Locale::FrCa => "Les règles d'acheminement de cet espace sont stockées dans un format que cette application ne peut modifier sans en perdre une partie. Modifiez-les sur le site Web de District AI.",
     }
 }
 
@@ -3142,7 +3142,7 @@ pub fn routing_unmodellable_body(l: Locale) -> &'static str {
 pub fn routing_unmodellable_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cannot be edited here",
-        Locale::FrCa => "Cannot be edited here",
+        Locale::FrCa => "Modification impossible ici",
     }
 }
 
@@ -3151,7 +3151,7 @@ pub fn routing_unmodellable_title(l: Locale) -> &'static str {
 pub fn scheduling_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load booking pages",
-        Locale::FrCa => "Could not load booking pages",
+        Locale::FrCa => "Impossible de charger les pages de réservation",
     }
 }
 
@@ -3160,7 +3160,7 @@ pub fn scheduling_failed_title(l: Locale) -> &'static str {
 pub fn scheduling_live(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your booking page is live.",
-        Locale::FrCa => "Your booking page is live.",
+        Locale::FrCa => "Votre page de réservation est en ligne.",
     }
 }
 
@@ -3169,7 +3169,7 @@ pub fn scheduling_live(l: Locale) -> &'static str {
 pub fn scheduling_live_without_url(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has a booking page, but District AI did not send its address.",
-        Locale::FrCa => "This workspace has a booking page, but District AI did not send its address.",
+        Locale::FrCa => "Cet espace de travail a une page de réservation, mais District AI n'a pas envoyé son adresse Web.",
     }
 }
 
@@ -3178,7 +3178,7 @@ pub fn scheduling_live_without_url(l: Locale) -> &'static str {
 pub fn scheduling_not_offered(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking pages are not offered to this workspace.",
-        Locale::FrCa => "Booking pages are not offered to this workspace.",
+        Locale::FrCa => "Cet espace de travail n'a pas accès aux pages de réservation.",
     }
 }
 
@@ -3187,7 +3187,7 @@ pub fn scheduling_not_offered(l: Locale) -> &'static str {
 pub fn scheduling_not_set_up(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking pages are available to this workspace. Turn them on to give customers a page to book on.",
-        Locale::FrCa => "Booking pages are available to this workspace. Turn them on to give customers a page to book on.",
+        Locale::FrCa => "Cet espace de travail a accès aux pages de réservation. Activez-les pour offrir à vos clients une page où réserver.",
     }
 }
 
@@ -3196,7 +3196,7 @@ pub fn scheduling_not_set_up(l: Locale) -> &'static str {
 pub fn scheduling_provisioning(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your booking page is being set up. This usually takes under a minute, and it is checked again every hour if anything stalls.",
-        Locale::FrCa => "Your booking page is being set up. This usually takes under a minute, and it is checked again every hour if anything stalls.",
+        Locale::FrCa => "Votre page de réservation est en cours de configuration. Cela prend habituellement moins d'une minute, et elle est revérifiée toutes les heures en cas de blocage.",
     }
 }
 
@@ -3205,7 +3205,7 @@ pub fn scheduling_provisioning(l: Locale) -> &'static str {
 pub fn scheduling_setup_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Setting up your booking page did not finish.",
-        Locale::FrCa => "Setting up your booking page did not finish.",
+        Locale::FrCa => "La configuration de votre page de réservation a échoué.",
     }
 }
 
@@ -3214,7 +3214,7 @@ pub fn scheduling_setup_failed(l: Locale) -> &'static str {
 pub fn scheduling_switched_off(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking pages are switched off for this workspace.",
-        Locale::FrCa => "Booking pages are switched off for this workspace.",
+        Locale::FrCa => "Les pages de réservation sont désactivées pour cet espace de travail.",
     }
 }
 
@@ -3223,7 +3223,7 @@ pub fn scheduling_switched_off(l: Locale) -> &'static str {
 pub fn scheduling_unknown(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has a booking page, and this version of the app does not recognise its state. Updating the app should fix it.",
-        Locale::FrCa => "This workspace has a booking page, and this version of the app does not recognise its state. Updating the app should fix it.",
+        Locale::FrCa => "Cet espace de travail a une page de réservation, mais cette version de l'application ne reconnaît pas son état. Une mise à jour devrait régler le problème.",
     }
 }
 
@@ -3232,7 +3232,7 @@ pub fn scheduling_unknown(l: Locale) -> &'static str {
 pub fn session_callback_expired(l: Locale) -> &'static str {
     match l {
         Locale::En => "That sign-in link has expired. Sign in again.",
-        Locale::FrCa => "That sign-in link has expired. Sign in again.",
+        Locale::FrCa => "Ce lien de connexion a expiré. Reconnectez-vous.",
     }
 }
 
@@ -3241,7 +3241,7 @@ pub fn session_callback_expired(l: Locale) -> &'static str {
 pub fn session_callback_malformed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign-in did not complete. Sign in to try again.",
-        Locale::FrCa => "Sign-in did not complete. Sign in to try again.",
+        Locale::FrCa => "La connexion n'a pas abouti. Connectez-vous pour réessayer.",
     }
 }
 
@@ -3250,7 +3250,7 @@ pub fn session_callback_malformed(l: Locale) -> &'static str {
 pub fn session_callback_mismatch(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign-in refused: the response did not match this request.",
-        Locale::FrCa => "Sign-in refused: the response did not match this request.",
+        Locale::FrCa => "Tentative de connexion refusée\u{00A0}: la réponse ne correspond pas à cette demande.",
     }
 }
 
@@ -3259,7 +3259,7 @@ pub fn session_callback_mismatch(l: Locale) -> &'static str {
 pub fn session_denied(l: Locale, reason: &str) -> String {
     match l {
         Locale::En => format!("Sign-in did not complete ({reason})."),
-        Locale::FrCa => format!("Sign-in did not complete ({reason})."),
+        Locale::FrCa => format!("La connexion n'a pas abouti ({reason})."),
     }
 }
 
@@ -3268,7 +3268,7 @@ pub fn session_denied(l: Locale, reason: &str) -> String {
 pub fn session_ended_refresh(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your session ended. Signing in again will restore it.",
-        Locale::FrCa => "Your session ended. Signing in again will restore it.",
+        Locale::FrCa => "Votre session a pris fin. Une nouvelle connexion la rétablira.",
     }
 }
 
@@ -3277,7 +3277,7 @@ pub fn session_ended_refresh(l: Locale) -> &'static str {
 pub fn session_ended_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Please sign in again",
-        Locale::FrCa => "Please sign in again",
+        Locale::FrCa => "Veuillez vous reconnecter",
     }
 }
 
@@ -3286,7 +3286,7 @@ pub fn session_ended_title(l: Locale) -> &'static str {
 pub fn session_exchange_rejected(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign-in expired. Please try again.",
-        Locale::FrCa => "Sign-in expired. Please try again.",
+        Locale::FrCa => "La tentative de connexion a expiré. Veuillez réessayer.",
     }
 }
 
@@ -3295,7 +3295,7 @@ pub fn session_exchange_rejected(l: Locale) -> &'static str {
 pub fn session_exchanging(l: Locale) -> &'static str {
     match l {
         Locale::En => "Finishing sign-in.",
-        Locale::FrCa => "Finishing sign-in.",
+        Locale::FrCa => "Finalisation de la connexion.",
     }
 }
 
@@ -3304,7 +3304,7 @@ pub fn session_exchanging(l: Locale) -> &'static str {
 pub fn session_no_browser(l: Locale) -> &'static str {
     match l {
         Locale::En => "No browser is available, and signing in needs one.",
-        Locale::FrCa => "No browser is available, and signing in needs one.",
+        Locale::FrCa => "Aucun navigateur n'est disponible, et la connexion en exige un.",
     }
 }
 
@@ -3313,7 +3313,7 @@ pub fn session_no_browser(l: Locale) -> &'static str {
 pub fn session_no_browser_for_page(l: Locale) -> &'static str {
     match l {
         Locale::En => "No browser is available to open that page.",
-        Locale::FrCa => "No browser is available to open that page.",
+        Locale::FrCa => "Aucun navigateur disponible pour ouvrir cette page.",
     }
 }
 
@@ -3322,7 +3322,7 @@ pub fn session_no_browser_for_page(l: Locale) -> &'static str {
 pub fn session_no_longer_valid(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your session is no longer valid. Please sign in again.",
-        Locale::FrCa => "Your session is no longer valid. Please sign in again.",
+        Locale::FrCa => "Votre session n'est plus valide. Veuillez vous reconnecter.",
     }
 }
 
@@ -3331,7 +3331,7 @@ pub fn session_no_longer_valid(l: Locale) -> &'static str {
 pub fn session_not_saved(l: Locale, problem: &str) -> String {
     match l {
         Locale::En => format!("You are signed in, but your sign-in could not be saved ({problem}), so you will need to sign in again the next time the app starts."),
-        Locale::FrCa => format!("You are signed in, but your sign-in could not be saved ({problem}), so you will need to sign in again the next time the app starts."),
+        Locale::FrCa => format!("Connexion réussie, mais vos informations de connexion n'ont pas pu être sauvegardées ({problem})\u{00A0}: il faudra vous reconnecter au prochain démarrage de l'application."),
     }
 }
 
@@ -3340,7 +3340,7 @@ pub fn session_not_saved(l: Locale, problem: &str) -> String {
 pub fn session_opening_browser(l: Locale) -> &'static str {
     match l {
         Locale::En => "Opening your browser to sign in.",
-        Locale::FrCa => "Opening your browser to sign in.",
+        Locale::FrCa => "Ouverture du navigateur pour la connexion.",
     }
 }
 
@@ -3349,7 +3349,7 @@ pub fn session_opening_browser(l: Locale) -> &'static str {
 pub fn session_resuming(l: Locale) -> &'static str {
     match l {
         Locale::En => "Resuming your session.",
-        Locale::FrCa => "Resuming your session.",
+        Locale::FrCa => "Reprise de votre session.",
     }
 }
 
@@ -3358,7 +3358,7 @@ pub fn session_resuming(l: Locale) -> &'static str {
 pub fn session_sign_in_to_continue(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign in to continue.",
-        Locale::FrCa => "Sign in to continue.",
+        Locale::FrCa => "Connectez-vous pour continuer.",
     }
 }
 
@@ -3367,7 +3367,7 @@ pub fn session_sign_in_to_continue(l: Locale) -> &'static str {
 pub fn session_sign_out_deferred(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI could not be reached, so it will be told the next time the app starts.",
-        Locale::FrCa => "District AI could not be reached, so it will be told the next time the app starts.",
+        Locale::FrCa => "District AI est injoignable\u{00A0}: la déconnexion lui sera signalée au prochain démarrage de l'application.",
     }
 }
 
@@ -3376,7 +3376,7 @@ pub fn session_sign_out_deferred(l: Locale) -> &'static str {
 pub fn session_sign_out_not_attempted(l: Locale, problem: &str) -> String {
     match l {
         Locale::En => format!("Your stored sign-in could not be read ({problem}), so District AI was not told. It may stay valid on the service until it expires. You can sign this device out from Devices on another device."),
-        Locale::FrCa => format!("Your stored sign-in could not be read ({problem}), so District AI was not told. It may stay valid on the service until it expires. You can sign this device out from Devices on another device."),
+        Locale::FrCa => format!("Impossible de lire vos informations de connexion ({problem})\u{00A0}: District AI n'a donc pas été avisé de la déconnexion, et votre session pourrait rester valide sur le service jusqu'à son expiration. Vous pouvez déconnecter cet appareil dans l'écran Appareils d'un autre appareil."),
     }
 }
 
@@ -3385,7 +3385,7 @@ pub fn session_sign_out_not_attempted(l: Locale, problem: &str) -> String {
 pub fn session_sign_out_not_removed(l: Locale, problem: &str) -> String {
     match l {
         Locale::En => format!("Your sign-in could not be removed from this computer ({problem}), so you may find yourself signed in the next time the app starts. Try signing out again."),
-        Locale::FrCa => format!("Your sign-in could not be removed from this computer ({problem}), so you may find yourself signed in the next time the app starts. Try signing out again."),
+        Locale::FrCa => format!("Vos informations de connexion n'ont pas pu être supprimées de cet ordinateur ({problem})\u{00A0}: votre session pourrait rester ouverte au prochain démarrage de l'application. Réessayez de vous déconnecter."),
     }
 }
 
@@ -3394,7 +3394,7 @@ pub fn session_sign_out_not_removed(l: Locale, problem: &str) -> String {
 pub fn session_sign_out_stranded(l: Locale, problem: &str) -> String {
     match l {
         Locale::En => format!("District AI could not be reached, and the sign-in could not be kept to tell it later ({problem}), so it may stay valid on the service until it expires. You can sign this device out from Devices on another device."),
-        Locale::FrCa => format!("District AI could not be reached, and the sign-in could not be kept to tell it later ({problem}), so it may stay valid on the service until it expires. You can sign this device out from Devices on another device."),
+        Locale::FrCa => format!("District AI est injoignable, et la déconnexion n'a pas pu être mise en attente pour l'en informer plus tard ({problem})\u{00A0}: votre session pourrait rester valide sur le service jusqu'à son expiration. Vous pouvez déconnecter cet appareil depuis l'écran Appareils d'un autre appareil."),
     }
 }
 
@@ -3403,7 +3403,7 @@ pub fn session_sign_out_stranded(l: Locale, problem: &str) -> String {
 pub fn session_signed_out(l: Locale) -> &'static str {
     match l {
         Locale::En => "You are signed out.",
-        Locale::FrCa => "You are signed out.",
+        Locale::FrCa => "Déconnexion effectuée.",
     }
 }
 
@@ -3412,7 +3412,7 @@ pub fn session_signed_out(l: Locale) -> &'static str {
 pub fn session_signed_out_everywhere(l: Locale) -> &'static str {
     match l {
         Locale::En => "You are signed out on every device.",
-        Locale::FrCa => "You are signed out on every device.",
+        Locale::FrCa => "Déconnexion effectuée sur tous vos appareils.",
     }
 }
 
@@ -3421,7 +3421,7 @@ pub fn session_signed_out_everywhere(l: Locale) -> &'static str {
 pub fn session_store_problem_corrupt(l: Locale) -> &'static str {
     match l {
         Locale::En => "what is stored could not be read",
-        Locale::FrCa => "what is stored could not be read",
+        Locale::FrCa => "le contenu stocké n'a pas pu être lu",
     }
 }
 
@@ -3430,7 +3430,7 @@ pub fn session_store_problem_corrupt(l: Locale) -> &'static str {
 pub fn session_store_problem_io(l: Locale) -> &'static str {
     match l {
         Locale::En => "a file could not be read or written",
-        Locale::FrCa => "a file could not be read or written",
+        Locale::FrCa => "la lecture ou l'écriture d'un fichier a échoué",
     }
 }
 
@@ -3439,7 +3439,7 @@ pub fn session_store_problem_io(l: Locale) -> &'static str {
 pub fn session_store_problem_locked(l: Locale) -> &'static str {
     match l {
         Locale::En => "the keyring is locked",
-        Locale::FrCa => "the keyring is locked",
+        Locale::FrCa => "le trousseau est verrouillé",
     }
 }
 
@@ -3448,7 +3448,7 @@ pub fn session_store_problem_locked(l: Locale) -> &'static str {
 pub fn session_store_problem_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "no keyring is available",
-        Locale::FrCa => "no keyring is available",
+        Locale::FrCa => "aucun trousseau disponible",
     }
 }
 
@@ -3457,7 +3457,7 @@ pub fn session_store_problem_unavailable(l: Locale) -> &'static str {
 pub fn session_unreadable_token(l: Locale) -> &'static str {
     match l {
         Locale::En => "District AI sent a sign-in this version of the app does not understand. Updating the app should fix it.",
-        Locale::FrCa => "District AI sent a sign-in this version of the app does not understand. Updating the app should fix it.",
+        Locale::FrCa => "District AI a envoyé une réponse de connexion que cette version de l'application ne comprend pas. Une mise à jour de l'application devrait régler le problème.",
     }
 }
 
@@ -3466,7 +3466,7 @@ pub fn session_unreadable_token(l: Locale) -> &'static str {
 pub fn session_waiting_for_browser(l: Locale) -> &'static str {
     match l {
         Locale::En => "Waiting for sign-in to finish in your browser.",
-        Locale::FrCa => "Waiting for sign-in to finish in your browser.",
+        Locale::FrCa => "En attente de la fin de la connexion dans votre navigateur.",
     }
 }
 
@@ -3475,7 +3475,7 @@ pub fn session_waiting_for_browser(l: Locale) -> &'static str {
 pub fn settings_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load this workspace's settings",
-        Locale::FrCa => "Could not load this workspace's settings",
+        Locale::FrCa => "Impossible de charger les paramètres de cet espace de travail",
     }
 }
 
@@ -3484,7 +3484,7 @@ pub fn settings_failed_title(l: Locale) -> &'static str {
 pub fn settings_group_workspace(l: Locale) -> &'static str {
     match l {
         Locale::En => "Workspace",
-        Locale::FrCa => "Workspace",
+        Locale::FrCa => "Espace de travail",
     }
 }
 
@@ -3493,7 +3493,7 @@ pub fn settings_group_workspace(l: Locale) -> &'static str {
 pub fn settings_more_on_web(l: Locale) -> &'static str {
     match l {
         Locale::En => "District Studio's Integrations and Video, and the outbound campaign, are changed on the District AI website.",
-        Locale::FrCa => "District Studio's Integrations and Video, and the outbound campaign, are changed on the District AI website.",
+        Locale::FrCa => "Les pages Intégrations et Vidéo de District Studio, ainsi que la campagne sortante, se modifient sur le site Web de District AI.",
     }
 }
 
@@ -3502,7 +3502,7 @@ pub fn settings_more_on_web(l: Locale) -> &'static str {
 pub fn settings_row_call_handling(l: Locale) -> &'static str {
     match l {
         Locale::En => "Call handling",
-        Locale::FrCa => "Call handling",
+        Locale::FrCa => "Gestion des appels",
     }
 }
 
@@ -3511,7 +3511,7 @@ pub fn settings_row_call_handling(l: Locale) -> &'static str {
 pub fn settings_row_call_handling_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Who answers first, how long your devices ring, and whether you are rung.",
-        Locale::FrCa => "Who answers first, how long your devices ring, and whether you are rung.",
+        Locale::FrCa => "Qui répond en premier, combien de temps vos appareils sonnent et si l'appel vous parvient.",
     }
 }
 
@@ -3520,7 +3520,7 @@ pub fn settings_row_call_handling_body(l: Locale) -> &'static str {
 pub fn settings_row_directory(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer directory",
-        Locale::FrCa => "Transfer directory",
+        Locale::FrCa => "Répertoire de transfert",
     }
 }
 
@@ -3529,7 +3529,7 @@ pub fn settings_row_directory(l: Locale) -> &'static str {
 pub fn settings_row_directory_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Who it can put a live caller through to.",
-        Locale::FrCa => "Who it can put a live caller through to.",
+        Locale::FrCa => "Vers qui l'agent peut transférer un appel en cours.",
     }
 }
 
@@ -3538,7 +3538,7 @@ pub fn settings_row_directory_body(l: Locale) -> &'static str {
 pub fn settings_row_knowledge(l: Locale) -> &'static str {
     match l {
         Locale::En => "Knowledge",
-        Locale::FrCa => "Knowledge",
+        Locale::FrCa => "Connaissances",
     }
 }
 
@@ -3547,7 +3547,7 @@ pub fn settings_row_knowledge(l: Locale) -> &'static str {
 pub fn settings_row_knowledge_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The documents it answers from, and where answers come from.",
-        Locale::FrCa => "The documents it answers from, and where answers come from.",
+        Locale::FrCa => "Les documents utilisés pour répondre, et la source des réponses.",
     }
 }
 
@@ -3556,7 +3556,7 @@ pub fn settings_row_knowledge_body(l: Locale) -> &'static str {
 pub fn settings_row_members(l: Locale) -> &'static str {
     match l {
         Locale::En => "Members",
-        Locale::FrCa => "Members",
+        Locale::FrCa => "Membres",
     }
 }
 
@@ -3565,7 +3565,7 @@ pub fn settings_row_members(l: Locale) -> &'static str {
 pub fn settings_row_members_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Who belongs to this workspace, their roles, and its name.",
-        Locale::FrCa => "Who belongs to this workspace, their roles, and its name.",
+        Locale::FrCa => "Les membres de cet espace de travail, leurs rôles et le nom de l'espace.",
     }
 }
 
@@ -3574,7 +3574,7 @@ pub fn settings_row_members_body(l: Locale) -> &'static str {
 pub fn settings_row_messaging(l: Locale) -> &'static str {
     match l {
         Locale::En => "Messaging accounts",
-        Locale::FrCa => "Messaging accounts",
+        Locale::FrCa => "Comptes de messagerie",
     }
 }
 
@@ -3583,7 +3583,7 @@ pub fn settings_row_messaging(l: Locale) -> &'static str {
 pub fn settings_row_messaging_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier accounts this workspace sends from.",
-        Locale::FrCa => "The carrier accounts this workspace sends from.",
+        Locale::FrCa => "Comptes de transporteur utilisés pour les envois de cet espace de travail.",
     }
 }
 
@@ -3592,7 +3592,7 @@ pub fn settings_row_messaging_body(l: Locale) -> &'static str {
 pub fn settings_row_numbers(l: Locale) -> &'static str {
     match l {
         Locale::En => "Phone numbers",
-        Locale::FrCa => "Phone numbers",
+        Locale::FrCa => "Numéros de téléphone",
     }
 }
 
@@ -3601,7 +3601,7 @@ pub fn settings_row_numbers(l: Locale) -> &'static str {
 pub fn settings_row_numbers_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The numbers this workspace uses.",
-        Locale::FrCa => "The numbers this workspace uses.",
+        Locale::FrCa => "Les numéros de cet espace de travail.",
     }
 }
 
@@ -3619,7 +3619,7 @@ pub fn settings_row_persona(l: Locale) -> &'static str {
 pub fn settings_row_persona_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The receptionist's name, greeting, character, language and answer length.",
-        Locale::FrCa => "The receptionist's name, greeting, character, language and answer length.",
+        Locale::FrCa => "Nom, message d'accueil, personnalité, langue et longueur des réponses de la réceptionniste.",
     }
 }
 
@@ -3628,7 +3628,7 @@ pub fn settings_row_persona_body(l: Locale) -> &'static str {
 pub fn settings_row_routing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Call routing rules",
-        Locale::FrCa => "Call routing rules",
+        Locale::FrCa => "Règles d'acheminement",
     }
 }
 
@@ -3637,7 +3637,7 @@ pub fn settings_row_routing(l: Locale) -> &'static str {
 pub fn settings_row_routing_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Which callers get which voice and instruction.",
-        Locale::FrCa => "Which callers get which voice and instruction.",
+        Locale::FrCa => "Quelle voix et quelle consigne pour quels appelants.",
     }
 }
 
@@ -3646,7 +3646,7 @@ pub fn settings_row_routing_body(l: Locale) -> &'static str {
 pub fn settings_row_tools(l: Locale) -> &'static str {
     match l {
         Locale::En => "Skills",
-        Locale::FrCa => "Skills",
+        Locale::FrCa => "Compétences",
     }
 }
 
@@ -3655,7 +3655,7 @@ pub fn settings_row_tools(l: Locale) -> &'static str {
 pub fn settings_row_tools_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "What it may do on a call, and outside research on contacts.",
-        Locale::FrCa => "What it may do on a call, and outside research on contacts.",
+        Locale::FrCa => "Ce que l'agent peut faire en appel, et les recherches externes sur les contacts.",
     }
 }
 
@@ -3664,7 +3664,7 @@ pub fn settings_row_tools_body(l: Locale) -> &'static str {
 pub fn settings_row_voice(l: Locale) -> &'static str {
     match l {
         Locale::En => "Voice",
-        Locale::FrCa => "Voice",
+        Locale::FrCa => "Voix",
     }
 }
 
@@ -3673,7 +3673,7 @@ pub fn settings_row_voice(l: Locale) -> &'static str {
 pub fn settings_row_voice_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The voice and engine it speaks with, part by part, and how fast it answers.",
-        Locale::FrCa => "The voice and engine it speaks with, part by part, and how fast it answers.",
+        Locale::FrCa => "La voix et le moteur utilisés, élément par élément, et la rapidité de réponse.",
     }
 }
 
@@ -3682,7 +3682,7 @@ pub fn settings_row_voice_body(l: Locale) -> &'static str {
 pub fn settings_saved(l: Locale) -> &'static str {
     match l {
         Locale::En => "Saved.",
-        Locale::FrCa => "Saved.",
+        Locale::FrCa => "Enregistré.",
     }
 }
 
@@ -3691,7 +3691,7 @@ pub fn settings_saved(l: Locale) -> &'static str {
 pub fn settings_saved_stale(l: Locale) -> &'static str {
     match l {
         Locale::En => "Saved, but the settings could not be read back. Read them again before changing anything else.",
-        Locale::FrCa => "Saved, but the settings could not be read back. Read them again before changing anything else.",
+        Locale::FrCa => "Enregistré, mais les paramètres n'ont pas pu être relus. Actualisez-les avant de modifier autre chose.",
     }
 }
 
@@ -3700,7 +3700,7 @@ pub fn settings_saved_stale(l: Locale) -> &'static str {
 pub fn settings_viewer_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "You have read-only access to this workspace. These are the settings you may read; an agency or client member can change them.",
-        Locale::FrCa => "You have read-only access to this workspace. These are the settings you may read; an agency or client member can change them.",
+        Locale::FrCa => "Votre accès à cet espace de travail est en lecture seule. Voici les paramètres que vous pouvez lire; un membre ayant le rôle Agence ou Client peut les modifier.",
     }
 }
 
@@ -3709,7 +3709,7 @@ pub fn settings_viewer_note(l: Locale) -> &'static str {
 pub fn studio_leg_out(l: Locale, leg: &str, place: &str) -> String {
     match l {
         Locale::En => format!("{leg}: {place}"),
-        Locale::FrCa => format!("{leg}: {place}"),
+        Locale::FrCa => format!("{leg}\u{00A0}: {place}"),
     }
 }
 
@@ -3718,7 +3718,7 @@ pub fn studio_leg_out(l: Locale, leg: &str, place: &str) -> String {
 pub fn support_capped(l: Locale) -> &'static str {
     match l {
         Locale::En => "Showing the 100 most recent requests.",
-        Locale::FrCa => "Showing the 100 most recent requests.",
+        Locale::FrCa => "Affichage des 100 demandes les plus récentes.",
     }
 }
 
@@ -3727,7 +3727,7 @@ pub fn support_capped(l: Locale) -> &'static str {
 pub fn support_close_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Mark as resolved",
-        Locale::FrCa => "Mark as resolved",
+        Locale::FrCa => "Marquer comme réglée",
     }
 }
 
@@ -3736,7 +3736,7 @@ pub fn support_close_action(l: Locale) -> &'static str {
 pub fn support_close_question(l: Locale) -> &'static str {
     match l {
         Locale::En => "Mark this request as resolved? Our team is told, and it cannot be reopened from here. You can still reply to take it up again.",
-        Locale::FrCa => "Mark this request as resolved? Our team is told, and it cannot be reopened from here. You can still reply to take it up again.",
+        Locale::FrCa => "Marquer cette demande comme réglée? L'équipe de Distronode en sera avisée; impossible de la rouvrir ici, mais vous pourrez y répondre pour la relancer.",
     }
 }
 
@@ -3745,7 +3745,7 @@ pub fn support_close_question(l: Locale) -> &'static str {
 pub fn support_closed_as(l: Locale, status: &str) -> String {
     match l {
         Locale::En => format!("Closed as {status}."),
-        Locale::FrCa => format!("Closed as {status}."),
+        Locale::FrCa => format!("Fermée (état\u{00A0}: {status})."),
     }
 }
 
@@ -3754,7 +3754,7 @@ pub fn support_closed_as(l: Locale, status: &str) -> String {
 pub fn support_deduplicated(l: Locale) -> &'static str {
     match l {
         Locale::En => "That request was already sent.",
-        Locale::FrCa => "That request was already sent.",
+        Locale::FrCa => "Cette demande a déjà été envoyée.",
     }
 }
 
@@ -3763,7 +3763,7 @@ pub fn support_deduplicated(l: Locale) -> &'static str {
 pub fn support_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Requests your team raises with Distronode appear here, with our replies.",
-        Locale::FrCa => "Requests your team raises with Distronode appear here, with our replies.",
+        Locale::FrCa => "Les demandes que votre équipe soumet à Distronode apparaissent ici, avec nos réponses.",
     }
 }
 
@@ -3772,7 +3772,7 @@ pub fn support_empty_body(l: Locale) -> &'static str {
 pub fn support_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No requests",
-        Locale::FrCa => "No requests",
+        Locale::FrCa => "Aucune demande",
     }
 }
 
@@ -3781,7 +3781,7 @@ pub fn support_empty_title(l: Locale) -> &'static str {
 pub fn support_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load your support requests",
-        Locale::FrCa => "Could not load your support requests",
+        Locale::FrCa => "Impossible de charger vos demandes de soutien",
     }
 }
 
@@ -3790,7 +3790,7 @@ pub fn support_failed_title(l: Locale) -> &'static str {
 pub fn support_filed(l: Locale, key: &str) -> String {
     match l {
         Locale::En => format!("Request {key} is open with our team."),
-        Locale::FrCa => format!("Request {key} is open with our team."),
+        Locale::FrCa => format!("La demande {key} est ouverte chez Distronode."),
     }
 }
 
@@ -3799,7 +3799,7 @@ pub fn support_filed(l: Locale, key: &str) -> String {
 pub fn support_kind_problem(l: Locale) -> &'static str {
     match l {
         Locale::En => "Something is broken",
-        Locale::FrCa => "Something is broken",
+        Locale::FrCa => "Quelque chose ne fonctionne pas",
     }
 }
 
@@ -3808,7 +3808,7 @@ pub fn support_kind_problem(l: Locale) -> &'static str {
 pub fn support_kind_question(l: Locale) -> &'static str {
     match l {
         Locale::En => "A question",
-        Locale::FrCa => "A question",
+        Locale::FrCa => "Une question",
     }
 }
 
@@ -3817,7 +3817,7 @@ pub fn support_kind_question(l: Locale) -> &'static str {
 pub fn support_kind_suggestion(l: Locale) -> &'static str {
     match l {
         Locale::En => "A suggestion",
-        Locale::FrCa => "A suggestion",
+        Locale::FrCa => "Une suggestion",
     }
 }
 
@@ -3826,7 +3826,7 @@ pub fn support_kind_suggestion(l: Locale) -> &'static str {
 pub fn support_pending(l: Locale) -> &'static str {
     match l {
         Locale::En => "We have your request. Its reference will appear here shortly.",
-        Locale::FrCa => "We have your request. Its reference will appear here shortly.",
+        Locale::FrCa => "Nous avons bien reçu votre demande. Sa référence apparaîtra ici sous peu.",
     }
 }
 
@@ -3835,7 +3835,7 @@ pub fn support_pending(l: Locale) -> &'static str {
 pub fn thread_attachment_size(l: Locale, megabytes: i64) -> String {
     match l {
         Locale::En => format!("Attachments must be between 1 byte and {} MB.", crate::format::integer(l, megabytes)),
-        Locale::FrCa => format!("Attachments must be between 1 byte and {} MB.", crate::format::integer(l, megabytes)),
+        Locale::FrCa => format!("Les pièces jointes doivent faire entre 1 octet et {} Mo.", crate::format::integer(l, megabytes)),
     }
 }
 
@@ -3844,7 +3844,7 @@ pub fn thread_attachment_size(l: Locale, megabytes: i64) -> String {
 pub fn thread_no_reply_target(l: Locale) -> &'static str {
     match l {
         Locale::En => "Replies cannot be sent on this conversation from here.",
-        Locale::FrCa => "Replies cannot be sent on this conversation from here.",
+        Locale::FrCa => "Impossible de répondre à cette conversation à partir d'ici.",
     }
 }
 
@@ -3853,7 +3853,7 @@ pub fn thread_no_reply_target(l: Locale) -> &'static str {
 pub fn thread_read_only_role(l: Locale) -> &'static str {
     match l {
         Locale::En => "You have read-only access to this workspace, so you cannot reply here.",
-        Locale::FrCa => "You have read-only access to this workspace, so you cannot reply here.",
+        Locale::FrCa => "Votre accès à cet espace de travail est en lecture seule; vous ne pouvez pas répondre ici.",
     }
 }
 
@@ -3862,7 +3862,7 @@ pub fn thread_read_only_role(l: Locale) -> &'static str {
 pub fn thread_too_many_attachments(l: Locale, count: i64) -> String {
     match l {
         Locale::En => format!("You can attach up to {} images to one message.", crate::format::integer(l, count)),
-        Locale::FrCa => format!("You can attach up to {} images to one message.", crate::format::integer(l, count)),
+        Locale::FrCa => format!("Vous pouvez joindre jusqu'à {} images à un même message.", crate::format::integer(l, count)),
     }
 }
 
@@ -3880,7 +3880,7 @@ pub fn thread_untitled(l: Locale) -> &'static str {
 pub fn tools_book_appointment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Book appointments",
-        Locale::FrCa => "Book appointments",
+        Locale::FrCa => "Fixer des rendez-vous",
     }
 }
 
@@ -3889,7 +3889,7 @@ pub fn tools_book_appointment(l: Locale) -> &'static str {
 pub fn tools_cancel_appointment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel appointments",
-        Locale::FrCa => "Cancel appointments",
+        Locale::FrCa => "Annuler des rendez-vous",
     }
 }
 
@@ -3898,7 +3898,7 @@ pub fn tools_cancel_appointment(l: Locale) -> &'static str {
 pub fn tools_check_availability(l: Locale) -> &'static str {
     match l {
         Locale::En => "Check availability",
-        Locale::FrCa => "Check availability",
+        Locale::FrCa => "Vérifier les disponibilités",
     }
 }
 
@@ -3907,7 +3907,7 @@ pub fn tools_check_availability(l: Locale) -> &'static str {
 pub fn tools_dispatch_email(l: Locale) -> &'static str {
     match l {
         Locale::En => "Email dispatcher",
-        Locale::FrCa => "Email dispatcher",
+        Locale::FrCa => "Envoi de courriels",
     }
 }
 
@@ -3916,7 +3916,7 @@ pub fn tools_dispatch_email(l: Locale) -> &'static str {
 pub fn tools_enrichment_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "When on, contacts can be researched with business details from licensed providers and public web search. Off unless someone turns it on; calls and contacts work normally without it.",
-        Locale::FrCa => "When on, contacts can be researched with business details from licensed providers and public web search. Off unless someone turns it on; calls and contacts work normally without it.",
+        Locale::FrCa => "Activée, elle permet de rechercher des renseignements d'affaires sur les contacts auprès de fournisseurs sous licence et sur le Web public. Désactivée par défaut; les appels et les contacts fonctionnent normalement sans elle.",
     }
 }
 
@@ -3925,7 +3925,7 @@ pub fn tools_enrichment_body(l: Locale) -> &'static str {
 pub fn tools_enrichment_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Outside research on contacts",
-        Locale::FrCa => "Outside research on contacts",
+        Locale::FrCa => "Recherche externe sur les contacts",
     }
 }
 
@@ -3934,7 +3934,7 @@ pub fn tools_enrichment_title(l: Locale) -> &'static str {
 pub fn tools_leave_message(l: Locale) -> &'static str {
     match l {
         Locale::En => "Take a message",
-        Locale::FrCa => "Take a message",
+        Locale::FrCa => "Prendre un message",
     }
 }
 
@@ -3943,7 +3943,7 @@ pub fn tools_leave_message(l: Locale) -> &'static str {
 pub fn tools_list_appointments(l: Locale) -> &'static str {
     match l {
         Locale::En => "Read back appointments",
-        Locale::FrCa => "Read back appointments",
+        Locale::FrCa => "Lire les rendez-vous à l'appelant",
     }
 }
 
@@ -3952,7 +3952,7 @@ pub fn tools_list_appointments(l: Locale) -> &'static str {
 pub fn tools_list_event_types(l: Locale) -> &'static str {
     match l {
         Locale::En => "List appointment types",
-        Locale::FrCa => "List appointment types",
+        Locale::FrCa => "Lister les types de rendez-vous",
     }
 }
 
@@ -3961,7 +3961,7 @@ pub fn tools_list_event_types(l: Locale) -> &'static str {
 pub fn tools_needs_support_number(l: Locale) -> &'static str {
     match l {
         Locale::En => "Needs a support team number, which is set on the District AI website.",
-        Locale::FrCa => "Needs a support team number, which is set on the District AI website.",
+        Locale::FrCa => "Il faut le numéro de téléphone de l'équipe de soutien, qui se définit sur le site Web de District AI.",
     }
 }
 
@@ -3970,7 +3970,7 @@ pub fn tools_needs_support_number(l: Locale) -> &'static str {
 pub fn tools_reschedule_appointment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reschedule appointments",
-        Locale::FrCa => "Reschedule appointments",
+        Locale::FrCa => "Reporter des rendez-vous",
     }
 }
 
@@ -3979,7 +3979,7 @@ pub fn tools_reschedule_appointment(l: Locale) -> &'static str {
 pub fn tools_search_knowledge_base(l: Locale) -> &'static str {
     match l {
         Locale::En => "Knowledge base",
-        Locale::FrCa => "Knowledge base",
+        Locale::FrCa => "Base de connaissances",
     }
 }
 
@@ -3988,7 +3988,7 @@ pub fn tools_search_knowledge_base(l: Locale) -> &'static str {
 pub fn tools_send_sms(l: Locale) -> &'static str {
     match l {
         Locale::En => "Text the caller",
-        Locale::FrCa => "Text the caller",
+        Locale::FrCa => "Envoyer un texto",
     }
 }
 
@@ -3997,7 +3997,7 @@ pub fn tools_send_sms(l: Locale) -> &'static str {
 pub fn tools_transfer_to_agent(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer to a person (fallback)",
-        Locale::FrCa => "Transfer to a person (fallback)",
+        Locale::FrCa => "Transférer à une personne (en dernier recours)",
     }
 }
 
@@ -4006,7 +4006,7 @@ pub fn tools_transfer_to_agent(l: Locale) -> &'static str {
 pub fn tools_transfer_to_person(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer to a person",
-        Locale::FrCa => "Transfer to a person",
+        Locale::FrCa => "Transférer à une personne",
     }
 }
 
@@ -4015,7 +4015,7 @@ pub fn tools_transfer_to_person(l: Locale) -> &'static str {
 pub fn tools_unknown_tool(l: Locale) -> &'static str {
     match l {
         Locale::En => "Stored for this workspace. This version of the app has no name for it, and leaving it on keeps it.",
-        Locale::FrCa => "Stored for this workspace. This version of the app has no name for it, and leaving it on keeps it.",
+        Locale::FrCa => "Compétence conservée pour cet espace de travail. Cette version de l'application ne sait pas la nommer; la laisser activée la conserve.",
     }
 }
 
@@ -4024,7 +4024,7 @@ pub fn tools_unknown_tool(l: Locale) -> &'static str {
 pub fn tools_update_contact(l: Locale) -> &'static str {
     match l {
         Locale::En => "Update contacts",
-        Locale::FrCa => "Update contacts",
+        Locale::FrCa => "Mettre à jour les contacts",
     }
 }
 
@@ -4033,7 +4033,7 @@ pub fn tools_update_contact(l: Locale) -> &'static str {
 pub fn transcript_assistant(l: Locale) -> &'static str {
     match l {
         Locale::En => "Assistant",
-        Locale::FrCa => "Assistant",
+        Locale::FrCa => "Assistante",
     }
 }
 
@@ -4042,7 +4042,7 @@ pub fn transcript_assistant(l: Locale) -> &'static str {
 pub fn transcript_caller(l: Locale) -> &'static str {
     match l {
         Locale::En => "Caller",
-        Locale::FrCa => "Caller",
+        Locale::FrCa => "Appelant",
     }
 }
 
@@ -4051,7 +4051,7 @@ pub fn transcript_caller(l: Locale) -> &'static str {
 pub fn transcript_connecting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connecting.",
-        Locale::FrCa => "Connecting.",
+        Locale::FrCa => "Connexion en cours.",
     }
 }
 
@@ -4060,7 +4060,7 @@ pub fn transcript_connecting(l: Locale) -> &'static str {
 pub fn transcript_ended(l: Locale) -> &'static str {
     match l {
         Locale::En => "Call ended",
-        Locale::FrCa => "Call ended",
+        Locale::FrCa => "Appel terminé",
     }
 }
 
@@ -4069,7 +4069,7 @@ pub fn transcript_ended(l: Locale) -> &'static str {
 pub fn transcript_heading(l: Locale) -> &'static str {
     match l {
         Locale::En => "Live transcript",
-        Locale::FrCa => "Live transcript",
+        Locale::FrCa => "Transcription en direct",
     }
 }
 
@@ -4078,7 +4078,7 @@ pub fn transcript_heading(l: Locale) -> &'static str {
 pub fn transcript_incomplete(l: Locale) -> &'static str {
     match l {
         Locale::En => "Earlier lines will appear in the full transcript after the call.",
-        Locale::FrCa => "Earlier lines will appear in the full transcript after the call.",
+        Locale::FrCa => "Les répliques précédentes figureront dans la transcription complète après l'appel.",
     }
 }
 
@@ -4087,7 +4087,7 @@ pub fn transcript_incomplete(l: Locale) -> &'static str {
 pub fn transcript_interrupted(l: Locale) -> &'static str {
     match l {
         Locale::En => "Interrupted",
-        Locale::FrCa => "Interrupted",
+        Locale::FrCa => "Interrompue",
     }
 }
 
@@ -4096,7 +4096,7 @@ pub fn transcript_interrupted(l: Locale) -> &'static str {
 pub fn transcript_live(l: Locale) -> &'static str {
     match l {
         Locale::En => "Live",
-        Locale::FrCa => "Live",
+        Locale::FrCa => "En direct",
     }
 }
 
@@ -4105,7 +4105,7 @@ pub fn transcript_live(l: Locale) -> &'static str {
 pub fn transcript_loading_full(l: Locale) -> &'static str {
     match l {
         Locale::En => "Loading the full transcript.",
-        Locale::FrCa => "Loading the full transcript.",
+        Locale::FrCa => "Chargement de la transcription complète.",
     }
 }
 
@@ -4114,7 +4114,7 @@ pub fn transcript_loading_full(l: Locale) -> &'static str {
 pub fn transcript_no_transcript(l: Locale) -> &'static str {
     match l {
         Locale::En => "No transcript for this call.",
-        Locale::FrCa => "No transcript for this call.",
+        Locale::FrCa => "Aucune transcription pour cet appel.",
     }
 }
 
@@ -4123,7 +4123,7 @@ pub fn transcript_no_transcript(l: Locale) -> &'static str {
 pub fn transcript_other_speaker(l: Locale) -> &'static str {
     match l {
         Locale::En => "Other speaker",
-        Locale::FrCa => "Other speaker",
+        Locale::FrCa => "Autre participant",
     }
 }
 
@@ -4132,7 +4132,7 @@ pub fn transcript_other_speaker(l: Locale) -> &'static str {
 pub fn transcript_reconnecting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reconnecting.",
-        Locale::FrCa => "Reconnecting.",
+        Locale::FrCa => "Reconnexion en cours.",
     }
 }
 
@@ -4141,7 +4141,7 @@ pub fn transcript_reconnecting(l: Locale) -> &'static str {
 pub fn transcript_waiting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing has been said yet.",
-        Locale::FrCa => "Nothing has been said yet.",
+        Locale::FrCa => "Rien n'a encore été dit.",
     }
 }
 
@@ -4150,7 +4150,7 @@ pub fn transcript_waiting(l: Locale) -> &'static str {
 pub fn voice_studio_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load Voice Studio",
-        Locale::FrCa => "Could not load Voice Studio",
+        Locale::FrCa => "Impossible de charger Voice Studio",
     }
 }
 
@@ -4159,7 +4159,7 @@ pub fn voice_studio_failed_title(l: Locale) -> &'static str {
 pub fn voice_studio_saved_stale(l: Locale) -> &'static str {
     match l {
         Locale::En => "Saved, but Voice Studio could not be read back. Read it again before changing anything else.",
-        Locale::FrCa => "Saved, but Voice Studio could not be read back. Read it again before changing anything else.",
+        Locale::FrCa => "Enregistré, mais Voice Studio n'a pas pu être rechargé. Actualisez-le avant de modifier autre chose.",
     }
 }
 
@@ -4168,7 +4168,7 @@ pub fn voice_studio_saved_stale(l: Locale) -> &'static str {
 pub fn workflows_campaign_active(l: Locale) -> &'static str {
     match l {
         Locale::En => "Active",
-        Locale::FrCa => "Active",
+        Locale::FrCa => "Actif",
     }
 }
 
@@ -4177,7 +4177,7 @@ pub fn workflows_campaign_active(l: Locale) -> &'static str {
 pub fn workflows_campaign_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load the campaign",
-        Locale::FrCa => "Could not load the campaign",
+        Locale::FrCa => "Impossible de charger la campagne",
     }
 }
 
@@ -4186,7 +4186,7 @@ pub fn workflows_campaign_failed_title(l: Locale) -> &'static str {
 pub fn workflows_campaign_no_batch(l: Locale) -> &'static str {
     match l {
         Locale::En => "No batch size set yet.",
-        Locale::FrCa => "No batch size set yet.",
+        Locale::FrCa => "Taille du lot pas encore définie.",
     }
 }
 
@@ -4195,7 +4195,7 @@ pub fn workflows_campaign_no_batch(l: Locale) -> &'static str {
 pub fn workflows_campaign_no_goal(l: Locale) -> &'static str {
     match l {
         Locale::En => "No goal set yet.",
-        Locale::FrCa => "No goal set yet.",
+        Locale::FrCa => "Objectif pas encore défini.",
     }
 }
 
@@ -4204,7 +4204,7 @@ pub fn workflows_campaign_no_goal(l: Locale) -> &'static str {
 pub fn workflows_campaign_paused(l: Locale) -> &'static str {
     match l {
         Locale::En => "Paused",
-        Locale::FrCa => "Paused",
+        Locale::FrCa => "En pause",
     }
 }
 
@@ -4213,7 +4213,7 @@ pub fn workflows_campaign_paused(l: Locale) -> &'static str {
 pub fn workflows_campaign_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Outbound campaign",
-        Locale::FrCa => "Outbound campaign",
+        Locale::FrCa => "Campagne sortante",
     }
 }
 
@@ -4222,7 +4222,7 @@ pub fn workflows_campaign_title(l: Locale) -> &'static str {
 pub fn workflows_campaign_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "You are a viewer in this workspace. Ask an agency or client member to change the campaign.",
-        Locale::FrCa => "You are a viewer in this workspace. Ask an agency or client member to change the campaign.",
+        Locale::FrCa => "Votre rôle dans cet espace de travail est Lecteur. Demandez à un membre ayant le rôle Agence ou Client de modifier la campagne.",
     }
 }
 
@@ -4231,7 +4231,7 @@ pub fn workflows_campaign_viewer(l: Locale) -> &'static str {
 pub fn workflows_campaign_web_only(l: Locale) -> &'static str {
     match l {
         Locale::En => "The campaign's goal and batch size are changed on the District AI website.",
-        Locale::FrCa => "The campaign's goal and batch size are changed on the District AI website.",
+        Locale::FrCa => "L'objectif et la taille de lot de la campagne se modifient sur le site Web de District AI.",
     }
 }
 
@@ -4240,7 +4240,7 @@ pub fn workflows_campaign_web_only(l: Locale) -> &'static str {
 pub fn workflows_confirm_pause_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Pause campaign",
-        Locale::FrCa => "Pause campaign",
+        Locale::FrCa => "Mettre la campagne en pause",
     }
 }
 
@@ -4249,7 +4249,7 @@ pub fn workflows_confirm_pause_action(l: Locale) -> &'static str {
 pub fn workflows_confirm_pause_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The campaign stops working through your contacts. Nothing is deleted, and its goal and batch size are kept, so resuming picks up where it left off.",
-        Locale::FrCa => "The campaign stops working through your contacts. Nothing is deleted, and its goal and batch size are kept, so resuming picks up where it left off.",
+        Locale::FrCa => "La campagne cesse de parcourir vos contacts. Rien n'est supprimé, et son objectif et sa taille de lot sont conservés\u{00A0}: à la reprise, elle repart là où elle s'était arrêtée.",
     }
 }
 
@@ -4258,7 +4258,7 @@ pub fn workflows_confirm_pause_body(l: Locale) -> &'static str {
 pub fn workflows_confirm_pause_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Pause the outbound campaign?",
-        Locale::FrCa => "Pause the outbound campaign?",
+        Locale::FrCa => "Mettre la campagne sortante en pause?",
     }
 }
 
@@ -4267,7 +4267,7 @@ pub fn workflows_confirm_pause_title(l: Locale) -> &'static str {
 pub fn workflows_confirm_resume_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Resume campaign",
-        Locale::FrCa => "Resume campaign",
+        Locale::FrCa => "Reprendre la campagne",
     }
 }
 
@@ -4276,7 +4276,7 @@ pub fn workflows_confirm_resume_action(l: Locale) -> &'static str {
 pub fn workflows_confirm_resume_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The campaign starts calling and messaging your contacts again, which spends call and message credit.",
-        Locale::FrCa => "The campaign starts calling and messaging your contacts again, which spends call and message credit.",
+        Locale::FrCa => "La campagne recommence à appeler vos contacts et à leur envoyer des messages, ce qui consomme du crédit d'appels et de messages.",
     }
 }
 
@@ -4285,7 +4285,7 @@ pub fn workflows_confirm_resume_body(l: Locale) -> &'static str {
 pub fn workflows_confirm_resume_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Resume the outbound campaign?",
-        Locale::FrCa => "Resume the outbound campaign?",
+        Locale::FrCa => "Reprendre la campagne sortante?",
     }
 }
 
@@ -4294,7 +4294,7 @@ pub fn workflows_confirm_resume_title(l: Locale) -> &'static str {
 pub fn workflows_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Workflows run an action after a call, a message or a new contact. They are built on the District AI website.",
-        Locale::FrCa => "Workflows run an action after a call, a message or a new contact. They are built on the District AI website.",
+        Locale::FrCa => "Les flux de travail lancent une action après un appel, un message ou un nouveau contact. Ils se créent sur le site Web de District AI.",
     }
 }
 
@@ -4303,7 +4303,7 @@ pub fn workflows_empty_body(l: Locale) -> &'static str {
 pub fn workflows_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No workflows yet",
-        Locale::FrCa => "No workflows yet",
+        Locale::FrCa => "Pas encore de flux de travail",
     }
 }
 
@@ -4312,7 +4312,7 @@ pub fn workflows_empty_title(l: Locale) -> &'static str {
 pub fn workflows_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load workflows",
-        Locale::FrCa => "Could not load workflows",
+        Locale::FrCa => "Impossible de charger les flux de travail",
     }
 }
 
@@ -4321,7 +4321,7 @@ pub fn workflows_failed_title(l: Locale) -> &'static str {
 pub fn workflows_runs_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workflow has not run yet.",
-        Locale::FrCa => "This workflow has not run yet.",
+        Locale::FrCa => "Ce flux de travail n'a pas encore été exécuté.",
     }
 }
 
@@ -4330,7 +4330,7 @@ pub fn workflows_runs_empty(l: Locale) -> &'static str {
 pub fn workflows_trigger_call_answered(l: Locale) -> &'static str {
     match l {
         Locale::En => "After an answered call",
-        Locale::FrCa => "After an answered call",
+        Locale::FrCa => "Après un appel répondu",
     }
 }
 
@@ -4339,7 +4339,7 @@ pub fn workflows_trigger_call_answered(l: Locale) -> &'static str {
 pub fn workflows_trigger_call_ended(l: Locale) -> &'static str {
     match l {
         Locale::En => "After any call ends",
-        Locale::FrCa => "After any call ends",
+        Locale::FrCa => "À la fin de chaque appel",
     }
 }
 
@@ -4348,7 +4348,7 @@ pub fn workflows_trigger_call_ended(l: Locale) -> &'static str {
 pub fn workflows_trigger_call_missed(l: Locale) -> &'static str {
     match l {
         Locale::En => "After a missed call",
-        Locale::FrCa => "After a missed call",
+        Locale::FrCa => "Après un appel manqué",
     }
 }
 
@@ -4357,7 +4357,7 @@ pub fn workflows_trigger_call_missed(l: Locale) -> &'static str {
 pub fn workflows_trigger_contact_created(l: Locale) -> &'static str {
     match l {
         Locale::En => "New contact",
-        Locale::FrCa => "New contact",
+        Locale::FrCa => "Nouveau contact",
     }
 }
 
@@ -4366,7 +4366,7 @@ pub fn workflows_trigger_contact_created(l: Locale) -> &'static str {
 pub fn workflows_trigger_dnc_registered(l: Locale) -> &'static str {
     match l {
         Locale::En => "Added to do-not-call",
-        Locale::FrCa => "Added to do-not-call",
+        Locale::FrCa => "Ajout à la liste d'exclusion",
     }
 }
 
@@ -4375,7 +4375,7 @@ pub fn workflows_trigger_dnc_registered(l: Locale) -> &'static str {
 pub fn workflows_trigger_intent_detected(l: Locale) -> &'static str {
     match l {
         Locale::En => "Intent detected",
-        Locale::FrCa => "Intent detected",
+        Locale::FrCa => "Intention détectée",
     }
 }
 
@@ -4384,7 +4384,7 @@ pub fn workflows_trigger_intent_detected(l: Locale) -> &'static str {
 pub fn workflows_trigger_negative_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Negative sentiment",
-        Locale::FrCa => "Negative sentiment",
+        Locale::FrCa => "Sentiment négatif",
     }
 }
 
@@ -4393,7 +4393,7 @@ pub fn workflows_trigger_negative_sentiment(l: Locale) -> &'static str {
 pub fn workflows_trigger_neutral_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Neutral sentiment",
-        Locale::FrCa => "Neutral sentiment",
+        Locale::FrCa => "Sentiment neutre",
     }
 }
 
@@ -4402,7 +4402,7 @@ pub fn workflows_trigger_neutral_sentiment(l: Locale) -> &'static str {
 pub fn workflows_trigger_positive_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Positive sentiment",
-        Locale::FrCa => "Positive sentiment",
+        Locale::FrCa => "Sentiment positif",
     }
 }
 
@@ -4411,7 +4411,7 @@ pub fn workflows_trigger_positive_sentiment(l: Locale) -> &'static str {
 pub fn workflows_trigger_sms_received(l: Locale) -> &'static str {
     match l {
         Locale::En => "Message received",
-        Locale::FrCa => "Message received",
+        Locale::FrCa => "Message reçu",
     }
 }
 
@@ -4420,7 +4420,7 @@ pub fn workflows_trigger_sms_received(l: Locale) -> &'static str {
 pub fn workspaces_billing_blocked_many(l: Locale, count: i64) -> String {
     match l {
         Locale::En => format!("None of your {} workspaces has an active subscription.", crate::format::integer(l, count)),
-        Locale::FrCa => format!("None of your {} workspaces has an active subscription.", crate::format::integer(l, count)),
+        Locale::FrCa => format!("Aucun de vos {} espaces de travail n'a d'abonnement actif.", crate::format::integer(l, count)),
     }
 }
 
@@ -4429,7 +4429,7 @@ pub fn workspaces_billing_blocked_many(l: Locale, count: i64) -> String {
 pub fn workspaces_billing_blocked_one(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your workspace does not have an active subscription.",
-        Locale::FrCa => "Your workspace does not have an active subscription.",
+        Locale::FrCa => "Votre espace de travail n'a pas d'abonnement actif.",
     }
 }
 
@@ -4438,7 +4438,7 @@ pub fn workspaces_billing_blocked_one(l: Locale) -> &'static str {
 pub fn workspaces_billing_blocked_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Subscription inactive",
-        Locale::FrCa => "Subscription inactive",
+        Locale::FrCa => "Abonnement inactif",
     }
 }
 
@@ -4447,7 +4447,7 @@ pub fn workspaces_billing_blocked_title(l: Locale) -> &'static str {
 pub fn workspaces_choose_plan_after_checkout_message(l: Locale) -> &'static str {
     match l {
         Locale::En => "This account does not have a District workspace yet. Choose a plan to set one up. A workspace you paid for can take a few minutes, and appears here once it is ready.",
-        Locale::FrCa => "This account does not have a District workspace yet. Choose a plan to set one up. A workspace you paid for can take a few minutes, and appears here once it is ready.",
+        Locale::FrCa => "Ce compte n'a pas encore d'espace de travail District. Choisissez un forfait pour en créer un. La préparation d'un espace de travail payé peut prendre quelques minutes; il apparaît ici dès qu'il est prêt.",
     }
 }
 
@@ -4456,7 +4456,7 @@ pub fn workspaces_choose_plan_after_checkout_message(l: Locale) -> &'static str 
 pub fn workspaces_choose_plan_message(l: Locale) -> &'static str {
     match l {
         Locale::En => "This account does not have a District workspace yet. Choose a plan to set one up.",
-        Locale::FrCa => "This account does not have a District workspace yet. Choose a plan to set one up.",
+        Locale::FrCa => "Ce compte n'a pas encore d'espace de travail District. Choisissez un forfait pour en créer un.",
     }
 }
 
@@ -4465,7 +4465,7 @@ pub fn workspaces_choose_plan_message(l: Locale) -> &'static str {
 pub fn workspaces_failed_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not load your workspace",
-        Locale::FrCa => "Could not load your workspace",
+        Locale::FrCa => "Impossible de charger votre espace de travail",
     }
 }
 
@@ -4474,7 +4474,7 @@ pub fn workspaces_failed_title(l: Locale) -> &'static str {
 pub fn workspaces_none_message(l: Locale) -> &'static str {
     match l {
         Locale::En => "This account is not linked to a District workspace yet. Please contact support.",
-        Locale::FrCa => "This account is not linked to a District workspace yet. Please contact support.",
+        Locale::FrCa => "Ce compte n'est pas encore lié à un espace de travail District. Veuillez communiquer avec le soutien.",
     }
 }
 
@@ -4483,7 +4483,7 @@ pub fn workspaces_none_message(l: Locale) -> &'static str {
 pub fn workspaces_none_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No workspace found",
-        Locale::FrCa => "No workspace found",
+        Locale::FrCa => "Aucun espace de travail trouvé",
     }
 }
 
@@ -4492,7 +4492,7 @@ pub fn workspaces_none_title(l: Locale) -> &'static str {
 pub fn workspaces_partial_warning(l: Locale, regions: &str) -> String {
     match l {
         Locale::En => format!("Some workspaces could not be listed ({regions} unreachable). This list may be incomplete."),
-        Locale::FrCa => format!("Some workspaces could not be listed ({regions} unreachable). This list may be incomplete."),
+        Locale::FrCa => format!("Certains espaces de travail n'ont pas pu être affichés (sans réponse\u{00A0}: {regions}). La liste peut être incomplète."),
     }
 }
 
@@ -4501,7 +4501,7 @@ pub fn workspaces_partial_warning(l: Locale, regions: &str) -> String {
 pub fn workspaces_regions_degraded(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your workspaces could not be listed because a region is unreachable. Your account has not changed.",
-        Locale::FrCa => "Your workspaces could not be listed because a region is unreachable. Your account has not changed.",
+        Locale::FrCa => "Vos espaces de travail n'ont pas pu être affichés, car une région est injoignable. Votre compte n'a pas changé.",
     }
 }
 
@@ -4510,7 +4510,7 @@ pub fn workspaces_regions_degraded(l: Locale) -> &'static str {
 pub fn workspaces_setting_up_message(l: Locale) -> &'static str {
     match l {
         Locale::En => "If you completed checkout, your workspace is being set up. It appears here in a moment.",
-        Locale::FrCa => "If you completed checkout, your workspace is being set up. It appears here in a moment.",
+        Locale::FrCa => "Si vous avez terminé le paiement, votre espace de travail est en préparation. Il apparaîtra ici sous peu.",
     }
 }
 
@@ -4519,6 +4519,6 @@ pub fn workspaces_setting_up_message(l: Locale) -> &'static str {
 pub fn workspaces_setting_up_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Setting up your workspace",
-        Locale::FrCa => "Setting up your workspace",
+        Locale::FrCa => "Préparation de votre espace de travail",
     }
 }

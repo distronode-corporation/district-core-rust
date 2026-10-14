@@ -3,14 +3,14 @@
 use crate::Locale;
 
 /// True when every entry has French; until then the French arm carries the English.
-pub const FR_COMPLETE: bool = false;
+pub const FR_COMPLETE: bool = true;
 
 /// `api_error.account_not_found`
 #[must_use]
 pub fn api_error_account_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That account could not be found.",
-        Locale::FrCa => "That account could not be found.",
+        Locale::FrCa => "Ce compte est introuvable.",
     }
 }
 
@@ -19,7 +19,7 @@ pub fn api_error_account_not_found(l: Locale) -> &'static str {
 pub fn api_error_already_cancelled(l: Locale) -> &'static str {
     match l {
         Locale::En => "That booking was already cancelled.",
-        Locale::FrCa => "That booking was already cancelled.",
+        Locale::FrCa => "Ce rendez-vous a déjà été annulé.",
     }
 }
 
@@ -28,7 +28,7 @@ pub fn api_error_already_cancelled(l: Locale) -> &'static str {
 pub fn api_error_attachment_unsupported(l: Locale) -> &'static str {
     match l {
         Locale::En => "That kind of attachment cannot be sent on this channel.",
-        Locale::FrCa => "That kind of attachment cannot be sent on this channel.",
+        Locale::FrCa => "Ce type de pièce jointe ne peut pas être envoyé sur ce canal.",
     }
 }
 
@@ -37,7 +37,7 @@ pub fn api_error_attachment_unsupported(l: Locale) -> &'static str {
 pub fn api_error_auto_dial_contact_opted_out(l: Locale) -> &'static str {
     match l {
         Locale::En => "This contact has opted out of calls from this workspace (DNC).",
-        Locale::FrCa => "This contact has opted out of calls from this workspace (DNC).",
+        Locale::FrCa => "Ce contact a choisi de ne plus recevoir d'appels de cet espace de travail (liste d'exclusion).",
     }
 }
 
@@ -46,7 +46,7 @@ pub fn api_error_auto_dial_contact_opted_out(l: Locale) -> &'static str {
 pub fn api_error_auto_dial_country_not_permitted(l: Locale) -> &'static str {
     match l {
         Locale::En => "Automated calls are not permitted to this contact's country.",
-        Locale::FrCa => "Automated calls are not permitted to this contact's country.",
+        Locale::FrCa => "Les appels automatisés ne sont pas permis vers le pays de ce contact.",
     }
 }
 
@@ -55,7 +55,7 @@ pub fn api_error_auto_dial_country_not_permitted(l: Locale) -> &'static str {
 pub fn api_error_auto_dial_outside_hours(l: Locale) -> &'static str {
     match l {
         Locale::En => "Automated calls can only be placed from 09:00 to 20:00 on weekdays and from 10:00 to 18:00 on weekends, in the contact's local time. Try again within those hours.",
-        Locale::FrCa => "Automated calls can only be placed from 09:00 to 20:00 on weekdays and from 10:00 to 18:00 on weekends, in the contact's local time. Try again within those hours.",
+        Locale::FrCa => "Les appels automatisés ne peuvent être faits que de 9 h à 20 h en semaine et de 10 h à 18 h la fin de semaine, à l'heure locale du contact. Réessayez pendant ces heures.",
     }
 }
 
@@ -64,7 +64,7 @@ pub fn api_error_auto_dial_outside_hours(l: Locale) -> &'static str {
 pub fn api_error_breached_password(l: Locale) -> &'static str {
     match l {
         Locale::En => "That password has appeared in a known data breach. Please choose a different one.",
-        Locale::FrCa => "That password has appeared in a known data breach. Please choose a different one.",
+        Locale::FrCa => "Ce mot de passe figure dans une fuite de données connue. Veuillez en choisir un autre.",
     }
 }
 
@@ -73,7 +73,7 @@ pub fn api_error_breached_password(l: Locale) -> &'static str {
 pub fn api_error_browser_session_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "This can only be changed from a browser signed in to this account.",
-        Locale::FrCa => "This can only be changed from a browser signed in to this account.",
+        Locale::FrCa => "Ce réglage ne peut être modifié que depuis un navigateur connecté à ce compte.",
     }
 }
 
@@ -82,7 +82,7 @@ pub fn api_error_browser_session_required(l: Locale) -> &'static str {
 pub fn api_error_business_account_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "In Canada we sell to businesses only. Choose Business and enter your business name.",
-        Locale::FrCa => "In Canada we sell to businesses only. Choose Business and enter your business name.",
+        Locale::FrCa => "Au Canada, nous vendons uniquement aux entreprises. Choisissez Entreprise et saisissez le nom de votre entreprise.",
     }
 }
 
@@ -91,7 +91,7 @@ pub fn api_error_business_account_required(l: Locale) -> &'static str {
 pub fn api_error_business_extraction_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "We could not draft your details from that website. Please try again, or enter them yourself.",
-        Locale::FrCa => "We could not draft your details from that website. Please try again, or enter them yourself.",
+        Locale::FrCa => "Nous n'avons pas pu préparer vos renseignements à partir de ce site Web. Veuillez réessayer, ou les saisir vous-même.",
     }
 }
 
@@ -100,7 +100,7 @@ pub fn api_error_business_extraction_failed(l: Locale) -> &'static str {
 pub fn api_error_calendar_unreachable(l: Locale) -> &'static str {
     match l {
         Locale::En => "The calendar could not be reached just now. Please try again in a few minutes.",
-        Locale::FrCa => "The calendar could not be reached just now. Please try again in a few minutes.",
+        Locale::FrCa => "Le calendrier n'a pas pu être joint à l'instant. Veuillez réessayer dans quelques minutes.",
     }
 }
 
@@ -109,7 +109,7 @@ pub fn api_error_calendar_unreachable(l: Locale) -> &'static str {
 pub fn api_error_call_has_no_room(l: Locale) -> &'static str {
     match l {
         Locale::En => "That call has no room to join.",
-        Locale::FrCa => "That call has no room to join.",
+        Locale::FrCa => "Cet appel n'a aucune salle à joindre.",
     }
 }
 
@@ -118,7 +118,7 @@ pub fn api_error_call_has_no_room(l: Locale) -> &'static str {
 pub fn api_error_call_not_direct_dial(l: Locale) -> &'static str {
     match l {
         Locale::En => "That call is not a direct call from this app and cannot be hung up here.",
-        Locale::FrCa => "That call is not a direct call from this app and cannot be hung up here.",
+        Locale::FrCa => "Cet appel n'est pas un appel direct passé depuis cette application et ne peut pas être raccroché ici.",
     }
 }
 
@@ -127,7 +127,7 @@ pub fn api_error_call_not_direct_dial(l: Locale) -> &'static str {
 pub fn api_error_call_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That call could not be found.",
-        Locale::FrCa => "That call could not be found.",
+        Locale::FrCa => "Cet appel est introuvable.",
     }
 }
 
@@ -136,7 +136,7 @@ pub fn api_error_call_not_found(l: Locale) -> &'static str {
 pub fn api_error_call_not_in_progress(l: Locale) -> &'static str {
     match l {
         Locale::En => "That call is not in progress.",
-        Locale::FrCa => "That call is not in progress.",
+        Locale::FrCa => "Cet appel n'est pas en cours.",
     }
 }
 
@@ -145,7 +145,7 @@ pub fn api_error_call_not_in_progress(l: Locale) -> &'static str {
 pub fn api_error_call_predates_feature(l: Locale) -> &'static str {
     match l {
         Locale::En => "That call started before this feature existed, so it is not available on it.",
-        Locale::FrCa => "That call started before this feature existed, so it is not available on it.",
+        Locale::FrCa => "Cet appel a commencé avant l'existence de cette fonction, elle n'est donc pas offerte pour lui.",
     }
 }
 
@@ -154,7 +154,7 @@ pub fn api_error_call_predates_feature(l: Locale) -> &'static str {
 pub fn api_error_carrier_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier could not complete that. Please try again or contact support.",
-        Locale::FrCa => "The carrier could not complete that. Please try again or contact support.",
+        Locale::FrCa => "L'opérateur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec l'assistance.",
     }
 }
 
@@ -163,7 +163,7 @@ pub fn api_error_carrier_error(l: Locale) -> &'static str {
 pub fn api_error_carrier_funding(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier account could not fund that purchase. Contact support.",
-        Locale::FrCa => "The carrier account could not fund that purchase. Contact support.",
+        Locale::FrCa => "Le compte auprès de l'opérateur n'a pas pu financer cet achat. Communiquez avec l'assistance.",
     }
 }
 
@@ -172,7 +172,7 @@ pub fn api_error_carrier_funding(l: Locale) -> &'static str {
 pub fn api_error_carrier_rejected(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier refused this registration. Fix the items listed and submit again.",
-        Locale::FrCa => "The carrier refused this registration. Fix the items listed and submit again.",
+        Locale::FrCa => "L'opérateur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau.",
     }
 }
 
@@ -181,7 +181,7 @@ pub fn api_error_carrier_rejected(l: Locale) -> &'static str {
 pub fn api_error_checkout_setup_in_progress(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your plan is already paid for. Finish setting up your receptionist from your dashboard before buying another plan.",
-        Locale::FrCa => "Your plan is already paid for. Finish setting up your receptionist from your dashboard before buying another plan.",
+        Locale::FrCa => "Votre forfait est déjà payé. Terminez la configuration de votre réceptionniste depuis votre tableau de bord avant d'acheter un autre forfait.",
     }
 }
 
@@ -190,7 +190,7 @@ pub fn api_error_checkout_setup_in_progress(l: Locale) -> &'static str {
 pub fn api_error_checkout_subscription_exists(l: Locale) -> &'static str {
     match l {
         Locale::En => "You already have an active plan. Change it from Billing in your dashboard instead of buying a second one.",
-        Locale::FrCa => "You already have an active plan. Change it from Billing in your dashboard instead of buying a second one.",
+        Locale::FrCa => "Vous avez déjà un forfait actif. Modifiez-le depuis la section Facturation de votre tableau de bord plutôt que d'en acheter un deuxième.",
     }
 }
 
@@ -199,7 +199,7 @@ pub fn api_error_checkout_subscription_exists(l: Locale) -> &'static str {
 pub fn api_error_connector_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That connector could not be found.",
-        Locale::FrCa => "That connector could not be found.",
+        Locale::FrCa => "Ce connecteur est introuvable.",
     }
 }
 
@@ -208,7 +208,7 @@ pub fn api_error_connector_not_found(l: Locale) -> &'static str {
 pub fn api_error_contact_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That contact could not be found in this workspace.",
-        Locale::FrCa => "That contact could not be found in this workspace.",
+        Locale::FrCa => "Ce contact est introuvable dans cet espace de travail.",
     }
 }
 
@@ -217,7 +217,7 @@ pub fn api_error_contact_not_found(l: Locale) -> &'static str {
 pub fn api_error_default_card_in_use(l: Locale) -> &'static str {
     match l {
         Locale::En => "Set another card as default before removing this one.",
-        Locale::FrCa => "Set another card as default before removing this one.",
+        Locale::FrCa => "Définissez une autre carte comme carte par défaut avant de retirer celle-ci.",
     }
 }
 
@@ -226,7 +226,7 @@ pub fn api_error_default_card_in_use(l: Locale) -> &'static str {
 pub fn api_error_demo_lines_busy(l: Locale) -> &'static str {
     match l {
         Locale::En => "Every demo line is busy right now. Please try again in a few minutes.",
-        Locale::FrCa => "Every demo line is busy right now. Please try again in a few minutes.",
+        Locale::FrCa => "Toutes les lignes de démonstration sont occupées en ce moment. Réessayez dans quelques minutes.",
     }
 }
 
@@ -235,7 +235,7 @@ pub fn api_error_demo_lines_busy(l: Locale) -> &'static str {
 pub fn api_error_dgi_requires_studio(l: Locale) -> &'static str {
     match l {
         Locale::En => "Lead enrichment is included with Voice Studio. Upgrade to turn it on.",
-        Locale::FrCa => "Lead enrichment is included with Voice Studio. Upgrade to turn it on.",
+        Locale::FrCa => "L'enrichissement des pistes est inclus avec Voice Studio. Passez à ce forfait pour l'activer.",
     }
 }
 
@@ -244,7 +244,7 @@ pub fn api_error_dgi_requires_studio(l: Locale) -> &'static str {
 pub fn api_error_direct_dial_disabled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Direct dialling is not available for this workspace yet. Contact support to ask about it.",
-        Locale::FrCa => "Direct dialling is not available for this workspace yet. Contact support to ask about it.",
+        Locale::FrCa => "La composition directe n'est pas encore disponible pour cet espace de travail. Communiquez avec l'assistance pour vous renseigner.",
     }
 }
 
@@ -253,7 +253,7 @@ pub fn api_error_direct_dial_disabled(l: Locale) -> &'static str {
 pub fn api_error_disclosure_required_in_region(l: Locale) -> &'static str {
     match l {
         Locale::En => "Callers in this region must be told they are speaking with an automated assistant, so this setting cannot be turned off.",
-        Locale::FrCa => "Callers in this region must be told they are speaking with an automated assistant, so this setting cannot be turned off.",
+        Locale::FrCa => "Dans cette région, les appelants doivent être informés qu'ils parlent avec une assistante automatisée. Ce paramètre ne peut donc pas être désactivé.",
     }
 }
 
@@ -262,7 +262,7 @@ pub fn api_error_disclosure_required_in_region(l: Locale) -> &'static str {
 pub fn api_error_do_not_call(l: Locale) -> &'static str {
     match l {
         Locale::En => "That number has opted out of contact from this workspace.",
-        Locale::FrCa => "That number has opted out of contact from this workspace.",
+        Locale::FrCa => "Ce numéro a retiré son consentement aux communications de cet espace de travail.",
     }
 }
 
@@ -271,7 +271,7 @@ pub fn api_error_do_not_call(l: Locale) -> &'static str {
 pub fn api_error_emergency_acknowledgement_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Confirm that you understand this number cannot be used to call 911 or other emergency services, then try again.",
-        Locale::FrCa => "Confirm that you understand this number cannot be used to call 911 or other emergency services, then try again.",
+        Locale::FrCa => "Confirmez que vous comprenez que ce numéro ne peut pas servir à appeler le 9-1-1 ni aucun autre service d'urgence, puis réessayez.",
     }
 }
 
@@ -280,7 +280,7 @@ pub fn api_error_emergency_acknowledgement_required(l: Locale) -> &'static str {
 pub fn api_error_emergency_number(l: Locale) -> &'static str {
     match l {
         Locale::En => "Emergency numbers cannot be dialled from this app. Use your phone's own dialer.",
-        Locale::FrCa => "Emergency numbers cannot be dialled from this app. Use your phone's own dialer.",
+        Locale::FrCa => "Les numéros d'urgence ne peuvent pas être composés depuis cette application. Utilisez le composeur de votre téléphone.",
     }
 }
 
@@ -289,7 +289,7 @@ pub fn api_error_emergency_number(l: Locale) -> &'static str {
 pub fn api_error_eu_vat_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "In the European Union we sell to businesses only. Enter your VAT number and we invoice you under the reverse-charge rule.",
-        Locale::FrCa => "In the European Union we sell to businesses only. Enter your VAT number and we invoice you under the reverse-charge rule.",
+        Locale::FrCa => "Dans l'Union européenne, nous vendons uniquement aux entreprises. Saisissez votre numéro de TVA et nous vous facturons selon le régime de l'autoliquidation.",
     }
 }
 
@@ -298,7 +298,7 @@ pub fn api_error_eu_vat_required(l: Locale) -> &'static str {
 pub fn api_error_file_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose a file to upload.",
-        Locale::FrCa => "Choose a file to upload.",
+        Locale::FrCa => "Choisissez un fichier à téléverser.",
     }
 }
 
@@ -307,7 +307,7 @@ pub fn api_error_file_required(l: Locale) -> &'static str {
 pub fn api_error_file_too_large(l: Locale) -> &'static str {
     match l {
         Locale::En => "That file is too large.",
-        Locale::FrCa => "That file is too large.",
+        Locale::FrCa => "Ce fichier est trop volumineux.",
     }
 }
 
@@ -316,7 +316,7 @@ pub fn api_error_file_too_large(l: Locale) -> &'static str {
 pub fn api_error_forbidden(l: Locale) -> &'static str {
     match l {
         Locale::En => "You do not have permission to do that.",
-        Locale::FrCa => "You do not have permission to do that.",
+        Locale::FrCa => "Vous n'avez pas la permission de faire cela.",
     }
 }
 
@@ -325,7 +325,7 @@ pub fn api_error_forbidden(l: Locale) -> &'static str {
 pub fn api_error_forwarding_check_daily_limit(l: Locale) -> &'static str {
     match l {
         Locale::En => "You have used today's five forwarding checks. Try again tomorrow.",
-        Locale::FrCa => "You have used today's five forwarding checks. Try again tomorrow.",
+        Locale::FrCa => "Vous avez utilisé les cinq vérifications du renvoi d'aujourd'hui. Réessayez demain.",
     }
 }
 
@@ -334,7 +334,7 @@ pub fn api_error_forwarding_check_daily_limit(l: Locale) -> &'static str {
 pub fn api_error_forwarding_check_destination(l: Locale) -> &'static str {
     match l {
         Locale::En => "We cannot place a check call to that number. Enter your business's own phone line.",
-        Locale::FrCa => "We cannot place a check call to that number. Enter your business's own phone line.",
+        Locale::FrCa => "Nous ne pouvons pas appeler ce numéro pour la vérification. Entrez la ligne téléphonique de votre entreprise.",
     }
 }
 
@@ -343,7 +343,7 @@ pub fn api_error_forwarding_check_destination(l: Locale) -> &'static str {
 pub fn api_error_forwarding_check_in_progress(l: Locale) -> &'static str {
     match l {
         Locale::En => "A forwarding check is already ringing. Wait for it to finish.",
-        Locale::FrCa => "A forwarding check is already ringing. Wait for it to finish.",
+        Locale::FrCa => "Une vérification du renvoi est déjà en cours. Attendez qu'elle se termine.",
     }
 }
 
@@ -352,7 +352,7 @@ pub fn api_error_forwarding_check_in_progress(l: Locale) -> &'static str {
 pub fn api_error_forwarding_check_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "The forwarding check is not available right now. You can still test by calling your business line.",
-        Locale::FrCa => "The forwarding check is not available right now. You can still test by calling your business line.",
+        Locale::FrCa => "La vérification du renvoi n'est pas offerte en ce moment. Vous pouvez tout de même tester en appelant votre ligne d'affaires.",
     }
 }
 
@@ -361,7 +361,7 @@ pub fn api_error_forwarding_check_unavailable(l: Locale) -> &'static str {
 pub fn api_error_incorrect_password(l: Locale) -> &'static str {
     match l {
         Locale::En => "That password is not correct.",
-        Locale::FrCa => "That password is not correct.",
+        Locale::FrCa => "Ce mot de passe n'est pas le bon.",
     }
 }
 
@@ -370,7 +370,7 @@ pub fn api_error_incorrect_password(l: Locale) -> &'static str {
 pub fn api_error_invalid_credentials(l: Locale) -> &'static str {
     match l {
         Locale::En => "That email address and password do not match an account.",
-        Locale::FrCa => "That email address and password do not match an account.",
+        Locale::FrCa => "Ce courriel et ce mot de passe ne correspondent à aucun compte.",
     }
 }
 
@@ -379,7 +379,7 @@ pub fn api_error_invalid_credentials(l: Locale) -> &'static str {
 pub fn api_error_invalid_engine_mix(l: Locale) -> &'static str {
     match l {
         Locale::En => "This voice chain could not be saved: one of its models, voices or locations is not available for this workspace and language. Choose another and save again.",
-        Locale::FrCa => "This voice chain could not be saved: one of its models, voices or locations is not available for this workspace and language. Choose another and save again.",
+        Locale::FrCa => "Cette chaîne vocale n'a pas pu être enregistrée\u{00A0}: un de ses modèles, voix ou emplacements n'est pas offert pour cet espace de travail et cette langue. Choisissez-en un autre et enregistrez de nouveau.",
     }
 }
 
@@ -388,7 +388,7 @@ pub fn api_error_invalid_engine_mix(l: Locale) -> &'static str {
 pub fn api_error_invalid_json(l: Locale) -> &'static str {
     match l {
         Locale::En => "That request could not be read. Please try again.",
-        Locale::FrCa => "That request could not be read. Please try again.",
+        Locale::FrCa => "Cette requête n'a pas pu être lue. Veuillez réessayer.",
     }
 }
 
@@ -397,7 +397,7 @@ pub fn api_error_invalid_json(l: Locale) -> &'static str {
 pub fn api_error_invalid_multipart(l: Locale) -> &'static str {
     match l {
         Locale::En => "That upload could not be read. Please try again.",
-        Locale::FrCa => "That upload could not be read. Please try again.",
+        Locale::FrCa => "Ce téléversement n'a pas pu être lu. Veuillez réessayer.",
     }
 }
 
@@ -406,7 +406,7 @@ pub fn api_error_invalid_multipart(l: Locale) -> &'static str {
 pub fn api_error_invalid_params(l: Locale, items: &str) -> String {
     match l {
         Locale::En => format!("Check these fields and try again: {items}."),
-        Locale::FrCa => format!("Check these fields and try again: {items}."),
+        Locale::FrCa => format!("Vérifiez ces champs, puis réessayez\u{00A0}: {items}."),
     }
 }
 
@@ -415,7 +415,7 @@ pub fn api_error_invalid_params(l: Locale, items: &str) -> String {
 pub fn api_error_invalid_params_without_list(l: Locale) -> &'static str {
     match l {
         Locale::En => "Some of what you entered is not valid. Please check it and try again.",
-        Locale::FrCa => "Some of what you entered is not valid. Please check it and try again.",
+        Locale::FrCa => "Une partie de ce que vous avez saisi n'est pas valide. Vérifiez, puis réessayez.",
     }
 }
 
@@ -424,7 +424,7 @@ pub fn api_error_invalid_params_without_list(l: Locale) -> &'static str {
 pub fn api_error_invalid_phone_number(l: Locale) -> &'static str {
     match l {
         Locale::En => "That does not look like a valid phone number.",
-        Locale::FrCa => "That does not look like a valid phone number.",
+        Locale::FrCa => "Cela ne ressemble pas à un numéro de téléphone valide.",
     }
 }
 
@@ -433,7 +433,7 @@ pub fn api_error_invalid_phone_number(l: Locale) -> &'static str {
 pub fn api_error_invalid_request(l: Locale) -> &'static str {
     match l {
         Locale::En => "That request was not valid. Please check the details and try again.",
-        Locale::FrCa => "That request was not valid. Please check the details and try again.",
+        Locale::FrCa => "Cette requête n'est pas valide. Vérifiez les renseignements, puis réessayez.",
     }
 }
 
@@ -442,7 +442,7 @@ pub fn api_error_invalid_request(l: Locale) -> &'static str {
 pub fn api_error_jira_not_connected(l: Locale) -> &'static str {
     match l {
         Locale::En => "No support project is connected to this workspace.",
-        Locale::FrCa => "No support project is connected to this workspace.",
+        Locale::FrCa => "Aucun projet d'assistance n'est connecté à cet espace de travail.",
     }
 }
 
@@ -451,7 +451,7 @@ pub fn api_error_jira_not_connected(l: Locale) -> &'static str {
 pub fn api_error_language_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "This language is not available for this workspace yet. Choose another language.",
-        Locale::FrCa => "This language is not available for this workspace yet. Choose another language.",
+        Locale::FrCa => "Cette langue n'est pas encore offerte pour cet espace de travail. Choisissez une autre langue.",
     }
 }
 
@@ -460,7 +460,7 @@ pub fn api_error_language_unavailable(l: Locale) -> &'static str {
 pub fn api_error_last_agency_member(l: Locale) -> &'static str {
     match l {
         Locale::En => "This is the last administrator of the workspace, so it cannot be removed or demoted.",
-        Locale::FrCa => "This is the last administrator of the workspace, so it cannot be removed or demoted.",
+        Locale::FrCa => "Il s'agit de la dernière personne administratrice de l'espace de travail, elle ne peut donc être ni retirée ni rétrogradée.",
     }
 }
 
@@ -469,7 +469,7 @@ pub fn api_error_last_agency_member(l: Locale) -> &'static str {
 pub fn api_error_mailbox_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "No mailbox is connected to this workspace.",
-        Locale::FrCa => "No mailbox is connected to this workspace.",
+        Locale::FrCa => "Aucune boîte de réception n'est connectée à cet espace de travail.",
     }
 }
 
@@ -478,7 +478,7 @@ pub fn api_error_mailbox_not_found(l: Locale) -> &'static str {
 pub fn api_error_managed_billing_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan.",
-        Locale::FrCa => "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan.",
+        Locale::FrCa => "La facturation gérée auprès des opérateurs n'est pas activée pour cet espace de travail. Communiquez avec l'assistance pour passer à un forfait géré.",
     }
 }
 
@@ -487,7 +487,7 @@ pub fn api_error_managed_billing_required(l: Locale) -> &'static str {
 pub fn api_error_media_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That file could not be found.",
-        Locale::FrCa => "That file could not be found.",
+        Locale::FrCa => "Ce fichier est introuvable.",
     }
 }
 
@@ -496,7 +496,7 @@ pub fn api_error_media_not_found(l: Locale) -> &'static str {
 pub fn api_error_member_exists(l: Locale) -> &'static str {
     match l {
         Locale::En => "That email address is already a member of this workspace.",
-        Locale::FrCa => "That email address is already a member of this workspace.",
+        Locale::FrCa => "Ce courriel est déjà membre de cet espace de travail.",
     }
 }
 
@@ -505,7 +505,7 @@ pub fn api_error_member_exists(l: Locale) -> &'static str {
 pub fn api_error_member_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That person is not a member of this workspace.",
-        Locale::FrCa => "That person is not a member of this workspace.",
+        Locale::FrCa => "Cette personne n'est pas membre de cet espace de travail.",
     }
 }
 
@@ -514,7 +514,7 @@ pub fn api_error_member_not_found(l: Locale) -> &'static str {
 pub fn api_error_message_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That message could not be found.",
-        Locale::FrCa => "That message could not be found.",
+        Locale::FrCa => "Ce message est introuvable.",
     }
 }
 
@@ -523,7 +523,7 @@ pub fn api_error_message_not_found(l: Locale) -> &'static str {
 pub fn api_error_message_too_long(l: Locale) -> &'static str {
     match l {
         Locale::En => "That message is too long.",
-        Locale::FrCa => "That message is too long.",
+        Locale::FrCa => "Ce message est trop long.",
     }
 }
 
@@ -532,7 +532,7 @@ pub fn api_error_message_too_long(l: Locale) -> &'static str {
 pub fn api_error_messaging_provider_not_configured(l: Locale) -> &'static str {
     match l {
         Locale::En => "No messaging provider is connected to this workspace.",
-        Locale::FrCa => "No messaging provider is connected to this workspace.",
+        Locale::FrCa => "Aucun fournisseur de messagerie n'est connecté à cet espace de travail.",
     }
 }
 
@@ -541,7 +541,7 @@ pub fn api_error_messaging_provider_not_configured(l: Locale) -> &'static str {
 pub fn api_error_mfa_code_invalid(l: Locale) -> &'static str {
     match l {
         Locale::En => "That code is not valid, or it has already been used.",
-        Locale::FrCa => "That code is not valid, or it has already been used.",
+        Locale::FrCa => "Ce code n'est pas valide, ou il a déjà été utilisé.",
     }
 }
 
@@ -550,7 +550,7 @@ pub fn api_error_mfa_code_invalid(l: Locale) -> &'static str {
 pub fn api_error_model_unavailable_in_region(l: Locale) -> &'static str {
     match l {
         Locale::En => "This voice engine is not available for workspaces in this region. Choose another engine.",
-        Locale::FrCa => "This voice engine is not available for workspaces in this region. Choose another engine.",
+        Locale::FrCa => "Ce moteur vocal n'est pas offert aux espaces de travail de cette région. Choisissez un autre moteur.",
     }
 }
 
@@ -559,7 +559,7 @@ pub fn api_error_model_unavailable_in_region(l: Locale) -> &'static str {
 pub fn api_error_no_password(l: Locale) -> &'static str {
     match l {
         Locale::En => "This account signs in with Google or Microsoft and has no password to re-enter. Set a password on the web first.",
-        Locale::FrCa => "This account signs in with Google or Microsoft and has no password to re-enter. Set a password on the web first.",
+        Locale::FrCa => "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le web.",
     }
 }
 
@@ -568,7 +568,7 @@ pub fn api_error_no_password(l: Locale) -> &'static str {
 pub fn api_error_no_sending_number(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has no texting number yet. Add or buy one in Messaging settings.",
-        Locale::FrCa => "This workspace has no texting number yet. Add or buy one in Messaging settings.",
+        Locale::FrCa => "Cet espace de travail n'a pas encore de numéro pour les textos. Ajoutez-en un ou achetez-en un dans les paramètres de messagerie.",
     }
 }
 
@@ -577,7 +577,7 @@ pub fn api_error_no_sending_number(l: Locale) -> &'static str {
 pub fn api_error_no_workspace(l: Locale) -> &'static str {
     match l {
         Locale::En => "This account is not a member of any workspace yet.",
-        Locale::FrCa => "This account is not a member of any workspace yet.",
+        Locale::FrCa => "Ce compte n'est encore membre d'aucun espace de travail.",
     }
 }
 
@@ -586,7 +586,7 @@ pub fn api_error_no_workspace(l: Locale) -> &'static str {
 pub fn api_error_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "We could not find what you asked for.",
-        Locale::FrCa => "We could not find what you asked for.",
+        Locale::FrCa => "Nous n'avons pas trouvé ce que vous demandez.",
     }
 }
 
@@ -595,7 +595,7 @@ pub fn api_error_not_found(l: Locale) -> &'static str {
 pub fn api_error_nothing_to_update(l: Locale) -> &'static str {
     match l {
         Locale::En => "There was nothing to change in that request.",
-        Locale::FrCa => "There was nothing to change in that request.",
+        Locale::FrCa => "Cette requête ne contenait rien à modifier.",
     }
 }
 
@@ -604,7 +604,7 @@ pub fn api_error_nothing_to_update(l: Locale) -> &'static str {
 pub fn api_error_number_in_use(l: Locale) -> &'static str {
     match l {
         Locale::En => "That number is already assigned to another workspace.",
-        Locale::FrCa => "That number is already assigned to another workspace.",
+        Locale::FrCa => "Ce numéro est déjà attribué à un autre espace de travail.",
     }
 }
 
@@ -613,7 +613,7 @@ pub fn api_error_number_in_use(l: Locale) -> &'static str {
 pub fn api_error_overage_cap_reached(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has reached the usage limit on its plan.",
-        Locale::FrCa => "This workspace has reached the usage limit on its plan.",
+        Locale::FrCa => "Cet espace de travail a atteint la limite d'utilisation de son forfait.",
     }
 }
 
@@ -622,7 +622,7 @@ pub fn api_error_overage_cap_reached(l: Locale) -> &'static str {
 pub fn api_error_overage_spend_cap_reached(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has reached the spending limit set on its plan.",
-        Locale::FrCa => "This workspace has reached the spending limit set on its plan.",
+        Locale::FrCa => "Cet espace de travail a atteint la limite de dépenses fixée sur son forfait.",
     }
 }
 
@@ -631,7 +631,7 @@ pub fn api_error_overage_spend_cap_reached(l: Locale) -> &'static str {
 pub fn api_error_password_policy(l: Locale) -> &'static str {
     match l {
         Locale::En => "Passwords must be 12 to 200 characters long. Please choose a different one.",
-        Locale::FrCa => "Passwords must be 12 to 200 characters long. Please choose a different one.",
+        Locale::FrCa => "Les mots de passe doivent compter de 12 à 200 caractères. Veuillez en choisir un autre.",
     }
 }
 
@@ -640,7 +640,7 @@ pub fn api_error_password_policy(l: Locale) -> &'static str {
 pub fn api_error_payload_too_large(l: Locale) -> &'static str {
     match l {
         Locale::En => "That request is too large.",
-        Locale::FrCa => "That request is too large.",
+        Locale::FrCa => "Cette requête est trop volumineuse.",
     }
 }
 
@@ -649,7 +649,7 @@ pub fn api_error_payload_too_large(l: Locale) -> &'static str {
 pub fn api_error_phone_number_limit_reached(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace already holds every phone number its plan includes. Upgrade the plan to add more.",
-        Locale::FrCa => "This workspace already holds every phone number its plan includes. Upgrade the plan to add more.",
+        Locale::FrCa => "Cet espace de travail détient déjà tous les numéros de téléphone inclus dans son forfait. Passez à un forfait supérieur pour en ajouter.",
     }
 }
 
@@ -658,7 +658,7 @@ pub fn api_error_phone_number_limit_reached(l: Locale) -> &'static str {
 pub fn api_error_phone_number_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That phone number is not one of this workspace's numbers.",
-        Locale::FrCa => "That phone number is not one of this workspace's numbers.",
+        Locale::FrCa => "Ce numéro de téléphone ne fait pas partie des numéros de cet espace de travail.",
     }
 }
 
@@ -667,7 +667,7 @@ pub fn api_error_phone_number_not_found(l: Locale) -> &'static str {
 pub fn api_error_plan_upgrade_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "That feature is not included in this workspace's plan.",
-        Locale::FrCa => "That feature is not included in this workspace's plan.",
+        Locale::FrCa => "Cette fonction n'est pas incluse dans le forfait de cet espace de travail.",
     }
 }
 
@@ -676,7 +676,7 @@ pub fn api_error_plan_upgrade_required(l: Locale) -> &'static str {
 pub fn api_error_provider_credentials_rejected(l: Locale) -> &'static str {
     match l {
         Locale::En => "The provider did not accept these credentials. Check them and test the connection again.",
-        Locale::FrCa => "The provider did not accept these credentials. Check them and test the connection again.",
+        Locale::FrCa => "Le fournisseur n'a pas accepté ces identifiants. Vérifiez-les, puis testez la connexion de nouveau.",
     }
 }
 
@@ -685,7 +685,7 @@ pub fn api_error_provider_credentials_rejected(l: Locale) -> &'static str {
 pub fn api_error_provider_not_configured(l: Locale) -> &'static str {
     match l {
         Locale::En => "No provider is connected to this workspace for that.",
-        Locale::FrCa => "No provider is connected to this workspace for that.",
+        Locale::FrCa => "Aucun fournisseur n'est connecté à cet espace de travail pour cela.",
     }
 }
 
@@ -694,7 +694,7 @@ pub fn api_error_provider_not_configured(l: Locale) -> &'static str {
 pub fn api_error_provider_requires_sinch(l: Locale) -> &'static str {
     match l {
         Locale::En => "That feature currently needs a Sinch account connected to this workspace.",
-        Locale::FrCa => "That feature currently needs a Sinch account connected to this workspace.",
+        Locale::FrCa => "Cette fonction exige pour l'instant un compte Sinch connecté à cet espace de travail.",
     }
 }
 
@@ -703,7 +703,7 @@ pub fn api_error_provider_requires_sinch(l: Locale) -> &'static str {
 pub fn api_error_provider_requires_twilio(l: Locale) -> &'static str {
     match l {
         Locale::En => "That feature currently needs a Twilio account connected to this workspace.",
-        Locale::FrCa => "That feature currently needs a Twilio account connected to this workspace.",
+        Locale::FrCa => "Cette fonction exige pour l'instant un compte Twilio connecté à cet espace de travail.",
     }
 }
 
@@ -712,7 +712,7 @@ pub fn api_error_provider_requires_twilio(l: Locale) -> &'static str {
 pub fn api_error_provider_unsupported(l: Locale) -> &'static str {
     match l {
         Locale::En => "That provider is not supported here.",
-        Locale::FrCa => "That provider is not supported here.",
+        Locale::FrCa => "Ce fournisseur n'est pas pris en charge ici.",
     }
 }
 
@@ -721,7 +721,7 @@ pub fn api_error_provider_unsupported(l: Locale) -> &'static str {
 pub fn api_error_rate_limited(l: Locale) -> &'static str {
     match l {
         Locale::En => "That has been tried several times just now. Please wait a moment and try again.",
-        Locale::FrCa => "That has been tried several times just now. Please wait a moment and try again.",
+        Locale::FrCa => "Cette action a été tentée plusieurs fois à l'instant. Attendez un moment, puis réessayez.",
     }
 }
 
@@ -730,7 +730,7 @@ pub fn api_error_rate_limited(l: Locale) -> &'static str {
 pub fn api_error_region_elsewhere(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your account is hosted in another region. Sign in there.",
-        Locale::FrCa => "Your account is hosted in another region. Sign in there.",
+        Locale::FrCa => "Votre compte est hébergé dans une autre région. Connectez-vous dans cette région.",
     }
 }
 
@@ -739,7 +739,7 @@ pub fn api_error_region_elsewhere(l: Locale) -> &'static str {
 pub fn api_error_region_handoff(l: Locale) -> &'static str {
     match l {
         Locale::En => "This checkout continues on the site for the data region you chose.",
-        Locale::FrCa => "This checkout continues on the site for the data region you chose.",
+        Locale::FrCa => "Ce paiement se poursuit sur le site de la région des données que vous avez choisie.",
     }
 }
 
@@ -748,7 +748,7 @@ pub fn api_error_region_handoff(l: Locale) -> &'static str {
 pub fn api_error_region_move_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "There is no open region move request for this workspace.",
-        Locale::FrCa => "There is no open region move request for this workspace.",
+        Locale::FrCa => "Aucune demande de changement de région n'est en cours pour cet espace de travail.",
     }
 }
 
@@ -757,7 +757,7 @@ pub fn api_error_region_move_not_found(l: Locale) -> &'static str {
 pub fn api_error_region_move_pending(l: Locale) -> &'static str {
     match l {
         Locale::En => "A region move has already been requested for this workspace.",
-        Locale::FrCa => "A region move has already been requested for this workspace.",
+        Locale::FrCa => "Un changement de région est déjà demandé pour cet espace de travail.",
     }
 }
 
@@ -766,7 +766,7 @@ pub fn api_error_region_move_pending(l: Locale) -> &'static str {
 pub fn api_error_region_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "That workspace's region cannot be reached right now. Please try again shortly.",
-        Locale::FrCa => "That workspace's region cannot be reached right now. Please try again shortly.",
+        Locale::FrCa => "La région de cet espace de travail est injoignable en ce moment. Veuillez réessayer sous peu.",
     }
 }
 
@@ -775,7 +775,7 @@ pub fn api_error_region_unavailable(l: Locale) -> &'static str {
 pub fn api_error_reply_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your reply could not be posted. Please try again.",
-        Locale::FrCa => "Your reply could not be posted. Please try again.",
+        Locale::FrCa => "Votre réponse n'a pas pu être publiée. Veuillez réessayer.",
     }
 }
 
@@ -784,7 +784,7 @@ pub fn api_error_reply_failed(l: Locale) -> &'static str {
 pub fn api_error_room_inactive(l: Locale) -> &'static str {
     match l {
         Locale::En => "That meeting room is not active.",
-        Locale::FrCa => "That meeting room is not active.",
+        Locale::FrCa => "Cette salle de réunion n'est pas active.",
     }
 }
 
@@ -793,7 +793,7 @@ pub fn api_error_room_inactive(l: Locale) -> &'static str {
 pub fn api_error_room_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That call room could not be found.",
-        Locale::FrCa => "That call room could not be found.",
+        Locale::FrCa => "Cette salle d'appel est introuvable.",
     }
 }
 
@@ -802,7 +802,7 @@ pub fn api_error_room_not_found(l: Locale) -> &'static str {
 pub fn api_error_scheduler_console_retired(l: Locale) -> &'static str {
     match l {
         Locale::En => "That scheduling console is no longer available.",
-        Locale::FrCa => "That scheduling console is no longer available.",
+        Locale::FrCa => "Cette console de prise de rendez-vous n'est plus offerte.",
     }
 }
 
@@ -811,7 +811,7 @@ pub fn api_error_scheduler_console_retired(l: Locale) -> &'static str {
 pub fn api_error_scheduling_not_enabled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Scheduling is not turned on for this workspace.",
-        Locale::FrCa => "Scheduling is not turned on for this workspace.",
+        Locale::FrCa => "La prise de rendez-vous n'est pas activée pour cet espace de travail.",
     }
 }
 
@@ -820,7 +820,7 @@ pub fn api_error_scheduling_not_enabled(l: Locale) -> &'static str {
 pub fn api_error_scheduling_not_ready(l: Locale) -> &'static str {
     match l {
         Locale::En => "Scheduling is still being set up for this workspace.",
-        Locale::FrCa => "Scheduling is still being set up for this workspace.",
+        Locale::FrCa => "La prise de rendez-vous est encore en cours de configuration pour cet espace de travail.",
     }
 }
 
@@ -829,7 +829,7 @@ pub fn api_error_scheduling_not_ready(l: Locale) -> &'static str {
 pub fn api_error_security_check_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "The security check did not pass. Please try again.",
-        Locale::FrCa => "The security check did not pass. Please try again.",
+        Locale::FrCa => "La vérification de sécurité a échoué. Veuillez réessayer.",
     }
 }
 
@@ -838,7 +838,7 @@ pub fn api_error_security_check_failed(l: Locale) -> &'static str {
 pub fn api_error_security_check_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Complete the security check and try again.",
-        Locale::FrCa => "Complete the security check and try again.",
+        Locale::FrCa => "Complétez la vérification de sécurité, puis réessayez.",
     }
 }
 
@@ -847,7 +847,7 @@ pub fn api_error_security_check_required(l: Locale) -> &'static str {
 pub fn api_error_sending_domain_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "No sending domain is connected to this workspace.",
-        Locale::FrCa => "No sending domain is connected to this workspace.",
+        Locale::FrCa => "Aucun domaine d'envoi n'est connecté à cet espace de travail.",
     }
 }
 
@@ -856,7 +856,7 @@ pub fn api_error_sending_domain_missing(l: Locale) -> &'static str {
 pub fn api_error_server_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "Something went wrong on our side. Please try again.",
-        Locale::FrCa => "Something went wrong on our side. Please try again.",
+        Locale::FrCa => "Une erreur est survenue de notre côté. Veuillez réessayer.",
     }
 }
 
@@ -865,7 +865,7 @@ pub fn api_error_server_error(l: Locale) -> &'static str {
 pub fn api_error_service_not_configured(l: Locale) -> &'static str {
     match l {
         Locale::En => "That is not set up on this deployment yet.",
-        Locale::FrCa => "That is not set up on this deployment yet.",
+        Locale::FrCa => "Cela n'est pas encore configuré sur ce déploiement.",
     }
 }
 
@@ -874,7 +874,7 @@ pub fn api_error_service_not_configured(l: Locale) -> &'static str {
 pub fn api_error_service_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "That is temporarily unavailable. Please try again shortly.",
-        Locale::FrCa => "That is temporarily unavailable. Please try again shortly.",
+        Locale::FrCa => "Cela est temporairement indisponible. Veuillez réessayer sous peu.",
     }
 }
 
@@ -883,7 +883,7 @@ pub fn api_error_service_unavailable(l: Locale) -> &'static str {
 pub fn api_error_session_expired(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your session has expired. Please sign in again.",
-        Locale::FrCa => "Your session has expired. Please sign in again.",
+        Locale::FrCa => "Votre session a expiré. Veuillez vous reconnecter.",
     }
 }
 
@@ -892,7 +892,7 @@ pub fn api_error_session_expired(l: Locale) -> &'static str {
 pub fn api_error_setup_not_available(l: Locale) -> &'static str {
     match l {
         Locale::En => "Guided setup is not available for this workspace.",
-        Locale::FrCa => "Guided setup is not available for this workspace.",
+        Locale::FrCa => "La configuration guidée n'est pas disponible pour cet espace de travail.",
     }
 }
 
@@ -901,7 +901,7 @@ pub fn api_error_setup_not_available(l: Locale) -> &'static str {
 pub fn api_error_sip_provider_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "That needs a SIP-capable provider, which means Twilio or Telnyx on this workspace.",
-        Locale::FrCa => "That needs a SIP-capable provider, which means Twilio or Telnyx on this workspace.",
+        Locale::FrCa => "Cela exige un fournisseur compatible SIP, c'est-à-dire Twilio ou Telnyx sur cet espace de travail.",
     }
 }
 
@@ -910,7 +910,7 @@ pub fn api_error_sip_provider_required(l: Locale) -> &'static str {
 pub fn api_error_status_change_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "The status could not be changed. Please try again.",
-        Locale::FrCa => "The status could not be changed. Please try again.",
+        Locale::FrCa => "Le statut n'a pas pu être modifié. Veuillez réessayer.",
     }
 }
 
@@ -919,7 +919,7 @@ pub fn api_error_status_change_failed(l: Locale) -> &'static str {
 pub fn api_error_stripe_test_mode_refused(l: Locale) -> &'static str {
     match l {
         Locale::En => "Test checkout is not available for this account on this site.",
-        Locale::FrCa => "Test checkout is not available for this account on this site.",
+        Locale::FrCa => "Le paiement de test n'est pas offert pour ce compte sur ce site.",
     }
 }
 
@@ -928,7 +928,7 @@ pub fn api_error_stripe_test_mode_refused(l: Locale) -> &'static str {
 pub fn api_error_subscription_inactive(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace's subscription is not active. Update billing to resume calls and messaging.",
-        Locale::FrCa => "This workspace's subscription is not active. Update billing to resume calls and messaging.",
+        Locale::FrCa => "L'abonnement de cet espace de travail n'est pas actif. Mettez la facturation à jour pour reprendre les appels et la messagerie.",
     }
 }
 
@@ -937,7 +937,7 @@ pub fn api_error_subscription_inactive(l: Locale) -> &'static str {
 pub fn api_error_test_call_in_progress(l: Locale) -> &'static str {
     match l {
         Locale::En => "A test call is already under way. Wait for it to end before starting another.",
-        Locale::FrCa => "A test call is already under way. Wait for it to end before starting another.",
+        Locale::FrCa => "Un appel d'essai est déjà en cours. Attendez qu'il se termine avant d'en lancer un autre.",
     }
 }
 
@@ -946,7 +946,7 @@ pub fn api_error_test_call_in_progress(l: Locale) -> &'static str {
 pub fn api_error_test_call_limit_reached(l: Locale) -> &'static str {
     match l {
         Locale::En => "You have used today's three test calls. You can place another one tomorrow, or call your number yourself.",
-        Locale::FrCa => "You have used today's three test calls. You can place another one tomorrow, or call your number yourself.",
+        Locale::FrCa => "Vous avez utilisé les trois appels d'essai d'aujourd'hui. Vous pourrez en faire un autre demain, ou appeler vous-même votre numéro.",
     }
 }
 
@@ -955,7 +955,7 @@ pub fn api_error_test_call_limit_reached(l: Locale) -> &'static str {
 pub fn api_error_test_call_needs_number(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose a phone number for this workspace first, so the test call has a number to come from.",
-        Locale::FrCa => "Choose a phone number for this workspace first, so the test call has a number to come from.",
+        Locale::FrCa => "Choisissez d'abord un numéro de téléphone pour cet espace de travail, afin que l'appel d'essai ait un numéro d'origine.",
     }
 }
 
@@ -964,7 +964,7 @@ pub fn api_error_test_call_needs_number(l: Locale) -> &'static str {
 pub fn api_error_ticket_create_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "That request could not be created. Please try again.",
-        Locale::FrCa => "That request could not be created. Please try again.",
+        Locale::FrCa => "Cette demande n'a pas pu être créée. Veuillez réessayer.",
     }
 }
 
@@ -973,7 +973,7 @@ pub fn api_error_ticket_create_failed(l: Locale) -> &'static str {
 pub fn api_error_ticket_not_closable(l: Locale) -> &'static str {
     match l {
         Locale::En => "This request cannot be closed from here. Reply to let us know it is resolved and we will close it.",
-        Locale::FrCa => "This request cannot be closed from here. Reply to let us know it is resolved and we will close it.",
+        Locale::FrCa => "Cette demande ne peut pas être fermée ici. Répondez pour nous dire qu'elle est réglée et nous la fermerons.",
     }
 }
 
@@ -982,7 +982,7 @@ pub fn api_error_ticket_not_closable(l: Locale) -> &'static str {
 pub fn api_error_ticket_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That support request could not be found.",
-        Locale::FrCa => "That support request could not be found.",
+        Locale::FrCa => "Cette demande d'assistance est introuvable.",
     }
 }
 
@@ -991,7 +991,7 @@ pub fn api_error_ticket_not_found(l: Locale) -> &'static str {
 pub fn api_error_ticket_opening(l: Locale) -> &'static str {
     match l {
         Locale::En => "This request is still being opened. Please try again in a moment.",
-        Locale::FrCa => "This request is still being opened. Please try again in a moment.",
+        Locale::FrCa => "Cette demande est encore en cours d'ouverture. Veuillez réessayer dans un moment.",
     }
 }
 
@@ -1000,7 +1000,7 @@ pub fn api_error_ticket_opening(l: Locale) -> &'static str {
 pub fn api_error_token_invalid(l: Locale) -> &'static str {
     match l {
         Locale::En => "That link is no longer valid. Request a new one.",
-        Locale::FrCa => "That link is no longer valid. Request a new one.",
+        Locale::FrCa => "Ce lien n'est plus valide. Demandez-en un nouveau.",
     }
 }
 
@@ -1009,7 +1009,7 @@ pub fn api_error_token_invalid(l: Locale) -> &'static str {
 pub fn api_error_unauthorized(l: Locale) -> &'static str {
     match l {
         Locale::En => "Please sign in to continue.",
-        Locale::FrCa => "Please sign in to continue.",
+        Locale::FrCa => "Veuillez vous connecter pour continuer.",
     }
 }
 
@@ -1018,7 +1018,7 @@ pub fn api_error_unauthorized(l: Locale) -> &'static str {
 pub fn api_error_unknown(l: Locale) -> &'static str {
     match l {
         Locale::En => "Something went wrong. Please try again.",
-        Locale::FrCa => "Something went wrong. Please try again.",
+        Locale::FrCa => "Une erreur est survenue. Veuillez réessayer.",
     }
 }
 
@@ -1027,7 +1027,7 @@ pub fn api_error_unknown(l: Locale) -> &'static str {
 pub fn api_error_unsupported_media_type(l: Locale) -> &'static str {
     match l {
         Locale::En => "That file type is not supported here.",
-        Locale::FrCa => "That file type is not supported here.",
+        Locale::FrCa => "Ce type de fichier n'est pas pris en charge ici.",
     }
 }
 
@@ -1036,7 +1036,7 @@ pub fn api_error_unsupported_media_type(l: Locale) -> &'static str {
 pub fn api_error_upstream_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "Something upstream did not answer. Please try again.",
-        Locale::FrCa => "Something upstream did not answer. Please try again.",
+        Locale::FrCa => "Un service en amont n'a pas répondu. Veuillez réessayer.",
     }
 }
 
@@ -1045,7 +1045,7 @@ pub fn api_error_upstream_error(l: Locale) -> &'static str {
 pub fn api_error_validation_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Some of what you entered is not valid. Please check it and try again.",
-        Locale::FrCa => "Some of what you entered is not valid. Please check it and try again.",
+        Locale::FrCa => "Une partie de ce que vous avez saisi n'est pas valide. Vérifiez, puis réessayez.",
     }
 }
 
@@ -1054,7 +1054,7 @@ pub fn api_error_validation_failed(l: Locale) -> &'static str {
 pub fn api_error_verify_not_enabled(l: Locale) -> &'static str {
     match l {
         Locale::En => "One-time passcodes are not turned on for this workspace.",
-        Locale::FrCa => "One-time passcodes are not turned on for this workspace.",
+        Locale::FrCa => "Les codes à usage unique ne sont pas activés pour cet espace de travail.",
     }
 }
 
@@ -1063,7 +1063,7 @@ pub fn api_error_verify_not_enabled(l: Locale) -> &'static str {
 pub fn api_error_website_unreadable(l: Locale) -> &'static str {
     match l {
         Locale::En => "We could not read that website. Check the address, or enter your details yourself.",
-        Locale::FrCa => "We could not read that website. Check the address, or enter your details yourself.",
+        Locale::FrCa => "Nous n'avons pas pu lire ce site Web. Vérifiez l'adresse, ou saisissez vos renseignements vous-même.",
     }
 }
 
@@ -1072,7 +1072,7 @@ pub fn api_error_website_unreadable(l: Locale) -> &'static str {
 pub fn api_error_whatsapp_unsupported(l: Locale) -> &'static str {
     match l {
         Locale::En => "WhatsApp is not available on this workspace's messaging account.",
-        Locale::FrCa => "WhatsApp is not available on this workspace's messaging account.",
+        Locale::FrCa => "WhatsApp n'est pas offert sur le compte de messagerie de cet espace de travail.",
     }
 }
 
@@ -1081,7 +1081,7 @@ pub fn api_error_whatsapp_unsupported(l: Locale) -> &'static str {
 pub fn api_error_workspace_access_denied(l: Locale) -> &'static str {
     match l {
         Locale::En => "You are not a member of that workspace.",
-        Locale::FrCa => "You are not a member of that workspace.",
+        Locale::FrCa => "Vous n'êtes pas membre de cet espace de travail.",
     }
 }
 
@@ -1090,7 +1090,7 @@ pub fn api_error_workspace_access_denied(l: Locale) -> &'static str {
 pub fn api_error_workspace_already_in_region(l: Locale) -> &'static str {
     match l {
         Locale::En => "That workspace is already in this region.",
-        Locale::FrCa => "That workspace is already in this region.",
+        Locale::FrCa => "Cet espace de travail est déjà dans cette région.",
     }
 }
 
@@ -1099,7 +1099,7 @@ pub fn api_error_workspace_already_in_region(l: Locale) -> &'static str {
 pub fn api_error_workspace_dormant(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has been quiet long enough that outbound calling and messaging are paused pending an account review. Request reactivation from your dashboard.",
-        Locale::FrCa => "This workspace has been quiet long enough that outbound calling and messaging are paused pending an account review. Request reactivation from your dashboard.",
+        Locale::FrCa => "Cet espace de travail est inactif depuis assez longtemps pour que les appels et les messages sortants soient suspendus en attendant une révision du compte. Demandez la réactivation depuis votre tableau de bord.",
     }
 }
 
@@ -1108,7 +1108,7 @@ pub fn api_error_workspace_dormant(l: Locale) -> &'static str {
 pub fn api_error_workspace_elsewhere(l: Locale) -> &'static str {
     match l {
         Locale::En => "That workspace is hosted in another region. Open it from that region's site.",
-        Locale::FrCa => "That workspace is hosted in another region. Open it from that region's site.",
+        Locale::FrCa => "Cet espace de travail est hébergé dans une autre région. Ouvrez-le depuis le site de cette région.",
     }
 }
 
@@ -1117,7 +1117,7 @@ pub fn api_error_workspace_elsewhere(l: Locale) -> &'static str {
 pub fn api_error_workspace_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That workspace could not be found.",
-        Locale::FrCa => "That workspace could not be found.",
+        Locale::FrCa => "Cet espace de travail est introuvable.",
     }
 }
 
@@ -1126,7 +1126,7 @@ pub fn api_error_workspace_not_found(l: Locale) -> &'static str {
 pub fn api_error_workspace_owner_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "The owner of that workspace could not be found.",
-        Locale::FrCa => "The owner of that workspace could not be found.",
+        Locale::FrCa => "La personne propriétaire de cet espace de travail est introuvable.",
     }
 }
 
@@ -1135,7 +1135,7 @@ pub fn api_error_workspace_owner_not_found(l: Locale) -> &'static str {
 pub fn api_error_workspace_owner_only(l: Locale) -> &'static str {
     match l {
         Locale::En => "Only the owner of this workspace can do that.",
-        Locale::FrCa => "Only the owner of this workspace can do that.",
+        Locale::FrCa => "Seule la personne propriétaire de cet espace de travail peut faire cela.",
     }
 }
 
@@ -1144,7 +1144,7 @@ pub fn api_error_workspace_owner_only(l: Locale) -> &'static str {
 pub fn api_error_caps_email_not_verified(l: Locale) -> &'static str {
     match l {
         Locale::En => "Confirm your email address before signing in.",
-        Locale::FrCa => "Confirm your email address before signing in.",
+        Locale::FrCa => "Confirmez votre adresse courriel avant de vous connecter.",
     }
 }
 
@@ -1153,7 +1153,7 @@ pub fn api_error_caps_email_not_verified(l: Locale) -> &'static str {
 pub fn api_error_caps_forbidden(l: Locale) -> &'static str {
     match l {
         Locale::En => "You do not have permission to do that.",
-        Locale::FrCa => "You do not have permission to do that.",
+        Locale::FrCa => "Vous n'avez pas la permission de faire cela.",
     }
 }
 
@@ -1162,7 +1162,7 @@ pub fn api_error_caps_forbidden(l: Locale) -> &'static str {
 pub fn api_error_caps_internal_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "Something went wrong on our side. Please try again.",
-        Locale::FrCa => "Something went wrong on our side. Please try again.",
+        Locale::FrCa => "Une erreur est survenue de notre côté. Veuillez réessayer.",
     }
 }
 
@@ -1171,7 +1171,7 @@ pub fn api_error_caps_internal_error(l: Locale) -> &'static str {
 pub fn api_error_caps_invalid_request(l: Locale) -> &'static str {
     match l {
         Locale::En => "That request was not valid. Please check the details and try again.",
-        Locale::FrCa => "That request was not valid. Please check the details and try again.",
+        Locale::FrCa => "Cette requête n'est pas valide. Vérifiez les renseignements, puis réessayez.",
     }
 }
 
@@ -1180,7 +1180,7 @@ pub fn api_error_caps_invalid_request(l: Locale) -> &'static str {
 pub fn api_error_caps_mfa_already_enabled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Two-step verification is already on for this account.",
-        Locale::FrCa => "Two-step verification is already on for this account.",
+        Locale::FrCa => "La vérification en deux étapes est déjà active sur ce compte.",
     }
 }
 
@@ -1189,7 +1189,7 @@ pub fn api_error_caps_mfa_already_enabled(l: Locale) -> &'static str {
 pub fn api_error_caps_mfa_enrol_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Set up two-step verification to continue.",
-        Locale::FrCa => "Set up two-step verification to continue.",
+        Locale::FrCa => "Activez la vérification en deux étapes pour continuer.",
     }
 }
 
@@ -1198,7 +1198,7 @@ pub fn api_error_caps_mfa_enrol_required(l: Locale) -> &'static str {
 pub fn api_error_caps_mfa_not_pending(l: Locale) -> &'static str {
     match l {
         Locale::En => "There is no second factor waiting to be confirmed.",
-        Locale::FrCa => "There is no second factor waiting to be confirmed.",
+        Locale::FrCa => "Aucun deuxième facteur n'attend d'être confirmé.",
     }
 }
 
@@ -1207,7 +1207,7 @@ pub fn api_error_caps_mfa_not_pending(l: Locale) -> &'static str {
 pub fn api_error_caps_mfa_not_started(l: Locale) -> &'static str {
     match l {
         Locale::En => "Start setting up two-step verification before confirming it.",
-        Locale::FrCa => "Start setting up two-step verification before confirming it.",
+        Locale::FrCa => "Commencez la configuration de la vérification en deux étapes avant de la confirmer.",
     }
 }
 
@@ -1216,7 +1216,7 @@ pub fn api_error_caps_mfa_not_started(l: Locale) -> &'static str {
 pub fn api_error_caps_mfa_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter the code from your authenticator app.",
-        Locale::FrCa => "Enter the code from your authenticator app.",
+        Locale::FrCa => "Entrez le code de votre application d'authentification.",
     }
 }
 
@@ -1225,7 +1225,7 @@ pub fn api_error_caps_mfa_required(l: Locale) -> &'static str {
 pub fn api_error_caps_missing_id(l: Locale) -> &'static str {
     match l {
         Locale::En => "That request was missing something it needed.",
-        Locale::FrCa => "That request was missing something it needed.",
+        Locale::FrCa => "Il manquait un élément nécessaire à cette requête.",
     }
 }
 
@@ -1234,7 +1234,7 @@ pub fn api_error_caps_missing_id(l: Locale) -> &'static str {
 pub fn api_error_caps_no_password_set(l: Locale) -> &'static str {
     match l {
         Locale::En => "Set a password on this account before changing this setting.",
-        Locale::FrCa => "Set a password on this account before changing this setting.",
+        Locale::FrCa => "Définissez un mot de passe sur ce compte avant de modifier ce réglage.",
     }
 }
 
@@ -1243,7 +1243,7 @@ pub fn api_error_caps_no_password_set(l: Locale) -> &'static str {
 pub fn api_error_caps_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "We could not find what you asked for.",
-        Locale::FrCa => "We could not find what you asked for.",
+        Locale::FrCa => "Nous n'avons pas trouvé ce que vous demandez.",
     }
 }
 
@@ -1252,7 +1252,7 @@ pub fn api_error_caps_not_found(l: Locale) -> &'static str {
 pub fn api_error_caps_regions_degraded(l: Locale, items: &str) -> String {
     match l {
         Locale::En => format!("Your workspaces could not all be listed because some regions are unreachable right now ({items}). Nothing about your account has changed."),
-        Locale::FrCa => format!("Your workspaces could not all be listed because some regions are unreachable right now ({items}). Nothing about your account has changed."),
+        Locale::FrCa => format!("Vos espaces de travail n'ont pas tous pu être listés, car certaines régions sont injoignables en ce moment ({items}). Rien n'a changé dans votre compte."),
     }
 }
 
@@ -1261,7 +1261,7 @@ pub fn api_error_caps_regions_degraded(l: Locale, items: &str) -> String {
 pub fn api_error_caps_regions_degraded_without_list(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your workspaces could not all be listed because some regions are unreachable right now. Nothing about your account has changed.",
-        Locale::FrCa => "Your workspaces could not all be listed because some regions are unreachable right now. Nothing about your account has changed.",
+        Locale::FrCa => "Vos espaces de travail n'ont pas tous pu être listés, car certaines régions sont injoignables en ce moment. Rien n'a changé dans votre compte.",
     }
 }
 
@@ -1270,7 +1270,7 @@ pub fn api_error_caps_regions_degraded_without_list(l: Locale) -> &'static str {
 pub fn api_error_caps_trust_bundles_not_approved(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace's carrier registration has not been approved yet. That has to finish first.",
-        Locale::FrCa => "This workspace's carrier registration has not been approved yet. That has to finish first.",
+        Locale::FrCa => "L'inscription de cet espace de travail auprès de l'opérateur n'est pas encore approuvée. Cette étape doit d'abord être terminée.",
     }
 }
 
@@ -1279,6 +1279,6 @@ pub fn api_error_caps_trust_bundles_not_approved(l: Locale) -> &'static str {
 pub fn api_error_caps_validation_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "Some of what you entered is not valid. Please check it and try again.",
-        Locale::FrCa => "Some of what you entered is not valid. Please check it and try again.",
+        Locale::FrCa => "Une partie de ce que vous avez saisi n'est pas valide. Vérifiez, puis réessayez.",
     }
 }

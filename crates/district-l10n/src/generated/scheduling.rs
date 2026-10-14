@@ -3,14 +3,14 @@
 use crate::Locale;
 
 /// True when every entry has French; until then the French arm carries the English.
-pub const FR_COMPLETE: bool = false;
+pub const FR_COMPLETE: bool = true;
 
 /// `actions.archive`
 #[must_use]
 pub fn actions_archive(l: Locale) -> &'static str {
     match l {
         Locale::En => "Archive",
-        Locale::FrCa => "Archive",
+        Locale::FrCa => "Archiver",
     }
 }
 
@@ -19,7 +19,7 @@ pub fn actions_archive(l: Locale) -> &'static str {
 pub fn actions_archived(l: Locale) -> &'static str {
     match l {
         Locale::En => "Event type archived",
-        Locale::FrCa => "Event type archived",
+        Locale::FrCa => "Type de rendez-vous archivé",
     }
 }
 
@@ -28,7 +28,7 @@ pub fn actions_archived(l: Locale) -> &'static str {
 pub fn actions_manage(l: Locale) -> &'static str {
     match l {
         Locale::En => "Manage",
-        Locale::FrCa => "Manage",
+        Locale::FrCa => "Gérer",
     }
 }
 
@@ -37,7 +37,7 @@ pub fn actions_manage(l: Locale) -> &'static str {
 pub fn actions_restore(l: Locale) -> &'static str {
     match l {
         Locale::En => "Restore",
-        Locale::FrCa => "Restore",
+        Locale::FrCa => "Restaurer",
     }
 }
 
@@ -46,7 +46,7 @@ pub fn actions_restore(l: Locale) -> &'static str {
 pub fn actions_restored(l: Locale) -> &'static str {
     match l {
         Locale::En => "Event type restored",
-        Locale::FrCa => "Event type restored",
+        Locale::FrCa => "Type de rendez-vous restauré",
     }
 }
 
@@ -55,7 +55,7 @@ pub fn actions_restored(l: Locale) -> &'static str {
 pub fn actions_send_test_email(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send test email",
-        Locale::FrCa => "Send test email",
+        Locale::FrCa => "Envoyer un courriel test",
     }
 }
 
@@ -64,7 +64,7 @@ pub fn actions_send_test_email(l: Locale) -> &'static str {
 pub fn actions_turn_off(l: Locale) -> &'static str {
     match l {
         Locale::En => "Turn off",
-        Locale::FrCa => "Turn off",
+        Locale::FrCa => "Désactiver",
     }
 }
 
@@ -73,7 +73,7 @@ pub fn actions_turn_off(l: Locale) -> &'static str {
 pub fn actions_turn_on(l: Locale) -> &'static str {
     match l {
         Locale::En => "Turn on",
-        Locale::FrCa => "Turn on",
+        Locale::FrCa => "Activer",
     }
 }
 
@@ -82,7 +82,7 @@ pub fn actions_turn_on(l: Locale) -> &'static str {
 pub fn actions_turned_off(l: Locale) -> &'static str {
     match l {
         Locale::En => "Event type turned off",
-        Locale::FrCa => "Event type turned off",
+        Locale::FrCa => "Type de rendez-vous désactivé",
     }
 }
 
@@ -91,7 +91,7 @@ pub fn actions_turned_off(l: Locale) -> &'static str {
 pub fn actions_turned_on(l: Locale) -> &'static str {
     match l {
         Locale::En => "Event type turned on",
-        Locale::FrCa => "Event type turned on",
+        Locale::FrCa => "Type de rendez-vous activé",
     }
 }
 
@@ -100,7 +100,7 @@ pub fn actions_turned_on(l: Locale) -> &'static str {
 pub fn answers_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Answers",
-        Locale::FrCa => "Answers",
+        Locale::FrCa => "Réponses",
     }
 }
 
@@ -109,7 +109,7 @@ pub fn answers_eyebrow(l: Locale) -> &'static str {
 pub fn app_revoke_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Revoke access",
-        Locale::FrCa => "Revoke access",
+        Locale::FrCa => "Révoquer l'accès",
     }
 }
 
@@ -118,7 +118,7 @@ pub fn app_revoke_action(l: Locale) -> &'static str {
 pub fn app_revoke_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "It stops reaching this workspace's booking data now.",
-        Locale::FrCa => "It stops reaching this workspace's booking data now.",
+        Locale::FrCa => "Elle cessera immédiatement d'accéder aux données de rendez-vous.",
     }
 }
 
@@ -127,7 +127,7 @@ pub fn app_revoke_confirm(l: Locale) -> &'static str {
 pub fn app_revoke_prompt(l: Locale, client_name: &str) -> String {
     match l {
         Locale::En => format!("Revoke {client_name}?"),
-        Locale::FrCa => format!("Revoke {client_name}?"),
+        Locale::FrCa => format!("Révoquer {client_name}?"),
     }
 }
 
@@ -136,7 +136,7 @@ pub fn app_revoke_prompt(l: Locale, client_name: &str) -> String {
 pub fn booking_answer_blank(l: Locale) -> &'static str {
     match l {
         Locale::En => "No answer",
-        Locale::FrCa => "No answer",
+        Locale::FrCa => "Sans réponse",
     }
 }
 
@@ -145,7 +145,7 @@ pub fn booking_answer_blank(l: Locale) -> &'static str {
 pub fn booking_manage(l: Locale) -> &'static str {
     match l {
         Locale::En => "Manage",
-        Locale::FrCa => "Manage",
+        Locale::FrCa => "Gérer",
     }
 }
 
@@ -163,7 +163,7 @@ pub fn booking_minutes(l: Locale, minutes: i64) -> String {
 pub fn booking_minutes_not_set(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not set",
-        Locale::FrCa => "Not set",
+        Locale::FrCa => "Non défini",
     }
 }
 
@@ -172,7 +172,7 @@ pub fn booking_minutes_not_set(l: Locale) -> &'static str {
 pub fn booking_no_host(l: Locale) -> &'static str {
     match l {
         Locale::En => "No host",
-        Locale::FrCa => "No host",
+        Locale::FrCa => "Aucun hôte",
     }
 }
 
@@ -181,7 +181,7 @@ pub fn booking_no_host(l: Locale) -> &'static str {
 pub fn booking_status_cancelled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancelled",
-        Locale::FrCa => "Cancelled",
+        Locale::FrCa => "Annulé",
     }
 }
 
@@ -190,7 +190,7 @@ pub fn booking_status_cancelled(l: Locale) -> &'static str {
 pub fn booking_status_confirmed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Confirmed",
-        Locale::FrCa => "Confirmed",
+        Locale::FrCa => "Confirmé",
     }
 }
 
@@ -199,7 +199,7 @@ pub fn booking_status_confirmed(l: Locale) -> &'static str {
 pub fn booking_status_rescheduled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Rescheduled",
-        Locale::FrCa => "Rescheduled",
+        Locale::FrCa => "Reporté",
     }
 }
 
@@ -217,7 +217,7 @@ pub fn booking_subtitle(l: Locale, who: &str, event_type: &str, host: &str) -> S
 pub fn booking_view_all(l: Locale) -> &'static str {
     match l {
         Locale::En => "All",
-        Locale::FrCa => "All",
+        Locale::FrCa => "Tout",
     }
 }
 
@@ -226,7 +226,7 @@ pub fn booking_view_all(l: Locale) -> &'static str {
 pub fn booking_view_cancelled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancelled",
-        Locale::FrCa => "Cancelled",
+        Locale::FrCa => "Annulé",
     }
 }
 
@@ -235,7 +235,7 @@ pub fn booking_view_cancelled(l: Locale) -> &'static str {
 pub fn booking_view_past(l: Locale) -> &'static str {
     match l {
         Locale::En => "Past",
-        Locale::FrCa => "Past",
+        Locale::FrCa => "Passés",
     }
 }
 
@@ -244,7 +244,7 @@ pub fn booking_view_past(l: Locale) -> &'static str {
 pub fn booking_view_upcoming(l: Locale) -> &'static str {
     match l {
         Locale::En => "Upcoming",
-        Locale::FrCa => "Upcoming",
+        Locale::FrCa => "À venir",
     }
 }
 
@@ -253,7 +253,7 @@ pub fn booking_view_upcoming(l: Locale) -> &'static str {
 pub fn bookings_empty_cancelled(l: Locale) -> &'static str {
     match l {
         Locale::En => "No cancelled bookings.",
-        Locale::FrCa => "No cancelled bookings.",
+        Locale::FrCa => "Aucun rendez-vous annulé.",
     }
 }
 
@@ -262,7 +262,7 @@ pub fn bookings_empty_cancelled(l: Locale) -> &'static str {
 pub fn bookings_empty_past(l: Locale) -> &'static str {
     match l {
         Locale::En => "No past bookings.",
-        Locale::FrCa => "No past bookings.",
+        Locale::FrCa => "Aucun rendez-vous passé.",
     }
 }
 
@@ -271,7 +271,7 @@ pub fn bookings_empty_past(l: Locale) -> &'static str {
 pub fn bookings_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No bookings",
-        Locale::FrCa => "No bookings",
+        Locale::FrCa => "Aucun rendez-vous",
     }
 }
 
@@ -280,7 +280,7 @@ pub fn bookings_empty_title(l: Locale) -> &'static str {
 pub fn bookings_empty_upcoming(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing is booked yet. Share your booking page and bookings appear here.",
-        Locale::FrCa => "Nothing is booked yet. Share your booking page and bookings appear here.",
+        Locale::FrCa => "Aucun rendez-vous pour l'instant. Partagez votre page de réservation et ils apparaîtront ici.",
     }
 }
 
@@ -289,7 +289,7 @@ pub fn bookings_empty_upcoming(l: Locale) -> &'static str {
 pub fn bookings_load_more(l: Locale) -> &'static str {
     match l {
         Locale::En => "Load more",
-        Locale::FrCa => "Load more",
+        Locale::FrCa => "Afficher plus",
     }
 }
 
@@ -298,7 +298,7 @@ pub fn bookings_load_more(l: Locale) -> &'static str {
 pub fn bookings_loading_more(l: Locale) -> &'static str {
     match l {
         Locale::En => "Loading…",
-        Locale::FrCa => "Loading…",
+        Locale::FrCa => "Chargement…",
     }
 }
 
@@ -307,7 +307,7 @@ pub fn bookings_loading_more(l: Locale) -> &'static str {
 pub fn caldav_connect_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connect calendar",
-        Locale::FrCa => "Connect calendar",
+        Locale::FrCa => "Connecter le calendrier",
     }
 }
 
@@ -316,7 +316,7 @@ pub fn caldav_connect_action(l: Locale) -> &'static str {
 pub fn caldav_connected(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calendar connected",
-        Locale::FrCa => "Calendar connected",
+        Locale::FrCa => "Calendrier connecté",
     }
 }
 
@@ -325,7 +325,7 @@ pub fn caldav_connected(l: Locale) -> &'static str {
 pub fn caldav_connected_to_line(l: Locale, account: &str) -> String {
     match l {
         Locale::En => format!("Calendar connected: {account}"),
-        Locale::FrCa => format!("Calendar connected: {account}"),
+        Locale::FrCa => format!("Calendrier connecté\u{00A0}: {account}"),
     }
 }
 
@@ -334,7 +334,7 @@ pub fn caldav_connected_to_line(l: Locale, account: &str) -> String {
 pub fn caldav_connecting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connecting…",
-        Locale::FrCa => "Connecting…",
+        Locale::FrCa => "Connexion…",
     }
 }
 
@@ -343,7 +343,7 @@ pub fn caldav_connecting(l: Locale) -> &'static str {
 pub fn caldav_password_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "An app-specific password from the provider, not the account password.",
-        Locale::FrCa => "An app-specific password from the provider, not the account password.",
+        Locale::FrCa => "Un mot de passe d'application obtenu auprès du fournisseur, et non le mot de passe du compte.",
     }
 }
 
@@ -352,7 +352,7 @@ pub fn caldav_password_hint(l: Locale) -> &'static str {
 pub fn caldav_password_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "App password",
-        Locale::FrCa => "App password",
+        Locale::FrCa => "Mot de passe d'application",
     }
 }
 
@@ -361,7 +361,7 @@ pub fn caldav_password_label(l: Locale) -> &'static str {
 pub fn caldav_password_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter the app password.",
-        Locale::FrCa => "Enter the app password.",
+        Locale::FrCa => "Entrez le mot de passe d'application.",
     }
 }
 
@@ -370,7 +370,7 @@ pub fn caldav_password_missing(l: Locale) -> &'static str {
 pub fn caldav_preset_custom(l: Locale) -> &'static str {
     match l {
         Locale::En => "Other server URL",
-        Locale::FrCa => "Other server URL",
+        Locale::FrCa => "URL d'un autre serveur",
     }
 }
 
@@ -379,7 +379,7 @@ pub fn caldav_preset_custom(l: Locale) -> &'static str {
 pub fn caldav_preset_custom_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Any other CalDAV server.",
-        Locale::FrCa => "Any other CalDAV server.",
+        Locale::FrCa => "Tout autre serveur CalDAV.",
     }
 }
 
@@ -397,7 +397,7 @@ pub fn caldav_preset_fastmail(l: Locale) -> &'static str {
 pub fn caldav_preset_fastmail_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Fastmail's calendar. Create an app password in Fastmail settings.",
-        Locale::FrCa => "Fastmail's calendar. Create an app password in Fastmail settings.",
+        Locale::FrCa => "Le calendrier de Fastmail. Créez un mot de passe d'application dans votre compte Fastmail.",
     }
 }
 
@@ -415,7 +415,7 @@ pub fn caldav_preset_icloud(l: Locale) -> &'static str {
 pub fn caldav_preset_icloud_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Apple's calendar. Create an app-specific password at appleid.apple.com.",
-        Locale::FrCa => "Apple's calendar. Create an app-specific password at appleid.apple.com.",
+        Locale::FrCa => "Le calendrier d'Apple. Créez un mot de passe pour app sur appleid.apple.com.",
     }
 }
 
@@ -424,7 +424,7 @@ pub fn caldav_preset_icloud_note(l: Locale) -> &'static str {
 pub fn caldav_preset_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Where the calendar lives",
-        Locale::FrCa => "Where the calendar lives",
+        Locale::FrCa => "Où se trouve le calendrier",
     }
 }
 
@@ -442,7 +442,7 @@ pub fn caldav_preset_nextcloud(l: Locale) -> &'static str {
 pub fn caldav_preset_nextcloud_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your own Nextcloud server, at its DAV address.",
-        Locale::FrCa => "Your own Nextcloud server, at its DAV address.",
+        Locale::FrCa => "Votre propre serveur Nextcloud, à son adresse DAV.",
     }
 }
 
@@ -451,7 +451,7 @@ pub fn caldav_preset_nextcloud_note(l: Locale) -> &'static str {
 pub fn caldav_refused(l: Locale) -> &'static str {
     match l {
         Locale::En => "Could not connect. Check the server, username and app password.",
-        Locale::FrCa => "Could not connect. Check the server, username and app password.",
+        Locale::FrCa => "Connexion impossible. Vérifiez le serveur, le nom d'utilisateur et le mot de passe d'application.",
     }
 }
 
@@ -460,7 +460,7 @@ pub fn caldav_refused(l: Locale) -> &'static str {
 pub fn caldav_server_url_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "The base address of the CalDAV server.",
-        Locale::FrCa => "The base address of the CalDAV server.",
+        Locale::FrCa => "L'adresse de base du serveur CalDAV.",
     }
 }
 
@@ -469,7 +469,7 @@ pub fn caldav_server_url_hint(l: Locale) -> &'static str {
 pub fn caldav_server_url_is_ip(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter the server's hostname rather than an IP address.",
-        Locale::FrCa => "Enter the server's hostname rather than an IP address.",
+        Locale::FrCa => "Entrez le nom d'hôte du serveur plutôt qu'une adresse IP.",
     }
 }
 
@@ -478,7 +478,7 @@ pub fn caldav_server_url_is_ip(l: Locale) -> &'static str {
 pub fn caldav_server_url_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Server URL",
-        Locale::FrCa => "Server URL",
+        Locale::FrCa => "URL du serveur",
     }
 }
 
@@ -487,7 +487,7 @@ pub fn caldav_server_url_label(l: Locale) -> &'static str {
 pub fn caldav_server_url_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter the server URL.",
-        Locale::FrCa => "Enter the server URL.",
+        Locale::FrCa => "Entrez l'URL du serveur.",
     }
 }
 
@@ -496,7 +496,7 @@ pub fn caldav_server_url_missing(l: Locale) -> &'static str {
 pub fn caldav_server_url_not_a_url(l: Locale) -> &'static str {
     match l {
         Locale::En => "That does not look like a server address. It should start with https://",
-        Locale::FrCa => "That does not look like a server address. It should start with https://",
+        Locale::FrCa => "Cela ne ressemble pas à une adresse de serveur. Elle doit commencer par https://",
     }
 }
 
@@ -505,7 +505,7 @@ pub fn caldav_server_url_not_a_url(l: Locale) -> &'static str {
 pub fn caldav_server_url_not_https(l: Locale) -> &'static str {
     match l {
         Locale::En => "The server address must start with https://. An app password sent over http:// travels in the clear.",
-        Locale::FrCa => "The server address must start with https://. An app password sent over http:// travels in the clear.",
+        Locale::FrCa => "L'adresse du serveur doit commencer par https://. Un mot de passe d'application envoyé par http:// circule en clair.",
     }
 }
 
@@ -514,7 +514,7 @@ pub fn caldav_server_url_not_https(l: Locale) -> &'static str {
 pub fn caldav_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connect a CalDAV calendar",
-        Locale::FrCa => "Connect a CalDAV calendar",
+        Locale::FrCa => "Connecter un calendrier CalDAV",
     }
 }
 
@@ -523,7 +523,7 @@ pub fn caldav_title(l: Locale) -> &'static str {
 pub fn caldav_username_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Username",
-        Locale::FrCa => "Username",
+        Locale::FrCa => "Nom d'utilisateur",
     }
 }
 
@@ -532,7 +532,7 @@ pub fn caldav_username_label(l: Locale) -> &'static str {
 pub fn caldav_username_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter the username.",
-        Locale::FrCa => "Enter the username.",
+        Locale::FrCa => "Entrez le nom d'utilisateur.",
     }
 }
 
@@ -541,7 +541,7 @@ pub fn caldav_username_missing(l: Locale) -> &'static str {
 pub fn calendar_account(l: Locale) -> &'static str {
     match l {
         Locale::En => "Account",
-        Locale::FrCa => "Account",
+        Locale::FrCa => "Compte",
     }
 }
 
@@ -550,7 +550,7 @@ pub fn calendar_account(l: Locale) -> &'static str {
 pub fn calendar_conflicts(l: Locale) -> &'static str {
     match l {
         Locale::En => "Checked for conflicts",
-        Locale::FrCa => "Checked for conflicts",
+        Locale::FrCa => "Vérifié pour les conflits",
     }
 }
 
@@ -559,7 +559,7 @@ pub fn calendar_conflicts(l: Locale) -> &'static str {
 pub fn calendar_conflicts_checked(l: Locale) -> &'static str {
     match l {
         Locale::En => "Checked",
-        Locale::FrCa => "Checked",
+        Locale::FrCa => "Vérifié",
     }
 }
 
@@ -568,7 +568,7 @@ pub fn calendar_conflicts_checked(l: Locale) -> &'static str {
 pub fn calendar_conflicts_none(l: Locale) -> &'static str {
     match l {
         Locale::En => "None",
-        Locale::FrCa => "None",
+        Locale::FrCa => "Aucun",
     }
 }
 
@@ -577,7 +577,7 @@ pub fn calendar_conflicts_none(l: Locale) -> &'static str {
 pub fn calendar_conflicts_not_checked(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not checked",
-        Locale::FrCa => "Not checked",
+        Locale::FrCa => "Non vérifié",
     }
 }
 
@@ -586,7 +586,7 @@ pub fn calendar_conflicts_not_checked(l: Locale) -> &'static str {
 pub fn calendar_connect_another(l: Locale) -> &'static str {
     match l {
         Locale::En => "Another account can be connected to check it for conflicts as well.",
-        Locale::FrCa => "Another account can be connected to check it for conflicts as well.",
+        Locale::FrCa => "Vous pouvez aussi connecter un autre compte pour y vérifier les conflits.",
     }
 }
 
@@ -595,7 +595,7 @@ pub fn calendar_connect_another(l: Locale) -> &'static str {
 pub fn calendar_connect_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connecting a calendar",
-        Locale::FrCa => "Connecting a calendar",
+        Locale::FrCa => "Connexion d'un calendrier",
     }
 }
 
@@ -604,7 +604,7 @@ pub fn calendar_connect_eyebrow(l: Locale) -> &'static str {
 pub fn calendar_connected(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connected",
-        Locale::FrCa => "Connected",
+        Locale::FrCa => "Connecté",
     }
 }
 
@@ -613,7 +613,7 @@ pub fn calendar_connected(l: Locale) -> &'static str {
 pub fn calendar_destination(l: Locale) -> &'static str {
     match l {
         Locale::En => "Receives bookings",
-        Locale::FrCa => "Receives bookings",
+        Locale::FrCa => "Reçoit les rendez-vous",
     }
 }
 
@@ -622,7 +622,7 @@ pub fn calendar_destination(l: Locale) -> &'static str {
 pub fn calendar_destination_none(l: Locale) -> &'static str {
     match l {
         Locale::En => "No calendar in this account",
-        Locale::FrCa => "No calendar in this account",
+        Locale::FrCa => "Aucun calendrier dans ce compte",
     }
 }
 
@@ -631,7 +631,7 @@ pub fn calendar_destination_none(l: Locale) -> &'static str {
 pub fn calendar_destination_this_account(l: Locale) -> &'static str {
     match l {
         Locale::En => "This account",
-        Locale::FrCa => "This account",
+        Locale::FrCa => "Ce compte",
     }
 }
 
@@ -649,7 +649,7 @@ pub fn calendar_line(l: Locale, provider: &str, account: &str) -> String {
 pub fn calendar_none_connected(l: Locale) -> &'static str {
     match l {
         Locale::En => "No calendar is connected yet, so nothing is checked for conflicts and bookings are not written anywhere.",
-        Locale::FrCa => "No calendar is connected yet, so nothing is checked for conflicts and bookings are not written anywhere.",
+        Locale::FrCa => "Aucun calendrier n'est encore connecté\u{00A0}: les conflits ne sont donc pas vérifiés, et les rendez-vous ne sont inscrits nulle part.",
     }
 }
 
@@ -658,7 +658,7 @@ pub fn calendar_none_connected(l: Locale) -> &'static str {
 pub fn calendar_not_configured(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calendar connections are not set up on this scheduler yet.",
-        Locale::FrCa => "Calendar connections are not set up on this scheduler yet.",
+        Locale::FrCa => "Les connexions de calendrier ne sont pas encore configurées pour la prise de rendez-vous.",
     }
 }
 
@@ -667,7 +667,7 @@ pub fn calendar_not_configured(l: Locale) -> &'static str {
 pub fn calendar_not_connected(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not connected",
-        Locale::FrCa => "Not connected",
+        Locale::FrCa => "Non connecté",
     }
 }
 
@@ -676,7 +676,7 @@ pub fn calendar_not_connected(l: Locale) -> &'static str {
 pub fn calendar_provider_apple(l: Locale) -> &'static str {
     match l {
         Locale::En => "Apple Calendar",
-        Locale::FrCa => "Apple Calendar",
+        Locale::FrCa => "Calendrier Apple",
     }
 }
 
@@ -694,7 +694,7 @@ pub fn calendar_provider_caldav(l: Locale) -> &'static str {
 pub fn calendar_provider_google(l: Locale) -> &'static str {
     match l {
         Locale::En => "Google Calendar",
-        Locale::FrCa => "Google Calendar",
+        Locale::FrCa => "Google Agenda",
     }
 }
 
@@ -721,7 +721,7 @@ pub fn calendar_zoom(l: Locale) -> &'static str {
 pub fn calendars_conflicts_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "A booking is refused when it clashes with an event on a checked calendar.",
-        Locale::FrCa => "A booking is refused when it clashes with an event on a checked calendar.",
+        Locale::FrCa => "Un rendez-vous est refusé lorsqu'il entre en conflit avec un événement d'un calendrier vérifié.",
     }
 }
 
@@ -730,7 +730,7 @@ pub fn calendars_conflicts_hint(l: Locale) -> &'static str {
 pub fn calendars_conflicts_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Checked for conflicts",
-        Locale::FrCa => "Checked for conflicts",
+        Locale::FrCa => "Vérifié pour les conflits",
     }
 }
 
@@ -739,7 +739,7 @@ pub fn calendars_conflicts_label(l: Locale) -> &'static str {
 pub fn calendars_destination_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "New bookings are written to this calendar.",
-        Locale::FrCa => "New bookings are written to this calendar.",
+        Locale::FrCa => "Les nouveaux rendez-vous sont inscrits dans ce calendrier.",
     }
 }
 
@@ -748,7 +748,7 @@ pub fn calendars_destination_hint(l: Locale) -> &'static str {
 pub fn calendars_destination_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Receives bookings",
-        Locale::FrCa => "Receives bookings",
+        Locale::FrCa => "Reçoit les rendez-vous",
     }
 }
 
@@ -757,7 +757,7 @@ pub fn calendars_destination_label(l: Locale) -> &'static str {
 pub fn calendars_loading(l: Locale) -> &'static str {
     match l {
         Locale::En => "Loading calendars…",
-        Locale::FrCa => "Loading calendars…",
+        Locale::FrCa => "Chargement des calendriers…",
     }
 }
 
@@ -766,7 +766,7 @@ pub fn calendars_loading(l: Locale) -> &'static str {
 pub fn calendars_open(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose calendars",
-        Locale::FrCa => "Choose calendars",
+        Locale::FrCa => "Choisir les calendriers",
     }
 }
 
@@ -775,7 +775,7 @@ pub fn calendars_open(l: Locale) -> &'static str {
 pub fn calendars_save_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save changes",
-        Locale::FrCa => "Save changes",
+        Locale::FrCa => "Enregistrer les modifications",
     }
 }
 
@@ -784,7 +784,7 @@ pub fn calendars_save_action(l: Locale) -> &'static str {
 pub fn calendars_saved(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calendars saved",
-        Locale::FrCa => "Calendars saved",
+        Locale::FrCa => "Calendriers enregistrés",
     }
 }
 
@@ -793,7 +793,7 @@ pub fn calendars_saved(l: Locale) -> &'static str {
 pub fn calendars_saving(l: Locale) -> &'static str {
     match l {
         Locale::En => "Saving…",
-        Locale::FrCa => "Saving…",
+        Locale::FrCa => "Sauvegarde…",
     }
 }
 
@@ -802,7 +802,7 @@ pub fn calendars_saving(l: Locale) -> &'static str {
 pub fn calendars_title(l: Locale, account_email: &str) -> String {
     match l {
         Locale::En => format!("Calendars in {account_email}"),
-        Locale::FrCa => format!("Calendars in {account_email}"),
+        Locale::FrCa => format!("Calendriers\u{00A0}: {account_email}"),
     }
 }
 
@@ -811,7 +811,7 @@ pub fn calendars_title(l: Locale, account_email: &str) -> String {
 pub fn cancel_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The attendee gets a cancellation email.",
-        Locale::FrCa => "The attendee gets a cancellation email.",
+        Locale::FrCa => "Le participant recevra un courriel d'annulation.",
     }
 }
 
@@ -820,7 +820,7 @@ pub fn cancel_body(l: Locale) -> &'static str {
 pub fn cancel_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel booking",
-        Locale::FrCa => "Cancel booking",
+        Locale::FrCa => "Annuler le rendez-vous",
     }
 }
 
@@ -829,7 +829,7 @@ pub fn cancel_confirm(l: Locale) -> &'static str {
 pub fn cancel_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking cancelled",
-        Locale::FrCa => "Booking cancelled",
+        Locale::FrCa => "Rendez-vous annulé",
     }
 }
 
@@ -838,7 +838,7 @@ pub fn cancel_done(l: Locale) -> &'static str {
 pub fn cancel_keep(l: Locale) -> &'static str {
     match l {
         Locale::En => "Keep it",
-        Locale::FrCa => "Keep it",
+        Locale::FrCa => "Le conserver",
     }
 }
 
@@ -847,7 +847,7 @@ pub fn cancel_keep(l: Locale) -> &'static str {
 pub fn cancel_reason_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Optional. It goes in the email.",
-        Locale::FrCa => "Optional. It goes in the email.",
+        Locale::FrCa => "Facultatif. Il figurera dans le courriel.",
     }
 }
 
@@ -856,7 +856,7 @@ pub fn cancel_reason_hint(l: Locale) -> &'static str {
 pub fn cancel_reason_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reason",
-        Locale::FrCa => "Reason",
+        Locale::FrCa => "Motif",
     }
 }
 
@@ -865,7 +865,7 @@ pub fn cancel_reason_label(l: Locale) -> &'static str {
 pub fn cancel_reason_too_long(l: Locale) -> &'static str {
     match l {
         Locale::En => "That reason is longer than 1000 characters.",
-        Locale::FrCa => "That reason is longer than 1000 characters.",
+        Locale::FrCa => "Ce motif dépasse 1000 caractères.",
     }
 }
 
@@ -874,7 +874,7 @@ pub fn cancel_reason_too_long(l: Locale) -> &'static str {
 pub fn cancel_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel this booking?",
-        Locale::FrCa => "Cancel this booking?",
+        Locale::FrCa => "Annuler ce rendez-vous?",
     }
 }
 
@@ -883,7 +883,7 @@ pub fn cancel_title(l: Locale) -> &'static str {
 pub fn coming_up_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No bookings yet. Share your booking page and they will appear here.",
-        Locale::FrCa => "No bookings yet. Share your booking page and they will appear here.",
+        Locale::FrCa => "Aucun rendez-vous pour l'instant. Partagez votre page de réservation et ils apparaîtront ici.",
     }
 }
 
@@ -892,7 +892,7 @@ pub fn coming_up_empty(l: Locale) -> &'static str {
 pub fn coming_up_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Coming up",
-        Locale::FrCa => "Coming up",
+        Locale::FrCa => "À venir",
     }
 }
 
@@ -910,7 +910,7 @@ pub fn coming_up_subtitle(l: Locale, who: &str, event_type: &str) -> String {
 pub fn common_add(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add",
-        Locale::FrCa => "Add",
+        Locale::FrCa => "Ajouter",
     }
 }
 
@@ -919,7 +919,7 @@ pub fn common_add(l: Locale) -> &'static str {
 pub fn common_cancel(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel",
-        Locale::FrCa => "Cancel",
+        Locale::FrCa => "Annuler",
     }
 }
 
@@ -928,7 +928,7 @@ pub fn common_cancel(l: Locale) -> &'static str {
 pub fn common_delete(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete",
-        Locale::FrCa => "Delete",
+        Locale::FrCa => "Supprimer",
     }
 }
 
@@ -937,7 +937,7 @@ pub fn common_delete(l: Locale) -> &'static str {
 pub fn common_edit(l: Locale) -> &'static str {
     match l {
         Locale::En => "Edit",
-        Locale::FrCa => "Edit",
+        Locale::FrCa => "Modifier",
     }
 }
 
@@ -946,7 +946,7 @@ pub fn common_edit(l: Locale) -> &'static str {
 pub fn common_off(l: Locale) -> &'static str {
     match l {
         Locale::En => "Off",
-        Locale::FrCa => "Off",
+        Locale::FrCa => "Désactivé",
     }
 }
 
@@ -955,7 +955,7 @@ pub fn common_off(l: Locale) -> &'static str {
 pub fn common_on(l: Locale) -> &'static str {
     match l {
         Locale::En => "On",
-        Locale::FrCa => "On",
+        Locale::FrCa => "Activé",
     }
 }
 
@@ -964,7 +964,7 @@ pub fn common_on(l: Locale) -> &'static str {
 pub fn common_remove(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove",
-        Locale::FrCa => "Remove",
+        Locale::FrCa => "Retirer",
     }
 }
 
@@ -973,7 +973,7 @@ pub fn common_remove(l: Locale) -> &'static str {
 pub fn common_save(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save",
-        Locale::FrCa => "Save",
+        Locale::FrCa => "Enregistrer",
     }
 }
 
@@ -982,7 +982,7 @@ pub fn common_save(l: Locale) -> &'static str {
 pub fn common_saving(l: Locale) -> &'static str {
     match l {
         Locale::En => "Saving…",
-        Locale::FrCa => "Saving…",
+        Locale::FrCa => "Sauvegarde…",
     }
 }
 
@@ -991,7 +991,7 @@ pub fn common_saving(l: Locale) -> &'static str {
 pub fn connect_hand_off_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Finish in the browser, then come back and refresh this page.",
-        Locale::FrCa => "Finish in the browser, then come back and refresh this page.",
+        Locale::FrCa => "Terminez dans le navigateur, puis revenez et actualisez cette page.",
     }
 }
 
@@ -1000,7 +1000,7 @@ pub fn connect_hand_off_note(l: Locale) -> &'static str {
 pub fn connect_not_configured(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calendar connections are not set up on this scheduler yet.",
-        Locale::FrCa => "Calendar connections are not set up on this scheduler yet.",
+        Locale::FrCa => "Les connexions de calendrier ne sont pas encore configurées pour la prise de rendez-vous.",
     }
 }
 
@@ -1009,7 +1009,7 @@ pub fn connect_not_configured(l: Locale) -> &'static str {
 pub fn connect_not_ready_yet(l: Locale) -> &'static str {
     match l {
         Locale::En => "Scheduling is still being set up for this workspace. Try again shortly.",
-        Locale::FrCa => "Scheduling is still being set up for this workspace. Try again shortly.",
+        Locale::FrCa => "La prise de rendez-vous est encore en cours de configuration pour cet espace de travail. Réessayez sous peu.",
     }
 }
 
@@ -1018,7 +1018,7 @@ pub fn connect_not_ready_yet(l: Locale) -> &'static str {
 pub fn connect_provider_named(l: Locale, provider: &str) -> String {
     match l {
         Locale::En => format!("Connect {provider}"),
-        Locale::FrCa => format!("Connect {provider}"),
+        Locale::FrCa => format!("Connecter {provider}"),
     }
 }
 
@@ -1027,7 +1027,7 @@ pub fn connect_provider_named(l: Locale, provider: &str) -> String {
 pub fn day_not_bookable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not bookable",
-        Locale::FrCa => "Not bookable",
+        Locale::FrCa => "Non réservable",
     }
 }
 
@@ -1043,10 +1043,10 @@ pub fn days_label(l: Locale, days: i64) -> String {
             }
         }
         Locale::FrCa => {
-            if days == 1 {
-                format!("{} day ahead", crate::format::integer(l, days))
+            if days == 0 || days == 1 {
+                format!("{} jour à l'avance", crate::format::integer(l, days))
             } else {
-                format!("{} days ahead", crate::format::integer(l, days))
+                format!("{} jours à l'avance", crate::format::integer(l, days))
             }
         }
     }
@@ -1057,7 +1057,7 @@ pub fn days_label(l: Locale, days: i64) -> String {
 pub fn delete_event_type_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Its booking page stops working. Existing bookings keep their times.",
-        Locale::FrCa => "Its booking page stops working. Existing bookings keep their times.",
+        Locale::FrCa => "Sa page de réservation cessera de fonctionner. Les rendez-vous existants gardent leur heure.",
     }
 }
 
@@ -1066,7 +1066,7 @@ pub fn delete_event_type_body(l: Locale) -> &'static str {
 pub fn delete_event_type_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete event type",
-        Locale::FrCa => "Delete event type",
+        Locale::FrCa => "Supprimer le type de rendez-vous",
     }
 }
 
@@ -1075,7 +1075,7 @@ pub fn delete_event_type_confirm(l: Locale) -> &'static str {
 pub fn delete_event_type_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete event type?",
-        Locale::FrCa => "Delete event type?",
+        Locale::FrCa => "Supprimer le type de rendez-vous?",
     }
 }
 
@@ -1084,7 +1084,7 @@ pub fn delete_event_type_title(l: Locale) -> &'static str {
 pub fn desk_booking_page(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking page",
-        Locale::FrCa => "Booking page",
+        Locale::FrCa => "Page de réservation",
     }
 }
 
@@ -1093,7 +1093,7 @@ pub fn desk_booking_page(l: Locale) -> &'static str {
 pub fn desk_calendar(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calendar",
-        Locale::FrCa => "Calendar",
+        Locale::FrCa => "Calendrier",
     }
 }
 
@@ -1102,7 +1102,7 @@ pub fn desk_calendar(l: Locale) -> &'static str {
 pub fn desk_event_types(l: Locale) -> &'static str {
     match l {
         Locale::En => "Event types",
-        Locale::FrCa => "Event types",
+        Locale::FrCa => "Types de rendez-vous",
     }
 }
 
@@ -1111,7 +1111,7 @@ pub fn desk_event_types(l: Locale) -> &'static str {
 pub fn desk_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your booking desk",
-        Locale::FrCa => "Your booking desk",
+        Locale::FrCa => "Votre centre de réservation",
     }
 }
 
@@ -1120,7 +1120,7 @@ pub fn desk_eyebrow(l: Locale) -> &'static str {
 pub fn desk_hours(l: Locale) -> &'static str {
     match l {
         Locale::En => "Working hours",
-        Locale::FrCa => "Working hours",
+        Locale::FrCa => "Heures de disponibilité",
     }
 }
 
@@ -1129,7 +1129,7 @@ pub fn desk_hours(l: Locale) -> &'static str {
 pub fn desk_next_booking(l: Locale) -> &'static str {
     match l {
         Locale::En => "Next booking",
-        Locale::FrCa => "Next booking",
+        Locale::FrCa => "Prochain rendez-vous",
     }
 }
 
@@ -1138,7 +1138,7 @@ pub fn desk_next_booking(l: Locale) -> &'static str {
 pub fn desk_no_bookings(l: Locale) -> &'static str {
     match l {
         Locale::En => "None yet.",
-        Locale::FrCa => "None yet.",
+        Locale::FrCa => "Aucun pour l'instant.",
     }
 }
 
@@ -1147,7 +1147,7 @@ pub fn desk_no_bookings(l: Locale) -> &'static str {
 pub fn desk_no_calendar(l: Locale) -> &'static str {
     match l {
         Locale::En => "No calendar is connected, so nothing is checked for conflicts.",
-        Locale::FrCa => "No calendar is connected, so nothing is checked for conflicts.",
+        Locale::FrCa => "Aucun calendrier n'est connecté\u{00A0}: les conflits ne sont donc pas vérifiés.",
     }
 }
 
@@ -1156,7 +1156,7 @@ pub fn desk_no_calendar(l: Locale) -> &'static str {
 pub fn desk_no_event_types(l: Locale) -> &'static str {
     match l {
         Locale::En => "No event types yet, so there is nothing to book.",
-        Locale::FrCa => "No event types yet, so there is nothing to book.",
+        Locale::FrCa => "Aucun type de rendez-vous\u{00A0}: rien à réserver pour l'instant.",
     }
 }
 
@@ -1165,7 +1165,7 @@ pub fn desk_no_event_types(l: Locale) -> &'static str {
 pub fn desk_no_host(l: Locale) -> &'static str {
     match l {
         Locale::En => "The booking address is not ready yet.",
-        Locale::FrCa => "The booking address is not ready yet.",
+        Locale::FrCa => "Le lien de réservation n'est pas encore prêt.",
     }
 }
 
@@ -1174,7 +1174,7 @@ pub fn desk_no_host(l: Locale) -> &'static str {
 pub fn desk_no_hours(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not bookable on any day yet.",
-        Locale::FrCa => "Not bookable on any day yet.",
+        Locale::FrCa => "Aucune journée réservable pour l'instant.",
     }
 }
 
@@ -1183,7 +1183,7 @@ pub fn desk_no_hours(l: Locale) -> &'static str {
 pub fn developer_apps_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No connected apps.",
-        Locale::FrCa => "No connected apps.",
+        Locale::FrCa => "Aucune application connectée.",
     }
 }
 
@@ -1192,7 +1192,7 @@ pub fn developer_apps_empty(l: Locale) -> &'static str {
 pub fn developer_apps_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connected apps",
-        Locale::FrCa => "Connected apps",
+        Locale::FrCa => "Applications connectées",
     }
 }
 
@@ -1201,7 +1201,7 @@ pub fn developer_apps_eyebrow(l: Locale) -> &'static str {
 pub fn developer_apps_subtitle(l: Locale) -> &'static str {
     match l {
         Locale::En => "Every connected app reaches the same booking data. There are no partial permissions, so revoking is the only way to narrow one.",
-        Locale::FrCa => "Every connected app reaches the same booking data. There are no partial permissions, so revoking is the only way to narrow one.",
+        Locale::FrCa => "Chaque application connectée accède aux mêmes données de rendez-vous. Sans autorisations partielles, seule la révocation permet de limiter l'accès d'une application.",
     }
 }
 
@@ -1210,7 +1210,7 @@ pub fn developer_apps_subtitle(l: Locale) -> &'static str {
 pub fn developer_deliveries(l: Locale) -> &'static str {
     match l {
         Locale::En => "Deliveries",
-        Locale::FrCa => "Deliveries",
+        Locale::FrCa => "Envois",
     }
 }
 
@@ -1219,7 +1219,7 @@ pub fn developer_deliveries(l: Locale) -> &'static str {
 pub fn developer_deliveries_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing delivered yet.",
-        Locale::FrCa => "Nothing delivered yet.",
+        Locale::FrCa => "Aucun envoi pour l'instant.",
     }
 }
 
@@ -1228,7 +1228,7 @@ pub fn developer_deliveries_empty(l: Locale) -> &'static str {
 pub fn developer_delivery_delivered(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delivered",
-        Locale::FrCa => "Delivered",
+        Locale::FrCa => "Livré",
     }
 }
 
@@ -1237,7 +1237,7 @@ pub fn developer_delivery_delivered(l: Locale) -> &'static str {
 pub fn developer_delivery_no_answer(l: Locale) -> &'static str {
     match l {
         Locale::En => "No answer",
-        Locale::FrCa => "No answer",
+        Locale::FrCa => "Sans réponse",
     }
 }
 
@@ -1246,7 +1246,7 @@ pub fn developer_delivery_no_answer(l: Locale) -> &'static str {
 pub fn developer_delivery_rejected(l: Locale, code: &str) -> String {
     match l {
         Locale::En => format!("Rejected with {code}"),
-        Locale::FrCa => format!("Rejected with {code}"),
+        Locale::FrCa => format!("Refusé avec le code {code}"),
     }
 }
 
@@ -1255,7 +1255,7 @@ pub fn developer_delivery_rejected(l: Locale, code: &str) -> String {
 pub fn developer_delivery_waiting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Waiting",
-        Locale::FrCa => "Waiting",
+        Locale::FrCa => "En attente",
     }
 }
 
@@ -1264,7 +1264,7 @@ pub fn developer_delivery_waiting(l: Locale) -> &'static str {
 pub fn developer_key_value(l: Locale, created: &str, last_used: &str) -> String {
     match l {
         Locale::En => format!("Created {created} · Last used {last_used}"),
-        Locale::FrCa => format!("Created {created} · Last used {last_used}"),
+        Locale::FrCa => format!("Créée le {created} · Dernière utilisation\u{00A0}: {last_used}"),
     }
 }
 
@@ -1273,7 +1273,7 @@ pub fn developer_key_value(l: Locale, created: &str, last_used: &str) -> String 
 pub fn developer_keys_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No API keys yet.",
-        Locale::FrCa => "No API keys yet.",
+        Locale::FrCa => "Aucune clé d'API.",
     }
 }
 
@@ -1282,7 +1282,7 @@ pub fn developer_keys_empty(l: Locale) -> &'static str {
 pub fn developer_keys_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your API keys",
-        Locale::FrCa => "Your API keys",
+        Locale::FrCa => "Vos clés d'API",
     }
 }
 
@@ -1291,7 +1291,7 @@ pub fn developer_keys_eyebrow(l: Locale) -> &'static str {
 pub fn developer_keys_subtitle(l: Locale) -> &'static str {
     match l {
         Locale::En => "A key lets your own tools and scripts reach this workspace's booking data.",
-        Locale::FrCa => "A key lets your own tools and scripts reach this workspace's booking data.",
+        Locale::FrCa => "Une clé permet à vos propres outils et scripts d'accéder aux données de rendez-vous de cet espace de travail.",
     }
 }
 
@@ -1300,7 +1300,7 @@ pub fn developer_keys_subtitle(l: Locale) -> &'static str {
 pub fn developer_mcp_auth_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Authorization header",
-        Locale::FrCa => "Authorization header",
+        Locale::FrCa => "En-tête Authorization",
     }
 }
 
@@ -1318,7 +1318,7 @@ pub fn developer_mcp_auth_value(l: Locale, key: &str) -> String {
 pub fn developer_mcp_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connect an AI assistant",
-        Locale::FrCa => "Connect an AI assistant",
+        Locale::FrCa => "Connecter un assistant IA",
     }
 }
 
@@ -1327,7 +1327,7 @@ pub fn developer_mcp_eyebrow(l: Locale) -> &'static str {
 pub fn developer_mcp_key_placeholder(l: Locale) -> &'static str {
     match l {
         Locale::En => "<your API key>",
-        Locale::FrCa => "<your API key>",
+        Locale::FrCa => "<votre clé d'API>",
     }
 }
 
@@ -1336,7 +1336,7 @@ pub fn developer_mcp_key_placeholder(l: Locale) -> &'static str {
 pub fn developer_mcp_no_host(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your booking address is not ready yet. It appears here once scheduling is set up.",
-        Locale::FrCa => "Your booking address is not ready yet. It appears here once scheduling is set up.",
+        Locale::FrCa => "Votre lien de réservation n'est pas encore prêt. Il apparaîtra ici une fois la prise de rendez-vous configurée.",
     }
 }
 
@@ -1345,7 +1345,7 @@ pub fn developer_mcp_no_host(l: Locale) -> &'static str {
 pub fn developer_mcp_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Use a key from the API keys tab. Anyone holding it can do everything on this workspace's bookings, so give each assistant its own and revoke it when you are done with it.",
-        Locale::FrCa => "Use a key from the API keys tab. Anyone holding it can do everything on this workspace's bookings, so give each assistant its own and revoke it when you are done with it.",
+        Locale::FrCa => "Utilisez une clé de l'onglet Clés d'API. Quiconque la détient peut tout faire sur les rendez-vous de cet espace de travail, alors donnez-en une propre à chaque assistant et révoquez-la quand vous avez terminé.",
     }
 }
 
@@ -1354,7 +1354,7 @@ pub fn developer_mcp_note(l: Locale) -> &'static str {
 pub fn developer_mcp_url_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "MCP URL",
-        Locale::FrCa => "MCP URL",
+        Locale::FrCa => "URL MCP",
     }
 }
 
@@ -1363,7 +1363,7 @@ pub fn developer_mcp_url_label(l: Locale) -> &'static str {
 pub fn developer_never(l: Locale) -> &'static str {
     match l {
         Locale::En => "Never",
-        Locale::FrCa => "Never",
+        Locale::FrCa => "Jamais",
     }
 }
 
@@ -1372,7 +1372,7 @@ pub fn developer_never(l: Locale) -> &'static str {
 pub fn developer_not_tried_yet(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not tried yet",
-        Locale::FrCa => "Not tried yet",
+        Locale::FrCa => "Pas encore tenté",
     }
 }
 
@@ -1381,7 +1381,7 @@ pub fn developer_not_tried_yet(l: Locale) -> &'static str {
 pub fn developer_tab_apps(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connected apps",
-        Locale::FrCa => "Connected apps",
+        Locale::FrCa => "Applications connectées",
     }
 }
 
@@ -1390,7 +1390,7 @@ pub fn developer_tab_apps(l: Locale) -> &'static str {
 pub fn developer_tab_keys(l: Locale) -> &'static str {
     match l {
         Locale::En => "API keys",
-        Locale::FrCa => "API keys",
+        Locale::FrCa => "Clés d'API",
     }
 }
 
@@ -1408,7 +1408,7 @@ pub fn developer_tab_webhooks(l: Locale) -> &'static str {
 pub fn developer_webhooks_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No webhooks yet.",
-        Locale::FrCa => "No webhooks yet.",
+        Locale::FrCa => "Aucun webhook.",
     }
 }
 
@@ -1426,7 +1426,7 @@ pub fn developer_webhooks_eyebrow(l: Locale) -> &'static str {
 pub fn developer_webhooks_subtitle(l: Locale) -> &'static str {
     match l {
         Locale::En => "Bookings already reach your District inbox and workflows; webhooks are for other systems.",
-        Locale::FrCa => "Bookings already reach your District inbox and workflows; webhooks are for other systems.",
+        Locale::FrCa => "Les rendez-vous arrivent déjà dans votre boîte de réception District et vos flux de travail; les webhooks servent aux autres systèmes.",
     }
 }
 
@@ -1435,7 +1435,7 @@ pub fn developer_webhooks_subtitle(l: Locale) -> &'static str {
 pub fn disconnect_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Disconnect",
-        Locale::FrCa => "Disconnect",
+        Locale::FrCa => "Déconnecter",
     }
 }
 
@@ -1444,7 +1444,7 @@ pub fn disconnect_action(l: Locale) -> &'static str {
 pub fn disconnect_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Bookings stop syncing to it. Existing events stay.",
-        Locale::FrCa => "Bookings stop syncing to it. Existing events stay.",
+        Locale::FrCa => "Les rendez-vous cesseront d'y être synchronisés. Les événements existants restent.",
     }
 }
 
@@ -1453,7 +1453,7 @@ pub fn disconnect_confirm(l: Locale) -> &'static str {
 pub fn disconnect_keep(l: Locale) -> &'static str {
     match l {
         Locale::En => "Keep it connected",
-        Locale::FrCa => "Keep it connected",
+        Locale::FrCa => "Le garder connecté",
     }
 }
 
@@ -1462,7 +1462,7 @@ pub fn disconnect_keep(l: Locale) -> &'static str {
 pub fn disconnect_prompt(l: Locale, account_email: &str) -> String {
     match l {
         Locale::En => format!("Disconnect {account_email}?"),
-        Locale::FrCa => format!("Disconnect {account_email}?"),
+        Locale::FrCa => format!("Déconnecter {account_email}?"),
     }
 }
 
@@ -1471,7 +1471,7 @@ pub fn disconnect_prompt(l: Locale, account_email: &str) -> String {
 pub fn disconnected_last_destination(l: Locale) -> &'static str {
     match l {
         Locale::En => "No calendar receives new bookings now. Connect one, or choose a calendar in another account.",
-        Locale::FrCa => "No calendar receives new bookings now. Connect one, or choose a calendar in another account.",
+        Locale::FrCa => "Aucun calendrier ne reçoit plus les nouveaux rendez-vous. Connectez-en un ou choisissez un calendrier d'un autre compte.",
     }
 }
 
@@ -1480,7 +1480,7 @@ pub fn disconnected_last_destination(l: Locale) -> &'static str {
 pub fn editor_active_toggle(l: Locale) -> &'static str {
     match l {
         Locale::En => "Active",
-        Locale::FrCa => "Active",
+        Locale::FrCa => "Actif",
     }
 }
 
@@ -1489,7 +1489,7 @@ pub fn editor_active_toggle(l: Locale) -> &'static str {
 pub fn editor_address(l: Locale) -> &'static str {
     match l {
         Locale::En => "Address",
-        Locale::FrCa => "Address",
+        Locale::FrCa => "Adresse",
     }
 }
 
@@ -1498,7 +1498,7 @@ pub fn editor_address(l: Locale) -> &'static str {
 pub fn editor_at_least_one_minute(l: Locale) -> &'static str {
     match l {
         Locale::En => "Has to be a whole number of minutes, at least 1.",
-        Locale::FrCa => "Has to be a whole number of minutes, at least 1.",
+        Locale::FrCa => "Doit être un nombre entier de minutes, au moins 1.",
     }
 }
 
@@ -1507,7 +1507,7 @@ pub fn editor_at_least_one_minute(l: Locale) -> &'static str {
 pub fn editor_at_least_zero(l: Locale) -> &'static str {
     match l {
         Locale::En => "Has to be a whole number, 0 or more.",
-        Locale::FrCa => "Has to be a whole number, 0 or more.",
+        Locale::FrCa => "Doit être un nombre entier, 0 ou plus.",
     }
 }
 
@@ -1516,7 +1516,7 @@ pub fn editor_at_least_zero(l: Locale) -> &'static str {
 pub fn editor_booking_page_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "The address customers use. It cannot be changed: links you have already shared point at it.",
-        Locale::FrCa => "The address customers use. It cannot be changed: links you have already shared point at it.",
+        Locale::FrCa => "L'adresse que vos clients utilisent. Elle ne peut pas être modifiée\u{00A0}: les liens déjà partagés pointent vers elle.",
     }
 }
 
@@ -1525,7 +1525,7 @@ pub fn editor_booking_page_hint(l: Locale) -> &'static str {
 pub fn editor_booking_page_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking page",
-        Locale::FrCa => "Booking page",
+        Locale::FrCa => "Page de réservation",
     }
 }
 
@@ -1534,7 +1534,7 @@ pub fn editor_booking_page_label(l: Locale) -> &'static str {
 pub fn editor_buffer_after_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Minutes kept free after a booking.",
-        Locale::FrCa => "Minutes kept free after a booking.",
+        Locale::FrCa => "Minutes gardées libres après un rendez-vous.",
     }
 }
 
@@ -1543,7 +1543,7 @@ pub fn editor_buffer_after_hint(l: Locale) -> &'static str {
 pub fn editor_buffer_after_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Buffer after",
-        Locale::FrCa => "Buffer after",
+        Locale::FrCa => "Battement après",
     }
 }
 
@@ -1552,7 +1552,7 @@ pub fn editor_buffer_after_label(l: Locale) -> &'static str {
 pub fn editor_buffer_before_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Minutes kept free before a booking.",
-        Locale::FrCa => "Minutes kept free before a booking.",
+        Locale::FrCa => "Minutes gardées libres avant un rendez-vous.",
     }
 }
 
@@ -1561,7 +1561,7 @@ pub fn editor_buffer_before_hint(l: Locale) -> &'static str {
 pub fn editor_buffer_before_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Buffer before",
-        Locale::FrCa => "Buffer before",
+        Locale::FrCa => "Battement avant",
     }
 }
 
@@ -1570,7 +1570,7 @@ pub fn editor_buffer_before_label(l: Locale) -> &'static str {
 pub fn editor_create_duration_invalid(l: Locale) -> &'static str {
     match l {
         Locale::En => "The duration has to be a whole number of minutes, at least 1.",
-        Locale::FrCa => "The duration has to be a whole number of minutes, at least 1.",
+        Locale::FrCa => "La durée doit être un nombre entier de minutes, au moins 1.",
     }
 }
 
@@ -1579,7 +1579,7 @@ pub fn editor_create_duration_invalid(l: Locale) -> &'static str {
 pub fn editor_create_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Create event type",
-        Locale::FrCa => "Create event type",
+        Locale::FrCa => "Créer un type de rendez-vous",
     }
 }
 
@@ -1588,7 +1588,7 @@ pub fn editor_create_title(l: Locale) -> &'static str {
 pub fn editor_description_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Shown on the booking page.",
-        Locale::FrCa => "Shown on the booking page.",
+        Locale::FrCa => "Affichée sur la page de réservation.",
     }
 }
 
@@ -1606,7 +1606,7 @@ pub fn editor_description_label(l: Locale) -> &'static str {
 pub fn editor_duration_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "How long the meeting runs, in minutes.",
-        Locale::FrCa => "How long the meeting runs, in minutes.",
+        Locale::FrCa => "La durée de la rencontre, en minutes.",
     }
 }
 
@@ -1615,7 +1615,7 @@ pub fn editor_duration_hint(l: Locale) -> &'static str {
 pub fn editor_duration_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Duration",
-        Locale::FrCa => "Duration",
+        Locale::FrCa => "Durée",
     }
 }
 
@@ -1624,7 +1624,7 @@ pub fn editor_duration_label(l: Locale) -> &'static str {
 pub fn editor_edit_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Edit event type",
-        Locale::FrCa => "Edit event type",
+        Locale::FrCa => "Modifier le type de rendez-vous",
     }
 }
 
@@ -1633,7 +1633,7 @@ pub fn editor_edit_title(l: Locale) -> &'static str {
 pub fn editor_interval_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "How often a booking may start. Independent of the duration.",
-        Locale::FrCa => "How often a booking may start. Independent of the duration.",
+        Locale::FrCa => "Fréquence à laquelle un rendez-vous peut commencer, indépendamment de la durée.",
     }
 }
 
@@ -1642,7 +1642,7 @@ pub fn editor_interval_hint(l: Locale) -> &'static str {
 pub fn editor_interval_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Starts every",
-        Locale::FrCa => "Starts every",
+        Locale::FrCa => "Intervalle",
     }
 }
 
@@ -1651,7 +1651,7 @@ pub fn editor_interval_label(l: Locale) -> &'static str {
 pub fn editor_listed_toggle(l: Locale) -> &'static str {
     match l {
         Locale::En => "Listed on your booking page",
-        Locale::FrCa => "Listed on your booking page",
+        Locale::FrCa => "Affiché sur votre page de réservation",
     }
 }
 
@@ -1660,7 +1660,7 @@ pub fn editor_listed_toggle(l: Locale) -> &'static str {
 pub fn editor_location_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Location",
-        Locale::FrCa => "Location",
+        Locale::FrCa => "Lieu",
     }
 }
 
@@ -1669,7 +1669,7 @@ pub fn editor_location_label(l: Locale) -> &'static str {
 pub fn editor_max_active_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Active bookings per attendee",
-        Locale::FrCa => "Active bookings per attendee",
+        Locale::FrCa => "Rendez-vous actifs par participant",
     }
 }
 
@@ -1678,7 +1678,7 @@ pub fn editor_max_active_label(l: Locale) -> &'static str {
 pub fn editor_max_future_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Bookable ahead",
-        Locale::FrCa => "Bookable ahead",
+        Locale::FrCa => "Réservable d'avance",
     }
 }
 
@@ -1687,7 +1687,7 @@ pub fn editor_max_future_label(l: Locale) -> &'static str {
 pub fn editor_meeting_link(l: Locale) -> &'static str {
     match l {
         Locale::En => "Meeting link",
-        Locale::FrCa => "Meeting link",
+        Locale::FrCa => "Lien de réunion",
     }
 }
 
@@ -1696,7 +1696,7 @@ pub fn editor_meeting_link(l: Locale) -> &'static str {
 pub fn editor_min_notice_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Minutes. How soon from now a customer may book.",
-        Locale::FrCa => "Minutes. How soon from now a customer may book.",
+        Locale::FrCa => "En minutes. Délai minimal avant qu'un client puisse réserver.",
     }
 }
 
@@ -1705,7 +1705,7 @@ pub fn editor_min_notice_hint(l: Locale) -> &'static str {
 pub fn editor_min_notice_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Minimum notice",
-        Locale::FrCa => "Minimum notice",
+        Locale::FrCa => "Préavis minimal",
     }
 }
 
@@ -1714,7 +1714,7 @@ pub fn editor_min_notice_label(l: Locale) -> &'static str {
 pub fn editor_name_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Name",
-        Locale::FrCa => "Name",
+        Locale::FrCa => "Nom",
     }
 }
 
@@ -1723,7 +1723,7 @@ pub fn editor_name_label(l: Locale) -> &'static str {
 pub fn editor_name_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Give the event type a name.",
-        Locale::FrCa => "Give the event type a name.",
+        Locale::FrCa => "Donnez un nom au type de rendez-vous.",
     }
 }
 
@@ -1732,7 +1732,7 @@ pub fn editor_name_missing(l: Locale) -> &'static str {
 pub fn editor_name_placeholder(l: Locale) -> &'static str {
     match l {
         Locale::En => "Phone consultation",
-        Locale::FrCa => "Phone consultation",
+        Locale::FrCa => "Consultation téléphonique",
     }
 }
 
@@ -1741,7 +1741,7 @@ pub fn editor_name_placeholder(l: Locale) -> &'static str {
 pub fn editor_no_limit_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "0 means no limit.",
-        Locale::FrCa => "0 means no limit.",
+        Locale::FrCa => "0 signifie aucune limite.",
     }
 }
 
@@ -1750,7 +1750,7 @@ pub fn editor_no_limit_hint(l: Locale) -> &'static str {
 pub fn editor_phone_number(l: Locale) -> &'static str {
     match l {
         Locale::En => "Phone number",
-        Locale::FrCa => "Phone number",
+        Locale::FrCa => "Numéro de téléphone",
     }
 }
 
@@ -1759,7 +1759,7 @@ pub fn editor_phone_number(l: Locale) -> &'static str {
 pub fn editor_show_taken_toggle(l: Locale) -> &'static str {
     match l {
         Locale::En => "Show taken times as taken",
-        Locale::FrCa => "Show taken times as taken",
+        Locale::FrCa => "Afficher les plages occupées comme occupées",
     }
 }
 
@@ -1768,7 +1768,7 @@ pub fn editor_show_taken_toggle(l: Locale) -> &'static str {
 pub fn email_template_cancellation(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancellation",
-        Locale::FrCa => "Cancellation",
+        Locale::FrCa => "Annulation",
     }
 }
 
@@ -1786,7 +1786,7 @@ pub fn email_template_confirmation(l: Locale) -> &'static str {
 pub fn email_template_reminder(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reminder",
-        Locale::FrCa => "Reminder",
+        Locale::FrCa => "Rappel",
     }
 }
 
@@ -1795,7 +1795,7 @@ pub fn email_template_reminder(l: Locale) -> &'static str {
 pub fn email_template_reschedule(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reschedule",
-        Locale::FrCa => "Reschedule",
+        Locale::FrCa => "Reporter",
     }
 }
 
@@ -1804,7 +1804,7 @@ pub fn email_template_reschedule(l: Locale) -> &'static str {
 pub fn event_type_details_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Details",
-        Locale::FrCa => "Details",
+        Locale::FrCa => "Détails",
     }
 }
 
@@ -1813,7 +1813,7 @@ pub fn event_type_details_eyebrow(l: Locale) -> &'static str {
 pub fn event_type_hosts_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Hosts",
-        Locale::FrCa => "Hosts",
+        Locale::FrCa => "Hôtes",
     }
 }
 
@@ -1822,7 +1822,7 @@ pub fn event_type_hosts_eyebrow(l: Locale) -> &'static str {
 pub fn event_type_no_hosts(l: Locale) -> &'static str {
     match l {
         Locale::En => "No hosts are assigned, so this event type cannot be booked.",
-        Locale::FrCa => "No hosts are assigned, so this event type cannot be booked.",
+        Locale::FrCa => "Aucun hôte n'est attribué\u{00A0}: ce type de rendez-vous n'est donc pas réservable.",
     }
 }
 
@@ -1831,7 +1831,7 @@ pub fn event_type_no_hosts(l: Locale) -> &'static str {
 pub fn event_type_no_questions(l: Locale) -> &'static str {
     match l {
         Locale::En => "This event type asks no questions.",
-        Locale::FrCa => "This event type asks no questions.",
+        Locale::FrCa => "Ce type de rendez-vous ne pose aucune question.",
     }
 }
 
@@ -1858,7 +1858,7 @@ pub fn event_type_subtitle(l: Locale, duration: &str, location: &str) -> String 
 pub fn event_types_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "An event type is a page a customer can book. Create one and its booking page goes live.",
-        Locale::FrCa => "An event type is a page a customer can book. Create one and its booking page goes live.",
+        Locale::FrCa => "Un type de rendez-vous a sa propre page où un client peut réserver. Créez-en un et sa page de réservation sera en ligne.",
     }
 }
 
@@ -1867,7 +1867,7 @@ pub fn event_types_empty_body(l: Locale) -> &'static str {
 pub fn event_types_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No event types yet",
-        Locale::FrCa => "No event types yet",
+        Locale::FrCa => "Aucun type de rendez-vous",
     }
 }
 
@@ -1876,7 +1876,7 @@ pub fn event_types_empty_title(l: Locale) -> &'static str {
 pub fn fact_buffer_after(l: Locale) -> &'static str {
     match l {
         Locale::En => "Buffer after",
-        Locale::FrCa => "Buffer after",
+        Locale::FrCa => "Battement après",
     }
 }
 
@@ -1885,7 +1885,7 @@ pub fn fact_buffer_after(l: Locale) -> &'static str {
 pub fn fact_buffer_before(l: Locale) -> &'static str {
     match l {
         Locale::En => "Buffer before",
-        Locale::FrCa => "Buffer before",
+        Locale::FrCa => "Battement avant",
     }
 }
 
@@ -1894,7 +1894,7 @@ pub fn fact_buffer_before(l: Locale) -> &'static str {
 pub fn fact_duration(l: Locale) -> &'static str {
     match l {
         Locale::En => "Duration",
-        Locale::FrCa => "Duration",
+        Locale::FrCa => "Durée",
     }
 }
 
@@ -1903,7 +1903,7 @@ pub fn fact_duration(l: Locale) -> &'static str {
 pub fn fact_horizon(l: Locale) -> &'static str {
     match l {
         Locale::En => "Bookable up to",
-        Locale::FrCa => "Bookable up to",
+        Locale::FrCa => "Réservable jusqu'à",
     }
 }
 
@@ -1912,7 +1912,7 @@ pub fn fact_horizon(l: Locale) -> &'static str {
 pub fn fact_interval(l: Locale) -> &'static str {
     match l {
         Locale::En => "Starts every",
-        Locale::FrCa => "Starts every",
+        Locale::FrCa => "Intervalle",
     }
 }
 
@@ -1921,7 +1921,7 @@ pub fn fact_interval(l: Locale) -> &'static str {
 pub fn fact_location(l: Locale) -> &'static str {
     match l {
         Locale::En => "Location",
-        Locale::FrCa => "Location",
+        Locale::FrCa => "Lieu",
     }
 }
 
@@ -1930,7 +1930,7 @@ pub fn fact_location(l: Locale) -> &'static str {
 pub fn fact_location_value(l: Locale) -> &'static str {
     match l {
         Locale::En => "Address",
-        Locale::FrCa => "Address",
+        Locale::FrCa => "Adresse",
     }
 }
 
@@ -1939,7 +1939,7 @@ pub fn fact_location_value(l: Locale) -> &'static str {
 pub fn fact_notice(l: Locale) -> &'static str {
     match l {
         Locale::En => "Minimum notice",
-        Locale::FrCa => "Minimum notice",
+        Locale::FrCa => "Préavis minimal",
     }
 }
 
@@ -1948,7 +1948,7 @@ pub fn fact_notice(l: Locale) -> &'static str {
 pub fn fact_state(l: Locale) -> &'static str {
     match l {
         Locale::En => "State",
-        Locale::FrCa => "State",
+        Locale::FrCa => "État",
     }
 }
 
@@ -1957,7 +1957,7 @@ pub fn fact_state(l: Locale) -> &'static str {
 pub fn failure_forbidden(l: Locale) -> &'static str {
     match l {
         Locale::En => "You can view this but not change it.",
-        Locale::FrCa => "You can view this but not change it.",
+        Locale::FrCa => "Vous pouvez consulter ceci, mais pas le modifier.",
     }
 }
 
@@ -1966,7 +1966,7 @@ pub fn failure_forbidden(l: Locale) -> &'static str {
 pub fn failure_not_ready(l: Locale) -> &'static str {
     match l {
         Locale::En => "Scheduling is not set up for this workspace yet.",
-        Locale::FrCa => "Scheduling is not set up for this workspace yet.",
+        Locale::FrCa => "La prise de rendez-vous n'est pas encore configurée pour cet espace de travail.",
     }
 }
 
@@ -1975,7 +1975,7 @@ pub fn failure_not_ready(l: Locale) -> &'static str {
 pub fn failure_offline(l: Locale) -> &'static str {
     match l {
         Locale::En => "You appear to be offline. Check your connection and try again.",
-        Locale::FrCa => "You appear to be offline. Check your connection and try again.",
+        Locale::FrCa => "Vous semblez être hors ligne. Vérifiez votre connexion et réessayez.",
     }
 }
 
@@ -1984,7 +1984,7 @@ pub fn failure_offline(l: Locale) -> &'static str {
 pub fn failure_slot_taken(l: Locale) -> &'static str {
     match l {
         Locale::En => "That time was just taken. Pick another.",
-        Locale::FrCa => "That time was just taken. Pick another.",
+        Locale::FrCa => "Cette heure vient d'être prise. Choisissez-en une autre.",
     }
 }
 
@@ -1993,7 +1993,7 @@ pub fn failure_slot_taken(l: Locale) -> &'static str {
 pub fn failure_stale_build(l: Locale) -> &'static str {
     match l {
         Locale::En => "This version of the app could not read that response. Please update.",
-        Locale::FrCa => "This version of the app could not read that response. Please update.",
+        Locale::FrCa => "Cette version de l'application n'a pas pu lire cette réponse. Veuillez la mettre à jour.",
     }
 }
 
@@ -2002,7 +2002,7 @@ pub fn failure_stale_build(l: Locale) -> &'static str {
 pub fn failure_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "The booking system did not answer. Try again in a minute.",
-        Locale::FrCa => "The booking system did not answer. Try again in a minute.",
+        Locale::FrCa => "Le système de réservation n'a pas répondu. Réessayez dans une minute.",
     }
 }
 
@@ -2011,7 +2011,7 @@ pub fn failure_unavailable(l: Locale) -> &'static str {
 pub fn failure_unknown(l: Locale) -> &'static str {
     match l {
         Locale::En => "That did not save. Try again.",
-        Locale::FrCa => "That did not save. Try again.",
+        Locale::FrCa => "Rien n'a été enregistré. Réessayez.",
     }
 }
 
@@ -2020,7 +2020,7 @@ pub fn failure_unknown(l: Locale) -> &'static str {
 pub fn host_archived(l: Locale, role: &str) -> String {
     match l {
         Locale::En => format!("{role} · archived"),
-        Locale::FrCa => format!("{role} · archived"),
+        Locale::FrCa => format!("{role} · compte archivé"),
     }
 }
 
@@ -2029,7 +2029,7 @@ pub fn host_archived(l: Locale, role: &str) -> String {
 pub fn host_priority_invalid(l: Locale) -> &'static str {
     match l {
         Locale::En => "A host's priority has to be a whole number, 0 or more.",
-        Locale::FrCa => "A host's priority has to be a whole number, 0 or more.",
+        Locale::FrCa => "La priorité d'un hôte doit être un nombre entier, 0 ou plus.",
     }
 }
 
@@ -2038,7 +2038,7 @@ pub fn host_priority_invalid(l: Locale) -> &'static str {
 pub fn host_role_optional(l: Locale) -> &'static str {
     match l {
         Locale::En => "Optional",
-        Locale::FrCa => "Optional",
+        Locale::FrCa => "Facultatif",
     }
 }
 
@@ -2047,7 +2047,7 @@ pub fn host_role_optional(l: Locale) -> &'static str {
 pub fn host_role_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Required",
-        Locale::FrCa => "Required",
+        Locale::FrCa => "Obligatoire",
     }
 }
 
@@ -2065,7 +2065,7 @@ pub fn host_role_rotation(l: Locale) -> &'static str {
 pub fn hosts_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No hosts yet. Add at least one or nobody can be booked.",
-        Locale::FrCa => "No hosts yet. Add at least one or nobody can be booked.",
+        Locale::FrCa => "Aucun hôte. Ajoutez-en au moins un pour permettre les rendez-vous.",
     }
 }
 
@@ -2074,7 +2074,7 @@ pub fn hosts_empty(l: Locale) -> &'static str {
 pub fn hosts_need_one(l: Locale) -> &'static str {
     match l {
         Locale::En => "An event type needs at least one host.",
-        Locale::FrCa => "An event type needs at least one host.",
+        Locale::FrCa => "Un type de rendez-vous a besoin d'au moins un hôte.",
     }
 }
 
@@ -2083,7 +2083,7 @@ pub fn hosts_need_one(l: Locale) -> &'static str {
 pub fn hosts_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Hosts",
-        Locale::FrCa => "Hosts",
+        Locale::FrCa => "Hôtes",
     }
 }
 
@@ -2092,7 +2092,7 @@ pub fn hosts_title(l: Locale) -> &'static str {
 pub fn hours_add_range(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add range",
-        Locale::FrCa => "Add range",
+        Locale::FrCa => "Ajouter une plage",
     }
 }
 
@@ -2101,7 +2101,7 @@ pub fn hours_add_range(l: Locale) -> &'static str {
 pub fn hours_copy_to_weekdays(l: Locale) -> &'static str {
     match l {
         Locale::En => "Copy to all weekdays",
-        Locale::FrCa => "Copy to all weekdays",
+        Locale::FrCa => "Copier sur tous les jours de semaine",
     }
 }
 
@@ -2110,7 +2110,7 @@ pub fn hours_copy_to_weekdays(l: Locale) -> &'static str {
 pub fn hours_date_range(l: Locale, start: &str, end: &str) -> String {
     match l {
         Locale::En => format!("{start} to {end}"),
-        Locale::FrCa => format!("{start} to {end}"),
+        Locale::FrCa => format!("{start} à {end}"),
     }
 }
 
@@ -2119,7 +2119,7 @@ pub fn hours_date_range(l: Locale, start: &str, end: &str) -> String {
 pub fn hours_none_at_all(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not bookable on any day yet.",
-        Locale::FrCa => "Not bookable on any day yet.",
+        Locale::FrCa => "Aucune journée réservable pour l'instant.",
     }
 }
 
@@ -2128,7 +2128,7 @@ pub fn hours_none_at_all(l: Locale) -> &'static str {
 pub fn hours_not_bookable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not bookable",
-        Locale::FrCa => "Not bookable",
+        Locale::FrCa => "Non réservable",
     }
 }
 
@@ -2137,7 +2137,7 @@ pub fn hours_not_bookable(l: Locale) -> &'static str {
 pub fn hours_nothing_to_save(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing to save.",
-        Locale::FrCa => "Nothing to save.",
+        Locale::FrCa => "Rien à enregistrer.",
     }
 }
 
@@ -2146,7 +2146,7 @@ pub fn hours_nothing_to_save(l: Locale) -> &'static str {
 pub fn hours_out_of_office(l: Locale) -> &'static str {
     match l {
         Locale::En => "Out of office",
-        Locale::FrCa => "Out of office",
+        Locale::FrCa => "Absence",
     }
 }
 
@@ -2155,7 +2155,7 @@ pub fn hours_out_of_office(l: Locale) -> &'static str {
 pub fn hours_range(l: Locale, start: &str, end: &str) -> String {
     match l {
         Locale::En => format!("{start} to {end}"),
-        Locale::FrCa => format!("{start} to {end}"),
+        Locale::FrCa => format!("{start} à {end}"),
     }
 }
 
@@ -2164,7 +2164,7 @@ pub fn hours_range(l: Locale, start: &str, end: &str) -> String {
 pub fn hours_saved(l: Locale) -> &'static str {
     match l {
         Locale::En => "Working hours saved",
-        Locale::FrCa => "Working hours saved",
+        Locale::FrCa => "Heures de disponibilité enregistrées",
     }
 }
 
@@ -2173,7 +2173,7 @@ pub fn hours_saved(l: Locale) -> &'static str {
 pub fn hours_time_range(l: Locale, start: &str, end: &str) -> String {
     match l {
         Locale::En => format!("{start} to {end}"),
-        Locale::FrCa => format!("{start} to {end}"),
+        Locale::FrCa => format!("{start} à {end}"),
     }
 }
 
@@ -2182,7 +2182,7 @@ pub fn hours_time_range(l: Locale, start: &str, end: &str) -> String {
 pub fn hours_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your working hours",
-        Locale::FrCa => "Your working hours",
+        Locale::FrCa => "Vos heures de disponibilité",
     }
 }
 
@@ -2191,7 +2191,7 @@ pub fn hours_title(l: Locale) -> &'static str {
 pub fn hours_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unavailable",
-        Locale::FrCa => "Unavailable",
+        Locale::FrCa => "Indisponible",
     }
 }
 
@@ -2200,7 +2200,7 @@ pub fn hours_unavailable(l: Locale) -> &'static str {
 pub fn key_copied(l: Locale) -> &'static str {
     match l {
         Locale::En => "Copied",
-        Locale::FrCa => "Copied",
+        Locale::FrCa => "Copié",
     }
 }
 
@@ -2209,7 +2209,7 @@ pub fn key_copied(l: Locale) -> &'static str {
 pub fn key_copy_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Copy key",
-        Locale::FrCa => "Copy key",
+        Locale::FrCa => "Copier la clé",
     }
 }
 
@@ -2218,7 +2218,7 @@ pub fn key_copy_action(l: Locale) -> &'static str {
 pub fn key_create(l: Locale) -> &'static str {
     match l {
         Locale::En => "Create key",
-        Locale::FrCa => "Create key",
+        Locale::FrCa => "Créer une clé",
     }
 }
 
@@ -2227,7 +2227,7 @@ pub fn key_create(l: Locale) -> &'static str {
 pub fn key_creating(l: Locale) -> &'static str {
     match l {
         Locale::En => "Creating…",
-        Locale::FrCa => "Creating…",
+        Locale::FrCa => "Création en cours…",
     }
 }
 
@@ -2236,7 +2236,7 @@ pub fn key_creating(l: Locale) -> &'static str {
 pub fn key_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Done",
-        Locale::FrCa => "Done",
+        Locale::FrCa => "C'est fait",
     }
 }
 
@@ -2245,7 +2245,7 @@ pub fn key_done(l: Locale) -> &'static str {
 pub fn key_name_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "What will use this key. You will see it in the list and nowhere else.",
-        Locale::FrCa => "What will use this key. You will see it in the list and nowhere else.",
+        Locale::FrCa => "Indiquez ce qui utilisera cette clé. Ce nom n'apparaît que dans la liste.",
     }
 }
 
@@ -2254,7 +2254,7 @@ pub fn key_name_hint(l: Locale) -> &'static str {
 pub fn key_name_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Name",
-        Locale::FrCa => "Name",
+        Locale::FrCa => "Nom",
     }
 }
 
@@ -2263,7 +2263,7 @@ pub fn key_name_label(l: Locale) -> &'static str {
 pub fn key_name_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Give the key a name.",
-        Locale::FrCa => "Give the key a name.",
+        Locale::FrCa => "Donnez un nom à la clé.",
     }
 }
 
@@ -2272,7 +2272,7 @@ pub fn key_name_missing(l: Locale) -> &'static str {
 pub fn key_reveal_title(l: Locale, name: &str) -> String {
     match l {
         Locale::En => format!("Your key for {name}"),
-        Locale::FrCa => format!("Your key for {name}"),
+        Locale::FrCa => format!("Votre clé pour {name}"),
     }
 }
 
@@ -2281,7 +2281,7 @@ pub fn key_reveal_title(l: Locale, name: &str) -> String {
 pub fn key_reveal_warning(l: Locale) -> &'static str {
     match l {
         Locale::En => "Copy it now. It is not shown again.",
-        Locale::FrCa => "Copy it now. It is not shown again.",
+        Locale::FrCa => "Copiez-le maintenant. Il ne sera plus affiché.",
     }
 }
 
@@ -2290,7 +2290,7 @@ pub fn key_reveal_warning(l: Locale) -> &'static str {
 pub fn key_revoke_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Revoke key",
-        Locale::FrCa => "Revoke key",
+        Locale::FrCa => "Révoquer la clé",
     }
 }
 
@@ -2299,7 +2299,7 @@ pub fn key_revoke_action(l: Locale) -> &'static str {
 pub fn key_revoke_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Anything using it stops working now.",
-        Locale::FrCa => "Anything using it stops working now.",
+        Locale::FrCa => "Tout ce qui l'utilise cessera de fonctionner immédiatement.",
     }
 }
 
@@ -2308,7 +2308,7 @@ pub fn key_revoke_confirm(l: Locale) -> &'static str {
 pub fn key_revoke_prompt(l: Locale, name: &str) -> String {
     match l {
         Locale::En => format!("Revoke {name}?"),
-        Locale::FrCa => format!("Revoke {name}?"),
+        Locale::FrCa => format!("Révoquer {name}?"),
     }
 }
 
@@ -2317,7 +2317,7 @@ pub fn key_revoke_prompt(l: Locale, name: &str) -> String {
 pub fn key_sheet_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Create key",
-        Locale::FrCa => "Create key",
+        Locale::FrCa => "Créer une clé",
     }
 }
 
@@ -2326,7 +2326,7 @@ pub fn key_sheet_title(l: Locale) -> &'static str {
 pub fn location_built_in_video(l: Locale) -> &'static str {
     match l {
         Locale::En => "Built-in video",
-        Locale::FrCa => "Built-in video",
+        Locale::FrCa => "Vidéo intégrée",
     }
 }
 
@@ -2335,7 +2335,7 @@ pub fn location_built_in_video(l: Locale) -> &'static str {
 pub fn location_custom_video(l: Locale) -> &'static str {
     match l {
         Locale::En => "Video link",
-        Locale::FrCa => "Video link",
+        Locale::FrCa => "Lien vidéo",
     }
 }
 
@@ -2353,7 +2353,7 @@ pub fn location_google_meet(l: Locale) -> &'static str {
 pub fn location_in_person(l: Locale) -> &'static str {
     match l {
         Locale::En => "In person",
-        Locale::FrCa => "In person",
+        Locale::FrCa => "En personne",
     }
 }
 
@@ -2362,7 +2362,7 @@ pub fn location_in_person(l: Locale) -> &'static str {
 pub fn location_link(l: Locale) -> &'static str {
     match l {
         Locale::En => "Link",
-        Locale::FrCa => "Link",
+        Locale::FrCa => "Lien",
     }
 }
 
@@ -2371,7 +2371,7 @@ pub fn location_link(l: Locale) -> &'static str {
 pub fn location_not_set(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not set",
-        Locale::FrCa => "Not set",
+        Locale::FrCa => "Non défini",
     }
 }
 
@@ -2380,7 +2380,7 @@ pub fn location_not_set(l: Locale) -> &'static str {
 pub fn location_phone(l: Locale) -> &'static str {
     match l {
         Locale::En => "Phone",
-        Locale::FrCa => "Phone",
+        Locale::FrCa => "Téléphone",
     }
 }
 
@@ -2405,10 +2405,10 @@ pub fn member_count(l: Locale, count: i64) -> String {
             }
         }
         Locale::FrCa => {
-            if count == 1 {
-                format!("{} member", crate::format::integer(l, count))
+            if count == 0 || count == 1 {
+                format!("{} membre", crate::format::integer(l, count))
             } else {
-                format!("{} members", crate::format::integer(l, count))
+                format!("{} membres", crate::format::integer(l, count))
             }
         }
     }
@@ -2428,7 +2428,7 @@ pub fn member_subtitle_with_role(l: Locale, email: &str, role: &str) -> String {
 pub fn members_degraded(l: Locale) -> &'static str {
     match l {
         Locale::En => "The workspace's members could not be read, so roles are not shown.",
-        Locale::FrCa => "The workspace's members could not be read, so roles are not shown.",
+        Locale::FrCa => "Impossible de lire les membres de l'espace de travail; les rôles ne sont pas affichés.",
     }
 }
 
@@ -2437,7 +2437,7 @@ pub fn members_degraded(l: Locale) -> &'static str {
 pub fn members_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nobody else is in this workspace yet.",
-        Locale::FrCa => "Nobody else is in this workspace yet.",
+        Locale::FrCa => "Personne d'autre ne fait partie de cet espace de travail.",
     }
 }
 
@@ -2446,7 +2446,7 @@ pub fn members_empty(l: Locale) -> &'static str {
 pub fn members_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Members",
-        Locale::FrCa => "Members",
+        Locale::FrCa => "Membres",
     }
 }
 
@@ -2464,7 +2464,7 @@ pub fn next_booking_line(l: Locale, when: &str, who: &str, event_type: &str) -> 
 pub fn not_public(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not public",
-        Locale::FrCa => "Not public",
+        Locale::FrCa => "Non public",
     }
 }
 
@@ -2473,7 +2473,7 @@ pub fn not_public(l: Locale) -> &'static str {
 pub fn override_add_button(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add override",
-        Locale::FrCa => "Add override",
+        Locale::FrCa => "Ajouter l'exception",
     }
 }
 
@@ -2482,7 +2482,7 @@ pub fn override_add_button(l: Locale) -> &'static str {
 pub fn override_add_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add an override",
-        Locale::FrCa => "Add an override",
+        Locale::FrCa => "Ajouter une exception",
     }
 }
 
@@ -2491,7 +2491,7 @@ pub fn override_add_title(l: Locale) -> &'static str {
 pub fn override_added(l: Locale) -> &'static str {
     match l {
         Locale::En => "Override added",
-        Locale::FrCa => "Override added",
+        Locale::FrCa => "Exception ajoutée",
     }
 }
 
@@ -2500,7 +2500,7 @@ pub fn override_added(l: Locale) -> &'static str {
 pub fn override_custom_hours(l: Locale) -> &'static str {
     match l {
         Locale::En => "Custom hours",
-        Locale::FrCa => "Custom hours",
+        Locale::FrCa => "Heures personnalisées",
     }
 }
 
@@ -2518,7 +2518,7 @@ pub fn override_date_label(l: Locale) -> &'static str {
 pub fn override_date_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Pick a date.",
-        Locale::FrCa => "Pick a date.",
+        Locale::FrCa => "Choisissez une date.",
     }
 }
 
@@ -2527,7 +2527,7 @@ pub fn override_date_missing(l: Locale) -> &'static str {
 pub fn override_delete_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete override",
-        Locale::FrCa => "Delete override",
+        Locale::FrCa => "Supprimer l'exception",
     }
 }
 
@@ -2536,7 +2536,7 @@ pub fn override_delete_confirm(l: Locale) -> &'static str {
 pub fn override_delete_group_body(l: Locale, days: i64) -> String {
     match l {
         Locale::En => format!("All {} days go back to your weekly hours.", crate::format::integer(l, days)),
-        Locale::FrCa => format!("All {} days go back to your weekly hours.", crate::format::integer(l, days)),
+        Locale::FrCa => format!("Ces {} journées reprennent vos heures hebdomadaires.", crate::format::integer(l, days)),
     }
 }
 
@@ -2545,7 +2545,7 @@ pub fn override_delete_group_body(l: Locale, days: i64) -> String {
 pub fn override_delete_single_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "That day goes back to your weekly hours.",
-        Locale::FrCa => "That day goes back to your weekly hours.",
+        Locale::FrCa => "Cette journée reprend vos heures hebdomadaires.",
     }
 }
 
@@ -2554,7 +2554,7 @@ pub fn override_delete_single_body(l: Locale) -> &'static str {
 pub fn override_delete_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete this override?",
-        Locale::FrCa => "Delete this override?",
+        Locale::FrCa => "Supprimer cette exception?",
     }
 }
 
@@ -2563,7 +2563,7 @@ pub fn override_delete_title(l: Locale) -> &'static str {
 pub fn override_deleted(l: Locale) -> &'static str {
     match l {
         Locale::En => "Override deleted",
-        Locale::FrCa => "Override deleted",
+        Locale::FrCa => "Exception supprimée",
     }
 }
 
@@ -2572,7 +2572,7 @@ pub fn override_deleted(l: Locale) -> &'static str {
 pub fn override_end_before_start(l: Locale) -> &'static str {
     match l {
         Locale::En => "The last day has to be on or after the first.",
-        Locale::FrCa => "The last day has to be on or after the first.",
+        Locale::FrCa => "Le dernier jour doit être identique ou postérieur au premier.",
     }
 }
 
@@ -2581,7 +2581,7 @@ pub fn override_end_before_start(l: Locale) -> &'static str {
 pub fn override_first_day_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "First day",
-        Locale::FrCa => "First day",
+        Locale::FrCa => "Premier jour",
     }
 }
 
@@ -2590,7 +2590,7 @@ pub fn override_first_day_label(l: Locale) -> &'static str {
 pub fn override_hours_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Hours that day",
-        Locale::FrCa => "Hours that day",
+        Locale::FrCa => "Heures ce jour-là",
     }
 }
 
@@ -2599,7 +2599,7 @@ pub fn override_hours_label(l: Locale) -> &'static str {
 pub fn override_kind_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "What happens that day",
-        Locale::FrCa => "What happens that day",
+        Locale::FrCa => "Ce qui se passe ce jour-là",
     }
 }
 
@@ -2608,7 +2608,7 @@ pub fn override_kind_label(l: Locale) -> &'static str {
 pub fn override_last_day_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Leave blank for a single day.",
-        Locale::FrCa => "Leave blank for a single day.",
+        Locale::FrCa => "Laissez vide pour une seule journée.",
     }
 }
 
@@ -2617,7 +2617,7 @@ pub fn override_last_day_hint(l: Locale) -> &'static str {
 pub fn override_last_day_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Last day",
-        Locale::FrCa => "Last day",
+        Locale::FrCa => "Dernier jour",
     }
 }
 
@@ -2626,7 +2626,7 @@ pub fn override_last_day_label(l: Locale) -> &'static str {
 pub fn override_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unavailable",
-        Locale::FrCa => "Unavailable",
+        Locale::FrCa => "Indisponible",
     }
 }
 
@@ -2635,7 +2635,7 @@ pub fn override_unavailable(l: Locale) -> &'static str {
 pub fn overrides_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No overrides ahead.",
-        Locale::FrCa => "No overrides ahead.",
+        Locale::FrCa => "Aucune exception à venir.",
     }
 }
 
@@ -2644,7 +2644,7 @@ pub fn overrides_empty(l: Locale) -> &'static str {
 pub fn overrides_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Date overrides",
-        Locale::FrCa => "Date overrides",
+        Locale::FrCa => "Exceptions",
     }
 }
 
@@ -2653,7 +2653,7 @@ pub fn overrides_eyebrow(l: Locale) -> &'static str {
 pub fn overrides_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Days you are away, or working different hours from usual.",
-        Locale::FrCa => "Days you are away, or working different hours from usual.",
+        Locale::FrCa => "Les journées d'absence, ou celles où vous travaillez à des heures différentes.",
     }
 }
 
@@ -2662,7 +2662,7 @@ pub fn overrides_hint(l: Locale) -> &'static str {
 pub fn overrides_subtitle(l: Locale) -> &'static str {
     match l {
         Locale::En => "Days you are away, or working different hours from usual.",
-        Locale::FrCa => "Days you are away, or working different hours from usual.",
+        Locale::FrCa => "Les journées d'absence, ou celles où vous travaillez à des heures différentes.",
     }
 }
 
@@ -2671,7 +2671,7 @@ pub fn overrides_subtitle(l: Locale) -> &'static str {
 pub fn overrides_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Date overrides",
-        Locale::FrCa => "Date overrides",
+        Locale::FrCa => "Exceptions",
     }
 }
 
@@ -2680,7 +2680,7 @@ pub fn overrides_title(l: Locale) -> &'static str {
 pub fn overrides_write_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No overrides ahead. Add one for a day off or different hours.",
-        Locale::FrCa => "No overrides ahead. Add one for a day off or different hours.",
+        Locale::FrCa => "Aucune exception à venir. Ajoutez-en une pour un congé ou des heures différentes.",
     }
 }
 
@@ -2689,7 +2689,7 @@ pub fn overrides_write_empty(l: Locale) -> &'static str {
 pub fn overview_booking(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking",
-        Locale::FrCa => "Booking",
+        Locale::FrCa => "Rendez-vous",
     }
 }
 
@@ -2698,7 +2698,7 @@ pub fn overview_booking(l: Locale) -> &'static str {
 pub fn overview_days_range(l: Locale, first: &str, last: &str) -> String {
     match l {
         Locale::En => format!("{first} to {last}"),
-        Locale::FrCa => format!("{first} to {last}"),
+        Locale::FrCa => format!("{first} au {last}"),
     }
 }
 
@@ -2714,10 +2714,10 @@ pub fn overview_event_types(l: Locale, count: i64, active: &str) -> String {
             }
         }
         Locale::FrCa => {
-            if count == 1 {
-                format!("{} event type, {active} active", crate::format::integer(l, count))
+            if count == 0 || count == 1 {
+                format!("{} type de rendez-vous, actifs\u{00A0}: {active}", crate::format::integer(l, count))
             } else {
-                format!("{} event types, {active} active", crate::format::integer(l, count))
+                format!("{} types de rendez-vous, actifs\u{00A0}: {active}", crate::format::integer(l, count))
             }
         }
     }
@@ -2737,7 +2737,7 @@ pub fn overview_hours_clause(l: Locale, days: &str, hours: &str) -> String {
 pub fn overview_someone(l: Locale) -> &'static str {
     match l {
         Locale::En => "Someone",
-        Locale::FrCa => "Someone",
+        Locale::FrCa => "Quelqu'un",
     }
 }
 
@@ -2746,7 +2746,7 @@ pub fn overview_someone(l: Locale) -> &'static str {
 pub fn overview_today(l: Locale, clock: &str) -> String {
     match l {
         Locale::En => format!("Today {clock}"),
-        Locale::FrCa => format!("Today {clock}"),
+        Locale::FrCa => format!("Aujourd'hui à {clock}"),
     }
 }
 
@@ -2755,7 +2755,7 @@ pub fn overview_today(l: Locale, clock: &str) -> String {
 pub fn overview_tomorrow(l: Locale, clock: &str) -> String {
     match l {
         Locale::En => format!("Tomorrow {clock}"),
-        Locale::FrCa => format!("Tomorrow {clock}"),
+        Locale::FrCa => format!("Demain à {clock}"),
     }
 }
 
@@ -2764,7 +2764,7 @@ pub fn overview_tomorrow(l: Locale, clock: &str) -> String {
 pub fn overview_window(l: Locale, start: &str, end: &str) -> String {
     match l {
         Locale::En => format!("{start} to {end}"),
-        Locale::FrCa => format!("{start} to {end}"),
+        Locale::FrCa => format!("{start} à {end}"),
     }
 }
 
@@ -2773,7 +2773,7 @@ pub fn overview_window(l: Locale, start: &str, end: &str) -> String {
 pub fn priority_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Priority",
-        Locale::FrCa => "Priority",
+        Locale::FrCa => "Priorité",
     }
 }
 
@@ -2782,7 +2782,7 @@ pub fn priority_label(l: Locale) -> &'static str {
 pub fn question_add_option(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add option",
-        Locale::FrCa => "Add option",
+        Locale::FrCa => "Ajouter l'option",
     }
 }
 
@@ -2791,7 +2791,7 @@ pub fn question_add_option(l: Locale) -> &'static str {
 pub fn question_add_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add question",
-        Locale::FrCa => "Add question",
+        Locale::FrCa => "Ajouter une question",
     }
 }
 
@@ -2800,7 +2800,7 @@ pub fn question_add_title(l: Locale) -> &'static str {
 pub fn question_added(l: Locale) -> &'static str {
     match l {
         Locale::En => "Question added",
-        Locale::FrCa => "Question added",
+        Locale::FrCa => "Question ajoutée",
     }
 }
 
@@ -2809,7 +2809,7 @@ pub fn question_added(l: Locale) -> &'static str {
 pub fn question_delete_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Customers stop being asked it. Answers already given stay on their bookings.",
-        Locale::FrCa => "Customers stop being asked it. Answers already given stay on their bookings.",
+        Locale::FrCa => "Cette question ne sera plus posée aux clients. Les réponses déjà données restent dans leurs rendez-vous.",
     }
 }
 
@@ -2818,7 +2818,7 @@ pub fn question_delete_body(l: Locale) -> &'static str {
 pub fn question_delete_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete question",
-        Locale::FrCa => "Delete question",
+        Locale::FrCa => "Supprimer la question",
     }
 }
 
@@ -2827,7 +2827,7 @@ pub fn question_delete_confirm(l: Locale) -> &'static str {
 pub fn question_delete_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete question?",
-        Locale::FrCa => "Delete question?",
+        Locale::FrCa => "Supprimer la question?",
     }
 }
 
@@ -2836,7 +2836,7 @@ pub fn question_delete_title(l: Locale) -> &'static str {
 pub fn question_deleted(l: Locale) -> &'static str {
     match l {
         Locale::En => "Question deleted",
-        Locale::FrCa => "Question deleted",
+        Locale::FrCa => "Question supprimée",
     }
 }
 
@@ -2845,7 +2845,7 @@ pub fn question_deleted(l: Locale) -> &'static str {
 pub fn question_edit_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Edit question",
-        Locale::FrCa => "Edit question",
+        Locale::FrCa => "Modifier la question",
     }
 }
 
@@ -2854,7 +2854,7 @@ pub fn question_edit_title(l: Locale) -> &'static str {
 pub fn question_label_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Label",
-        Locale::FrCa => "Label",
+        Locale::FrCa => "Libellé",
     }
 }
 
@@ -2863,7 +2863,7 @@ pub fn question_label_label(l: Locale) -> &'static str {
 pub fn question_label_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Give the question a label.",
-        Locale::FrCa => "Give the question a label.",
+        Locale::FrCa => "Donnez un libellé à la question.",
     }
 }
 
@@ -2872,7 +2872,7 @@ pub fn question_label_missing(l: Locale) -> &'static str {
 pub fn question_label_placeholder(l: Locale) -> &'static str {
     match l {
         Locale::En => "What would you like to talk about?",
-        Locale::FrCa => "What would you like to talk about?",
+        Locale::FrCa => "De quoi aimeriez-vous discuter?",
     }
 }
 
@@ -2881,7 +2881,7 @@ pub fn question_label_placeholder(l: Locale) -> &'static str {
 pub fn question_needs_option(l: Locale) -> &'static str {
     match l {
         Locale::En => "A Select question needs at least one option.",
-        Locale::FrCa => "A Select question needs at least one option.",
+        Locale::FrCa => "Une question à liste déroulante a besoin d'au moins une option.",
     }
 }
 
@@ -2890,7 +2890,7 @@ pub fn question_needs_option(l: Locale) -> &'static str {
 pub fn question_option_placeholder(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add an option",
-        Locale::FrCa => "Add an option",
+        Locale::FrCa => "Ajouter une option",
     }
 }
 
@@ -2899,7 +2899,7 @@ pub fn question_option_placeholder(l: Locale) -> &'static str {
 pub fn question_options_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "What the customer can choose from.",
-        Locale::FrCa => "What the customer can choose from.",
+        Locale::FrCa => "Ce que le client peut choisir.",
     }
 }
 
@@ -2917,7 +2917,7 @@ pub fn question_options_label(l: Locale) -> &'static str {
 pub fn question_position_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Lower numbers are asked first.",
-        Locale::FrCa => "Lower numbers are asked first.",
+        Locale::FrCa => "Les questions aux numéros les plus bas sont posées en premier.",
     }
 }
 
@@ -2926,7 +2926,7 @@ pub fn question_position_hint(l: Locale) -> &'static str {
 pub fn question_position_invalid(l: Locale) -> &'static str {
     match l {
         Locale::En => "Position has to be a whole number, 0 or more.",
-        Locale::FrCa => "Position has to be a whole number, 0 or more.",
+        Locale::FrCa => "La position doit être un nombre entier, 0 ou plus.",
     }
 }
 
@@ -2944,7 +2944,7 @@ pub fn question_position_label(l: Locale) -> &'static str {
 pub fn question_required(l: Locale, type_: &str) -> String {
     match l {
         Locale::En => format!("{type_} · required"),
-        Locale::FrCa => format!("{type_} · required"),
+        Locale::FrCa => format!("{type_} · obligatoire"),
     }
 }
 
@@ -2953,7 +2953,7 @@ pub fn question_required(l: Locale, type_: &str) -> String {
 pub fn question_required_toggle(l: Locale) -> &'static str {
     match l {
         Locale::En => "Required",
-        Locale::FrCa => "Required",
+        Locale::FrCa => "Obligatoire",
     }
 }
 
@@ -2962,7 +2962,7 @@ pub fn question_required_toggle(l: Locale) -> &'static str {
 pub fn question_save_button(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save question",
-        Locale::FrCa => "Save question",
+        Locale::FrCa => "Enregistrer la question",
     }
 }
 
@@ -2971,7 +2971,7 @@ pub fn question_save_button(l: Locale) -> &'static str {
 pub fn question_saved(l: Locale) -> &'static str {
     match l {
         Locale::En => "Question saved",
-        Locale::FrCa => "Question saved",
+        Locale::FrCa => "Question enregistrée",
     }
 }
 
@@ -2980,7 +2980,7 @@ pub fn question_saved(l: Locale) -> &'static str {
 pub fn question_type_checkbox(l: Locale) -> &'static str {
     match l {
         Locale::En => "Checkbox",
-        Locale::FrCa => "Checkbox",
+        Locale::FrCa => "Case à cocher",
     }
 }
 
@@ -2998,7 +2998,7 @@ pub fn question_type_label(l: Locale) -> &'static str {
 pub fn question_type_select(l: Locale) -> &'static str {
     match l {
         Locale::En => "Select",
-        Locale::FrCa => "Select",
+        Locale::FrCa => "Liste déroulante",
     }
 }
 
@@ -3007,7 +3007,7 @@ pub fn question_type_select(l: Locale) -> &'static str {
 pub fn question_type_text(l: Locale) -> &'static str {
     match l {
         Locale::En => "Text",
-        Locale::FrCa => "Text",
+        Locale::FrCa => "Texte",
     }
 }
 
@@ -3016,7 +3016,7 @@ pub fn question_type_text(l: Locale) -> &'static str {
 pub fn questions_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No questions yet. Customers give their name, email and nothing else.",
-        Locale::FrCa => "No questions yet. Customers give their name, email and nothing else.",
+        Locale::FrCa => "Aucune question. Les clients donnent leur nom et leur courriel, rien de plus.",
     }
 }
 
@@ -3034,7 +3034,7 @@ pub fn questions_title(l: Locale) -> &'static str {
 pub fn range_to(l: Locale) -> &'static str {
     match l {
         Locale::En => "to",
-        Locale::FrCa => "to",
+        Locale::FrCa => "à",
     }
 }
 
@@ -3043,7 +3043,7 @@ pub fn range_to(l: Locale) -> &'static str {
 pub fn reassign_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The booking keeps its time. Both hosts get an email about the change.",
-        Locale::FrCa => "The booking keeps its time. Both hosts get an email about the change.",
+        Locale::FrCa => "Le rendez-vous garde son heure. Les deux hôtes recevront un courriel à ce sujet.",
     }
 }
 
@@ -3052,7 +3052,7 @@ pub fn reassign_body(l: Locale) -> &'static str {
 pub fn reassign_cancel(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel",
-        Locale::FrCa => "Cancel",
+        Locale::FrCa => "Annuler",
     }
 }
 
@@ -3061,7 +3061,7 @@ pub fn reassign_cancel(l: Locale) -> &'static str {
 pub fn reassign_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Change host",
-        Locale::FrCa => "Change host",
+        Locale::FrCa => "Changer d'hôte",
     }
 }
 
@@ -3070,7 +3070,7 @@ pub fn reassign_confirm(l: Locale) -> &'static str {
 pub fn reassign_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Host changed",
-        Locale::FrCa => "Host changed",
+        Locale::FrCa => "Hôte changé",
     }
 }
 
@@ -3079,7 +3079,7 @@ pub fn reassign_done(l: Locale) -> &'static str {
 pub fn reassign_host_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "New host",
-        Locale::FrCa => "New host",
+        Locale::FrCa => "Nouvel hôte",
     }
 }
 
@@ -3088,7 +3088,7 @@ pub fn reassign_host_label(l: Locale) -> &'static str {
 pub fn reassign_no_hosts(l: Locale) -> &'static str {
     match l {
         Locale::En => "No other host can take it.",
-        Locale::FrCa => "No other host can take it.",
+        Locale::FrCa => "Aucun autre hôte ne peut le prendre.",
     }
 }
 
@@ -3097,7 +3097,7 @@ pub fn reassign_no_hosts(l: Locale) -> &'static str {
 pub fn reassign_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reassign this booking?",
-        Locale::FrCa => "Reassign this booking?",
+        Locale::FrCa => "Réattribuer ce rendez-vous?",
     }
 }
 
@@ -3106,7 +3106,7 @@ pub fn reassign_title(l: Locale) -> &'static str {
 pub fn reschedule_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "The attendee gets an email with the new time.",
-        Locale::FrCa => "The attendee gets an email with the new time.",
+        Locale::FrCa => "Le participant recevra un courriel avec la nouvelle heure.",
     }
 }
 
@@ -3115,7 +3115,7 @@ pub fn reschedule_body(l: Locale) -> &'static str {
 pub fn reschedule_cancel(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel",
-        Locale::FrCa => "Cancel",
+        Locale::FrCa => "Annuler",
     }
 }
 
@@ -3124,7 +3124,7 @@ pub fn reschedule_cancel(l: Locale) -> &'static str {
 pub fn reschedule_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Move booking",
-        Locale::FrCa => "Move booking",
+        Locale::FrCa => "Reporter le rendez-vous",
     }
 }
 
@@ -3133,7 +3133,7 @@ pub fn reschedule_confirm(l: Locale) -> &'static str {
 pub fn reschedule_day_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Day",
-        Locale::FrCa => "Day",
+        Locale::FrCa => "Jour",
     }
 }
 
@@ -3142,7 +3142,7 @@ pub fn reschedule_day_label(l: Locale) -> &'static str {
 pub fn reschedule_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking moved",
-        Locale::FrCa => "Booking moved",
+        Locale::FrCa => "Rendez-vous reporté",
     }
 }
 
@@ -3151,7 +3151,7 @@ pub fn reschedule_done(l: Locale) -> &'static str {
 pub fn reschedule_done_at(l: Locale, when: &str) -> String {
     match l {
         Locale::En => format!("Booking moved to {when}"),
-        Locale::FrCa => format!("Booking moved to {when}"),
+        Locale::FrCa => format!("Rendez-vous reporté\u{00A0}: {when}"),
     }
 }
 
@@ -3160,7 +3160,7 @@ pub fn reschedule_done_at(l: Locale, when: &str) -> String {
 pub fn reschedule_no_slots(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing free that day. Try another.",
-        Locale::FrCa => "Nothing free that day. Try another.",
+        Locale::FrCa => "Aucune disponibilité ce jour-là. Essayez une autre date.",
     }
 }
 
@@ -3169,7 +3169,7 @@ pub fn reschedule_no_slots(l: Locale) -> &'static str {
 pub fn reschedule_pick_time(l: Locale) -> &'static str {
     match l {
         Locale::En => "Pick a time.",
-        Locale::FrCa => "Pick a time.",
+        Locale::FrCa => "Choisissez une heure.",
     }
 }
 
@@ -3178,7 +3178,7 @@ pub fn reschedule_pick_time(l: Locale) -> &'static str {
 pub fn reschedule_time_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Time",
-        Locale::FrCa => "Time",
+        Locale::FrCa => "Heure",
     }
 }
 
@@ -3187,7 +3187,7 @@ pub fn reschedule_time_label(l: Locale) -> &'static str {
 pub fn reschedule_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reschedule this booking?",
-        Locale::FrCa => "Reschedule this booking?",
+        Locale::FrCa => "Reporter ce rendez-vous?",
     }
 }
 
@@ -3196,7 +3196,7 @@ pub fn reschedule_title(l: Locale) -> &'static str {
 pub fn rotation_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Which host the next booking goes to.",
-        Locale::FrCa => "Which host the next booking goes to.",
+        Locale::FrCa => "L'hôte qui recevra le prochain rendez-vous.",
     }
 }
 
@@ -3214,7 +3214,7 @@ pub fn rotation_label(l: Locale) -> &'static str {
 pub fn rotation_strategy_even(l: Locale) -> &'static str {
     match l {
         Locale::En => "Even",
-        Locale::FrCa => "Even",
+        Locale::FrCa => "Équilibrée",
     }
 }
 
@@ -3223,7 +3223,7 @@ pub fn rotation_strategy_even(l: Locale) -> &'static str {
 pub fn rotation_strategy_priority(l: Locale) -> &'static str {
     match l {
         Locale::En => "Priority",
-        Locale::FrCa => "Priority",
+        Locale::FrCa => "Priorité",
     }
 }
 
@@ -3232,7 +3232,7 @@ pub fn rotation_strategy_priority(l: Locale) -> &'static str {
 pub fn rotation_strategy_soonest(l: Locale) -> &'static str {
     match l {
         Locale::En => "Soonest",
-        Locale::FrCa => "Soonest",
+        Locale::FrCa => "Au plus tôt",
     }
 }
 
@@ -3241,7 +3241,7 @@ pub fn rotation_strategy_soonest(l: Locale) -> &'static str {
 pub fn routing_mode_collective(l: Locale) -> &'static str {
     match l {
         Locale::En => "Collective",
-        Locale::FrCa => "Collective",
+        Locale::FrCa => "Collectif",
     }
 }
 
@@ -3250,7 +3250,7 @@ pub fn routing_mode_collective(l: Locale) -> &'static str {
 pub fn routing_mode_fixed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Fixed",
-        Locale::FrCa => "Fixed",
+        Locale::FrCa => "Fixe",
     }
 }
 
@@ -3259,7 +3259,7 @@ pub fn routing_mode_fixed(l: Locale) -> &'static str {
 pub fn routing_mode_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Routing",
-        Locale::FrCa => "Routing",
+        Locale::FrCa => "Acheminement",
     }
 }
 
@@ -3268,7 +3268,7 @@ pub fn routing_mode_label(l: Locale) -> &'static str {
 pub fn routing_mode_round_robin(l: Locale) -> &'static str {
     match l {
         Locale::En => "Round robin",
-        Locale::FrCa => "Round robin",
+        Locale::FrCa => "À tour de rôle",
     }
 }
 
@@ -3277,7 +3277,7 @@ pub fn routing_mode_round_robin(l: Locale) -> &'static str {
 pub fn section_subtitle_bookings(l: Locale) -> &'static str {
     match l {
         Locale::En => "Every booking in this workspace, upcoming and past",
-        Locale::FrCa => "Every booking in this workspace, upcoming and past",
+        Locale::FrCa => "Tous les rendez-vous de cet espace de travail, à venir et passés",
     }
 }
 
@@ -3286,7 +3286,7 @@ pub fn section_subtitle_bookings(l: Locale) -> &'static str {
 pub fn section_subtitle_calendar(l: Locale) -> &'static str {
     match l {
         Locale::En => "The accounts bookings are written to and checked against",
-        Locale::FrCa => "The accounts bookings are written to and checked against",
+        Locale::FrCa => "Les comptes où les rendez-vous sont inscrits et où les conflits sont vérifiés",
     }
 }
 
@@ -3295,7 +3295,7 @@ pub fn section_subtitle_calendar(l: Locale) -> &'static str {
 pub fn section_subtitle_developer(l: Locale) -> &'static str {
     match l {
         Locale::En => "API keys, connected apps and webhooks",
-        Locale::FrCa => "API keys, connected apps and webhooks",
+        Locale::FrCa => "Clés d'API, applications connectées et webhooks",
     }
 }
 
@@ -3304,7 +3304,7 @@ pub fn section_subtitle_developer(l: Locale) -> &'static str {
 pub fn section_subtitle_event_types(l: Locale) -> &'static str {
     match l {
         Locale::En => "The pages a customer can book, and how long each one runs",
-        Locale::FrCa => "The pages a customer can book, and how long each one runs",
+        Locale::FrCa => "Les pages où un client peut réserver, et la durée de chaque rendez-vous",
     }
 }
 
@@ -3313,7 +3313,7 @@ pub fn section_subtitle_event_types(l: Locale) -> &'static str {
 pub fn section_subtitle_hours(l: Locale) -> &'static str {
     match l {
         Locale::En => "The weekly hours you are bookable, and the dates you are not",
-        Locale::FrCa => "The weekly hours you are bookable, and the dates you are not",
+        Locale::FrCa => "Vos heures réservables de la semaine, et les dates où vous n'êtes pas réservable",
     }
 }
 
@@ -3322,7 +3322,7 @@ pub fn section_subtitle_hours(l: Locale) -> &'static str {
 pub fn section_subtitle_overview(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your booking desk, and what is coming up",
-        Locale::FrCa => "Your booking desk, and what is coming up",
+        Locale::FrCa => "Votre centre de réservation et ce qui est à venir",
     }
 }
 
@@ -3331,7 +3331,7 @@ pub fn section_subtitle_overview(l: Locale) -> &'static str {
 pub fn section_subtitle_settings(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your booking page, your booking assistant, and how the scheduler treats you",
-        Locale::FrCa => "Your booking page, your booking assistant, and how the scheduler treats you",
+        Locale::FrCa => "Votre page et votre assistante de réservation, et vos préférences",
     }
 }
 
@@ -3340,7 +3340,7 @@ pub fn section_subtitle_settings(l: Locale) -> &'static str {
 pub fn section_subtitle_team(l: Locale) -> &'static str {
     match l {
         Locale::En => "The hosts who can be booked, and the teams they route through",
-        Locale::FrCa => "The hosts who can be booked, and the teams they route through",
+        Locale::FrCa => "Les hôtes réservables et leurs équipes d'acheminement",
     }
 }
 
@@ -3349,7 +3349,7 @@ pub fn section_subtitle_team(l: Locale) -> &'static str {
 pub fn section_title_booking(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking",
-        Locale::FrCa => "Booking",
+        Locale::FrCa => "Rendez-vous",
     }
 }
 
@@ -3358,7 +3358,7 @@ pub fn section_title_booking(l: Locale) -> &'static str {
 pub fn section_title_bookings(l: Locale) -> &'static str {
     match l {
         Locale::En => "Bookings",
-        Locale::FrCa => "Bookings",
+        Locale::FrCa => "Rendez-vous",
     }
 }
 
@@ -3367,7 +3367,7 @@ pub fn section_title_bookings(l: Locale) -> &'static str {
 pub fn section_title_calendar(l: Locale) -> &'static str {
     match l {
         Locale::En => "Calendar",
-        Locale::FrCa => "Calendar",
+        Locale::FrCa => "Calendrier",
     }
 }
 
@@ -3376,7 +3376,7 @@ pub fn section_title_calendar(l: Locale) -> &'static str {
 pub fn section_title_developer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Developer",
-        Locale::FrCa => "Developer",
+        Locale::FrCa => "Développeur",
     }
 }
 
@@ -3385,7 +3385,7 @@ pub fn section_title_developer(l: Locale) -> &'static str {
 pub fn section_title_event_type(l: Locale) -> &'static str {
     match l {
         Locale::En => "Event type",
-        Locale::FrCa => "Event type",
+        Locale::FrCa => "Type de rendez-vous",
     }
 }
 
@@ -3394,7 +3394,7 @@ pub fn section_title_event_type(l: Locale) -> &'static str {
 pub fn section_title_event_types(l: Locale) -> &'static str {
     match l {
         Locale::En => "Event types",
-        Locale::FrCa => "Event types",
+        Locale::FrCa => "Types de rendez-vous",
     }
 }
 
@@ -3403,7 +3403,7 @@ pub fn section_title_event_types(l: Locale) -> &'static str {
 pub fn section_title_hours(l: Locale) -> &'static str {
     match l {
         Locale::En => "Working hours",
-        Locale::FrCa => "Working hours",
+        Locale::FrCa => "Heures de disponibilité",
     }
 }
 
@@ -3412,7 +3412,7 @@ pub fn section_title_hours(l: Locale) -> &'static str {
 pub fn section_title_overview(l: Locale) -> &'static str {
     match l {
         Locale::En => "Overview",
-        Locale::FrCa => "Overview",
+        Locale::FrCa => "Vue d'ensemble",
     }
 }
 
@@ -3421,7 +3421,7 @@ pub fn section_title_overview(l: Locale) -> &'static str {
 pub fn section_title_settings(l: Locale) -> &'static str {
     match l {
         Locale::En => "Settings",
-        Locale::FrCa => "Settings",
+        Locale::FrCa => "Paramètres",
     }
 }
 
@@ -3430,7 +3430,7 @@ pub fn section_title_settings(l: Locale) -> &'static str {
 pub fn section_title_team(l: Locale) -> &'static str {
     match l {
         Locale::En => "Team",
-        Locale::FrCa => "Team",
+        Locale::FrCa => "Équipe",
     }
 }
 
@@ -3439,7 +3439,7 @@ pub fn section_title_team(l: Locale) -> &'static str {
 pub fn sections_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Manage",
-        Locale::FrCa => "Manage",
+        Locale::FrCa => "Gérer",
     }
 }
 
@@ -3448,7 +3448,7 @@ pub fn sections_eyebrow(l: Locale) -> &'static str {
 pub fn settings_assistant_enabled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking assistant",
-        Locale::FrCa => "Booking assistant",
+        Locale::FrCa => "Assistante de réservation",
     }
 }
 
@@ -3457,7 +3457,7 @@ pub fn settings_assistant_enabled(l: Locale) -> &'static str {
 pub fn settings_assistant_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "The assistant that answers questions on your booking page.",
-        Locale::FrCa => "The assistant that answers questions on your booking page.",
+        Locale::FrCa => "L'assistante qui répond aux questions sur votre page de réservation.",
     }
 }
 
@@ -3466,7 +3466,7 @@ pub fn settings_assistant_hint(l: Locale) -> &'static str {
 pub fn settings_assistant_instructions(l: Locale) -> &'static str {
     match l {
         Locale::En => "Extra instructions",
-        Locale::FrCa => "Extra instructions",
+        Locale::FrCa => "Instructions supplémentaires",
     }
 }
 
@@ -3475,7 +3475,7 @@ pub fn settings_assistant_instructions(l: Locale) -> &'static str {
 pub fn settings_assistant_instructions_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Extra instructions for the booking assistant. Up to 4000 characters.",
-        Locale::FrCa => "Extra instructions for the booking assistant. Up to 4000 characters.",
+        Locale::FrCa => "Instructions supplémentaires pour l'assistante de réservation. Jusqu'à 4000 caractères.",
     }
 }
 
@@ -3484,7 +3484,7 @@ pub fn settings_assistant_instructions_hint(l: Locale) -> &'static str {
 pub fn settings_assistant_instructions_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Extra instructions for the booking assistant",
-        Locale::FrCa => "Extra instructions for the booking assistant",
+        Locale::FrCa => "Instructions supplémentaires pour l'assistante de réservation",
     }
 }
 
@@ -3493,7 +3493,7 @@ pub fn settings_assistant_instructions_label(l: Locale) -> &'static str {
 pub fn settings_assistant_instructions_placeholder(l: Locale) -> &'static str {
     match l {
         Locale::En => "We are closed on public holidays. Always ask which location the customer means.",
-        Locale::FrCa => "We are closed on public holidays. Always ask which location the customer means.",
+        Locale::FrCa => "Nous sommes fermés les jours fériés. Demandez toujours de quelle succursale le client parle.",
     }
 }
 
@@ -3502,7 +3502,7 @@ pub fn settings_assistant_instructions_placeholder(l: Locale) -> &'static str {
 pub fn settings_assistant_instructions_too_long(l: Locale) -> &'static str {
     match l {
         Locale::En => "That is longer than 4000 characters.",
-        Locale::FrCa => "That is longer than 4000 characters.",
+        Locale::FrCa => "Ce texte dépasse 4000 caractères.",
     }
 }
 
@@ -3511,7 +3511,7 @@ pub fn settings_assistant_instructions_too_long(l: Locale) -> &'static str {
 pub fn settings_assistant_toggle(l: Locale) -> &'static str {
     match l {
         Locale::En => "Turn the booking assistant on",
-        Locale::FrCa => "Turn the booking assistant on",
+        Locale::FrCa => "Activer l'assistante de réservation",
     }
 }
 
@@ -3520,7 +3520,7 @@ pub fn settings_assistant_toggle(l: Locale) -> &'static str {
 pub fn settings_automation_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking assistant saved",
-        Locale::FrCa => "Booking assistant saved",
+        Locale::FrCa => "Assistante de réservation enregistrée",
     }
 }
 
@@ -3529,7 +3529,7 @@ pub fn settings_automation_done(l: Locale) -> &'static str {
 pub fn settings_automation_save(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save booking assistant",
-        Locale::FrCa => "Save booking assistant",
+        Locale::FrCa => "Enregistrer l'assistante",
     }
 }
 
@@ -3538,7 +3538,7 @@ pub fn settings_automation_save(l: Locale) -> &'static str {
 pub fn settings_automation_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking assistant",
-        Locale::FrCa => "Booking assistant",
+        Locale::FrCa => "Assistante de réservation",
     }
 }
 
@@ -3547,7 +3547,7 @@ pub fn settings_automation_title(l: Locale) -> &'static str {
 pub fn settings_avatar_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Profile picture",
-        Locale::FrCa => "Profile picture",
+        Locale::FrCa => "Photo de profil",
     }
 }
 
@@ -3556,7 +3556,7 @@ pub fn settings_avatar_label(l: Locale) -> &'static str {
 pub fn settings_banner_opacity_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Banner opacity",
-        Locale::FrCa => "Banner opacity",
+        Locale::FrCa => "Opacité de la bannière",
     }
 }
 
@@ -3565,7 +3565,7 @@ pub fn settings_banner_opacity_label(l: Locale) -> &'static str {
 pub fn settings_branding_banner(l: Locale) -> &'static str {
     match l {
         Locale::En => "Banner",
-        Locale::FrCa => "Banner",
+        Locale::FrCa => "Bannière",
     }
 }
 
@@ -3574,7 +3574,7 @@ pub fn settings_branding_banner(l: Locale) -> &'static str {
 pub fn settings_branding_business_name(l: Locale) -> &'static str {
     match l {
         Locale::En => "Business name",
-        Locale::FrCa => "Business name",
+        Locale::FrCa => "Nom de l'entreprise",
     }
 }
 
@@ -3583,7 +3583,7 @@ pub fn settings_branding_business_name(l: Locale) -> &'static str {
 pub fn settings_branding_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking page saved",
-        Locale::FrCa => "Booking page saved",
+        Locale::FrCa => "Page de réservation enregistrée",
     }
 }
 
@@ -3592,7 +3592,7 @@ pub fn settings_branding_done(l: Locale) -> &'static str {
 pub fn settings_branding_locale(l: Locale) -> &'static str {
     match l {
         Locale::En => "Page language",
-        Locale::FrCa => "Page language",
+        Locale::FrCa => "Langue de la page",
     }
 }
 
@@ -3610,7 +3610,7 @@ pub fn settings_branding_logo(l: Locale) -> &'static str {
 pub fn settings_branding_privacy(l: Locale) -> &'static str {
     match l {
         Locale::En => "Privacy policy link",
-        Locale::FrCa => "Privacy policy link",
+        Locale::FrCa => "Lien vers la politique de confidentialité",
     }
 }
 
@@ -3619,7 +3619,7 @@ pub fn settings_branding_privacy(l: Locale) -> &'static str {
 pub fn settings_branding_save(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save booking page",
-        Locale::FrCa => "Save booking page",
+        Locale::FrCa => "Enregistrer la page",
     }
 }
 
@@ -3628,7 +3628,7 @@ pub fn settings_branding_save(l: Locale) -> &'static str {
 pub fn settings_branding_terms(l: Locale) -> &'static str {
     match l {
         Locale::En => "Terms link",
-        Locale::FrCa => "Terms link",
+        Locale::FrCa => "Lien vers les conditions",
     }
 }
 
@@ -3637,7 +3637,7 @@ pub fn settings_branding_terms(l: Locale) -> &'static str {
 pub fn settings_branding_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking page",
-        Locale::FrCa => "Booking page",
+        Locale::FrCa => "Page de réservation",
     }
 }
 
@@ -3646,7 +3646,7 @@ pub fn settings_branding_title(l: Locale) -> &'static str {
 pub fn settings_business_name_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Shown at the top of every booking page.",
-        Locale::FrCa => "Shown at the top of every booking page.",
+        Locale::FrCa => "Affiché en haut de chaque page de réservation.",
     }
 }
 
@@ -3655,7 +3655,7 @@ pub fn settings_business_name_hint(l: Locale) -> &'static str {
 pub fn settings_business_name_too_long(l: Locale) -> &'static str {
     match l {
         Locale::En => "That name is longer than 200 characters.",
-        Locale::FrCa => "That name is longer than 200 characters.",
+        Locale::FrCa => "Ce nom dépasse 200 caractères.",
     }
 }
 
@@ -3682,7 +3682,7 @@ pub fn settings_date_format_mdy(l: Locale) -> &'static str {
 pub fn settings_date_format_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose how dates are written.",
-        Locale::FrCa => "Choose how dates are written.",
+        Locale::FrCa => "Choisissez la façon d'écrire les dates.",
     }
 }
 
@@ -3700,7 +3700,7 @@ pub fn settings_date_format_ymd(l: Locale) -> &'static str {
 pub fn settings_fallback_locale_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "The language a visitor gets when their browser asks for one we do not have.",
-        Locale::FrCa => "The language a visitor gets when their browser asks for one we do not have.",
+        Locale::FrCa => "La langue affichée à un visiteur dont la langue demandée n'est pas prise en charge.",
     }
 }
 
@@ -3709,7 +3709,7 @@ pub fn settings_fallback_locale_hint(l: Locale) -> &'static str {
 pub fn settings_fallback_locale_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose the language the booking page falls back to.",
-        Locale::FrCa => "Choose the language the booking page falls back to.",
+        Locale::FrCa => "Choisissez la langue de repli de la page de réservation.",
     }
 }
 
@@ -3718,7 +3718,7 @@ pub fn settings_fallback_locale_required(l: Locale) -> &'static str {
 pub fn settings_image_choose(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose image",
-        Locale::FrCa => "Choose image",
+        Locale::FrCa => "Choisir une image",
     }
 }
 
@@ -3727,7 +3727,7 @@ pub fn settings_image_choose(l: Locale) -> &'static str {
 pub fn settings_image_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "JPEG, PNG, GIF or WebP, up to 5 MB.",
-        Locale::FrCa => "JPEG, PNG, GIF or WebP, up to 5 MB.",
+        Locale::FrCa => "JPEG, PNG, GIF ou WebP, jusqu'à 5 Mo.",
     }
 }
 
@@ -3736,7 +3736,7 @@ pub fn settings_image_hint(l: Locale) -> &'static str {
 pub fn settings_image_immediate(l: Locale) -> &'static str {
     match l {
         Locale::En => "Images save as soon as you choose or remove them.",
-        Locale::FrCa => "Images save as soon as you choose or remove them.",
+        Locale::FrCa => "Le choix ou le retrait d'une image s'applique immédiatement.",
     }
 }
 
@@ -3745,7 +3745,7 @@ pub fn settings_image_immediate(l: Locale) -> &'static str {
 pub fn settings_image_remove(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove",
-        Locale::FrCa => "Remove",
+        Locale::FrCa => "Retirer",
     }
 }
 
@@ -3754,7 +3754,7 @@ pub fn settings_image_remove(l: Locale) -> &'static str {
 pub fn settings_image_removed(l: Locale, label: &str) -> String {
     match l {
         Locale::En => format!("{label} removed"),
-        Locale::FrCa => format!("{label} removed"),
+        Locale::FrCa => format!("Image retirée\u{00A0}: {label}"),
     }
 }
 
@@ -3763,7 +3763,7 @@ pub fn settings_image_removed(l: Locale, label: &str) -> String {
 pub fn settings_image_too_large(l: Locale) -> &'static str {
     match l {
         Locale::En => "That image is larger than 5 MB. Choose a smaller one.",
-        Locale::FrCa => "That image is larger than 5 MB. Choose a smaller one.",
+        Locale::FrCa => "Cette image dépasse 5 Mo. Choisissez-en une plus petite.",
     }
 }
 
@@ -3772,7 +3772,7 @@ pub fn settings_image_too_large(l: Locale) -> &'static str {
 pub fn settings_image_unreadable(l: Locale) -> &'static str {
     match l {
         Locale::En => "That image could not be read. Choose another.",
-        Locale::FrCa => "That image could not be read. Choose another.",
+        Locale::FrCa => "Cette image n'a pas pu être lue. Choisissez-en une autre.",
     }
 }
 
@@ -3781,7 +3781,7 @@ pub fn settings_image_unreadable(l: Locale) -> &'static str {
 pub fn settings_image_uploaded(l: Locale, label: &str) -> String {
     match l {
         Locale::En => format!("{label} uploaded"),
-        Locale::FrCa => format!("{label} uploaded"),
+        Locale::FrCa => format!("Image téléversée\u{00A0}: {label}"),
     }
 }
 
@@ -3790,7 +3790,7 @@ pub fn settings_image_uploaded(l: Locale, label: &str) -> String {
 pub fn settings_image_wrong_type(l: Locale) -> &'static str {
     match l {
         Locale::En => "That file is not an image we can use. Choose a JPEG, PNG, GIF or WebP.",
-        Locale::FrCa => "That file is not an image we can use. Choose a JPEG, PNG, GIF or WebP.",
+        Locale::FrCa => "Ce fichier n'est pas une image utilisable. Choisissez un fichier JPEG, PNG, GIF ou WebP.",
     }
 }
 
@@ -3799,7 +3799,7 @@ pub fn settings_image_wrong_type(l: Locale) -> &'static str {
 pub fn settings_legal_url_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Linked in the footer of the booking page. Leave it empty for none.",
-        Locale::FrCa => "Linked in the footer of the booking page. Leave it empty for none.",
+        Locale::FrCa => "Affiché en lien au pied de la page de réservation. Laissez vide pour n'en afficher aucun.",
     }
 }
 
@@ -3808,7 +3808,7 @@ pub fn settings_legal_url_hint(l: Locale) -> &'static str {
 pub fn settings_locale_not_set(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not set",
-        Locale::FrCa => "Not set",
+        Locale::FrCa => "Non défini",
     }
 }
 
@@ -3817,7 +3817,7 @@ pub fn settings_locale_not_set(l: Locale) -> &'static str {
 pub fn settings_logo_height_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "In pixels, between 16 and 64.",
-        Locale::FrCa => "In pixels, between 16 and 64.",
+        Locale::FrCa => "En pixels, entre 16 et 64.",
     }
 }
 
@@ -3826,7 +3826,7 @@ pub fn settings_logo_height_hint(l: Locale) -> &'static str {
 pub fn settings_logo_height_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Logo height",
-        Locale::FrCa => "Logo height",
+        Locale::FrCa => "Hauteur du logo",
     }
 }
 
@@ -3835,7 +3835,7 @@ pub fn settings_logo_height_label(l: Locale) -> &'static str {
 pub fn settings_logo_opacity_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Logo opacity",
-        Locale::FrCa => "Logo opacity",
+        Locale::FrCa => "Opacité du logo",
     }
 }
 
@@ -3844,7 +3844,7 @@ pub fn settings_logo_opacity_label(l: Locale) -> &'static str {
 pub fn settings_name_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Give your name.",
-        Locale::FrCa => "Give your name.",
+        Locale::FrCa => "Indiquez votre nom.",
     }
 }
 
@@ -3853,7 +3853,7 @@ pub fn settings_name_required(l: Locale) -> &'static str {
 pub fn settings_name_too_long(l: Locale) -> &'static str {
     match l {
         Locale::En => "That name is longer than 200 characters.",
-        Locale::FrCa => "That name is longer than 200 characters.",
+        Locale::FrCa => "Ce nom dépasse 200 caractères.",
     }
 }
 
@@ -3862,7 +3862,7 @@ pub fn settings_name_too_long(l: Locale) -> &'static str {
 pub fn settings_not_set(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not set",
-        Locale::FrCa => "Not set",
+        Locale::FrCa => "Non défini",
     }
 }
 
@@ -3871,7 +3871,7 @@ pub fn settings_not_set(l: Locale) -> &'static str {
 pub fn settings_notifications_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Notifications saved",
-        Locale::FrCa => "Notifications saved",
+        Locale::FrCa => "Notifications enregistrées",
     }
 }
 
@@ -3880,7 +3880,7 @@ pub fn settings_notifications_done(l: Locale) -> &'static str {
 pub fn settings_notifications_save(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save notifications",
-        Locale::FrCa => "Save notifications",
+        Locale::FrCa => "Enregistrer les notifications",
     }
 }
 
@@ -3889,7 +3889,7 @@ pub fn settings_notifications_save(l: Locale) -> &'static str {
 pub fn settings_notifications_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Email notifications",
-        Locale::FrCa => "Email notifications",
+        Locale::FrCa => "Notifications par courriel",
     }
 }
 
@@ -3898,7 +3898,7 @@ pub fn settings_notifications_title(l: Locale) -> &'static str {
 pub fn settings_notify_attendee_description(l: Locale) -> &'static str {
     match l {
         Locale::En => "When you are the one being booked into somebody else's meeting.",
-        Locale::FrCa => "When you are the one being booked into somebody else's meeting.",
+        Locale::FrCa => "Quand c'est vous qu'on inscrit à la rencontre de quelqu'un d'autre.",
     }
 }
 
@@ -3907,7 +3907,7 @@ pub fn settings_notify_attendee_description(l: Locale) -> &'static str {
 pub fn settings_notify_attendee_heading(l: Locale) -> &'static str {
     match l {
         Locale::En => "As an attendee",
-        Locale::FrCa => "As an attendee",
+        Locale::FrCa => "Comme participant",
     }
 }
 
@@ -3916,7 +3916,7 @@ pub fn settings_notify_attendee_heading(l: Locale) -> &'static str {
 pub fn settings_notify_cancellation(l: Locale) -> &'static str {
     match l {
         Locale::En => "A booking is cancelled",
-        Locale::FrCa => "A booking is cancelled",
+        Locale::FrCa => "Un rendez-vous est annulé",
     }
 }
 
@@ -3925,7 +3925,7 @@ pub fn settings_notify_cancellation(l: Locale) -> &'static str {
 pub fn settings_notify_confirmation(l: Locale) -> &'static str {
     match l {
         Locale::En => "A booking is confirmed",
-        Locale::FrCa => "A booking is confirmed",
+        Locale::FrCa => "Un rendez-vous est confirmé",
     }
 }
 
@@ -3934,7 +3934,7 @@ pub fn settings_notify_confirmation(l: Locale) -> &'static str {
 pub fn settings_notify_host_booking(l: Locale) -> &'static str {
     match l {
         Locale::En => "Somebody books you",
-        Locale::FrCa => "Somebody books you",
+        Locale::FrCa => "Quelqu'un prend rendez-vous",
     }
 }
 
@@ -3943,7 +3943,7 @@ pub fn settings_notify_host_booking(l: Locale) -> &'static str {
 pub fn settings_notify_host_cancel(l: Locale) -> &'static str {
     match l {
         Locale::En => "Somebody cancels",
-        Locale::FrCa => "Somebody cancels",
+        Locale::FrCa => "Quelqu'un annule",
     }
 }
 
@@ -3952,7 +3952,7 @@ pub fn settings_notify_host_cancel(l: Locale) -> &'static str {
 pub fn settings_notify_host_description(l: Locale) -> &'static str {
     match l {
         Locale::En => "When somebody books one of your event types.",
-        Locale::FrCa => "When somebody books one of your event types.",
+        Locale::FrCa => "Quand quelqu'un réserve un de vos types de rendez-vous.",
     }
 }
 
@@ -3961,7 +3961,7 @@ pub fn settings_notify_host_description(l: Locale) -> &'static str {
 pub fn settings_notify_host_heading(l: Locale) -> &'static str {
     match l {
         Locale::En => "As a host",
-        Locale::FrCa => "As a host",
+        Locale::FrCa => "Comme hôte",
     }
 }
 
@@ -3970,7 +3970,7 @@ pub fn settings_notify_host_heading(l: Locale) -> &'static str {
 pub fn settings_notify_host_reschedule(l: Locale) -> &'static str {
     match l {
         Locale::En => "Somebody moves their booking",
-        Locale::FrCa => "Somebody moves their booking",
+        Locale::FrCa => "Quelqu'un reporte son rendez-vous",
     }
 }
 
@@ -3979,7 +3979,7 @@ pub fn settings_notify_host_reschedule(l: Locale) -> &'static str {
 pub fn settings_notify_reminder(l: Locale) -> &'static str {
     match l {
         Locale::En => "A booking is coming up",
-        Locale::FrCa => "A booking is coming up",
+        Locale::FrCa => "Un rendez-vous approche",
     }
 }
 
@@ -3988,7 +3988,7 @@ pub fn settings_notify_reminder(l: Locale) -> &'static str {
 pub fn settings_notify_reschedule(l: Locale) -> &'static str {
     match l {
         Locale::En => "A booking is moved",
-        Locale::FrCa => "A booking is moved",
+        Locale::FrCa => "Un rendez-vous est reporté",
     }
 }
 
@@ -3997,7 +3997,7 @@ pub fn settings_notify_reschedule(l: Locale) -> &'static str {
 pub fn settings_opacity_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "A percentage, between 20 and 100.",
-        Locale::FrCa => "A percentage, between 20 and 100.",
+        Locale::FrCa => "Un pourcentage, entre 20 et 100.",
     }
 }
 
@@ -4006,7 +4006,7 @@ pub fn settings_opacity_hint(l: Locale) -> &'static str {
 pub fn settings_profile_date_format(l: Locale) -> &'static str {
     match l {
         Locale::En => "Date format",
-        Locale::FrCa => "Date format",
+        Locale::FrCa => "Format de date",
     }
 }
 
@@ -4015,7 +4015,7 @@ pub fn settings_profile_date_format(l: Locale) -> &'static str {
 pub fn settings_profile_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Profile saved",
-        Locale::FrCa => "Profile saved",
+        Locale::FrCa => "Profil enregistré",
     }
 }
 
@@ -4024,7 +4024,7 @@ pub fn settings_profile_done(l: Locale) -> &'static str {
 pub fn settings_profile_name(l: Locale) -> &'static str {
     match l {
         Locale::En => "Name",
-        Locale::FrCa => "Name",
+        Locale::FrCa => "Nom",
     }
 }
 
@@ -4033,7 +4033,7 @@ pub fn settings_profile_name(l: Locale) -> &'static str {
 pub fn settings_profile_save(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save profile",
-        Locale::FrCa => "Save profile",
+        Locale::FrCa => "Enregistrer le profil",
     }
 }
 
@@ -4042,7 +4042,7 @@ pub fn settings_profile_save(l: Locale) -> &'static str {
 pub fn settings_profile_time_format(l: Locale) -> &'static str {
     match l {
         Locale::En => "Time format",
-        Locale::FrCa => "Time format",
+        Locale::FrCa => "Format de l'heure",
     }
 }
 
@@ -4051,7 +4051,7 @@ pub fn settings_profile_time_format(l: Locale) -> &'static str {
 pub fn settings_profile_timezone(l: Locale) -> &'static str {
     match l {
         Locale::En => "Timezone",
-        Locale::FrCa => "Timezone",
+        Locale::FrCa => "Fuseau horaire",
     }
 }
 
@@ -4060,7 +4060,7 @@ pub fn settings_profile_timezone(l: Locale) -> &'static str {
 pub fn settings_profile_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your scheduler profile",
-        Locale::FrCa => "Your scheduler profile",
+        Locale::FrCa => "Votre profil de réservation",
     }
 }
 
@@ -4069,7 +4069,7 @@ pub fn settings_profile_title(l: Locale) -> &'static str {
 pub fn settings_profile_week_start(l: Locale) -> &'static str {
     match l {
         Locale::En => "Week starts on",
-        Locale::FrCa => "Week starts on",
+        Locale::FrCa => "La semaine commence le",
     }
 }
 
@@ -4078,7 +4078,7 @@ pub fn settings_profile_week_start(l: Locale) -> &'static str {
 pub fn settings_set(l: Locale) -> &'static str {
     match l {
         Locale::En => "Set",
-        Locale::FrCa => "Set",
+        Locale::FrCa => "Défini",
     }
 }
 
@@ -4087,7 +4087,7 @@ pub fn settings_set(l: Locale) -> &'static str {
 pub fn settings_tab_assistant(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking assistant",
-        Locale::FrCa => "Booking assistant",
+        Locale::FrCa => "Assistante de réservation",
     }
 }
 
@@ -4096,7 +4096,7 @@ pub fn settings_tab_assistant(l: Locale) -> &'static str {
 pub fn settings_tab_booking_page(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booking page",
-        Locale::FrCa => "Booking page",
+        Locale::FrCa => "Page de réservation",
     }
 }
 
@@ -4105,7 +4105,7 @@ pub fn settings_tab_booking_page(l: Locale) -> &'static str {
 pub fn settings_tab_notifications(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your notifications",
-        Locale::FrCa => "Your notifications",
+        Locale::FrCa => "Vos notifications",
     }
 }
 
@@ -4114,7 +4114,7 @@ pub fn settings_tab_notifications(l: Locale) -> &'static str {
 pub fn settings_tab_profile(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your profile",
-        Locale::FrCa => "Your profile",
+        Locale::FrCa => "Votre profil",
     }
 }
 
@@ -4123,7 +4123,7 @@ pub fn settings_tab_profile(l: Locale) -> &'static str {
 pub fn settings_time_format_12h(l: Locale) -> &'static str {
     match l {
         Locale::En => "12-hour (2:30 pm)",
-        Locale::FrCa => "12-hour (2:30 pm)",
+        Locale::FrCa => "12 heures (2:30 pm)",
     }
 }
 
@@ -4132,7 +4132,7 @@ pub fn settings_time_format_12h(l: Locale) -> &'static str {
 pub fn settings_time_format_24h(l: Locale) -> &'static str {
     match l {
         Locale::En => "24-hour (14:30)",
-        Locale::FrCa => "24-hour (14:30)",
+        Locale::FrCa => "24 heures (14:30)",
     }
 }
 
@@ -4141,7 +4141,7 @@ pub fn settings_time_format_24h(l: Locale) -> &'static str {
 pub fn settings_time_format_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose 12-hour or 24-hour.",
-        Locale::FrCa => "Choose 12-hour or 24-hour.",
+        Locale::FrCa => "Choisissez le format 12 heures ou 24 heures.",
     }
 }
 
@@ -4150,7 +4150,7 @@ pub fn settings_time_format_required(l: Locale) -> &'static str {
 pub fn settings_timezone_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose your timezone.",
-        Locale::FrCa => "Choose your timezone.",
+        Locale::FrCa => "Choisissez votre fuseau horaire.",
     }
 }
 
@@ -4159,7 +4159,7 @@ pub fn settings_timezone_required(l: Locale) -> &'static str {
 pub fn settings_url_not_absolute(l: Locale) -> &'static str {
     match l {
         Locale::En => "Give the full address, starting with https://",
-        Locale::FrCa => "Give the full address, starting with https://",
+        Locale::FrCa => "Indiquez l'adresse complète, qui commence par https://",
     }
 }
 
@@ -4168,7 +4168,7 @@ pub fn settings_url_not_absolute(l: Locale) -> &'static str {
 pub fn settings_url_too_long(l: Locale) -> &'static str {
     match l {
         Locale::En => "That link is too long.",
-        Locale::FrCa => "That link is too long.",
+        Locale::FrCa => "Ce lien est trop long.",
     }
 }
 
@@ -4177,7 +4177,7 @@ pub fn settings_url_too_long(l: Locale) -> &'static str {
 pub fn settings_week_start_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose the day your week starts on.",
-        Locale::FrCa => "Choose the day your week starts on.",
+        Locale::FrCa => "Choisissez le jour où commence votre semaine.",
     }
 }
 
@@ -4186,7 +4186,7 @@ pub fn settings_week_start_required(l: Locale) -> &'static str {
 pub fn settings_whole_number_between(l: Locale, min: i64, max: i64) -> String {
     match l {
         Locale::En => format!("Give a whole number between {} and {}.", crate::format::integer(l, min), crate::format::integer(l, max)),
-        Locale::FrCa => format!("Give a whole number between {} and {}.", crate::format::integer(l, min), crate::format::integer(l, max)),
+        Locale::FrCa => format!("Indiquez un nombre entier entre {} et {}.", crate::format::integer(l, min), crate::format::integer(l, max)),
     }
 }
 
@@ -4195,7 +4195,7 @@ pub fn settings_whole_number_between(l: Locale, min: i64, max: i64) -> String {
 pub fn state_active(l: Locale) -> &'static str {
     match l {
         Locale::En => "Active",
-        Locale::FrCa => "Active",
+        Locale::FrCa => "Actif",
     }
 }
 
@@ -4204,7 +4204,7 @@ pub fn state_active(l: Locale) -> &'static str {
 pub fn state_archived(l: Locale) -> &'static str {
     match l {
         Locale::En => "Archived",
-        Locale::FrCa => "Archived",
+        Locale::FrCa => "Archivé",
     }
 }
 
@@ -4213,7 +4213,7 @@ pub fn state_archived(l: Locale) -> &'static str {
 pub fn state_inactive(l: Locale) -> &'static str {
     match l {
         Locale::En => "Inactive",
-        Locale::FrCa => "Inactive",
+        Locale::FrCa => "Inactif",
     }
 }
 
@@ -4222,7 +4222,7 @@ pub fn state_inactive(l: Locale) -> &'static str {
 pub fn stranded_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Someone who has left still has bookings",
-        Locale::FrCa => "Someone who has left still has bookings",
+        Locale::FrCa => "Une personne partie a encore des rendez-vous",
     }
 }
 
@@ -4231,7 +4231,7 @@ pub fn stranded_eyebrow(l: Locale) -> &'static str {
 pub fn team_add(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add member",
-        Locale::FrCa => "Add member",
+        Locale::FrCa => "Ajouter le membre",
     }
 }
 
@@ -4240,7 +4240,7 @@ pub fn team_add(l: Locale) -> &'static str {
 pub fn team_add_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Host added to the team",
-        Locale::FrCa => "Host added to the team",
+        Locale::FrCa => "Hôte ajouté à l'équipe",
     }
 }
 
@@ -4249,7 +4249,7 @@ pub fn team_add_done(l: Locale) -> &'static str {
 pub fn team_add_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Host",
-        Locale::FrCa => "Host",
+        Locale::FrCa => "Hôte",
     }
 }
 
@@ -4258,7 +4258,7 @@ pub fn team_add_label(l: Locale) -> &'static str {
 pub fn team_add_none(l: Locale) -> &'static str {
     match l {
         Locale::En => "Every host is already in this team.",
-        Locale::FrCa => "Every host is already in this team.",
+        Locale::FrCa => "Tous les hôtes font déjà partie de cette équipe.",
     }
 }
 
@@ -4267,7 +4267,7 @@ pub fn team_add_none(l: Locale) -> &'static str {
 pub fn team_add_placeholder(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose a host",
-        Locale::FrCa => "Choose a host",
+        Locale::FrCa => "Choisissez un hôte",
     }
 }
 
@@ -4276,7 +4276,7 @@ pub fn team_add_placeholder(l: Locale) -> &'static str {
 pub fn team_add_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose a host to add.",
-        Locale::FrCa => "Choose a host to add.",
+        Locale::FrCa => "Choisissez un hôte à ajouter.",
     }
 }
 
@@ -4285,7 +4285,7 @@ pub fn team_add_required(l: Locale) -> &'static str {
 pub fn team_archive(l: Locale) -> &'static str {
     match l {
         Locale::En => "Archive account",
-        Locale::FrCa => "Archive account",
+        Locale::FrCa => "Archiver le compte",
     }
 }
 
@@ -4294,7 +4294,7 @@ pub fn team_archive(l: Locale) -> &'static str {
 pub fn team_archive_blocked(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reassign or cancel their upcoming bookings first.",
-        Locale::FrCa => "Reassign or cancel their upcoming bookings first.",
+        Locale::FrCa => "Réattribuez ou annulez d'abord ses rendez-vous à venir.",
     }
 }
 
@@ -4303,7 +4303,7 @@ pub fn team_archive_blocked(l: Locale) -> &'static str {
 pub fn team_archive_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "They can no longer sign in, they are skipped in routing, and their event types stop taking bookings. The account is kept.",
-        Locale::FrCa => "They can no longer sign in, they are skipped in routing, and their event types stop taking bookings. The account is kept.",
+        Locale::FrCa => "Cette personne ne pourra plus se connecter, sera exclue de l'acheminement et ses types de rendez-vous ne seront plus réservables. Le compte est conservé.",
     }
 }
 
@@ -4312,7 +4312,7 @@ pub fn team_archive_body(l: Locale) -> &'static str {
 pub fn team_archive_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Archive account",
-        Locale::FrCa => "Archive account",
+        Locale::FrCa => "Archiver le compte",
     }
 }
 
@@ -4321,7 +4321,7 @@ pub fn team_archive_confirm(l: Locale) -> &'static str {
 pub fn team_archive_counting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Checking their upcoming bookings…",
-        Locale::FrCa => "Checking their upcoming bookings…",
+        Locale::FrCa => "Vérification de ses rendez-vous à venir…",
     }
 }
 
@@ -4330,7 +4330,7 @@ pub fn team_archive_counting(l: Locale) -> &'static str {
 pub fn team_archive_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Scheduler account closed",
-        Locale::FrCa => "Scheduler account closed",
+        Locale::FrCa => "Compte de réservation fermé",
     }
 }
 
@@ -4339,7 +4339,7 @@ pub fn team_archive_done(l: Locale) -> &'static str {
 pub fn team_archive_done_named(l: Locale, name: &str) -> String {
     match l {
         Locale::En => format!("{name}'s scheduler account is closed"),
-        Locale::FrCa => format!("{name}'s scheduler account is closed"),
+        Locale::FrCa => format!("Le compte de réservation de {name} est fermé"),
     }
 }
 
@@ -4348,7 +4348,7 @@ pub fn team_archive_done_named(l: Locale, name: &str) -> String {
 pub fn team_archive_keep(l: Locale) -> &'static str {
     match l {
         Locale::En => "Keep account",
-        Locale::FrCa => "Keep account",
+        Locale::FrCa => "Conserver le compte",
     }
 }
 
@@ -4357,7 +4357,7 @@ pub fn team_archive_keep(l: Locale) -> &'static str {
 pub fn team_archive_refused(l: Locale) -> &'static str {
     match l {
         Locale::En => "That account could not be archived. It may still hold upcoming bookings, it may be the workspace owner, or it may be archived already.",
-        Locale::FrCa => "That account could not be archived. It may still hold upcoming bookings, it may be the workspace owner, or it may be archived already.",
+        Locale::FrCa => "Ce compte n'a pas pu être archivé. Il se peut qu'il ait encore des rendez-vous à venir, qu'il soit celui du propriétaire de l'espace de travail ou qu'il soit déjà archivé.",
     }
 }
 
@@ -4366,7 +4366,7 @@ pub fn team_archive_refused(l: Locale) -> &'static str {
 pub fn team_archive_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Archive this account?",
-        Locale::FrCa => "Archive this account?",
+        Locale::FrCa => "Archiver ce compte?",
     }
 }
 
@@ -4375,7 +4375,7 @@ pub fn team_archive_title(l: Locale) -> &'static str {
 pub fn team_archive_title_named(l: Locale, name: &str) -> String {
     match l {
         Locale::En => format!("Archive {name}'s account?"),
-        Locale::FrCa => format!("Archive {name}'s account?"),
+        Locale::FrCa => format!("Archiver le compte de {name}?"),
     }
 }
 
@@ -4384,7 +4384,7 @@ pub fn team_archive_title_named(l: Locale, name: &str) -> String {
 pub fn team_close(l: Locale) -> &'static str {
     match l {
         Locale::En => "Done",
-        Locale::FrCa => "Done",
+        Locale::FrCa => "Terminé",
     }
 }
 
@@ -4393,7 +4393,7 @@ pub fn team_close(l: Locale) -> &'static str {
 pub fn team_create(l: Locale) -> &'static str {
     match l {
         Locale::En => "Create team",
-        Locale::FrCa => "Create team",
+        Locale::FrCa => "Créer une équipe",
     }
 }
 
@@ -4402,7 +4402,7 @@ pub fn team_create(l: Locale) -> &'static str {
 pub fn team_create_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Team created",
-        Locale::FrCa => "Team created",
+        Locale::FrCa => "Équipe créée",
     }
 }
 
@@ -4411,7 +4411,7 @@ pub fn team_create_done(l: Locale) -> &'static str {
 pub fn team_create_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "New team",
-        Locale::FrCa => "New team",
+        Locale::FrCa => "Nouvelle équipe",
     }
 }
 
@@ -4420,7 +4420,7 @@ pub fn team_create_title(l: Locale) -> &'static str {
 pub fn team_delete_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Event types that route to this team stop rotating through it.",
-        Locale::FrCa => "Event types that route to this team stop rotating through it.",
+        Locale::FrCa => "Les types de rendez-vous associés à cette équipe cesseront d'être répartis entre ses hôtes.",
     }
 }
 
@@ -4429,7 +4429,7 @@ pub fn team_delete_body(l: Locale) -> &'static str {
 pub fn team_delete_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete team",
-        Locale::FrCa => "Delete team",
+        Locale::FrCa => "Supprimer l'équipe",
     }
 }
 
@@ -4438,7 +4438,7 @@ pub fn team_delete_confirm(l: Locale) -> &'static str {
 pub fn team_delete_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Team deleted",
-        Locale::FrCa => "Team deleted",
+        Locale::FrCa => "Équipe supprimée",
     }
 }
 
@@ -4447,7 +4447,7 @@ pub fn team_delete_done(l: Locale) -> &'static str {
 pub fn team_delete_keep(l: Locale) -> &'static str {
     match l {
         Locale::En => "Keep team",
-        Locale::FrCa => "Keep team",
+        Locale::FrCa => "Conserver l'équipe",
     }
 }
 
@@ -4456,7 +4456,7 @@ pub fn team_delete_keep(l: Locale) -> &'static str {
 pub fn team_delete_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete this team?",
-        Locale::FrCa => "Delete this team?",
+        Locale::FrCa => "Supprimer cette équipe?",
     }
 }
 
@@ -4465,7 +4465,7 @@ pub fn team_delete_title(l: Locale) -> &'static str {
 pub fn team_delete_title_named(l: Locale, name: &str) -> String {
     match l {
         Locale::En => format!("Delete {name}?"),
-        Locale::FrCa => format!("Delete {name}?"),
+        Locale::FrCa => format!("Supprimer {name}?"),
     }
 }
 
@@ -4474,7 +4474,7 @@ pub fn team_delete_title_named(l: Locale, name: &str) -> String {
 pub fn team_members_button(l: Locale) -> &'static str {
     match l {
         Locale::En => "Hosts",
-        Locale::FrCa => "Hosts",
+        Locale::FrCa => "Hôtes",
     }
 }
 
@@ -4483,7 +4483,7 @@ pub fn team_members_button(l: Locale) -> &'static str {
 pub fn team_members_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No hosts yet. Nothing routes through this team until one is added.",
-        Locale::FrCa => "No hosts yet. Nothing routes through this team until one is added.",
+        Locale::FrCa => "Aucun hôte pour l'instant. Aucun rendez-vous ne passe par cette équipe avant l'ajout d'un hôte.",
     }
 }
 
@@ -4492,7 +4492,7 @@ pub fn team_members_empty(l: Locale) -> &'static str {
 pub fn team_members_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "A lower routing priority is offered a booking first.",
-        Locale::FrCa => "A lower routing priority is offered a booking first.",
+        Locale::FrCa => "Le rendez-vous est d'abord proposé à la priorité d'acheminement la plus basse.",
     }
 }
 
@@ -4501,7 +4501,7 @@ pub fn team_members_hint(l: Locale) -> &'static str {
 pub fn team_name_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Name",
-        Locale::FrCa => "Name",
+        Locale::FrCa => "Nom",
     }
 }
 
@@ -4510,7 +4510,7 @@ pub fn team_name_label(l: Locale) -> &'static str {
 pub fn team_name_placeholder(l: Locale) -> &'static str {
     match l {
         Locale::En => "Front desk",
-        Locale::FrCa => "Front desk",
+        Locale::FrCa => "Réception",
     }
 }
 
@@ -4519,7 +4519,7 @@ pub fn team_name_placeholder(l: Locale) -> &'static str {
 pub fn team_name_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "Give the team a name.",
-        Locale::FrCa => "Give the team a name.",
+        Locale::FrCa => "Donnez un nom à l'équipe.",
     }
 }
 
@@ -4528,7 +4528,7 @@ pub fn team_name_required(l: Locale) -> &'static str {
 pub fn team_name_too_long(l: Locale) -> &'static str {
     match l {
         Locale::En => "That name is longer than 200 characters.",
-        Locale::FrCa => "That name is longer than 200 characters.",
+        Locale::FrCa => "Ce nom dépasse 200 caractères.",
     }
 }
 
@@ -4537,7 +4537,7 @@ pub fn team_name_too_long(l: Locale) -> &'static str {
 pub fn team_priority_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Routing priority saved",
-        Locale::FrCa => "Routing priority saved",
+        Locale::FrCa => "Priorité d'acheminement enregistrée",
     }
 }
 
@@ -4546,7 +4546,7 @@ pub fn team_priority_done(l: Locale) -> &'static str {
 pub fn team_priority_invalid(l: Locale) -> &'static str {
     match l {
         Locale::En => "A routing priority is a whole number, zero or more.",
-        Locale::FrCa => "A routing priority is a whole number, zero or more.",
+        Locale::FrCa => "Une priorité d'acheminement est un nombre entier, zéro ou plus.",
     }
 }
 
@@ -4555,7 +4555,7 @@ pub fn team_priority_invalid(l: Locale) -> &'static str {
 pub fn team_priority_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Routing priority",
-        Locale::FrCa => "Routing priority",
+        Locale::FrCa => "Priorité d'acheminement",
     }
 }
 
@@ -4564,7 +4564,7 @@ pub fn team_priority_label(l: Locale) -> &'static str {
 pub fn team_remove(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove",
-        Locale::FrCa => "Remove",
+        Locale::FrCa => "Retirer",
     }
 }
 
@@ -4573,7 +4573,7 @@ pub fn team_remove(l: Locale) -> &'static str {
 pub fn team_remove_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Bookings stop routing to them through this team. Their routing priority is not kept.",
-        Locale::FrCa => "Bookings stop routing to them through this team. Their routing priority is not kept.",
+        Locale::FrCa => "Cette équipe ne lui acheminera plus de rendez-vous. Sa priorité d'acheminement ne sera pas conservée.",
     }
 }
 
@@ -4582,7 +4582,7 @@ pub fn team_remove_body(l: Locale) -> &'static str {
 pub fn team_remove_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Host removed from the team",
-        Locale::FrCa => "Host removed from the team",
+        Locale::FrCa => "Hôte retiré de l'équipe",
     }
 }
 
@@ -4591,7 +4591,7 @@ pub fn team_remove_done(l: Locale) -> &'static str {
 pub fn team_remove_keep(l: Locale) -> &'static str {
     match l {
         Locale::En => "Keep them",
-        Locale::FrCa => "Keep them",
+        Locale::FrCa => "Ne pas retirer",
     }
 }
 
@@ -4600,7 +4600,7 @@ pub fn team_remove_keep(l: Locale) -> &'static str {
 pub fn team_remove_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove this host?",
-        Locale::FrCa => "Remove this host?",
+        Locale::FrCa => "Retirer cet hôte?",
     }
 }
 
@@ -4609,7 +4609,7 @@ pub fn team_remove_title(l: Locale) -> &'static str {
 pub fn team_rename(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save name",
-        Locale::FrCa => "Save name",
+        Locale::FrCa => "Enregistrer le nom",
     }
 }
 
@@ -4618,7 +4618,7 @@ pub fn team_rename(l: Locale) -> &'static str {
 pub fn team_rename_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Team renamed",
-        Locale::FrCa => "Team renamed",
+        Locale::FrCa => "Équipe renommée",
     }
 }
 
@@ -4627,7 +4627,7 @@ pub fn team_rename_done(l: Locale) -> &'static str {
 pub fn team_role_agency(l: Locale) -> &'static str {
     match l {
         Locale::En => "Agency",
-        Locale::FrCa => "Agency",
+        Locale::FrCa => "Agence",
     }
 }
 
@@ -4645,7 +4645,7 @@ pub fn team_role_client(l: Locale) -> &'static str {
 pub fn team_role_removed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Removed from the workspace",
-        Locale::FrCa => "Removed from the workspace",
+        Locale::FrCa => "Retiré de l'espace de travail",
     }
 }
 
@@ -4654,7 +4654,7 @@ pub fn team_role_removed(l: Locale) -> &'static str {
 pub fn team_role_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Viewer",
-        Locale::FrCa => "Viewer",
+        Locale::FrCa => "Lecteur",
     }
 }
 
@@ -4663,7 +4663,7 @@ pub fn team_role_viewer(l: Locale) -> &'static str {
 pub fn team_save_priority(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save priority",
-        Locale::FrCa => "Save priority",
+        Locale::FrCa => "Enregistrer la priorité",
     }
 }
 
@@ -4672,7 +4672,7 @@ pub fn team_save_priority(l: Locale) -> &'static str {
 pub fn team_slug_read_only_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "The booking-page address cannot be changed here.",
-        Locale::FrCa => "The booking-page address cannot be changed here.",
+        Locale::FrCa => "L'adresse de la page de réservation n'est pas modifiable ici.",
     }
 }
 
@@ -4681,7 +4681,7 @@ pub fn team_slug_read_only_hint(l: Locale) -> &'static str {
 pub fn team_state_absent(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not set up yet",
-        Locale::FrCa => "Not set up yet",
+        Locale::FrCa => "Pas encore configuré",
     }
 }
 
@@ -4690,7 +4690,7 @@ pub fn team_state_absent(l: Locale) -> &'static str {
 pub fn team_state_archived(l: Locale) -> &'static str {
     match l {
         Locale::En => "Archived",
-        Locale::FrCa => "Archived",
+        Locale::FrCa => "Archivé",
     }
 }
 
@@ -4699,7 +4699,7 @@ pub fn team_state_archived(l: Locale) -> &'static str {
 pub fn team_state_host(l: Locale) -> &'static str {
     match l {
         Locale::En => "Host",
-        Locale::FrCa => "Host",
+        Locale::FrCa => "Hôte",
     }
 }
 
@@ -4708,7 +4708,7 @@ pub fn team_state_host(l: Locale) -> &'static str {
 pub fn team_stranded_many(l: Locale, subject: &str) -> String {
     match l {
         Locale::En => format!("{subject} are no longer in this workspace but still hold upcoming bookings, so the scheduler kept their accounts open. Reassign or cancel those bookings, then archive the accounts."),
-        Locale::FrCa => format!("{subject} are no longer in this workspace but still hold upcoming bookings, so the scheduler kept their accounts open. Reassign or cancel those bookings, then archive the accounts."),
+        Locale::FrCa => format!("{subject} ne font plus partie de cet espace de travail, mais ont encore des rendez-vous à venir; le système de réservation a donc gardé leurs comptes ouverts. Réattribuez ou annulez ces rendez-vous, puis archivez les comptes."),
     }
 }
 
@@ -4717,7 +4717,7 @@ pub fn team_stranded_many(l: Locale, subject: &str) -> String {
 pub fn team_stranded_one(l: Locale, subject: &str) -> String {
     match l {
         Locale::En => format!("{subject} is no longer in this workspace but still holds upcoming bookings, so the scheduler kept their account open. Reassign or cancel those bookings, then archive the account."),
-        Locale::FrCa => format!("{subject} is no longer in this workspace but still holds upcoming bookings, so the scheduler kept their account open. Reassign or cancel those bookings, then archive the account."),
+        Locale::FrCa => format!("{subject} ne fait plus partie de cet espace de travail, mais a encore des rendez-vous à venir; le système de réservation a donc gardé son compte ouvert. Réattribuez ou annulez ces rendez-vous, puis archivez le compte."),
     }
 }
 
@@ -4726,7 +4726,7 @@ pub fn team_stranded_one(l: Locale, subject: &str) -> String {
 pub fn teams_empty(l: Locale) -> &'static str {
     match l {
         Locale::En => "No teams yet.",
-        Locale::FrCa => "No teams yet.",
+        Locale::FrCa => "Aucune équipe.",
     }
 }
 
@@ -4735,7 +4735,7 @@ pub fn teams_empty(l: Locale) -> &'static str {
 pub fn teams_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Teams",
-        Locale::FrCa => "Teams",
+        Locale::FrCa => "Équipes",
     }
 }
 
@@ -4744,7 +4744,7 @@ pub fn teams_eyebrow(l: Locale) -> &'static str {
 pub fn teams_subtitle(l: Locale) -> &'static str {
     match l {
         Locale::En => "A team rotates bookings through its hosts, in routing-priority order.",
-        Locale::FrCa => "A team rotates bookings through its hosts, in routing-priority order.",
+        Locale::FrCa => "Une équipe répartit les rendez-vous entre ses hôtes, selon la priorité d'acheminement.",
     }
 }
 
@@ -4753,7 +4753,7 @@ pub fn teams_subtitle(l: Locale) -> &'static str {
 pub fn test_email_not_sent(l: Locale) -> &'static str {
     match l {
         Locale::En => "The booking system did not send the test email.",
-        Locale::FrCa => "The booking system did not send the test email.",
+        Locale::FrCa => "Le système de réservation n'a pas envoyé le courriel test.",
     }
 }
 
@@ -4762,7 +4762,7 @@ pub fn test_email_not_sent(l: Locale) -> &'static str {
 pub fn test_email_sent(l: Locale, address: &str) -> String {
     match l {
         Locale::En => format!("Test email sent to {address}"),
-        Locale::FrCa => format!("Test email sent to {address}"),
+        Locale::FrCa => format!("Courriel d'essai envoyé à {address}"),
     }
 }
 
@@ -4771,7 +4771,7 @@ pub fn test_email_sent(l: Locale, address: &str) -> String {
 pub fn time_format_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter a time as HH:MM.",
-        Locale::FrCa => "Enter a time as HH:MM.",
+        Locale::FrCa => "Entrez une heure au format HH:MM.",
     }
 }
 
@@ -4780,7 +4780,7 @@ pub fn time_format_error(l: Locale) -> &'static str {
 pub fn time_order_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "The end has to be after the start.",
-        Locale::FrCa => "The end has to be after the start.",
+        Locale::FrCa => "La fin doit être après le début.",
     }
 }
 
@@ -4789,7 +4789,7 @@ pub fn time_order_error(l: Locale) -> &'static str {
 pub fn time_overlap_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "These hours overlap another range on this day.",
-        Locale::FrCa => "These hours overlap another range on this day.",
+        Locale::FrCa => "Ces heures chevauchent une autre plage de cette journée.",
     }
 }
 
@@ -4798,7 +4798,7 @@ pub fn time_overlap_error(l: Locale) -> &'static str {
 pub fn times_in(l: Locale, zone: &str) -> String {
     match l {
         Locale::En => format!("Times in {zone}"),
-        Locale::FrCa => format!("Times in {zone}"),
+        Locale::FrCa => format!("Fuseau horaire\u{00A0}: {zone}"),
     }
 }
 
@@ -4807,7 +4807,7 @@ pub fn times_in(l: Locale, zone: &str) -> String {
 pub fn unknown_time(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
-        Locale::FrCa => "Unknown",
+        Locale::FrCa => "Inconnu",
     }
 }
 
@@ -4816,7 +4816,7 @@ pub fn unknown_time(l: Locale) -> &'static str {
 pub fn webhook_add_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add webhook",
-        Locale::FrCa => "Add webhook",
+        Locale::FrCa => "Ajouter un webhook",
     }
 }
 
@@ -4825,7 +4825,7 @@ pub fn webhook_add_action(l: Locale) -> &'static str {
 pub fn webhook_add_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add webhook",
-        Locale::FrCa => "Add webhook",
+        Locale::FrCa => "Ajouter un webhook",
     }
 }
 
@@ -4834,7 +4834,7 @@ pub fn webhook_add_title(l: Locale) -> &'static str {
 pub fn webhook_added(l: Locale) -> &'static str {
     match l {
         Locale::En => "Webhook added",
-        Locale::FrCa => "Webhook added",
+        Locale::FrCa => "Webhook ajouté",
     }
 }
 
@@ -4843,7 +4843,7 @@ pub fn webhook_added(l: Locale) -> &'static str {
 pub fn webhook_delete_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete webhook",
-        Locale::FrCa => "Delete webhook",
+        Locale::FrCa => "Supprimer le webhook",
     }
 }
 
@@ -4852,7 +4852,7 @@ pub fn webhook_delete_action(l: Locale) -> &'static str {
 pub fn webhook_delete_confirm(l: Locale) -> &'static str {
     match l {
         Locale::En => "It stops receiving booking changes now, and its signing secret cannot be recovered.",
-        Locale::FrCa => "It stops receiving booking changes now, and its signing secret cannot be recovered.",
+        Locale::FrCa => "Il cessera aussitôt de recevoir les changements de rendez-vous; son secret de signature sera irrécupérable.",
     }
 }
 
@@ -4861,7 +4861,7 @@ pub fn webhook_delete_confirm(l: Locale) -> &'static str {
 pub fn webhook_delete_prompt(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delete this webhook?",
-        Locale::FrCa => "Delete this webhook?",
+        Locale::FrCa => "Supprimer ce webhook?",
     }
 }
 
@@ -4870,7 +4870,7 @@ pub fn webhook_delete_prompt(l: Locale) -> &'static str {
 pub fn webhook_dropped_events_line(l: Locale, events: &str) -> String {
     match l {
         Locale::En => format!("Saving will stop sending {events}. This app does not know those events, so it cannot send them back."),
-        Locale::FrCa => format!("Saving will stop sending {events}. This app does not know those events, so it cannot send them back."),
+        Locale::FrCa => format!("Si vous enregistrez, l'envoi de ces événements s'arrêtera\u{00A0}: {events}. Cette application ne les connaît pas et ne peut donc pas les rétablir."),
     }
 }
 
@@ -4879,7 +4879,7 @@ pub fn webhook_dropped_events_line(l: Locale, events: &str) -> String {
 pub fn webhook_edit_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Edit webhook",
-        Locale::FrCa => "Edit webhook",
+        Locale::FrCa => "Modifier le webhook",
     }
 }
 
@@ -4888,7 +4888,7 @@ pub fn webhook_edit_title(l: Locale) -> &'static str {
 pub fn webhook_events_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "What to send. Each one is a separate delivery.",
-        Locale::FrCa => "What to send. Each one is a separate delivery.",
+        Locale::FrCa => "Ce qu'il faut envoyer. Chacun fait l'objet d'un envoi distinct.",
     }
 }
 
@@ -4897,7 +4897,7 @@ pub fn webhook_events_hint(l: Locale) -> &'static str {
 pub fn webhook_events_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Events",
-        Locale::FrCa => "Events",
+        Locale::FrCa => "Événements",
     }
 }
 
@@ -4906,7 +4906,7 @@ pub fn webhook_events_label(l: Locale) -> &'static str {
 pub fn webhook_events_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose at least one event.",
-        Locale::FrCa => "Choose at least one event.",
+        Locale::FrCa => "Choisissez au moins un événement.",
     }
 }
 
@@ -4915,7 +4915,7 @@ pub fn webhook_events_missing(l: Locale) -> &'static str {
 pub fn webhook_fields_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Which parts of the booking each delivery carries.",
-        Locale::FrCa => "Which parts of the booking each delivery carries.",
+        Locale::FrCa => "Les parties du rendez-vous incluses dans chaque envoi.",
     }
 }
 
@@ -4924,7 +4924,7 @@ pub fn webhook_fields_hint(l: Locale) -> &'static str {
 pub fn webhook_fields_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Data to send",
-        Locale::FrCa => "Data to send",
+        Locale::FrCa => "Données à envoyer",
     }
 }
 
@@ -4933,7 +4933,7 @@ pub fn webhook_fields_label(l: Locale) -> &'static str {
 pub fn webhook_personal_data(l: Locale) -> &'static str {
     match l {
         Locale::En => "Personal data",
-        Locale::FrCa => "Personal data",
+        Locale::FrCa => "Renseignements personnels",
     }
 }
 
@@ -4942,7 +4942,7 @@ pub fn webhook_personal_data(l: Locale) -> &'static str {
 pub fn webhook_save_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save changes",
-        Locale::FrCa => "Save changes",
+        Locale::FrCa => "Enregistrer les modifications",
     }
 }
 
@@ -4951,7 +4951,7 @@ pub fn webhook_save_action(l: Locale) -> &'static str {
 pub fn webhook_saving(l: Locale) -> &'static str {
     match l {
         Locale::En => "Saving…",
-        Locale::FrCa => "Saving…",
+        Locale::FrCa => "Sauvegarde…",
     }
 }
 
@@ -4960,7 +4960,7 @@ pub fn webhook_saving(l: Locale) -> &'static str {
 pub fn webhook_secret_copy_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Copy signing secret",
-        Locale::FrCa => "Copy signing secret",
+        Locale::FrCa => "Copier le secret",
     }
 }
 
@@ -4969,7 +4969,7 @@ pub fn webhook_secret_copy_action(l: Locale) -> &'static str {
 pub fn webhook_secret_note(l: Locale, url: &str) -> String {
     match l {
         Locale::En => format!("Every delivery to {url} is signed with it, in the X-Calnode-Signature header."),
-        Locale::FrCa => format!("Every delivery to {url} is signed with it, in the X-Calnode-Signature header."),
+        Locale::FrCa => format!("Chaque envoi vers {url} est signé avec ce secret, dans l'en-tête X-Calnode-Signature."),
     }
 }
 
@@ -4978,7 +4978,7 @@ pub fn webhook_secret_note(l: Locale, url: &str) -> String {
 pub fn webhook_secret_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your signing secret",
-        Locale::FrCa => "Your signing secret",
+        Locale::FrCa => "Votre secret de signature",
     }
 }
 
@@ -4987,7 +4987,7 @@ pub fn webhook_secret_title(l: Locale) -> &'static str {
 pub fn webhook_updated(l: Locale) -> &'static str {
     match l {
         Locale::En => "Webhook updated",
-        Locale::FrCa => "Webhook updated",
+        Locale::FrCa => "Webhook mis à jour",
     }
 }
 
@@ -4996,7 +4996,7 @@ pub fn webhook_updated(l: Locale) -> &'static str {
 pub fn webhook_url_fixed(l: Locale) -> &'static str {
     match l {
         Locale::En => "The URL cannot be changed. Delete this webhook and add another to move it.",
-        Locale::FrCa => "The URL cannot be changed. Delete this webhook and add another to move it.",
+        Locale::FrCa => "L'URL ne peut pas être modifiée. Supprimez ce webhook et ajoutez-en un autre pour la déplacer.",
     }
 }
 
@@ -5005,7 +5005,7 @@ pub fn webhook_url_fixed(l: Locale) -> &'static str {
 pub fn webhook_url_hint(l: Locale) -> &'static str {
     match l {
         Locale::En => "Where each delivery is posted. https only.",
-        Locale::FrCa => "Where each delivery is posted. https only.",
+        Locale::FrCa => "Où chaque envoi est transmis. https seulement.",
     }
 }
 
@@ -5014,7 +5014,7 @@ pub fn webhook_url_hint(l: Locale) -> &'static str {
 pub fn webhook_url_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Endpoint URL",
-        Locale::FrCa => "Endpoint URL",
+        Locale::FrCa => "URL du point d'accès",
     }
 }
 
@@ -5023,7 +5023,7 @@ pub fn webhook_url_label(l: Locale) -> &'static str {
 pub fn webhook_url_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Give the webhook a URL.",
-        Locale::FrCa => "Give the webhook a URL.",
+        Locale::FrCa => "Donnez une URL au webhook.",
     }
 }
 
@@ -5032,7 +5032,7 @@ pub fn webhook_url_missing(l: Locale) -> &'static str {
 pub fn webhook_url_not_a_url(l: Locale) -> &'static str {
     match l {
         Locale::En => "That is not a URL. It has to start with https://.",
-        Locale::FrCa => "That is not a URL. It has to start with https://.",
+        Locale::FrCa => "Ce n'est pas une URL. Elle doit commencer par https://.",
     }
 }
 
@@ -5041,7 +5041,7 @@ pub fn webhook_url_not_a_url(l: Locale) -> &'static str {
 pub fn webhook_url_not_https(l: Locale) -> &'static str {
     match l {
         Locale::En => "The URL has to start with https://.",
-        Locale::FrCa => "The URL has to start with https://.",
+        Locale::FrCa => "L'URL doit commencer par https://.",
     }
 }
 
@@ -5050,7 +5050,7 @@ pub fn webhook_url_not_https(l: Locale) -> &'static str {
 pub fn webhook_url_private(l: Locale) -> &'static str {
     match l {
         Locale::En => "That address is not reachable from the internet. Use a public https URL.",
-        Locale::FrCa => "That address is not reachable from the internet. Use a public https URL.",
+        Locale::FrCa => "Cette adresse n'est pas joignable depuis Internet. Utilisez une URL https publique.",
     }
 }
 
@@ -5059,7 +5059,7 @@ pub fn webhook_url_private(l: Locale) -> &'static str {
 pub fn weekday_friday(l: Locale) -> &'static str {
     match l {
         Locale::En => "Friday",
-        Locale::FrCa => "Friday",
+        Locale::FrCa => "Vendredi",
     }
 }
 
@@ -5068,7 +5068,7 @@ pub fn weekday_friday(l: Locale) -> &'static str {
 pub fn weekday_monday(l: Locale) -> &'static str {
     match l {
         Locale::En => "Monday",
-        Locale::FrCa => "Monday",
+        Locale::FrCa => "Lundi",
     }
 }
 
@@ -5077,7 +5077,7 @@ pub fn weekday_monday(l: Locale) -> &'static str {
 pub fn weekday_saturday(l: Locale) -> &'static str {
     match l {
         Locale::En => "Saturday",
-        Locale::FrCa => "Saturday",
+        Locale::FrCa => "Samedi",
     }
 }
 
@@ -5086,7 +5086,7 @@ pub fn weekday_saturday(l: Locale) -> &'static str {
 pub fn weekday_short_fri(l: Locale) -> &'static str {
     match l {
         Locale::En => "Fri",
-        Locale::FrCa => "Fri",
+        Locale::FrCa => "ven.",
     }
 }
 
@@ -5095,7 +5095,7 @@ pub fn weekday_short_fri(l: Locale) -> &'static str {
 pub fn weekday_short_mon(l: Locale) -> &'static str {
     match l {
         Locale::En => "Mon",
-        Locale::FrCa => "Mon",
+        Locale::FrCa => "lun.",
     }
 }
 
@@ -5104,7 +5104,7 @@ pub fn weekday_short_mon(l: Locale) -> &'static str {
 pub fn weekday_short_sat(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sat",
-        Locale::FrCa => "Sat",
+        Locale::FrCa => "sam.",
     }
 }
 
@@ -5113,7 +5113,7 @@ pub fn weekday_short_sat(l: Locale) -> &'static str {
 pub fn weekday_short_sun(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sun",
-        Locale::FrCa => "Sun",
+        Locale::FrCa => "dim.",
     }
 }
 
@@ -5122,7 +5122,7 @@ pub fn weekday_short_sun(l: Locale) -> &'static str {
 pub fn weekday_short_thu(l: Locale) -> &'static str {
     match l {
         Locale::En => "Thu",
-        Locale::FrCa => "Thu",
+        Locale::FrCa => "jeu.",
     }
 }
 
@@ -5131,7 +5131,7 @@ pub fn weekday_short_thu(l: Locale) -> &'static str {
 pub fn weekday_short_tue(l: Locale) -> &'static str {
     match l {
         Locale::En => "Tue",
-        Locale::FrCa => "Tue",
+        Locale::FrCa => "mar.",
     }
 }
 
@@ -5140,7 +5140,7 @@ pub fn weekday_short_tue(l: Locale) -> &'static str {
 pub fn weekday_short_wed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Wed",
-        Locale::FrCa => "Wed",
+        Locale::FrCa => "mer.",
     }
 }
 
@@ -5149,7 +5149,7 @@ pub fn weekday_short_wed(l: Locale) -> &'static str {
 pub fn weekday_sunday(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sunday",
-        Locale::FrCa => "Sunday",
+        Locale::FrCa => "Dimanche",
     }
 }
 
@@ -5158,7 +5158,7 @@ pub fn weekday_sunday(l: Locale) -> &'static str {
 pub fn weekday_thursday(l: Locale) -> &'static str {
     match l {
         Locale::En => "Thursday",
-        Locale::FrCa => "Thursday",
+        Locale::FrCa => "Jeudi",
     }
 }
 
@@ -5167,7 +5167,7 @@ pub fn weekday_thursday(l: Locale) -> &'static str {
 pub fn weekday_tuesday(l: Locale) -> &'static str {
     match l {
         Locale::En => "Tuesday",
-        Locale::FrCa => "Tuesday",
+        Locale::FrCa => "Mardi",
     }
 }
 
@@ -5176,6 +5176,6 @@ pub fn weekday_tuesday(l: Locale) -> &'static str {
 pub fn weekday_wednesday(l: Locale) -> &'static str {
     match l {
         Locale::En => "Wednesday",
-        Locale::FrCa => "Wednesday",
+        Locale::FrCa => "Mercredi",
     }
 }
