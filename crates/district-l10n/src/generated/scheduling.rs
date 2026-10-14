@@ -275,12 +275,372 @@ pub fn bookings_loading_more(l: Locale) -> &'static str {
     }
 }
 
+/// `caldav.connect_action`
+#[must_use]
+pub fn caldav_connect_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connect calendar",
+        Locale::FrCa => "Connect calendar",
+    }
+}
+
+/// `caldav.connected`
+#[must_use]
+pub fn caldav_connected(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Calendar connected",
+        Locale::FrCa => "Calendar connected",
+    }
+}
+
+/// `caldav.connected_to_line`
+#[must_use]
+pub fn caldav_connected_to_line(l: Locale, account: &str) -> String {
+    match l {
+        Locale::En => format!("Calendar connected: {account}"),
+        Locale::FrCa => format!("Calendar connected: {account}"),
+    }
+}
+
+/// `caldav.connecting`
+#[must_use]
+pub fn caldav_connecting(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connecting…",
+        Locale::FrCa => "Connecting…",
+    }
+}
+
+/// `caldav.password_hint`
+#[must_use]
+pub fn caldav_password_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "An app-specific password from the provider, not the account password.",
+        Locale::FrCa => "An app-specific password from the provider, not the account password.",
+    }
+}
+
+/// `caldav.password_label`
+#[must_use]
+pub fn caldav_password_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "App password",
+        Locale::FrCa => "App password",
+    }
+}
+
+/// `caldav.password_missing`
+#[must_use]
+pub fn caldav_password_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Enter the app password.",
+        Locale::FrCa => "Enter the app password.",
+    }
+}
+
+/// `caldav.preset_custom`
+#[must_use]
+pub fn caldav_preset_custom(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Other server URL",
+        Locale::FrCa => "Other server URL",
+    }
+}
+
+/// `caldav.preset_custom_note`
+#[must_use]
+pub fn caldav_preset_custom_note(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Any other CalDAV server.",
+        Locale::FrCa => "Any other CalDAV server.",
+    }
+}
+
+/// `caldav.preset_fastmail`
+#[must_use]
+pub fn caldav_preset_fastmail(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Fastmail",
+        Locale::FrCa => "Fastmail",
+    }
+}
+
+/// `caldav.preset_fastmail_note`
+#[must_use]
+pub fn caldav_preset_fastmail_note(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Fastmail's calendar. Create an app password in Fastmail settings.",
+        Locale::FrCa => "Fastmail's calendar. Create an app password in Fastmail settings.",
+    }
+}
+
+/// `caldav.preset_icloud`
+#[must_use]
+pub fn caldav_preset_icloud(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "iCloud",
+        Locale::FrCa => "iCloud",
+    }
+}
+
+/// `caldav.preset_icloud_note`
+#[must_use]
+pub fn caldav_preset_icloud_note(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Apple's calendar. Create an app-specific password at appleid.apple.com.",
+        Locale::FrCa => "Apple's calendar. Create an app-specific password at appleid.apple.com.",
+    }
+}
+
+/// `caldav.preset_label`
+#[must_use]
+pub fn caldav_preset_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Where the calendar lives",
+        Locale::FrCa => "Where the calendar lives",
+    }
+}
+
+/// `caldav.preset_nextcloud`
+#[must_use]
+pub fn caldav_preset_nextcloud(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Nextcloud",
+        Locale::FrCa => "Nextcloud",
+    }
+}
+
+/// `caldav.preset_nextcloud_note`
+#[must_use]
+pub fn caldav_preset_nextcloud_note(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your own Nextcloud server, at its DAV address.",
+        Locale::FrCa => "Your own Nextcloud server, at its DAV address.",
+    }
+}
+
+/// `caldav.refused`
+#[must_use]
+pub fn caldav_refused(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Could not connect. Check the server, username and app password.",
+        Locale::FrCa => "Could not connect. Check the server, username and app password.",
+    }
+}
+
+/// `caldav.server_url_hint`
+#[must_use]
+pub fn caldav_server_url_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The base address of the CalDAV server.",
+        Locale::FrCa => "The base address of the CalDAV server.",
+    }
+}
+
+/// `caldav.server_url_is_ip`
+#[must_use]
+pub fn caldav_server_url_is_ip(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Enter the server's hostname rather than an IP address.",
+        Locale::FrCa => "Enter the server's hostname rather than an IP address.",
+    }
+}
+
+/// `caldav.server_url_label`
+#[must_use]
+pub fn caldav_server_url_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Server URL",
+        Locale::FrCa => "Server URL",
+    }
+}
+
+/// `caldav.server_url_missing`
+#[must_use]
+pub fn caldav_server_url_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Enter the server URL.",
+        Locale::FrCa => "Enter the server URL.",
+    }
+}
+
+/// `caldav.server_url_not_a_url`
+#[must_use]
+pub fn caldav_server_url_not_a_url(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That does not look like a server address. It should start with https://",
+        Locale::FrCa => "That does not look like a server address. It should start with https://",
+    }
+}
+
+/// `caldav.server_url_not_https`
+#[must_use]
+pub fn caldav_server_url_not_https(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The server address must start with https://. An app password sent over http:// travels in the clear.",
+        Locale::FrCa => "The server address must start with https://. An app password sent over http:// travels in the clear.",
+    }
+}
+
+/// `caldav.title`
+#[must_use]
+pub fn caldav_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connect a CalDAV calendar",
+        Locale::FrCa => "Connect a CalDAV calendar",
+    }
+}
+
+/// `caldav.username_label`
+#[must_use]
+pub fn caldav_username_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Username",
+        Locale::FrCa => "Username",
+    }
+}
+
+/// `caldav.username_missing`
+#[must_use]
+pub fn caldav_username_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Enter the username.",
+        Locale::FrCa => "Enter the username.",
+    }
+}
+
+/// `calendar.account`
+#[must_use]
+pub fn calendar_account(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Account",
+        Locale::FrCa => "Account",
+    }
+}
+
+/// `calendar.conflicts`
+#[must_use]
+pub fn calendar_conflicts(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Checked for conflicts",
+        Locale::FrCa => "Checked for conflicts",
+    }
+}
+
+/// `calendar.conflicts_checked`
+#[must_use]
+pub fn calendar_conflicts_checked(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Checked",
+        Locale::FrCa => "Checked",
+    }
+}
+
+/// `calendar.conflicts_none`
+#[must_use]
+pub fn calendar_conflicts_none(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "None",
+        Locale::FrCa => "None",
+    }
+}
+
+/// `calendar.conflicts_not_checked`
+#[must_use]
+pub fn calendar_conflicts_not_checked(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not checked",
+        Locale::FrCa => "Not checked",
+    }
+}
+
+/// `calendar.connect_another`
+#[must_use]
+pub fn calendar_connect_another(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Another account can be connected to check it for conflicts as well.",
+        Locale::FrCa => "Another account can be connected to check it for conflicts as well.",
+    }
+}
+
+/// `calendar.connect_eyebrow`
+#[must_use]
+pub fn calendar_connect_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connecting a calendar",
+        Locale::FrCa => "Connecting a calendar",
+    }
+}
+
+/// `calendar.connected`
+#[must_use]
+pub fn calendar_connected(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connected",
+        Locale::FrCa => "Connected",
+    }
+}
+
+/// `calendar.destination`
+#[must_use]
+pub fn calendar_destination(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Receives bookings",
+        Locale::FrCa => "Receives bookings",
+    }
+}
+
+/// `calendar.destination_none`
+#[must_use]
+pub fn calendar_destination_none(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No calendar in this account",
+        Locale::FrCa => "No calendar in this account",
+    }
+}
+
+/// `calendar.destination_this_account`
+#[must_use]
+pub fn calendar_destination_this_account(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This account",
+        Locale::FrCa => "This account",
+    }
+}
+
 /// `calendar.line`
 #[must_use]
 pub fn calendar_line(l: Locale, provider: &str, account: &str) -> String {
     match l {
         Locale::En => format!("{provider}, {account}"),
         Locale::FrCa => format!("{provider}, {account}"),
+    }
+}
+
+/// `calendar.none_connected`
+#[must_use]
+pub fn calendar_none_connected(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No calendar is connected yet, so nothing is checked for conflicts and bookings are not written anywhere.",
+        Locale::FrCa => "No calendar is connected yet, so nothing is checked for conflicts and bookings are not written anywhere.",
+    }
+}
+
+/// `calendar.not_configured`
+#[must_use]
+pub fn calendar_not_configured(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Calendar connections are not set up on this scheduler yet.",
+        Locale::FrCa => "Calendar connections are not set up on this scheduler yet.",
+    }
+}
+
+/// `calendar.not_connected`
+#[must_use]
+pub fn calendar_not_connected(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not connected",
+        Locale::FrCa => "Not connected",
     }
 }
 
@@ -317,6 +677,105 @@ pub fn calendar_provider_microsoft(l: Locale) -> &'static str {
     match l {
         Locale::En => "Microsoft 365",
         Locale::FrCa => "Microsoft 365",
+    }
+}
+
+/// `calendar.zoom`
+#[must_use]
+pub fn calendar_zoom(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Zoom",
+        Locale::FrCa => "Zoom",
+    }
+}
+
+/// `calendars.conflicts_hint`
+#[must_use]
+pub fn calendars_conflicts_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A booking is refused when it clashes with an event on a checked calendar.",
+        Locale::FrCa => "A booking is refused when it clashes with an event on a checked calendar.",
+    }
+}
+
+/// `calendars.conflicts_label`
+#[must_use]
+pub fn calendars_conflicts_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Checked for conflicts",
+        Locale::FrCa => "Checked for conflicts",
+    }
+}
+
+/// `calendars.destination_hint`
+#[must_use]
+pub fn calendars_destination_hint(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "New bookings are written to this calendar.",
+        Locale::FrCa => "New bookings are written to this calendar.",
+    }
+}
+
+/// `calendars.destination_label`
+#[must_use]
+pub fn calendars_destination_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Receives bookings",
+        Locale::FrCa => "Receives bookings",
+    }
+}
+
+/// `calendars.loading`
+#[must_use]
+pub fn calendars_loading(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Loading calendars…",
+        Locale::FrCa => "Loading calendars…",
+    }
+}
+
+/// `calendars.open`
+#[must_use]
+pub fn calendars_open(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose calendars",
+        Locale::FrCa => "Choose calendars",
+    }
+}
+
+/// `calendars.save_action`
+#[must_use]
+pub fn calendars_save_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save changes",
+        Locale::FrCa => "Save changes",
+    }
+}
+
+/// `calendars.saved`
+#[must_use]
+pub fn calendars_saved(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Calendars saved",
+        Locale::FrCa => "Calendars saved",
+    }
+}
+
+/// `calendars.saving`
+#[must_use]
+pub fn calendars_saving(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Saving…",
+        Locale::FrCa => "Saving…",
+    }
+}
+
+/// `calendars.title`
+#[must_use]
+pub fn calendars_title(l: Locale, account_email: &str) -> String {
+    match l {
+        Locale::En => format!("Calendars in {account_email}"),
+        Locale::FrCa => format!("Calendars in {account_email}"),
     }
 }
 
@@ -482,6 +941,42 @@ pub fn common_saving(l: Locale) -> &'static str {
     }
 }
 
+/// `connect.hand_off_note`
+#[must_use]
+pub fn connect_hand_off_note(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Finish in the browser, then come back and refresh this page.",
+        Locale::FrCa => "Finish in the browser, then come back and refresh this page.",
+    }
+}
+
+/// `connect.not_configured`
+#[must_use]
+pub fn connect_not_configured(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Calendar connections are not set up on this scheduler yet.",
+        Locale::FrCa => "Calendar connections are not set up on this scheduler yet.",
+    }
+}
+
+/// `connect.not_ready_yet`
+#[must_use]
+pub fn connect_not_ready_yet(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Scheduling is still being set up for this workspace. Try again shortly.",
+        Locale::FrCa => "Scheduling is still being set up for this workspace. Try again shortly.",
+    }
+}
+
+/// `connect.provider_named`
+#[must_use]
+pub fn connect_provider_named(l: Locale, provider: &str) -> String {
+    match l {
+        Locale::En => format!("Connect {provider}"),
+        Locale::FrCa => format!("Connect {provider}"),
+    }
+}
+
 /// `day.not_bookable`
 #[must_use]
 pub fn day_not_bookable(l: Locale) -> &'static str {
@@ -635,6 +1130,51 @@ pub fn desk_no_hours(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not bookable on any day yet.",
         Locale::FrCa => "Not bookable on any day yet.",
+    }
+}
+
+/// `disconnect.action`
+#[must_use]
+pub fn disconnect_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Disconnect",
+        Locale::FrCa => "Disconnect",
+    }
+}
+
+/// `disconnect.confirm`
+#[must_use]
+pub fn disconnect_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Bookings stop syncing to it. Existing events stay.",
+        Locale::FrCa => "Bookings stop syncing to it. Existing events stay.",
+    }
+}
+
+/// `disconnect.keep`
+#[must_use]
+pub fn disconnect_keep(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Keep it connected",
+        Locale::FrCa => "Keep it connected",
+    }
+}
+
+/// `disconnect.prompt`
+#[must_use]
+pub fn disconnect_prompt(l: Locale, account_email: &str) -> String {
+    match l {
+        Locale::En => format!("Disconnect {account_email}?"),
+        Locale::FrCa => format!("Disconnect {account_email}?"),
+    }
+}
+
+/// `disconnected.last_destination`
+#[must_use]
+pub fn disconnected_last_destination(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No calendar receives new bookings now. Connect one, or choose a calendar in another account.",
+        Locale::FrCa => "No calendar receives new bookings now. Connect one, or choose a calendar in another account.",
     }
 }
 

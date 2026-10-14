@@ -215,6 +215,266 @@ screen = "scheduling bookings"
 tier = "T3"
 note = "The Load more button while the next page is on its way."
 
+[caldav.connect_action]
+en = "Connect calendar"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.connected]
+en = "Calendar connected"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.connected_to_line]
+en = "Calendar connected: {account}"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+args = { account = "str" }
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.connecting]
+en = "Connecting…"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.password_hint]
+en = "An app-specific password from the provider, not the account password."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.password_label]
+en = "App password"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.password_missing]
+en = "Enter the app password."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.preset_custom]
+en = "Other server URL"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.preset_custom_note]
+en = "Any other CalDAV server."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.preset_fastmail]
+en = "Fastmail"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.preset_fastmail_note]
+en = "Fastmail's calendar. Create an app password in Fastmail settings."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.preset_icloud]
+en = "iCloud"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "Where a CalDAV calendar lives: Apple's iCloud. A product name."
+
+[caldav.preset_icloud_note]
+en = "Apple's calendar. Create an app-specific password at appleid.apple.com."
+ctx = "body"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "Where to get an app-specific password for iCloud."
+
+[caldav.preset_label]
+en = "Where the calendar lives"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.preset_nextcloud]
+en = "Nextcloud"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.preset_nextcloud_note]
+en = "Your own Nextcloud server, at its DAV address."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.refused]
+en = "Could not connect. Check the server, username and app password."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.server_url_hint]
+en = "The base address of the CalDAV server."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.server_url_is_ip]
+en = "Enter the server's hostname rather than an IP address."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.server_url_label]
+en = "Server URL"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.server_url_missing]
+en = "Enter the server URL."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.server_url_not_a_url]
+en = "That does not look like a server address. It should start with https://"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.server_url_not_https]
+en = "The server address must start with https://. An app password sent over http:// travels in the clear."
+ctx = "error"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "The CalDAV server address is not https. Nothing was sent."
+
+[caldav.title]
+en = "Connect a CalDAV calendar"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.username_label]
+en = "Username"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[caldav.username_missing]
+en = "Enter the username."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendar.account]
+en = "Account"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.conflicts]
+en = "Checked for conflicts"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.conflicts_checked]
+en = "Checked"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.conflicts_none]
+en = "None"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.conflicts_not_checked]
+en = "Not checked"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.connect_another]
+en = "Another account can be connected to check it for conflicts as well."
+ctx = "body"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.connect_eyebrow]
+en = "Connecting a calendar"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.connected]
+en = "Connected"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.destination]
+en = "Receives bookings"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.destination_none]
+en = "No calendar in this account"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.destination_this_account]
+en = "This account"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
 [calendar.line]
 en = "{provider}, {account}"
 ctx = "format"
@@ -222,6 +482,27 @@ screen = "scheduling overview"
 tier = "T3"
 args = { provider = "str", account = "str" }
 note = "One connected calendar in the overview, e.g. \"Google Calendar, ada@example.com\". {provider} is the calendar service, {account} the account's address."
+
+[calendar.none_connected]
+en = "No calendar is connected yet, so nothing is checked for conflicts and bookings are not written anywhere."
+ctx = "body"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.not_configured]
+en = "Calendar connections are not set up on this scheduler yet."
+ctx = "body"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendar.not_connected]
+en = "Not connected"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.provider_apple]
 en = "Apple Calendar"
@@ -250,6 +531,84 @@ ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
 note = "A calendar service's name. A product name, never translated."
+
+[calendar.zoom]
+en = "Zoom"
+ctx = "label"
+screen = "scheduling calendar"
+tier = "T3"
+note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
+
+[calendars.conflicts_hint]
+en = "A booking is refused when it clashes with an event on a checked calendar."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendars.conflicts_label]
+en = "Checked for conflicts"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendars.destination_hint]
+en = "New bookings are written to this calendar."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendars.destination_label]
+en = "Receives bookings"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendars.loading]
+en = "Loading calendars…"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendars.open]
+en = "Choose calendars"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendars.save_action]
+en = "Save changes"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendars.saved]
+en = "Calendars saved"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendars.saving]
+en = "Saving…"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[calendars.title]
+en = "Calendars in {account_email}"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+args = { account_email = "str" }
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [cancel.body]
 en = "The attendee gets a cancellation email."
@@ -378,6 +737,35 @@ screen = "scheduling"
 tier = "T3"
 note = "A save button while the save is on its way."
 
+[connect.hand_off_note]
+en = "Finish in the browser, then come back and refresh this page."
+ctx = "body"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "Said before the browser opens the calendar provider's consent page: the app is not told when it is done, so the member refreshes."
+
+[connect.not_configured]
+en = "Calendar connections are not set up on this scheduler yet."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[connect.not_ready_yet]
+en = "Scheduling is still being set up for this workspace. Try again shortly."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[connect.provider_named]
+en = "Connect {provider}"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+args = { provider = "str" }
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
 [day.not_bookable]
 en = "Not bookable"
 ctx = "label"
@@ -491,6 +879,42 @@ ctx = "body"
 screen = "scheduling overview"
 tier = "T3"
 note = "The hours row when no weekly hours are set."
+
+[disconnect.action]
+en = "Disconnect"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[disconnect.confirm]
+en = "Bookings stop syncing to it. Existing events stay."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[disconnect.keep]
+en = "Keep it connected"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[disconnect.prompt]
+en = "Disconnect {account_email}?"
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+args = { account_email = "str" }
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
+
+[disconnected.last_destination]
+en = "No calendar receives new bookings now. Connect one, or choose a calendar in another account."
+ctx = "label"
+screen = "scheduling calendar writes"
+tier = "T3"
+note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [editor.active_toggle]
 en = "Active"

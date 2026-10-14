@@ -422,10 +422,10 @@ fn copying_a_day_to_the_weekdays_keeps_each_days_rules() {
     // A window carrying the id of a rule no longer read is created anew.
     let effects = hours(&mut model, HoursEvent::SaveWeek);
     let requests = sent(&effects);
-    assert!(matches!(
+    assert_eq!(
         requests[0].1,
-        SchedulingAdminRequest::PatchRule { .. }
-    ));
+        SchedulingAdminRequest::DeleteRule { id: "bad".into() }
+    );
 }
 
 #[test]

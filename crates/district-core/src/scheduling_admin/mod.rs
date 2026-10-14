@@ -43,6 +43,12 @@ macro_rules! data {
             _ => None,
         }
     };
+    ($variant:ident, boxed) => {
+        |data: district_model::SchedulingAdminData| match data {
+            district_model::SchedulingAdminData::$variant(value) => Some(*value),
+            _ => None,
+        }
+    };
 }
 
 mod bookings;
@@ -67,7 +73,11 @@ pub use bookings::{
     BookingsEvent, BookingsSection, BookingsView, CANCEL_REASON_MAX, CancelDialog, ReassignDialog,
     RescheduleDialog, is_actionable, status_label,
 };
-pub use calendar::{CalendarEvent, CalendarSection, provider_label};
+pub use calendar::{
+    CALENDAR_WEB_PATH, CaldavDialog, CaldavField, CaldavForm, CaldavPreset, CalendarDialog,
+    CalendarEvent, CalendarPicker, CalendarSection, ConnectState, ConnectionCard, DisconnectState,
+    OAUTH_PROVIDERS, connect_next, provider_label,
+};
 pub use clock::{SchedulingDay, times_in};
 pub use developer::{DeveloperEvent, DeveloperSection};
 pub use event_types::{
@@ -395,7 +405,7 @@ pub struct SchedulingAdmin {
 /// sign-in a calendar connection starts with, or an effect that reports
 /// nothing back.
 pub(crate) enum Out {
-    Send(Pending, SchedulingAdminRequest),
+    Send(Pending, Box<SchedulingAdminRequest>),
     SignIn(Pending, String),
     Effect(Effect),
     /// Show another screen: a deleted event type's list.

@@ -2,6 +2,7 @@
 //! reads, what each action sends, and how each answer and refusal lands.
 
 mod bookings;
+mod calendar;
 mod common;
 mod event_types;
 mod hours;
@@ -42,7 +43,7 @@ pub(crate) fn sent(effects: &[Effect]) -> Vec<(Ticket, SchedulingAdminRequest)> 
         .filter_map(|effect| match effect {
             Effect::SchedulingAdmin {
                 ticket, request, ..
-            } => Some((*ticket, request.clone())),
+            } => Some((*ticket, request.as_ref().clone())),
             _ => None,
         })
         .collect()
