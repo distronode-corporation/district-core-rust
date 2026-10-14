@@ -7,8 +7,8 @@
 # plus a newline). There are three sets, each with its own [sets.<name>] table
 # below: `fixtures`, the Android app's set, which this client reads too,
 # `desktop`, the shapes only this client reads, and `i18n`, the service's
-# localization facts, which crates/district-l10n reads. All come from the one
-# commit in [source].
+# localization facts, which crates/district-l10n reads. Each table names the
+# server commit its set was copied from.
 #
 # The files here are those bytes except for the substitutions below, which replace
 # data that must not appear in a public repository. A phone, email or host
@@ -22,20 +22,20 @@
 # contracts/SHA256SUMS holds a digest of every file of every set; from contracts/,
 # `sha256sum -c SHA256SUMS` checks them.
 
-[source]
-commit = "46e1740a6fb0d78c34f6a216545e557f5a08af2b"
-
 [sets.fixtures]
+commit = "46e1740a6fb0d78c34f6a216545e557f5a08af2b"
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
 file_count = 166
 
 [sets.desktop]
+commit = "46e1740a6fb0d78c34f6a216545e557f5a08af2b"
 source = "the desktop-only contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
 file_count = 13
 
 [sets.i18n]
+commit = "2528233a95df57c65a7e06bbdf6a93b61b9baf62"
 source = "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests"
 source_clean = true
 file_count = 3

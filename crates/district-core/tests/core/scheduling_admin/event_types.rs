@@ -1,6 +1,7 @@
 //! Event types: the list and its create form, one event type's details, its
 //! editor, its state actions, its hosts and its questions.
 
+use district_core::l10n::{Locale, with_locale};
 use district_core::scheduling_admin::{
     ActionsDialog, EventTypeDialog, EventTypeEditor, EventTypeEvent, EventTypeForm,
     EventTypeSection, EventTypesEvent, EventTypesSection, HostsDialog, QuestionForm,
@@ -310,10 +311,10 @@ fn an_event_type_shows_its_details_hosts_and_questions_in_order() {
     assert_eq!(
         section.host_rows(),
         [
-            ("Contract Member".to_owned(), "required".to_owned()),
+            ("Contract Member".to_owned(), "Required".to_owned()),
             (
                 "Rotation Host".to_owned(),
-                "rotation \u{b7} archived".to_owned()
+                "Rotation \u{b7} archived".to_owned()
             ),
         ]
     );
@@ -322,11 +323,11 @@ fn an_event_type_shows_its_details_hosts_and_questions_in_order() {
         [
             (
                 "Which product are you asking about?".to_owned(),
-                "select \u{b7} required".to_owned()
+                "Select \u{b7} required".to_owned()
             ),
             (
                 "Anything we should read first?".to_owned(),
-                "text".to_owned()
+                "Text".to_owned()
             ),
         ]
     );
@@ -376,6 +377,60 @@ fn a_sparse_event_type_shows_only_what_it_has_and_a_blank_host_by_address() {
     let facts: Vec<&str> = section(&model).facts().iter().map(|(l, _)| *l).collect();
     assert_eq!(facts, ["Duration", "Location", "State"]);
     assert_eq!(section(&model).host_rows()[0].0, "ann@example.com");
+}
+
+#[test]
+fn host_roles_and_question_types_read_as_their_labels_in_french() {
+    let model = opened("agency");
+    let section = section(&model);
+    let (hosts, questions) = with_locale(Locale::FrCa, || {
+        (section.host_rows(), section.question_rows())
+    });
+    let kinds: Vec<&str> = hosts.iter().map(|(_, role)| role.as_str()).collect();
+    assert_eq!(
+        kinds,
+        ["Obligatoire", "Rotation \u{b7} compte archiv\u{e9}"]
+    );
+    let kinds: Vec<&str> = questions.iter().map(|(_, kind)| kind.as_str()).collect();
+    assert_eq!(kinds, ["Liste d\u{e9}roulante \u{b7} obligatoire", "Texte"]);
+}
+
+#[test]
+fn a_role_or_question_type_this_build_does_not_know_never_reads_as_itself() {
+    let (mut model, effects) = open("agency", SchedulingSection::EventType { slug: "s".into() });
+    let host = SchedulingHost {
+        email: "ann@example.com".into(),
+        role: "cohost".into(),
+        archived: true,
+        ..SchedulingHost::default()
+    };
+    let question = SchedulingQuestion {
+        label: "Pick a day".into(),
+        kind: "date".into(),
+        required: true,
+        ..SchedulingQuestion::default()
+    };
+    answer(
+        &mut model,
+        ticket_for(&effects, |r| {
+            matches!(r, SchedulingAdminRequest::Hosts { .. })
+        }),
+        done(SchedulingAdminData::Hosts(vec![host])),
+    );
+    answer(
+        &mut model,
+        ticket_for(&effects, |r| {
+            matches!(r, SchedulingAdminRequest::Questions { .. })
+        }),
+        done(SchedulingAdminData::Questions(vec![question])),
+    );
+    let section = section(&model);
+    assert_eq!(section.host_rows()[0].1, "Other \u{b7} archived");
+    assert_eq!(section.question_rows()[0].1, "Other \u{b7} required");
+    with_locale(Locale::FrCa, || {
+        assert_eq!(section.host_rows()[0].1, "Autre \u{b7} compte archiv\u{e9}");
+        assert_eq!(section.question_rows()[0].1, "Autre \u{b7} obligatoire");
+    });
 }
 
 fn dialog(model: &Model) -> &EventTypeDialog {

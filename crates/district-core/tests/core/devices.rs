@@ -2,6 +2,7 @@
 //! out with a question first.
 
 use district_api::{ApiError, ErrorDetail, ReauthReason, UnauthorizedReason};
+use district_core::l10n::{Locale, with_locale};
 use district_core::{
     Confirmation, DeviceRow, DevicesEvent, DevicesList, DevicesScreen, Effect, Event, FailureText,
     Model, Route, SessionState, SignOutScope, SigningOut,
@@ -107,15 +108,44 @@ fn a_row_is_shown_by_its_name_platform_and_last_renewal() {
     let rows = rows(&model);
     assert_eq!(rows[0].name(), "Google Pixel 9");
     assert_eq!(rows[0].platform(), "Android");
+    // The day the service stamped, as a reader writes it, never the raw stamp.
+    assert_eq!(rows[0].last_active(), "Last active Aug 15, 2026");
     assert_eq!(
-        rows[0].last_active(),
-        "Last active 2026-08-15T14:30:00.000Z"
+        with_locale(Locale::FrCa, || rows[0].last_active()),
+        "Derni\u{e8}re activit\u{e9}\u{a0}: 15 ao\u{fb}t 2026"
     );
     // No name is "Unnamed device", never the opaque id.
     assert_eq!(rows[1].name(), "Unnamed device");
     assert_eq!(rows[1].platform(), "iOS");
     assert_eq!(rows[1].last_active(), "Signed in recently");
     assert_eq!(rows[2].platform(), "Linux");
+
+    let stamped = |when: &str| DeviceRow {
+        device: NativeDevice {
+            device_id: "d".to_owned(),
+            device_name: None,
+            platform: "linux".to_owned(),
+            last_used_at: Some(when.to_owned()),
+            created_at: String::new(),
+        },
+        is_this_device: false,
+    };
+    // The day as it falls in UTC, the first of a month the French way, and a
+    // stamp that is not an instant as it came.
+    assert_eq!(
+        stamped("2026-09-01T03:59:00Z").last_active(),
+        "Last active Sep 1, 2026"
+    );
+    assert_eq!(
+        with_locale(Locale::FrCa, || stamped("2026-09-01T03:59:00Z")
+            .last_active()),
+        "Derni\u{e8}re activit\u{e9}\u{a0}: 1er sept. 2026"
+    );
+    assert_eq!(
+        stamped("2026-09-01T23:30:00-04:00").last_active(),
+        "Last active Sep 2, 2026"
+    );
+    assert_eq!(stamped("yesterday").last_active(), "Last active yesterday");
 
     let row = |name: Option<&str>, platform: &str| DeviceRow {
         device: NativeDevice {

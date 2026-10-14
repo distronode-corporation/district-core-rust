@@ -1023,7 +1023,7 @@ screen = "devices"
 tier = "T3"
 args = { when = "str" }
 state = "reviewed"
-note = "Under a device: when it last renewed its sign-in. {when} is the time as the service stamped it."
+note = "Under a device: when it last renewed its sign-in. {when} is the day it falls on in UTC, written by the date format (Aug 15, 2026)."
 
 [devices.nothing_revoked]
 en = "That device was already signed out. The list has been refreshed."

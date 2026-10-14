@@ -3,6 +3,69 @@ catalog = "wire"
 platform = "rust"
 apple = false
 
+[wire.a2p_campaign_type.customer_care]
+en = "Customer Care"
+fr = "Service à la clientèle"
+ctx = "label"
+screen = "wire a2p_campaign_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `CUSTOMER_CARE` of a2pCampaignType. `campaignType` in the POST /api/district/workspace/a2p body: the A2P 10DLC use case a registration is filed under. A request value; the route files any other value as Twilio's MIXED."
+
+[wire.a2p_campaign_type.low_volume]
+en = "Low Volume Mixed (Under 15k msgs/mo)"
+fr = "Faible volume mixte (moins de 15 k messages/mois)"
+ctx = "label"
+screen = "wire a2p_campaign_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `LOW_VOLUME` of a2pCampaignType. `campaignType` in the POST /api/district/workspace/a2p body: the A2P 10DLC use case a registration is filed under. A request value; the route files any other value as Twilio's MIXED."
+
+[wire.a2p_campaign_type.marketing]
+en = "Marketing / Promotions"
+fr = "Marketing / promotions"
+ctx = "label"
+screen = "wire a2p_campaign_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `MARKETING` of a2pCampaignType. `campaignType` in the POST /api/district/workspace/a2p body: the A2P 10DLC use case a registration is filed under. A request value; the route files any other value as Twilio's MIXED."
+
+[wire.a2p_campaign_type.v_2fa]
+en = "2FA / OTP Alerts"
+fr = "Alertes 2FA / mot de passe à usage unique"
+ctx = "label"
+screen = "wire a2p_campaign_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `2FA` of a2pCampaignType. `campaignType` in the POST /api/district/workspace/a2p body: the A2P 10DLC use case a registration is filed under. A request value; the route files any other value as Twilio's MIXED."
+
+[wire.a2p_registration_status.failed]
+en = "FAILED"
+fr = "ÉCHEC"
+ctx = "label"
+screen = "wire a2p_registration_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `FAILED` of a2pRegistrationStatus. `status` in the POST /api/district/workspace/a2p answer: Twilio's campaign status, passed through (`IN_PROGRESS` when Twilio sends none). Twilio's SDK types it as a string and names these three as examples, so another value can arrive and is shown as sent. The portal has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.a2p_registration_status.in_progress]
+en = "IN PROGRESS"
+fr = "EN COURS"
+ctx = "label"
+screen = "wire a2p_registration_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `IN_PROGRESS` of a2pRegistrationStatus. `status` in the POST /api/district/workspace/a2p answer: Twilio's campaign status, passed through (`IN_PROGRESS` when Twilio sends none). Twilio's SDK types it as a string and names these three as examples, so another value can arrive and is shown as sent. The portal has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.a2p_registration_status.verified]
+en = "VERIFIED"
+fr = "VÉRIFIÉE"
+ctx = "label"
+screen = "wire a2p_registration_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `VERIFIED` of a2pRegistrationStatus. `status` in the POST /api/district/workspace/a2p answer: Twilio's campaign status, passed through (`IN_PROGRESS` when Twilio sends none). Twilio's SDK types it as a string and names these three as examples, so another value can arrive and is shown as sent. The portal has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
 [wire.analytics_sentiment.friction_sentiment]
 en = "Friction Sentiment"
 fr = "Sentiment de friction"
@@ -740,6 +803,51 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `unknown` of numberProvider. `numbers[].provider` in GET /api/district/workspace/provider/numbers, and `provider` in the number search response. `unknown` is a managed number whose carrier is not recorded. The service has no label for it; the English is the value as the apps show it."
 
+[wire.number_status.active]
+en = "Active"
+fr = "Actif"
+ctx = "label"
+screen = "wire number_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `active` of numberStatus. `numbers[].status` in GET /api/district/workspace/provider/numbers: a managed number's `PhoneNumberIndex.status` (missing reads as `active`; `released` rows are left out of the list), and for a number on the workspace's own carrier account the carrier's word (`active` from Twilio and Sinch; Telnyx's own status passed through, so another value can arrive). `pending_verification` is a toll-free number under carrier review (POST /api/district/workspace/tfv); `suspended` is set by staff. The portal shows the value itself and has no label for any of them; an empty one shows as `fallback`. The service has no label for it; the English is the value as the apps show it."
+
+[wire.number_status.fallback]
+en = "Active"
+fr = "Actif"
+ctx = "label"
+screen = "wire number_status"
+tier = "T3"
+state = "reviewed"
+note = "The label for a value of numberStatus this build does not know, or none."
+
+[wire.number_status.pending_verification]
+en = "Pending verification"
+fr = "Vérification en attente"
+ctx = "label"
+screen = "wire number_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `pending_verification` of numberStatus. `numbers[].status` in GET /api/district/workspace/provider/numbers: a managed number's `PhoneNumberIndex.status` (missing reads as `active`; `released` rows are left out of the list), and for a number on the workspace's own carrier account the carrier's word (`active` from Twilio and Sinch; Telnyx's own status passed through, so another value can arrive). `pending_verification` is a toll-free number under carrier review (POST /api/district/workspace/tfv); `suspended` is set by staff. The portal shows the value itself and has no label for any of them; an empty one shows as `fallback`. The service has no label for it; the English is the value as the apps show it."
+
+[wire.number_status.released]
+en = "Released"
+fr = "Libéré"
+ctx = "label"
+screen = "wire number_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `released` of numberStatus. `numbers[].status` in GET /api/district/workspace/provider/numbers: a managed number's `PhoneNumberIndex.status` (missing reads as `active`; `released` rows are left out of the list), and for a number on the workspace's own carrier account the carrier's word (`active` from Twilio and Sinch; Telnyx's own status passed through, so another value can arrive). `pending_verification` is a toll-free number under carrier review (POST /api/district/workspace/tfv); `suspended` is set by staff. The portal shows the value itself and has no label for any of them; an empty one shows as `fallback`. The service has no label for it; the English is the value as the apps show it."
+
+[wire.number_status.suspended]
+en = "Suspended"
+fr = "Suspendu"
+ctx = "label"
+screen = "wire number_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `suspended` of numberStatus. `numbers[].status` in GET /api/district/workspace/provider/numbers: a managed number's `PhoneNumberIndex.status` (missing reads as `active`; `released` rows are left out of the list), and for a number on the workspace's own carrier account the carrier's word (`active` from Twilio and Sinch; Telnyx's own status passed through, so another value can arrive). `pending_verification` is a toll-free number under carrier review (POST /api/district/workspace/tfv); `suspended` is set by staff. The portal shows the value itself and has no label for any of them; an empty one shows as `fallback`. The service has no label for it; the English is the value as the apps show it."
+
 [wire.number_type.local]
 en = "Local"
 fr = "Local"
@@ -1024,6 +1132,88 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `pending` of researchStatus. `dgiStatus` on a contact (GET /api/district/contacts, /contacts/get): the lead research job."
 
+[wire.scheduling_host_role.optional]
+en = "Optional"
+fr = "Facultatif"
+ctx = "label"
+screen = "wire scheduling_host_role"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `optional` of schedulingHostRole. `role` on an event type's host in the scheduling admin ops `eventTypes.hosts*`."
+
+[wire.scheduling_host_role.required]
+en = "Required"
+fr = "Obligatoire"
+ctx = "label"
+screen = "wire scheduling_host_role"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `required` of schedulingHostRole. `role` on an event type's host in the scheduling admin ops `eventTypes.hosts*`."
+
+[wire.scheduling_host_role.rotation]
+en = "Rotation"
+fr = "Rotation"
+ctx = "label"
+screen = "wire scheduling_host_role"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "A label for the stored value `rotation` of schedulingHostRole. `role` on an event type's host in the scheduling admin ops `eventTypes.hosts*`."
+
+[wire.scheduling_question_type.checkbox]
+en = "Checkbox"
+fr = "Case à cocher"
+ctx = "label"
+screen = "wire scheduling_question_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `checkbox` of schedulingQuestionType. `type` on a booking question in the scheduling admin ops `eventTypes.questions.*`."
+
+[wire.scheduling_question_type.select]
+en = "Select"
+fr = "Liste déroulante"
+ctx = "label"
+screen = "wire scheduling_question_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `select` of schedulingQuestionType. `type` on a booking question in the scheduling admin ops `eventTypes.questions.*`."
+
+[wire.scheduling_question_type.text]
+en = "Text"
+fr = "Texte"
+ctx = "label"
+screen = "wire scheduling_question_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `text` of schedulingQuestionType. `type` on a booking question in the scheduling admin ops `eventTypes.questions.*`."
+
+[wire.scheduling_webhook_delivery_status.failed]
+en = "Failed"
+fr = "Échec"
+ctx = "label"
+screen = "wire scheduling_webhook_delivery_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `failed` of schedulingWebhookDeliveryStatus. `items[].status` in the scheduling admin op `webhooks.deliveries`: what the scheduler's worker stores (internal/worker/worker.go in the district-scheduler fork: `pending`, then `success` or `failed`). `failed` has no single label: the portal shows \"No answer\" without a `response_status` and \"Rejected with {code}\" with one (schedulingI18n.ts developer). The service has no label for it; the English is the value as the apps show it."
+
+[wire.scheduling_webhook_delivery_status.pending]
+en = "Waiting"
+fr = "En attente"
+ctx = "label"
+screen = "wire scheduling_webhook_delivery_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `pending` of schedulingWebhookDeliveryStatus. `items[].status` in the scheduling admin op `webhooks.deliveries`: what the scheduler's worker stores (internal/worker/worker.go in the district-scheduler fork: `pending`, then `success` or `failed`). `failed` has no single label: the portal shows \"No answer\" without a `response_status` and \"Rejected with {code}\" with one (schedulingI18n.ts developer)."
+
+[wire.scheduling_webhook_delivery_status.success]
+en = "Delivered"
+fr = "Livré"
+ctx = "label"
+screen = "wire scheduling_webhook_delivery_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `success` of schedulingWebhookDeliveryStatus. `items[].status` in the scheduling admin op `webhooks.deliveries`: what the scheduler's worker stores (internal/worker/worker.go in the district-scheduler fork: `pending`, then `success` or `failed`). `failed` has no single label: the portal shows \"No answer\" without a `response_status` and \"Rejected with {code}\" with one (schedulingI18n.ts developer)."
+
 [wire.sentiment.negative]
 en = "Friction"
 fr = "Friction"
@@ -1051,6 +1241,51 @@ screen = "wire sentiment"
 tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `positive` of sentiment. `sentiment` on a call row, written by the voice agent's post-call analysis. The portal labels \"negative\" as friction."
+
+[wire.sip_trunk_status.active]
+en = "Active"
+fr = "Actif"
+ctx = "label"
+screen = "wire sip_trunk_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `active` of sipTrunkStatus. `trunks[].status` in GET /api/district/workspace/sip and `trunk.status` in its POST: the trunk's billing row status. A trunk's row is written `active` and nothing changes it; the portal badges every listed trunk with this label."
+
+[wire.toll_free_verification_status.in_review]
+en = "IN REVIEW"
+fr = "EN EXAMEN"
+ctx = "label"
+screen = "wire toll_free_verification_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `IN_REVIEW` of tollFreeVerificationStatus. `status` in the POST /api/district/workspace/tfv answer: Twilio's toll-free verification status, passed through. The portal has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.toll_free_verification_status.pending_review]
+en = "PENDING REVIEW"
+fr = "EXAMEN EN ATTENTE"
+ctx = "label"
+screen = "wire toll_free_verification_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `PENDING_REVIEW` of tollFreeVerificationStatus. `status` in the POST /api/district/workspace/tfv answer: Twilio's toll-free verification status, passed through. The portal has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.toll_free_verification_status.twilio_approved]
+en = "TWILIO APPROVED"
+fr = "APPROUVÉE PAR TWILIO"
+ctx = "label"
+screen = "wire toll_free_verification_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `TWILIO_APPROVED` of tollFreeVerificationStatus. `status` in the POST /api/district/workspace/tfv answer: Twilio's toll-free verification status, passed through. The portal has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+
+[wire.toll_free_verification_status.twilio_rejected]
+en = "TWILIO REJECTED"
+fr = "REFUSÉE PAR TWILIO"
+ctx = "label"
+screen = "wire toll_free_verification_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `TWILIO_REJECTED` of tollFreeVerificationStatus. `status` in the POST /api/district/workspace/tfv answer: Twilio's toll-free verification status, passed through. The portal has no label for any of them. The service has no label for it; the English is the value as the apps show it."
 
 [wire.transfer_reason.auth_error]
 en = "Transfer authorization error"

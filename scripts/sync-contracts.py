@@ -4,6 +4,7 @@ public repository.
 
     python3 scripts/sync-contracts.py --monorepo PATH
     python3 scripts/sync-contracts.py --monorepo PATH --allow-dirty
+    python3 scripts/sync-contracts.py --monorepo PATH --sets i18n
 
 The fixtures are JSON bodies recorded from the District AI server's own route
 handlers (and, for the live telemetry socket, from its real publisher) by tests in
@@ -43,6 +44,15 @@ This script:
 
 It is idempotent: a second run against the same commit changes nothing, the sync
 date included.
+
+`--sets` names the sets to bring to PATH's commit (by default, every set). Each
+other set stays at the commit SOURCE.toml records for it: the script reads that
+set from PATH's history at that commit, runs it through the same table and
+checks, and stops unless the result is byte for byte the copy already here. So
+SOURCE.toml records a commit per set, and every set is still reproducible from
+the commit it names. This is how a set is synced without the others, for
+example the localization facts when the server has recorded fixtures this client
+has no types for yet.
 
 THE TABLE NAMES ORIGINALS BY DIGEST, NOT BY VALUE. Writing an internal host name or
 a phone number into this file, or into SOURCE.toml, would publish exactly what the
@@ -481,17 +491,51 @@ def check_replacements_are_new(
 # The server repository.
 
 
-def read_monorepo(path: Path, allow_dirty: bool) -> tuple[str, dict[str, bool], dict[str, str]]:
-    """The commit, whether each set's source directory is clean (by set name), and
-    every fixture's text keyed by its path under contracts/ (`<set>/<file>`)."""
+def git_bytes(checkout: Path, *args: str) -> bytes:
+    """The standard output of `git -C <checkout> <args>`, as bytes."""
+    return subprocess.run(
+        ["git", "-C", str(checkout), *args], check=True, capture_output=True
+    ).stdout
+
+
+def read_monorepo(
+    path: Path, allow_dirty: bool, kept: dict[str, str],
+) -> tuple[dict[str, str], dict[str, bool], dict[str, str]]:
+    """Each set's commit and whether its source directory is clean (both by set
+    name), and every fixture's text keyed by its path under contracts/
+    (`<set>/<file>`).
+
+    A set named in `kept` is read from the checkout's history at the commit given
+    for it, so it is clean by construction; every other set is read from the
+    working tree, at the checkout's HEAD."""
     try:
         top = Path(git(path, "rev-parse", "--show-toplevel").strip())
     except subprocess.CalledProcessError as exc:
         raise SyncError(f"{path} is not a git checkout: {exc.stderr.strip()}") from exc
     commit = head(top)
+    commits: dict[str, str] = {}
     clean: dict[str, bool] = {}
     sources: dict[str, str] = {}
     for fixture_set in SETS:
+        if fixture_set.name in kept:
+            at = kept[fixture_set.name]
+            try:
+                listing = git(top, "ls-tree", "--name-only", f"{at}:{fixture_set.source}")
+                git(top, "cat-file", "-e", f"{at}:{fixture_set.generator}")
+            except subprocess.CalledProcessError as exc:
+                raise SyncError(
+                    f"cannot read {fixture_set.source} or its generator at {at[:12]}, the commit "
+                    f"SOURCE.toml records for {fixture_set.name}: {exc.stderr.strip()}"
+                ) from exc
+            names = sorted(name for name in listing.splitlines() if name.endswith(".json"))
+            for name in names:
+                data = git_bytes(top, "cat-file", "blob", f"{at}:{fixture_set.source}/{name}")
+                sources[f"{fixture_set.name}/{name}"] = data.decode("utf-8")
+            if not names:
+                raise SyncError(f"{fixture_set.source} at {at[:12]} holds no .json files")
+            commits[fixture_set.name] = at
+            clean[fixture_set.name] = True
+            continue
         directory = top / fixture_set.source
         if not directory.is_dir():
             raise SyncError(f"{directory} does not exist; is {top} the server repository?")
@@ -510,7 +554,28 @@ def read_monorepo(path: Path, allow_dirty: bool) -> tuple[str, dict[str, bool], 
             sources[f"{fixture_set.name}/{file.name}"] = file.read_bytes().decode("utf-8")
         if not files:
             raise SyncError(f"{directory} holds no .json files")
-    return commit, clean, sources
+        commits[fixture_set.name] = commit
+    return commits, clean, sources
+
+
+def recorded_commits(text: str) -> dict[str, str]:
+    """The commit SOURCE.toml records for each set: its own `commit`, or, in a file
+    written before sets had one, the single commit in [source]."""
+    shared = ""
+    commits: dict[str, str] = {}
+    table = ""
+    for line in text.splitlines():
+        if line.startswith("[") and line.endswith("]"):
+            table = line.strip("[]")
+            continue
+        m = re.fullmatch(r'commit = "([0-9a-f]{40})"', line)
+        if not m:
+            continue
+        if table == "source":
+            shared = m.group(1)
+        elif table.startswith("sets."):
+            commits[table.removeprefix("sets.")] = m.group(1)
+    return {fixture_set.name: commits.get(fixture_set.name, shared) for fixture_set in SETS}
 
 
 # Output.
@@ -542,8 +607,8 @@ SOURCE_HEADER = """\
 # plus a newline). There are three sets, each with its own [sets.<name>] table
 # below: `fixtures`, the Android app's set, which this client reads too,
 # `desktop`, the shapes only this client reads, and `i18n`, the service's
-# localization facts, which crates/district-l10n reads. All come from the one
-# commit in [source].
+# localization facts, which crates/district-l10n reads. Each table names the
+# server commit its set was copied from.
 #
 # The files here are those bytes except for the substitutions below, which replace
 # data that must not appear in a public repository. A phone, email or host
@@ -560,16 +625,15 @@ SOURCE_HEADER = """\
 
 
 def render_source(
-    commit: str, clean: dict[str, bool], date: str, outputs: dict[str, str],
+    commits: dict[str, str], clean: dict[str, bool], date: str, outputs: dict[str, str],
     table: tuple[Substitution, ...], per_file: dict[int, Counter],
 ) -> str:
-    lines = [SOURCE_HEADER]
-    lines.append("[source]")
-    lines.append(f"commit = {toml_string(commit)}")
+    lines = [SOURCE_HEADER.rstrip("\n")]
     for fixture_set in SETS:
         count = sum(1 for path in outputs if path.startswith(f"{fixture_set.name}/"))
         lines.append("")
         lines.append(f"[sets.{fixture_set.name}]")
+        lines.append(f"commit = {toml_string(commits[fixture_set.name])}")
         lines.append(f"source = {toml_string(fixture_set.description)}")
         lines.append(f"source_clean = {'true' if clean[fixture_set.name] else 'false'}")
         lines.append(f"file_count = {count}")
@@ -605,9 +669,22 @@ def write_if_changed(path: Path, content: str) -> bool:
     return True
 
 
-def sync(monorepo: Path, allow_dirty: bool, today: str) -> int:
+def sync(monorepo: Path, allow_dirty: bool, today: str, only: tuple[str, ...] = ()) -> int:
     validate_table(SUBSTITUTIONS)
-    commit, clean, sources = read_monorepo(monorepo, allow_dirty)
+    names = [fixture_set.name for fixture_set in SETS]
+    unknown = [name for name in only if name not in names]
+    if unknown:
+        raise SyncError(f"no such set: {', '.join(unknown)} (the sets are {', '.join(names)})")
+    kept: dict[str, str] = {}
+    if only:
+        previous = recorded_commits(SOURCE.read_text(encoding="utf-8")) if SOURCE.is_file() else {}
+        for name in names:
+            if name in only:
+                continue
+            if not previous.get(name):
+                raise SyncError(f"SOURCE.toml records no commit for {name}, so it cannot be kept")
+            kept[name] = previous[name]
+    commits, clean, sources = read_monorepo(monorepo, allow_dirty, kept)
 
     problems: list[str] = []
     for name, text in sources.items():
@@ -639,6 +716,22 @@ def sync(monorepo: Path, allow_dirty: bool, today: str) -> int:
         )
     if problems:
         raise SyncError("the substituted fixtures fail their checks:\n  " + "\n  ".join(problems))
+    # A kept set must come out as the copy already here, or its recorded commit no
+    # longer describes it.
+    for name, at in kept.items():
+        here = {
+            f"{name}/{path.name}": path.read_bytes().decode("utf-8")
+            for path in sorted((DEST / name).glob("*.json"))
+        }
+        produced = {path: text for path, text in outputs.items() if path.startswith(f"{name}/")}
+        if here != produced:
+            differ = sorted(set(here) ^ set(produced)) + sorted(
+                path for path in set(here) & set(produced) if here[path] != produced[path]
+            )
+            raise SyncError(
+                f"{name} at {at[:12]}, the commit SOURCE.toml records for it, does not reproduce "
+                f"contracts/{name}/:\n  " + "\n  ".join(differ)
+            )
 
     sums = "".join(
         f"{hashlib.sha256(outputs[name].encode('utf-8')).hexdigest()}  {name}\n"
@@ -650,7 +743,7 @@ def sync(monorepo: Path, allow_dirty: bool, today: str) -> int:
     if SOURCE.is_file():
         previous = SOURCE.read_text(encoding="utf-8")
         m = re.search(r'^date = "(\d{4}-\d{2}-\d{2})"$', previous, re.MULTILINE)
-        if m and render_source(commit, clean, m.group(1), outputs, SUBSTITUTIONS, per_file) == previous:
+        if m and render_source(commits, clean, m.group(1), outputs, SUBSTITUTIONS, per_file) == previous:
             date = m.group(1)
 
     changed: list[str] = []
@@ -670,15 +763,18 @@ def sync(monorepo: Path, allow_dirty: bool, today: str) -> int:
                 changed.append(f"{relative} (removed)")
     if write_if_changed(SUMS, sums):
         changed.append("SHA256SUMS")
-    source = render_source(commit, clean, date, outputs, SUBSTITUTIONS, per_file)
+    source = render_source(commits, clean, date, outputs, SUBSTITUTIONS, per_file)
     if write_if_changed(SOURCE, source):
         changed.append("SOURCE.toml")
 
-    print(f"server repository at {commit[:12]}")
     for fixture_set in SETS:
         count = sum(1 for name in outputs if name.startswith(f"{fixture_set.name}/"))
         state = "clean" if clean[fixture_set.name] else "DIRTY"
-        print(f"  {fixture_set.name:8} {count:3} fixtures from {fixture_set.source} ({state})")
+        how = "kept" if fixture_set.name in kept else "synced"
+        print(
+            f"  {fixture_set.name:8} {count:3} fixtures from {fixture_set.source} "
+            f"at {commits[fixture_set.name][:12]} ({how}, {state})"
+        )
     print(f"{len(outputs)} fixtures, {len(SUBSTITUTIONS)} substitutions:")
     for index, sub in enumerate(SUBSTITUTIONS):
         files = per_file[index]
@@ -702,10 +798,13 @@ def main(argv: list[str]) -> int:
                         help="a checkout of the server repository")
     parser.add_argument("--allow-dirty", action="store_true",
                         help="copy uncommitted fixture changes, recording source_clean = false for that set")
+    parser.add_argument("--sets", default="",
+                        help="comma-separated sets to sync (default: all); the others stay at their recorded commit")
     args = parser.parse_args(argv[1:])
     today = datetime.datetime.now(datetime.timezone.utc).date().isoformat()
+    only = tuple(name for name in args.sets.split(",") if name)
     try:
-        return sync(args.monorepo, args.allow_dirty, today)
+        return sync(args.monorepo, args.allow_dirty, today, only)
     except SyncError as exc:
         print(f"sync-contracts: {exc}", file=sys.stderr)
         return 1
