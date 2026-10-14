@@ -1065,6 +1065,10 @@ impl Presence for FakePresence {
             Err(server_error())
         }
     }
+    async fn unregister_all(&self, _revision: Ticket) -> Result<(), ApiError> {
+        self.0.push("presence all");
+        Ok(())
+    }
 }
 
 struct FakeEngine(Log);

@@ -153,7 +153,10 @@ async fn every_endpoint_is_sent_as_its_spec_says() {
         }
 
         match spec.body {
-            BodyKind::Empty => assert!(request.body.is_empty(), "{name}: has a body"),
+            // A sample names no field, so an optional body is left out.
+            BodyKind::Empty | BodyKind::OptionalJson => {
+                assert!(request.body.is_empty(), "{name}: has a body");
+            }
             BodyKind::Json => {
                 assert_eq!(
                     header(request, "content-type"),
@@ -370,6 +373,12 @@ async fn badly_built_requests_are_refused_locally() {
         ("AuthMe takes no body", {
             let (name, mime, bytes) = file();
             client.request(Endpoint::AuthMe).file(name, mime, bytes)
+        }),
+        ("PushUnregister takes a JSON body, not a file", {
+            let (name, mime, bytes) = file();
+            client
+                .request(Endpoint::PushUnregister)
+                .file(name, mime, bytes)
         }),
         ("MessageSend takes a JSON body, not a file", {
             let (name, mime, bytes) = file();

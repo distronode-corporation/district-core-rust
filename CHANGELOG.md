@@ -17,6 +17,18 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Changed
+
+- The presence going away (the setting off, sleep, quitting) unregisters the
+  presence alone: `POST devices/unregister` with `{"kind": "desktop"}`, so a
+  Windows push registration of the same installation stays for exactly the time
+  the app is not there to ring. Signing out still removes every kind, with no body.
+  A service that predates the kind ignores the body and behaves as before.
+- Breaking: `ApiClient::unregister_presence` and `PresenceApi::unregister_presence`
+  take the kind (`None` for every kind); `Presence` has a new method,
+  `unregister_all`, which sign-out calls; `BodyKind` has a new variant,
+  `OptionalJson`, which `PushUnregister` uses.
+
 ## [4.0.0-beta.2] - 2026-10-13
 
 Three features the iOS and Mac apps have, now in the core for both desktop apps, and the

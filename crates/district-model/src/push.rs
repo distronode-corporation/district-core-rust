@@ -33,16 +33,21 @@ pub struct PushRegistrationResponse {
 /// presence: `{token, platform, kind: "desktop"}`, where `platform` is the
 /// app's [`Platform::wire`] value.
 ///
-/// The desktop has no push service. What it registers is that it is awake and
-/// holding the live socket, so that the service counts it as a device a call
-/// can ring; the ring itself arrives on the socket as a `call_ringing` event.
+/// This is not a push registration. What it registers is that the desktop is
+/// awake and holding the live socket, so that the service counts it as a device
+/// a call can ring; the ring itself arrives on the socket as a `call_ringing`
+/// event. District AI for Linux has no push service and has only this; District
+/// AI for Windows also registers for Windows push notifications (WNS), a
+/// registration of another kind on the same installation, which the app makes.
 /// The token is an opaque random value this installation made up, sent only so
 /// the row has one: nothing is ever sent to it.
 ///
 /// There is no device id in it, on purpose. The service takes the installation
 /// from the access token and never from the body, because an id a caller could
 /// name would let one account point another's registration at itself.
-/// Unregistering has no body at all, for the same reason, so it has no type.
+/// Unregistering names no installation either, for the same reason: its body
+/// names at most the kind to remove, so the presence going away leaves a push
+/// registration in place (see `ApiClient::unregister_presence`).
 ///
 /// The token identifies one installation, so `Debug` leaves it out.
 #[derive(Clone, PartialEq, Eq, Serialize)]

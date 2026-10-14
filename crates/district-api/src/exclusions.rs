@@ -144,8 +144,9 @@ pub struct Addition {
 pub const DESKTOP_ONLY: &[Addition] = &[
     Addition {
         endpoint: Endpoint::TelemetryToken,
-        reason: "A desktop has no mobile push service, so live calls and messages arrive over the \
-                 telemetry socket instead.",
+        reason: "Live calls and messages reach a desktop app over the telemetry socket while it \
+                 runs. District AI for Linux has no push service; District AI for Windows can \
+                 also be reached by Windows push notifications (WNS).",
     },
     Addition {
         endpoint: Endpoint::AuthMe,

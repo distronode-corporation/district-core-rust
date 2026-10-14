@@ -83,6 +83,10 @@ pub enum BodyKind {
     Json,
     /// `multipart/form-data` with one file part named `file`.
     Multipart,
+    /// A JSON object when the caller gives one, and no body at all otherwise:
+    /// for an endpoint whose bodiless call means something of its own. Never
+    /// workspace-scoped in the body.
+    OptionalJson,
 }
 
 /// Whether a request is repeated after the service refuses its access token.
@@ -402,9 +406,10 @@ endpoint_table! {
     /// Registers this installation to be told about calls and messages.
     PushRegister => Post "/api/district/devices/register",
         workspace: None, body: Json, retry: Never;
-    /// Unregisters this installation.
+    /// Unregisters this installation: one kind of its registrations when the
+    /// body names it (`{kind}`), every kind without a body.
     PushUnregister => Post "/api/district/devices/unregister",
-        workspace: None, body: Empty, retry: Never;
+        workspace: None, body: OptionalJson, retry: Never;
 
     // Workspace settings.
 

@@ -1188,6 +1188,11 @@ impl Presence for RecordedPresence {
         self.0.push(format!("presence {revision:?} {registered}"));
         Ok(())
     }
+
+    async fn unregister_all(&self, revision: Ticket) -> Result<(), ApiError> {
+        self.0.push(format!("presence {revision:?} all"));
+        Ok(())
+    }
 }
 
 type Coordinator = TokenRefreshCoordinator<MemorySessionStore, NoRefresh>;
@@ -1868,8 +1873,11 @@ async fn the_api_client_places_answers_and_ends_calls_and_sets_presence() {
     let token = body["token"].as_str().unwrap();
     assert_eq!(token.len(), 36, "a random install value");
     assert!(!format!("{presence:?}").contains(token));
+    // The presence going away names its own kind, so a push registration of
+    // the same installation stays.
     assert_eq!(requests[4].url.path(), "/api/district/devices/unregister");
-    assert!(requests[4].body.is_empty());
+    let unregister: serde_json::Value = serde_json::from_slice(&requests[4].body).unwrap();
+    assert_eq!(unregister, json!({"kind": "desktop"}));
 
     // Each presence makes its own value, and registers as the platform it was
     // given.
@@ -1880,8 +1888,17 @@ async fn the_api_client_places_answers_and_ends_calls_and_sets_presence() {
     assert_ne!(again["token"], body["token"]);
     assert_eq!(again["platform"], "windows");
 
+    // Signing out removes every kind, with no body at all.
+    let [.., last] = revisions();
+    other.unregister_all(last).await.unwrap();
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests[6].url.path(), "/api/district/devices/unregister");
+    assert!(requests[6].body.is_empty());
+
     // The client is the presence's API as it is.
-    PresenceApi::unregister_presence(&*client).await.unwrap();
+    PresenceApi::unregister_presence(&*client, None)
+        .await
+        .unwrap();
 }
 
 /// The two calls `DesktopPresence` makes, recorded, with a register that can
@@ -1923,8 +1940,12 @@ impl PresenceApi for ScriptedPresenceApi {
 
     async fn unregister_presence(
         &self,
+        kind: Option<&'static str>,
     ) -> Result<district_model::PushRegistrationResponse, ApiError> {
-        self.calls.push("unregister".to_owned());
+        self.calls.push(match kind {
+            Some(kind) => format!("unregister {kind}"),
+            None => "unregister all".to_owned(),
+        });
         self.answer()
     }
 }
@@ -1940,7 +1961,7 @@ async fn presence_changes_go_one_at_a_time_and_a_late_older_one_is_dropped() {
     presence.set(newer, false).await.unwrap();
     presence.set(older, true).await.unwrap();
     presence.set(newer, true).await.unwrap();
-    assert_eq!(api.calls.entries(), ["unregister"]);
+    assert_eq!(api.calls.entries(), ["unregister desktop"]);
 
     // A register held on its way: the unregistration asked for meanwhile
     // waits for it, and goes after it.
@@ -1964,7 +1985,7 @@ async fn presence_changes_go_one_at_a_time_and_a_late_older_one_is_dropped() {
     unregistering.await.unwrap().unwrap();
     assert_eq!(
         api.calls.entries(),
-        ["register started", "register done", "unregister"]
+        ["register started", "register done", "unregister desktop"]
     );
 
     // A refusal comes back as the error it is.
@@ -1978,6 +1999,19 @@ async fn presence_changes_go_one_at_a_time_and_a_late_older_one_is_dropped() {
         presence.set(newer, false).await,
         Err(ApiError::Forbidden(_))
     ));
+    assert!(matches!(
+        presence.unregister_all(newest).await,
+        Err(ApiError::Forbidden(_))
+    ));
+    assert_eq!(
+        api.calls.entries(),
+        [
+            "register started",
+            "register done",
+            "unregister desktop",
+            "unregister all"
+        ]
+    );
 }
 
 struct LoggedRevokes(Timeline);
@@ -1994,6 +2028,10 @@ struct FailingPresence;
 
 impl Presence for FailingPresence {
     async fn set(&self, _revision: Ticket, _registered: bool) -> Result<(), ApiError> {
+        Err(ApiError::Forbidden(ErrorDetail::default()))
+    }
+
+    async fn unregister_all(&self, _revision: Ticket) -> Result<(), ApiError> {
         Err(ApiError::Forbidden(ErrorDetail::default()))
     }
 }
@@ -2021,7 +2059,7 @@ async fn signing_out_unregisters_the_presence_first_as_its_own_change() {
     assert!(report.presence_unregistered);
     assert_eq!(
         timeline.entries(),
-        [format!("presence {revision:?} false"), "revoke".to_owned()]
+        [format!("presence {revision:?} all"), "revoke".to_owned()]
     );
 
     // A presence that could not be unregistered is reported, and the sign-out
