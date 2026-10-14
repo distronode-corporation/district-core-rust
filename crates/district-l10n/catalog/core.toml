@@ -5,3543 +5,4556 @@ apple = false
 
 [account.delete_account_caption]
 en = "Request deletion of your account and its data. Opens in your browser."
+fr = "Demander la suppression de votre compte et de ses données. S'ouvre dans votre navigateur."
 ctx = "body"
 screen = "account"
 tier = "T0"
+state = "reviewed"
 note = "Caption of the account deletion row. Deletion cannot be undone; the request continues in the web browser, which is why the caption says so."
 
 [account.devices_caption]
 en = "See where you are signed in, and sign out a device you no longer have."
+fr = "Voyez où votre compte est connecté et déconnectez un appareil que vous n'avez plus."
 ctx = "body"
 screen = "account"
 tier = "T3"
+state = "reviewed"
 note = "Caption of the row that opens the list of devices signed in to this account."
 
 [account.sign_out_caption]
 en = "Sign out of District AI on this device."
+fr = "Se déconnecter de District AI sur cet appareil."
 ctx = "body"
 screen = "account"
 tier = "T2"
+state = "reviewed"
 note = "Caption of the sign-out row on the account screen."
 
 [analytics.change_down]
 en = "Down {pct}% on the previous period."
+fr = "Baisse de {pct}\u00A0% par rapport à la période précédente."
 ctx = "body"
 screen = "analytics"
 tier = "T1"
 args = { pct = "int" }
+state = "reviewed"
 note = "Under the call volume: calls fell by {pct} percent against the window before. French puts a no-break space before %."
 
 [analytics.change_flat]
 en = "No change on the previous period."
+fr = "Aucun changement par rapport à la période précédente."
 ctx = "body"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "Under the call volume: the same number of calls as the window before."
 
 [analytics.change_new]
 en = "New: no calls in the previous period to compare with."
+fr = "Nouveau\u00A0: aucun appel à comparer durant la période précédente."
 ctx = "body"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "Under the call volume: the previous window had no calls, so there is nothing to compare with."
 
 [analytics.change_up]
 en = "Up {pct}% on the previous period."
+fr = "Hausse de {pct}\u00A0% par rapport à la période précédente."
 ctx = "body"
 screen = "analytics"
 tier = "T1"
 args = { pct = "int" }
+state = "reviewed"
 note = "Under the call volume: calls rose by {pct} percent against the window before. French puts a no-break space before %."
 
 [analytics.failed_title]
 en = "Could not load analytics"
+fr = "Impossible de charger l'analytique"
 ctx = "title"
 screen = "analytics"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the analytics screen when every figure on it failed to load."
 
 [analytics.history_caption]
 en = "The bars compare metered call minutes across these months."
+fr = "Les barres comparent les minutes d'appel mesurées pour ces mois."
 ctx = "body"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "Caption under the usage history bars: each bar is one month's metered call minutes."
 
 [analytics.history_failed_title]
 en = "Could not load usage history"
+fr = "Impossible de charger l'historique d'utilisation"
 ctx = "title"
 screen = "analytics"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the usage history card when it failed to load."
 
 [analytics.history_none]
 en = "No usage has been recorded in recent months."
+fr = "Aucune utilisation n'a été mesurée ces derniers mois."
 ctx = "body"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "The usage history card when nothing was metered in any of the recent months."
 
 [analytics.no_calls]
 en = "No calls in this window."
+fr = "Aucun appel pour cette période."
 ctx = "body"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "Under the call volume chart when the selected window has no calls."
 
 [analytics.no_sentiment]
 en = "No calls to analyse yet."
+fr = "Aucun appel analysé pour l'instant."
 ctx = "body"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "Under the sentiment breakdown when no call has been analysed yet."
 
 [analytics.not_recorded]
 en = "Not recorded"
+fr = "Non mesuré"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "What a usage figure reads when the service measured nothing for it: absent, not zero."
 
 [analytics.range_30_days]
 en = "30 days"
+fr = "30 jours"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "Chip that selects the last 30 days as the window of the call analytics."
 
 [analytics.range_7_days]
 en = "7 days"
+fr = "7 jours"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "Chip that selects the last 7 days as the window of the call analytics."
 
 [analytics.range_90_days]
 en = "90 days"
+fr = "90 jours"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "Chip that selects the last 90 days as the window of the call analytics."
 
 [analytics.report_failed_title]
 en = "Could not load call analytics"
+fr = "Impossible de charger l'analytique des appels"
 ctx = "title"
 screen = "analytics"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the call analytics card when it failed to load."
 
 [analytics.usage_avatar_minutes]
 en = "Video minutes"
+fr = "Minutes de vidéo"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "A usage line: minutes of video (the video avatar) this month."
 
 [analytics.usage_failed_title]
 en = "Could not load usage"
+fr = "Impossible de charger l'utilisation"
 ctx = "title"
 screen = "analytics"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the usage card when it failed to load."
 
 [analytics.usage_inbound_minutes]
 en = "Inbound call minutes"
+fr = "Minutes d'appels entrants"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "A usage line: minutes of calls received (inbound) this month."
 
 [analytics.usage_none]
 en = "No usage has been recorded this month yet."
+fr = "Aucune utilisation n'a encore été mesurée ce mois-ci."
 ctx = "body"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "The usage card when nothing has been metered this month."
 
 [analytics.usage_outbound_minutes]
 en = "Outbound call minutes"
+fr = "Minutes d'appels sortants"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "A usage line: minutes of calls placed (outbound) this month."
 
 [analytics.usage_phone_numbers]
 en = "Phone numbers"
+fr = "Numéros de téléphone"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "A usage line: how many phone numbers the workspace holds."
 
 [analytics.usage_picture_messages_sent]
 en = "Picture messages sent"
+fr = "Messages multimédias envoyés"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "A usage line: picture messages (MMS) sent this month."
 
 [analytics.usage_texts_received]
 en = "Texts received"
+fr = "Textos reçus"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "A usage line: text messages (SMS) received this month."
 
 [analytics.usage_texts_sent]
 en = "Texts sent"
+fr = "Textos envoyés"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "A usage line: text messages (SMS) sent this month."
 
 [analytics.usage_whatsapp_received]
 en = "WhatsApp messages received"
+fr = "Messages WhatsApp reçus"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "A usage line: WhatsApp messages received this month. WhatsApp is a product name."
 
 [analytics.usage_whatsapp_sent]
 en = "WhatsApp messages sent"
+fr = "Messages WhatsApp envoyés"
 ctx = "label"
 screen = "analytics"
 tier = "T3"
+state = "reviewed"
 note = "A usage line: WhatsApp messages sent this month. WhatsApp is a product name."
 
 [billing.account_failed_title]
 en = "Could not load your subscription and invoices"
+fr = "Impossible de charger votre abonnement et vos factures"
 ctx = "title"
 screen = "billing"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the subscriptions and invoices section when it failed to load."
 
 [billing.failed_title]
 en = "Could not load billing"
+fr = "Impossible de charger la facturation"
 ctx = "title"
 screen = "billing"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the billing screen when the workspace's plan failed to load."
 
 [billing.invoices_truncated]
 en = "Showing your most recent invoices. Older ones are on the website."
+fr = "Vos dernières factures sont affichées. Les plus anciennes sont sur le site Web."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Under the invoices list when older invoices exist that are not shown."
 
 [billing.no_invoices]
 en = "No invoices yet."
+fr = "Aucune facture pour l'instant."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "The invoices list when the account has none."
 
 [billing.no_plan]
 en = "No plan on this workspace"
+fr = "Aucun forfait pour cet espace de travail"
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "In place of the plan's name when the workspace has no plan. Never \"Free\"."
 
 [billing.no_subscription]
 en = "No subscription is attached to this account."
+fr = "Aucun abonnement n'est associé à ce compte."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "The subscriptions list when the account has none."
 
 [billing.overage_auto_bill]
 en = "Minutes beyond your plan are billed automatically."
+fr = "Les minutes hors forfait sont facturées automatiquement."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Under the minutes meter, auto-billing plan: minutes past the allowance are charged automatically."
 
 [billing.overage_auto_bill_exceeded]
 en = "You are over your included minutes, and the extra is being billed."
+fr = "Vous avez dépassé vos minutes incluses, et l'excédent est facturé."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Under the minutes meter, auto-billing plan, allowance used up: the extra minutes are being charged."
 
 [billing.overage_hard_cap]
 en = "Calls stop once your included minutes run out."
+fr = "Les appels cessent une fois vos minutes incluses épuisées."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Under the minutes meter, hard cap plan: calls stop once the included minutes are used."
 
 [billing.overage_hard_cap_exceeded]
 en = "Calls are being declined: your included minutes are used up."
+fr = "Les appels sont refusés\u00A0: vos minutes incluses sont épuisées."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Under the minutes meter, hard cap plan, allowance used up: incoming calls are refused right now. The most urgent message on the screen."
 
 [billing.read_only]
 en = "Plan changes, payment methods and cancellations are made on the District AI website. This screen is read only."
+fr = "Les changements de forfait, moyens de paiement et résiliations se gèrent sur le site Web de District AI. Cet écran est en lecture seule."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Note on the billing screen for a member who could manage billing on the web: nothing can be changed in this app."
 
 [billing.read_only_viewer]
 en = "This screen is read only. Ask an agency or client member of this workspace to change the plan."
+fr = "Cet écran est en lecture seule. Demandez à un membre ayant le rôle Agence ou Client de cet espace de travail de changer de forfait."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Note on the billing screen for a viewer: they cannot change the plan; agency and client are the two other roles."
 
 [billing.status_active]
 en = "Active"
+fr = "Actif"
 ctx = "label"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Badge: the subscription is paid up."
 
 [billing.status_cancelled]
 en = "Cancelled"
+fr = "Annulé"
 ctx = "label"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Badge: the subscription was cancelled and will end."
 
 [billing.status_cancelled_caption]
 en = "This plan will not renew."
+fr = "Ce forfait ne sera pas renouvelé."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Under the cancelled badge: the plan ends at the end of its period."
 
 [billing.status_none]
 en = "No subscription"
+fr = "Aucun abonnement"
 ctx = "label"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Badge: the workspace has no subscription."
 
 [billing.status_past_due]
 en = "Past due"
+fr = "En retard"
 ctx = "label"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Badge: a payment failed and is being retried."
 
 [billing.status_past_due_caption]
 en = "A payment did not go through. Service continues while it is retried."
+fr = "Un paiement n'a pas abouti. Le service continue pendant les nouvelles tentatives de paiement."
 ctx = "body"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Under the past due badge: a payment failed, and service goes on while it is retried."
 
 [billing.unavailable_body]
 en = "The payment provider could not be reached just now, so your subscription and invoices are not shown. Your plan and usage above are current, and nothing about your account has changed."
+fr = "Le fournisseur de paiement est injoignable pour le moment, alors votre abonnement et vos factures ne sont pas affichés. Votre forfait et votre utilisation ci-dessus sont à jour, et rien n'a changé dans votre compte."
 ctx = "body"
 screen = "billing"
 tier = "T2"
+state = "reviewed"
 note = "Body of that section: the payment provider could not be reached; the plan and usage above it are still current."
 
 [billing.unavailable_title]
 en = "Billing details unavailable"
+fr = "Données de facturation indisponibles"
 ctx = "title"
 screen = "billing"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the subscriptions and invoices section when the payment provider (Stripe) could not be reached."
 
 [billing.web_action]
 en = "Manage billing on the web"
+fr = "Gérer la facturation sur le Web"
 ctx = "button"
 screen = "billing"
 tier = "T1"
+state = "reviewed"
 note = "Button that opens the billing page in the web browser."
 
 [call.caller]
 en = "Caller"
+fr = "Appelant"
 ctx = "title"
 screen = "call"
 tier = "T3"
+state = "reviewed"
 note = "Title of the call window for a call answered on this computer, when nothing names the caller."
 
 [call.connect_failed]
 en = "The call could not be connected."
+fr = "L'appel n'a pas pu être établi."
 ctx = "error"
 screen = "call"
 tier = "T2"
+state = "reviewed"
 note = "The call's audio could not be joined."
 
 [call.connecting]
 en = "Connecting."
+fr = "Connexion en cours."
 ctx = "label"
 screen = "call"
 tier = "T3"
+state = "reviewed"
 note = "Status under the title while the app joins the call's audio."
 
 [call.dialing]
 en = "Placing the call."
+fr = "Lancement de l'appel."
 ctx = "label"
 screen = "call"
 tier = "T3"
+state = "reviewed"
 note = "Status under the title while an outbound call is being placed."
 
 [call.ended]
 en = "Call ended."
+fr = "Appel terminé."
 ctx = "label"
 screen = "call"
 tier = "T3"
+state = "reviewed"
 note = "Status under the title after a call ended."
 
 [call.ended_lasted]
 en = "Call ended. It lasted {duration}."
+fr = "Appel terminé. Durée\u00A0: {duration}."
 ctx = "label"
 screen = "call"
 tier = "T3"
 args = { duration = "duration" }
+state = "reviewed"
 note = "Status after an answered call ended. {duration} is its length as a clock, 1:05 or 1:02:05."
 
 [call.ended_note]
 en = "The call log has the record of this call. The length here is this app's own count."
+fr = "Le journal des appels contient le dossier de cet appel. Cette durée est mesurée par l'application."
 ctx = "body"
 screen = "call"
 tier = "T3"
+state = "reviewed"
 note = "Note under an ended call: the call log holds the real record; the length shown is counted by this app."
 
 [call.ringing]
 en = "Calling."
+fr = "Appel en cours."
 ctx = "label"
 screen = "call"
 tier = "T3"
+state = "reviewed"
 note = "Status under the title while a placed call rings at the other end."
 
 [call_handling.mode_ai_first]
 en = "The receptionist answers"
+fr = "La réceptionniste répond"
 ctx = "label"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "How the workspace answers calls: the AI receptionist answers every call."
 
 [call_handling.mode_ai_first_body]
 en = "The receptionist takes every incoming call."
+fr = "La réceptionniste prend tous les appels entrants."
 ctx = "body"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "What that mode does."
 
 [call_handling.mode_ai_then_app]
 en = "The receptionist answers, then your devices ring"
+fr = "La réceptionniste répond, puis vos appareils sonnent"
 ctx = "label"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "How the workspace answers calls: the AI receptionist answers, then the members' devices ring."
 
 [call_handling.mode_ai_then_app_body]
 en = "The receptionist takes the call and can hand it to the members' devices."
+fr = "La réceptionniste prend l'appel et peut le transférer aux appareils des membres."
 ctx = "body"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "What that mode does: the receptionist can hand the call to the members' devices."
 
 [call_handling.mode_app_first]
 en = "Your devices ring first"
+fr = "Vos appareils sonnent d'abord"
 ctx = "label"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "How the workspace answers calls: the members' devices ring first."
 
 [call_handling.mode_app_first_body]
 en = "The members' devices ring before the receptionist answers."
+fr = "Les appareils des membres sonnent avant que la réceptionniste réponde."
 ctx = "body"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "What that mode does: devices ring before the receptionist answers."
 
 [call_handling.ring_hint]
 en = "Between 5 and 30 seconds."
+fr = "Entre 5 et 30 secondes."
 ctx = "placeholder"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "Hint under the ring time field: how long devices ring."
 
 [call_handling.unavailable_other]
 en = "You cannot be made available for calls in this workspace."
+fr = "Impossible de vous rendre disponible pour les appels dans cet espace de travail."
 ctx = "body"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "Why the member cannot be made available for calls, when the service gives another reason."
 
 [call_handling.unavailable_owner]
 en = "You hold your role as this workspace's owner, with no membership to set this on, so it cannot be changed here."
+fr = "Votre rôle de propriétaire de cet espace de travail ne s'accompagne d'aucun profil de membre où appliquer ce réglage; il ne peut donc pas être modifié ici."
 ctx = "body"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "Why the workspace's owner, who holds the role without a membership, cannot change their availability here."
 
 [call_handling.unavailable_viewer]
 en = "Viewers are not rung for calls."
+fr = "Le rôle Lecteur ne reçoit pas d'appels."
 ctx = "body"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "Why a viewer cannot be made available for calls."
 
 [call_handling.viewer]
 en = "Only agency and client members can change how this workspace answers calls."
+fr = "Seuls les membres Agence et Client peuvent modifier la façon dont cet espace de travail répond aux appels."
 ctx = "body"
 screen = "settings call handling"
 tier = "T3"
+state = "reviewed"
 note = "Note for a viewer on the call handling settings."
 
 [calls.empty_body]
 en = "Calls your receptionist answers will appear here."
+fr = "Les appels que prend votre réceptionniste apparaîtront ici."
 ctx = "body"
 screen = "calls"
 tier = "T3"
+state = "reviewed"
 note = "Body of the empty call log: calls the AI receptionist answers are listed here."
 
 [calls.empty_title]
 en = "No calls yet"
+fr = "Aucun appel"
 ctx = "title"
 screen = "calls"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the call log when the workspace has no calls."
 
 [calls.failed_title]
 en = "Could not load the call log"
+fr = "Impossible de charger le journal des appels"
 ctx = "title"
 screen = "calls"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the call log when it failed to load."
 
 [calls.transcript_absent]
 en = "No transcript for this call."
+fr = "Aucune transcription pour cet appel."
 ctx = "body"
 screen = "calls"
 tier = "T3"
+state = "reviewed"
 note = "In place of a call's transcript when the call has none."
 
 [contacts.action_block]
 en = "Block"
+fr = "Bloquer"
 ctx = "button"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Button that confirms blocking a caller."
 
 [contacts.action_clear_intel]
 en = "Clear research"
+fr = "Effacer la recherche externe"
 ctx = "button"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Button that confirms clearing a contact's research."
 
 [contacts.action_delete]
 en = "Delete"
+fr = "Supprimer"
 ctx = "button"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Button that confirms deleting a contact."
 
 [contacts.action_unblock]
 en = "Unblock"
+fr = "Débloquer"
 ctx = "button"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Button that confirms unblocking a caller."
 
 [contacts.blocked_empty_title]
 en = "No blocked callers"
+fr = "Aucun appelant bloqué"
 ctx = "title"
 screen = "contacts"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the blocked callers list when nobody is blocked."
 
 [contacts.blocked_failed_title]
 en = "Could not load blocked callers"
+fr = "Impossible de charger les appelants bloqués"
 ctx = "title"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the blocked callers list when it failed to load."
 
 [contacts.confirm_block]
 en = "Block this caller? Their conversations and calls stop appearing in this workspace. You can unblock them at any time."
+fr = "Bloquer cet appelant? Ses conversations et ses appels cessent d'apparaître dans cet espace de travail. Vous pouvez le débloquer en tout temps."
 ctx = "body"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation before blocking a caller: their conversations and calls stop appearing; a carrier may still connect the call, so it does not claim they can no longer call."
 
 [contacts.confirm_clear_intel]
 en = "Clear this contact's research? The contact, its phone number, email and history are kept. Getting the research back means running it again."
+fr = "Effacer la recherche externe sur ce contact? Le contact, son numéro de téléphone, son courriel et sa chronologie sont conservés. Pour récupérer la recherche, il faut la relancer."
 ctx = "body"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation before clearing a contact's research (what outside research found about the caller). Running the research again costs money."
 
 [contacts.confirm_delete]
 en = "Delete this contact? This cannot be undone."
+fr = "Supprimer ce contact? Cette action est irréversible."
 ctx = "body"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation before deleting a contact. Cannot be undone."
 
 [contacts.confirm_unblock]
 en = "Unblock this caller? Their conversations and calls start appearing in this workspace again."
+fr = "Débloquer cet appelant? Ses conversations et ses appels recommencent à apparaître dans cet espace de travail."
 ctx = "body"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation before unblocking a caller."
 
 [contacts.empty_body]
 en = "Callers are added automatically as they come in."
+fr = "Les appelants sont ajoutés automatiquement au fil des appels."
 ctx = "body"
 screen = "contacts"
 tier = "T3"
+state = "reviewed"
 note = "Body of the empty contact list: callers become contacts by themselves."
 
 [contacts.empty_title]
 en = "No contacts yet"
+fr = "Aucun contact"
 ctx = "title"
 screen = "contacts"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the contact list when the workspace has none."
 
 [contacts.failed_title]
 en = "Could not load contacts"
+fr = "Impossible de charger les contacts"
 ctx = "title"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the contact list when it failed to load."
 
 [contacts.needs_phone_or_email]
 en = "Enter a phone number or an email address."
+fr = "Entrez un numéro de téléphone ou un courriel."
 ctx = "error"
 screen = "contacts"
 tier = "T2"
+state = "reviewed"
 note = "Under the contact form when it has a name but no way to reach the contact."
 
 [contacts.unnamed]
 en = "Unnamed contact"
+fr = "Contact sans nom"
 ctx = "label"
 screen = "contacts"
 tier = "T3"
+state = "reviewed"
 note = "What a contact with no name, phone number or email address is called in lists."
 
 [desk.author_assistant]
 en = "Receptionist"
+fr = "Réceptionniste"
 ctx = "label"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "Who wrote a message in a ticket's thread: the AI receptionist."
 
 [desk.author_customer]
 en = "Customer"
+fr = "Client"
 ctx = "label"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "Who wrote a message in a ticket's thread: the customer who raised it."
 
 [desk.author_team]
 en = "Your team"
+fr = "Votre équipe"
 ctx = "label"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "Who wrote a message in a ticket's thread: a member of the workspace (\"your\" is the workspace)."
 
 [desk.empty_body]
 en = "Tickets your customers raise will appear here."
+fr = "Les billets soumis par vos clients apparaîtront ici."
 ctx = "body"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "Body of the empty ticket queue."
 
 [desk.empty_title]
 en = "No tickets yet"
+fr = "Aucun billet pour l'instant"
 ctx = "title"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the ticket queue when it has no tickets."
 
 [desk.failed_title]
 en = "Could not load the help desk"
+fr = "Impossible de charger le comptoir"
 ctx = "title"
 screen = "help desk"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the help desk when it failed to load."
 
 [desk.logo_file_kept]
 en = "The logo is no longer shown to customers, but its file could not be deleted and may still be reachable at its address."
+fr = "Le logo n'est plus affiché aux clients, mais son fichier n'a pas pu être supprimé et pourrait encore être accessible à son adresse."
 ctx = "body"
 screen = "help desk"
 tier = "T2"
+state = "reviewed"
 note = "After removing the help desk logo: it is no longer shown, but its file could not be deleted and may still be reachable at its address."
 
 [desk.none_matching]
 en = "No tickets with this status."
+fr = "Aucun billet avec cet état."
 ctx = "body"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "The ticket queue when the status filter matches no ticket."
 
 [desk.off_body]
 en = "While the desk is off, no tickets are recorded. Turn it on to start taking them."
+fr = "Tant que le comptoir est désactivé, aucun billet n'est consigné. Activez-le pour en recevoir."
 ctx = "body"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "Body when the help desk is off: no tickets are recorded until it is turned on."
 
 [desk.off_title]
 en = "The help desk is off"
+fr = "Le comptoir est désactivé"
 ctx = "title"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the help desk when it is turned off."
 
 [desk.settings_failed_title]
 en = "Could not load the desk's settings"
+fr = "Paramètres du comptoir indisponibles"
 ctx = "title"
 screen = "help desk"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the help desk settings when they failed to load."
 
 [desk.status_open]
 en = "Open"
+fr = "Ouverte"
 ctx = "label"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "A help desk ticket's status: open, waiting for the team."
 
 [desk.status_resolved]
 en = "Resolved"
+fr = "Réglée"
 ctx = "label"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "A help desk ticket's status: resolved."
 
 [desk.status_waiting]
 en = "Waiting on the customer"
+fr = "En attente du client"
 ctx = "label"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "A help desk ticket's status: the team replied and waits for the customer."
 
 [desk.ticket_already_raised]
 en = "That ticket was already raised."
+fr = "Ce billet a déjà été créé."
 ctx = "toast"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "After raising a ticket that the service already had (the same press arrived twice)."
 
 [desk.ticket_raised]
 en = "Ticket {reference} is open."
+fr = "Le billet {reference} a été créé."
 ctx = "toast"
 screen = "help desk"
 tier = "T3"
 args = { reference = "str" }
+state = "reviewed"
 note = "After raising a ticket. {reference} is its reference, for example DESK-42."
 
 [desk.turn_on]
 en = "Turn on the help desk"
+fr = "Activer le comptoir"
 ctx = "button"
 screen = "help desk"
 tier = "T3"
+state = "reviewed"
 note = "Button that turns the help desk on."
 
 [devices.action_sign_out]
 en = "Sign out"
+fr = "Se déconnecter"
 ctx = "button"
 screen = "devices"
 tier = "T2"
+state = "reviewed"
 note = "Button that confirms a sign-out."
 
 [devices.confirm_device]
 en = "Sign this device out? It will need to sign in again to use District AI."
+fr = "Déconnecter cet appareil? Il devra se reconnecter pour utiliser District AI."
 ctx = "body"
 screen = "devices"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation before signing out another device."
 
 [devices.confirm_everywhere]
 en = "Sign out of District AI on every device, including this one?"
+fr = "Vous déconnecter de District AI sur tous les appareils, y compris celui-ci?"
 ctx = "body"
 screen = "devices"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation before signing out every device, including this one."
 
 [devices.confirm_this_device]
 en = "This is the device you are using. Signing it out will return you to the sign-in screen."
+fr = "C'est l'appareil que vous utilisez. Si vous le déconnectez, vous reviendrez à l'écran de connexion."
 ctx = "body"
 screen = "devices"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation before signing out the device the person is using: they go back to the sign-in screen."
 
 [devices.empty_body]
 en = "Nothing else is signed in to this account right now. A device that just signed in can take a few minutes to appear."
+fr = "Aucun autre appareil n'est connecté à ce compte pour le moment. Un appareil qui vient de se connecter peut mettre quelques minutes à apparaître."
 ctx = "body"
 screen = "devices"
 tier = "T3"
+state = "reviewed"
 note = "Body of the empty devices list: a device that just signed in can take a few minutes to appear."
 
 [devices.empty_title]
 en = "No other devices"
+fr = "Aucun autre appareil"
 ctx = "title"
 screen = "devices"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the devices list when no other device is signed in."
 
 [devices.failed_title]
 en = "Could not list your devices"
+fr = "Impossible d'afficher vos appareils"
 ctx = "title"
 screen = "devices"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the devices list when it failed to load."
 
 [devices.last_active]
 en = "Last active {when}"
+fr = "Dernière activité\u00A0: {when}"
 ctx = "label"
 screen = "devices"
 tier = "T3"
 args = { when = "str" }
+state = "reviewed"
 note = "Under a device: when it last renewed its sign-in. {when} is the time as the service stamped it."
 
 [devices.nothing_revoked]
 en = "That device was already signed out. The list has been refreshed."
+fr = "Cet appareil était déjà déconnecté. La liste a été actualisée."
 ctx = "toast"
 screen = "devices"
 tier = "T2"
+state = "reviewed"
 note = "After signing out a device that was already signed out."
 
 [devices.platform_unknown]
 en = "Unknown platform"
+fr = "Plateforme inconnue"
 ctx = "label"
 screen = "devices"
 tier = "T3"
+state = "reviewed"
 note = "Platform of a signed-in device that did not say what it is."
 
 [devices.signed_in_recently]
 en = "Signed in recently"
+fr = "Connecté récemment"
 ctx = "label"
 screen = "devices"
 tier = "T3"
+state = "reviewed"
 note = "Under a device that has not renewed its sign-in yet (its first ten minutes)."
 
 [devices.this_device]
 en = "This device"
+fr = "Cet appareil"
 ctx = "label"
 screen = "devices"
 tier = "T3"
+state = "reviewed"
 note = "Marker on the row of the device the person is using."
 
 [devices.unnamed]
 en = "Unnamed device"
+fr = "Appareil sans nom"
 ctx = "label"
 screen = "devices"
 tier = "T3"
+state = "reviewed"
 note = "Name of a signed-in device that gave no name of its own."
 
 [dialer.busy_note]
 en = "Finish the call or meeting you are in first."
+fr = "Terminez d'abord votre appel ou votre réunion en cours."
 ctx = "body"
 screen = "dialler"
 tier = "T3"
+state = "reviewed"
 note = "For a member who is already in a call or a meeting room."
 
 [dialer.hint]
 en = "Enter a number with its country code, for example +1 212 555 0142."
+fr = "Indiquez un numéro avec l'indicatif du pays, par exemple +1 212 555 0142."
 ctx = "placeholder"
 screen = "dialler"
 tier = "T3"
+state = "reviewed"
 note = "Above the keypad: enter the number with its country code. +1 212 555 0142 is an example number; keep it as it is."
 
 [dialer.microphone_note]
 en = "Placing a call turns on your microphone."
+fr = "Passer un appel active votre microphone."
 ctx = "body"
 screen = "dialler"
 tier = "T0"
+state = "reviewed"
 note = "Under the keypad: placing a call turns the microphone on (a privacy notice)."
 
 [directory.add_rejected]
 en = "A name and a phone number are both needed to add someone."
+fr = "Un nom et un numéro de téléphone sont requis pour ajouter une personne."
 ctx = "error"
 screen = "settings transfer directory"
 tier = "T2"
+state = "reviewed"
 note = "When adding a transfer target without a name or a phone number."
 
 [directory.confirm_clear_action]
 en = "Remove everyone"
+fr = "Tout retirer"
 ctx = "button"
 screen = "settings transfer directory"
 tier = "T2"
+state = "reviewed"
 note = "Button that saves an empty directory."
 
 [directory.confirm_clear_body]
 en = "Saving an empty directory removes everyone the receptionist can put a live caller through to."
+fr = "Enregistrer un répertoire vide retire toutes les personnes vers qui la réceptionniste peut transférer un appel en cours."
 ctx = "body"
 screen = "settings transfer directory"
 tier = "T2"
+state = "reviewed"
 note = "Before saving an empty directory: nobody is left to transfer callers to."
 
 [directory.confirm_clear_title]
 en = "Remove every transfer target?"
+fr = "Retirer toutes les destinations?"
 ctx = "title"
 screen = "settings transfer directory"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation heading before saving an empty transfer directory (the people the receptionist can put a caller through to)."
 
 [directory.confirm_many_body]
 en = "The directory will hold exactly these {count} entries, replacing what is stored."
+fr = "Le répertoire contiendra exactement ces {count} entrées, qui remplaceront ce qui est enregistré."
 ctx = "body"
 screen = "settings transfer directory"
 tier = "T2"
 args = { count = "int" }
+state = "reviewed"
 note = "Before saving a directory of {count} entries (2 or more): it replaces what is stored."
 
 [directory.confirm_one_body]
 en = "The directory will hold exactly one entry, replacing what is stored."
+fr = "Le répertoire contiendra exactement une entrée, qui remplacera ce qui est enregistré."
 ctx = "body"
 screen = "settings transfer directory"
 tier = "T2"
+state = "reviewed"
 note = "Before saving a directory of one entry: it replaces what is stored."
 
 [directory.confirm_replace_action]
 en = "Replace"
+fr = "Remplacer"
 ctx = "button"
 screen = "settings transfer directory"
 tier = "T2"
+state = "reviewed"
 note = "Button that saves the directory, replacing what is stored."
 
 [directory.confirm_replace_title]
 en = "Replace the transfer directory?"
+fr = "Remplacer le répertoire de transfert?"
 ctx = "title"
 screen = "settings transfer directory"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation heading before saving the transfer directory."
 
 [directory.empty_body]
 en = "The receptionist has nobody to put a caller through to. Add someone below."
+fr = "La réceptionniste n'a personne vers qui transférer un appelant. Ajoutez quelqu'un ci-dessous."
 ctx = "body"
 screen = "settings transfer directory"
 tier = "T3"
+state = "reviewed"
 note = "Body of an empty directory: add someone below."
 
 [directory.empty_title]
 en = "No transfer targets"
+fr = "Aucune destination"
 ctx = "title"
 screen = "settings transfer directory"
 tier = "T3"
+state = "reviewed"
 note = "Heading of an empty transfer directory."
 
 [directory.unmodellable_body]
 en = "This workspace's transfer directory is stored in a shape this app cannot change without losing part of it. Change it on the District AI website."
+fr = "Le répertoire de transfert de cet espace de travail est stocké dans un format que cette application ne peut modifier sans en perdre une partie. Modifiez-le sur le site Web de District AI."
 ctx = "body"
 screen = "settings transfer directory"
 tier = "T3"
+state = "reviewed"
 note = "Body: the directory must be changed on the website so nothing is lost."
 
 [directory.unmodellable_title]
 en = "Cannot be edited here"
+fr = "Modification impossible ici"
 ctx = "title"
 screen = "settings transfer directory"
 tier = "T3"
+state = "reviewed"
 note = "Heading when the stored directory has a shape this app cannot edit."
 
 [failure.affected_regions]
 en = "Affected regions: {regions}"
+fr = "Régions touchées\u00A0: {regions}"
 ctx = "error"
 screen = "any screen"
 tier = "T2"
 args = { regions = "str" }
+state = "reviewed"
 note = "Under the regions-unreachable message. {regions} is the list of region codes in capitals, joined by commas (EU, APAC)."
 
 [failure.app_bug]
 en = "Something went wrong in the app. Please report it if it keeps happening."
+fr = "Une erreur est survenue dans l'application. Veuillez la signaler si elle se reproduit."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The app built a request the service could not accept: a bug in the app, which the person may report."
 
 [failure.fallback]
 en = "Something went wrong. Please try again."
+fr = "Une erreur est survenue. Veuillez réessayer."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "A refusal the service gave no words for and this app has no sentence of its own for."
 
 [failure.forbidden]
 en = "Your role in this workspace does not allow this."
+fr = "Votre rôle dans cet espace de travail ne le permet pas."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The member's role in this workspace does not allow the action. Fallback when the service gave no words of its own."
 
 [failure.hand_off_elsewhere]
 en = "District AI sent a sign-in link for another address, so it was not opened. Updating the app may fix it."
+fr = "District AI a envoyé un lien de connexion qui pointe vers une autre adresse Web; il n'a pas été ouvert. Une mise à jour de l'application pourrait régler le problème."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Opening the web: the service sent a sign-in link for an address other than its own, so the app did not open it."
 
 [failure.hand_off_nonce_refused]
 en = "District AI could not confirm the browser that was opened for the web. Please try again."
+fr = "District AI n'a pas pu vérifier la fenêtre de navigateur ouverte pour la version Web. Veuillez réessayer."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Opening the web: the service could not confirm the browser that was opened. A new attempt fixes it."
 
 [failure.hand_off_page_refused]
 en = "District AI did not accept the page this version of the app asked to open. Updating the app should fix it."
+fr = "District AI a refusé la page demandée par cette version de l'application. Une mise à jour devrait régler le problème."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Opening a billing page on the web: the service refused the page this version of the app asked for."
 
 [failure.hand_off_refused]
 en = "District AI could not confirm your sign-in for the web. Sign out, sign in again, and try again."
+fr = "District AI n'a pas pu confirmer votre connexion pour la version Web. Déconnectez-vous, reconnectez-vous, puis réessayez."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Opening the web from the app signed in (a hand-off): the service refused the app's sign-in for it."
 
 [failure.hand_off_too_many]
 en = "The web was opened several times just now. Wait a moment and try again."
+fr = "La version Web a été ouverte plusieurs fois à l'instant. Attendez un instant, puis réessayez."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Opening the web from the app signed in: asked too often in the last minute."
 
 [failure.hand_off_update_needed]
 en = "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app."
+fr = "District AI exige désormais que votre navigateur réponde à l'application avant d'ouvrir la version Web, et il ne l'a pas fait. Réessayez et laissez le navigateur ouvrir District AI s'il le demande. Si le problème persiste, mettez à jour l'application."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Opening the web: the service now needs the browser to answer the app first, and it did not in time."
 
 [failure.keyring_locked]
 en = "Your keyring is locked. Unlock it, then try again."
+fr = "Votre trousseau est verrouillé. Déverrouillez-le, puis réessayez."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Linux: the secret store (keyring) is locked; unlocking it lets the app read the saved sign-in."
 
 [failure.keyring_unavailable]
 en = "Your sign-in could not be read because no keyring is available. Start your keyring (for example GNOME Keyring or KeePassXC), then try again."
+fr = "Vos informations de connexion n'ont pas pu être lues, car aucun trousseau n'est disponible. Démarrez votre trousseau (par exemple GNOME Keyring ou KeePassXC), puis réessayez."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Linux: no secret store (keyring) is running, so the saved sign-in cannot be read. GNOME Keyring and KeePassXC are product names."
 
 [failure.last_agency_member]
 en = "Every workspace needs at least one agency member, so this change was not made."
+fr = "Chaque espace de travail doit avoir au moins un membre ayant le rôle Agence; ce changement n'a donc pas été fait."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Changing or removing a member: the workspace would be left with no agency (administrator) member, so nothing changed."
 
 [failure.live_forbidden]
 en = "Live updates are not available to you in this workspace. New calls and messages appear when you refresh."
+fr = "Les mises à jour en direct vous sont inaccessibles dans cet espace de travail. Actualisez pour voir les nouveaux appels et messages."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Live updates (new calls and messages appearing by themselves) are refused for this member; refreshing by hand still works."
 
 [failure.live_unusable]
 en = "Live updates could not be started, so new calls and messages appear when you refresh. Updating the app may fix it."
+fr = "Les mises à jour en direct n'ont pas pu démarrer\u00A0: actualisez pour voir les nouveaux appels et messages. Une mise à jour de l'application pourrait régler le problème."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Live updates could not start for a reason an app update may fix; refreshing by hand still works."
 
 [failure.member_exists]
 en = "That address is already a member of this workspace."
+fr = "Cette adresse appartient déjà à un membre de cet espace de travail."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Adding a member: the email address is already a member of this workspace."
 
 [failure.not_found]
 en = "That could not be found. It may have been removed."
+fr = "Cet élément est introuvable. Il a peut-être été supprimé."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The record asked for does not exist any more. Fallback when the service gave no words of its own."
 
 [failure.not_json]
 en = "Could not reach District AI. If this network asks you to sign in, as hotel and public networks often do, sign in to it and try again."
+fr = "Impossible de joindre District AI. Si ce réseau vous demande de vous connecter, comme souvent dans les hôtels et les lieux publics, connectez-vous-y, puis réessayez."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Something other than the service answered, typically a hotel or public wifi page asking the person to sign in to the network first."
 
 [failure.offline]
 en = "Could not reach District AI. Check your connection."
+fr = "Impossible de joindre District AI. Vérifiez votre connexion Internet."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "No connection to the service: no network, a refused connection or a timeout."
 
 [failure.preview_unencrypted]
 en = "District AI sent an audition that could not be joined securely, so it was not started. Updating the app may fix it."
+fr = "District AI a envoyé un aperçu impossible à rejoindre de façon sécurisée\u00A0: il n'a pas été lancé. Une mise à jour de l'application pourrait régler le problème."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Trying the receptionist's voice (an audition): the service sent one that could not be joined securely, so it did not start."
 
 [failure.purchase_not_shown]
 en = "District AI could not show that page in this window. Try again, and it opens in your browser."
+fr = "District AI n'a pas pu afficher cette page dans cette fenêtre. Réessayez\u00A0: elle s'ouvrira dans votre navigateur."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Windows: the checkout or billing page could not be shown inside the app window; pressing again opens it in the browser."
 
 [failure.rate_limited]
 en = "Too many requests. Wait a moment and try again."
+fr = "Trop de requêtes. Attendez un instant, puis réessayez."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The service refused because of too many requests in a short time. Waiting fixes it."
 
 [failure.redirected]
 en = "Could not reach District AI: the request was redirected. If this network asks you to sign in, sign in to it and try again."
+fr = "Impossible de joindre District AI\u00A0: la requête a été redirigée. Si ce réseau vous demande de vous connecter, connectez-vous-y, puis réessayez."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The request was redirected, which a network that wants its own sign-in does. The app never follows redirects."
 
 [failure.refused_not_retried]
 en = "District AI did not accept that just now. Please try again."
+fr = "District AI n'a pas accepté cette action à l'instant. Veuillez réessayer."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The service refused the sign-in token on a request that is never repeated automatically; pressing again sends a fresh one."
 
 [failure.regions_degraded]
 en = "A region is unreachable, so this could not be loaded. Your account has not changed."
+fr = "Une région est injoignable\u00A0: impossible de charger ce contenu. Votre compte n'a pas été modifié."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "A regional database did not answer, so the list or page could not be loaded in full. Reassures that nothing about the account changed."
 
 [failure.scheduling_not_offered]
 en = "Booking pages are not offered to this workspace."
+fr = "Cet espace de travail n'a pas accès aux pages de réservation."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Turning booking pages on: the service does not offer them to this workspace."
 
 [failure.scheduling_setup_failed]
 en = "Setting up booking pages did not finish, and no reason was given."
+fr = "La configuration des pages de réservation a échoué, et aucune raison n'a été donnée."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Setting up booking pages ran and failed, and the service gave no reason."
 
 [failure.scheduling_too_many]
 en = "Booking pages were turned on several times in the last hour for this workspace. Try again later."
+fr = "Les pages de réservation ont été activées plusieurs fois depuis une heure pour cet espace de travail. Réessayez plus tard."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Turning booking pages on: refused because it was tried several times in the last hour for the whole workspace."
 
 [failure.server]
 en = "Something went wrong on our side. Please try again shortly."
+fr = "Une erreur est survenue du côté de District AI. Veuillez réessayer sous peu."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The service failed (an HTTP 5xx). \"Our side\" is District AI's side."
 
 [failure.signed_out]
 en = "Your session has ended."
+fr = "Votre session a pris fin."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The session has ended (signed out elsewhere, expired or refused); signing in again is the only way on."
 
 [failure.storage_failed]
 en = "Your sign-in could not be read or saved on this computer. Please try again."
+fr = "Vos informations de connexion n'ont pas pu être lues ni sauvegardées sur cet ordinateur. Veuillez réessayer."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The saved sign-in could not be read or written on this computer, for a reason other than the keyring."
 
 [failure.unexpected_response]
 en = "District AI sent a response this version of the app does not understand. Updating the app should fix it."
+fr = "District AI a envoyé une réponse que cette version de l'application ne comprend pas. Une mise à jour devrait régler le problème."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "The service answered in a shape this version of the app cannot read; an update of the app fixes it."
 
 [failure.unreadable_attachment]
 en = "That image could not be read. Try picking it again."
+fr = "Impossible de lire cette image. Sélectionnez-la de nouveau."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Attaching an image (to a message or as the help desk logo): the file could not be read."
 
 [failure.unsupported_attachment]
 en = "Only JPEG, PNG, GIF or WebP images can be attached."
+fr = "Seules les images JPEG, PNG, GIF ou WebP peuvent être jointes."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
+state = "reviewed"
 note = "Attaching a file to a text message: only these image formats are accepted. JPEG, PNG, GIF and WebP are format names."
 
 [hq.applying]
 en = "Applying the change."
+fr = "Modification en cours."
 ctx = "label"
 screen = "District HQ"
 tier = "T3"
+state = "reviewed"
 note = "While a confirmed change is being applied."
 
 [hq.confirm_action]
 en = "Confirm"
+fr = "Confirmer"
 ctx = "button"
 screen = "District HQ"
 tier = "T2"
+state = "reviewed"
 note = "Button that confirms the proposed change."
 
 [hq.confirm_note]
 en = "Nothing has been changed yet."
+fr = "Rien n'a encore été modifié."
 ctx = "body"
 screen = "District HQ"
 tier = "T2"
+state = "reviewed"
 note = "Under a proposed change: it is only a proposal; nothing has changed."
 
 [hq.confirm_title]
 en = "Confirm this change"
+fr = "Confirmer ce changement"
 ctx = "title"
 screen = "District HQ"
 tier = "T2"
+state = "reviewed"
 note = "Heading of a card proposing a change to the workspace that the member must confirm."
 
 [hq.dismiss_action]
 en = "Dismiss"
+fr = "Fermer"
 ctx = "button"
 screen = "District HQ"
 tier = "T3"
+state = "reviewed"
 note = "Button that declines the proposed change."
 
 [hq.empty_body]
 en = "Ask about your calls, contacts, the receptionist or your knowledge base."
+fr = "Posez une question sur vos appels et contacts, la réceptionniste ou la base de connaissances."
 ctx = "body"
 screen = "District HQ"
 tier = "T3"
+state = "reviewed"
 note = "Body of the empty District HQ conversation: what it can be asked about."
 
 [hq.empty_title]
 en = "Ask District HQ"
+fr = "Poser une question à District HQ"
 ctx = "title"
 screen = "District HQ"
 tier = "T3"
+state = "reviewed"
 note = "Heading of District HQ, the assistant the member asks questions of, before anything was asked. District HQ is a product name."
 
 [hq.note_applied]
 en = "Done. The change is in place."
+fr = "Terminé. Le changement est en place."
 ctx = "toast"
 screen = "District HQ"
 tier = "T3"
+state = "reviewed"
 note = "After a confirmed change was applied."
 
 [hq.note_mismatched]
 en = "District AI reports a change other than the one you confirmed. Check your workspace settings before relying on it."
+fr = "District AI signale un changement autre que celui que vous avez confirmé. Vérifiez les paramètres de votre espace de travail avant de vous fier à ce changement."
 ctx = "body"
 screen = "District HQ"
 tier = "T2"
+state = "reviewed"
 note = "After a confirmed change: the service reports a different change than the one confirmed; the member should check the settings."
 
 [hq.note_not_applied]
 en = "That change was not made."
+fr = "Ce changement n'a pas été fait."
 ctx = "toast"
 screen = "District HQ"
 tier = "T2"
+state = "reviewed"
 note = "After a confirmed change was not made."
 
 [hq.thinking]
 en = "Thinking."
+fr = "Réflexion en cours."
 ctx = "label"
 screen = "District HQ"
 tier = "T3"
+state = "reviewed"
 note = "While District HQ is answering."
 
 [inbox.compose_action]
 en = "New message"
+fr = "Nouveau message"
 ctx = "button"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "The inbox's button that starts a conversation with somebody: a contact, or a phone number or email address typed in."
 
 [inbox.compose_cancel]
 en = "Cancel"
+fr = "Annuler"
 ctx = "button"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "Closes the new message form without sending."
 
 [inbox.compose_change]
 en = "Change"
+fr = "Changer"
 ctx = "button"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "Beside the chosen recipient of a new message: choose somebody else."
 
 [inbox.compose_channel_email]
 en = "Email"
+fr = "Courriel"
 ctx = "label"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "One of the channels a new message can be sent on: an email."
 
 [inbox.compose_channel_sms]
 en = "Text message"
+fr = "Texto"
 ctx = "label"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "One of the channels a new message can be sent on: a text message (SMS)."
 
 [inbox.compose_message]
 en = "Message"
+fr = "Message"
 ctx = "label"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "The label of the new message's text field."
 
 [inbox.compose_message_address]
 en = "Message {address}"
+fr = "Écrire à {address}"
 ctx = "button"
 screen = "inbox compose"
 tier = "T3"
 args = { address = "str" }
+state = "reviewed"
 note = "Under the recipient field of a new message: send to what was typed. {address} is the phone number or email address being typed."
 
 [inbox.compose_no_address]
 en = "This contact has no phone number or email address on file."
+fr = "Ce contact n'a aucun numéro de téléphone ni adresse courriel au dossier."
 ctx = "body"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "Shown when the contact chosen for a new message has nothing to send to."
 
 [inbox.compose_recent_contacts]
 en = "Showing your most recent contacts. For anyone else, type their number or email."
+fr = "Voici vos contacts les plus récents. Pour joindre quelqu'un d'autre, tapez son numéro ou son courriel."
 ctx = "body"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "Under the contacts offered for a new message: only the most recent are listed, and anybody else can be reached by typing their number or email address."
 
 [inbox.compose_send]
 en = "Send"
+fr = "Envoyer"
 ctx = "button"
 screen = "inbox compose"
 tier = "T2"
+state = "reviewed"
 note = "Sends the new message. A text message or an email costs the workspace money, so it is sent once."
 
 [inbox.compose_send_on]
 en = "Send on"
+fr = "Envoyer par"
 ctx = "label"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "Above the choice of channel for a new message, followed by 'Text message' or 'Email'."
 
 [inbox.compose_sending]
 en = "Sending…"
+fr = "Envoi en cours…"
 ctx = "label"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "On the send button while the new message is on its way."
 
 [inbox.compose_subject]
 en = "Subject"
+fr = "Objet"
 ctx = "placeholder"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "The subject field of a new message sent as an email. Required for an email."
 
 [inbox.compose_suggestions_failed]
 en = "{message} You can still enter a number or an email address above."
+fr = "{message} Vous pouvez quand même saisir un numéro ou une adresse courriel ci-dessus."
 ctx = "error"
 screen = "inbox compose"
 tier = "T3"
 args = { message = "str" }
+state = "reviewed"
 note = "When the contacts could not be read for a new message. {message} is the failure's own sentence; the form still works with a number or address typed in."
 
 [inbox.compose_title]
 en = "New message"
+fr = "Nouveau message"
 ctx = "title"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "The title of the form that starts a conversation."
 
 [inbox.compose_to]
 en = "To"
+fr = "À"
 ctx = "label"
 screen = "inbox compose"
 tier = "T3"
+state = "reviewed"
 note = "The recipient field of a new message: a contact, or a phone number or email address."
 
 [inbox.empty_body]
 en = "Texts and emails from your customers will appear here."
+fr = "Les textos et les courriels de vos clients apparaîtront ici."
 ctx = "body"
 screen = "inbox"
 tier = "T3"
+state = "reviewed"
 note = "Body of the empty inbox: texts and emails from customers are listed here."
 
 [inbox.empty_title]
 en = "No conversations yet"
+fr = "Aucune conversation"
 ctx = "title"
 screen = "inbox"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the inbox when there are no conversations."
 
 [inbox.failed_title]
 en = "Could not load your conversations"
+fr = "Impossible de charger vos conversations"
 ctx = "title"
 screen = "inbox"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the inbox when the conversations failed to load."
 
 [inbox.partial_note]
 en = "Showing recent conversations. Older, quieter threads are not listed."
+fr = "Voici les conversations récentes. Les plus anciennes et moins actives n'y figurent pas."
 ctx = "body"
 screen = "inbox"
 tier = "T3"
+state = "reviewed"
 note = "Under the inbox when only recent conversations are listed."
 
 [inbox.search_none_body]
 en = "Search looks inside every message in this workspace, including older threads."
+fr = "La recherche couvre tous les messages de cet espace de travail, même les anciennes conversations."
 ctx = "body"
 screen = "inbox"
 tier = "T3"
+state = "reviewed"
 note = "Body when a search found nothing: the search covers every message, older threads included."
 
 [inbox.search_none_title]
 en = "No matches"
+fr = "Aucun résultat"
 ctx = "title"
 screen = "inbox"
 tier = "T3"
+state = "reviewed"
 note = "Heading when a search of the messages found nothing."
 
 [inbox.search_truncated]
 en = "Showing the newest matches. Older ones are not listed."
+fr = "Voici les derniers résultats. Les plus anciens ne sont pas affichés."
 ctx = "body"
 screen = "inbox"
 tier = "T3"
+state = "reviewed"
 note = "Under search results when only the newest matches are listed."
 
 [knowledge.add_billed]
 en = "Adding a document is billed by its length. It is added once, when you press Add."
+fr = "L'ajout d'un document est facturé selon sa longueur, une seule fois, quand vous appuyez sur Ajouter."
 ctx = "body"
 screen = "settings knowledge"
 tier = "T1"
+state = "reviewed"
 note = "Note: adding a document is billed by its length, once, when Add is pressed. \"Add\" is the button's label."
 
 [knowledge.add_rejected]
 en = "A title and some text are both needed."
+fr = "Un titre et un texte sont tous deux requis."
 ctx = "error"
 screen = "settings knowledge"
 tier = "T2"
+state = "reviewed"
 note = "When adding a document without a title or text."
 
 [knowledge.confirm_delete_action]
 en = "Delete"
+fr = "Supprimer"
 ctx = "button"
 screen = "settings knowledge"
 tier = "T2"
+state = "reviewed"
 note = "Button that deletes a knowledge document."
 
 [knowledge.confirm_delete_body]
 en = "\"{title}\" and everything the receptionist learned from it are deleted. Getting it back means adding it again, which is billed again."
+fr = "«\u00A0{title}\u00A0» et tout ce que la réceptionniste en a appris seront supprimés. Pour le récupérer, il faudra l'ajouter de nouveau, et l'ajout sera facturé encore une fois."
 ctx = "body"
 screen = "settings knowledge"
 tier = "T2"
 args = { title = "str" }
+state = "reviewed"
 note = "Before deleting a knowledge document. {title} is its title; French uses « » around it. Adding a document is billed."
 
 [knowledge.confirm_delete_title]
 en = "Delete this document?"
+fr = "Supprimer ce document?"
 ctx = "title"
 screen = "settings knowledge"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation heading before deleting a knowledge document."
 
 [knowledge.confirm_linked_action]
 en = "Send questions to Atlassian"
+fr = "Envoyer les questions à Atlassian"
 ctx = "button"
 screen = "settings knowledge"
 tier = "T0"
+state = "reviewed"
 note = "Button that confirms sending questions to Atlassian."
 
 [knowledge.confirm_linked_body]
 en = "Callers' questions will be sent to Atlassian, outside this workspace's region, and answered by its assistant instead of from the documents added here."
+fr = "Les questions des appelants seront envoyées à Atlassian, hors de la région de cet espace de travail, et son assistant y répondra au lieu de s'appuyer sur les documents ajoutés ici."
 ctx = "body"
 screen = "settings knowledge"
 tier = "T0"
+state = "reviewed"
 note = "Before linking: questions leave the workspace's data region for Atlassian, and the documents added here stop being used."
 
 [knowledge.confirm_linked_title]
 en = "Send questions to Atlassian?"
+fr = "Envoyer les questions à Atlassian?"
 ctx = "title"
 screen = "settings knowledge"
 tier = "T0"
+state = "reviewed"
 note = "Confirmation heading before sending callers' questions to Atlassian."
 
 [knowledge.empty_body]
 en = "The receptionist has nothing of your own to answer from. Add a document above."
+fr = "La réceptionniste n'a aucun de vos documents pour répondre. Ajoutez-en un ci-dessus."
 ctx = "body"
 screen = "settings knowledge"
 tier = "T3"
+state = "reviewed"
 note = "Body when the knowledge base has no documents: add one above."
 
 [knowledge.empty_title]
 en = "No documents yet"
+fr = "Aucun document"
 ctx = "title"
 screen = "settings knowledge"
 tier = "T3"
+state = "reviewed"
 note = "Heading when the knowledge base has no documents."
 
 [knowledge.mode_internal]
 en = "Your own knowledge base"
+fr = "Votre propre base de connaissances"
 ctx = "label"
 screen = "settings knowledge"
 tier = "T3"
+state = "reviewed"
 note = "Where the receptionist's answers come from: the workspace's own documents."
 
 [knowledge.mode_internal_body]
 en = "Answers come only from the documents added here, searched in this workspace's own region."
+fr = "Les réponses proviennent uniquement des documents ajoutés ici, consultés dans la région de cet espace de travail."
 ctx = "body"
 screen = "settings knowledge"
 tier = "T0"
+state = "reviewed"
 note = "What that mode means: answers only from the documents added here, searched in the workspace's own data region."
 
 [knowledge.mode_linked]
 en = "Linked support knowledge base"
+fr = "Base de connaissances du soutien liée"
 ctx = "label"
 screen = "settings knowledge"
 tier = "T3"
+state = "reviewed"
 note = "Where the receptionist's answers come from: a linked support knowledge base (Atlassian)."
 
 [knowledge.mode_linked_body]
 en = "Callers' questions are sent to Atlassian, whose assistant writes the answers."
+fr = "Les questions des appelants sont envoyées à Atlassian, dont l'assistant rédige les réponses."
 ctx = "body"
 screen = "settings knowledge"
 tier = "T0"
+state = "reviewed"
 note = "What that mode means: callers' questions go to Atlassian (a company), whose assistant writes the answers."
 
 [knowledge.mode_unavailable]
 en = "Where this workspace's answers come from could not be read, so it cannot be changed right now."
+fr = "La source des réponses de cet espace de travail n'a pas pu être lue; elle ne peut donc pas être modifiée pour l'instant."
 ctx = "body"
 screen = "settings knowledge"
 tier = "T2"
+state = "reviewed"
 note = "When where answers come from could not be read."
 
 [knowledge.viewer]
 en = "You have read-only access to this workspace. An agency or client member can add documents and change where answers come from."
+fr = "Votre accès à cet espace de travail est en lecture seule. Un membre ayant le rôle Agence ou Client peut ajouter des documents et changer la source des réponses."
 ctx = "body"
 screen = "settings knowledge"
 tier = "T3"
+state = "reviewed"
 note = "Note for a member with read-only access."
 
 [live.action_answer]
 en = "Answer"
+fr = "Répondre"
 ctx = "button"
 screen = "live updates"
 tier = "T0"
+state = "reviewed"
 note = "Button on an incoming call notification that answers it."
 
 [live.action_decline]
 en = "Decline"
+fr = "Refuser"
 ctx = "button"
 screen = "live updates"
 tier = "T0"
+state = "reviewed"
 note = "Button on an incoming call notification that declines it."
 
 [live.message_body]
 en = "Open District AI to read it."
+fr = "Ouvrez District AI pour le lire."
 ctx = "notification"
 screen = "live updates"
 tier = "T0"
+state = "reviewed"
 note = "Desktop notification body for a new message. District AI is the app's name."
 
 [live.message_title]
 en = "New message"
+fr = "Nouveau message"
 ctx = "notification"
 screen = "live updates"
 tier = "T0"
+state = "reviewed"
 note = "Desktop notification heading for a new message. It never shows the message, which stays private."
 
 [live.missed_body]
 en = "Open District AI to see it in the call log."
+fr = "Consultez-le dans le journal des appels de District AI."
 ctx = "notification"
 screen = "live updates"
 tier = "T0"
+state = "reviewed"
 note = "Desktop notification body for a missed call."
 
 [live.missed_title]
 en = "Missed call"
+fr = "Appel manqué"
 ctx = "notification"
 screen = "live updates"
 tier = "T0"
+state = "reviewed"
 note = "Desktop notification heading for a missed call."
 
 [live.reconnecting]
 en = "Reconnecting to live updates."
+fr = "Reconnexion aux mises à jour en direct."
 ctx = "label"
 screen = "live updates"
 tier = "T3"
+state = "reviewed"
 note = "Status bar line while live updates reconnect."
 
 [live.waiting_title]
 en = "Another call is ringing"
+fr = "Un autre appel entrant"
 ctx = "notification"
 screen = "live updates"
 tier = "T0"
+state = "reviewed"
 note = "Desktop notification heading when a call rings while another call is already ringing or in progress."
 
 [marketplace.not_configured_title]
 en = "No carrier connected"
+fr = "Aucun transporteur connecté"
 ctx = "title"
 screen = "phone numbers"
 tier = "T3"
+state = "reviewed"
 note = "Heading when the workspace has no carrier account connected, so numbers cannot be searched."
 
 [marketplace.number_type_local]
 en = "Local"
+fr = "Local"
 ctx = "label"
 screen = "phone numbers"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A kind of phone number to search for: a local number."
 
 [marketplace.number_type_mobile]
 en = "Mobile"
+fr = "Mobile"
 ctx = "label"
 screen = "phone numbers"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A kind of phone number to search for: a mobile number."
 
 [marketplace.number_type_toll_free]
 en = "Toll-free"
+fr = "Sans frais"
 ctx = "label"
 screen = "phone numbers"
 tier = "T3"
+state = "reviewed"
 note = "A kind of phone number to search for: a toll-free number."
 
 [marketplace.owned_empty_body]
 en = "This workspace has no active phone numbers."
+fr = "Cet espace de travail n'a aucun numéro actif."
 ctx = "body"
 screen = "phone numbers"
 tier = "T3"
+state = "reviewed"
 note = "Body when the workspace has no active phone numbers."
 
 [marketplace.owned_empty_title]
 en = "No numbers yet"
+fr = "Aucun numéro"
 ctx = "title"
 screen = "phone numbers"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the workspace's numbers when it has none."
 
 [marketplace.owned_failed_title]
 en = "Could not load this workspace's numbers"
+fr = "Impossible de charger les numéros de cet espace"
 ctx = "title"
 screen = "phone numbers"
 tier = "T2"
+state = "reviewed"
 note = "Heading when the workspace's numbers failed to load."
 
 [marketplace.partial_note]
 en = "Could not reach {carriers}, so this list may be missing numbers."
+fr = "Impossible de joindre {carriers}; il manque peut-être des numéros à cette liste."
 ctx = "body"
 screen = "phone numbers"
 tier = "T2"
 args = { carriers = "str" }
+state = "reviewed"
 note = "Under the workspace's numbers when carriers did not answer. {carriers} names them (Twilio, Telnyx), joined by commas."
 
 [marketplace.partial_note_unnamed]
 en = "Could not reach a carrier, so this list may be missing numbers."
+fr = "Un transporteur est injoignable; il manque peut-être des numéros à cette liste."
 ctx = "body"
 screen = "phone numbers"
 tier = "T2"
+state = "reviewed"
 note = "Under the workspace's numbers when a carrier did not answer and the service did not say which."
 
 [marketplace.search_failed_title]
 en = "Could not search for numbers"
+fr = "Impossible de rechercher des numéros"
 ctx = "title"
 screen = "phone numbers"
 tier = "T2"
+state = "reviewed"
 note = "Heading when a number search failed."
 
 [marketplace.search_none_body]
 en = "The carrier has no numbers matching these filters."
+fr = "Le transporteur n'a aucun numéro correspondant à ces filtres."
 ctx = "body"
 screen = "phone numbers"
 tier = "T3"
+state = "reviewed"
 note = "Body when a number search found nothing for these filters."
 
 [marketplace.search_none_title]
 en = "No matches"
+fr = "Aucun résultat"
 ctx = "title"
 screen = "phone numbers"
 tier = "T3"
+state = "reviewed"
 note = "Heading when a number search found nothing."
 
 [marketplace.web_action]
 en = "Open the number marketplace on the web"
+fr = "Ouvrir la place de marché des numéros sur le Web"
 ctx = "button"
 screen = "phone numbers"
 tier = "T3"
+state = "reviewed"
 note = "Button that opens the number marketplace in the web browser."
 
 [marketplace.web_caption]
 en = "Numbers are bought on the District AI website. This opens it in your browser."
+fr = "Les numéros s'achètent sur le site Web de District AI. Ce bouton l'ouvre dans votre navigateur."
 ctx = "body"
 screen = "phone numbers"
 tier = "T1"
+state = "reviewed"
 note = "Caption under that button: numbers are bought on the website, which opens in the browser."
 
 [media.connect_failed]
 en = "The room could not be joined. Try again."
+fr = "Impossible de rejoindre la salle. Réessayez."
 ctx = "error"
 screen = "call"
 tier = "T2"
+state = "reviewed"
 note = "A call or meeting room could not be joined."
 
 [media.connection_lost]
 en = "The connection was lost and could not be resumed."
+fr = "La connexion a été perdue et n'a pas pu être rétablie."
 ctx = "error"
 screen = "call"
 tier = "T2"
+state = "reviewed"
 note = "The call's connection was lost and could not be resumed."
 
 [media.encryption_failed]
 en = "Someone's audio could not be decrypted, so you may not hear them. Leaving and joining again may fix it."
+fr = "Le son d'une personne n'a pas pu être déchiffré; vous pourriez ne pas l'entendre. Quitter et revenir pourrait régler le problème."
 ctx = "error"
 screen = "call"
 tier = "T2"
+state = "reviewed"
 note = "During an encrypted call or room: someone's audio could not be decrypted."
 
 [media.joined_elsewhere]
 en = "You joined this room from somewhere else."
+fr = "Vous avez rejoint cette salle ailleurs."
 ctx = "error"
 screen = "call"
 tier = "T2"
+state = "reviewed"
 note = "The same person joined this room from another device, which ends this session."
 
 [media.microphone_unavailable]
 en = "Your microphone could not be used, so nobody can hear you."
+fr = "Impossible d'utiliser votre micro\u00A0: personne ne peut vous entendre."
 ctx = "error"
 screen = "call"
 tier = "T2"
+state = "reviewed"
 note = "During a call or room: the microphone could not be used, so nobody hears the member."
 
 [media.reconnecting]
 en = "Reconnecting. The call is still here."
+fr = "Reconnexion en cours. L'appel se poursuit."
 ctx = "label"
 screen = "call"
 tier = "T3"
+state = "reviewed"
 note = "During a call or room while the connection is being resumed."
 
 [media.removed]
 en = "You were removed from the room."
+fr = "On vous a retiré de la salle."
 ctx = "error"
 screen = "call"
 tier = "T2"
+state = "reviewed"
 note = "The service removed the member from the meeting room."
 
 [media.unavailable]
 en = "Calls and meeting rooms are not available in this build of District AI."
+fr = "Les appels et salles de réunion ne sont pas disponibles dans cette version de District AI."
 ctx = "error"
 screen = "call"
 tier = "T2"
+state = "reviewed"
 note = "This build of the app has no calling: calls and meeting rooms cannot be joined. Said plainly; trying again never helps."
 
 [members.add_rejected]
 en = "That does not look like an email address."
+fr = "Ceci ne ressemble pas à une adresse courriel."
 ctx = "error"
 screen = "settings members"
 tier = "T2"
+state = "reviewed"
 note = "When the address typed to add a member is not an email address."
 
 [members.no_invitation]
 en = "Adding someone sends no invitation. They get access when they sign in with this address."
+fr = "L'ajout d'une personne n'envoie aucune invitation. Elle obtient l'accès en se connectant avec cette adresse."
 ctx = "body"
 screen = "settings members"
 tier = "T2"
+state = "reviewed"
 note = "Note: adding someone sends no invitation; they get access by signing in with that address."
 
 [members.remove_action]
 en = "Remove"
+fr = "Retirer"
 ctx = "button"
 screen = "settings members"
 tier = "T2"
+state = "reviewed"
 note = "Button that removes a member."
 
 [members.remove_body]
 en = "{email} loses access to this workspace at once. Adding them again makes a new membership."
+fr = "{email} perd aussitôt l'accès à cet espace de travail. L'ajouter de nouveau crée une nouvelle adhésion."
 ctx = "body"
 screen = "settings members"
 tier = "T2"
 args = { email = "str" }
+state = "reviewed"
 note = "Before removing a member. {email} is their email address."
 
 [members.remove_title]
 en = "Remove this member?"
+fr = "Retirer ce membre?"
 ctx = "title"
 screen = "settings members"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation heading before removing a member."
 
 [members.role_agency]
 en = "Agency"
+fr = "Agence"
 ctx = "label"
 screen = "settings members"
 tier = "T3"
+state = "reviewed"
 note = "A member's role: full access. \"Agency\" is the role's name in the product (the agency running the workspace)."
 
 [members.role_agency_body]
 en = "Full access, including who belongs here and what each member may do."
+fr = "Accès complet, y compris qui fait partie de l'espace et ce que chaque membre peut faire."
 ctx = "body"
 screen = "settings members"
 tier = "T2"
+state = "reviewed"
 note = "What the agency role may do."
 
 [members.role_client]
 en = "Client"
+fr = "Client"
 ctx = "label"
 screen = "settings members"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A member's role: everyday use. \"Client\" is the role's name in the product (the business the workspace serves)."
 
 [members.role_client_body]
 en = "Everyday use: calls, contacts, messages and the workspace's settings."
+fr = "Usage courant\u00A0: appels, contacts, messages et paramètres de l'espace de travail."
 ctx = "body"
 screen = "settings members"
 tier = "T2"
+state = "reviewed"
 note = "What the client role may do."
 
 [members.role_viewer]
 en = "Viewer"
+fr = "Lecteur"
 ctx = "label"
 screen = "settings members"
 tier = "T3"
+state = "reviewed"
 note = "A member's role: read only."
 
 [members.role_viewer_body]
 en = "Read only: sees calls, contacts and messages, and changes nothing."
+fr = "Lecture seule\u00A0: voit les appels, les contacts et les messages, sans rien modifier."
 ctx = "body"
 screen = "settings members"
 tier = "T2"
+state = "reviewed"
 note = "What the viewer role may do."
 
 [messaging.channel_sms]
 en = "SMS"
+fr = "SMS"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A channel a carrier account carries: text messages (SMS)."
 
 [messaging.channel_voice]
 en = "Voice"
+fr = "Voix"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "A channel a carrier account carries: phone calls."
 
 [messaging.channel_whatsapp]
 en = "WhatsApp"
+fr = "WhatsApp"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A channel a carrier account carries: WhatsApp (a product name)."
 
 [messaging.creator_cell_help]
 en = "Where the receptionist reaches the workspace's owner. The saved number is not shown here; typing one replaces it."
+fr = "Le numéro où la réceptionniste joint le propriétaire de l'espace de travail. Le numéro actuel n'est pas affiché; en saisir un nouveau le remplace."
 ctx = "body"
 screen = "settings messaging accounts"
 tier = "T0"
+state = "reviewed"
 note = "About the owner's mobile number box: the receptionist reaches the owner there; the saved number is never shown."
 
 [messaging.delete_action]
 en = "Remove and release"
+fr = "Retirer et libérer"
 ctx = "button"
 screen = "settings messaging accounts"
 tier = "T2"
+state = "reviewed"
 note = "Button that removes the carrier account and releases its numbers."
 
 [messaging.delete_body]
 en = "\"{account}\" is removed, and its phone numbers ({count}) are released: another workspace can then claim a number only this account held."
+fr = "Le compte «\u00A0{account}\u00A0» sera retiré et ses numéros ({count}) seront libérés\u00A0: un autre espace de travail pourra alors réclamer un numéro que seul ce compte détenait."
 ctx = "body"
 screen = "settings messaging accounts"
 tier = "T2"
 args = { account = "str", count = "int" }
+state = "reviewed"
 note = "Before removing a carrier account. {account} is its name; {count} is how many phone numbers it holds. French uses « » around the name."
 
 [messaging.delete_title]
 en = "Remove this carrier account?"
+fr = "Retirer ce compte de transporteur?"
 ctx = "title"
 screen = "settings messaging accounts"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation heading before removing a carrier account."
 
 [messaging.empty_body]
 en = "This workspace has no carrier account, so it cannot send texts from its own numbers."
+fr = "Sans compte de transporteur, cet espace de travail ne peut pas envoyer de textos depuis ses propres numéros."
 ctx = "body"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Body: without a carrier account the workspace cannot text from its own numbers."
 
 [messaging.empty_title]
 en = "No carrier connected"
+fr = "Aucun transporteur connecté"
 ctx = "title"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Heading when the workspace has no carrier account."
 
 [messaging.field_account_sid]
 en = "Account SID"
+fr = "Account SID"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "Label of a carrier credential box: Twilio's Account SID (keep the vendor's term as the vendor's French console writes it)."
 
 [messaging.field_api_key]
 en = "API key"
+fr = "Clé d'API"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Label of a carrier credential box: Telnyx's API key."
 
 [messaging.field_application_key]
 en = "Application key"
+fr = "Clé d'application"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Label of a carrier credential box: Sinch's application key."
 
 [messaging.field_application_secret]
 en = "Application secret"
+fr = "Secret d'application"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Label of a carrier credential box: Sinch's application secret."
 
 [messaging.field_auth_token]
 en = "Auth token"
+fr = "Jeton d'authentification"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Label of a carrier credential box: Twilio's auth token."
 
 [messaging.field_key_id]
 en = "Key ID"
+fr = "ID de clé"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Label of a carrier credential box: Sinch's key ID."
 
 [messaging.field_key_secret]
 en = "Key secret"
+fr = "Secret de clé"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Label of a carrier credential box: Sinch's key secret."
 
 [messaging.field_project_id]
 en = "Project ID"
+fr = "ID de projet"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Label of a carrier credential box: Sinch's project ID."
 
 [messaging.numbers_help]
 en = "Leave this alone to keep the numbers as they are. Editing it replaces the account's numbers with the ones listed."
+fr = "Ne modifiez pas ce champ pour garder les numéros tels quels. Le modifier remplace les numéros du compte par ceux de la liste."
 ctx = "body"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "About the numbers box: editing it replaces the account's numbers."
 
 [messaging.provider_switch]
 en = "Changing the carrier drops the saved keys, so enter the new carrier's keys before saving."
+fr = "Changer de transporteur efface les clés enregistrées; saisissez celles du nouveau transporteur avant d'enregistrer."
 ctx = "body"
 screen = "settings messaging accounts"
 tier = "T2"
+state = "reviewed"
 note = "After changing an existing account's carrier: the saved keys are dropped."
 
 [messaging.secret_keep]
 en = "Leave blank to keep the saved value."
+fr = "Laissez vide pour garder la valeur actuelle."
 ctx = "placeholder"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Under the secret boxes of a saved account: leaving one blank keeps the saved value."
 
 [messaging.source_byok]
 en = "Your own carrier account"
+fr = "Votre propre compte"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Whose carrier account it is: the workspace brought its own."
 
 [messaging.source_managed]
 en = "Managed by Distronode"
+fr = "Géré par Distronode"
 ctx = "label"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Whose carrier account it is: Distronode (the company) manages it."
 
 [messaging.test_needs_every_field]
 en = "Fill in every key to check them."
+fr = "Pour vérifier, saisissez chaque clé."
 ctx = "body"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "When the credential check cannot run yet."
 
 [messaging.viewer]
 en = "You have read-only access to this workspace, so carrier accounts are shown and not changed."
+fr = "Accès en lecture seule à cet espace de travail\u00A0: les comptes de transporteur sont affichés, mais non modifiables."
 ctx = "body"
 screen = "settings messaging accounts"
 tier = "T3"
+state = "reviewed"
 note = "Note for a member with read-only access."
 
 [overview.finish_setup_action]
 en = "Open the web dashboard"
+fr = "Ouvrir le tableau de bord Web"
 ctx = "button"
 screen = "overview"
 tier = "T3"
+state = "reviewed"
 note = "Button on that card that opens the web dashboard in the browser."
 
 [overview.finish_setup_body]
 en = "Your receptionist is not live yet. Pick your number, set up how it answers, and go live from the web dashboard."
+fr = "Votre réceptionniste n'est pas encore active. Choisissez votre numéro, réglez sa façon de répondre et activez-la depuis le tableau de bord Web."
 ctx = "body"
 screen = "overview"
 tier = "T3"
+state = "reviewed"
 note = "Body of that card: the receptionist is not answering calls yet; the number and how it answers are set up on the web dashboard."
 
 [overview.finish_setup_title]
 en = "Finish setting up on the web"
+fr = "Terminer la configuration sur le Web"
 ctx = "title"
 screen = "overview"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the card shown while the workspace's receptionist is not live yet: setup is finished on the website."
 
 [overview.read_only_badge]
 en = "Read-only access"
+fr = "Lecture seule"
 ctx = "label"
 screen = "overview"
 tier = "T3"
+state = "reviewed"
 note = "Badge on the overview for a member whose role can change nothing in this workspace."
 
 [overview.workspace_mismatch]
 en = "The workspace you selected is no longer the one District AI can report on. Try again to reload your workspaces."
+fr = "L'espace de travail sélectionné n'est plus accessible à District AI. Réessayez pour actualiser vos espaces de travail."
 ctx = "error"
 screen = "overview"
 tier = "T2"
+state = "reviewed"
 note = "The overview answered for a different workspace than the one selected; trying again reloads the workspace list."
 
 [persona.clear_hint]
 en = "Clearing a box saves it as empty. Anything you do not change is kept as it is."
+fr = "Un champ vidé est enregistré vide. Tout ce que vous ne modifiez pas reste tel quel."
 ctx = "body"
 screen = "settings persona"
 tier = "T3"
+state = "reviewed"
 note = "Under the persona's text boxes: an emptied box saves as empty; the rest is kept."
 
 [persona.engine_read_only]
 en = "The languages and answer lengths this workspace may use could not be read, so they cannot be changed right now."
+fr = "Impossible de lire les langues et longueurs de réponse permises pour cet espace de travail; elles ne peuvent pas être modifiées pour l'instant."
 ctx = "body"
 screen = "settings persona"
 tier = "T2"
+state = "reviewed"
 note = "When the languages and answer lengths could not be read."
 
 [persona.preview_billed]
 en = "This places a real call to your receptionist, with the settings on screen whether or not they are saved. It is billed like any call."
+fr = "Cette action passe un véritable appel à votre réceptionniste, avec les paramètres affichés, enregistrés ou non. Il est facturé comme tout autre appel."
 ctx = "body"
 screen = "settings persona"
 tier = "T1"
+state = "reviewed"
 note = "Shown before the audition starts: it is a real call, billed like any other."
 
 [persona.preview_not_joined]
 en = "The audition could not be joined. Try again in a moment."
+fr = "Impossible de rejoindre l'aperçu. Réessayez dans un moment."
 ctx = "error"
 screen = "settings persona"
 tier = "T2"
+state = "reviewed"
 note = "Trying the receptionist (an audition, a real call to it): its room could not be joined."
 
 [persona.preview_title]
 en = "Try this receptionist"
+fr = "Appeler la réceptionniste"
 ctx = "title"
 screen = "settings persona"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the dialog that tries the receptionist with a real call."
 
 [persona.refit_checking]
 en = "Checking that the voice chain speaks the new language."
+fr = "Nous vérifions que la chaîne vocale parle la nouvelle langue."
 ctx = "label"
 screen = "settings persona"
 tier = "T3"
+state = "reviewed"
 note = "After changing the receptionist's language: checking that every part of its voice chain (speech recognition, model, voice) speaks it."
 
 [persona.refit_failed]
 en = "The voice chain could not be moved to the new language. Fit it in Voice Studio."
+fr = "La chaîne vocale n'a pas pu être adaptée à la nouvelle langue. Ajustez-la dans Voice Studio."
 ctx = "body"
 screen = "settings persona"
 tier = "T2"
+state = "reviewed"
 note = "Moving the voice chain to the new language failed."
 
 [persona.refit_failed_reason]
 en = "The voice chain could not be moved to the new language. Fit it in Voice Studio. {reason}"
+fr = "La chaîne vocale n'a pas pu être adaptée à la nouvelle langue. Ajustez-la dans Voice Studio. {reason}"
 ctx = "body"
 screen = "settings persona"
 tier = "T2"
 args = { reason = "str" }
+state = "reviewed"
 note = "Moving the voice chain to the new language failed. {reason} is a full sentence saying why."
 
 [persona.refit_no_fit]
 en = "No model this workspace may use speaks the new language for every part of the voice chain. Choose them in Voice Studio."
+fr = "Pour au moins une étape de la chaîne vocale, aucun modèle permis dans cet espace de travail ne parle la nouvelle langue. Choisissez les modèles dans Voice Studio."
 ctx = "body"
 screen = "settings persona"
 tier = "T2"
+state = "reviewed"
 note = "No model the workspace may use speaks the new language for every part of the voice chain."
 
 [persona.refit_not_seen]
 en = "The voice chain was saved, but Voice Studio does not show it fitting the new language. Check it there."
+fr = "La chaîne vocale a été enregistrée, mais Voice Studio ne la montre pas adaptée à la nouvelle langue. Vérifiez-la dans Voice Studio."
 ctx = "body"
 screen = "settings persona"
 tier = "T2"
+state = "reviewed"
 note = "The voice chain was saved, but reading it back does not show it fitting the new language."
 
 [persona.refit_refitted]
 en = "The voice chain was moved to models that speak the new language. Voice Studio shows it."
+fr = "La chaîne vocale est passée à des modèles qui parlent la nouvelle langue. Elle est visible dans Voice Studio."
 ctx = "body"
 screen = "settings persona"
 tier = "T3"
+state = "reviewed"
 note = "The voice chain was moved to models that speak the new language. Voice Studio is the name of a settings section."
 
 [persona.studio_hint]
 en = "The voice, the engine and how it is tuned are changed in Voice Studio."
+fr = "La voix, le moteur et leurs ajustements se modifient dans Voice Studio."
 ctx = "body"
 screen = "settings persona"
 tier = "T3"
+state = "reviewed"
 note = "Where the voice and engine are changed: Voice Studio (a settings section)."
 
 [presence.failed]
 en = "Calls cannot ring here right now. {reason}"
+fr = "Aucun appel ne peut sonner ici pour l'instant. {reason}"
 ctx = "error"
 screen = "settings"
 tier = "T2"
 args = { reason = "str" }
+state = "reviewed"
 note = "Under the ring setting when registering this computer for calls failed. {reason} is a full sentence saying why."
 
 [presence.setting_body]
 en = "Calls handed to you ring here while District AI is running and you are signed in. Your availability for calls is set in Call handling."
+fr = "Les appels qui vous sont transférés sonnent ici quand District AI est ouvert et votre session active. Vos disponibilités pour les appels se règlent dans Gestion des appels."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "What that setting does. \"Call handling\" is the name of a settings section; use the same words as its title."
 
 [presence.setting_label]
 en = "Ring on this computer"
+fr = "Faire sonner cet ordinateur"
 ctx = "label"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "A setting: let calls handed to the member ring on this computer."
 
 [purchase.cancel_action]
 en = "Cancel"
+fr = "Annuler"
 ctx = "button"
 screen = "billing purchase"
 tier = "T3"
+state = "reviewed"
 note = "Button that goes back without opening checkout."
 
 [purchase.choose_plan_action]
 en = "Choose a plan"
+fr = "Choisir un forfait"
 ctx = "button"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "Button that shows the plans to choose from."
 
 [purchase.confirm_action]
 en = "Continue to checkout"
+fr = "Passer au paiement"
 ctx = "button"
 screen = "billing purchase"
 tier = "T0"
+state = "reviewed"
 note = "Button that continues to checkout."
 
 [purchase.confirm_body]
 en = "Payment is handled by Stripe, District AI's payment processor. Checkout opens in a private window inside District AI, signed in for this purchase only. Your card details go to Stripe, not to District AI, and the price is shown before you pay."
+fr = "Le paiement est traité par Stripe, le fournisseur de paiement de District AI. La page de paiement s'ouvre dans une fenêtre privée de District AI, connectée pour cet achat seulement. Les renseignements de votre carte sont transmis à Stripe, et non à District AI, et le prix est affiché avant le paiement."
 ctx = "body"
 screen = "billing purchase"
 tier = "T0"
+state = "reviewed"
 note = "Body of that step when checkout opens inside the app: Stripe handles the payment, card details go to Stripe only."
 
 [purchase.confirm_body_browser]
 en = "Payment is handled by Stripe, District AI's payment processor. Checkout opens in your browser, signed in to District AI. Your card details go to Stripe, not to District AI, and the price is shown before you pay."
+fr = "Le paiement est traité par Stripe, le fournisseur de paiement de District AI. La page de paiement s'ouvre dans votre navigateur, connectée à District AI. Les renseignements de votre carte sont transmis à Stripe, et non à District AI, et le prix est affiché avant le paiement."
 ctx = "body"
 screen = "billing purchase"
 tier = "T0"
+state = "reviewed"
 note = "Body of that step when checkout opens in the web browser instead."
 
 [purchase.confirm_title]
 en = "Continue to checkout with Stripe"
+fr = "Passer au paiement avec Stripe"
 ctx = "title"
 screen = "billing purchase"
 tier = "T0"
+state = "reviewed"
 note = "Heading of the step before checkout opens. Stripe is the payment processor's name."
 
 [purchase.in_app_note]
 en = "Choose or change your plan here. Checkout and payment are handled by Stripe, and open inside District AI."
+fr = "Choisissez ou changez votre forfait ici. Le paiement est géré par Stripe et s'ouvre dans District AI."
 ctx = "body"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "Windows: the billing screen's note while buying in the app is on. Stripe is the payment processor's name."
 
 [purchase.in_browser]
 en = "This computer cannot show checkout inside District AI, so it opens in your browser."
+fr = "Cet ordinateur ne peut pas afficher la page de paiement dans District AI\u00A0: elle s'ouvre donc dans votre navigateur."
 ctx = "body"
 screen = "billing purchase"
 tier = "T3"
+state = "reviewed"
 note = "Windows: said once checkout opens in the browser because this computer cannot show it inside the app."
 
 [purchase.manage_action]
 en = "Manage billing"
+fr = "Gérer la facturation"
 ctx = "button"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "Button that opens the billing page (payment method, invoices, cancellation)."
 
 [purchase.opening]
 en = "Opening a secure page"
+fr = "Ouverture d'une page sécurisée"
 ctx = "label"
 screen = "billing purchase"
 tier = "T3"
+state = "reviewed"
 note = "While the checkout or billing page is being opened."
 
 [purchase.prices_note]
 en = "Prices, and any promotion, are shown at checkout before you pay."
+fr = "Les prix et toute promotion figurent sur la page de paiement, avant que vous payiez."
 ctx = "body"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "Beside the plans: the app shows no prices; checkout shows them, and any promotion, before paying."
 
 [purchase.promo_invalid]
 en = "A promotion code has only letters, digits, hyphens and underscores, up to 40 of them."
+fr = "Un code promotionnel se limite à 40 lettres, chiffres, traits d'union ou traits de soulignement."
 ctx = "error"
 screen = "billing purchase"
 tier = "T2"
+state = "reviewed"
 note = "Under the promotion code field: the code may only hold letters, digits, hyphens and underscores, at most 40."
 
 [purchase.promo_label]
 en = "Promotion code (optional)"
+fr = "Code promotionnel (facultatif)"
 ctx = "label"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "Label of the promotion code field at checkout."
 
 [purchase.setting_body]
 en = "With Sign in every time, choosing a plan or managing billing signs you in afresh, in a private window inside District AI that keeps nothing once it closes. Off hides plans and billing actions on this computer."
+fr = "Avec «\u00A0Se connecter chaque fois\u00A0», choisir un forfait ou gérer la facturation vous connecte de nouveau, dans une fenêtre privée de District AI qui ne conserve rien une fois fermée. «\u00A0Désactivé\u00A0» masque les forfaits et les actions de facturation sur cet ordinateur."
 ctx = "body"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "Windows: what that setting does. \"Sign in every time\" and \"Off\" are its two values; use the same words as their labels."
 
 [purchase.setting_label]
 en = "Purchases on this computer"
+fr = "Achats sur cet ordinateur"
 ctx = "label"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "Windows: a setting for buying in the app on this computer."
 
 [purchase.setting_off]
 en = "Off"
+fr = "Désactivé"
 ctx = "label"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "Windows: a value of the purchases setting that hides plans and billing actions."
 
 [purchase.setting_sign_in_every_time]
 en = "Sign in every time"
+fr = "Se connecter chaque fois"
 ctx = "label"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "Windows: a value of the purchases setting: each purchase signs in afresh in a private window."
 
 [purchase.term_annual]
 en = "Annual"
+fr = "Annuel"
 ctx = "label"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "How often a plan is billed: once a year, paid up front."
 
 [purchase.term_monthly]
 en = "Monthly"
+fr = "Mensuel"
 ctx = "label"
 screen = "billing purchase"
 tier = "T1"
+state = "reviewed"
 note = "How often a plan is billed: every month."
 
 [ringing.body]
 en = "Transferred from your AI receptionist."
+fr = "Appel transféré par votre réceptionniste IA."
 ctx = "notification"
 screen = "incoming call"
 tier = "T0"
+state = "reviewed"
 note = "What an incoming call says: the AI receptionist transferred it. Nothing about the caller."
 
 [ringing.call_ended]
 en = "That call ended before you could answer it."
+fr = "Cet appel a pris fin avant que vous puissiez y répondre."
 ctx = "body"
 screen = "incoming call"
 tier = "T3"
+state = "reviewed"
 note = "After the caller hung up before the call was answered."
 
 [ringing.microphone_note]
 en = "Answering puts your microphone on this call."
+fr = "Répondre active votre microphone pour cet appel."
 ctx = "body"
 screen = "incoming call"
 tier = "T0"
+state = "reviewed"
 note = "Beside the Answer button: answering turns the microphone on (a privacy notice)."
 
 [ringing.missed]
 en = "You missed a call."
+fr = "Vous avez manqué un appel."
 ctx = "body"
 screen = "incoming call"
 tier = "T3"
+state = "reviewed"
 note = "After an incoming call was not answered in time."
 
 [ringing.title]
 en = "Incoming call"
+fr = "Appel entrant"
 ctx = "notification"
 screen = "incoming call"
 tier = "T0"
+state = "reviewed"
 note = "Heading of an incoming call, in the app and in its desktop notification."
 
 [ringing.waiting_body]
 en = "Hang up to answer it."
+fr = "Raccrochez pour y répondre."
 ctx = "notification"
 screen = "incoming call"
 tier = "T0"
+state = "reviewed"
 note = "An incoming call while another call is in progress: hang up the current one to answer."
 
 [rooms.busy_note]
 en = "Finish the call you are on to join a room."
+fr = "Terminez votre appel en cours pour rejoindre une salle."
 ctx = "body"
 screen = "rooms"
 tier = "T3"
+state = "reviewed"
 note = "For a member who is on a call: finish it before joining a room."
 
 [rooms.companion_note]
 en = "The Companion joins every room and writes up the minutes."
+fr = "Le Compagnon se joint à chaque salle et en rédige le procès-verbal."
 ctx = "body"
 screen = "rooms"
 tier = "T0"
+state = "reviewed"
 note = "The Companion (the AI note-taker, a product name) joins every room and writes the minutes. A privacy notice."
 
 [rooms.empty_body]
 en = "Meetings appear here once one has been held, with the minutes when it ends."
+fr = "Les réunions s'affichent ici dès qu'elles ont lieu, avec leur procès-verbal une fois terminées."
 ctx = "body"
 screen = "rooms"
 tier = "T3"
+state = "reviewed"
 note = "Body of the empty meetings list: a meeting appears once held, with minutes when it ends."
 
 [rooms.empty_title]
 en = "No meetings yet"
+fr = "Aucune réunion pour l'instant"
 ctx = "title"
 screen = "rooms"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the meetings list when none has been held."
 
 [rooms.failed_title]
 en = "Could not load meetings"
+fr = "Impossible de charger les réunions"
 ctx = "title"
 screen = "rooms"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the meetings list when it failed to load."
 
 [rooms.listener_note]
 en = "You are in this workspace as a viewer, so you join rooms to listen."
+fr = "Avec le rôle Lecteur dans cet espace de travail, vous rejoignez les salles seulement pour écouter."
 ctx = "body"
 screen = "rooms"
 tier = "T3"
+state = "reviewed"
 note = "For a viewer: they join rooms to listen only."
 
 [rooms.name_hint]
 en = "Name the room. Anyone in this workspace who types the same name joins you."
+fr = "Nommez la salle. Toute personne de cet espace de travail qui saisit le même nom vous rejoint."
 ctx = "body"
 screen = "rooms"
 tier = "T3"
+state = "reviewed"
 note = "Under the room name field: everyone in the workspace who types the same name meets in the same room."
 
 [rooms.name_preview]
 en = "Everyone who joins \"{room}\" meets in the same room."
+fr = "Quiconque rejoint «\u00A0{room}\u00A0» se retrouve dans cette même salle."
 ctx = "body"
 screen = "rooms"
 tier = "T3"
 args = { room = "str" }
+state = "reviewed"
 note = "Under the room name field: {room} is the room's name as typed, cleaned to letters, digits and hyphens. French uses « » around it."
 
 [rooms.no_minutes]
 en = "No minutes were saved for this meeting."
+fr = "Aucun procès-verbal n'a été conservé pour cette réunion."
 ctx = "body"
 screen = "rooms"
 tier = "T3"
+state = "reviewed"
 note = "For a finished meeting with no minutes saved."
 
 [rooms.no_minutes_yet]
 en = "Minutes are written when the meeting ends."
+fr = "Le procès-verbal est rédigé à la fin de la réunion."
 ctx = "body"
 screen = "rooms"
 tier = "T3"
+state = "reviewed"
 note = "For a meeting still running: the minutes are written when it ends."
 
 [rooms.start_title]
 en = "Start or join a room"
+fr = "Créer ou rejoindre une salle"
 ctx = "title"
 screen = "rooms"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the form that starts or joins a meeting room."
 
 [routing.confirm_clear_action]
 en = "Remove all rules"
+fr = "Supprimer les règles"
 ctx = "button"
 screen = "settings call routing"
 tier = "T2"
+state = "reviewed"
 note = "Button that saves no rules."
 
 [routing.confirm_clear_body]
 en = "Saving with no rules removes every override: every caller gets the workspace's persona."
+fr = "Enregistrer sans règle supprime tous les remplacements\u00A0: chaque appelant aura la persona de l'espace de travail."
 ctx = "body"
 screen = "settings call routing"
 tier = "T2"
+state = "reviewed"
 note = "Before saving no rules: every caller gets the workspace's persona."
 
 [routing.confirm_clear_title]
 en = "Remove every routing rule?"
+fr = "Supprimer toutes les règles?"
 ctx = "title"
 screen = "settings call routing"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation heading before saving no call routing rules (rules that give some callers another voice or instruction)."
 
 [routing.confirm_many_body]
 en = "There will be exactly these {count} rules, in this order, replacing what is stored."
+fr = "Il y aura exactement ces {count} règles, dans cet ordre, qui remplaceront ce qui est enregistré."
 ctx = "body"
 screen = "settings call routing"
 tier = "T2"
 args = { count = "int" }
+state = "reviewed"
 note = "Before saving {count} rules (2 or more): they replace what is stored, in this order."
 
 [routing.confirm_one_body]
 en = "There will be exactly one rule, replacing what is stored."
+fr = "Il y aura exactement une règle, qui remplacera ce qui est enregistré."
 ctx = "body"
 screen = "settings call routing"
 tier = "T2"
+state = "reviewed"
 note = "Before saving one rule: it replaces what is stored."
 
 [routing.confirm_replace_action]
 en = "Replace"
+fr = "Remplacer"
 ctx = "button"
 screen = "settings call routing"
 tier = "T2"
+state = "reviewed"
 note = "Button that saves the rules, replacing what is stored."
 
 [routing.confirm_replace_title]
 en = "Replace the routing rules?"
+fr = "Remplacer les règles?"
 ctx = "title"
 screen = "settings call routing"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation heading before saving the call routing rules."
 
 [routing.empty_body]
 en = "Every caller gets the workspace's persona. Add a rule to give some callers another voice or instruction."
+fr = "Chaque appelant a la persona de l'espace de travail. Ajoutez une règle pour donner à certains appelants une autre voix ou consigne."
 ctx = "body"
 screen = "settings call routing"
 tier = "T3"
+state = "reviewed"
 note = "Body when there are no routing rules."
 
 [routing.empty_title]
 en = "No routing rules"
+fr = "Aucune règle d'acheminement"
 ctx = "title"
 screen = "settings call routing"
 tier = "T3"
+state = "reviewed"
 note = "Heading when there are no routing rules."
 
 [routing.unmodellable_body]
 en = "This workspace's routing rules are stored in a shape this app cannot change without losing part of them. Change them on the District AI website."
+fr = "Les règles d'acheminement de cet espace sont stockées dans un format que cette application ne peut modifier sans en perdre une partie. Modifiez-les sur le site Web de District AI."
 ctx = "body"
 screen = "settings call routing"
 tier = "T3"
+state = "reviewed"
 note = "Body: the rules must be changed on the website so nothing is lost."
 
 [routing.unmodellable_title]
 en = "Cannot be edited here"
+fr = "Modification impossible ici"
 ctx = "title"
 screen = "settings call routing"
 tier = "T3"
+state = "reviewed"
 note = "Heading when the stored rules have a shape this app cannot edit."
 
 [scheduling.failed_title]
 en = "Could not load booking pages"
+fr = "Impossible de charger les pages de réservation"
 ctx = "title"
 screen = "booking pages"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the booking pages card when it failed to load."
 
 [scheduling.live]
 en = "Your booking page is live."
+fr = "Votre page de réservation est en ligne."
 ctx = "body"
 screen = "booking pages"
 tier = "T3"
+state = "reviewed"
 note = "Booking pages card: the booking page is live."
 
 [scheduling.live_without_url]
 en = "This workspace has a booking page, but District AI did not send its address."
+fr = "Cet espace de travail a une page de réservation, mais District AI n'a pas envoyé son adresse Web."
 ctx = "body"
 screen = "booking pages"
 tier = "T3"
+state = "reviewed"
 note = "Booking pages card: there is a booking page but the service did not send its address."
 
 [scheduling.not_offered]
 en = "Booking pages are not offered to this workspace."
+fr = "Cet espace de travail n'a pas accès aux pages de réservation."
 ctx = "body"
 screen = "booking pages"
 tier = "T3"
+state = "reviewed"
 note = "Booking pages card: the service does not offer booking pages (customers booking appointments on a web page) to this workspace."
 
 [scheduling.not_set_up]
 en = "Booking pages are available to this workspace. Turn them on to give customers a page to book on."
+fr = "Cet espace de travail a accès aux pages de réservation. Activez-les pour offrir à vos clients une page où réserver."
 ctx = "body"
 screen = "booking pages"
 tier = "T3"
+state = "reviewed"
 note = "Booking pages card: available but not turned on yet."
 
 [scheduling.provisioning]
 en = "Your booking page is being set up. This usually takes under a minute, and it is checked again every hour if anything stalls."
+fr = "Votre page de réservation est en cours de configuration. Cela prend habituellement moins d'une minute, et elle est revérifiée toutes les heures en cas de blocage."
 ctx = "body"
 screen = "booking pages"
 tier = "T3"
+state = "reviewed"
 note = "Booking pages card: the booking page is being set up."
 
 [scheduling.setup_failed]
 en = "Setting up your booking page did not finish."
+fr = "La configuration de votre page de réservation a échoué."
 ctx = "body"
 screen = "booking pages"
 tier = "T2"
+state = "reviewed"
 note = "Booking pages card: setting up the booking page failed."
 
 [scheduling.switched_off]
 en = "Booking pages are switched off for this workspace."
+fr = "Les pages de réservation sont désactivées pour cet espace de travail."
 ctx = "body"
 screen = "booking pages"
 tier = "T3"
+state = "reviewed"
 note = "Booking pages card: booking pages are turned off for this workspace."
 
 [scheduling.unknown]
 en = "This workspace has a booking page, and this version of the app does not recognise its state. Updating the app should fix it."
+fr = "Cet espace de travail a une page de réservation, mais cette version de l'application ne reconnaît pas son état. Une mise à jour devrait régler le problème."
 ctx = "body"
 screen = "booking pages"
 tier = "T3"
+state = "reviewed"
 note = "Booking pages card: the service reports a state this version of the app does not know."
 
 [session.callback_expired]
 en = "That sign-in link has expired. Sign in again."
+fr = "Ce lien de connexion a expiré. Reconnectez-vous."
 ctx = "error"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "The sign-in link that came back is no longer waited for."
 
 [session.callback_malformed]
 en = "Sign-in did not complete. Sign in to try again."
+fr = "La connexion n'a pas abouti. Connectez-vous pour réessayer."
 ctx = "error"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "The browser's answer to the sign-in was incomplete."
 
 [session.callback_mismatch]
 en = "Sign-in refused: the response did not match this request."
+fr = "Tentative de connexion refusée\u00A0: la réponse ne correspond pas à cette demande."
 ctx = "error"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "Security: the browser handed back a sign-in this app did not ask for, so it was refused. Said plainly."
 
 [session.denied]
 en = "Sign-in did not complete ({reason})."
+fr = "La connexion n'a pas abouti ({reason})."
 ctx = "error"
 screen = "sign-in"
 tier = "T2"
 args = { reason = "str" }
+state = "reviewed"
 note = "The sign-in page reported an error. {reason} is the sign-in service's own short code for it, in English (for example access_denied)."
 
 [session.ended_refresh]
 en = "Your session ended. Signing in again will restore it."
+fr = "Votre session a pris fin. Une nouvelle connexion la rétablira."
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "Sign-in screen after the session ended routinely (its renewal was interrupted or the service could not be reached)."
 
 [session.ended_title]
 en = "Please sign in again"
+fr = "Veuillez vous reconnecter"
 ctx = "title"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the sign-in screen after the session ended."
 
 [session.exchange_rejected]
 en = "Sign-in expired. Please try again."
+fr = "La tentative de connexion a expiré. Veuillez réessayer."
 ctx = "error"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "Completing the sign-in was refused because it took too long."
 
 [session.exchanging]
 en = "Finishing sign-in."
+fr = "Finalisation de la connexion."
 ctx = "label"
 screen = "sign-in"
 tier = "T3"
+state = "reviewed"
 note = "After the browser handed the sign-in back, while it is completed."
 
 [session.no_browser]
 en = "No browser is available, and signing in needs one."
+fr = "Aucun navigateur n'est disponible, et la connexion en exige un."
 ctx = "error"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "Signing in needs a web browser and none would open."
 
 [session.no_browser_for_page]
 en = "No browser is available to open that page."
+fr = "Aucun navigateur disponible pour ouvrir cette page."
 ctx = "error"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "No web browser would open a page the app asked for."
 
 [session.no_longer_valid]
 en = "Your session is no longer valid. Please sign in again."
+fr = "Votre session n'est plus valide. Veuillez vous reconnecter."
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "Sign-in screen after the service refused the session."
 
 [session.not_saved]
 en = "You are signed in, but your sign-in could not be saved ({problem}), so you will need to sign in again the next time the app starts."
+fr = "Connexion réussie, mais vos informations de connexion n'ont pas pu être sauvegardées ({problem})\u00A0: il faudra vous reconnecter au prochain démarrage de l'application."
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
 args = { problem = "str" }
+state = "reviewed"
 note = "After signing in when the sign-in could not be saved on this computer. {problem} is a clause from session.store_problem."
 
 [session.opening_browser]
 en = "Opening your browser to sign in."
+fr = "Ouverture du navigateur pour la connexion."
 ctx = "label"
 screen = "sign-in"
 tier = "T3"
+state = "reviewed"
 note = "While the web browser opens the sign-in page."
 
 [session.resuming]
 en = "Resuming your session."
+fr = "Reprise de votre session."
 ctx = "label"
 screen = "sign-in"
 tier = "T3"
+state = "reviewed"
 note = "At start-up while the saved session is being resumed."
 
 [session.sign_in_to_continue]
 en = "Sign in to continue."
+fr = "Connectez-vous pour continuer."
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "Sign-in screen when there is no session at all."
 
 [session.sign_out_deferred]
 en = "District AI could not be reached, so it will be told the next time the app starts."
+fr = "District AI est injoignable\u00A0: la déconnexion lui sera signalée au prochain démarrage de l'application."
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "After signing out while offline: the service will be told the next time the app starts."
 
 [session.sign_out_not_attempted]
 en = "Your stored sign-in could not be read ({problem}), so District AI was not told. It may stay valid on the service until it expires. You can sign this device out from Devices on another device."
+fr = "Impossible de lire vos informations de connexion ({problem})\u00A0: District AI n'a donc pas été avisé de la déconnexion, et votre session pourrait rester valide sur le service jusqu'à son expiration. Vous pouvez déconnecter cet appareil dans l'écran Appareils d'un autre appareil."
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
 args = { problem = "str" }
+state = "reviewed"
 note = "After signing out when the saved sign-in could not be read. {problem} is a clause from session.store_problem. \"Devices\" is the name of a screen."
 
 [session.sign_out_not_removed]
 en = "Your sign-in could not be removed from this computer ({problem}), so you may find yourself signed in the next time the app starts. Try signing out again."
+fr = "Vos informations de connexion n'ont pas pu être supprimées de cet ordinateur ({problem})\u00A0: votre session pourrait rester ouverte au prochain démarrage de l'application. Réessayez de vous déconnecter."
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
 args = { problem = "str" }
+state = "reviewed"
 note = "After signing out when the saved sign-in could not be deleted. {problem} is a clause from session.store_problem."
 
 [session.sign_out_stranded]
 en = "District AI could not be reached, and the sign-in could not be kept to tell it later ({problem}), so it may stay valid on the service until it expires. You can sign this device out from Devices on another device."
+fr = "District AI est injoignable, et la déconnexion n'a pas pu être mise en attente pour l'en informer plus tard ({problem})\u00A0: votre session pourrait rester valide sur le service jusqu'à son expiration. Vous pouvez déconnecter cet appareil depuis l'écran Appareils d'un autre appareil."
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
 args = { problem = "str" }
+state = "reviewed"
 note = "After signing out while offline when the sign-in could not be kept to tell the service later. {problem} is a clause from session.store_problem. \"Devices\" is the name of a screen."
 
 [session.signed_out]
 en = "You are signed out."
+fr = "Déconnexion effectuée."
 ctx = "title"
 screen = "sign-in"
 tier = "T3"
+state = "reviewed"
 note = "Headline after signing out of this device."
 
 [session.signed_out_everywhere]
 en = "You are signed out on every device."
+fr = "Déconnexion effectuée sur tous vos appareils."
 ctx = "title"
 screen = "sign-in"
 tier = "T3"
+state = "reviewed"
 note = "Headline after signing out of every device."
 
 [session.store_problem_corrupt]
 en = "what is stored could not be read"
+fr = "le contenu stocké n'a pas pu être lu"
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "A clause inside parentheses in the sign-out and sign-in sentences: what is stored could not be read. Lower case; no final period."
 
 [session.store_problem_io]
 en = "a file could not be read or written"
+fr = "la lecture ou l'écriture d'un fichier a échoué"
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "A clause inside parentheses in the sign-out and sign-in sentences: a file could not be read or written. Lower case; no final period."
 
 [session.store_problem_locked]
 en = "the keyring is locked"
+fr = "le trousseau est verrouillé"
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "A clause inside parentheses in the sign-out and sign-in sentences: the keyring is locked. Lower case; no final period."
 
 [session.store_problem_unavailable]
 en = "no keyring is available"
+fr = "aucun trousseau disponible"
 ctx = "body"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "A clause inside parentheses in the sign-out and sign-in sentences: no secret store (keyring) is running. Lower case; no final period."
 
 [session.unreadable_token]
 en = "District AI sent a sign-in this version of the app does not understand. Updating the app should fix it."
+fr = "District AI a envoyé une réponse de connexion que cette version de l'application ne comprend pas. Une mise à jour de l'application devrait régler le problème."
 ctx = "error"
 screen = "sign-in"
 tier = "T2"
+state = "reviewed"
 note = "The service sent a sign-in this version of the app cannot read; an update fixes it."
 
 [session.waiting_for_browser]
 en = "Waiting for sign-in to finish in your browser."
+fr = "En attente de la fin de la connexion dans votre navigateur."
 ctx = "label"
 screen = "sign-in"
 tier = "T3"
+state = "reviewed"
 note = "While the person signs in, in the web browser."
 
 [settings.failed_title]
 en = "Could not load this workspace's settings"
+fr = "Impossible de charger les paramètres de cet espace de travail"
 ctx = "title"
 screen = "settings"
 tier = "T2"
+state = "reviewed"
 note = "Heading when the workspace's settings failed to load."
 
 [settings.group_workspace]
 en = "Workspace"
+fr = "Espace de travail"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the settings group about the workspace itself (carrier accounts, members, numbers)."
 
 [settings.more_on_web]
 en = "District Studio's Integrations and Video, and the outbound campaign, are changed on the District AI website."
+fr = "Les pages Intégrations et Vidéo de District Studio, ainsi que la campagne sortante, se modifient sur le site Web de District AI."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Under the settings list: these other settings are changed on the website. District Studio, Integrations and Video are names of web pages; keep District Studio as is."
 
 [settings.row_call_handling]
 en = "Call handling"
+fr = "Gestion des appels"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings row that opens how calls are answered."
 
 [settings.row_call_handling_body]
 en = "Who answers first, how long your devices ring, and whether you are rung."
+fr = "Qui répond en premier, combien de temps vos appareils sonnent et si l'appel vous parvient."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Call handling settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.row_directory]
 en = "Transfer directory"
+fr = "Répertoire de transfert"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings row that opens the people the receptionist can transfer a caller to."
 
 [settings.row_directory_body]
 en = "Who it can put a live caller through to."
+fr = "Vers qui l'agent peut transférer un appel en cours."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Transfer directory settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.row_knowledge]
 en = "Knowledge"
+fr = "Connaissances"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings row that opens the knowledge base it answers from."
 
 [settings.row_knowledge_body]
 en = "The documents it answers from, and where answers come from."
+fr = "Les documents utilisés pour répondre, et la source des réponses."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Knowledge settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.row_members]
 en = "Members"
+fr = "Membres"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings row that opens the workspace's members."
 
 [settings.row_members_body]
 en = "Who belongs to this workspace, their roles, and its name."
+fr = "Les membres de cet espace de travail, leurs rôles et le nom de l'espace."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Members settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.row_messaging]
 en = "Messaging accounts"
+fr = "Comptes de messagerie"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings row that opens the carrier accounts."
 
 [settings.row_messaging_body]
 en = "The carrier accounts this workspace sends from."
+fr = "Comptes de transporteur utilisés pour les envois de cet espace de travail."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Messaging accounts settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.row_numbers]
 en = "Phone numbers"
+fr = "Numéros de téléphone"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings row that opens the workspace's phone numbers."
 
 [settings.row_numbers_body]
 en = "The numbers this workspace uses."
+fr = "Les numéros de cet espace de travail."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Phone numbers settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.row_persona]
 en = "Persona"
+fr = "Persona"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "Title of the settings row that opens the receptionist's persona (name, greeting, character)."
 
 [settings.row_persona_body]
 en = "The receptionist's name, greeting, character, language and answer length."
+fr = "Nom, message d'accueil, personnalité, langue et longueur des réponses de la réceptionniste."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Persona settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.row_routing]
 en = "Call routing rules"
+fr = "Règles d'acheminement"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings row that opens the call routing rules."
 
 [settings.row_routing_body]
 en = "Which callers get which voice and instruction."
+fr = "Quelle voix et quelle consigne pour quels appelants."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Call routing rules settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.row_tools]
 en = "Skills"
+fr = "Compétences"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings row that opens what the receptionist may do on a call."
 
 [settings.row_tools_body]
 en = "What it may do on a call, and outside research on contacts."
+fr = "Ce que l'agent peut faire en appel, et les recherches externes sur les contacts."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Skills settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.row_voice]
 en = "Voice"
+fr = "Voix"
 ctx = "title"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings row that opens the receptionist's voice and speech engine (Voice Studio)."
 
 [settings.row_voice_body]
 en = "The voice and engine it speaks with, part by part, and how fast it answers."
+fr = "La voix et le moteur utilisés, élément par élément, et la rapidité de réponse."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Subtitle of the Voice settings row: what the section holds. \"It\" is the AI receptionist."
 
 [settings.saved]
 en = "Saved."
+fr = "Enregistré."
 ctx = "toast"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "After a setting was saved."
 
 [settings.saved_stale]
 en = "Saved, but the settings could not be read back. Read them again before changing anything else."
+fr = "Enregistré, mais les paramètres n'ont pas pu être relus. Actualisez-les avant de modifier autre chose."
 ctx = "toast"
 screen = "settings"
 tier = "T2"
+state = "reviewed"
 note = "After a save, when the settings could not be read back."
 
 [settings.viewer_note]
 en = "You have read-only access to this workspace. These are the settings you may read; an agency or client member can change them."
+fr = "Votre accès à cet espace de travail est en lecture seule. Voici les paramètres que vous pouvez lire; un membre ayant le rôle Agence ou Client peut les modifier."
 ctx = "body"
 screen = "settings"
 tier = "T3"
+state = "reviewed"
 note = "Under the settings list for a viewer."
 
 [studio.leg_out]
 en = "{leg}: {place}"
+fr = "{leg}\u00A0: {place}"
 ctx = "format"
 screen = "settings voice studio"
 tier = "T0"
 args = { leg = "str", place = "str" }
+state = "reviewed"
 note = "One part of the voice chain that runs outside the workspace's data region. {leg} is the part's name and {place} where it runs, both already in the reader's language. French puts a no-break space before the colon."
 
 [support.capped]
 en = "Showing the 100 most recent requests."
+fr = "Affichage des 100 demandes les plus récentes."
 ctx = "body"
 screen = "support"
 tier = "T3"
+state = "reviewed"
 note = "Under the list when it holds the service's maximum of 100 requests."
 
 [support.close_action]
 en = "Mark as resolved"
+fr = "Marquer comme réglée"
 ctx = "button"
 screen = "support"
 tier = "T2"
+state = "reviewed"
 note = "Button that marks a support request resolved."
 
 [support.close_question]
 en = "Mark this request as resolved? Our team is told, and it cannot be reopened from here. You can still reply to take it up again."
+fr = "Marquer cette demande comme réglée? L'équipe de Distronode en sera avisée; impossible de la rouvrir ici, mais vous pourrez y répondre pour la relancer."
 ctx = "body"
 screen = "support"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation before marking a support request resolved: Distronode's team is told; it cannot be reopened here, but replying takes it up again."
 
 [support.closed_as]
 en = "Closed as {status}."
+fr = "Fermée (état\u00A0: {status})."
 ctx = "toast"
 screen = "support"
 tier = "T3"
 args = { status = "str" }
+state = "reviewed"
 note = "After closing a support request. {status} is the status name the support desk gave it, in its own words (often English)."
 
 [support.deduplicated]
 en = "That request was already sent."
+fr = "Cette demande a déjà été envoyée."
 ctx = "toast"
 screen = "support"
 tier = "T3"
+state = "reviewed"
 note = "After sending a support request the service already had."
 
 [support.empty_body]
 en = "Requests your team raises with Distronode appear here, with our replies."
+fr = "Les demandes que votre équipe soumet à Distronode apparaissent ici, avec nos réponses."
 ctx = "body"
 screen = "support"
 tier = "T3"
+state = "reviewed"
 note = "Body of the empty list: requests the workspace raises with Distronode (the company) appear here with its replies."
 
 [support.empty_title]
 en = "No requests"
+fr = "Aucune demande"
 ctx = "title"
 screen = "support"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the support requests list when there are none."
 
 [support.failed_title]
 en = "Could not load your support requests"
+fr = "Impossible de charger vos demandes de soutien"
 ctx = "title"
 screen = "support"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the support requests list when it failed to load."
 
 [support.filed]
 en = "Request {key} is open with our team."
+fr = "La demande {key} est ouverte chez Distronode."
 ctx = "toast"
 screen = "support"
 tier = "T3"
 args = { key = "str" }
+state = "reviewed"
 note = "After sending a support request to Distronode. {key} is its reference, for example SUP-12. \"Our team\" is Distronode's support team."
 
 [support.kind_problem]
 en = "Something is broken"
+fr = "Quelque chose ne fonctionne pas"
 ctx = "label"
 screen = "support"
 tier = "T3"
+state = "reviewed"
 note = "A kind of support request: something does not work."
 
 [support.kind_question]
 en = "A question"
+fr = "Une question"
 ctx = "label"
 screen = "support"
 tier = "T3"
+state = "reviewed"
 note = "A kind of support request: a question."
 
 [support.kind_suggestion]
 en = "A suggestion"
+fr = "Une suggestion"
 ctx = "label"
 screen = "support"
 tier = "T3"
+state = "reviewed"
 note = "A kind of support request: a suggestion."
 
 [support.pending]
 en = "We have your request. Its reference will appear here shortly."
+fr = "Nous avons bien reçu votre demande. Sa référence apparaîtra ici sous peu."
 ctx = "toast"
 screen = "support"
 tier = "T3"
+state = "reviewed"
 note = "After sending a support request whose reference is not known yet. It was received."
 
 [thread.attachment_size]
 en = "Attachments must be between 1 byte and {megabytes} MB."
+fr = "Les pièces jointes doivent faire entre 1 octet et {megabytes} Mo."
 ctx = "error"
 screen = "conversation"
 tier = "T2"
 args = { megabytes = "int" }
+state = "reviewed"
 note = "When an image to attach is empty or too large. {megabytes} is the largest size in megabytes. MB is the unit (Mo in French)."
 
 [thread.no_reply_target]
 en = "Replies cannot be sent on this conversation from here."
+fr = "Impossible de répondre à cette conversation à partir d'ici."
 ctx = "body"
 screen = "conversation"
 tier = "T3"
+state = "reviewed"
 note = "In place of the reply box on a conversation the app cannot reply on."
 
 [thread.read_only_role]
 en = "You have read-only access to this workspace, so you cannot reply here."
+fr = "Votre accès à cet espace de travail est en lecture seule; vous ne pouvez pas répondre ici."
 ctx = "body"
 screen = "conversation"
 tier = "T3"
+state = "reviewed"
 note = "In place of the reply box for a member whose role cannot reply."
 
 [thread.too_many_attachments]
 en = "You can attach up to {count} images to one message."
+fr = "Vous pouvez joindre jusqu'à {count} images à un même message."
 ctx = "error"
 screen = "conversation"
 tier = "T2"
 args = { count = "int" }
+state = "reviewed"
 note = "When attaching one image too many to a text message. {count} is the most allowed (more than one)."
 
 [thread.untitled]
 en = "Conversation"
+fr = "Conversation"
 ctx = "title"
 screen = "conversation"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "Title of a conversation with a contact the app knows nothing else about yet."
 
 [tools.book_appointment]
 en = "Book appointments"
+fr = "Fixer des rendez-vous"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: book appointments for the caller."
 
 [tools.cancel_appointment]
 en = "Cancel appointments"
+fr = "Annuler des rendez-vous"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: cancel the caller's appointments."
 
 [tools.check_availability]
 en = "Check availability"
+fr = "Vérifier les disponibilités"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: check free times on the booking calendar."
 
 [tools.dispatch_email]
 en = "Email dispatcher"
+fr = "Envoi de courriels"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: send an email to the workspace's dispatcher."
 
 [tools.enrichment_body]
 en = "When on, contacts can be researched with business details from licensed providers and public web search. Off unless someone turns it on; calls and contacts work normally without it."
+fr = "Activée, elle permet de rechercher des renseignements d'affaires sur les contacts auprès de fournisseurs sous licence et sur le Web public. Désactivée par défaut; les appels et les contacts fonctionnent normalement sans elle."
 ctx = "body"
 screen = "settings skills"
 tier = "T0"
+state = "reviewed"
 note = "What that switch does: research uses licensed data providers and public web search; it is off unless turned on."
 
 [tools.enrichment_title]
 en = "Outside research on contacts"
+fr = "Recherche externe sur les contacts"
 ctx = "title"
 screen = "settings skills"
 tier = "T0"
+state = "reviewed"
 note = "Title of the switch for outside research on contacts (business details about callers)."
 
 [tools.leave_message]
 en = "Take a message"
+fr = "Prendre un message"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: take a message for the team."
 
 [tools.list_appointments]
 en = "Read back appointments"
+fr = "Lire les rendez-vous à l'appelant"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: read the caller's appointments back to them."
 
 [tools.list_event_types]
 en = "List appointment types"
+fr = "Lister les types de rendez-vous"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: list the kinds of appointment that can be booked."
 
 [tools.needs_support_number]
 en = "Needs a support team number, which is set on the District AI website."
+fr = "Il faut le numéro de téléphone de l'équipe de soutien, qui se définit sur le site Web de District AI."
 ctx = "body"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "Note on the fallback transfer when no support team number is stored."
 
 [tools.reschedule_appointment]
 en = "Reschedule appointments"
+fr = "Reporter des rendez-vous"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: move the caller's appointments."
 
 [tools.search_knowledge_base]
 en = "Knowledge base"
+fr = "Base de connaissances"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: answer from the knowledge base."
 
 [tools.send_sms]
 en = "Text the caller"
+fr = "Envoyer un texto"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: send the caller a text message."
 
 [tools.transfer_to_agent]
 en = "Transfer to a person (fallback)"
+fr = "Transférer à une personne (en dernier recours)"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: transfer to a person, as the fallback when nothing else fits."
 
 [tools.transfer_to_person]
 en = "Transfer to a person"
+fr = "Transférer à une personne"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill the receptionist may use on a call: transfer the caller to a person."
 
 [tools.unknown_tool]
 en = "Stored for this workspace. This version of the app has no name for it, and leaving it on keeps it."
+fr = "Compétence conservée pour cet espace de travail. Cette version de l'application ne sait pas la nommer; la laisser activée la conserve."
 ctx = "body"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "Note on a stored skill this version of the app has no name for."
 
 [tools.update_contact]
 en = "Update contacts"
+fr = "Mettre à jour les contacts"
 ctx = "label"
 screen = "settings skills"
 tier = "T3"
+state = "reviewed"
 note = "A skill: create or update the caller's contact."
 
 [transcript.assistant]
 en = "Assistant"
+fr = "Assistante"
 ctx = "label"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Label of a line spoken by the AI assistant when the service gives no persona name."
 
 [transcript.caller]
 en = "Caller"
+fr = "Appelant"
 ctx = "label"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Label of a line spoken by the caller."
 
 [transcript.connecting]
 en = "Connecting."
+fr = "Connexion en cours."
 ctx = "label"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Status while the live transcript starts."
 
 [transcript.ended]
 en = "Call ended"
+fr = "Appel terminé"
 ctx = "label"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Status after the call ended."
 
 [transcript.heading]
 en = "Live transcript"
+fr = "Transcription en direct"
 ctx = "title"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Heading over the transcript of a call in progress, written as it is spoken."
 
 [transcript.incomplete]
 en = "Earlier lines will appear in the full transcript after the call."
+fr = "Les répliques précédentes figureront dans la transcription complète après l'appel."
 ctx = "body"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Note when the live transcript does not reach back to the start of the call."
 
 [transcript.interrupted]
 en = "Interrupted"
+fr = "Interrompue"
 ctx = "label"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Under an assistant's line that was cut off; its text is what was actually played."
 
 [transcript.live]
 en = "Live"
+fr = "En direct"
 ctx = "label"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Status while lines of the live transcript arrive."
 
 [transcript.loading_full]
 en = "Loading the full transcript."
+fr = "Chargement de la transcription complète."
 ctx = "body"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "While the call's full transcript is read after the call."
 
 [transcript.no_transcript]
 en = "No transcript for this call."
+fr = "Aucune transcription pour cet appel."
 ctx = "body"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "When the call's full transcript is empty."
 
 [transcript.other_speaker]
 en = "Other speaker"
+fr = "Autre participant"
 ctx = "label"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Label of a line by a speaker the app does not know."
 
 [transcript.reconnecting]
 en = "Reconnecting."
+fr = "Reconnexion en cours."
 ctx = "label"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "Status after the AI assistant on the call failed; the call may get a fresh one."
 
 [transcript.waiting]
 en = "Nothing has been said yet."
+fr = "Rien n'a encore été dit."
 ctx = "body"
 screen = "call transcript"
 tier = "T3"
+state = "reviewed"
 note = "While the live transcript is open and nobody has spoken yet."
 
 [voice_studio.failed_title]
 en = "Could not load Voice Studio"
+fr = "Impossible de charger Voice Studio"
 ctx = "title"
 screen = "settings voice studio"
 tier = "T2"
+state = "reviewed"
 note = "Heading when Voice Studio (a settings section: the receptionist's voice and engine) failed to load."
 
 [voice_studio.saved_stale]
 en = "Saved, but Voice Studio could not be read back. Read it again before changing anything else."
+fr = "Enregistré, mais Voice Studio n'a pas pu être rechargé. Actualisez-le avant de modifier autre chose."
 ctx = "toast"
 screen = "settings voice studio"
 tier = "T2"
+state = "reviewed"
 note = "After a save, when Voice Studio could not be read back."
 
 [workflows.campaign_active]
 en = "Active"
+fr = "Actif"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "Badge: the outbound campaign is running."
 
 [workflows.campaign_failed_title]
 en = "Could not load the campaign"
+fr = "Impossible de charger la campagne"
 ctx = "title"
 screen = "workflows"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the campaign card when it failed to load."
 
 [workflows.campaign_no_batch]
 en = "No batch size set yet."
+fr = "Taille du lot pas encore définie."
 ctx = "body"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "The campaign's batch size (contacts worked per run) was never set."
 
 [workflows.campaign_no_goal]
 en = "No goal set yet."
+fr = "Objectif pas encore défini."
 ctx = "body"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "The campaign's goal was never set."
 
 [workflows.campaign_paused]
 en = "Paused"
+fr = "En pause"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "Badge: the outbound campaign is paused, or was never set up."
 
 [workflows.campaign_title]
 en = "Outbound campaign"
+fr = "Campagne sortante"
 ctx = "title"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the outbound campaign card: the receptionist calling and messaging contacts on its own."
 
 [workflows.campaign_viewer]
 en = "You are a viewer in this workspace. Ask an agency or client member to change the campaign."
+fr = "Votre rôle dans cet espace de travail est Lecteur. Demandez à un membre ayant le rôle Agence ou Client de modifier la campagne."
 ctx = "body"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "Note for a viewer: agency and client members can change the campaign."
 
 [workflows.campaign_web_only]
 en = "The campaign's goal and batch size are changed on the District AI website."
+fr = "L'objectif et la taille de lot de la campagne se modifient sur le site Web de District AI."
 ctx = "body"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "Note: the goal and batch size are changed on the website."
 
 [workflows.confirm_pause_action]
 en = "Pause campaign"
+fr = "Mettre la campagne en pause"
 ctx = "button"
 screen = "workflows"
 tier = "T2"
+state = "reviewed"
 note = "Button that pauses the campaign."
 
 [workflows.confirm_pause_body]
 en = "The campaign stops working through your contacts. Nothing is deleted, and its goal and batch size are kept, so resuming picks up where it left off."
+fr = "La campagne cesse de parcourir vos contacts. Rien n'est supprimé, et son objectif et sa taille de lot sont conservés\u00A0: à la reprise, elle repart là où elle s'était arrêtée."
 ctx = "body"
 screen = "workflows"
 tier = "T2"
+state = "reviewed"
 note = "Before pausing: nothing is deleted; resuming continues where it stopped."
 
 [workflows.confirm_pause_title]
 en = "Pause the outbound campaign?"
+fr = "Mettre la campagne sortante en pause?"
 ctx = "title"
 screen = "workflows"
 tier = "T2"
+state = "reviewed"
 note = "Confirmation heading before pausing the outbound campaign."
 
 [workflows.confirm_resume_action]
 en = "Resume campaign"
+fr = "Reprendre la campagne"
 ctx = "button"
 screen = "workflows"
 tier = "T1"
+state = "reviewed"
 note = "Button that resumes the campaign."
 
 [workflows.confirm_resume_body]
 en = "The campaign starts calling and messaging your contacts again, which spends call and message credit."
+fr = "La campagne recommence à appeler vos contacts et à leur envoyer des messages, ce qui consomme du crédit d'appels et de messages."
 ctx = "body"
 screen = "workflows"
 tier = "T1"
+state = "reviewed"
 note = "Before resuming: the campaign calls and messages contacts again, which spends credit."
 
 [workflows.confirm_resume_title]
 en = "Resume the outbound campaign?"
+fr = "Reprendre la campagne sortante?"
 ctx = "title"
 screen = "workflows"
 tier = "T1"
+state = "reviewed"
 note = "Confirmation heading before resuming the outbound campaign."
 
 [workflows.empty_body]
 en = "Workflows run an action after a call, a message or a new contact. They are built on the District AI website."
+fr = "Les flux de travail lancent une action après un appel, un message ou un nouveau contact. Ils se créent sur le site Web de District AI."
 ctx = "body"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "Body of the empty list: what a workflow is, and that workflows are built on the website."
 
 [workflows.empty_title]
 en = "No workflows yet"
+fr = "Pas encore de flux de travail"
 ctx = "title"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the workflows list when none was built."
 
 [workflows.failed_title]
 en = "Could not load workflows"
+fr = "Impossible de charger les flux de travail"
 ctx = "title"
 screen = "workflows"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the workflows list when it failed to load."
 
 [workflows.runs_empty]
 en = "This workflow has not run yet."
+fr = "Ce flux de travail n'a pas encore été exécuté."
 ctx = "body"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "Under a workflow that has never run."
 
 [workflows.trigger_call_answered]
 en = "After an answered call"
+fr = "Après un appel répondu"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: an answered call ends."
 
 [workflows.trigger_call_ended]
 en = "After any call ends"
+fr = "À la fin de chaque appel"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: any call ends."
 
 [workflows.trigger_call_missed]
 en = "After a missed call"
+fr = "Après un appel manqué"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: a missed call."
 
 [workflows.trigger_contact_created]
 en = "New contact"
+fr = "Nouveau contact"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: a contact was added."
 
 [workflows.trigger_dnc_registered]
 en = "Added to do-not-call"
+fr = "Ajout à la liste d'exclusion"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: a contact was added to the do-not-call list."
 
 [workflows.trigger_intent_detected]
 en = "Intent detected"
+fr = "Intention détectée"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: a caller's intent was recognized."
 
 [workflows.trigger_negative_sentiment]
 en = "Negative sentiment"
+fr = "Sentiment négatif"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: a call analysed as negative."
 
 [workflows.trigger_neutral_sentiment]
 en = "Neutral sentiment"
+fr = "Sentiment neutre"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: a call analysed as neutral."
 
 [workflows.trigger_positive_sentiment]
 en = "Positive sentiment"
+fr = "Sentiment positif"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: a call analysed as positive."
 
 [workflows.trigger_sms_received]
 en = "Message received"
+fr = "Message reçu"
 ctx = "label"
 screen = "workflows"
 tier = "T3"
+state = "reviewed"
 note = "What starts a workflow: a text message arrived."
 
 [workspaces.billing_blocked_many]
 en = "None of your {count} workspaces has an active subscription."
+fr = "Aucun de vos {count} espaces de travail n'a d'abonnement actif."
 ctx = "body"
 screen = "workspaces"
 tier = "T1"
 args = { count = "int" }
+state = "reviewed"
 note = "Body when none of the account's workspaces has an active subscription. {count} is always 2 or more."
 
 [workspaces.billing_blocked_one]
 en = "Your workspace does not have an active subscription."
+fr = "Votre espace de travail n'a pas d'abonnement actif."
 ctx = "body"
 screen = "workspaces"
 tier = "T1"
+state = "reviewed"
 note = "Body when the account's one workspace has no active subscription."
 
 [workspaces.billing_blocked_title]
 en = "Subscription inactive"
+fr = "Abonnement inactif"
 ctx = "title"
 screen = "workspaces"
 tier = "T1"
+state = "reviewed"
 note = "Heading when no workspace of the account has an active subscription."
 
 [workspaces.choose_plan_after_checkout_message]
 en = "This account does not have a District workspace yet. Choose a plan to set one up. A workspace you paid for can take a few minutes, and appears here once it is ready."
+fr = "Ce compte n'a pas encore d'espace de travail District. Choisissez un forfait pour en créer un. La préparation d'un espace de travail payé peut prendre quelques minutes; il apparaît ici dès qu'il est prêt."
 ctx = "body"
 screen = "workspaces"
 tier = "T1"
+state = "reviewed"
 note = "Still no workspace after that wait: plans are offered again, and a workspace paid for may still be on its way."
 
 [workspaces.choose_plan_message]
 en = "This account does not have a District workspace yet. Choose a plan to set one up."
+fr = "Ce compte n'a pas encore d'espace de travail District. Choisissez un forfait pour en créer un."
 ctx = "body"
 screen = "workspaces"
 tier = "T1"
+state = "reviewed"
 note = "Signed in with no workspace while plans are offered: choosing a plan sets one up. \"District\" is the product's name."
 
 [workspaces.failed_title]
 en = "Could not load your workspace"
+fr = "Impossible de charger votre espace de travail"
 ctx = "title"
 screen = "workspaces"
 tier = "T2"
+state = "reviewed"
 note = "Heading when the workspace list failed to load."
 
 [workspaces.none_message]
 en = "This account is not linked to a District workspace yet. Please contact support."
+fr = "Ce compte n'est pas encore lié à un espace de travail District. Veuillez communiquer avec le soutien."
 ctx = "body"
 screen = "workspaces"
 tier = "T2"
+state = "reviewed"
 note = "Body when the account has no workspace and plans are not offered: support can link one."
 
 [workspaces.none_title]
 en = "No workspace found"
+fr = "Aucun espace de travail trouvé"
 ctx = "title"
 screen = "workspaces"
 tier = "T2"
+state = "reviewed"
 note = "Heading when the account has no workspace."
 
 [workspaces.partial_warning]
 en = "Some workspaces could not be listed ({regions} unreachable). This list may be incomplete."
+fr = "Certains espaces de travail n'ont pas pu être affichés (sans réponse\u00A0: {regions}). La liste peut être incomplète."
 ctx = "body"
 screen = "workspaces"
 tier = "T2"
 args = { regions = "str" }
+state = "reviewed"
 note = "Beside the workspace switcher when regions did not answer. {regions} lists their codes in capitals, joined by commas (EU, APAC)."
 
 [workspaces.regions_degraded]
 en = "Your workspaces could not be listed because a region is unreachable. Your account has not changed."
+fr = "Vos espaces de travail n'ont pas pu être affichés, car une région est injoignable. Votre compte n'a pas changé."
 ctx = "error"
 screen = "workspaces"
 tier = "T2"
+state = "reviewed"
 note = "The workspace list failed because a region did not answer; nothing about the account changed."
 
 [workspaces.setting_up_message]
 en = "If you completed checkout, your workspace is being set up. It appears here in a moment."
+fr = "Si vous avez terminé le paiement, votre espace de travail est en préparation. Il apparaîtra ici sous peu."
 ctx = "body"
 screen = "workspaces"
 tier = "T1"
+state = "reviewed"
 note = "Body meanwhile: no plans are offered, so nobody pays twice."
 
 [workspaces.setting_up_title]
 en = "Setting up your workspace"
+fr = "Préparation de votre espace de travail"
 ctx = "title"
 screen = "workspaces"
 tier = "T1"
+state = "reviewed"
 note = "Heading while a workspace that a checkout may have paid for is being set up."

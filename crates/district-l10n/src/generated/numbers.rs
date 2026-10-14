@@ -3,14 +3,14 @@
 use crate::Locale;
 
 /// True when every entry has French; until then the French arm carries the English.
-pub const FR_COMPLETE: bool = false;
+pub const FR_COMPLETE: bool = true;
 
 /// `numbers.a2p_business_label`
 #[must_use]
 pub fn numbers_a2p_business_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Legal business name",
-        Locale::FrCa => "Legal business name",
+        Locale::FrCa => "Dénomination sociale",
     }
 }
 
@@ -19,7 +19,7 @@ pub fn numbers_a2p_business_label(l: Locale) -> &'static str {
 pub fn numbers_a2p_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "Required before this workspace can send text messages to US numbers from a local number.",
-        Locale::FrCa => "Required before this workspace can send text messages to US numbers from a local number.",
+        Locale::FrCa => "Obligatoire pour que cet espace de travail envoie des textos aux numéros des États-Unis depuis un numéro local.",
     }
 }
 
@@ -28,7 +28,7 @@ pub fn numbers_a2p_caption(l: Locale) -> &'static str {
 pub fn numbers_a2p_confirm_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Submit it",
-        Locale::FrCa => "Submit it",
+        Locale::FrCa => "Soumettre",
     }
 }
 
@@ -37,7 +37,7 @@ pub fn numbers_a2p_confirm_action(l: Locale) -> &'static str {
 pub fn numbers_a2p_confirm_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "This registers a brand and a campaign on your carrier account. The carrier charges a one-off brand fee and a monthly campaign fee, and a repeated submission leaves duplicates somebody has to clear by hand.",
-        Locale::FrCa => "This registers a brand and a campaign on your carrier account. The carrier charges a one-off brand fee and a monthly campaign fee, and a repeated submission leaves duplicates somebody has to clear by hand.",
+        Locale::FrCa => "Cette action inscrit une marque et une campagne dans votre compte de transporteur. Le transporteur facture des frais uniques pour la marque et des frais mensuels pour la campagne, et une soumission répétée laisse des doublons que quelqu'un devra supprimer à la main.",
     }
 }
 
@@ -46,7 +46,7 @@ pub fn numbers_a2p_confirm_body(l: Locale) -> &'static str {
 pub fn numbers_a2p_confirm_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Submit this registration?",
-        Locale::FrCa => "Submit this registration?",
+        Locale::FrCa => "Soumettre cette inscription?",
     }
 }
 
@@ -55,7 +55,7 @@ pub fn numbers_a2p_confirm_title(l: Locale) -> &'static str {
 pub fn numbers_a2p_description_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "What you will send",
-        Locale::FrCa => "What you will send",
+        Locale::FrCa => "Ce que vous enverrez",
     }
 }
 
@@ -64,7 +64,7 @@ pub fn numbers_a2p_description_label(l: Locale) -> &'static str {
 pub fn numbers_a2p_ein_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "EIN or company number (optional)",
-        Locale::FrCa => "EIN or company number (optional)",
+        Locale::FrCa => "EIN ou numéro d'entreprise (facultatif)",
     }
 }
 
@@ -73,7 +73,7 @@ pub fn numbers_a2p_ein_label(l: Locale) -> &'static str {
 pub fn numbers_a2p_sample_one_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Example message 1",
-        Locale::FrCa => "Example message 1",
+        Locale::FrCa => "Exemple de message 1",
     }
 }
 
@@ -82,7 +82,7 @@ pub fn numbers_a2p_sample_one_label(l: Locale) -> &'static str {
 pub fn numbers_a2p_sample_two_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Example message 2",
-        Locale::FrCa => "Example message 2",
+        Locale::FrCa => "Exemple de message 2",
     }
 }
 
@@ -91,7 +91,7 @@ pub fn numbers_a2p_sample_two_label(l: Locale) -> &'static str {
 pub fn numbers_a2p_submit_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Submit registration",
-        Locale::FrCa => "Submit registration",
+        Locale::FrCa => "Soumettre l'inscription",
     }
 }
 
@@ -100,7 +100,7 @@ pub fn numbers_a2p_submit_action(l: Locale) -> &'static str {
 pub fn numbers_a2p_submitted(l: Locale, status: &str) -> String {
     match l {
         Locale::En => format!("Submitted. The carrier reports {status}."),
-        Locale::FrCa => format!("Submitted. The carrier reports {status}."),
+        Locale::FrCa => format!("Soumise. État selon le transporteur\u{00A0}: {status}."),
     }
 }
 
@@ -109,7 +109,7 @@ pub fn numbers_a2p_submitted(l: Locale, status: &str) -> String {
 pub fn numbers_a2p_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "A2P 10DLC registration",
-        Locale::FrCa => "A2P 10DLC registration",
+        Locale::FrCa => "Inscription A2P 10DLC",
     }
 }
 
@@ -118,7 +118,7 @@ pub fn numbers_a2p_title(l: Locale) -> &'static str {
 pub fn numbers_a2p_vertical_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Industry (optional)",
-        Locale::FrCa => "Industry (optional)",
+        Locale::FrCa => "Secteur (facultatif)",
     }
 }
 
@@ -127,7 +127,7 @@ pub fn numbers_a2p_vertical_label(l: Locale) -> &'static str {
 pub fn numbers_a2p_website_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Website (optional)",
-        Locale::FrCa => "Website (optional)",
+        Locale::FrCa => "Site Web (facultatif)",
     }
 }
 
@@ -136,7 +136,7 @@ pub fn numbers_a2p_website_label(l: Locale) -> &'static str {
 pub fn numbers_cancel(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel",
-        Locale::FrCa => "Cancel",
+        Locale::FrCa => "Annuler",
     }
 }
 
@@ -145,7 +145,7 @@ pub fn numbers_cancel(l: Locale) -> &'static str {
 pub fn numbers_carrier_balance_amount(l: Locale, balance: &str) -> String {
     match l {
         Locale::En => format!("Balance {balance}"),
-        Locale::FrCa => format!("Balance {balance}"),
+        Locale::FrCa => format!("Solde\u{00A0}: {balance}"),
     }
 }
 
@@ -154,7 +154,7 @@ pub fn numbers_carrier_balance_amount(l: Locale, balance: &str) -> String {
 pub fn numbers_carrier_balance_with_currency(l: Locale, balance: &str, currency: &str) -> String {
     match l {
         Locale::En => format!("Balance {balance} {currency}"),
-        Locale::FrCa => format!("Balance {balance} {currency}"),
+        Locale::FrCa => format!("Solde\u{00A0}: {balance} {currency}"),
     }
 }
 
@@ -163,7 +163,7 @@ pub fn numbers_carrier_balance_with_currency(l: Locale, balance: &str, currency:
 pub fn numbers_carrier_connected(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connected",
-        Locale::FrCa => "Connected",
+        Locale::FrCa => "Connecté",
     }
 }
 
@@ -172,7 +172,7 @@ pub fn numbers_carrier_connected(l: Locale) -> &'static str {
 pub fn numbers_carrier_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Carrier accounts",
-        Locale::FrCa => "Carrier accounts",
+        Locale::FrCa => "Comptes de transporteur",
     }
 }
 
@@ -181,7 +181,7 @@ pub fn numbers_carrier_eyebrow(l: Locale) -> &'static str {
 pub fn numbers_carrier_managed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Held by Distronode. Account details are not this workspace's to see.",
-        Locale::FrCa => "Held by Distronode. Account details are not this workspace's to see.",
+        Locale::FrCa => "Détenu par Distronode. Cet espace de travail n'a pas accès aux détails du compte.",
     }
 }
 
@@ -190,7 +190,7 @@ pub fn numbers_carrier_managed(l: Locale) -> &'static str {
 pub fn numbers_carrier_none_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has no carrier credentials, so numbers cannot be searched, configured or registered yet.",
-        Locale::FrCa => "This workspace has no carrier credentials, so numbers cannot be searched, configured or registered yet.",
+        Locale::FrCa => "Sans identifiants de transporteur, cet espace de travail ne permet encore ni la recherche, ni la configuration, ni l'inscription de numéros.",
     }
 }
 
@@ -199,7 +199,7 @@ pub fn numbers_carrier_none_body(l: Locale) -> &'static str {
 pub fn numbers_carrier_none_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No carrier connected",
-        Locale::FrCa => "No carrier connected",
+        Locale::FrCa => "Aucun transporteur connecté",
     }
 }
 
@@ -215,10 +215,10 @@ pub fn numbers_carrier_number_count(l: Locale, count: i64) -> String {
             }
         }
         Locale::FrCa => {
-            if count == 1 {
-                format!("{} number on this account", crate::format::integer(l, count))
+            if count == 0 || count == 1 {
+                format!("{} numéro dans ce compte", crate::format::integer(l, count))
             } else {
-                format!("{} numbers on this account", crate::format::integer(l, count))
+                format!("{} numéros dans ce compte", crate::format::integer(l, count))
             }
         }
     }
@@ -229,7 +229,7 @@ pub fn numbers_carrier_number_count(l: Locale, count: i64) -> String {
 pub fn numbers_carrier_refused(l: Locale) -> &'static str {
     match l {
         Locale::En => "These credentials were refused. Connect the account again in the workspace's carrier accounts settings.",
-        Locale::FrCa => "These credentials were refused. Connect the account again in the workspace's carrier accounts settings.",
+        Locale::FrCa => "Ces identifiants ont été refusés. Reconnectez le compte dans les paramètres des comptes de transporteur de l'espace de travail.",
     }
 }
 
@@ -238,7 +238,7 @@ pub fn numbers_carrier_refused(l: Locale) -> &'static str {
 pub fn numbers_carrier_refused_badge(l: Locale) -> &'static str {
     match l {
         Locale::En => "Credentials refused",
-        Locale::FrCa => "Credentials refused",
+        Locale::FrCa => "Identifiants refusés",
     }
 }
 
@@ -247,7 +247,7 @@ pub fn numbers_carrier_refused_badge(l: Locale) -> &'static str {
 pub fn numbers_close(l: Locale) -> &'static str {
     match l {
         Locale::En => "Close",
-        Locale::FrCa => "Close",
+        Locale::FrCa => "Fermer",
     }
 }
 
@@ -256,7 +256,7 @@ pub fn numbers_close(l: Locale) -> &'static str {
 pub fn numbers_compliance_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Messaging compliance",
-        Locale::FrCa => "Messaging compliance",
+        Locale::FrCa => "Conformité des messages",
     }
 }
 
@@ -265,7 +265,7 @@ pub fn numbers_compliance_eyebrow(l: Locale) -> &'static str {
 pub fn numbers_compliance_no_status(l: Locale) -> &'static str {
     match l {
         Locale::En => "Neither registration can be checked from the app. What you see here is what the carrier answered when it was submitted.",
-        Locale::FrCa => "Neither registration can be checked from the app. What you see here is what the carrier answered when it was submitted.",
+        Locale::FrCa => "Aucune des deux inscriptions ne peut être vérifiée dans l'application. Vous voyez ici la réponse du transporteur au moment de la soumission.",
     }
 }
 
@@ -274,7 +274,7 @@ pub fn numbers_compliance_no_status(l: Locale) -> &'static str {
 pub fn numbers_configure_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reapply call routing",
-        Locale::FrCa => "Reapply call routing",
+        Locale::FrCa => "Rétablir l'acheminement",
     }
 }
 
@@ -283,7 +283,7 @@ pub fn numbers_configure_action(l: Locale) -> &'static str {
 pub fn numbers_configure_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "Points this number's calls and messages back at this workspace, and re-pins an EU number to its European bridge.",
-        Locale::FrCa => "Points this number's calls and messages back at this workspace, and re-pins an EU number to its European bridge.",
+        Locale::FrCa => "Cette action réachemine les appels et les messages de ce numéro vers cet espace de travail, et rattache un numéro de l'UE à la passerelle européenne.",
     }
 }
 
@@ -292,7 +292,7 @@ pub fn numbers_configure_caption(l: Locale) -> &'static str {
 pub fn numbers_configure_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Routing reapplied.",
-        Locale::FrCa => "Routing reapplied.",
+        Locale::FrCa => "Acheminement rétabli.",
     }
 }
 
@@ -301,7 +301,7 @@ pub fn numbers_configure_done(l: Locale) -> &'static str {
 pub fn numbers_lookup_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Look this number up",
-        Locale::FrCa => "Look this number up",
+        Locale::FrCa => "Rechercher ce numéro",
     }
 }
 
@@ -310,7 +310,7 @@ pub fn numbers_lookup_action(l: Locale) -> &'static str {
 pub fn numbers_lookup_confirm_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Run it",
-        Locale::FrCa => "Run it",
+        Locale::FrCa => "Lancer",
     }
 }
 
@@ -319,7 +319,7 @@ pub fn numbers_lookup_confirm_action(l: Locale) -> &'static str {
 pub fn numbers_lookup_confirm_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your carrier charges for each lookup, including one that comes back invalid. One click runs exactly one lookup.",
-        Locale::FrCa => "Your carrier charges for each lookup, including one that comes back invalid. One click runs exactly one lookup.",
+        Locale::FrCa => "Votre transporteur facture chaque recherche, même lorsque le numéro s'avère non valide. Un clic lance exactement une recherche.",
     }
 }
 
@@ -328,7 +328,7 @@ pub fn numbers_lookup_confirm_body(l: Locale) -> &'static str {
 pub fn numbers_lookup_confirm_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Run a paid lookup?",
-        Locale::FrCa => "Run a paid lookup?",
+        Locale::FrCa => "Lancer une recherche payante?",
     }
 }
 
@@ -337,7 +337,7 @@ pub fn numbers_lookup_confirm_title(l: Locale) -> &'static str {
 pub fn numbers_lookup_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "Number lookup",
-        Locale::FrCa => "Number lookup",
+        Locale::FrCa => "Recherche de numéro",
     }
 }
 
@@ -346,7 +346,7 @@ pub fn numbers_lookup_eyebrow(l: Locale) -> &'static str {
 pub fn numbers_lookup_invalid(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier could not recognise that number.",
-        Locale::FrCa => "The carrier could not recognise that number.",
+        Locale::FrCa => "Le transporteur n'a pas reconnu ce numéro.",
     }
 }
 
@@ -355,7 +355,7 @@ pub fn numbers_lookup_invalid(l: Locale) -> &'static str {
 pub fn numbers_lookup_number_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Phone number, in full",
-        Locale::FrCa => "Phone number, in full",
+        Locale::FrCa => "Numéro de téléphone complet",
     }
 }
 
@@ -364,7 +364,7 @@ pub fn numbers_lookup_number_label(l: Locale) -> &'static str {
 pub fn numbers_managed_no_release(l: Locale) -> &'static str {
     match l {
         Locale::En => "This line is held on Distronode's carrier account, so it is yours to use and not to release or reconfigure.",
-        Locale::FrCa => "This line is held on Distronode's carrier account, so it is yours to use and not to release or reconfigure.",
+        Locale::FrCa => "Cette ligne est détenue sur le compte de transporteur de Distronode\u{00A0}: vous pouvez l'utiliser, mais pas la libérer ni la reconfigurer.",
     }
 }
 
@@ -373,7 +373,7 @@ pub fn numbers_managed_no_release(l: Locale) -> &'static str {
 pub fn numbers_purchase_elsewhere(l: Locale) -> &'static str {
     match l {
         Locale::En => "New numbers cannot be bought in this app. Everything else about a number, including releasing it, is here.",
-        Locale::FrCa => "New numbers cannot be bought in this app. Everything else about a number, including releasing it, is here.",
+        Locale::FrCa => "Les nouveaux numéros ne peuvent pas être achetés dans cette application. Tout le reste, y compris la libération d'un numéro, se fait ici.",
     }
 }
 
@@ -382,7 +382,7 @@ pub fn numbers_purchase_elsewhere(l: Locale) -> &'static str {
 pub fn numbers_release_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Release this number",
-        Locale::FrCa => "Release this number",
+        Locale::FrCa => "Libérer ce numéro",
     }
 }
 
@@ -391,7 +391,7 @@ pub fn numbers_release_action(l: Locale) -> &'static str {
 pub fn numbers_release_confirm_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Release it",
-        Locale::FrCa => "Release it",
+        Locale::FrCa => "Libérer",
     }
 }
 
@@ -400,7 +400,7 @@ pub fn numbers_release_confirm_action(l: Locale) -> &'static str {
 pub fn numbers_release_confirm_body(l: Locale, phone_number: &str) -> String {
     match l {
         Locale::En => format!("{phone_number} goes back to the carrier's pool and generally cannot be reclaimed. Calls and messages to it stop immediately, so anyone dialling it reaches nothing. Its monthly charge ends."),
-        Locale::FrCa => format!("{phone_number} goes back to the carrier's pool and generally cannot be reclaimed. Calls and messages to it stop immediately, so anyone dialling it reaches nothing. Its monthly charge ends."),
+        Locale::FrCa => format!("{phone_number} retourne dans la réserve du transporteur et ne peut généralement pas être récupéré. Les appels et les messages vers ce numéro cessent immédiatement\u{00A0}: quiconque le compose ne joint plus personne. Ses frais mensuels prennent fin."),
     }
 }
 
@@ -409,7 +409,7 @@ pub fn numbers_release_confirm_body(l: Locale, phone_number: &str) -> String {
 pub fn numbers_release_confirm_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Release this number?",
-        Locale::FrCa => "Release this number?",
+        Locale::FrCa => "Libérer ce numéro?",
     }
 }
 
@@ -418,7 +418,7 @@ pub fn numbers_release_confirm_title(l: Locale) -> &'static str {
 pub fn numbers_release_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Released.",
-        Locale::FrCa => "Released.",
+        Locale::FrCa => "Libéré.",
     }
 }
 
@@ -427,7 +427,7 @@ pub fn numbers_release_done(l: Locale) -> &'static str {
 pub fn numbers_release_warning(l: Locale, warnings: &str) -> String {
     match l {
         Locale::En => format!("Released, but {warnings}"),
-        Locale::FrCa => format!("Released, but {warnings}"),
+        Locale::FrCa => format!("Numéro libéré, avec des réserves\u{00A0}: {warnings}"),
     }
 }
 
@@ -443,10 +443,10 @@ pub fn numbers_sip_address_count(l: Locale, count: i64) -> String {
             }
         }
         Locale::FrCa => {
-            if count == 1 {
-                format!("{} address", crate::format::integer(l, count))
+            if count == 0 || count == 1 {
+                format!("{} adresse", crate::format::integer(l, count))
             } else {
-                format!("{} addresses", crate::format::integer(l, count))
+                format!("{} adresses", crate::format::integer(l, count))
             }
         }
     }
@@ -457,7 +457,7 @@ pub fn numbers_sip_address_count(l: Locale, count: i64) -> String {
 pub fn numbers_sip_create_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Create trunk",
-        Locale::FrCa => "Create trunk",
+        Locale::FrCa => "Créer le raccordement",
     }
 }
 
@@ -466,7 +466,7 @@ pub fn numbers_sip_create_action(l: Locale) -> &'static str {
 pub fn numbers_sip_domain_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier adds .sip.twilio.com, so enter the label only.",
-        Locale::FrCa => "The carrier adds .sip.twilio.com, so enter the label only.",
+        Locale::FrCa => "Le transporteur ajoute .sip.twilio.com\u{00A0}: saisissez seulement l'étiquette.",
     }
 }
 
@@ -475,7 +475,7 @@ pub fn numbers_sip_domain_caption(l: Locale) -> &'static str {
 pub fn numbers_sip_domain_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Domain label",
-        Locale::FrCa => "Domain label",
+        Locale::FrCa => "Étiquette de domaine",
     }
 }
 
@@ -484,7 +484,7 @@ pub fn numbers_sip_domain_label(l: Locale) -> &'static str {
 pub fn numbers_sip_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "A SIP trunk lets your own PBX send and receive calls on this workspace's numbers.",
-        Locale::FrCa => "A SIP trunk lets your own PBX send and receive calls on this workspace's numbers.",
+        Locale::FrCa => "Avec un raccordement SIP, votre PBX passe et reçoit des appels sur les numéros de cet espace de travail.",
     }
 }
 
@@ -493,7 +493,7 @@ pub fn numbers_sip_empty_body(l: Locale) -> &'static str {
 pub fn numbers_sip_empty_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "No SIP trunks",
-        Locale::FrCa => "No SIP trunks",
+        Locale::FrCa => "Aucun raccordement SIP",
     }
 }
 
@@ -502,7 +502,7 @@ pub fn numbers_sip_empty_title(l: Locale) -> &'static str {
 pub fn numbers_sip_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "SIP trunks",
-        Locale::FrCa => "SIP trunks",
+        Locale::FrCa => "Raccordements SIP",
     }
 }
 
@@ -511,7 +511,7 @@ pub fn numbers_sip_eyebrow(l: Locale) -> &'static str {
 pub fn numbers_sip_ip_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Allowed IPs or ranges, one per line",
-        Locale::FrCa => "Allowed IPs or ranges, one per line",
+        Locale::FrCa => "Adresses IP ou plages permises, une par ligne",
     }
 }
 
@@ -520,7 +520,7 @@ pub fn numbers_sip_ip_label(l: Locale) -> &'static str {
 pub fn numbers_sip_name_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Trunk name",
-        Locale::FrCa => "Trunk name",
+        Locale::FrCa => "Nom du raccordement",
     }
 }
 
@@ -529,7 +529,7 @@ pub fn numbers_sip_name_label(l: Locale) -> &'static str {
 pub fn numbers_sip_one_way(l: Locale) -> &'static str {
     match l {
         Locale::En => "Creating a trunk adds a $25 per month charge, and it cannot be removed in this app.",
-        Locale::FrCa => "Creating a trunk adds a $25 per month charge, and it cannot be removed in this app.",
+        Locale::FrCa => "Un raccordement ajoute des frais de 25\u{00A0}$ par mois et ne peut pas être supprimé dans cette application.",
     }
 }
 
@@ -547,7 +547,7 @@ pub fn numbers_sip_trunk_meta_line(l: Locale, status: &str, addresses: &str) -> 
 pub fn numbers_sip_unprovisioned(l: Locale) -> &'static str {
     match l {
         Locale::En => "No carrier resources are recorded for this trunk.",
-        Locale::FrCa => "No carrier resources are recorded for this trunk.",
+        Locale::FrCa => "Aucune ressource du transporteur n'est consignée pour ce raccordement.",
     }
 }
 
@@ -556,7 +556,7 @@ pub fn numbers_sip_unprovisioned(l: Locale) -> &'static str {
 pub fn numbers_tab_carrier(l: Locale) -> &'static str {
     match l {
         Locale::En => "Carrier",
-        Locale::FrCa => "Carrier",
+        Locale::FrCa => "Transporteur",
     }
 }
 
@@ -565,7 +565,7 @@ pub fn numbers_tab_carrier(l: Locale) -> &'static str {
 pub fn numbers_tfv_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "Required before a toll-free number can send text messages.",
-        Locale::FrCa => "Required before a toll-free number can send text messages.",
+        Locale::FrCa => "Obligatoire avant qu'un numéro sans frais puisse envoyer des textos.",
     }
 }
 
@@ -574,7 +574,7 @@ pub fn numbers_tfv_caption(l: Locale) -> &'static str {
 pub fn numbers_tfv_confirm_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Submit it",
-        Locale::FrCa => "Submit it",
+        Locale::FrCa => "Soumettre",
     }
 }
 
@@ -583,7 +583,7 @@ pub fn numbers_tfv_confirm_action(l: Locale) -> &'static str {
 pub fn numbers_tfv_confirm_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "This files a verification with the carrier for a number that is already answering calls, and puts it into a manual review that takes days. Repeated submissions for one number can put your carrier account's standing in question.",
-        Locale::FrCa => "This files a verification with the carrier for a number that is already answering calls, and puts it into a manual review that takes days. Repeated submissions for one number can put your carrier account's standing in question.",
+        Locale::FrCa => "Cette action dépose auprès du transporteur une demande de vérification pour un numéro qui répond déjà aux appels, et la soumet à un examen manuel de plusieurs jours. Des soumissions répétées pour un même numéro peuvent nuire à la réputation de votre compte de transporteur.",
     }
 }
 
@@ -592,7 +592,7 @@ pub fn numbers_tfv_confirm_body(l: Locale) -> &'static str {
 pub fn numbers_tfv_confirm_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Submit this verification?",
-        Locale::FrCa => "Submit this verification?",
+        Locale::FrCa => "Soumettre cette vérification?",
     }
 }
 
@@ -601,7 +601,7 @@ pub fn numbers_tfv_confirm_title(l: Locale) -> &'static str {
 pub fn numbers_tfv_message_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Example message (optional)",
-        Locale::FrCa => "Example message (optional)",
+        Locale::FrCa => "Exemple de message (facultatif)",
     }
 }
 
@@ -610,7 +610,7 @@ pub fn numbers_tfv_message_label(l: Locale) -> &'static str {
 pub fn numbers_tfv_opt_in_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "A reviewer opens this by hand. It must be publicly reachable and show your own consent wording.",
-        Locale::FrCa => "A reviewer opens this by hand. It must be publicly reachable and show your own consent wording.",
+        Locale::FrCa => "Un examinateur ouvre ce lien manuellement. Le lien doit être accessible publiquement et afficher votre propre texte de consentement.",
     }
 }
 
@@ -619,7 +619,7 @@ pub fn numbers_tfv_opt_in_caption(l: Locale) -> &'static str {
 pub fn numbers_tfv_opt_in_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Link to your opt-in form or screenshot",
-        Locale::FrCa => "Link to your opt-in form or screenshot",
+        Locale::FrCa => "Lien vers votre formulaire de consentement ou une capture d'écran",
     }
 }
 
@@ -628,7 +628,7 @@ pub fn numbers_tfv_opt_in_label(l: Locale) -> &'static str {
 pub fn numbers_tfv_submit_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Submit verification",
-        Locale::FrCa => "Submit verification",
+        Locale::FrCa => "Soumettre la vérification",
     }
 }
 
@@ -637,7 +637,7 @@ pub fn numbers_tfv_submit_action(l: Locale) -> &'static str {
 pub fn numbers_tfv_submitted(l: Locale, status: &str) -> String {
     match l {
         Locale::En => format!("Submitted. The carrier reports {status}."),
-        Locale::FrCa => format!("Submitted. The carrier reports {status}."),
+        Locale::FrCa => format!("Soumise. État selon le transporteur\u{00A0}: {status}."),
     }
 }
 
@@ -646,7 +646,7 @@ pub fn numbers_tfv_submitted(l: Locale, status: &str) -> String {
 pub fn numbers_tfv_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Toll-free verification",
-        Locale::FrCa => "Toll-free verification",
+        Locale::FrCa => "Vérification du numéro sans frais",
     }
 }
 
@@ -655,7 +655,7 @@ pub fn numbers_tfv_title(l: Locale) -> &'static str {
 pub fn numbers_tfv_use_case_customer_support(l: Locale) -> &'static str {
     match l {
         Locale::En => "Customer Support",
-        Locale::FrCa => "Customer Support",
+        Locale::FrCa => "Soutien à la clientèle",
     }
 }
 
@@ -664,7 +664,7 @@ pub fn numbers_tfv_use_case_customer_support(l: Locale) -> &'static str {
 pub fn numbers_tfv_use_case_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "Use case",
-        Locale::FrCa => "Use case",
+        Locale::FrCa => "Utilisation",
     }
 }
 
@@ -691,7 +691,7 @@ pub fn numbers_tfv_use_case_notifications(l: Locale) -> &'static str {
 pub fn numbers_tfv_use_case_otp(l: Locale) -> &'static str {
     match l {
         Locale::En => "2FA / OTP",
-        Locale::FrCa => "2FA / OTP",
+        Locale::FrCa => "2FA / code unique",
     }
 }
 
@@ -700,7 +700,7 @@ pub fn numbers_tfv_use_case_otp(l: Locale) -> &'static str {
 pub fn numbers_verify_disable_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Stop using one-time passcodes",
-        Locale::FrCa => "Stop using one-time passcodes",
+        Locale::FrCa => "Désactiver les codes à usage unique",
     }
 }
 
@@ -709,7 +709,7 @@ pub fn numbers_verify_disable_action(l: Locale) -> &'static str {
 pub fn numbers_verify_disable_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "Turning this off stops Distronode using the service. The carrier keeps it, and its history, on your account.",
-        Locale::FrCa => "Turning this off stops Distronode using the service. The carrier keeps it, and its history, on your account.",
+        Locale::FrCa => "Une fois désactivé, ce service n'est plus utilisé par Distronode. Le transporteur le conserve, avec son historique, dans votre compte.",
     }
 }
 
@@ -718,7 +718,7 @@ pub fn numbers_verify_disable_caption(l: Locale) -> &'static str {
 pub fn numbers_verify_enable_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enable one-time passcodes",
-        Locale::FrCa => "Enable one-time passcodes",
+        Locale::FrCa => "Activer les codes à usage unique",
     }
 }
 
@@ -727,7 +727,7 @@ pub fn numbers_verify_enable_action(l: Locale) -> &'static str {
 pub fn numbers_verify_enable_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "Creates a one-time passcode sender on your carrier account. The carrier charges for the messages it sends.",
-        Locale::FrCa => "Creates a one-time passcode sender on your carrier account. The carrier charges for the messages it sends.",
+        Locale::FrCa => "Cette option crée un expéditeur de codes à usage unique dans votre compte de transporteur. Le transporteur facture les messages qu'il envoie.",
     }
 }
 
@@ -736,7 +736,7 @@ pub fn numbers_verify_enable_caption(l: Locale) -> &'static str {
 pub fn numbers_verify_eyebrow(l: Locale) -> &'static str {
     match l {
         Locale::En => "One-time passcodes",
-        Locale::FrCa => "One-time passcodes",
+        Locale::FrCa => "Codes à usage unique",
     }
 }
 
@@ -745,7 +745,7 @@ pub fn numbers_verify_eyebrow(l: Locale) -> &'static str {
 pub fn numbers_verify_off(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not enabled",
-        Locale::FrCa => "Not enabled",
+        Locale::FrCa => "Non activé",
     }
 }
 
@@ -754,7 +754,7 @@ pub fn numbers_verify_off(l: Locale) -> &'static str {
 pub fn numbers_verify_on(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enabled",
-        Locale::FrCa => "Enabled",
+        Locale::FrCa => "Activé",
     }
 }
 
@@ -763,7 +763,7 @@ pub fn numbers_verify_on(l: Locale) -> &'static str {
 pub fn numbers_viewer_cannot_provision(l: Locale) -> &'static str {
     match l {
         Locale::En => "Carrier setup and number changes need an agency or client role. Ask someone on this workspace who has one.",
-        Locale::FrCa => "Carrier setup and number changes need an agency or client role. Ask someone on this workspace who has one.",
+        Locale::FrCa => "Configurer le transporteur ou les numéros exige un rôle Agence ou Client. Demandez à un membre de cet espace de travail qui en a un.",
     }
 }
 
@@ -772,7 +772,7 @@ pub fn numbers_viewer_cannot_provision(l: Locale) -> &'static str {
 pub fn numbers_working(l: Locale) -> &'static str {
     match l {
         Locale::En => "Working…",
-        Locale::FrCa => "Working…",
+        Locale::FrCa => "En cours…",
     }
 }
 
@@ -781,6 +781,6 @@ pub fn numbers_working(l: Locale) -> &'static str {
 pub fn numbers_write_unrepeatable(l: Locale) -> &'static str {
     match l {
         Locale::En => "We could not confirm whether that went through, so it is not offered again. Reload to see where things stand.",
-        Locale::FrCa => "We could not confirm whether that went through, so it is not offered again. Reload to see where things stand.",
+        Locale::FrCa => "Nous n'avons pas pu confirmer si l'opération a abouti; elle n'est donc pas proposée de nouveau. Actualisez pour voir où en sont les choses.",
     }
 }

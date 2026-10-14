@@ -5,3888 +5,5067 @@ apple = false
 
 [actions.archive]
 en = "Archive"
+fr = "Archiver"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "One of an event type's state actions, or what it says once done."
 
 [actions.archived]
 en = "Event type archived"
+fr = "Type de rendez-vous archivé"
 ctx = "toast"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "One of an event type's state actions, or what it says once done."
 
 [actions.manage]
 en = "Manage"
+fr = "Gérer"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "Opens an event type's state actions: on or off, archive, a test email, delete."
 
 [actions.restore]
 en = "Restore"
+fr = "Restaurer"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "One of an event type's state actions, or what it says once done."
 
 [actions.restored]
 en = "Event type restored"
+fr = "Type de rendez-vous restauré"
 ctx = "toast"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "One of an event type's state actions, or what it says once done."
 
 [actions.send_test_email]
 en = "Send test email"
+fr = "Envoyer un courriel test"
 ctx = "label"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "One of an event type's state actions, or what it says once done."
 
 [actions.turn_off]
 en = "Turn off"
+fr = "Désactiver"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "One of an event type's state actions, or what it says once done."
 
 [actions.turn_on]
 en = "Turn on"
+fr = "Activer"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "One of an event type's state actions, or what it says once done."
 
 [actions.turned_off]
 en = "Event type turned off"
+fr = "Type de rendez-vous désactivé"
 ctx = "toast"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "One of an event type's state actions, or what it says once done."
 
 [actions.turned_on]
 en = "Event type turned on"
+fr = "Type de rendez-vous activé"
 ctx = "toast"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "One of an event type's state actions, or what it says once done."
 
 [answers.eyebrow]
 en = "Answers"
+fr = "Réponses"
 ctx = "label"
 screen = "scheduling booking"
 tier = "T3"
+state = "reviewed"
 note = "Heading of what the booker answered to the booking page's questions."
 
 [app.revoke_action]
 en = "Revoke access"
+fr = "Révoquer l'accès"
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [app.revoke_confirm]
 en = "It stops reaching this workspace's booking data now."
+fr = "Elle cessera immédiatement d'accéder aux données de rendez-vous."
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [app.revoke_prompt]
 en = "Revoke {client_name}?"
+fr = "Révoquer {client_name}?"
 ctx = "placeholder"
 screen = "scheduling developer writes"
 tier = "T3"
 args = { client_name = "str" }
+state = "reviewed"
 
 [booking.answer_blank]
 en = "No answer"
+fr = "Sans réponse"
 ctx = "label"
 screen = "scheduling booking"
 tier = "T3"
+state = "reviewed"
 note = "In place of an answer the booker left empty (an optional question)."
 
 [booking.manage]
 en = "Manage"
+fr = "Gérer"
 ctx = "label"
 screen = "scheduling booking"
 tier = "T3"
+state = "reviewed"
 note = "Heading over the cancel button on one booking."
 
 [booking.minutes]
 en = "{minutes} min"
+fr = "{minutes} min"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
 args = { minutes = "int" }
+state = "reviewed"
+same_ok = true
 note = "A length in minutes, e.g. \"30 min\": a meeting's duration, a buffer, a notice."
 
 [booking.minutes_not_set]
 en = "Not set"
+fr = "Non défini"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "In place of a length in minutes the event type does not set."
 
 [booking.no_host]
 en = "No host"
+fr = "Aucun hôte"
 ctx = "label"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "In a booking's second line in place of the host, for a booking no host was given."
 
 [booking.status_cancelled]
 en = "Cancelled"
+fr = "Annulé"
 ctx = "label"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "Status badge on a cancelled booking."
 
 [booking.status_confirmed]
 en = "Confirmed"
+fr = "Confirmé"
 ctx = "label"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "Status badge on a confirmed booking."
 
 [booking.status_rescheduled]
 en = "Rescheduled"
+fr = "Reporté"
 ctx = "label"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "Status badge on a booking moved to another time."
 
 [booking.subtitle]
 en = "{who} · {event_type} · {host}"
+fr = "{who} · {event_type} · {host}"
 ctx = "format"
 screen = "scheduling bookings"
 tier = "T3"
 args = { who = "str", event_type = "str", host = "str" }
+state = "reviewed"
+same_ok = true
 note = "Second line of a booking: who booked, the kind of meeting, and the host, separated by middle dots."
 
 [booking.view_all]
 en = "All"
+fr = "Tout"
 ctx = "label"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "Bookings list filter: every booking, whatever its status or date."
 
 [booking.view_cancelled]
 en = "Cancelled"
+fr = "Annulé"
 ctx = "label"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "Bookings list filter: the cancelled bookings."
 
 [booking.view_past]
 en = "Past"
+fr = "Passés"
 ctx = "label"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "Bookings list filter: confirmed bookings that already happened."
 
 [booking.view_upcoming]
 en = "Upcoming"
+fr = "À venir"
 ctx = "label"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "Bookings list filter: confirmed bookings still to come."
 
 [bookings.empty_cancelled]
 en = "No cancelled bookings."
+fr = "Aucun rendez-vous annulé."
 ctx = "body"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "The empty bookings list, in the Cancelled view."
 
 [bookings.empty_past]
 en = "No past bookings."
+fr = "Aucun rendez-vous passé."
 ctx = "body"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "The empty bookings list, in the Past view."
 
 [bookings.empty_title]
 en = "No bookings"
+fr = "Aucun rendez-vous"
 ctx = "title"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the empty bookings list."
 
 [bookings.empty_upcoming]
 en = "Nothing is booked yet. Share your booking page and bookings appear here."
+fr = "Aucun rendez-vous pour l'instant. Partagez votre page de réservation et ils apparaîtront ici."
 ctx = "body"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "The empty bookings list, in the Upcoming and All views."
 
 [bookings.load_more]
 en = "Load more"
+fr = "Afficher plus"
 ctx = "button"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "Button at the end of the bookings list: read the next page."
 
 [bookings.loading_more]
 en = "Loading…"
+fr = "Chargement…"
 ctx = "button"
 screen = "scheduling bookings"
 tier = "T3"
+state = "reviewed"
 note = "The Load more button while the next page is on its way."
 
 [caldav.connect_action]
 en = "Connect calendar"
+fr = "Connecter le calendrier"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.connected]
 en = "Calendar connected"
+fr = "Calendrier connecté"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.connected_to_line]
 en = "Calendar connected: {account}"
+fr = "Calendrier connecté\u00A0: {account}"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
 args = { account = "str" }
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.connecting]
 en = "Connecting…"
+fr = "Connexion…"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.password_hint]
 en = "An app-specific password from the provider, not the account password."
+fr = "Un mot de passe d'application obtenu auprès du fournisseur, et non le mot de passe du compte."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.password_label]
 en = "App password"
+fr = "Mot de passe d'application"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.password_missing]
 en = "Enter the app password."
+fr = "Entrez le mot de passe d'application."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.preset_custom]
 en = "Other server URL"
+fr = "URL d'un autre serveur"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.preset_custom_note]
 en = "Any other CalDAV server."
+fr = "Tout autre serveur CalDAV."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.preset_fastmail]
 en = "Fastmail"
+fr = "Fastmail"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.preset_fastmail_note]
 en = "Fastmail's calendar. Create an app password in Fastmail settings."
+fr = "Le calendrier de Fastmail. Créez un mot de passe d'application dans votre compte Fastmail."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.preset_icloud]
 en = "iCloud"
+fr = "iCloud"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "Where a CalDAV calendar lives: Apple's iCloud. A product name."
 
 [caldav.preset_icloud_note]
 en = "Apple's calendar. Create an app-specific password at appleid.apple.com."
+fr = "Le calendrier d'Apple. Créez un mot de passe pour app sur appleid.apple.com."
 ctx = "body"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "Where to get an app-specific password for iCloud."
 
 [caldav.preset_label]
 en = "Where the calendar lives"
+fr = "Où se trouve le calendrier"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.preset_nextcloud]
 en = "Nextcloud"
+fr = "Nextcloud"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.preset_nextcloud_note]
 en = "Your own Nextcloud server, at its DAV address."
+fr = "Votre propre serveur Nextcloud, à son adresse DAV."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.refused]
 en = "Could not connect. Check the server, username and app password."
+fr = "Connexion impossible. Vérifiez le serveur, le nom d'utilisateur et le mot de passe d'application."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.server_url_hint]
 en = "The base address of the CalDAV server."
+fr = "L'adresse de base du serveur CalDAV."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.server_url_is_ip]
 en = "Enter the server's hostname rather than an IP address."
+fr = "Entrez le nom d'hôte du serveur plutôt qu'une adresse IP."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.server_url_label]
 en = "Server URL"
+fr = "URL du serveur"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.server_url_missing]
 en = "Enter the server URL."
+fr = "Entrez l'URL du serveur."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.server_url_not_a_url]
 en = "That does not look like a server address. It should start with https://"
+fr = "Cela ne ressemble pas à une adresse de serveur. Elle doit commencer par https://"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.server_url_not_https]
 en = "The server address must start with https://. An app password sent over http:// travels in the clear."
+fr = "L'adresse du serveur doit commencer par https://. Un mot de passe d'application envoyé par http:// circule en clair."
 ctx = "error"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "The CalDAV server address is not https. Nothing was sent."
 
 [caldav.title]
 en = "Connect a CalDAV calendar"
+fr = "Connecter un calendrier CalDAV"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.username_label]
 en = "Username"
+fr = "Nom d'utilisateur"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.username_missing]
 en = "Enter the username."
+fr = "Entrez le nom d'utilisateur."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendar.account]
 en = "Account"
+fr = "Compte"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.conflicts]
 en = "Checked for conflicts"
+fr = "Vérifié pour les conflits"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.conflicts_checked]
 en = "Checked"
+fr = "Vérifié"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.conflicts_none]
 en = "None"
+fr = "Aucun"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.conflicts_not_checked]
 en = "Not checked"
+fr = "Non vérifié"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.connect_another]
 en = "Another account can be connected to check it for conflicts as well."
+fr = "Vous pouvez aussi connecter un autre compte pour y vérifier les conflits."
 ctx = "body"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.connect_eyebrow]
 en = "Connecting a calendar"
+fr = "Connexion d'un calendrier"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.connected]
 en = "Connected"
+fr = "Connecté"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.destination]
 en = "Receives bookings"
+fr = "Reçoit les rendez-vous"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.destination_none]
 en = "No calendar in this account"
+fr = "Aucun calendrier dans ce compte"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.destination_this_account]
 en = "This account"
+fr = "Ce compte"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.line]
 en = "{provider}, {account}"
+fr = "{provider}, {account}"
 ctx = "format"
 screen = "scheduling overview"
 tier = "T3"
 args = { provider = "str", account = "str" }
+state = "reviewed"
+same_ok = true
 note = "One connected calendar in the overview, e.g. \"Google Calendar, ada@example.com\". {provider} is the calendar service, {account} the account's address."
 
 [calendar.none_connected]
 en = "No calendar is connected yet, so nothing is checked for conflicts and bookings are not written anywhere."
+fr = "Aucun calendrier n'est encore connecté\u00A0: les conflits ne sont donc pas vérifiés, et les rendez-vous ne sont inscrits nulle part."
 ctx = "body"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.not_configured]
 en = "Calendar connections are not set up on this scheduler yet."
+fr = "Les connexions de calendrier ne sont pas encore configurées pour la prise de rendez-vous."
 ctx = "body"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.not_connected]
 en = "Not connected"
+fr = "Non connecté"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendar.provider_apple]
 en = "Apple Calendar"
+fr = "Calendrier Apple"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "A calendar service's name. Use Apple's own French name for its Calendar."
 
 [calendar.provider_caldav]
 en = "CalDAV"
+fr = "CalDAV"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A calendar protocol's name. A technical name, never translated."
 
 [calendar.provider_google]
 en = "Google Calendar"
+fr = "Google Agenda"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
 note = "A calendar service's name. Use Google's own French name for the product."
 
 [calendar.provider_microsoft]
 en = "Microsoft 365"
+fr = "Microsoft 365"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A calendar service's name. A product name, never translated."
 
 [calendar.zoom]
 en = "Zoom"
+fr = "Zoom"
 ctx = "label"
 screen = "scheduling calendar"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "On the calendars section: the member's own connected calendar accounts, which are checked for conflicts with bookings and which receives new bookings."
 
 [calendars.conflicts_hint]
 en = "A booking is refused when it clashes with an event on a checked calendar."
+fr = "Un rendez-vous est refusé lorsqu'il entre en conflit avec un événement d'un calendrier vérifié."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendars.conflicts_label]
 en = "Checked for conflicts"
+fr = "Vérifié pour les conflits"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendars.destination_hint]
 en = "New bookings are written to this calendar."
+fr = "Les nouveaux rendez-vous sont inscrits dans ce calendrier."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendars.destination_label]
 en = "Receives bookings"
+fr = "Reçoit les rendez-vous"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendars.loading]
 en = "Loading calendars…"
+fr = "Chargement des calendriers…"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendars.open]
 en = "Choose calendars"
+fr = "Choisir les calendriers"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendars.save_action]
 en = "Save changes"
+fr = "Enregistrer les modifications"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendars.saved]
 en = "Calendars saved"
+fr = "Calendriers enregistrés"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendars.saving]
 en = "Saving…"
+fr = "Sauvegarde…"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [calendars.title]
 en = "Calendars in {account_email}"
+fr = "Calendriers\u00A0: {account_email}"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
 args = { account_email = "str" }
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [cancel.body]
 en = "The attendee gets a cancellation email."
+fr = "Le participant recevra un courriel d'annulation."
 ctx = "body"
 screen = "scheduling booking writes"
 tier = "T2"
+state = "reviewed"
 note = "Under the heading: what the attendee receives when the booking is cancelled."
 
 [cancel.confirm]
 en = "Cancel booking"
+fr = "Annuler le rendez-vous"
 ctx = "button"
 screen = "scheduling booking writes"
 tier = "T2"
+state = "reviewed"
 note = "Confirms cancelling the booking. Destructive; also the button that opens the dialog."
 
 [cancel.done]
 en = "Booking cancelled"
+fr = "Rendez-vous annulé"
 ctx = "toast"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Said once the booking is cancelled."
 
 [cancel.keep]
 en = "Keep it"
+fr = "Le conserver"
 ctx = "button"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Closes the cancel dialog without cancelling."
 
 [cancel.reason_hint]
 en = "Optional. It goes in the email."
+fr = "Facultatif. Il figurera dans le courriel."
 ctx = "body"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Under the reason field: it is optional, and goes in the attendee's email."
 
 [cancel.reason_label]
 en = "Reason"
+fr = "Motif"
 ctx = "label"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Label of the cancellation reason field."
 
 [cancel.reason_too_long]
 en = "That reason is longer than 1000 characters."
+fr = "Ce motif dépasse 1000 caractères."
 ctx = "error"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "The reason is over the 1000 characters the scheduler takes. Nothing was sent."
 
 [cancel.title]
 en = "Cancel this booking?"
+fr = "Annuler ce rendez-vous?"
 ctx = "title"
 screen = "scheduling booking writes"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the dialog that cancels a booking."
 
 [coming.up_empty]
 en = "No bookings yet. Share your booking page and they will appear here."
+fr = "Aucun rendez-vous pour l'instant. Partagez votre page de réservation et ils apparaîtront ici."
 ctx = "body"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "The list of the next bookings when nothing is booked."
 
 [coming.up_eyebrow]
 en = "Coming up"
+fr = "À venir"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the list of the next bookings on the overview."
 
 [coming.up_subtitle]
 en = "{who} · {event_type}"
+fr = "{who} · {event_type}"
 ctx = "format"
 screen = "scheduling overview"
 tier = "T3"
 args = { who = "str", event_type = "str" }
+state = "reviewed"
+same_ok = true
 note = "Second line of an upcoming booking: who booked, and the kind of meeting, separated by a middle dot."
 
 [common.add]
 en = "Add"
+fr = "Ajouter"
 ctx = "button"
 screen = "scheduling"
 tier = "T3"
+state = "reviewed"
 note = "Adds the chosen item (a host, a team member) to a list."
 
 [common.cancel]
 en = "Cancel"
+fr = "Annuler"
 ctx = "button"
 screen = "scheduling"
 tier = "T3"
+state = "reviewed"
 note = "Closes a form or dialog without saving."
 
 [common.delete]
 en = "Delete"
+fr = "Supprimer"
 ctx = "button"
 screen = "scheduling"
 tier = "T3"
+state = "reviewed"
 note = "Deletes an item; a confirmation follows."
 
 [common.edit]
 en = "Edit"
+fr = "Modifier"
 ctx = "button"
 screen = "scheduling"
 tier = "T3"
+state = "reviewed"
 note = "Opens an item's editor."
 
 [common.off]
 en = "Off"
+fr = "Désactivé"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [common.on]
 en = "On"
+fr = "Activé"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [common.remove]
 en = "Remove"
+fr = "Retirer"
 ctx = "button"
 screen = "scheduling"
 tier = "T3"
+state = "reviewed"
 note = "Takes an item off a list in a form; nothing is saved until the form is."
 
 [common.save]
 en = "Save"
+fr = "Enregistrer"
 ctx = "button"
 screen = "scheduling"
 tier = "T3"
+state = "reviewed"
 note = "Saves a form in the booking scheduler."
 
 [common.saving]
 en = "Saving…"
+fr = "Sauvegarde…"
 ctx = "button"
 screen = "scheduling"
 tier = "T3"
+state = "reviewed"
 note = "A save button while the save is on its way."
 
 [connect.hand_off_note]
 en = "Finish in the browser, then come back and refresh this page."
+fr = "Terminez dans le navigateur, puis revenez et actualisez cette page."
 ctx = "body"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "Said before the browser opens the calendar provider's consent page: the app is not told when it is done, so the member refreshes."
 
 [connect.not_configured]
 en = "Calendar connections are not set up on this scheduler yet."
+fr = "Les connexions de calendrier ne sont pas encore configurées pour la prise de rendez-vous."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [connect.not_ready_yet]
 en = "Scheduling is still being set up for this workspace. Try again shortly."
+fr = "La prise de rendez-vous est encore en cours de configuration pour cet espace de travail. Réessayez sous peu."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [connect.provider_named]
 en = "Connect {provider}"
+fr = "Connecter {provider}"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
 args = { provider = "str" }
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [day.not_bookable]
 en = "Not bookable"
+fr = "Non réservable"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A day with no working hours."
 
 [days.label]
 en.one = "{days} day ahead"
 en.other = "{days} days ahead"
+fr.one = "{days} jour à l'avance"
+fr.other = "{days} jours à l'avance"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
 args = { days = "int" }
+state = "reviewed"
 note = "How far ahead an event type can be booked, e.g. \"60 days ahead\"."
 
 [delete.event_type_body]
 en = "Its booking page stops working. Existing bookings keep their times."
+fr = "Sa page de réservation cessera de fonctionner. Les rendez-vous existants gardent leur heure."
 ctx = "body"
 screen = "scheduling event type actions"
 tier = "T2"
+state = "reviewed"
 note = "What deleting an event type does, and what survives it."
 
 [delete.event_type_confirm]
 en = "Delete event type"
+fr = "Supprimer le type de rendez-vous"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T2"
+state = "reviewed"
 note = "Deletes the event type: the button, and the confirmation's. Destructive."
 
 [delete.event_type_title]
 en = "Delete event type?"
+fr = "Supprimer le type de rendez-vous?"
 ctx = "title"
 screen = "scheduling event type actions"
 tier = "T2"
+state = "reviewed"
 note = "Heading of the confirmation before an event type is deleted."
 
 [desk.booking_page]
 en = "Booking page"
+fr = "Page de réservation"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "Row label: the public booking page links."
 
 [desk.calendar]
 en = "Calendar"
+fr = "Calendrier"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "Row label: the connected calendars."
 
 [desk.event_types]
 en = "Event types"
+fr = "Types de rendez-vous"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "Row label: the event types (kinds of meeting customers can book)."
 
 [desk.eyebrow]
 en = "Your booking desk"
+fr = "Votre centre de réservation"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the overview's summary card: the booking page, calendars, hours, event types and next booking."
 
 [desk.hours]
 en = "Working hours"
+fr = "Heures de disponibilité"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "Row label: the weekly working hours."
 
 [desk.next_booking]
 en = "Next booking"
+fr = "Prochain rendez-vous"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "Row label: the next upcoming booking."
 
 [desk.no_bookings]
 en = "None yet."
+fr = "Aucun pour l'instant."
 ctx = "body"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "The next booking row when nothing is booked."
 
 [desk.no_calendar]
 en = "No calendar is connected, so nothing is checked for conflicts."
+fr = "Aucun calendrier n'est connecté\u00A0: les conflits ne sont donc pas vérifiés."
 ctx = "body"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "The calendar row when no calendar is connected."
 
 [desk.no_event_types]
 en = "No event types yet, so there is nothing to book."
+fr = "Aucun type de rendez-vous\u00A0: rien à réserver pour l'instant."
 ctx = "body"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "The booking page and event types rows when there is no event type, so nothing can be booked."
 
 [desk.no_host]
 en = "The booking address is not ready yet."
+fr = "Le lien de réservation n'est pas encore prêt."
 ctx = "body"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "The booking page row while the booking pages have no public address yet (still being set up)."
 
 [desk.no_hours]
 en = "Not bookable on any day yet."
+fr = "Aucune journée réservable pour l'instant."
 ctx = "body"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "The hours row when no weekly hours are set."
 
 [developer.apps_empty]
 en = "No connected apps."
+fr = "Aucune application connectée."
 ctx = "body"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.apps_eyebrow]
 en = "Connected apps"
+fr = "Applications connectées"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.apps_subtitle]
 en = "Every connected app reaches the same booking data. There are no partial permissions, so revoking is the only way to narrow one."
+fr = "Chaque application connectée accède aux mêmes données de rendez-vous. Sans autorisations partielles, seule la révocation permet de limiter l'accès d'une application."
 ctx = "title"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.deliveries]
 en = "Deliveries"
+fr = "Envois"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.deliveries_empty]
 en = "Nothing delivered yet."
+fr = "Aucun envoi pour l'instant."
 ctx = "body"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.delivery_delivered]
 en = "Delivered"
+fr = "Livré"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 note = "Status of one webhook delivery: the receiving server accepted it."
 
 [developer.delivery_no_answer]
 en = "No answer"
+fr = "Sans réponse"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 note = "Status of one webhook delivery: the receiving server never answered."
 
 [developer.delivery_rejected]
 en = "Rejected with {code}"
+fr = "Refusé avec le code {code}"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
 args = { code = "str" }
+state = "reviewed"
 note = "Status of one webhook delivery: the receiving server refused it. {code} is the HTTP status number it answered with, e.g."
 
 [developer.delivery_waiting]
 en = "Waiting"
+fr = "En attente"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 note = "Status of one webhook delivery: not attempted yet."
 
 [developer.key_value]
 en = "Created {created} · Last used {last_used}"
+fr = "Créée le {created} · Dernière utilisation\u00A0: {last_used}"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
 args = { created = "str", last_used = "str" }
+state = "reviewed"
 
 [developer.keys_empty]
 en = "No API keys yet."
+fr = "Aucune clé d'API."
 ctx = "body"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.keys_eyebrow]
 en = "Your API keys"
+fr = "Vos clés d'API"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.keys_subtitle]
 en = "A key lets your own tools and scripts reach this workspace's booking data."
+fr = "Une clé permet à vos propres outils et scripts d'accéder aux données de rendez-vous de cet espace de travail."
 ctx = "title"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.mcp_auth_label]
 en = "Authorization header"
+fr = "En-tête Authorization"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.mcp_auth_value]
 en = "Bearer {key}"
+fr = "Bearer {key}"
 ctx = "format"
 screen = "scheduling developer"
 tier = "T3"
 args = { key = "str" }
+state = "reviewed"
+same_ok = true
 note = "The value of the Authorization header an AI assistant sends. \"Bearer\" is the HTTP scheme name and is never translated; {key} is the API key placeholder."
 
 [developer.mcp_eyebrow]
 en = "Connect an AI assistant"
+fr = "Connecter un assistant IA"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.mcp_key_placeholder]
 en = "<your API key>"
+fr = "<votre clé d'API>"
 ctx = "placeholder"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 note = "Stands in for the operator's API key inside a configuration snippet they copy into an AI assistant. Keep the angle brackets."
 
 [developer.mcp_no_host]
 en = "Your booking address is not ready yet. It appears here once scheduling is set up."
+fr = "Votre lien de réservation n'est pas encore prêt. Il apparaîtra ici une fois la prise de rendez-vous configurée."
 ctx = "body"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.mcp_note]
 en = "Use a key from the API keys tab. Anyone holding it can do everything on this workspace's bookings, so give each assistant its own and revoke it when you are done with it."
+fr = "Utilisez une clé de l'onglet Clés d'API. Quiconque la détient peut tout faire sur les rendez-vous de cet espace de travail, alors donnez-en une propre à chaque assistant et révoquez-la quand vous avez terminé."
 ctx = "body"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 note = "It says there are no partial permissions, which is the whole security story of this integration. Anyone holding a key can do everything in the tool list, so the only way to narrow an assistant is to give it its own key and revoke that."
 
 [developer.mcp_url_label]
 en = "MCP URL"
+fr = "URL MCP"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.never]
 en = "Never"
+fr = "Jamais"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 note = "The absent marker is per column and the three are not interchangeable. \"Never\" means a key that has not been used; \"Not tried yet\" means a delivery that has not run; the em dash means a value that is simply missing."
 
 [developer.not_tried_yet]
 en = "Not tried yet"
+fr = "Pas encore tenté"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.tab_apps]
 en = "Connected apps"
+fr = "Applications connectées"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 note = "Tab on the scheduling developer screen: the third-party apps given access."
 
 [developer.tab_keys]
 en = "API keys"
+fr = "Clés d'API"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 note = "Tab on the scheduling developer screen: the operator's API keys."
 
 [developer.tab_webhooks]
 en = "Webhooks"
+fr = "Webhooks"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "Tab on the scheduling developer screen: the webhook endpoints that receive booking events."
 
 [developer.webhooks_empty]
 en = "No webhooks yet."
+fr = "Aucun webhook."
 ctx = "body"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [developer.webhooks_eyebrow]
 en = "Webhooks"
+fr = "Webhooks"
 ctx = "label"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 
 [developer.webhooks_subtitle]
 en = "Bookings already reach your District inbox and workflows; webhooks are for other systems."
+fr = "Les rendez-vous arrivent déjà dans votre boîte de réception District et vos flux de travail; les webhooks servent aux autres systèmes."
 ctx = "title"
 screen = "scheduling developer"
 tier = "T3"
+state = "reviewed"
 
 [disconnect.action]
 en = "Disconnect"
+fr = "Déconnecter"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [disconnect.confirm]
 en = "Bookings stop syncing to it. Existing events stay."
+fr = "Les rendez-vous cesseront d'y être synchronisés. Les événements existants restent."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [disconnect.keep]
 en = "Keep it connected"
+fr = "Le garder connecté"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [disconnect.prompt]
 en = "Disconnect {account_email}?"
+fr = "Déconnecter {account_email}?"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
 args = { account_email = "str" }
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [disconnected.last_destination]
 en = "No calendar receives new bookings now. Connect one, or choose a calendar in another account."
+fr = "Aucun calendrier ne reçoit plus les nouveaux rendez-vous. Connectez-en un ou choisissez un calendrier d'un autre compte."
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
+state = "reviewed"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [editor.active_toggle]
 en = "Active"
+fr = "Actif"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.address]
 en = "Address"
+fr = "Adresse"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.at_least_one_minute]
 en = "Has to be a whole number of minutes, at least 1."
+fr = "Doit être un nombre entier de minutes, au moins 1."
 ctx = "error"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book). A refusal before anything was sent."
 
 [editor.at_least_zero]
 en = "Has to be a whole number, 0 or more."
+fr = "Doit être un nombre entier, 0 ou plus."
 ctx = "error"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book). A refusal before anything was sent."
 
 [editor.booking_page_hint]
 en = "The address customers use. It cannot be changed: links you have already shared point at it."
+fr = "L'adresse que vos clients utilisent. Elle ne peut pas être modifiée\u00A0: les liens déjà partagés pointent vers elle."
 ctx = "body"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.booking_page_label]
 en = "Booking page"
+fr = "Page de réservation"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.buffer_after_hint]
 en = "Minutes kept free after a booking."
+fr = "Minutes gardées libres après un rendez-vous."
 ctx = "body"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.buffer_after_label]
 en = "Buffer after"
+fr = "Battement après"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.buffer_before_hint]
 en = "Minutes kept free before a booking."
+fr = "Minutes gardées libres avant un rendez-vous."
 ctx = "body"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.buffer_before_label]
 en = "Buffer before"
+fr = "Battement avant"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.create_duration_invalid]
 en = "The duration has to be a whole number of minutes, at least 1."
+fr = "La durée doit être un nombre entier de minutes, au moins 1."
 ctx = "error"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book). A refusal before anything was sent."
 
 [editor.create_title]
 en = "Create event type"
+fr = "Créer un type de rendez-vous"
 ctx = "title"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.description_hint]
 en = "Shown on the booking page."
+fr = "Affichée sur la page de réservation."
 ctx = "body"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.description_label]
 en = "Description"
+fr = "Description"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.duration_hint]
 en = "How long the meeting runs, in minutes."
+fr = "La durée de la rencontre, en minutes."
 ctx = "body"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.duration_label]
 en = "Duration"
+fr = "Durée"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.edit_title]
 en = "Edit event type"
+fr = "Modifier le type de rendez-vous"
 ctx = "title"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.interval_hint]
 en = "How often a booking may start. Independent of the duration."
+fr = "Fréquence à laquelle un rendez-vous peut commencer, indépendamment de la durée."
 ctx = "body"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.interval_label]
 en = "Starts every"
+fr = "Intervalle"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.listed_toggle]
 en = "Listed on your booking page"
+fr = "Affiché sur votre page de réservation"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.location_label]
 en = "Location"
+fr = "Lieu"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.max_active_label]
 en = "Active bookings per attendee"
+fr = "Rendez-vous actifs par participant"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.max_future_label]
 en = "Bookable ahead"
+fr = "Réservable d'avance"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.meeting_link]
 en = "Meeting link"
+fr = "Lien de réunion"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.min_notice_hint]
 en = "Minutes. How soon from now a customer may book."
+fr = "En minutes. Délai minimal avant qu'un client puisse réserver."
 ctx = "body"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.min_notice_label]
 en = "Minimum notice"
+fr = "Préavis minimal"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.name_label]
 en = "Name"
+fr = "Nom"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.name_missing]
 en = "Give the event type a name."
+fr = "Donnez un nom au type de rendez-vous."
 ctx = "error"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book). A refusal before anything was sent."
 
 [editor.name_placeholder]
 en = "Phone consultation"
+fr = "Consultation téléphonique"
 ctx = "placeholder"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.no_limit_hint]
 en = "0 means no limit."
+fr = "0 signifie aucune limite."
 ctx = "body"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.phone_number]
 en = "Phone number"
+fr = "Numéro de téléphone"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [editor.show_taken_toggle]
 en = "Show taken times as taken"
+fr = "Afficher les plages occupées comme occupées"
 ctx = "label"
 screen = "scheduling event type editor"
 tier = "T3"
+state = "reviewed"
 note = "In the form that creates or edits an event type (a kind of meeting customers can book)."
 
 [email.template_cancellation]
 en = "Cancellation"
+fr = "Annulation"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "The kind of email a test send uses: it goes to the member's own address."
 
 [email.template_confirmation]
 en = "Confirmation"
+fr = "Confirmation"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "The kind of email a test send uses: it goes to the member's own address."
 
 [email.template_reminder]
 en = "Reminder"
+fr = "Rappel"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "The kind of email a test send uses: it goes to the member's own address."
 
 [email.template_reschedule]
 en = "Reschedule"
+fr = "Reporter"
 ctx = "button"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "The kind of email a test send uses: it goes to the member's own address."
 
 [event.type_details_eyebrow]
 en = "Details"
+fr = "Détails"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "Heading of an event type's details."
 
 [event.type_hosts_eyebrow]
 en = "Hosts"
+fr = "Hôtes"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "Heading of an event type's hosts (the people who can be booked for it)."
 
 [event.type_no_hosts]
 en = "No hosts are assigned, so this event type cannot be booked."
+fr = "Aucun hôte n'est attribué\u00A0: ce type de rendez-vous n'est donc pas réservable."
 ctx = "body"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "Said when an event type has no host."
 
 [event.type_no_questions]
 en = "This event type asks no questions."
+fr = "Ce type de rendez-vous ne pose aucune question."
 ctx = "body"
 screen = "scheduling booking"
 tier = "T3"
+state = "reviewed"
 note = "Said when the kind of meeting asks the booker no questions."
 
 [event.type_questions_eyebrow]
 en = "Questions"
+fr = "Questions"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "Heading of the questions the booking page asks."
 
 [event.type_subtitle]
 en = "{duration} · {location}"
+fr = "{duration} · {location}"
 ctx = "format"
 screen = "scheduling event types"
 tier = "T3"
 args = { duration = "str", location = "str" }
+state = "reviewed"
+same_ok = true
 note = "An event type's second line: how long it runs and where, separated by a middle dot."
 
 [event.types_empty_body]
 en = "An event type is a page a customer can book. Create one and its booking page goes live."
+fr = "Un type de rendez-vous a sa propre page où un client peut réserver. Créez-en un et sa page de réservation sera en ligne."
 ctx = "body"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "The empty event types list. An event type is a kind of meeting with its own booking page."
 
 [event.types_empty_title]
 en = "No event types yet"
+fr = "Aucun type de rendez-vous"
 ctx = "title"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the empty event types list."
 
 [fact.buffer_after]
 en = "Buffer after"
+fr = "Battement après"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "The label of one of an event type's details."
 
 [fact.buffer_before]
 en = "Buffer before"
+fr = "Battement avant"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "The label of one of an event type's details."
 
 [fact.duration]
 en = "Duration"
+fr = "Durée"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "The label of one of an event type's details."
 
 [fact.horizon]
 en = "Bookable up to"
+fr = "Réservable jusqu'à"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "The label of one of an event type's details."
 
 [fact.interval]
 en = "Starts every"
+fr = "Intervalle"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "The label of one of an event type's details."
 
 [fact.location]
 en = "Location"
+fr = "Lieu"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "The label of one of an event type's details."
 
 [fact.location_value]
 en = "Address"
+fr = "Adresse"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "The label of one of an event type's details."
 
 [fact.notice]
 en = "Minimum notice"
+fr = "Préavis minimal"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "The label of one of an event type's details."
 
 [fact.state]
 en = "State"
+fr = "État"
 ctx = "label"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "The label of one of an event type's details."
 
 [failure.forbidden]
 en = "You can view this but not change it."
+fr = "Vous pouvez consulter ceci, mais pas le modifier."
 ctx = "error"
 screen = "scheduling failure"
 tier = "T2"
+state = "reviewed"
 note = "The member's role lets them read this and not change it."
 
 [failure.not_ready]
 en = "Scheduling is not set up for this workspace yet."
+fr = "La prise de rendez-vous n'est pas encore configurée pour cet espace de travail."
 ctx = "error"
 screen = "scheduling failure"
 tier = "T2"
+state = "reviewed"
 note = "The workspace has no booking pages yet: someone has to turn scheduling on first."
 
 [failure.offline]
 en = "You appear to be offline. Check your connection and try again."
+fr = "Vous semblez être hors ligne. Vérifiez votre connexion et réessayez."
 ctx = "error"
 screen = "scheduling failure"
 tier = "T2"
+state = "reviewed"
 note = "The request never reached the service: no network."
 
 [failure.slot_taken]
 en = "That time was just taken. Pick another."
+fr = "Cette heure vient d'être prise. Choisissez-en une autre."
 ctx = "error"
 screen = "scheduling failure"
 tier = "T2"
+state = "reviewed"
 note = "Someone else booked the chosen time between the list and the choice. The list of times is read again."
 
 [failure.stale_build]
 en = "This version of the app could not read that response. Please update."
+fr = "Cette version de l'application n'a pas pu lire cette réponse. Veuillez la mettre à jour."
 ctx = "error"
 screen = "scheduling failure"
 tier = "T2"
+state = "reviewed"
 note = "The service answered in a shape this version cannot read; updating the app is the remedy."
 
 [failure.unavailable]
 en = "The booking system did not answer. Try again in a minute."
+fr = "Le système de réservation n'a pas répondu. Réessayez dans une minute."
 ctx = "error"
 screen = "scheduling failure"
 tier = "T2"
+state = "reviewed"
 note = "The booking scheduler did not answer, or is limiting requests. Offered with Try again."
 
 [failure.unknown]
 en = "That did not save. Try again."
+fr = "Rien n'a été enregistré. Réessayez."
 ctx = "error"
 screen = "scheduling failure"
 tier = "T2"
+state = "reviewed"
 note = "Any other refusal of a change or a read in the booking scheduler."
 
 [host.archived]
 en = "{role} · archived"
+fr = "{role} · compte archivé"
 ctx = "format"
 screen = "scheduling event type"
 tier = "T3"
 args = { role = "str" }
+state = "reviewed"
 note = "A host's role, for a host whose account is archived. {role} is the role."
 
 [host.priority_invalid]
 en = "A host's priority has to be a whole number, 0 or more."
+fr = "La priorité d'un hôte doit être un nombre entier, 0 ou plus."
 ctx = "error"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "A host's priority is not a whole number of 0 or more. Nothing was sent."
 
 [host.role_optional]
 en = "Optional"
+fr = "Facultatif"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "A host's role on an event type."
 
 [host.role_required]
 en = "Required"
+fr = "Obligatoire"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "A host's role on an event type."
 
 [host.role_rotation]
 en = "Rotation"
+fr = "Rotation"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A host's role on an event type."
 
 [hosts.empty]
 en = "No hosts yet. Add at least one or nobody can be booked."
+fr = "Aucun hôte. Ajoutez-en au moins un pour permettre les rendez-vous."
 ctx = "body"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "The hosts dialog with no host in it."
 
 [hosts.need_one]
 en = "An event type needs at least one host."
+fr = "Un type de rendez-vous a besoin d'au moins un hôte."
 ctx = "error"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "A save with no host. Nothing was sent."
 
 [hosts.title]
 en = "Hosts"
+fr = "Hôtes"
 ctx = "title"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "The hosts dialog's title, and the button that opens it."
 
 [hours.add_range]
 en = "Add range"
+fr = "Ajouter une plage"
 ctx = "button"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "Adds a window to a day, 9 to 5."
 
 [hours.copy_to_weekdays]
 en = "Copy to all weekdays"
+fr = "Copier sur tous les jours de semaine"
 ctx = "button"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "Gives every other weekday this day's windows."
 
 [hours.date_range]
 en = "{start} to {end}"
+fr = "{start} à {end}"
 ctx = "format"
 screen = "scheduling hours"
 tier = "T3"
 args = { start = "str", end = "str" }
+state = "reviewed"
 note = "A run of days off or changed hours, e.g. \"Dec 24, 2026 to Dec 31, 2026\". {start} and {end} are dates."
 
 [hours.none_at_all]
 en = "Not bookable on any day yet."
+fr = "Aucune journée réservable pour l'instant."
 ctx = "body"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "The working hours summary when no day has hours."
 
 [hours.not_bookable]
 en = "Not bookable"
+fr = "Non réservable"
 ctx = "label"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "A day with no window in the week editor."
 
 [hours.nothing_to_save]
 en = "Nothing to save."
+fr = "Rien à enregistrer."
 ctx = "toast"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "A save with no change: nothing was sent."
 
 [hours.out_of_office]
 en = "Out of office"
+fr = "Absence"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A date override on which the member is away and takes no bookings."
 
 [hours.range]
 en = "{start} to {end}"
+fr = "{start} à {end}"
 ctx = "format"
 screen = "scheduling hours"
 tier = "T3"
 args = { start = "str", end = "str" }
+state = "reviewed"
 note = "One window of working hours, e.g. \"9:00 a.m. to 5:00 p.m.\". {start} and {end} are times of day; several are joined with commas."
 
 [hours.saved]
 en = "Working hours saved"
+fr = "Heures de disponibilité enregistrées"
 ctx = "toast"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "The week was saved."
 
 [hours.time_range]
 en = "{start} to {end}"
+fr = "{start} à {end}"
 ctx = "format"
 screen = "scheduling hours"
 tier = "T3"
 args = { start = "str", end = "str" }
+state = "reviewed"
 note = "The hours on a date override, e.g. \"12:00 p.m. to 4:00 p.m.\". {start} and {end} are times of day."
 
 [hours.title]
 en = "Your working hours"
+fr = "Vos heures de disponibilité"
 ctx = "title"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "The week editor's title, and the button that opens it."
 
 [hours.unavailable]
 en = "Unavailable"
+fr = "Indisponible"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A date override on which the member takes no bookings."
 
 [key.copied]
 en = "Copied"
+fr = "Copié"
 ctx = "toast"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.copy_action]
 en = "Copy key"
+fr = "Copier la clé"
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.create]
 en = "Create key"
+fr = "Créer une clé"
 ctx = "label"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.creating]
 en = "Creating…"
+fr = "Création en cours…"
 ctx = "label"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.done]
 en = "Done"
+fr = "C'est fait"
 ctx = "toast"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.name_hint]
 en = "What will use this key. You will see it in the list and nowhere else."
+fr = "Indiquez ce qui utilisera cette clé. Ce nom n'apparaît que dans la liste."
 ctx = "a11y"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.name_label]
 en = "Name"
+fr = "Nom"
 ctx = "label"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.name_missing]
 en = "Give the key a name."
+fr = "Donnez un nom à la clé."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.reveal_title]
 en = "Your key for {name}"
+fr = "Votre clé pour {name}"
 ctx = "title"
 screen = "scheduling developer writes"
 tier = "T3"
 args = { name = "str" }
+state = "reviewed"
 
 [key.reveal_warning]
 en = "Copy it now. It is not shown again."
+fr = "Copiez-le maintenant. Il ne sera plus affiché."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 note = "The show-once sentence, and it is the app's own rather than the fork's. `SchedulingAPIKeyCreated.note` carries an English string from a service that does not localise; treating it as the source would make the one sentence a customer has to act on untranslatable."
 
 [key.revoke_action]
 en = "Revoke key"
+fr = "Révoquer la clé"
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.revoke_confirm]
 en = "Anything using it stops working now."
+fr = "Tout ce qui l'utilise cessera de fonctionner immédiatement."
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [key.revoke_prompt]
 en = "Revoke {name}?"
+fr = "Révoquer {name}?"
 ctx = "placeholder"
 screen = "scheduling developer writes"
 tier = "T3"
 args = { name = "str" }
+state = "reviewed"
 
 [key.sheet_title]
 en = "Create key"
+fr = "Créer une clé"
 ctx = "title"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [location.built_in_video]
 en = "Built-in video"
+fr = "Vidéo intégrée"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
 
 [location.custom_video]
 en = "Video link"
+fr = "Lien vidéo"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
 
 [location.google_meet]
 en = "Google Meet"
+fr = "Google Meet"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
 
 [location.in_person]
 en = "In person"
+fr = "En personne"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
 
 [location.link]
 en = "Link"
+fr = "Lien"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
 
 [location.not_set]
 en = "Not set"
+fr = "Non défini"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
 
 [location.phone]
 en = "Phone"
+fr = "Téléphone"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
 
 [location.teams]
 en = "Microsoft Teams"
+fr = "Microsoft Teams"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "Where an event type's meetings happen: one of the location types. \"Not set\" when it has none."
 
 [member.count]
 en.one = "{count} member"
 en.other = "{count} members"
+fr.one = "{count} membre"
+fr.other = "{count} membres"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
 args = { count = "int" }
+state = "reviewed"
 
 [member.subtitle_with_role]
 en = "{email} · {role}"
+fr = "{email} · {role}"
 ctx = "format"
 screen = "scheduling team"
 tier = "T3"
 args = { email = "str", role = "str" }
+state = "reviewed"
+same_ok = true
 
 [members.degraded]
 en = "The workspace's members could not be read, so roles are not shown."
+fr = "Impossible de lire les membres de l'espace de travail; les rôles ne sont pas affichés."
 ctx = "body"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 note = "Shown instead of role labels when the membership read failed. Without it every host would be captioned \"Removed from the workspace\", which is a false accusation drawn from an absent read rather than from a fact."
 
 [members.empty]
 en = "Nobody else is in this workspace yet."
+fr = "Personne d'autre ne fait partie de cet espace de travail."
 ctx = "body"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 
 [members.eyebrow]
 en = "Members"
+fr = "Membres"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 
 [next.booking_line]
 en = "{when}, {who}, {event_type}"
+fr = "{when}, {who}, {event_type}"
 ctx = "format"
 screen = "scheduling overview"
 tier = "T3"
 args = { when = "str", who = "str", event_type = "str" }
+state = "reviewed"
+same_ok = true
 note = "The next booking, e.g. \"Today 2:30 p.m., Ada, Intro call\". {when} is when it starts, {who} who booked, {event_type} the kind of meeting."
 
 [not.public]
 en = "Not public"
+fr = "Non public"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "In place of an event type's booking link when it has none: archived, switched off, unlisted, or the booking pages have no address yet. A state, not a missing value."
 
 [override.add_button]
 en = "Add override"
+fr = "Ajouter l'exception"
 ctx = "button"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.add_title]
 en = "Add an override"
+fr = "Ajouter une exception"
 ctx = "title"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.added]
 en = "Override added"
+fr = "Exception ajoutée"
 ctx = "toast"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.custom_hours]
 en = "Custom hours"
+fr = "Heures personnalisées"
 ctx = "label"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.date_label]
 en = "Date"
+fr = "Date"
 ctx = "label"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.date_missing]
 en = "Pick a date."
+fr = "Choisissez une date."
 ctx = "error"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day). Nothing was sent."
 
 [override.delete_confirm]
 en = "Delete override"
+fr = "Supprimer l'exception"
 ctx = "button"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.delete_group_body]
 en = "All {days} days go back to your weekly hours."
+fr = "Ces {days} journées reprennent vos heures hebdomadaires."
 ctx = "body"
 screen = "scheduling hours editor"
 tier = "T3"
 args = { days = "int" }
+state = "reviewed"
 note = "What deleting a run of days off does: all {days} days go back to the weekly hours."
 
 [override.delete_single_body]
 en = "That day goes back to your weekly hours."
+fr = "Cette journée reprend vos heures hebdomadaires."
 ctx = "body"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.delete_title]
 en = "Delete this override?"
+fr = "Supprimer cette exception?"
 ctx = "title"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.deleted]
 en = "Override deleted"
+fr = "Exception supprimée"
 ctx = "toast"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.end_before_start]
 en = "The last day has to be on or after the first."
+fr = "Le dernier jour doit être identique ou postérieur au premier."
 ctx = "error"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day). Nothing was sent."
 
 [override.first_day_label]
 en = "First day"
+fr = "Premier jour"
 ctx = "label"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.hours_label]
 en = "Hours that day"
+fr = "Heures ce jour-là"
 ctx = "label"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.kind_label]
 en = "What happens that day"
+fr = "Ce qui se passe ce jour-là"
 ctx = "label"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.last_day_hint]
 en = "Leave blank for a single day."
+fr = "Laissez vide pour une seule journée."
 ctx = "body"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.last_day_label]
 en = "Last day"
+fr = "Dernier jour"
 ctx = "label"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [override.unavailable]
 en = "Unavailable"
+fr = "Indisponible"
 ctx = "label"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "In the editor of the dated overrides of the working hours (a day off, or different hours on a day)."
 
 [overrides.empty]
 en = "No overrides ahead."
+fr = "Aucune exception à venir."
 ctx = "body"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "No override still to come."
 
 [overrides.eyebrow]
 en = "Date overrides"
+fr = "Exceptions"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the dated overrides of the working hours."
 
 [overrides.hint]
 en = "Days you are away, or working different hours from usual."
+fr = "Les journées d'absence, ou celles où vous travaillez à des heures différentes."
 ctx = "body"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "Under the overrides editor's title."
 
 [overrides.subtitle]
 en = "Days you are away, or working different hours from usual."
+fr = "Les journées d'absence, ou celles où vous travaillez à des heures différentes."
 ctx = "body"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "Under the overrides' heading: what an override is."
 
 [overrides.title]
 en = "Date overrides"
+fr = "Exceptions"
 ctx = "title"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "The overrides editor's title, and the button that opens it."
 
 [overrides.write_empty]
 en = "No overrides ahead. Add one for a day off or different hours."
+fr = "Aucune exception à venir. Ajoutez-en une pour un congé ou des heures différentes."
 ctx = "body"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "The overrides editor with nothing still to come."
 
 [overview.booking]
 en = "Booking"
+fr = "Rendez-vous"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "The name shown for a booking whose kind of meeting is not known."
 
 [overview.days_range]
 en = "{first} to {last}"
+fr = "{first} au {last}"
 ctx = "format"
 screen = "scheduling overview"
 tier = "T3"
 args = { first = "str", last = "str" }
+state = "reviewed"
 note = "Three or more weekdays in a row, e.g. \"Mon to Fri\". {first} and {last} are abbreviated weekday names."
 
 [overview.event_types]
 en.one = "{count} event type, {active} active"
 en.other = "{count} event types, {active} active"
+fr.one = "{count} type de rendez-vous, actifs\u00A0: {active}"
+fr.other = "{count} types de rendez-vous, actifs\u00A0: {active}"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
 args = { count = "int", active = "str" }
+state = "reviewed"
 note = "The event types row, e.g. \"3 event types, 2 active\". {count} is how many there are; {active} how many are switched on, already written as a number. \"active\" is not made plural, as on the web."
 
 [overview.hours_clause]
 en = "{days}, {hours}"
+fr = "{days}, {hours}"
 ctx = "format"
 screen = "scheduling overview"
 tier = "T3"
 args = { days = "str", hours = "str" }
+state = "reviewed"
+same_ok = true
 note = "One clause of the working hours summary, e.g. \"Mon to Fri, 9:00 a.m. to 5:00 p.m.\". {days} names the days, {hours} the times. Clauses are joined with semicolons."
 
 [overview.someone]
 en = "Someone"
+fr = "Quelqu'un"
 ctx = "label"
 screen = "scheduling overview"
 tier = "T3"
+state = "reviewed"
 note = "Who booked, when the booking carries neither a name nor an address."
 
 [overview.today]
 en = "Today {clock}"
+fr = "Aujourd'hui à {clock}"
 ctx = "format"
 screen = "scheduling overview"
 tier = "T3"
 args = { clock = "str" }
+state = "reviewed"
 note = "When the next booking starts, if today, e.g. \"Today 2:30 p.m.\". {clock} is the time of day."
 
 [overview.tomorrow]
 en = "Tomorrow {clock}"
+fr = "Demain à {clock}"
 ctx = "format"
 screen = "scheduling overview"
 tier = "T3"
 args = { clock = "str" }
+state = "reviewed"
 note = "When the next booking starts, if tomorrow, e.g. \"Tomorrow 10:00 a.m.\". {clock} is the time of day."
 
 [overview.window]
 en = "{start} to {end}"
+fr = "{start} à {end}"
 ctx = "format"
 screen = "scheduling overview"
 tier = "T3"
 args = { start = "str", end = "str" }
+state = "reviewed"
 note = "One window of working hours, e.g. \"9:00 a.m. to 5:00 p.m.\". {start} and {end} are times of day."
 
 [priority.label]
 en = "Priority"
+fr = "Priorité"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "Label of a host's place in the rotation."
 
 [question.add_option]
 en = "Add option"
+fr = "Ajouter l'option"
 ctx = "button"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.add_title]
 en = "Add question"
+fr = "Ajouter une question"
 ctx = "title"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.added]
 en = "Question added"
+fr = "Question ajoutée"
 ctx = "toast"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.delete_body]
 en = "Customers stop being asked it. Answers already given stay on their bookings."
+fr = "Cette question ne sera plus posée aux clients. Les réponses déjà données restent dans leurs rendez-vous."
 ctx = "body"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.delete_confirm]
 en = "Delete question"
+fr = "Supprimer la question"
 ctx = "button"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.delete_title]
 en = "Delete question?"
+fr = "Supprimer la question?"
 ctx = "title"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.deleted]
 en = "Question deleted"
+fr = "Question supprimée"
 ctx = "toast"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.edit_title]
 en = "Edit question"
+fr = "Modifier la question"
 ctx = "title"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.label_label]
 en = "Label"
+fr = "Libellé"
 ctx = "label"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.label_missing]
 en = "Give the question a label."
+fr = "Donnez un libellé à la question."
 ctx = "error"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.label_placeholder]
 en = "What would you like to talk about?"
+fr = "De quoi aimeriez-vous discuter?"
 ctx = "placeholder"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.needs_option]
 en = "A Select question needs at least one option."
+fr = "Une question à liste déroulante a besoin d'au moins une option."
 ctx = "error"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.option_placeholder]
 en = "Add an option"
+fr = "Ajouter une option"
 ctx = "placeholder"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.options_hint]
 en = "What the customer can choose from."
+fr = "Ce que le client peut choisir."
 ctx = "body"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.options_label]
 en = "Options"
+fr = "Options"
 ctx = "label"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.position_hint]
 en = "Lower numbers are asked first."
+fr = "Les questions aux numéros les plus bas sont posées en premier."
 ctx = "body"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.position_invalid]
 en = "Position has to be a whole number, 0 or more."
+fr = "La position doit être un nombre entier, 0 ou plus."
 ctx = "error"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.position_label]
 en = "Position"
+fr = "Position"
 ctx = "label"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.required]
 en = "{type} · required"
+fr = "{type} · obligatoire"
 ctx = "format"
 screen = "scheduling event type"
 tier = "T3"
 args = { type = "str" }
+state = "reviewed"
 note = "A booking question's kind, for a question that must be answered. {type} is the kind."
 
 [question.required_toggle]
 en = "Required"
+fr = "Obligatoire"
 ctx = "label"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.save_button]
 en = "Save question"
+fr = "Enregistrer la question"
 ctx = "button"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.saved]
 en = "Question saved"
+fr = "Question enregistrée"
 ctx = "toast"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.type_checkbox]
 en = "Checkbox"
+fr = "Case à cocher"
 ctx = "label"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.type_label]
 en = "Type"
+fr = "Type"
 ctx = "label"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.type_select]
 en = "Select"
+fr = "Liste déroulante"
 ctx = "label"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [question.type_text]
 en = "Text"
+fr = "Texte"
 ctx = "label"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "In the dialog that edits the questions a booking page asks."
 
 [questions.empty]
 en = "No questions yet. Customers give their name, email and nothing else."
+fr = "Aucune question. Les clients donnent leur nom et leur courriel, rien de plus."
 ctx = "body"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
 note = "The questions dialog with no question: the booking page asks for a name and an address only."
 
 [questions.title]
 en = "Questions"
+fr = "Questions"
 ctx = "title"
 screen = "scheduling event type questions"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "The questions dialog's title, and the button that opens it."
 
 [range.to]
 en = "to"
+fr = "à"
 ctx = "label"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "Between a start and an end time field, as in \"9:00 to 17:00\"."
 
 [reassign.body]
 en = "The booking keeps its time. Both hosts get an email about the change."
+fr = "Le rendez-vous garde son heure. Les deux hôtes recevront un courriel à ce sujet."
 ctx = "body"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Under the heading: the time stays, and both hosts are emailed."
 
 [reassign.cancel]
 en = "Cancel"
+fr = "Annuler"
 ctx = "button"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Closes the host dialog without changing anything."
 
 [reassign.confirm]
 en = "Change host"
+fr = "Changer d'hôte"
 ctx = "button"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Confirms the change of host; also the button that opens the dialog."
 
 [reassign.done]
 en = "Host changed"
+fr = "Hôte changé"
 ctx = "toast"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Said once the booking has its new host."
 
 [reassign.host_label]
 en = "New host"
+fr = "Nouvel hôte"
 ctx = "label"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Label over the list of hosts to choose from."
 
 [reassign.no_hosts]
 en = "No other host can take it."
+fr = "Aucun autre hôte ne peut le prendre."
 ctx = "body"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Nobody else can take the booking: every other host is archived or already its host."
 
 [reassign.title]
 en = "Reassign this booking?"
+fr = "Réattribuer ce rendez-vous?"
 ctx = "title"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the dialog that hands a booking to another host."
 
 [reschedule.body]
 en = "The attendee gets an email with the new time."
+fr = "Le participant recevra un courriel avec la nouvelle heure."
 ctx = "body"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Under the heading: what the attendee receives when the booking moves."
 
 [reschedule.cancel]
 en = "Cancel"
+fr = "Annuler"
 ctx = "button"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Closes the move dialog without moving the booking."
 
 [reschedule.confirm]
 en = "Move booking"
+fr = "Reporter le rendez-vous"
 ctx = "button"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Confirms the move; also the button that opens the dialog."
 
 [reschedule.day_label]
 en = "Day"
+fr = "Jour"
 ctx = "label"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Label of the day picker."
 
 [reschedule.done]
 en = "Booking moved"
+fr = "Rendez-vous reporté"
 ctx = "toast"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Said once the booking moved, when its new time cannot be written out."
 
 [reschedule.done_at]
 en = "Booking moved to {when}"
+fr = "Rendez-vous reporté\u00A0: {when}"
 ctx = "toast"
 screen = "scheduling booking writes"
 tier = "T3"
 args = { when = "str" }
+state = "reviewed"
 note = "Said once the booking moved. {when} is its new date and time, already formatted."
 
 [reschedule.no_slots]
 en = "Nothing free that day. Try another."
+fr = "Aucune disponibilité ce jour-là. Essayez une autre date."
 ctx = "body"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "The chosen day has no free time."
 
 [reschedule.pick_time]
 en = "Pick a time."
+fr = "Choisissez une heure."
 ctx = "error"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "The confirm was pressed with no time chosen. Nothing was sent."
 
 [reschedule.time_label]
 en = "Time"
+fr = "Heure"
 ctx = "label"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Label over the day's free times."
 
 [reschedule.title]
 en = "Reschedule this booking?"
+fr = "Reporter ce rendez-vous?"
 ctx = "title"
 screen = "scheduling booking writes"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the dialog that moves a booking to another time."
 
 [rotation.hint]
 en = "Which host the next booking goes to."
+fr = "L'hôte qui recevra le prochain rendez-vous."
 ctx = "body"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "Under the rotation."
 
 [rotation.label]
 en = "Rotation"
+fr = "Rotation"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "Label of how round-robin hosts take turns."
 
 [rotation.strategy_even]
 en = "Even"
+fr = "Équilibrée"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "How round-robin hosts take turns."
 
 [rotation.strategy_priority]
 en = "Priority"
+fr = "Priorité"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "How round-robin hosts take turns."
 
 [rotation.strategy_soonest]
 en = "Soonest"
+fr = "Au plus tôt"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "How round-robin hosts take turns."
 
 [routing.mode_collective]
 en = "Collective"
+fr = "Collectif"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "How a booking is routed among an event type's hosts."
 
 [routing.mode_fixed]
 en = "Fixed"
+fr = "Fixe"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "How a booking is routed among an event type's hosts."
 
 [routing.mode_label]
 en = "Routing"
+fr = "Acheminement"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "Label of how bookings are routed among the hosts."
 
 [routing.mode_round_robin]
 en = "Round robin"
+fr = "À tour de rôle"
 ctx = "label"
 screen = "scheduling event type hosts"
 tier = "T3"
+state = "reviewed"
 note = "How a booking is routed among an event type's hosts."
 
 [section.subtitle_bookings]
 en = "Every booking in this workspace, upcoming and past"
+fr = "Tous les rendez-vous de cet espace de travail, à venir et passés"
 ctx = "body"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Second line of the bookings row in the list of sections: what the section holds."
 
 [section.subtitle_calendar]
 en = "The accounts bookings are written to and checked against"
+fr = "Les comptes où les rendez-vous sont inscrits et où les conflits sont vérifiés"
 ctx = "body"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Second line of the calendar row in the list of sections: what the section holds."
 
 [section.subtitle_developer]
 en = "API keys, connected apps and webhooks"
+fr = "Clés d'API, applications connectées et webhooks"
 ctx = "body"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Second line of the developer row in the list of sections: what the section holds."
 
 [section.subtitle_event_types]
 en = "The pages a customer can book, and how long each one runs"
+fr = "Les pages où un client peut réserver, et la durée de chaque rendez-vous"
 ctx = "body"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Second line of the event types row in the list of sections: what the section holds."
 
 [section.subtitle_hours]
 en = "The weekly hours you are bookable, and the dates you are not"
+fr = "Vos heures réservables de la semaine, et les dates où vous n'êtes pas réservable"
 ctx = "body"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Second line of the hours row in the list of sections: what the section holds."
 
 [section.subtitle_overview]
 en = "Your booking desk, and what is coming up"
+fr = "Votre centre de réservation et ce qui est à venir"
 ctx = "body"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Second line of the overview row in the list of sections: what the section holds."
 
 [section.subtitle_settings]
 en = "Your booking page, your booking assistant, and how the scheduler treats you"
+fr = "Votre page et votre assistante de réservation, et vos préférences"
 ctx = "body"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Second line of the settings row in the list of sections: what the section holds."
 
 [section.subtitle_team]
 en = "The hosts who can be booked, and the teams they route through"
+fr = "Les hôtes réservables et leurs équipes d'acheminement"
 ctx = "body"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Second line of the team row in the list of sections: what the section holds."
 
 [section.title_booking]
 en = "Booking"
+fr = "Rendez-vous"
 ctx = "title"
 screen = "scheduling booking"
 tier = "T3"
+state = "reviewed"
 note = "Title of the screen showing one booking."
 
 [section.title_bookings]
 en = "Bookings"
+fr = "Rendez-vous"
 ctx = "title"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Title of the bookings section of the booking scheduler, as the web dashboard names it."
 
 [section.title_calendar]
 en = "Calendar"
+fr = "Calendrier"
 ctx = "title"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Title of the calendar section of the booking scheduler, as the web dashboard names it."
 
 [section.title_developer]
 en = "Developer"
+fr = "Développeur"
 ctx = "title"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Title of the developer section of the booking scheduler, as the web dashboard names it."
 
 [section.title_event_type]
 en = "Event type"
+fr = "Type de rendez-vous"
 ctx = "title"
 screen = "scheduling event type"
 tier = "T3"
+state = "reviewed"
 note = "Title of the screen showing one event type (a kind of meeting customers can book)."
 
 [section.title_event_types]
 en = "Event types"
+fr = "Types de rendez-vous"
 ctx = "title"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Title of the event types section of the booking scheduler, as the web dashboard names it."
 
 [section.title_hours]
 en = "Working hours"
+fr = "Heures de disponibilité"
 ctx = "title"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Title of the hours section of the booking scheduler, as the web dashboard names it."
 
 [section.title_overview]
 en = "Overview"
+fr = "Vue d'ensemble"
 ctx = "title"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Title of the overview section of the booking scheduler, as the web dashboard names it."
 
 [section.title_settings]
 en = "Settings"
+fr = "Paramètres"
 ctx = "title"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Title of the settings section of the booking scheduler, as the web dashboard names it."
 
 [section.title_team]
 en = "Team"
+fr = "Équipe"
 ctx = "title"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Title of the team section of the booking scheduler, as the web dashboard names it."
 
 [sections.eyebrow]
 en = "Manage"
+fr = "Gérer"
 ctx = "label"
 screen = "scheduling hub"
 tier = "T3"
+state = "reviewed"
 note = "Heading over the list of the booking scheduler's sections, under the booking page card."
 
 [settings.assistant_enabled]
 en = "Booking assistant"
+fr = "Assistante de réservation"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.assistant_hint]
 en = "The assistant that answers questions on your booking page."
+fr = "L'assistante qui répond aux questions sur votre page de réservation."
 ctx = "a11y"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 note = "No \"and writes the notes\": meeting notes were retired with recording (2026-10-03)."
 
 [settings.assistant_instructions]
 en = "Extra instructions"
+fr = "Instructions supplémentaires"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.assistant_instructions_hint]
 en = "Extra instructions for the booking assistant. Up to 4000 characters."
+fr = "Instructions supplémentaires pour l'assistante de réservation. Jusqu'à 4000 caractères."
 ctx = "a11y"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.assistant_instructions_label]
 en = "Extra instructions for the booking assistant"
+fr = "Instructions supplémentaires pour l'assistante de réservation"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.assistant_instructions_placeholder]
 en = "We are closed on public holidays. Always ask which location the customer means."
+fr = "Nous sommes fermés les jours fériés. Demandez toujours de quelle succursale le client parle."
 ctx = "placeholder"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.assistant_instructions_too_long]
 en = "That is longer than 4000 characters."
+fr = "Ce texte dépasse 4000 caractères."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 
 [settings.assistant_toggle]
 en = "Turn the booking assistant on"
+fr = "Activer l'assistante de réservation"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.automation_done]
 en = "Booking assistant saved"
+fr = "Assistante de réservation enregistrée"
 ctx = "toast"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.automation_save]
 en = "Save booking assistant"
+fr = "Enregistrer l'assistante"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.automation_title]
 en = "Booking assistant"
+fr = "Assistante de réservation"
 ctx = "title"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 note = "The recording and notetaker switches that shared this sheet were retired with meeting recording (2026-10-03), as on the web's \"Booking assistant\" tab."
 
 [settings.avatar_label]
 en = "Profile picture"
+fr = "Photo de profil"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.banner_opacity_label]
 en = "Banner opacity"
+fr = "Opacité de la bannière"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.branding_banner]
 en = "Banner"
+fr = "Bannière"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.branding_business_name]
 en = "Business name"
+fr = "Nom de l'entreprise"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.branding_done]
 en = "Booking page saved"
+fr = "Page de réservation enregistrée"
 ctx = "toast"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.branding_locale]
 en = "Page language"
+fr = "Langue de la page"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.branding_logo]
 en = "Logo"
+fr = "Logo"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 
 [settings.branding_privacy]
 en = "Privacy policy link"
+fr = "Lien vers la politique de confidentialité"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.branding_save]
 en = "Save booking page"
+fr = "Enregistrer la page"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.branding_terms]
 en = "Terms link"
+fr = "Lien vers les conditions"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.branding_title]
 en = "Booking page"
+fr = "Page de réservation"
 ctx = "title"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.business_name_hint]
 en = "Shown at the top of every booking page."
+fr = "Affiché en haut de chaque page de réservation."
 ctx = "a11y"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.business_name_too_long]
 en = "That name is longer than 200 characters."
+fr = "Ce nom dépasse 200 caractères."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 
 [settings.date_format_dmy]
 en = "31/12/2026"
+fr = "31/12/2026"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A sample date showing the day-month-year order."
 
 [settings.date_format_mdy]
 en = "12/31/2026"
+fr = "12/31/2026"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A sample date showing the month-day-year order."
 
 [settings.date_format_required]
 en = "Choose how dates are written."
+fr = "Choisissez la façon d'écrire les dates."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 
 [settings.date_format_ymd]
 en = "2026-12-31"
+fr = "2026-12-31"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A sample date showing the year-month-day order."
 
 [settings.fallback_locale_hint]
 en = "The language a visitor gets when their browser asks for one we do not have."
+fr = "La langue affichée à un visiteur dont la langue demandée n'est pas prise en charge."
 ctx = "a11y"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.fallback_locale_required]
 en = "Choose the language the booking page falls back to."
+fr = "Choisissez la langue de repli de la page de réservation."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 
 [settings.image_choose]
 en = "Choose image"
+fr = "Choisir une image"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.image_hint]
 en = "JPEG, PNG, GIF or WebP, up to 5 MB."
+fr = "JPEG, PNG, GIF ou WebP, jusqu'à 5 Mo."
 ctx = "a11y"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.image_immediate]
 en = "Images save as soon as you choose or remove them."
+fr = "Le choix ou le retrait d'une image s'applique immédiatement."
 ctx = "body"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 note = "Says \"takes effect now\". Upload and remove are immediate on their own ops and are not undone by closing the sheet, the web says the same, and a picture that vanished from the public booking page because somebody tapped Remove and then Cancel is the surprise this line exists to prevent."
 
 [settings.image_remove]
 en = "Remove"
+fr = "Retirer"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.image_removed]
 en = "{label} removed"
+fr = "Image retirée\u00A0: {label}"
 ctx = "toast"
 screen = "scheduling settings writes"
 tier = "T3"
 args = { label = "str" }
+state = "reviewed"
 
 [settings.image_too_large]
 en = "That image is larger than 5 MB. Choose a smaller one."
+fr = "Cette image dépasse 5 Mo. Choisissez-en une plus petite."
 ctx = "body"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 note = "The only two checks a client can make, and both buy a better message rather than a guarantee, the fork sniffs the first 512 bytes, so a renamed svg still fails there. Svg is the one an operator will want for a logo and it is a script-bearing document; the route refuses it with a 415."
 
 [settings.image_unreadable]
 en = "That image could not be read. Choose another."
+fr = "Cette image n'a pas pu être lue. Choisissez-en une autre."
 ctx = "body"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 note = "A different answer from either of those: the picker handed back nothing readable, which is not a rejected type and not a rejected size. Collapsing the three leaves an operator re-picking the same file."
 
 [settings.image_uploaded]
 en = "{label} uploaded"
+fr = "Image téléversée\u00A0: {label}"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
 args = { label = "str" }
+state = "reviewed"
 
 [settings.image_wrong_type]
 en = "That file is not an image we can use. Choose a JPEG, PNG, GIF or WebP."
+fr = "Ce fichier n'est pas une image utilisable. Choisissez un fichier JPEG, PNG, GIF ou WebP."
 ctx = "body"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.legal_url_hint]
 en = "Linked in the footer of the booking page. Leave it empty for none."
+fr = "Affiché en lien au pied de la page de réservation. Laissez vide pour n'en afficher aucun."
 ctx = "a11y"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.locale_not_set]
 en = "Not set"
+fr = "Non défini"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Shown in place of the booking page language when the profile sets none."
 
 [settings.logo_height_hint]
 en = "In pixels, between 16 and 64."
+fr = "En pixels, entre 16 et 64."
 ctx = "a11y"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.logo_height_label]
 en = "Logo height"
+fr = "Hauteur du logo"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.logo_opacity_label]
 en = "Logo opacity"
+fr = "Opacité du logo"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.name_required]
 en = "Give your name."
+fr = "Indiquez votre nom."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 
 [settings.name_too_long]
 en = "That name is longer than 200 characters."
+fr = "Ce nom dépasse 200 caractères."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 note = "The same sentence as `businessNameTooLong` and a separate constant. Two catalog fields happen to share a ceiling and a wording today; one of them moving should not silently move the other."
 
 [settings.not_set]
 en = "Not set"
+fr = "Non défini"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.notifications_done]
 en = "Notifications saved"
+fr = "Notifications enregistrées"
 ctx = "toast"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.notifications_save]
 en = "Save notifications"
+fr = "Enregistrer les notifications"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.notifications_title]
 en = "Email notifications"
+fr = "Notifications par courriel"
 ctx = "title"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.notify_attendee_description]
 en = "When you are the one being booked into somebody else's meeting."
+fr = "Quand c'est vous qu'on inscrit à la rencontre de quelqu'un d'autre."
 ctx = "body"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Explains the first group of email notification switches: the ones about meetings other people book the operator into."
 
 [settings.notify_attendee_heading]
 en = "As an attendee"
+fr = "Comme participant"
 ctx = "title"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the first group of email notification switches."
 
 [settings.notify_cancellation]
 en = "A booking is cancelled"
+fr = "Un rendez-vous est annulé"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Email notification switch: tell me when a booking I attend is cancelled."
 
 [settings.notify_confirmation]
 en = "A booking is confirmed"
+fr = "Un rendez-vous est confirmé"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Email notification switch: tell me when a booking I attend is confirmed."
 
 [settings.notify_host_booking]
 en = "Somebody books you"
+fr = "Quelqu'un prend rendez-vous"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Email notification switch: tell me when somebody books one of my event types."
 
 [settings.notify_host_cancel]
 en = "Somebody cancels"
+fr = "Quelqu'un annule"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Email notification switch: tell me when somebody cancels a booking with me."
 
 [settings.notify_host_description]
 en = "When somebody books one of your event types."
+fr = "Quand quelqu'un réserve un de vos types de rendez-vous."
 ctx = "body"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Explains the second group of email notification switches: the ones about bookings made with the operator."
 
 [settings.notify_host_heading]
 en = "As a host"
+fr = "Comme hôte"
 ctx = "title"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Heading of the second group of email notification switches."
 
 [settings.notify_host_reschedule]
 en = "Somebody moves their booking"
+fr = "Quelqu'un reporte son rendez-vous"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Email notification switch: tell me when somebody moves a booking with me to another time."
 
 [settings.notify_reminder]
 en = "A booking is coming up"
+fr = "Un rendez-vous approche"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Email notification switch: remind me before a booking I attend."
 
 [settings.notify_reschedule]
 en = "A booking is moved"
+fr = "Un rendez-vous est reporté"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Email notification switch: tell me when a booking I attend moves to another time."
 
 [settings.opacity_hint]
 en = "A percentage, between 20 and 100."
+fr = "Un pourcentage, entre 20 et 100."
 ctx = "a11y"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.profile_date_format]
 en = "Date format"
+fr = "Format de date"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.profile_done]
 en = "Profile saved"
+fr = "Profil enregistré"
 ctx = "toast"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.profile_name]
 en = "Name"
+fr = "Nom"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.profile_save]
 en = "Save profile"
+fr = "Enregistrer le profil"
 ctx = "label"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.profile_time_format]
 en = "Time format"
+fr = "Format de l'heure"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.profile_timezone]
 en = "Timezone"
+fr = "Fuseau horaire"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.profile_title]
 en = "Your scheduler profile"
+fr = "Votre profil de réservation"
 ctx = "title"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.profile_week_start]
 en = "Week starts on"
+fr = "La semaine commence le"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 
 [settings.set]
 en = "Set"
+fr = "Défini"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "\"Set\"/\"Not set\" for an image rather than its URL. A logo's address is a long opaque string that tells an operator nothing they can act on, and the image itself is not what this read-only row is for."
 
 [settings.tab_assistant]
 en = "Booking assistant"
+fr = "Assistante de réservation"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Tab on the scheduling settings screen: the AI assistant that answers on the booking page."
 
 [settings.tab_booking_page]
 en = "Booking page"
+fr = "Page de réservation"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Tab on the scheduling settings screen: the public page customers book from."
 
 [settings.tab_notifications]
 en = "Your notifications"
+fr = "Vos notifications"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Tab on the scheduling settings screen: the operator's own email notification switches."
 
 [settings.tab_profile]
 en = "Your profile"
+fr = "Votre profil"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Tab on the scheduling settings screen: the operator's own scheduling profile (name, timezone, language)."
 
 [settings.time_format_12h]
 en = "12-hour (2:30 pm)"
+fr = "12 heures (2:30 pm)"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Choice of clock for the booking page: a 12-hour clock, with an example time in the parenthesis."
 
 [settings.time_format_24h]
 en = "24-hour (14:30)"
+fr = "24 heures (14:30)"
 ctx = "label"
 screen = "scheduling settings"
 tier = "T3"
+state = "reviewed"
 note = "Choice of clock for the booking page: a 24-hour clock, with an example time in the parenthesis. Keep the example in the clock's own form."
 
 [settings.time_format_required]
 en = "Choose 12-hour or 24-hour."
+fr = "Choisissez le format 12 heures ou 24 heures."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 
 [settings.timezone_required]
 en = "Choose your timezone."
+fr = "Choisissez votre fuseau horaire."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 
 [settings.url_not_absolute]
 en = "Give the full address, starting with https://"
+fr = "Indiquez l'adresse complète, qui commence par https://"
 ctx = "body"
 screen = "scheduling settings writes"
 tier = "T3"
+state = "reviewed"
 
 [settings.url_too_long]
 en = "That link is too long."
+fr = "Ce lien est trop long."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 
 [settings.week_start_required]
 en = "Choose the day your week starts on."
+fr = "Choisissez le jour où commence votre semaine."
 ctx = "error"
 screen = "scheduling settings writes"
 tier = "T2"
+state = "reviewed"
 
 [settings.whole_number_between]
 en = "Give a whole number between {min} and {max}."
+fr = "Indiquez un nombre entier entre {min} et {max}."
 ctx = "body"
 screen = "scheduling settings writes"
 tier = "T3"
 args = { min = "int", max = "int" }
+state = "reviewed"
 
 [state.active]
 en = "Active"
+fr = "Actif"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Badge: the event type can be booked."
 
 [state.archived]
 en = "Archived"
+fr = "Archivé"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Badge: the event type is archived."
 
 [state.inactive]
 en = "Inactive"
+fr = "Inactif"
 ctx = "label"
 screen = "scheduling event types"
 tier = "T3"
+state = "reviewed"
 note = "Badge: the event type is switched off."
 
 [stranded.eyebrow]
 en = "Someone who has left still has bookings"
+fr = "Une personne partie a encore des rendez-vous"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 
 [team.add]
 en = "Add member"
+fr = "Ajouter le membre"
 ctx = "button"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.add_done]
 en = "Host added to the team"
+fr = "Hôte ajouté à l'équipe"
 ctx = "toast"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.add_label]
 en = "Host"
+fr = "Hôte"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.add_none]
 en = "Every host is already in this team."
+fr = "Tous les hôtes font déjà partie de cette équipe."
 ctx = "body"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.add_placeholder]
 en = "Choose a host"
+fr = "Choisissez un hôte"
 ctx = "placeholder"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.add_required]
 en = "Choose a host to add."
+fr = "Choisissez un hôte à ajouter."
 ctx = "error"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 
 [team.archive]
 en = "Archive account"
+fr = "Archiver le compte"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.archive_blocked]
 en = "Reassign or cancel their upcoming bookings first."
+fr = "Réattribuez ou annulez d'abord ses rendez-vous à venir."
 ctx = "body"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 note = "The archive is blocked until the upcoming-booking count has been read and is zero, which is the web's `canArchive` and not a caution of our own. The fork refuses with a 409 while the user still hosts anything, so offering the button before the read has landed offers a refusal."
 
 [team.archive_body]
 en = "They can no longer sign in, they are skipped in routing, and their event types stop taking bookings. The account is kept."
+fr = "Cette personne ne pourra plus se connecter, sera exclue de l'acheminement et ses types de rendez-vous ne seront plus réservables. Le compte est conservé."
 ctx = "body"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 note = "Says what a soft delete actually does. The row and its links survive; the member cannot sign in, is skipped in routing, and their event types are deactivated."
 
 [team.archive_confirm]
 en = "Archive account"
+fr = "Archiver le compte"
 ctx = "button"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 
 [team.archive_counting]
 en = "Checking their upcoming bookings…"
+fr = "Vérification de ses rendez-vous à venir…"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.archive_done]
 en = "Scheduler account closed"
+fr = "Compte de réservation fermé"
 ctx = "toast"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.archive_done_named]
 en = "{name}'s scheduler account is closed"
+fr = "Le compte de réservation de {name} est fermé"
 ctx = "toast"
 screen = "scheduling team writes"
 tier = "T3"
 args = { name = "str" }
+state = "reviewed"
 note = "{name} is a person's name."
 
 [team.archive_keep]
 en = "Keep account"
+fr = "Conserver le compte"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.archive_refused]
 en = "That account could not be archived. It may still hold upcoming bookings, it may be the workspace owner, or it may be archived already."
+fr = "Ce compte n'a pas pu être archivé. Il se peut qu'il ait encore des rendez-vous à venir, qu'il soit celui du propriétaire de l'espace de travail ou qu'il soit déjà archivé."
 ctx = "error"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 note = "Enumerates because this client cannot tell the four refusals apart. The fork answers 409 (still hosting bookings), 403 (not the owner), 400 (is the workspace owner, or already archived) and 404 (gone), and every one of them arrives as `SchedulingAdminError/unknown`, the status is collapsed by `error(forStatus:code:)` before a screen sees it."
 
 [team.archive_title]
 en = "Archive this account?"
+fr = "Archiver ce compte?"
 ctx = "title"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 
 [team.archive_title_named]
 en = "Archive {name}'s account?"
+fr = "Archiver le compte de {name}?"
 ctx = "title"
 screen = "scheduling team writes"
 tier = "T2"
 args = { name = "str" }
+state = "reviewed"
 note = "{name} is a person's name."
 
 [team.close]
 en = "Done"
+fr = "Terminé"
 ctx = "button"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 note = "The edit sheet's way out is \"Done\", not \"Cancel\", because its writes have already landed. Every control on it saves on its own button; calling the dismissal \"Cancel\" would promise an undo that does not exist."
 
 [team.create]
 en = "Create team"
+fr = "Créer une équipe"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.create_done]
 en = "Team created"
+fr = "Équipe créée"
 ctx = "toast"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.create_title]
 en = "New team"
+fr = "Nouvelle équipe"
 ctx = "title"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.delete_body]
 en = "Event types that route to this team stop rotating through it."
+fr = "Les types de rendez-vous associés à cette équipe cesseront d'être répartis entre ses hôtes."
 ctx = "body"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 
 [team.delete_confirm]
 en = "Delete team"
+fr = "Supprimer l'équipe"
 ctx = "button"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 
 [team.delete_done]
 en = "Team deleted"
+fr = "Équipe supprimée"
 ctx = "toast"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.delete_keep]
 en = "Keep team"
+fr = "Conserver l'équipe"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.delete_title]
 en = "Delete this team?"
+fr = "Supprimer cette équipe?"
 ctx = "title"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 
 [team.delete_title_named]
 en = "Delete {name}?"
+fr = "Supprimer {name}?"
 ctx = "title"
 screen = "scheduling team writes"
 tier = "T2"
 args = { name = "str" }
+state = "reviewed"
 note = "{name} is a scheduling team's name."
 
 [team.members_button]
 en = "Hosts"
+fr = "Hôtes"
 ctx = "button"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 note = "The word on the control that opens the member editor. The sheet itself is titled with the team's name, so the button has to say what it leads to rather than repeat the row it sits on."
 
 [team.members_empty]
 en = "No hosts yet. Nothing routes through this team until one is added."
+fr = "Aucun hôte pour l'instant. Aucun rendez-vous ne passe par cette équipe avant l'ajout d'un hôte."
 ctx = "body"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.members_hint]
 en = "A lower routing priority is offered a booking first."
+fr = "Le rendez-vous est d'abord proposé à la priorité d'acheminement la plus basse."
 ctx = "a11y"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.name_label]
 en = "Name"
+fr = "Nom"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.name_placeholder]
 en = "Front desk"
+fr = "Réception"
 ctx = "placeholder"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.name_required]
 en = "Give the team a name."
+fr = "Donnez un nom à l'équipe."
 ctx = "error"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 note = "The one client-side rule, and it is the web's: trimmed, non-empty."
 
 [team.name_too_long]
 en = "That name is longer than 200 characters."
+fr = "Ce nom dépasse 200 caractères."
 ctx = "error"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 note = "The catalog's own ceiling (`z.string().min(1).max(200)`), mirrored so the button is honest rather than to re-validate the server."
 
 [team.priority_done]
 en = "Routing priority saved"
+fr = "Priorité d'acheminement enregistrée"
 ctx = "toast"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.priority_invalid]
 en = "A routing priority is a whole number, zero or more."
+fr = "Une priorité d'acheminement est un nombre entier, zéro ou plus."
 ctx = "error"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 note = "Refuses an empty field and a decimal rather than coercing either, which is the web's `parsePriority` rule. `Int(\"\")` is nil in Swift and `Number(\"\")` is 0 in JavaScript, so the web needs an explicit empty check where this does not, the sentence is what has to match."
 
 [team.priority_label]
 en = "Routing priority"
+fr = "Priorité d'acheminement"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.remove]
 en = "Remove"
+fr = "Retirer"
 ctx = "button"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 
 [team.remove_body]
 en = "Bookings stop routing to them through this team. Their routing priority is not kept."
+fr = "Cette équipe ne lui acheminera plus de rendez-vous. Sa priorité d'acheminement ne sera pas conservée."
 ctx = "body"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 
 [team.remove_done]
 en = "Host removed from the team"
+fr = "Hôte retiré de l'équipe"
 ctx = "toast"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.remove_keep]
 en = "Keep them"
+fr = "Ne pas retirer"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.remove_title]
 en = "Remove this host?"
+fr = "Retirer cet hôte?"
 ctx = "title"
 screen = "scheduling team writes"
 tier = "T2"
+state = "reviewed"
 note = "A confirmation the web does not have, and the divergence is deliberate. The web team page removes a member on one click."
 
 [team.rename]
 en = "Save name"
+fr = "Enregistrer le nom"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.rename_done]
 en = "Team renamed"
+fr = "Équipe renommée"
 ctx = "toast"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.role_agency]
 en = "Agency"
+fr = "Agence"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 note = "A workspace member's role, as the scheduling team screen names it: the agency that runs the workspace (an administrator)."
 
 [team.role_client]
 en = "Client"
+fr = "Client"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
+same_ok = true
 note = "A workspace member's role, as the scheduling team screen names it: a member of the client business."
 
 [team.role_removed]
 en = "Removed from the workspace"
+fr = "Retiré de l'espace de travail"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 note = "Shown in the role column for a scheduling host who is no longer a member of the workspace."
 
 [team.role_viewer]
 en = "Viewer"
+fr = "Lecteur"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 note = "A workspace member's role, as the scheduling team screen names it: read-only access."
 
 [team.save_priority]
 en = "Save priority"
+fr = "Enregistrer la priorité"
 ctx = "label"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 
 [team.slug_read_only_hint]
 en = "The booking-page address cannot be changed here."
+fr = "L'adresse de la page de réservation n'est pas modifiable ici."
 ctx = "a11y"
 screen = "scheduling team writes"
 tier = "T3"
+state = "reviewed"
 note = "The slug is not editable here, and that is the web's decision carried over rather than an unfinished form. `teams.patch` accepts a slug, and the fork routes public team booking pages by slug, so re-slugging breaks every link already handed out."
 
 [team.state_absent]
 en = "Not set up yet"
+fr = "Pas encore configuré"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 note = "Badge on a workspace member who has no scheduling account yet."
 
 [team.state_archived]
 en = "Archived"
+fr = "Archivé"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 note = "Badge on a scheduling host whose account is archived and takes no bookings."
 
 [team.state_host]
 en = "Host"
+fr = "Hôte"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 note = "Badge on a member whose scheduling account takes bookings."
 
 [team.stranded_many]
 en = "{subject} are no longer in this workspace but still hold upcoming bookings, so the scheduler kept their accounts open. Reassign or cancel those bookings, then archive the accounts."
+fr = "{subject} ne font plus partie de cet espace de travail, mais ont encore des rendez-vous à venir; le système de réservation a donc gardé leurs comptes ouverts. Réattribuez ou annulez ces rendez-vous, puis archivez les comptes."
 ctx = "body"
 screen = "scheduling team writes"
 tier = "T3"
 args = { subject = "str" }
+state = "reviewed"
 note = "{subject} is two or more names joined as a list (A, B and C)."
 
 [team.stranded_one]
 en = "{subject} is no longer in this workspace but still holds upcoming bookings, so the scheduler kept their account open. Reassign or cancel those bookings, then archive the account."
+fr = "{subject} ne fait plus partie de cet espace de travail, mais a encore des rendez-vous à venir; le système de réservation a donc gardé son compte ouvert. Réattribuez ou annulez ces rendez-vous, puis archivez le compte."
 ctx = "body"
 screen = "scheduling team writes"
 tier = "T3"
 args = { subject = "str" }
+state = "reviewed"
 note = "{subject} is one person's name."
 
 [teams.empty]
 en = "No teams yet."
+fr = "Aucune équipe."
 ctx = "body"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 
 [teams.eyebrow]
 en = "Teams"
+fr = "Équipes"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 
 [teams.subtitle]
 en = "A team rotates bookings through its hosts, in routing-priority order."
+fr = "Une équipe répartit les rendez-vous entre ses hôtes, selon la priorité d'acheminement."
 ctx = "title"
 screen = "scheduling team"
 tier = "T3"
+state = "reviewed"
 
 [test.email_not_sent]
 en = "The booking system did not send the test email."
+fr = "Le système de réservation n'a pas envoyé le courriel test."
 ctx = "toast"
 screen = "scheduling event type actions"
 tier = "T3"
+state = "reviewed"
 note = "The booking system answered but did not send the test email."
 
 [test.email_sent]
 en = "Test email sent to {address}"
+fr = "Courriel d'essai envoyé à {address}"
 ctx = "toast"
 screen = "scheduling event type actions"
 tier = "T3"
 args = { address = "str" }
+state = "reviewed"
 note = "The test email was handed over for sending. {address} is where it went."
 
 [time.format_error]
 en = "Enter a time as HH:MM."
+fr = "Entrez une heure au format HH:MM."
 ctx = "error"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "A time is not written as HH:MM. Nothing was sent."
 
 [time.order_error]
 en = "The end has to be after the start."
+fr = "La fin doit être après le début."
 ctx = "error"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "A window ends before it starts. Nothing was sent."
 
 [time.overlap_error]
 en = "These hours overlap another range on this day."
+fr = "Ces heures chevauchent une autre plage de cette journée."
 ctx = "error"
 screen = "scheduling hours editor"
 tier = "T3"
+state = "reviewed"
 note = "A window overlaps another on the same day. Nothing was sent."
 
 [times.in]
 en = "Times in {zone}"
+fr = "Fuseau horaire\u00A0: {zone}"
 ctx = "label"
 screen = "scheduling"
 tier = "T3"
 args = { zone = "str" }
+state = "reviewed"
 note = "Above every list of times: the IANA time zone they are shown in, the one on the member's scheduler profile (for example America/Toronto). {zone} is the zone's identifier, never translated."
 
 [unknown.time]
 en = "Unknown"
+fr = "Inconnu"
 ctx = "label"
 screen = "scheduling"
 tier = "T3"
+state = "reviewed"
 note = "Shown in place of a date and time the service sent in a form that cannot be read."
 
 [webhook.add_action]
 en = "Add webhook"
+fr = "Ajouter un webhook"
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.add_title]
 en = "Add webhook"
+fr = "Ajouter un webhook"
 ctx = "title"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.added]
 en = "Webhook added"
+fr = "Webhook ajouté"
 ctx = "toast"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.delete_action]
 en = "Delete webhook"
+fr = "Supprimer le webhook"
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T2"
+state = "reviewed"
 
 [webhook.delete_confirm]
 en = "It stops receiving booking changes now, and its signing secret cannot be recovered."
+fr = "Il cessera aussitôt de recevoir les changements de rendez-vous; son secret de signature sera irrécupérable."
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T2"
+state = "reviewed"
 
 [webhook.delete_prompt]
 en = "Delete this webhook?"
+fr = "Supprimer ce webhook?"
 ctx = "placeholder"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.dropped_events_line]
 en = "Saving will stop sending {events}. This app does not know those events, so it cannot send them back."
+fr = "Si vous enregistrez, l'envoi de ces événements s'arrêtera\u00A0: {events}. Cette application ne les connaît pas et ne peut donc pas les rétablir."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
 args = { events = "str" }
+state = "reviewed"
 note = "{events} is a comma-separated list of webhook event names, as the server spells them."
 
 [webhook.edit_title]
 en = "Edit webhook"
+fr = "Modifier le webhook"
 ctx = "title"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.events_hint]
 en = "What to send. Each one is a separate delivery."
+fr = "Ce qu'il faut envoyer. Chacun fait l'objet d'un envoi distinct."
 ctx = "a11y"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.events_label]
 en = "Events"
+fr = "Événements"
 ctx = "label"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.events_missing]
 en = "Choose at least one event."
+fr = "Choisissez au moins un événement."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.fields_hint]
 en = "Which parts of the booking each delivery carries."
+fr = "Les parties du rendez-vous incluses dans chaque envoi."
 ctx = "a11y"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.fields_label]
 en = "Data to send"
+fr = "Données à envoyer"
 ctx = "label"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.personal_data]
 en = "Personal data"
+fr = "Renseignements personnels"
 ctx = "label"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.save_action]
 en = "Save changes"
+fr = "Enregistrer les modifications"
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.saving]
 en = "Saving…"
+fr = "Sauvegarde…"
 ctx = "label"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.secret_copy_action]
 en = "Copy signing secret"
+fr = "Copier le secret"
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.secret_note]
 en = "Every delivery to {url} is signed with it, in the X-Calnode-Signature header."
+fr = "Chaque envoi vers {url} est signé avec ce secret, dans l'en-tête X-Calnode-Signature."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
 args = { url = "str" }
+state = "reviewed"
 
 [webhook.secret_title]
 en = "Your signing secret"
+fr = "Votre secret de signature"
 ctx = "title"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.updated]
 en = "Webhook updated"
+fr = "Webhook mis à jour"
 ctx = "toast"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.url_fixed]
 en = "The URL cannot be changed. Delete this webhook and add another to move it."
+fr = "L'URL ne peut pas être modifiée. Supprimez ce webhook et ajoutez-en un autre pour la déplacer."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 note = "The URL is not editable, because `webhooks.patch` takes only `events` and `fields`. Offering a box that silently kept the old value is worse than not offering one: the person believes deliveries have moved."
 
 [webhook.url_hint]
 en = "Where each delivery is posted. https only."
+fr = "Où chaque envoi est transmis. https seulement."
 ctx = "a11y"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.url_label]
 en = "Endpoint URL"
+fr = "URL du point d'accès"
 ctx = "label"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.url_missing]
 en = "Give the webhook a URL."
+fr = "Donnez une URL au webhook."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.url_not_a_url]
 en = "That is not a URL. It has to start with https://."
+fr = "Ce n'est pas une URL. Elle doit commencer par https://."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.url_not_https]
 en = "The URL has to start with https://."
+fr = "L'URL doit commencer par https://."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [webhook.url_private]
 en = "That address is not reachable from the internet. Use a public https URL."
+fr = "Cette adresse n'est pas joignable depuis Internet. Utilisez une URL https publique."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
+state = "reviewed"
 
 [weekday.friday]
 en = "Friday"
+fr = "Vendredi"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A day of the week, standing alone, as a row of the working hours."
 
 [weekday.monday]
 en = "Monday"
+fr = "Lundi"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A day of the week, standing alone, as a row of the working hours."
 
 [weekday.saturday]
 en = "Saturday"
+fr = "Samedi"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A day of the week, standing alone, as a row of the working hours."
 
 [weekday.short_fri]
 en = "Fri"
+fr = "ven."
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "The abbreviated weekday name (Fri), in the working hours summary (\"Mon to Fri, 9:00 to 17:00\")."
 
 [weekday.short_mon]
 en = "Mon"
+fr = "lun."
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "The abbreviated weekday name (Mon), in the working hours summary (\"Mon to Fri, 9:00 to 17:00\")."
 
 [weekday.short_sat]
 en = "Sat"
+fr = "sam."
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "The abbreviated weekday name (Sat), in the working hours summary (\"Mon to Fri, 9:00 to 17:00\")."
 
 [weekday.short_sun]
 en = "Sun"
+fr = "dim."
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "The abbreviated weekday name (Sun), in the working hours summary (\"Mon to Fri, 9:00 to 17:00\")."
 
 [weekday.short_thu]
 en = "Thu"
+fr = "jeu."
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "The abbreviated weekday name (Thu), in the working hours summary (\"Mon to Fri, 9:00 to 17:00\")."
 
 [weekday.short_tue]
 en = "Tue"
+fr = "mar."
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "The abbreviated weekday name (Tue), in the working hours summary (\"Mon to Fri, 9:00 to 17:00\")."
 
 [weekday.short_wed]
 en = "Wed"
+fr = "mer."
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "The abbreviated weekday name (Wed), in the working hours summary (\"Mon to Fri, 9:00 to 17:00\")."
 
 [weekday.sunday]
 en = "Sunday"
+fr = "Dimanche"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A day of the week, standing alone, as a row of the working hours."
 
 [weekday.thursday]
 en = "Thursday"
+fr = "Jeudi"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A day of the week, standing alone, as a row of the working hours."
 
 [weekday.tuesday]
 en = "Tuesday"
+fr = "Mardi"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A day of the week, standing alone, as a row of the working hours."
 
 [weekday.wednesday]
 en = "Wednesday"
+fr = "Mercredi"
 ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
+state = "reviewed"
 note = "A day of the week, standing alone, as a row of the working hours."

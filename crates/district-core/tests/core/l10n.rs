@@ -1,9 +1,8 @@
 //! The core's words in the language the app chose: English exactly as it has
-//! always been, and French where the catalog has it. There is no French yet, so
-//! the French arm of every sentence is the English; what these tests hold is
-//! which path each language takes: the service's English never reaches a French
-//! screen, a known error code reads as the catalog's sentence for it, and numbers
-//! are written the French way.
+//! always been, and French from the catalog, which has French for every entry.
+//! What these tests hold is which path each language takes: the service's
+//! English never reaches a French screen, a known error code reads as the
+//! catalog's sentence for it, and numbers are written the French way.
 //!
 //! Each test sets French for its own thread only ([`with_locale`]), so the rest
 //! of the suite, which runs beside it in this process, stays in English.
@@ -58,7 +57,11 @@ fn french_reads_a_known_code_as_the_catalog_sentence_never_the_services_english(
 
 #[test]
 fn french_reads_an_unknown_code_or_none_as_the_screens_own_words() {
-    let ours = english(|| FailureText::from_api_error(&refused(None, None))).message;
+    let ours = french(|| FailureText::from_api_error(&refused(None, None))).message;
+    assert_ne!(
+        ours,
+        english(|| FailureText::from_api_error(&refused(None, None))).message
+    );
     for error in [
         refused(Some("SOMETHING_NEW"), Some("A sentence in English.")),
         refused(None, Some("A sentence in English.")),
@@ -120,18 +123,13 @@ fn chart_labels_and_percentages_follow_the_language() {
     };
     let (english_funnel, english_conversion) = english(|| (report.funnel(), report.conversion()));
     let (french_funnel, french_conversion) = french(|| (report.funnel(), report.conversion()));
-    // The stored names are the vocabulary's English, so the labels read the same
-    // until the French is written; the percentage takes its French space now.
-    assert_eq!(
-        english_funnel
-            .iter()
-            .map(|bar| &bar.label)
-            .collect::<Vec<_>>(),
-        french_funnel
-            .iter()
-            .map(|bar| &bar.label)
-            .collect::<Vec<_>>()
-    );
+    // The stored names are the vocabulary's English; each bar reads as its French
+    // label, and the percentage takes its French space.
+    assert_eq!(english_funnel.len(), french_funnel.len());
+    assert!(!french_funnel.is_empty());
+    for (english_bar, french_bar) in english_funnel.iter().zip(&french_funnel) {
+        assert_ne!(english_bar.label, french_bar.label);
+    }
     assert!(english_conversion.ends_with('%') && !english_conversion.contains(NBSP));
     assert!(
         french_conversion.ends_with(&format!("{NBSP}%")),
@@ -150,7 +148,10 @@ fn a_short_numbers_list_names_its_carriers_in_either_language() {
         refreshing: false,
     };
     let english_note = english(|| numbers.partial_note()).unwrap();
-    assert_eq!(french(|| numbers.partial_note()).unwrap(), english_note);
+    let french_note = french(|| numbers.partial_note()).unwrap();
+    assert!(english_note.contains("telnyx"), "{english_note}");
+    assert!(french_note.contains("telnyx"), "{french_note}");
+    assert_ne!(french_note, english_note);
 }
 
 #[test]

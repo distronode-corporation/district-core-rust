@@ -5,37 +5,47 @@ apple = false
 
 [report.accepted]
 en = "Reported. We'll review it."
+fr = "Signalé. Nous allons l'examiner."
 ctx = "body"
 screen = "report"
 tier = "T2"
+state = "reviewed"
 note = "Shown in the report dialog once the report reached Distronode. It must read as accepted: a dialog that closed silently looks the same as one that failed."
 
 [report.already_reported]
 en = "You have already reported this. We'll review it."
+fr = "Vous avez déjà fait ce signalement. Nous allons l'examiner."
 ctx = "body"
 screen = "report"
 tier = "T2"
+state = "reviewed"
 note = "Shown in the report dialog when Distronode already had this report. A success, not a failure: reporting it as a failure invites a second ticket."
 
 [report.cancel]
 en = "Cancel"
+fr = "Annuler"
 ctx = "button"
 screen = "report"
 tier = "T2"
+state = "reviewed"
 note = "Closes the report dialog without sending anything."
 
 [report.draft_open]
 en = "Send or discard the support request you are writing in Support, then report this."
+fr = "Envoyez ou abandonnez la demande de soutien que vous rédigez dans Soutien, puis signalez ce contenu."
 ctx = "error"
 screen = "report"
 tier = "T2"
+state = "reviewed"
 note = "Shown in the report dialog, over the note it keeps, when the member has a support request half written in the Support area: sending the report would wipe it. 'Support' is the name of that area of the app."
 
 [report.intro]
 en = "Tell us what is wrong with this AI-generated content. We will review it."
+fr = "Dites-nous ce qui ne va pas dans ce contenu généré par l'IA. Nous l'examinerons."
 ctx = "body"
 screen = "report"
 tier = "T2"
+state = "reviewed"
 note = "The first line of the report dialog, under its title. 'We' is Distronode."
 
 [report.no_note]
@@ -48,16 +58,20 @@ note = "Sent to the District support desk inside the ticket, never shown on scre
 
 [report.note_label]
 en = "What is wrong (optional)"
+fr = "Ce qui ne va pas (facultatif)"
 ctx = "label"
 screen = "report"
 tier = "T2"
+state = "reviewed"
 note = "The label of the report dialog's note field. The note is optional."
 
 [report.pending]
 en = "Reported. We have it and it is catching up."
+fr = "Signalé. Nous l'avons reçu; le traitement est en cours."
 ctx = "body"
 screen = "report"
 tier = "T2"
+state = "reviewed"
 note = "Shown in the report dialog when Distronode received the report and its ticket number is still to come. A success."
 
 [report.preamble_linux]
@@ -139,9 +153,11 @@ note = "Sent to the District support desk inside the ticket, never shown on scre
 
 [report.send]
 en = "Send"
+fr = "Envoyer"
 ctx = "button"
 screen = "report"
 tier = "T2"
+state = "reviewed"
 note = "Sends the report from the report dialog."
 
 [report.subject]
@@ -154,7 +170,9 @@ note = "Sent to the District support desk as the ticket's subject, never shown o
 
 [report.title]
 en = "Report AI-generated content"
+fr = "Signaler un contenu généré par l'IA"
 ctx = "title"
 screen = "report"
 tier = "T2"
+state = "reviewed"
 note = "The title of the dialog that reports a call summary, a contact's dossier, a reply or an answer the AI wrote."

@@ -3,14 +3,14 @@
 use crate::Locale;
 
 /// True when every entry has French; until then the French arm carries the English.
-pub const FR_COMPLETE: bool = false;
+pub const FR_COMPLETE: bool = true;
 
 /// `wire.analytics_sentiment.friction_sentiment`
 #[must_use]
 pub fn wire_analytics_sentiment_friction_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Friction Sentiment",
-        Locale::FrCa => "Friction Sentiment",
+        Locale::FrCa => "Sentiment de friction",
     }
 }
 
@@ -19,7 +19,7 @@ pub fn wire_analytics_sentiment_friction_sentiment(l: Locale) -> &'static str {
 pub fn wire_analytics_sentiment_neutral_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Neutral Sentiment",
-        Locale::FrCa => "Neutral Sentiment",
+        Locale::FrCa => "Sentiment neutre",
     }
 }
 
@@ -28,7 +28,7 @@ pub fn wire_analytics_sentiment_neutral_sentiment(l: Locale) -> &'static str {
 pub fn wire_analytics_sentiment_positive_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "Positive Sentiment",
-        Locale::FrCa => "Positive Sentiment",
+        Locale::FrCa => "Sentiment positif",
     }
 }
 
@@ -37,7 +37,7 @@ pub fn wire_analytics_sentiment_positive_sentiment(l: Locale) -> &'static str {
 pub fn wire_billing_invoice_status_draft(l: Locale) -> &'static str {
     match l {
         Locale::En => "Draft",
-        Locale::FrCa => "Draft",
+        Locale::FrCa => "Brouillon",
     }
 }
 
@@ -46,7 +46,7 @@ pub fn wire_billing_invoice_status_draft(l: Locale) -> &'static str {
 pub fn wire_billing_invoice_status_open(l: Locale) -> &'static str {
     match l {
         Locale::En => "Open",
-        Locale::FrCa => "Open",
+        Locale::FrCa => "Ouverte",
     }
 }
 
@@ -55,7 +55,7 @@ pub fn wire_billing_invoice_status_open(l: Locale) -> &'static str {
 pub fn wire_billing_invoice_status_paid(l: Locale) -> &'static str {
     match l {
         Locale::En => "Paid",
-        Locale::FrCa => "Paid",
+        Locale::FrCa => "Payée",
     }
 }
 
@@ -64,7 +64,7 @@ pub fn wire_billing_invoice_status_paid(l: Locale) -> &'static str {
 pub fn wire_billing_invoice_status_uncollectible(l: Locale) -> &'static str {
     match l {
         Locale::En => "Uncollectible",
-        Locale::FrCa => "Uncollectible",
+        Locale::FrCa => "Irrécouvrable",
     }
 }
 
@@ -73,7 +73,7 @@ pub fn wire_billing_invoice_status_uncollectible(l: Locale) -> &'static str {
 pub fn wire_billing_invoice_status_void(l: Locale) -> &'static str {
     match l {
         Locale::En => "Void",
-        Locale::FrCa => "Void",
+        Locale::FrCa => "Annulée",
     }
 }
 
@@ -82,7 +82,7 @@ pub fn wire_billing_invoice_status_void(l: Locale) -> &'static str {
 pub fn wire_billing_subscription_status_active(l: Locale) -> &'static str {
     match l {
         Locale::En => "Active",
-        Locale::FrCa => "Active",
+        Locale::FrCa => "Actif",
     }
 }
 
@@ -91,7 +91,7 @@ pub fn wire_billing_subscription_status_active(l: Locale) -> &'static str {
 pub fn wire_billing_subscription_status_past_due(l: Locale) -> &'static str {
     match l {
         Locale::En => "Payment past due",
-        Locale::FrCa => "Payment past due",
+        Locale::FrCa => "Paiement en retard",
     }
 }
 
@@ -100,7 +100,7 @@ pub fn wire_billing_subscription_status_past_due(l: Locale) -> &'static str {
 pub fn wire_billing_subscription_status_trialing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Trial",
-        Locale::FrCa => "Trial",
+        Locale::FrCa => "Essai",
     }
 }
 
@@ -109,7 +109,7 @@ pub fn wire_billing_subscription_status_trialing(l: Locale) -> &'static str {
 pub fn wire_billing_subscription_status_unpaid(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unpaid",
-        Locale::FrCa => "Unpaid",
+        Locale::FrCa => "Impayé",
     }
 }
 
@@ -118,7 +118,7 @@ pub fn wire_billing_subscription_status_unpaid(l: Locale) -> &'static str {
 pub fn wire_call_direction_inbound(l: Locale) -> &'static str {
     match l {
         Locale::En => "Inbound",
-        Locale::FrCa => "Inbound",
+        Locale::FrCa => "Entrant",
     }
 }
 
@@ -127,7 +127,7 @@ pub fn wire_call_direction_inbound(l: Locale) -> &'static str {
 pub fn wire_call_direction_outbound(l: Locale) -> &'static str {
     match l {
         Locale::En => "Outbound",
-        Locale::FrCa => "Outbound",
+        Locale::FrCa => "Sortant",
     }
 }
 
@@ -136,7 +136,7 @@ pub fn wire_call_direction_outbound(l: Locale) -> &'static str {
 pub fn wire_call_status_abandoned(l: Locale) -> &'static str {
     match l {
         Locale::En => "Abandoned",
-        Locale::FrCa => "Abandoned",
+        Locale::FrCa => "Abandonné",
     }
 }
 
@@ -145,7 +145,7 @@ pub fn wire_call_status_abandoned(l: Locale) -> &'static str {
 pub fn wire_call_status_busy(l: Locale) -> &'static str {
     match l {
         Locale::En => "Busy",
-        Locale::FrCa => "Busy",
+        Locale::FrCa => "Occupé",
     }
 }
 
@@ -154,7 +154,7 @@ pub fn wire_call_status_busy(l: Locale) -> &'static str {
 pub fn wire_call_status_canceled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Canceled",
-        Locale::FrCa => "Canceled",
+        Locale::FrCa => "Annulé",
     }
 }
 
@@ -163,7 +163,7 @@ pub fn wire_call_status_canceled(l: Locale) -> &'static str {
 pub fn wire_call_status_completed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Completed",
-        Locale::FrCa => "Completed",
+        Locale::FrCa => "Terminé",
     }
 }
 
@@ -172,7 +172,7 @@ pub fn wire_call_status_completed(l: Locale) -> &'static str {
 pub fn wire_call_status_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Failed",
-        Locale::FrCa => "Failed",
+        Locale::FrCa => "Échec",
     }
 }
 
@@ -181,7 +181,7 @@ pub fn wire_call_status_failed(l: Locale) -> &'static str {
 pub fn wire_call_status_in_progress(l: Locale) -> &'static str {
     match l {
         Locale::En => "In progress",
-        Locale::FrCa => "In progress",
+        Locale::FrCa => "En cours",
     }
 }
 
@@ -190,7 +190,7 @@ pub fn wire_call_status_in_progress(l: Locale) -> &'static str {
 pub fn wire_call_status_no_answer(l: Locale) -> &'static str {
     match l {
         Locale::En => "No answer",
-        Locale::FrCa => "No answer",
+        Locale::FrCa => "Sans réponse",
     }
 }
 
@@ -199,7 +199,7 @@ pub fn wire_call_status_no_answer(l: Locale) -> &'static str {
 pub fn wire_call_status_ringing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Ringing",
-        Locale::FrCa => "Ringing",
+        Locale::FrCa => "Sonnerie",
     }
 }
 
@@ -208,7 +208,7 @@ pub fn wire_call_status_ringing(l: Locale) -> &'static str {
 pub fn wire_call_status_unknown(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
-        Locale::FrCa => "Unknown",
+        Locale::FrCa => "Inconnu",
     }
 }
 
@@ -217,7 +217,7 @@ pub fn wire_call_status_unknown(l: Locale) -> &'static str {
 pub fn wire_call_type_inbound(l: Locale) -> &'static str {
     match l {
         Locale::En => "Inbound",
-        Locale::FrCa => "Inbound",
+        Locale::FrCa => "Entrant",
     }
 }
 
@@ -226,7 +226,7 @@ pub fn wire_call_type_inbound(l: Locale) -> &'static str {
 pub fn wire_call_type_missed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Missed",
-        Locale::FrCa => "Missed",
+        Locale::FrCa => "Manqué",
     }
 }
 
@@ -235,7 +235,7 @@ pub fn wire_call_type_missed(l: Locale) -> &'static str {
 pub fn wire_call_type_outbound(l: Locale) -> &'static str {
     match l {
         Locale::En => "Outbound",
-        Locale::FrCa => "Outbound",
+        Locale::FrCa => "Sortant",
     }
 }
 
@@ -244,7 +244,7 @@ pub fn wire_call_type_outbound(l: Locale) -> &'static str {
 pub fn wire_contact_research_key_callerintel(l: Locale) -> &'static str {
     match l {
         Locale::En => "CallerIntel",
-        Locale::FrCa => "CallerIntel",
+        Locale::FrCa => "Profil de l'appelant",
     }
 }
 
@@ -253,7 +253,7 @@ pub fn wire_contact_research_key_callerintel(l: Locale) -> &'static str {
 pub fn wire_contact_research_key_corepainpoints(l: Locale) -> &'static str {
     match l {
         Locale::En => "Inferred CRM Key Challenges",
-        Locale::FrCa => "Inferred CRM Key Challenges",
+        Locale::FrCa => "Enjeux CRM déduits",
     }
 }
 
@@ -262,7 +262,7 @@ pub fn wire_contact_research_key_corepainpoints(l: Locale) -> &'static str {
 pub fn wire_contact_research_key_dynamicicebreakers(l: Locale) -> &'static str {
     match l {
         Locale::En => "CTO/CEO Conversation Starters",
-        Locale::FrCa => "CTO/CEO Conversation Starters",
+        Locale::FrCa => "Amorces de conversation pour la direction",
     }
 }
 
@@ -271,7 +271,7 @@ pub fn wire_contact_research_key_dynamicicebreakers(l: Locale) -> &'static str {
 pub fn wire_contact_research_key_estimatedvalue(l: Locale) -> &'static str {
     match l {
         Locale::En => "EstimatedValue",
-        Locale::FrCa => "EstimatedValue",
+        Locale::FrCa => "Valeur estimée",
     }
 }
 
@@ -280,7 +280,7 @@ pub fn wire_contact_research_key_estimatedvalue(l: Locale) -> &'static str {
 pub fn wire_contact_research_key_executivesummary(l: Locale) -> &'static str {
     match l {
         Locale::En => "Executive Dossier Summary",
-        Locale::FrCa => "Executive Dossier Summary",
+        Locale::FrCa => "Résumé du dossier",
     }
 }
 
@@ -289,7 +289,7 @@ pub fn wire_contact_research_key_executivesummary(l: Locale) -> &'static str {
 pub fn wire_contact_research_key_person(l: Locale) -> &'static str {
     match l {
         Locale::En => "Person",
-        Locale::FrCa => "Person",
+        Locale::FrCa => "Identité",
     }
 }
 
@@ -298,7 +298,7 @@ pub fn wire_contact_research_key_person(l: Locale) -> &'static str {
 pub fn wire_contact_research_key_recommendedgreeting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Suggested Receptionist Greeting",
-        Locale::FrCa => "Suggested Receptionist Greeting",
+        Locale::FrCa => "Accueil suggéré pour la réceptionniste",
     }
 }
 
@@ -307,7 +307,7 @@ pub fn wire_contact_research_key_recommendedgreeting(l: Locale) -> &'static str 
 pub fn wire_desk_ticket_source_manual(l: Locale) -> &'static str {
     match l {
         Locale::En => "Manual",
-        Locale::FrCa => "Manual",
+        Locale::FrCa => "Saisie manuelle",
     }
 }
 
@@ -316,7 +316,7 @@ pub fn wire_desk_ticket_source_manual(l: Locale) -> &'static str {
 pub fn wire_desk_ticket_source_voice_call(l: Locale) -> &'static str {
     match l {
         Locale::En => "From a phone call",
-        Locale::FrCa => "From a phone call",
+        Locale::FrCa => "Depuis un appel téléphonique",
     }
 }
 
@@ -325,7 +325,7 @@ pub fn wire_desk_ticket_source_voice_call(l: Locale) -> &'static str {
 pub fn wire_desk_ticket_status_fallback(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
-        Locale::FrCa => "Unknown",
+        Locale::FrCa => "Inconnue",
     }
 }
 
@@ -334,7 +334,7 @@ pub fn wire_desk_ticket_status_fallback(l: Locale) -> &'static str {
 pub fn wire_desk_ticket_status_open(l: Locale) -> &'static str {
     match l {
         Locale::En => "Open",
-        Locale::FrCa => "Open",
+        Locale::FrCa => "Ouverte",
     }
 }
 
@@ -343,7 +343,7 @@ pub fn wire_desk_ticket_status_open(l: Locale) -> &'static str {
 pub fn wire_desk_ticket_status_resolved(l: Locale) -> &'static str {
     match l {
         Locale::En => "Resolved",
-        Locale::FrCa => "Resolved",
+        Locale::FrCa => "Réglée",
     }
 }
 
@@ -352,7 +352,7 @@ pub fn wire_desk_ticket_status_resolved(l: Locale) -> &'static str {
 pub fn wire_desk_ticket_status_waiting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Waiting",
-        Locale::FrCa => "Waiting",
+        Locale::FrCa => "En attente",
     }
 }
 
@@ -361,7 +361,7 @@ pub fn wire_desk_ticket_status_waiting(l: Locale) -> &'static str {
 pub fn wire_disposition_booked(l: Locale) -> &'static str {
     match l {
         Locale::En => "Booked",
-        Locale::FrCa => "Booked",
+        Locale::FrCa => "Rendez-vous pris",
     }
 }
 
@@ -370,7 +370,7 @@ pub fn wire_disposition_booked(l: Locale) -> &'static str {
 pub fn wire_disposition_callback(l: Locale) -> &'static str {
     match l {
         Locale::En => "Callback",
-        Locale::FrCa => "Callback",
+        Locale::FrCa => "À rappeler",
     }
 }
 
@@ -379,7 +379,7 @@ pub fn wire_disposition_callback(l: Locale) -> &'static str {
 pub fn wire_disposition_escalated(l: Locale) -> &'static str {
     match l {
         Locale::En => "Escalated",
-        Locale::FrCa => "Escalated",
+        Locale::FrCa => "Transmis à l'équipe",
     }
 }
 
@@ -388,7 +388,7 @@ pub fn wire_disposition_escalated(l: Locale) -> &'static str {
 pub fn wire_disposition_info(l: Locale) -> &'static str {
     match l {
         Locale::En => "Info",
-        Locale::FrCa => "Info",
+        Locale::FrCa => "Information",
     }
 }
 
@@ -397,7 +397,7 @@ pub fn wire_disposition_info(l: Locale) -> &'static str {
 pub fn wire_disposition_interested(l: Locale) -> &'static str {
     match l {
         Locale::En => "Interested",
-        Locale::FrCa => "Interested",
+        Locale::FrCa => "Intéressé",
     }
 }
 
@@ -406,7 +406,7 @@ pub fn wire_disposition_interested(l: Locale) -> &'static str {
 pub fn wire_disposition_not_interested(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not interested",
-        Locale::FrCa => "Not interested",
+        Locale::FrCa => "Pas intéressé",
     }
 }
 
@@ -415,7 +415,7 @@ pub fn wire_disposition_not_interested(l: Locale) -> &'static str {
 pub fn wire_disposition_other(l: Locale) -> &'static str {
     match l {
         Locale::En => "Other",
-        Locale::FrCa => "Other",
+        Locale::FrCa => "Autre",
     }
 }
 
@@ -424,7 +424,7 @@ pub fn wire_disposition_other(l: Locale) -> &'static str {
 pub fn wire_disposition_voicemail(l: Locale) -> &'static str {
     match l {
         Locale::En => "Voicemail",
-        Locale::FrCa => "Voicemail",
+        Locale::FrCa => "Boîte vocale",
     }
 }
 
@@ -433,7 +433,7 @@ pub fn wire_disposition_voicemail(l: Locale) -> &'static str {
 pub fn wire_disposition_wrong_number(l: Locale) -> &'static str {
     match l {
         Locale::En => "Wrong number",
-        Locale::FrCa => "Wrong number",
+        Locale::FrCa => "Mauvais numéro",
     }
 }
 
@@ -442,7 +442,7 @@ pub fn wire_disposition_wrong_number(l: Locale) -> &'static str {
 pub fn wire_funnel_stage_connected_calls(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connected Calls",
-        Locale::FrCa => "Connected Calls",
+        Locale::FrCa => "Appels connectés",
     }
 }
 
@@ -451,7 +451,7 @@ pub fn wire_funnel_stage_connected_calls(l: Locale) -> &'static str {
 pub fn wire_funnel_stage_successful_leads(l: Locale) -> &'static str {
     match l {
         Locale::En => "Successful Leads",
-        Locale::FrCa => "Successful Leads",
+        Locale::FrCa => "Clients potentiels obtenus",
     }
 }
 
@@ -460,7 +460,7 @@ pub fn wire_funnel_stage_successful_leads(l: Locale) -> &'static str {
 pub fn wire_funnel_stage_total_dials(l: Locale) -> &'static str {
     match l {
         Locale::En => "Total Dials",
-        Locale::FrCa => "Total Dials",
+        Locale::FrCa => "Composions totales",
     }
 }
 
@@ -469,7 +469,7 @@ pub fn wire_funnel_stage_total_dials(l: Locale) -> &'static str {
 pub fn wire_generic_other(l: Locale) -> &'static str {
     match l {
         Locale::En => "Other",
-        Locale::FrCa => "Other",
+        Locale::FrCa => "Autre",
     }
 }
 
@@ -478,7 +478,7 @@ pub fn wire_generic_other(l: Locale) -> &'static str {
 pub fn wire_knowledge_document_status_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Failed",
-        Locale::FrCa => "Failed",
+        Locale::FrCa => "Échec",
     }
 }
 
@@ -487,7 +487,7 @@ pub fn wire_knowledge_document_status_failed(l: Locale) -> &'static str {
 pub fn wire_knowledge_document_status_fallback(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
-        Locale::FrCa => "Unknown",
+        Locale::FrCa => "Inconnu",
     }
 }
 
@@ -496,7 +496,7 @@ pub fn wire_knowledge_document_status_fallback(l: Locale) -> &'static str {
 pub fn wire_knowledge_document_status_processing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Indexing",
-        Locale::FrCa => "Indexing",
+        Locale::FrCa => "Indexation",
     }
 }
 
@@ -505,7 +505,7 @@ pub fn wire_knowledge_document_status_processing(l: Locale) -> &'static str {
 pub fn wire_knowledge_document_status_ready(l: Locale) -> &'static str {
     match l {
         Locale::En => "Ready",
-        Locale::FrCa => "Ready",
+        Locale::FrCa => "Prêt",
     }
 }
 
@@ -514,7 +514,7 @@ pub fn wire_knowledge_document_status_ready(l: Locale) -> &'static str {
 pub fn wire_line_type_landline(l: Locale) -> &'static str {
     match l {
         Locale::En => "Home or office line",
-        Locale::FrCa => "Home or office line",
+        Locale::FrCa => "Ligne résidentielle ou de bureau",
     }
 }
 
@@ -523,7 +523,7 @@ pub fn wire_line_type_landline(l: Locale) -> &'static str {
 pub fn wire_line_type_mobile(l: Locale) -> &'static str {
     match l {
         Locale::En => "Mobile phone",
-        Locale::FrCa => "Mobile phone",
+        Locale::FrCa => "Téléphone mobile",
     }
 }
 
@@ -532,7 +532,7 @@ pub fn wire_line_type_mobile(l: Locale) -> &'static str {
 pub fn wire_line_type_voip(l: Locale) -> &'static str {
     match l {
         Locale::En => "VoIP or hosted phone system",
-        Locale::FrCa => "VoIP or hosted phone system",
+        Locale::FrCa => "Système téléphonique IP ou hébergé",
     }
 }
 
@@ -541,7 +541,7 @@ pub fn wire_line_type_voip(l: Locale) -> &'static str {
 pub fn wire_meeting_status_completed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Completed",
-        Locale::FrCa => "Completed",
+        Locale::FrCa => "Terminée",
     }
 }
 
@@ -550,7 +550,7 @@ pub fn wire_meeting_status_completed(l: Locale) -> &'static str {
 pub fn wire_meeting_status_in_progress(l: Locale) -> &'static str {
     match l {
         Locale::En => "In Progress",
-        Locale::FrCa => "In Progress",
+        Locale::FrCa => "En cours",
     }
 }
 
@@ -559,7 +559,7 @@ pub fn wire_meeting_status_in_progress(l: Locale) -> &'static str {
 pub fn wire_member_role_agency(l: Locale) -> &'static str {
     match l {
         Locale::En => "Administrator",
-        Locale::FrCa => "Administrator",
+        Locale::FrCa => "Administrateur",
     }
 }
 
@@ -568,7 +568,7 @@ pub fn wire_member_role_agency(l: Locale) -> &'static str {
 pub fn wire_member_role_client(l: Locale) -> &'static str {
     match l {
         Locale::En => "Member",
-        Locale::FrCa => "Member",
+        Locale::FrCa => "Membre",
     }
 }
 
@@ -577,7 +577,7 @@ pub fn wire_member_role_client(l: Locale) -> &'static str {
 pub fn wire_member_role_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Viewer",
-        Locale::FrCa => "Viewer",
+        Locale::FrCa => "Lecteur",
     }
 }
 
@@ -586,7 +586,7 @@ pub fn wire_member_role_viewer(l: Locale) -> &'static str {
 pub fn wire_message_delivery_status_delivered(l: Locale) -> &'static str {
     match l {
         Locale::En => "Delivered",
-        Locale::FrCa => "Delivered",
+        Locale::FrCa => "Livré",
     }
 }
 
@@ -595,7 +595,7 @@ pub fn wire_message_delivery_status_delivered(l: Locale) -> &'static str {
 pub fn wire_message_delivery_status_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Failed",
-        Locale::FrCa => "Failed",
+        Locale::FrCa => "Échec",
     }
 }
 
@@ -604,7 +604,7 @@ pub fn wire_message_delivery_status_failed(l: Locale) -> &'static str {
 pub fn wire_message_delivery_status_queued(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sent",
-        Locale::FrCa => "Sent",
+        Locale::FrCa => "Envoyé",
     }
 }
 
@@ -613,7 +613,7 @@ pub fn wire_message_delivery_status_queued(l: Locale) -> &'static str {
 pub fn wire_message_delivery_status_received(l: Locale) -> &'static str {
     match l {
         Locale::En => "Received",
-        Locale::FrCa => "Received",
+        Locale::FrCa => "Reçu",
     }
 }
 
@@ -622,7 +622,7 @@ pub fn wire_message_delivery_status_received(l: Locale) -> &'static str {
 pub fn wire_message_delivery_status_sent(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sent",
-        Locale::FrCa => "Sent",
+        Locale::FrCa => "Envoyé",
     }
 }
 
@@ -658,7 +658,7 @@ pub fn wire_messaging_carrier_twilio(l: Locale) -> &'static str {
 pub fn wire_messaging_credential_source_byok(l: Locale) -> &'static str {
     match l {
         Locale::En => "Bring Your Own Keys",
-        Locale::FrCa => "Bring Your Own Keys",
+        Locale::FrCa => "Vos propres clés",
     }
 }
 
@@ -667,7 +667,7 @@ pub fn wire_messaging_credential_source_byok(l: Locale) -> &'static str {
 pub fn wire_messaging_credential_source_managed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Managed Service",
-        Locale::FrCa => "Managed Service",
+        Locale::FrCa => "Service géré",
     }
 }
 
@@ -676,7 +676,7 @@ pub fn wire_messaging_credential_source_managed(l: Locale) -> &'static str {
 pub fn wire_number_capability_mms(l: Locale) -> &'static str {
     match l {
         Locale::En => "Mms",
-        Locale::FrCa => "Mms",
+        Locale::FrCa => "MMS",
     }
 }
 
@@ -685,7 +685,7 @@ pub fn wire_number_capability_mms(l: Locale) -> &'static str {
 pub fn wire_number_capability_sms(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sms",
-        Locale::FrCa => "Sms",
+        Locale::FrCa => "Texto",
     }
 }
 
@@ -694,7 +694,7 @@ pub fn wire_number_capability_sms(l: Locale) -> &'static str {
 pub fn wire_number_capability_voice(l: Locale) -> &'static str {
     match l {
         Locale::En => "Voice",
-        Locale::FrCa => "Voice",
+        Locale::FrCa => "Voix",
     }
 }
 
@@ -730,7 +730,7 @@ pub fn wire_number_provider_twilio(l: Locale) -> &'static str {
 pub fn wire_number_provider_unknown(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
-        Locale::FrCa => "Unknown",
+        Locale::FrCa => "Inconnu",
     }
 }
 
@@ -757,7 +757,7 @@ pub fn wire_number_type_mobile(l: Locale) -> &'static str {
 pub fn wire_number_type_tollfree(l: Locale) -> &'static str {
     match l {
         Locale::En => "Toll-Free",
-        Locale::FrCa => "Toll-Free",
+        Locale::FrCa => "Sans frais",
     }
 }
 
@@ -766,7 +766,7 @@ pub fn wire_number_type_tollfree(l: Locale) -> &'static str {
 pub fn wire_placeholder_ai_call_completed(l: Locale) -> &'static str {
     match l {
         Locale::En => "AI call completed.",
-        Locale::FrCa => "AI call completed.",
+        Locale::FrCa => "Appel IA terminé.",
     }
 }
 
@@ -775,7 +775,7 @@ pub fn wire_placeholder_ai_call_completed(l: Locale) -> &'static str {
 pub fn wire_placeholder_ai_outbound_voice_session_active(l: Locale) -> &'static str {
     match l {
         Locale::En => "AI Outbound Voice session active...",
-        Locale::FrCa => "AI Outbound Voice session active...",
+        Locale::FrCa => "Session vocale IA sortante en cours…",
     }
 }
 
@@ -784,7 +784,7 @@ pub fn wire_placeholder_ai_outbound_voice_session_active(l: Locale) -> &'static 
 pub fn wire_placeholder_ai_voice_session_active(l: Locale) -> &'static str {
     match l {
         Locale::En => "AI Voice session active...",
-        Locale::FrCa => "AI Voice session active...",
+        Locale::FrCa => "Session vocale IA en cours…",
     }
 }
 
@@ -802,7 +802,7 @@ pub fn wire_placeholder_consultation(l: Locale) -> &'static str {
 pub fn wire_placeholder_customer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Customer",
-        Locale::FrCa => "Customer",
+        Locale::FrCa => "Client",
     }
 }
 
@@ -811,7 +811,7 @@ pub fn wire_placeholder_customer(l: Locale) -> &'static str {
 pub fn wire_placeholder_distronode_support(l: Locale) -> &'static str {
     match l {
         Locale::En => "Distronode Support",
-        Locale::FrCa => "Distronode Support",
+        Locale::FrCa => "Soutien Distronode",
     }
 }
 
@@ -820,7 +820,7 @@ pub fn wire_placeholder_distronode_support(l: Locale) -> &'static str {
 pub fn wire_placeholder_free(l: Locale) -> &'static str {
     match l {
         Locale::En => "Free",
-        Locale::FrCa => "Free",
+        Locale::FrCa => "Gratuit",
     }
 }
 
@@ -829,7 +829,7 @@ pub fn wire_placeholder_free(l: Locale) -> &'static str {
 pub fn wire_placeholder_manual_edit_update(l: Locale) -> &'static str {
     match l {
         Locale::En => "Manual edit update.",
-        Locale::FrCa => "Manual edit update.",
+        Locale::FrCa => "Mise à jour manuelle.",
     }
 }
 
@@ -838,7 +838,7 @@ pub fn wire_placeholder_manual_edit_update(l: Locale) -> &'static str {
 pub fn wire_placeholder_new_manually_added_contact(l: Locale) -> &'static str {
     match l {
         Locale::En => "New manually added contact.",
-        Locale::FrCa => "New manually added contact.",
+        Locale::FrCa => "Nouveau contact ajouté à la main.",
     }
 }
 
@@ -847,7 +847,7 @@ pub fn wire_placeholder_new_manually_added_contact(l: Locale) -> &'static str {
 pub fn wire_placeholder_no_answer_no_conversation_took_place(l: Locale) -> &'static str {
     match l {
         Locale::En => "No answer, no conversation took place.",
-        Locale::FrCa => "No answer, no conversation took place.",
+        Locale::FrCa => "Sans réponse, aucune conversation n'a eu lieu.",
     }
 }
 
@@ -856,7 +856,7 @@ pub fn wire_placeholder_no_answer_no_conversation_took_place(l: Locale) -> &'sta
 pub fn wire_placeholder_no_summary_available(l: Locale) -> &'static str {
     match l {
         Locale::En => "No summary available.",
-        Locale::FrCa => "No summary available.",
+        Locale::FrCa => "Aucun résumé disponible.",
     }
 }
 
@@ -865,7 +865,7 @@ pub fn wire_placeholder_no_summary_available(l: Locale) -> &'static str {
 pub fn wire_placeholder_test_call(l: Locale) -> &'static str {
     match l {
         Locale::En => "Test call",
-        Locale::FrCa => "Test call",
+        Locale::FrCa => "Appel d'essai",
     }
 }
 
@@ -874,7 +874,7 @@ pub fn wire_placeholder_test_call(l: Locale) -> &'static str {
 pub fn wire_placeholder_unknown(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown",
-        Locale::FrCa => "Unknown",
+        Locale::FrCa => "Inconnu",
     }
 }
 
@@ -883,7 +883,7 @@ pub fn wire_placeholder_unknown(l: Locale) -> &'static str {
 pub fn wire_placeholder_unknown_caller(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown Caller",
-        Locale::FrCa => "Unknown Caller",
+        Locale::FrCa => "Appelant inconnu",
     }
 }
 
@@ -892,7 +892,7 @@ pub fn wire_placeholder_unknown_caller(l: Locale) -> &'static str {
 pub fn wire_placeholder_voice_session_completed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Voice session completed.",
-        Locale::FrCa => "Voice session completed.",
+        Locale::FrCa => "Session vocale terminée.",
     }
 }
 
@@ -901,7 +901,7 @@ pub fn wire_placeholder_voice_session_completed(l: Locale) -> &'static str {
 pub fn wire_placeholder_you(l: Locale) -> &'static str {
     match l {
         Locale::En => "You",
-        Locale::FrCa => "You",
+        Locale::FrCa => "Vous",
     }
 }
 
@@ -910,7 +910,7 @@ pub fn wire_placeholder_you(l: Locale) -> &'static str {
 pub fn wire_region_apac(l: Locale) -> &'static str {
     match l {
         Locale::En => "Asia-Pacific",
-        Locale::FrCa => "Asia-Pacific",
+        Locale::FrCa => "Asie-Pacifique",
     }
 }
 
@@ -937,7 +937,7 @@ pub fn wire_region_eu(l: Locale) -> &'static str {
 pub fn wire_region_us(l: Locale) -> &'static str {
     match l {
         Locale::En => "United States",
-        Locale::FrCa => "United States",
+        Locale::FrCa => "États-Unis",
     }
 }
 
@@ -946,7 +946,7 @@ pub fn wire_region_us(l: Locale) -> &'static str {
 pub fn wire_region_long_apac(l: Locale) -> &'static str {
     match l {
         Locale::En => "Asia-Pacific (Singapore)",
-        Locale::FrCa => "Asia-Pacific (Singapore)",
+        Locale::FrCa => "Asie-Pacifique (Singapour)",
     }
 }
 
@@ -955,7 +955,7 @@ pub fn wire_region_long_apac(l: Locale) -> &'static str {
 pub fn wire_region_long_ca(l: Locale) -> &'static str {
     match l {
         Locale::En => "Canada (Montreal)",
-        Locale::FrCa => "Canada (Montreal)",
+        Locale::FrCa => "Canada (Montréal)",
     }
 }
 
@@ -964,7 +964,7 @@ pub fn wire_region_long_ca(l: Locale) -> &'static str {
 pub fn wire_region_long_eu(l: Locale) -> &'static str {
     match l {
         Locale::En => "Europe (Frankfurt)",
-        Locale::FrCa => "Europe (Frankfurt)",
+        Locale::FrCa => "Europe (Francfort)",
     }
 }
 
@@ -973,7 +973,7 @@ pub fn wire_region_long_eu(l: Locale) -> &'static str {
 pub fn wire_region_long_us(l: Locale) -> &'static str {
     match l {
         Locale::En => "United States (us-east4)",
-        Locale::FrCa => "United States (us-east4)",
+        Locale::FrCa => "États-Unis (us-east4)",
     }
 }
 
@@ -982,7 +982,7 @@ pub fn wire_region_long_us(l: Locale) -> &'static str {
 pub fn wire_research_status_complete(l: Locale) -> &'static str {
     match l {
         Locale::En => "Complete",
-        Locale::FrCa => "Complete",
+        Locale::FrCa => "Terminé",
     }
 }
 
@@ -991,7 +991,7 @@ pub fn wire_research_status_complete(l: Locale) -> &'static str {
 pub fn wire_research_status_crawling(l: Locale) -> &'static str {
     match l {
         Locale::En => "Crawling web…",
-        Locale::FrCa => "Crawling web…",
+        Locale::FrCa => "Exploration du Web…",
     }
 }
 
@@ -1000,7 +1000,7 @@ pub fn wire_research_status_crawling(l: Locale) -> &'static str {
 pub fn wire_research_status_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enrichment failed",
-        Locale::FrCa => "Enrichment failed",
+        Locale::FrCa => "Échec de l'enrichissement",
     }
 }
 
@@ -1009,7 +1009,7 @@ pub fn wire_research_status_failed(l: Locale) -> &'static str {
 pub fn wire_research_status_pending(l: Locale) -> &'static str {
     match l {
         Locale::En => "Pending queue",
-        Locale::FrCa => "Pending queue",
+        Locale::FrCa => "En file d'attente",
     }
 }
 
@@ -1027,7 +1027,7 @@ pub fn wire_sentiment_negative(l: Locale) -> &'static str {
 pub fn wire_sentiment_neutral(l: Locale) -> &'static str {
     match l {
         Locale::En => "Neutral",
-        Locale::FrCa => "Neutral",
+        Locale::FrCa => "Neutre",
     }
 }
 
@@ -1036,7 +1036,7 @@ pub fn wire_sentiment_neutral(l: Locale) -> &'static str {
 pub fn wire_sentiment_positive(l: Locale) -> &'static str {
     match l {
         Locale::En => "Positive",
-        Locale::FrCa => "Positive",
+        Locale::FrCa => "Positif",
     }
 }
 
@@ -1045,7 +1045,7 @@ pub fn wire_sentiment_positive(l: Locale) -> &'static str {
 pub fn wire_transfer_reason_auth_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer authorization error",
-        Locale::FrCa => "Transfer authorization error",
+        Locale::FrCa => "Erreur d'autorisation du transfert",
     }
 }
 
@@ -1054,7 +1054,7 @@ pub fn wire_transfer_reason_auth_error(l: Locale) -> &'static str {
 pub fn wire_transfer_reason_caller_requested_human(l: Locale) -> &'static str {
     match l {
         Locale::En => "Caller requested human",
-        Locale::FrCa => "Caller requested human",
+        Locale::FrCa => "Veut parler à une personne",
     }
 }
 
@@ -1063,7 +1063,7 @@ pub fn wire_transfer_reason_caller_requested_human(l: Locale) -> &'static str {
 pub fn wire_transfer_reason_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer failed",
-        Locale::FrCa => "Transfer failed",
+        Locale::FrCa => "Échec du transfert",
     }
 }
 
@@ -1072,7 +1072,7 @@ pub fn wire_transfer_reason_error(l: Locale) -> &'static str {
 pub fn wire_transfer_reason_fallback(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer attempted but not connected",
-        Locale::FrCa => "Transfer attempted but not connected",
+        Locale::FrCa => "Transfert tenté, sans connexion",
     }
 }
 
@@ -1081,7 +1081,7 @@ pub fn wire_transfer_reason_fallback(l: Locale) -> &'static str {
 pub fn wire_transfer_reason_no_answer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Target didn't answer",
-        Locale::FrCa => "Target didn't answer",
+        Locale::FrCa => "Le poste n'a pas répondu",
     }
 }
 
@@ -1090,7 +1090,7 @@ pub fn wire_transfer_reason_no_answer(l: Locale) -> &'static str {
 pub fn wire_transfer_reason_provider_unsupported(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer attempted but not connected",
-        Locale::FrCa => "Transfer attempted but not connected",
+        Locale::FrCa => "Transfert tenté, sans connexion",
     }
 }
 
@@ -1099,7 +1099,7 @@ pub fn wire_transfer_reason_provider_unsupported(l: Locale) -> &'static str {
 pub fn wire_transfer_reason_ring_timeout(l: Locale) -> &'static str {
     match l {
         Locale::En => "Target didn't answer (rang out)",
-        Locale::FrCa => "Target didn't answer (rang out)",
+        Locale::FrCa => "Le poste n'a pas répondu (sonnerie expirée)",
     }
 }
 
@@ -1108,7 +1108,7 @@ pub fn wire_transfer_reason_ring_timeout(l: Locale) -> &'static str {
 pub fn wire_transfer_reason_room_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer attempted but not connected",
-        Locale::FrCa => "Transfer attempted but not connected",
+        Locale::FrCa => "Transfert tenté, sans connexion",
     }
 }
 
@@ -1117,7 +1117,7 @@ pub fn wire_transfer_reason_room_not_found(l: Locale) -> &'static str {
 pub fn wire_transfer_reason_trunk_not_configured(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer route not configured",
-        Locale::FrCa => "Transfer route not configured",
+        Locale::FrCa => "Voie de transfert non configurée",
     }
 }
 
@@ -1126,7 +1126,7 @@ pub fn wire_transfer_reason_trunk_not_configured(l: Locale) -> &'static str {
 pub fn wire_transfer_status_completed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Completed",
-        Locale::FrCa => "Completed",
+        Locale::FrCa => "Terminé",
     }
 }
 
@@ -1135,7 +1135,7 @@ pub fn wire_transfer_status_completed(l: Locale) -> &'static str {
 pub fn wire_transfer_status_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transfer failed",
-        Locale::FrCa => "Transfer failed",
+        Locale::FrCa => "Échec du transfert",
     }
 }
 
@@ -1144,7 +1144,7 @@ pub fn wire_transfer_status_failed(l: Locale) -> &'static str {
 pub fn wire_transfer_status_success(l: Locale) -> &'static str {
     match l {
         Locale::En => "Transferred",
-        Locale::FrCa => "Transferred",
+        Locale::FrCa => "Transféré",
     }
 }
 
@@ -1153,7 +1153,7 @@ pub fn wire_transfer_status_success(l: Locale) -> &'static str {
 pub fn wire_workflow_action_add_crm_tag(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add CRM Tag",
-        Locale::FrCa => "Add CRM Tag",
+        Locale::FrCa => "Ajouter une étiquette CRM",
     }
 }
 
@@ -1162,7 +1162,7 @@ pub fn wire_workflow_action_add_crm_tag(l: Locale) -> &'static str {
 pub fn wire_workflow_action_notify_ops(l: Locale) -> &'static str {
     match l {
         Locale::En => "Notify Ops Webhook",
-        Locale::FrCa => "Notify Ops Webhook",
+        Locale::FrCa => "Notifier le webhook des opérations",
     }
 }
 
@@ -1171,7 +1171,7 @@ pub fn wire_workflow_action_notify_ops(l: Locale) -> &'static str {
 pub fn wire_workflow_action_register_compliance_dnc(l: Locale) -> &'static str {
     match l {
         Locale::En => "Register Compliance DNC",
-        Locale::FrCa => "Register Compliance DNC",
+        Locale::FrCa => "Inscrire à la liste d'exclusion",
     }
 }
 
@@ -1180,7 +1180,7 @@ pub fn wire_workflow_action_register_compliance_dnc(l: Locale) -> &'static str {
 pub fn wire_workflow_action_remove_crm_tag(l: Locale) -> &'static str {
     match l {
         Locale::En => "Remove CRM Tag",
-        Locale::FrCa => "Remove CRM Tag",
+        Locale::FrCa => "Retirer une étiquette CRM",
     }
 }
 
@@ -1189,7 +1189,7 @@ pub fn wire_workflow_action_remove_crm_tag(l: Locale) -> &'static str {
 pub fn wire_workflow_action_send_email(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send Email",
-        Locale::FrCa => "Send Email",
+        Locale::FrCa => "Envoyer un courriel",
     }
 }
 
@@ -1198,7 +1198,7 @@ pub fn wire_workflow_action_send_email(l: Locale) -> &'static str {
 pub fn wire_workflow_action_send_sms(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send SMS",
-        Locale::FrCa => "Send SMS",
+        Locale::FrCa => "Envoyer un texto",
     }
 }
 
@@ -1207,7 +1207,7 @@ pub fn wire_workflow_action_send_sms(l: Locale) -> &'static str {
 pub fn wire_workflow_action_outcome_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Failed",
-        Locale::FrCa => "Failed",
+        Locale::FrCa => "Échec",
     }
 }
 
@@ -1216,7 +1216,7 @@ pub fn wire_workflow_action_outcome_failed(l: Locale) -> &'static str {
 pub fn wire_workflow_action_outcome_ok(l: Locale) -> &'static str {
     match l {
         Locale::En => "Ok",
-        Locale::FrCa => "Ok",
+        Locale::FrCa => "OK",
     }
 }
 
@@ -1225,7 +1225,7 @@ pub fn wire_workflow_action_outcome_ok(l: Locale) -> &'static str {
 pub fn wire_workflow_action_outcome_skipped(l: Locale) -> &'static str {
     match l {
         Locale::En => "Skipped",
-        Locale::FrCa => "Skipped",
+        Locale::FrCa => "Ignoré",
     }
 }
 
@@ -1234,7 +1234,7 @@ pub fn wire_workflow_action_outcome_skipped(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_contact_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "Contact not found",
-        Locale::FrCa => "Contact not found",
+        Locale::FrCa => "Contact introuvable",
     }
 }
 
@@ -1243,7 +1243,7 @@ pub fn wire_workflow_action_reason_contact_not_found(l: Locale) -> &'static str 
 pub fn wire_workflow_action_reason_dnc(l: Locale) -> &'static str {
     match l {
         Locale::En => "Dnc",
-        Locale::FrCa => "Dnc",
+        Locale::FrCa => "Liste d'exclusion",
     }
 }
 
@@ -1252,7 +1252,7 @@ pub fn wire_workflow_action_reason_dnc(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_dormant(l: Locale) -> &'static str {
     match l {
         Locale::En => "Dormant",
-        Locale::FrCa => "Dormant",
+        Locale::FrCa => "Inactif",
     }
 }
 
@@ -1261,7 +1261,7 @@ pub fn wire_workflow_action_reason_dormant(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_empty_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Empty body",
-        Locale::FrCa => "Empty body",
+        Locale::FrCa => "Message vide",
     }
 }
 
@@ -1270,7 +1270,7 @@ pub fn wire_workflow_action_reason_empty_body(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_empty_subject(l: Locale) -> &'static str {
     match l {
         Locale::En => "Empty subject",
-        Locale::FrCa => "Empty subject",
+        Locale::FrCa => "Objet vide",
     }
 }
 
@@ -1279,7 +1279,7 @@ pub fn wire_workflow_action_reason_empty_subject(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_empty_tag(l: Locale) -> &'static str {
     match l {
         Locale::En => "Empty tag",
-        Locale::FrCa => "Empty tag",
+        Locale::FrCa => "Étiquette vide",
     }
 }
 
@@ -1288,7 +1288,7 @@ pub fn wire_workflow_action_reason_empty_tag(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_http_status(l: Locale) -> &'static str {
     match l {
         Locale::En => "Http {status}",
-        Locale::FrCa => "Http {status}",
+        Locale::FrCa => "HTTP {status}",
     }
 }
 
@@ -1297,7 +1297,7 @@ pub fn wire_workflow_action_reason_http_status(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_invalid_recipient(l: Locale) -> &'static str {
     match l {
         Locale::En => "Invalid recipient",
-        Locale::FrCa => "Invalid recipient",
+        Locale::FrCa => "Destinataire invalide",
     }
 }
 
@@ -1306,7 +1306,7 @@ pub fn wire_workflow_action_reason_invalid_recipient(l: Locale) -> &'static str 
 pub fn wire_workflow_action_reason_missing_webhook_url(l: Locale) -> &'static str {
     match l {
         Locale::En => "Missing webhook url",
-        Locale::FrCa => "Missing webhook url",
+        Locale::FrCa => "URL du webhook manquante",
     }
 }
 
@@ -1315,7 +1315,7 @@ pub fn wire_workflow_action_reason_missing_webhook_url(l: Locale) -> &'static st
 pub fn wire_workflow_action_reason_no_provider_credentials(l: Locale) -> &'static str {
     match l {
         Locale::En => "No provider credentials",
-        Locale::FrCa => "No provider credentials",
+        Locale::FrCa => "Aucun identifiant de fournisseur",
     }
 }
 
@@ -1324,7 +1324,7 @@ pub fn wire_workflow_action_reason_no_provider_credentials(l: Locale) -> &'stati
 pub fn wire_workflow_action_reason_no_recipient(l: Locale) -> &'static str {
     match l {
         Locale::En => "No recipient",
-        Locale::FrCa => "No recipient",
+        Locale::FrCa => "Aucun destinataire",
     }
 }
 
@@ -1333,7 +1333,7 @@ pub fn wire_workflow_action_reason_no_recipient(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_no_sending_number(l: Locale) -> &'static str {
     match l {
         Locale::En => "No sending number",
-        Locale::FrCa => "No sending number",
+        Locale::FrCa => "Aucun numéro d'envoi",
     }
 }
 
@@ -1342,7 +1342,7 @@ pub fn wire_workflow_action_reason_no_sending_number(l: Locale) -> &'static str 
 pub fn wire_workflow_action_reason_postmark_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "Postmark missing",
-        Locale::FrCa => "Postmark missing",
+        Locale::FrCa => "Postmark non configuré",
     }
 }
 
@@ -1351,7 +1351,7 @@ pub fn wire_workflow_action_reason_postmark_missing(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_report_recipient_refused(l: Locale) -> &'static str {
     match l {
         Locale::En => "Report recipient refused",
-        Locale::FrCa => "Report recipient refused",
+        Locale::FrCa => "Destinataire du rapport refusé",
     }
 }
 
@@ -1360,7 +1360,7 @@ pub fn wire_workflow_action_reason_report_recipient_refused(l: Locale) -> &'stat
 pub fn wire_workflow_action_reason_report_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "Report unavailable",
-        Locale::FrCa => "Report unavailable",
+        Locale::FrCa => "Rapport indisponible",
     }
 }
 
@@ -1369,7 +1369,7 @@ pub fn wire_workflow_action_reason_report_unavailable(l: Locale) -> &'static str
 pub fn wire_workflow_action_reason_send_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send failed",
-        Locale::FrCa => "Send failed",
+        Locale::FrCa => "Échec d'envoi",
     }
 }
 
@@ -1378,7 +1378,7 @@ pub fn wire_workflow_action_reason_send_failed(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_tag_already_present(l: Locale) -> &'static str {
     match l {
         Locale::En => "Tag already present",
-        Locale::FrCa => "Tag already present",
+        Locale::FrCa => "Étiquette déjà présente",
     }
 }
 
@@ -1387,7 +1387,7 @@ pub fn wire_workflow_action_reason_tag_already_present(l: Locale) -> &'static st
 pub fn wire_workflow_action_reason_tag_not_present(l: Locale) -> &'static str {
     match l {
         Locale::En => "Tag not present",
-        Locale::FrCa => "Tag not present",
+        Locale::FrCa => "Étiquette absente",
     }
 }
 
@@ -1396,7 +1396,7 @@ pub fn wire_workflow_action_reason_tag_not_present(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_unknown_action_type(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unknown action type",
-        Locale::FrCa => "Unknown action type",
+        Locale::FrCa => "Type d'action inconnu",
     }
 }
 
@@ -1405,7 +1405,7 @@ pub fn wire_workflow_action_reason_unknown_action_type(l: Locale) -> &'static st
 pub fn wire_workflow_run_status_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Failed",
-        Locale::FrCa => "Failed",
+        Locale::FrCa => "Échec",
     }
 }
 
@@ -1414,7 +1414,7 @@ pub fn wire_workflow_run_status_failed(l: Locale) -> &'static str {
 pub fn wire_workflow_run_status_partial(l: Locale) -> &'static str {
     match l {
         Locale::En => "Partly done",
-        Locale::FrCa => "Partly done",
+        Locale::FrCa => "Partiellement fait",
     }
 }
 
@@ -1423,7 +1423,7 @@ pub fn wire_workflow_run_status_partial(l: Locale) -> &'static str {
 pub fn wire_workflow_run_status_skipped(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing to do",
-        Locale::FrCa => "Nothing to do",
+        Locale::FrCa => "Rien à faire",
     }
 }
 
@@ -1432,7 +1432,7 @@ pub fn wire_workflow_run_status_skipped(l: Locale) -> &'static str {
 pub fn wire_workflow_run_status_success(l: Locale) -> &'static str {
     match l {
         Locale::En => "Succeeded",
-        Locale::FrCa => "Succeeded",
+        Locale::FrCa => "Réussi",
     }
 }
 
@@ -1441,7 +1441,7 @@ pub fn wire_workflow_run_status_success(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_booking_cancelled(l: Locale) -> &'static str {
     match l {
         Locale::En => "When a Booking Is Cancelled",
-        Locale::FrCa => "When a Booking Is Cancelled",
+        Locale::FrCa => "Quand une réservation est annulée",
     }
 }
 
@@ -1450,7 +1450,7 @@ pub fn wire_workflow_trigger_booking_cancelled(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_booking_created(l: Locale) -> &'static str {
     match l {
         Locale::En => "When a Booking Is Made",
-        Locale::FrCa => "When a Booking Is Made",
+        Locale::FrCa => "Quand une réservation est faite",
     }
 }
 
@@ -1459,7 +1459,7 @@ pub fn wire_workflow_trigger_booking_created(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_booking_reminder(l: Locale) -> &'static str {
     match l {
         Locale::En => "When a Booking Reminder Is Sent",
-        Locale::FrCa => "When a Booking Reminder Is Sent",
+        Locale::FrCa => "Quand un rappel de réservation est envoyé",
     }
 }
 
@@ -1468,7 +1468,7 @@ pub fn wire_workflow_trigger_booking_reminder(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_booking_rescheduled(l: Locale) -> &'static str {
     match l {
         Locale::En => "When a Booking Is Rescheduled",
-        Locale::FrCa => "When a Booking Is Rescheduled",
+        Locale::FrCa => "Quand une réservation est déplacée",
     }
 }
 
@@ -1477,7 +1477,7 @@ pub fn wire_workflow_trigger_booking_rescheduled(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_call_ended(l: Locale) -> &'static str {
     match l {
         Locale::En => "When Any Call Ends (answered or not)",
-        Locale::FrCa => "When Any Call Ends (answered or not)",
+        Locale::FrCa => "Quand un appel se termine (répondu ou non)",
     }
 }
 
@@ -1486,7 +1486,7 @@ pub fn wire_workflow_trigger_call_ended(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_call_ended_answered(l: Locale) -> &'static str {
     match l {
         Locale::En => "When an Answered Call Ends",
-        Locale::FrCa => "When an Answered Call Ends",
+        Locale::FrCa => "Quand un appel répondu se termine",
     }
 }
 
@@ -1495,7 +1495,7 @@ pub fn wire_workflow_trigger_call_ended_answered(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_call_ended_unanswered(l: Locale) -> &'static str {
     match l {
         Locale::En => "When a Call Goes Unanswered",
-        Locale::FrCa => "When a Call Goes Unanswered",
+        Locale::FrCa => "Quand un appel reste sans réponse",
     }
 }
 
@@ -1504,7 +1504,7 @@ pub fn wire_workflow_trigger_call_ended_unanswered(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_contact_created(l: Locale) -> &'static str {
     match l {
         Locale::En => "When New Contact Created",
-        Locale::FrCa => "When New Contact Created",
+        Locale::FrCa => "Quand un contact est créé",
     }
 }
 
@@ -1513,7 +1513,7 @@ pub fn wire_workflow_trigger_contact_created(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_dnc_registered(l: Locale) -> &'static str {
     match l {
         Locale::En => "When Contact Registered DNC",
-        Locale::FrCa => "When Contact Registered DNC",
+        Locale::FrCa => "Quand un contact s'inscrit à la liste d'exclusion",
     }
 }
 
@@ -1522,7 +1522,7 @@ pub fn wire_workflow_trigger_dnc_registered(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_intent_detected(l: Locale) -> &'static str {
     match l {
         Locale::En => "When Specific Intent Detected",
-        Locale::FrCa => "When Specific Intent Detected",
+        Locale::FrCa => "Quand une intention précise est détectée",
     }
 }
 
@@ -1531,7 +1531,7 @@ pub fn wire_workflow_trigger_intent_detected(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_negative_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "When Call Sentiment is Negative",
-        Locale::FrCa => "When Call Sentiment is Negative",
+        Locale::FrCa => "Quand le sentiment de l'appel est négatif",
     }
 }
 
@@ -1540,7 +1540,7 @@ pub fn wire_workflow_trigger_negative_sentiment(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_neutral_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "When Call Sentiment is Neutral",
-        Locale::FrCa => "When Call Sentiment is Neutral",
+        Locale::FrCa => "Quand le sentiment de l'appel est neutre",
     }
 }
 
@@ -1549,7 +1549,7 @@ pub fn wire_workflow_trigger_neutral_sentiment(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_positive_sentiment(l: Locale) -> &'static str {
     match l {
         Locale::En => "When Call Sentiment is Positive",
-        Locale::FrCa => "When Call Sentiment is Positive",
+        Locale::FrCa => "Quand le sentiment de l'appel est positif",
     }
 }
 
@@ -1558,6 +1558,6 @@ pub fn wire_workflow_trigger_positive_sentiment(l: Locale) -> &'static str {
 pub fn wire_workflow_trigger_sms_received(l: Locale) -> &'static str {
     match l {
         Locale::En => "When Inbound SMS Received",
-        Locale::FrCa => "When Inbound SMS Received",
+        Locale::FrCa => "Quand un texto entrant est reçu",
     }
 }

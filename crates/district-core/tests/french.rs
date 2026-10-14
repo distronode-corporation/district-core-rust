@@ -2,9 +2,8 @@
 //! names. A binary of its own, because the language is the process's and every
 //! other test runs in English.
 //!
-//! There is no French yet, so the French arm of every sentence carries the
-//! English and `FR_COMPLETE` is false; what this holds is that French is the
-//! arm taken.
+//! Every entry has its French, so `FR_COMPLETE` is true; what this holds is
+//! that French is the arm taken.
 
 use district_api::{ApiError, ErrorDetail};
 use district_core::l10n::{self, Locale, api_error_text, strings};
@@ -23,8 +22,8 @@ fn config(locale: Locale) -> CoreConfig {
 #[test]
 fn a_french_model_writes_in_french_until_told_otherwise() {
     assert!(
-        !std::hint::black_box(l10n::FR_COMPLETE),
-        "French is still being written"
+        std::hint::black_box(l10n::FR_COMPLETE),
+        "every entry has its French"
     );
     let (mut model, _) = Model::new(config(Locale::FrCa));
     assert_eq!(model.config().locale, Locale::FrCa);

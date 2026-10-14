@@ -1,6 +1,7 @@
 //! The wire labels: every value in `contracts/i18n/wire-vocabulary.json`, the
-//! English the desktop apps show for it today, and a generic label, never the
-//! stored English, for a value this build does not know.
+//! English the desktop apps show for it today and its French (the website's,
+//! where the website has one), and a generic label, never the stored English,
+//! for a value this build does not know.
 
 use std::fs;
 use std::path::PathBuf;
@@ -56,14 +57,21 @@ fn every_value_reads_as_its_label_in_both_languages() {
             let english = value["en"]
                 .as_str()
                 .map_or_else(|| humanize(raw), str::to_owned);
-            for locale in Locale::ALL {
-                assert_eq!(wire_label(wire, raw, locale), english, "{name} {raw}");
+            let french = wire_label(wire, raw, Locale::FrCa);
+            assert!(!french.is_empty(), "{name} {raw}");
+            if let Some(website) = value["fr"].as_str() {
+                assert_eq!(french, website, "{name} {raw}");
+            }
+            for (locale, label) in [(Locale::En, &english), (Locale::FrCa, &french)] {
+                assert_eq!(&wire_label(wire, raw, locale), label, "{name} {raw}");
                 // Matched trimmed and without regard to case.
                 let shouted = format!("  {}  ", raw.to_uppercase());
-                assert_eq!(wire_label(wire, &shouted, locale), english, "{name} {raw}");
+                assert_eq!(&wire_label(wire, &shouted, locale), label, "{name} {raw}");
             }
             if let Some(long) = value["enLong"].as_str() {
-                assert_eq!(region_long_label(raw, Locale::FrCa), long);
+                assert_eq!(region_long_label(raw, Locale::En), long);
+                let french_long = value["frLong"].as_str().expect("frLong");
+                assert_eq!(region_long_label(raw, Locale::FrCa), french_long);
             }
             checked += 1;
         }
@@ -73,19 +81,18 @@ fn every_value_reads_as_its_label_in_both_languages() {
 
 #[test]
 fn an_unknown_value_never_reads_as_its_english() {
-    let fallback = vocabulary()["categories"]["transferReason"]["fallback"]["en"]
-        .as_str()
-        .expect("fallback")
-        .to_owned();
+    let transfer = &vocabulary()["categories"]["transferReason"]["fallback"];
     for locale in Locale::ALL {
+        let (other, field) = match locale {
+            Locale::En => ("Other", "en"),
+            Locale::FrCa => ("Autre", "fr"),
+        };
+        let fallback = transfer[field].as_str().expect("fallback");
         assert_eq!(
             wire_label(WireCategory::CallStatus, "queued-by-carrier", locale),
-            "Other"
+            other
         );
-        assert_eq!(
-            wire_label(WireCategory::MemberRole, "owner", locale),
-            "Other"
-        );
+        assert_eq!(wire_label(WireCategory::MemberRole, "owner", locale), other);
         assert_eq!(
             wire_label(WireCategory::TransferReason, "sip_486", locale),
             fallback
@@ -110,6 +117,12 @@ fn an_unknown_value_never_reads_as_its_english() {
             fallback,
             "{name}"
         );
+        let website = category["fallback"]["fr"].as_str().expect("fr");
+        assert_eq!(
+            wire_label(wire, "not-a-value", Locale::FrCa),
+            website,
+            "{name}"
+        );
         with_fallback += 1;
     }
     assert!(
@@ -125,8 +138,11 @@ fn a_placeholder_reads_as_its_label_and_real_data_as_nothing() {
     let mut aliases = 0;
     for placeholder in vocabulary["placeholders"].as_array().expect("placeholders") {
         let value = placeholder["value"].as_str().expect("value");
-        for locale in Locale::ALL {
-            assert_eq!(placeholder_label(value, locale), Some(value), "{value}");
+        assert_eq!(placeholder_label(value, Locale::En), Some(value), "{value}");
+        let french = placeholder_label(value, Locale::FrCa).expect(value);
+        assert!(!french.is_empty(), "{value}");
+        if let Some(website) = placeholder["fr"].as_str() {
+            assert_eq!(french, website, "{value}");
         }
         // An older spelling still in stored rows reads as the same placeholder.
         // The vendored copy writes its em dash as " - "; the stored row has the

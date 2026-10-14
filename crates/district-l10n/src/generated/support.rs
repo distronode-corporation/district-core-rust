@@ -3,14 +3,14 @@
 use crate::Locale;
 
 /// True when every entry has French; until then the French arm carries the English.
-pub const FR_COMPLETE: bool = false;
+pub const FR_COMPLETE: bool = true;
 
 /// `report.accepted`
 #[must_use]
 pub fn report_accepted(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reported. We'll review it.",
-        Locale::FrCa => "Reported. We'll review it.",
+        Locale::FrCa => "Signalé. Nous allons l'examiner.",
     }
 }
 
@@ -19,7 +19,7 @@ pub fn report_accepted(l: Locale) -> &'static str {
 pub fn report_already_reported(l: Locale) -> &'static str {
     match l {
         Locale::En => "You have already reported this. We'll review it.",
-        Locale::FrCa => "You have already reported this. We'll review it.",
+        Locale::FrCa => "Vous avez déjà fait ce signalement. Nous allons l'examiner.",
     }
 }
 
@@ -28,7 +28,7 @@ pub fn report_already_reported(l: Locale) -> &'static str {
 pub fn report_cancel(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancel",
-        Locale::FrCa => "Cancel",
+        Locale::FrCa => "Annuler",
     }
 }
 
@@ -37,7 +37,7 @@ pub fn report_cancel(l: Locale) -> &'static str {
 pub fn report_draft_open(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send or discard the support request you are writing in Support, then report this.",
-        Locale::FrCa => "Send or discard the support request you are writing in Support, then report this.",
+        Locale::FrCa => "Envoyez ou abandonnez la demande de soutien que vous rédigez dans Soutien, puis signalez ce contenu.",
     }
 }
 
@@ -46,7 +46,7 @@ pub fn report_draft_open(l: Locale) -> &'static str {
 pub fn report_intro(l: Locale) -> &'static str {
     match l {
         Locale::En => "Tell us what is wrong with this AI-generated content. We will review it.",
-        Locale::FrCa => "Tell us what is wrong with this AI-generated content. We will review it.",
+        Locale::FrCa => "Dites-nous ce qui ne va pas dans ce contenu généré par l'IA. Nous l'examinerons.",
     }
 }
 
@@ -64,7 +64,7 @@ pub fn report_no_note(l: Locale) -> &'static str {
 pub fn report_note_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "What is wrong (optional)",
-        Locale::FrCa => "What is wrong (optional)",
+        Locale::FrCa => "Ce qui ne va pas (facultatif)",
     }
 }
 
@@ -73,7 +73,7 @@ pub fn report_note_label(l: Locale) -> &'static str {
 pub fn report_pending(l: Locale) -> &'static str {
     match l {
         Locale::En => "Reported. We have it and it is catching up.",
-        Locale::FrCa => "Reported. We have it and it is catching up.",
+        Locale::FrCa => "Signalé. Nous l'avons reçu; le traitement est en cours.",
     }
 }
 
@@ -163,7 +163,7 @@ pub fn report_reference_meeting_minutes(l: Locale, meeting_id: &str) -> String {
 pub fn report_send(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send",
-        Locale::FrCa => "Send",
+        Locale::FrCa => "Envoyer",
     }
 }
 
@@ -181,6 +181,6 @@ pub fn report_subject(l: Locale) -> &'static str {
 pub fn report_title(l: Locale) -> &'static str {
     match l {
         Locale::En => "Report AI-generated content",
-        Locale::FrCa => "Report AI-generated content",
+        Locale::FrCa => "Signaler un contenu généré par l'IA",
     }
 }
