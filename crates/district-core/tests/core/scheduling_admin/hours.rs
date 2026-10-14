@@ -667,3 +667,16 @@ fn answers_for_an_editor_that_closed_land_nowhere() {
     let (mut model, _) = open("agency", SchedulingSection::Overview);
     assert!(hours(&mut model, HoursEvent::OpenWeek).is_empty());
 }
+
+#[test]
+fn a_day_off_needs_no_end_date_and_a_save_with_no_form_sends_nothing() {
+    let day = OverrideForm {
+        reason: "day_off".into(),
+        date: "2026-10-01".into(),
+        ..OverrideForm::default()
+    };
+    assert_eq!(day.error(), None);
+    let mut model = overrides_open();
+    assert!(hours(&mut model, HoursEvent::SaveOverride).is_empty());
+    assert_eq!(editor(&model).validation, None);
+}

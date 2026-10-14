@@ -143,6 +143,77 @@ fn an_answer_for_a_section_left_is_dropped() {
 }
 
 #[test]
+fn every_section_left_with_reads_on_their_way_drops_them() {
+    let sections = [
+        SchedulingSection::Bookings,
+        SchedulingSection::EventTypes,
+        SchedulingSection::EventType { slug: "s".into() },
+        SchedulingSection::Hours,
+        SchedulingSection::Calendar,
+        SchedulingSection::Team,
+        SchedulingSection::Settings,
+        SchedulingSection::Developer,
+    ];
+    for section in sections {
+        let (mut model, effects) = open("agency", section.clone());
+        // The sections scoped by the status send their reads once it is read.
+        let mut effects = effects;
+        if effects
+            .iter()
+            .any(|e| matches!(e, Effect::LoadSchedulingStatus { .. }))
+        {
+            effects.extend(super::status_answer(
+                &mut model,
+                &effects,
+                Ok(ready_status()),
+            ));
+        }
+        let waiting = sent(&effects);
+        assert!(!waiting.is_empty(), "{section:?}");
+        model.update(Event::Navigate(Route::SchedulingAdmin(
+            SchedulingSection::Overview,
+        )));
+        for (ticket, _) in waiting {
+            assert!(
+                answer(&mut model, ticket, Err(server_error())).is_empty(),
+                "{section:?}"
+            );
+        }
+    }
+}
+
+#[test]
+fn going_back_to_an_event_types_list_never_read_reads_it() {
+    let (mut model, _) = open("agency", SchedulingSection::EventType { slug: "s".into() });
+    assert!(admin(&model).event_types.is_none());
+    let effects = model.update(Event::Back);
+    assert_eq!(
+        signed_in(&model).route,
+        Route::SchedulingAdmin(SchedulingSection::EventTypes)
+    );
+    assert!(admin(&model).event_types.is_some());
+    assert!(!effects.is_empty());
+}
+
+#[test]
+fn a_refresh_with_reads_on_their_way_drops_them_for_new_ones() {
+    for section in SchedulingSection::listed()
+        .into_iter()
+        .chain([SchedulingSection::EventType { slug: "s".into() }])
+    {
+        let (mut model, first) = open("agency", section.clone());
+        let again = model.update(Event::Refresh);
+        assert!(!sent(&again).is_empty(), "{section:?}");
+        for (ticket, _) in sent(&first) {
+            assert!(
+                answer(&mut model, ticket, Err(server_error())).is_empty(),
+                "{section:?}"
+            );
+        }
+    }
+}
+
+#[test]
 fn a_refresh_reads_the_section_afresh() {
     let (mut model, _) = open("agency", SchedulingSection::Overview);
     let effects = model.update(Event::Refresh);

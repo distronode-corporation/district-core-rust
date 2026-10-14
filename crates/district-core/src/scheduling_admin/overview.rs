@@ -117,58 +117,81 @@ impl OverviewSection {
     /// hours, the event types, the next booking.
     pub fn desk(&self, now: SystemTime) -> Vec<DeskRow> {
         vec![
-            row(ss::desk_booking_page(l()), &self.event_types, |_| {
-                let links = self.booking_links();
-                if links.is_empty() {
-                    Err(match self.public_host {
-                        None => ss::desk_no_host(l()),
-                        Some(_) => ss::desk_no_event_types(l()),
-                    })
-                } else {
-                    Ok(links)
-                }
-            }),
-            row(ss::desk_calendar(l()), &self.calendar, |status| {
-                let lines: Vec<String> = status
-                    .connections
-                    .iter()
-                    .map(|c| ss::calendar_line(l(), &provider_label(&c.provider), &c.account_email))
-                    .collect();
-                if lines.is_empty() {
-                    Err(ss::desk_no_calendar(l()))
-                } else {
+            row(
+                ss::desk_booking_page(l()),
+                self.event_types.failure(),
+                self.event_types.value().map(|_| {
+                    let links = self.booking_links();
+                    if links.is_empty() {
+                        Err(match self.public_host {
+                            None => ss::desk_no_host(l()),
+                            Some(_) => ss::desk_no_event_types(l()),
+                        })
+                    } else {
+                        Ok(links)
+                    }
+                }),
+            ),
+            row(
+                ss::desk_calendar(l()),
+                self.calendar.failure(),
+                self.calendar.value().map(|status| {
+                    let lines: Vec<String> = status
+                        .connections
+                        .iter()
+                        .map(|c| {
+                            ss::calendar_line(l(), &provider_label(&c.provider), &c.account_email)
+                        })
+                        .collect();
+                    if lines.is_empty() {
+                        Err(ss::desk_no_calendar(l()))
+                    } else {
+                        Ok(lines)
+                    }
+                }),
+            ),
+            row(
+                ss::desk_hours(l()),
+                self.rules.failure(),
+                self.rules.value().map(|rules| {
+                    summarize_working_hours(rules, &self.timezone)
+                        .map(|summary| vec![summary])
+                        .ok_or(ss::desk_no_hours(l()))
+                }),
+            ),
+            row(
+                ss::desk_event_types(l()),
+                self.event_types.failure(),
+                self.event_types.value().map(|items| {
+                    let summary =
+                        summarize_event_types(items).ok_or(ss::desk_no_event_types(l()))?;
+                    let names: Vec<&str> = items
+                        .iter()
+                        .filter(|item| item.is_active != Some(false))
+                        .map(|item| item.name.as_str())
+                        .collect();
+                    let mut lines = vec![summary];
+                    if !names.is_empty() {
+                        lines.push(names.join(", "));
+                    }
                     Ok(lines)
-                }
-            }),
-            row(ss::desk_hours(l()), &self.rules, |rules| {
-                summarize_working_hours(rules, &self.timezone)
-                    .map(|summary| vec![summary])
-                    .ok_or(ss::desk_no_hours(l()))
-            }),
-            row(ss::desk_event_types(l()), &self.event_types, |items| {
-                let summary = summarize_event_types(items).ok_or(ss::desk_no_event_types(l()))?;
-                let names: Vec<&str> = items
-                    .iter()
-                    .filter(|item| item.is_active != Some(false))
-                    .map(|item| item.name.as_str())
-                    .collect();
-                let mut lines = vec![summary];
-                if !names.is_empty() {
-                    lines.push(names.join(", "));
-                }
-                Ok(lines)
-            }),
-            row(ss::desk_next_booking(l()), &self.bookings, |bookings| {
-                let booking = bookings.first().ok_or(ss::desk_no_bookings(l()))?;
-                let when = clock::relative(&booking.start_at, &self.timezone, now)
-                    .unwrap_or_else(|| ss::unknown_time(l()).to_owned());
-                Ok(vec![ss::next_booking_line(
-                    l(),
-                    &when,
-                    &booking_who(booking),
-                    &self.event_type_name(booking),
-                )])
-            }),
+                }),
+            ),
+            row(
+                ss::desk_next_booking(l()),
+                self.bookings.failure(),
+                self.bookings.value().map(|bookings| {
+                    let booking = bookings.first().ok_or(ss::desk_no_bookings(l()))?;
+                    let when = clock::relative(&booking.start_at, &self.timezone, now)
+                        .unwrap_or_else(|| ss::unknown_time(l()).to_owned());
+                    Ok(vec![ss::next_booking_line(
+                        l(),
+                        &when,
+                        &booking_who(booking),
+                        &self.event_type_name(booking),
+                    )])
+                }),
+            ),
         ]
     }
 
@@ -216,20 +239,18 @@ impl OverviewSection {
     }
 }
 
-/// A row from its read: loading, failed, or what `content` makes of the value
+/// A row from its read: failed, still loading, or what was made of the value
 /// (lines, or a hint for nothing set up).
-fn row<T>(
+fn row(
     label: &'static str,
-    load: &SectionLoad<T>,
-    content: impl FnOnce(&T) -> Result<Vec<String>, &'static str>,
+    failure: Option<&FailureText>,
+    ready: Option<Result<Vec<String>, &'static str>>,
 ) -> DeskRow {
-    let content = match load {
-        SectionLoad::Loading => DeskContent::Loading,
-        SectionLoad::Failed(failure) => DeskContent::Failed(failure.clone()),
-        SectionLoad::Ready(value) => match content(value) {
-            Ok(lines) => DeskContent::Lines(lines),
-            Err(hint) => DeskContent::Hint(hint),
-        },
+    let content = match (failure, ready) {
+        (Some(failure), _) => DeskContent::Failed(failure.clone()),
+        (None, None) => DeskContent::Loading,
+        (None, Some(Ok(lines))) => DeskContent::Lines(lines),
+        (None, Some(Err(hint))) => DeskContent::Hint(hint),
     };
     DeskRow { label, content }
 }
@@ -298,21 +319,27 @@ pub(crate) fn status_arrived(
 
 pub(crate) fn answered(admin: &mut SchedulingAdmin, pending: Pending, answer: Answer) -> Vec<Out> {
     // The register's answers are forgotten when it closes, so it is open.
-    if let Some(section) = admin.overview.as_mut() {
-        match pending {
-            // The profile gives the zone and nothing else: its failure is no
-            // row, and the zone stays UTC.
-            Pending::Me => {
-                if let Ok(SchedulingAdminData::Me(me)) = answer {
-                    section.timezone = me.display_timezone().to_owned();
-                }
+    admin
+        .overview
+        .as_mut()
+        .map(|section| overview_answer(section, pending, answer))
+        .unwrap_or_default()
+}
+
+fn overview_answer(section: &mut OverviewSection, pending: Pending, answer: Answer) -> Vec<Out> {
+    match pending {
+        // The profile gives the zone and nothing else: its failure is no
+        // row, and the zone stays UTC.
+        Pending::Me => {
+            if let Ok(SchedulingAdminData::Me(me)) = answer {
+                section.timezone = me.display_timezone().to_owned();
             }
-            Pending::EventTypes => section.event_types = load(answer, data!(EventTypes)),
-            Pending::Calendar => section.calendar = load(answer, data!(CalendarStatus)),
-            Pending::Rules => section.rules = load(answer, data!(Rules)),
-            Pending::Bookings => {
-                section.bookings = load(answer, |data| data!(BookingPage)(data).map(|p| p.items));
-            }
+        }
+        Pending::EventTypes => section.event_types = load(answer, data!(EventTypes)),
+        Pending::Calendar => section.calendar = load(answer, data!(CalendarStatus)),
+        Pending::Rules => section.rules = load(answer, data!(Rules)),
+        Pending::Bookings => {
+            section.bookings = load(answer, |data| data!(BookingPage)(data).map(|p| p.items));
         }
     }
     Vec::new()
@@ -488,5 +515,82 @@ pub(crate) fn booking_event_type_name(
             .find(|t| t.slug == slug)
             .map_or(slug, |t| t.name.as_str())
             .to_owned(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use district_model::SchedulingAvailabilityRule;
+
+    use super::*;
+
+    fn rule(
+        day: i64,
+        start: &str,
+        end: &str,
+        event_type: Option<&str>,
+    ) -> SchedulingAvailabilityRule {
+        SchedulingAvailabilityRule {
+            event_type_id: event_type.map(Into::into),
+            day_of_week: day,
+            start_time: start.into(),
+            end_time: end.into(),
+            ..SchedulingAvailabilityRule::default()
+        }
+    }
+
+    #[test]
+    fn days_with_the_same_hours_share_a_clause() {
+        let spread = [
+            rule(1, "09:00", "17:00", None),
+            rule(4, "09:00", "17:00", None),
+            rule(6, "09:00", "17:00", None),
+            rule(5, "10:00", "11:00", None),
+            rule(0, "12:00", "13:00", None),
+            rule(2, "08:00", "09:00", None),
+        ];
+        let text = summarize_working_hours(&spread, "UTC").unwrap_or_default();
+        assert!(text.starts_with("Mon, Thu, Sat, "), "{text}");
+        assert!(text.contains("; Fri, "), "{text}");
+        assert!(text.contains("; Sun, "), "{text}");
+        assert!(text.contains("; Tue, "), "{text}");
+        let week = [
+            rule(1, "09:00", "17:00", None),
+            rule(2, "09:00", "17:00", None),
+            rule(3, "09:00", "17:00", None),
+        ];
+        let text = summarize_working_hours(&week, "UTC").unwrap_or_default();
+        assert!(text.starts_with("Mon to Wed, "), "{text}");
+        // A rule for one event type is not the member's hours.
+        assert_eq!(
+            summarize_working_hours(&[rule(1, "09:00", "17:00", Some("et"))], "UTC"),
+            None
+        );
+    }
+
+    #[test]
+    fn who_booked_is_the_name_else_the_address_else_someone() {
+        use district_model::SchedulingBookingAttendee;
+        let booking = |name: Option<&str>, email: Option<&str>| SchedulingBooking {
+            attendees: Some(vec![SchedulingBookingAttendee {
+                name: name.map(Into::into),
+                email: email.map(Into::into),
+            }]),
+            ..SchedulingBooking::default()
+        };
+        assert_eq!(booking_who(&booking(Some(" Ann "), None)), "Ann");
+        assert_eq!(
+            booking_who(&booking(Some(" "), Some("ann@example.com"))),
+            "ann@example.com"
+        );
+        assert_eq!(booking_who(&booking(None, None)), "Someone");
+    }
+
+    #[test]
+    fn a_slug_is_encoded_as_the_web_encodes_it() {
+        assert_eq!(
+            booking_url_for("book.example.com", "a b/2!~*'()_.-"),
+            "https://book.example.com/book/a%20b%2F2!~*'()_.-"
+        );
     }
 }
