@@ -769,6 +769,8 @@ fn the_carrier_tab_says_each_thing_in_words() {
     // A balance that is not a number is shown as the carrier wrote it.
     twilio.balance = Some("n/a".to_owned());
     assert_eq!(carrier_balance(&twilio).as_deref(), Some("Balance n/a CAD"));
+    twilio.currency = None;
+    assert_eq!(carrier_balance(&twilio).as_deref(), Some("Balance n/a"));
     for (count, said) in [
         (1, "1 number on this account"),
         (3, "3 numbers on this account"),
