@@ -17,52 +17,58 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.0-beta.3] - 2026-10-14
+
+Scheduling administration in the core for both desktop apps, and a presence that no
+longer removes a Windows push registration when it goes away.
+
 ### Added
 
-- Scheduling administration, native in the core for both desktop apps, ported from
-  District AI for iOS and district-core-swift 7.0.0-beta.1: the booking scheduler's
-  sections behind `Route::SchedulingAdmin(SchedulingSection)`, each a state in
-  `SignedIn::scheduling_admin` (`SchedulingAdmin`) driven by
-  `Event::SchedulingAdmin(SchedulingAdminEvent)`.
-  - The overview (`OverviewSection`: the booking desk's rows and what is coming up);
-    bookings and one booking (`BookingsSection`, `BookingDetailSection`: views,
-    paging, cancel, move to another time, hand over to another host); event types and
-    one event type (`EventTypesSection`, `EventTypeSection`: create, edit, switch on
-    or off, archive, a test email, delete, hosts and routing, booking questions);
-    working hours and date overrides (`HoursSection`); calendars (`CalendarSection`:
-    Google and Microsoft through a single-use browser sign-in, CalDAV through a form,
-    which calendars are checked and which receives bookings, disconnect); the team
-    (`TeamSection`: members and their scheduler accounts, teams and their hosts,
-    archiving an account); developer (`DeveloperSection`: API keys, connected apps and
-    the MCP address, webhooks and their deliveries, a key or a signing secret shown
-    once); settings (`SettingsSection`: the booking page and its images, the booking
-    assistant, the member's profile and picture, their notifications).
-  - Every write that removes something is asked once more, every refusal reads as one
-    of the web dashboard's sentences, and every word comes from the new
-    `district-l10n` catalog `catalog/scheduling.toml` (`scheduling_strings`).
-  - `Effect::SchedulingAdmin` (one operation of the admin RPC, or an image upload) is
-    answered with `Event::SchedulingAdminAnswered`; `Effect::SchedulingSignIn` (the
-    scheduler's own sign-in, a credential) with `Event::SchedulingSignInReady`. The
-    team section reads the workspace's members through `Effect::LoadMembers`.
+- Scheduling administration, native in the core, ported from District AI for iOS and
+  district-core-swift 7.0.0-beta.1. Each section is a route,
+  `Route::SchedulingAdmin(SchedulingSection)`, with its state in
+  `SignedIn::scheduling_admin` (`SchedulingAdmin`) and its events in
+  `Event::SchedulingAdmin(SchedulingAdminEvent)`. The per-area API:
+  - the overview (`OverviewSection`);
+  - bookings and one booking (`BookingsSection`, `BookingDetailSection`: cancel, move,
+    hand over);
+  - event types and one event type (`EventTypesSection`, `EventTypeSection`: create,
+    edit, switch on or off, archive, test email, delete, hosts and routing, questions);
+  - working hours and date overrides (`HoursSection`);
+  - calendars (`CalendarSection`: Google and Microsoft through a single-use browser
+    sign-in, CalDAV through a form, disconnect);
+  - the team (`TeamSection`: members, teams and their hosts, archiving an account);
+  - developer (`DeveloperSection`: API keys, connected apps and the MCP address,
+    webhooks and their deliveries);
+  - settings (`SettingsSection`: the booking page and its images, the assistant, the
+    member's profile and notifications).
+
+  Every write that removes something is asked once more, every refusal reads as one
+  of the web dashboard's sentences, and every word comes from the new catalog
+  `catalog/scheduling.toml` (`scheduling_strings`).
 - `district-api`: `ApiClient::scheduling_admin` (`POST /api/district/scheduling/admin`
   and its upload route) and `ApiClient::scheduling_sign_in`
-  (`GET /api/district/scheduling/sso`, read for its `Location`, never followed), and
-  the same on `DistrictApi`.
+  (`GET /api/district/scheduling/sso`, read for its `Location`, never followed).
 - `district-model`: the admin RPC's wire types (`SchedulingAdminRequest`,
   `SchedulingAdminReply`, `SchedulingAdminData` and every payload), held strictly to
   the 39 `district-scheduling-*` fixtures.
 
 ### Changed
 
-- The presence going away (the setting off, sleep, quitting) unregisters the
-  presence alone: `POST devices/unregister` with `{"kind": "desktop"}`, so a
-  Windows push registration of the same installation stays for exactly the time
-  the app is not there to ring. Signing out still removes every kind, with no body.
-  A service that predates the kind ignores the body and behaves as before.
-- Breaking: `ApiClient::unregister_presence` and `PresenceApi::unregister_presence`
-  take the kind (`None` for every kind); `Presence` has a new method,
-  `unregister_all`, which sign-out calls; `BodyKind` has a new variant,
-  `OptionalJson`, which `PushUnregister` uses.
+- The presence going away (the setting off, sleep, quitting) unregisters the presence
+  alone: `POST devices/unregister` with `{"kind": "desktop"}`, so a Windows push
+  registration of the same installation stays. Signing out still removes every kind,
+  with no body, through the new `Presence::unregister_all`. A service that predates
+  the kind ignores the body and behaves as before.
+- Breaking:
+  - `Route`, `Event` and `Effect` have new variants (`Route::SchedulingAdmin`,
+    `Event::SchedulingAdmin`, `Event::SchedulingAdminAnswered`,
+    `Event::SchedulingSignInReady`, `Effect::SchedulingAdmin`,
+    `Effect::SchedulingSignIn`), and `SignedIn` a new field, `scheduling_admin`.
+  - `DistrictApi` has two new methods, `scheduling_admin` and `scheduling_sign_in`.
+  - `ApiClient::unregister_presence` and `PresenceApi::unregister_presence` take the
+    kind (`None` for every kind); `Presence` has a new method, `unregister_all`.
+  - `BodyKind` has a new variant, `OptionalJson`, which `PushUnregister` uses.
 
 ## [4.0.0-beta.2] - 2026-10-13
 
