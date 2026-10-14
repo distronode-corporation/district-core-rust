@@ -294,6 +294,35 @@ mod tests {
         });
     }
 
+    /// French reads the first of a month `1er`, a 24-hour clock with no minutes on
+    /// the hour, and a range keeps both years, in every formatter here.
+    #[test]
+    fn french_reads_the_first_and_the_clock_as_the_service_does() {
+        with_locale(Locale::FrCa, || {
+            let first = SchedulingDay::parse("2026-08-01").unwrap();
+            assert_eq!(first.label(), "1er ao\u{fb}t 2026");
+            assert_eq!(
+                date_time("2026-08-01T13:00:00Z", "America/Toronto").as_deref(),
+                Some("1er ao\u{fb}t 2026, 9 h")
+            );
+            assert_eq!(
+                date_time("2026-09-12T19:04:00Z", "America/Toronto").as_deref(),
+                Some("12 sept. 2026, 15 h 04")
+            );
+            let now = at(SEPT_14_13H);
+            let zone = "America/Toronto";
+            assert_eq!(
+                relative("2026-09-14T20:00:00Z", zone, now).as_deref(),
+                Some("Aujourd'hui \u{e0} 16 h")
+            );
+            assert_eq!(
+                relative("2026-10-01T13:30:00Z", zone, now).as_deref(),
+                Some("1er oct. 2026, 9 h 30")
+            );
+            assert_eq!(hour_minute("13:30", zone), "13 h 30");
+        });
+    }
+
     #[test]
     fn after_now_is_judged_on_the_instant() {
         let now = at(SEPT_14_13H);
