@@ -80,6 +80,25 @@ screen = "scheduling booking"
 tier = "T3"
 note = "Heading of what the booker answered to the booking page's questions."
 
+[app.revoke_action]
+en = "Revoke access"
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[app.revoke_confirm]
+en = "It stops reaching this workspace's booking data now."
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[app.revoke_prompt]
+en = "Revoke {client_name}?"
+ctx = "placeholder"
+screen = "scheduling developer writes"
+tier = "T3"
+args = { client_name = "str" }
+
 [booking.answer_blank]
 en = "No answer"
 ctx = "label"
@@ -716,6 +735,18 @@ screen = "scheduling"
 tier = "T3"
 note = "Opens an item's editor."
 
+[common.off]
+en = "Off"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
+[common.on]
+en = "On"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
 [common.remove]
 en = "Remove"
 ctx = "button"
@@ -879,6 +910,188 @@ ctx = "body"
 screen = "scheduling overview"
 tier = "T3"
 note = "The hours row when no weekly hours are set."
+
+[developer.apps_empty]
+en = "No connected apps."
+ctx = "body"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.apps_eyebrow]
+en = "Connected apps"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.apps_subtitle]
+en = "Every connected app reaches the same booking data. There are no partial permissions, so revoking is the only way to narrow one."
+ctx = "title"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.deliveries]
+en = "Deliveries"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.deliveries_empty]
+en = "Nothing delivered yet."
+ctx = "body"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.delivery_delivered]
+en = "Delivered"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+note = "Status of one webhook delivery: the receiving server accepted it."
+
+[developer.delivery_no_answer]
+en = "No answer"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+note = "Status of one webhook delivery: the receiving server never answered."
+
+[developer.delivery_rejected]
+en = "Rejected with {code}"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+args = { code = "str" }
+note = "Status of one webhook delivery: the receiving server refused it. {code} is the HTTP status number it answered with, e.g."
+
+[developer.delivery_waiting]
+en = "Waiting"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+note = "Status of one webhook delivery: not attempted yet."
+
+[developer.key_value]
+en = "Created {created} · Last used {last_used}"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+args = { created = "str", last_used = "str" }
+
+[developer.keys_empty]
+en = "No API keys yet."
+ctx = "body"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.keys_eyebrow]
+en = "Your API keys"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.keys_subtitle]
+en = "A key lets your own tools and scripts reach this workspace's booking data."
+ctx = "title"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.mcp_auth_label]
+en = "Authorization header"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.mcp_auth_value]
+en = "Bearer {key}"
+ctx = "format"
+screen = "scheduling developer"
+tier = "T3"
+args = { key = "str" }
+note = "The value of the Authorization header an AI assistant sends. \"Bearer\" is the HTTP scheme name and is never translated; {key} is the API key placeholder."
+
+[developer.mcp_eyebrow]
+en = "Connect an AI assistant"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.mcp_key_placeholder]
+en = "<your API key>"
+ctx = "placeholder"
+screen = "scheduling developer"
+tier = "T3"
+note = "Stands in for the operator's API key inside a configuration snippet they copy into an AI assistant. Keep the angle brackets."
+
+[developer.mcp_no_host]
+en = "Your booking address is not ready yet. It appears here once scheduling is set up."
+ctx = "body"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.mcp_note]
+en = "Use a key from the API keys tab. Anyone holding it can do everything on this workspace's bookings, so give each assistant its own and revoke it when you are done with it."
+ctx = "body"
+screen = "scheduling developer"
+tier = "T3"
+note = "It says there are no partial permissions, which is the whole security story of this integration. Anyone holding a key can do everything in the tool list, so the only way to narrow an assistant is to give it its own key and revoke that."
+
+[developer.mcp_url_label]
+en = "MCP URL"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.never]
+en = "Never"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+note = "The absent marker is per column and the three are not interchangeable. \"Never\" means a key that has not been used; \"Not tried yet\" means a delivery that has not run; the em dash means a value that is simply missing."
+
+[developer.not_tried_yet]
+en = "Not tried yet"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.tab_apps]
+en = "Connected apps"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+note = "Tab on the scheduling developer screen: the third-party apps given access."
+
+[developer.tab_keys]
+en = "API keys"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+note = "Tab on the scheduling developer screen: the operator's API keys."
+
+[developer.tab_webhooks]
+en = "Webhooks"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+note = "Tab on the scheduling developer screen: the webhook endpoints that receive booking events."
+
+[developer.webhooks_empty]
+en = "No webhooks yet."
+ctx = "body"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.webhooks_eyebrow]
+en = "Webhooks"
+ctx = "label"
+screen = "scheduling developer"
+tier = "T3"
+
+[developer.webhooks_subtitle]
+en = "Bookings already reach your District inbox and workflows; webhooks are for other systems."
+ctx = "title"
+screen = "scheduling developer"
+tier = "T3"
 
 [disconnect.action]
 en = "Disconnect"
@@ -1480,6 +1693,93 @@ ctx = "label"
 screen = "scheduling hours"
 tier = "T3"
 note = "A date override on which the member takes no bookings."
+
+[key.copied]
+en = "Copied"
+ctx = "toast"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.copy_action]
+en = "Copy key"
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.create]
+en = "Create key"
+ctx = "label"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.creating]
+en = "Creating…"
+ctx = "label"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.done]
+en = "Done"
+ctx = "toast"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.name_hint]
+en = "What will use this key. You will see it in the list and nowhere else."
+ctx = "a11y"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.name_label]
+en = "Name"
+ctx = "label"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.name_missing]
+en = "Give the key a name."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.reveal_title]
+en = "Your key for {name}"
+ctx = "title"
+screen = "scheduling developer writes"
+tier = "T3"
+args = { name = "str" }
+
+[key.reveal_warning]
+en = "Copy it now. It is not shown again."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
+note = "The show-once sentence, and it is the app's own rather than the fork's. `SchedulingAPIKeyCreated.note` carries an English string from a service that does not localise; treating it as the source would make the one sentence a customer has to act on untranslatable."
+
+[key.revoke_action]
+en = "Revoke key"
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.revoke_confirm]
+en = "Anything using it stops working now."
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[key.revoke_prompt]
+en = "Revoke {name}?"
+ctx = "placeholder"
+screen = "scheduling developer writes"
+tier = "T3"
+args = { name = "str" }
+
+[key.sheet_title]
+en = "Create key"
+ctx = "title"
+screen = "scheduling developer writes"
+tier = "T3"
 
 [location.built_in_video]
 en = "Built-in video"
@@ -2797,6 +3097,172 @@ ctx = "label"
 screen = "scheduling"
 tier = "T3"
 note = "Shown in place of a date and time the service sent in a form that cannot be read."
+
+[webhook.add_action]
+en = "Add webhook"
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.add_title]
+en = "Add webhook"
+ctx = "title"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.added]
+en = "Webhook added"
+ctx = "toast"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.delete_action]
+en = "Delete webhook"
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T2"
+
+[webhook.delete_confirm]
+en = "It stops receiving booking changes now, and its signing secret cannot be recovered."
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T2"
+
+[webhook.delete_prompt]
+en = "Delete this webhook?"
+ctx = "placeholder"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.dropped_events_line]
+en = "Saving will stop sending {events}. This app does not know those events, so it cannot send them back."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
+args = { events = "str" }
+note = "{events} is a comma-separated list of webhook event names, as the server spells them."
+
+[webhook.edit_title]
+en = "Edit webhook"
+ctx = "title"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.events_hint]
+en = "What to send. Each one is a separate delivery."
+ctx = "a11y"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.events_label]
+en = "Events"
+ctx = "label"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.events_missing]
+en = "Choose at least one event."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.fields_hint]
+en = "Which parts of the booking each delivery carries."
+ctx = "a11y"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.fields_label]
+en = "Data to send"
+ctx = "label"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.personal_data]
+en = "Personal data"
+ctx = "label"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.save_action]
+en = "Save changes"
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.saving]
+en = "Saving…"
+ctx = "label"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.secret_copy_action]
+en = "Copy signing secret"
+ctx = "button"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.secret_note]
+en = "Every delivery to {url} is signed with it, in the X-Calnode-Signature header."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
+args = { url = "str" }
+
+[webhook.secret_title]
+en = "Your signing secret"
+ctx = "title"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.updated]
+en = "Webhook updated"
+ctx = "toast"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.url_fixed]
+en = "The URL cannot be changed. Delete this webhook and add another to move it."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
+note = "The URL is not editable, because `webhooks.patch` takes only `events` and `fields`. Offering a box that silently kept the old value is worse than not offering one: the person believes deliveries have moved."
+
+[webhook.url_hint]
+en = "Where each delivery is posted. https only."
+ctx = "a11y"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.url_label]
+en = "Endpoint URL"
+ctx = "label"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.url_missing]
+en = "Give the webhook a URL."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.url_not_a_url]
+en = "That is not a URL. It has to start with https://."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.url_not_https]
+en = "The URL has to start with https://."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
+
+[webhook.url_private]
+en = "That address is not reachable from the internet. Use a public https URL."
+ctx = "body"
+screen = "scheduling developer writes"
+tier = "T3"
 
 [weekday.friday]
 en = "Friday"

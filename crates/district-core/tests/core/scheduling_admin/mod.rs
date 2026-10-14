@@ -4,6 +4,7 @@
 mod bookings;
 mod calendar;
 mod common;
+mod developer;
 mod event_types;
 mod hours;
 mod overview;
