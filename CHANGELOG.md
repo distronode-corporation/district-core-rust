@@ -17,73 +17,76 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.0-beta.2] - 2026-10-13
+
+Three features the iOS and Mac apps have, now in the core for both desktop apps, and the
+server's wire vocabulary synced.
+
 ### Added
 
-- `district-l10n`: the wire vocabulary synced to the server at `46e1740a6`, from 11
-  categories to 31. `WireCategory` names the 20 new ones (help desk tickets, knowledge
-  documents, workflows and their runs, numbers, meetings, message delivery, contact
-  research, line types, billing, messaging accounts), and `wire_label` gives each
-  value its label, or the category's fallback where the service has one (help desk
-  ticket status, knowledge document status). A value that names a part of itself in
-  braces (`http-{status}`) is written to the catalog with its braces doubled.
 - Reporting AI-generated content, lifted from District AI for Windows
-  (`district-ffi/src/report.rs`) into the core so that both desktop apps raise the
-  same report. A report is a support request raised through the support form from
-  any screen, without navigating: `SupportEvent::Report { platform, target, note }`
-  and `SupportEvent::DismissReport`, with `ReportTarget`, `ReportStatus`,
-  `SupportScreen::report_status`, `SupportScreen::report_refusal` (a report is
-  refused while the member has a support request of their own typed),
-  `ReportDialog`, `report_message`, `report_subject` and `REPORT_NOTE_LIMIT`. What
-  the support desk receives stays English in every language (fixed catalog
-  entries) and names the app it came from; the dialog's words and the outcome's
-  sentence are translatable.
-- `district-l10n`: `support_strings`, generated from the new `catalog/support.toml`.
-- Starting a conversation from the inbox, as the iOS and Mac apps do:
-  `InboxEvent::Compose(ComposeEvent)` and `InboxScreen::compose`, a
-  `ComposeScreen` with the most recent contacts (`COMPOSE_CONTACT_WINDOW`)
-  filtered by name, number or address, a recipient that is a contact or a typed
-  number or address (`ComposeRecipient`), its channels a text message first, a
-  subject required for an email, and the form's words. The first message is sent
-  once (`messages/send`); its thread is then asked for by the message's id and
-  opened, with its reply going where the service says the thread is reached. A
-  message that went out and whose thread cannot be found still closes the form.
-  No new endpoint: contacts, send and the message's thread were already called.
-- Managing the numbers a workspace holds, as the iOS and Mac apps do; buying a number
-  stays on the web. On the phone numbers screen (`MarketplaceScreen::admin`, a
-  `NumberAdmin`, and `MarketplaceEvent::Numbers(NumberAdminEvent)`): reapplying a
-  number's routing; releasing it behind a confirmation, which reads the numbers again;
-  the billed lookup behind a confirmation; and a new carrier tab
-  (`MarketplaceTab::Carrier`) with the carrier accounts' status, the SIP trunks (list
-  and create), the one-time passcode sender on or off, and the A2P 10DLC and toll-free
-  registrations, both behind a confirmation. Each write has its own `NumberWrite`; a
-  write that costs money or cannot be undone is offered again after a failure only
-  when the failure proves it did not happen. One effect and one event carry every call
-  (`Effect::NumberAdmin` with a `NumberCall`, `Event::NumberAdminDone` with a
-  `NumberAnswer`), run by the new `DistrictApi::number_call`.
-- `district-api`: ten endpoints and their typed calls (`configure_number`,
-  `release_number`, `lookup_number`, `provider_status`, `sip_trunks`,
-  `create_sip_trunk`, `verify_service`, `set_verify_service`, `register_a2p`,
-  `verify_toll_free`), each in `DESKTOP_ONLY`. The lookup is a read that is never
-  repeated, because the carrier bills it.
-- `district-model`: their types (`NumberReleaseResponse`, `ProviderStatusResponse`,
-  `SipTrunk`, `A2pRegistrationDraft` and the rest). No contract fixture records them
-  yet; their shapes are the routes'.
-- `district-l10n`: `numbers_strings`, generated from the new `catalog/numbers.toml`.
+  (`district-ffi/src/report.rs`) so that both apps raise the same report: a support
+  request through the support form, from any screen, without navigating.
+  - Raise it with `SupportEvent::Report { platform, target, note }` (`ReportTarget`:
+    a call, a contact, a conversation event, an AI-written reply, a District HQ
+    answer, a meeting's minutes or action items); put it away with
+    `SupportEvent::DismissReport`.
+  - Read it back with `SupportScreen::report_status` (`ReportStatus`: sending, sent,
+    failed) and `SupportScreen::report_refusal`, the sentence to show while the
+    member has a support request of their own typed. The dialog's words are
+    `ReportDialog`.
+  - What the support desk receives is English in every language and names the app
+    (`report_message`, `report_subject`, `REPORT_NOTE_LIMIT`); what the member reads
+    is translatable.
+- Starting a conversation from the inbox: `InboxEvent::Compose(ComposeEvent)` and
+  `InboxScreen::compose`, a `ComposeScreen`.
+  - A recipient is a contact from the most recent window
+    (`COMPOSE_CONTACT_WINDOW`, filtered by name, number or address) or a number or
+    address typed in (`ComposeRecipient`); a text message comes first among its
+    channels, and an email needs a subject.
+  - The first message is sent once; its thread is then found by the message's id
+    and opened, its reply going where the service says the thread is reached. No new
+    endpoint.
+- Managing the numbers a workspace holds; buying a number stays on the web.
+  `MarketplaceScreen::admin` (a `NumberAdmin`) and
+  `MarketplaceEvent::Numbers(NumberAdminEvent)`, with a new carrier tab
+  (`MarketplaceTab::Carrier`).
+  - Reapplying a number's routing; releasing it behind a confirmation
+    (`NumberConfirmation`), after which the numbers are read again; the billed lookup
+    behind a confirmation.
+  - On the carrier tab: the carrier accounts' status (`CarrierStatus`), the SIP
+    trunks (`SipTrunks`, list and create), the one-time passcode sender on or off
+    (`VerifyService`), and the A2P 10DLC and toll-free registrations
+    (`A2pForm`, `TollFreeForm`), each behind a confirmation.
+  - Each write has its own `NumberWrite`. A write that costs money or cannot be
+    undone is offered again after a failure only when the failure proves it did not
+    happen.
+  - One effect and one event carry every call: `Effect::NumberAdmin` with a
+    `NumberCall`, `Event::NumberAdminDone` with a `NumberAnswer`, run by the new
+    `DistrictApi::number_call`.
+  - `district-api`: ten endpoints and their typed calls (`configure_number`,
+    `release_number`, `lookup_number`, `provider_status`, `sip_trunks`,
+    `create_sip_trunk`, `verify_service`, `set_verify_service`, `register_a2p`,
+    `verify_toll_free`), each in `DESKTOP_ONLY`. The lookup is a read that is never
+    repeated: the carrier bills it.
+  - `district-model`: their types. No contract fixture records them yet; their
+    shapes are the routes'.
+- `district-l10n`: two new catalogs, `support.toml` (`support_strings`) and
+  `numbers.toml` (`numbers_strings`), and the inbox's new words in `core.toml`.
+- `district-l10n`: the wire vocabulary at the server's `46e1740a6`, from 11 categories
+  to 31. `WireCategory` names the 20 new ones and `wire_label` labels their values,
+  with a category's own fallback where the service has one.
 
 ### Changed
 
 - `placeholder_label`: the summary of an unanswered call is now "No answer, no
   conversation took place."; rows stored with the old spelling, an em dash where the
-  comma is, read as the same placeholder. The old spelling had no label before,
-  because the vendored copy replaces its em dash.
-- Breaking: `WireCategory` has 20 new variants, and `WireCategory::ALL` 31 entries.
-- Breaking: `SupportScreen` has a new field, `reporting`, and `SupportEvent` two new
-  variants.
-- Breaking: `InboxScreen` has a new field, `compose`, and `InboxEvent` a new
-  variant.
-- Breaking: `DistrictApi` has a new method, `number_call`; `MarketplaceScreen` a new
-  field, `admin`; `MarketplaceTab` and `MarketplaceEvent` new variants; `Effect` and
-  `Event` one new variant each.
+  comma is, read as the same placeholder.
+- Breaking: `SupportScreen` has a new field (`reporting`) and `SupportEvent` two new
+  variants; `InboxScreen` a new field (`compose`) and `InboxEvent` a new variant;
+  `MarketplaceScreen` a new field (`admin`), and `MarketplaceTab` and
+  `MarketplaceEvent` new variants; `Effect` and `Event` one new variant each;
+  `DistrictApi` a new method (`number_call`); `WireCategory` 20 new variants.
 - Breaking: `MarketplaceScreen::read_only_note`, `READ_ONLY` and `READ_ONLY_VIEWER`
   are gone, with the catalog entries `marketplace.read_only` and
   `marketplace.read_only_viewer`: the screen is no longer read only.
