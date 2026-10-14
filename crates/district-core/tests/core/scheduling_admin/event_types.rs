@@ -166,7 +166,10 @@ fn a_create_sends_a_unique_slug_the_name_the_duration_and_the_location() {
         location: "phone".into(),
         ..EventTypeForm::default()
     };
-    on_list(&mut model, EventTypesEvent::EditForm(fields.clone()));
+    on_list(
+        &mut model,
+        EventTypesEvent::EditForm(Box::new(fields.clone())),
+    );
     assert!(on_list(&mut model, EventTypesEvent::Save).is_empty());
     assert_eq!(
         editor(&model).validation,
@@ -174,7 +177,7 @@ fn a_create_sends_a_unique_slug_the_name_the_duration_and_the_location() {
     );
     assert_eq!(editor(&model).location_value_label(), Some("Phone number"));
     fields.duration = " 45 ".into();
-    on_list(&mut model, EventTypesEvent::EditForm(fields));
+    on_list(&mut model, EventTypesEvent::EditForm(Box::new(fields)));
     let effects = on_list(&mut model, EventTypesEvent::Save);
     let requests = sent(&effects);
     let [(ticket, request)] = requests.as_slice() else {
@@ -203,7 +206,7 @@ fn a_create_sends_a_unique_slug_the_name_the_duration_and_the_location() {
     let effects = answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::EventType(types()[0].clone())),
+        done(SchedulingAdminData::EventType(Box::new(types()[0].clone()))),
     );
     assert!(list(&model).editor.is_none());
     assert_eq!(
@@ -222,7 +225,7 @@ fn a_viewer_cannot_open_the_create_form_and_it_closes() {
     assert!(list(&model).editor.is_none());
     on_list(
         &mut model,
-        EventTypesEvent::EditForm(EventTypeForm::default()),
+        EventTypesEvent::EditForm(Box::new(EventTypeForm::default())),
     );
     assert!(on_list(&mut model, EventTypesEvent::Save).is_empty());
 
@@ -265,7 +268,7 @@ fn opened(role: &str) -> Model {
     let replies = [
         (
             SchedulingAdminRequest::EventType { slug: slug() },
-            SchedulingAdminData::EventType(types()[0].clone()),
+            SchedulingAdminData::EventType(Box::new(types()[0].clone())),
         ),
         (
             SchedulingAdminRequest::Hosts { slug: slug() },
@@ -364,7 +367,7 @@ fn a_sparse_event_type_shows_only_what_it_has_and_a_blank_host_by_address() {
         ticket_for(&effects, |r| {
             matches!(r, SchedulingAdminRequest::EventType { .. })
         }),
-        done(SchedulingAdminData::EventType(sparse)),
+        done(SchedulingAdminData::EventType(Box::new(sparse))),
     );
     answer(
         &mut model,
@@ -476,7 +479,7 @@ fn an_edit_sends_every_field_and_reads_the_event_type_again() {
     let effects = answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::EventType(types()[0].clone())),
+        done(SchedulingAdminData::EventType(Box::new(types()[0].clone()))),
     );
     assert!(section(&model).dialog.is_none());
     assert_eq!(sent(&effects).len(), 3, "the three reads again");
@@ -497,7 +500,7 @@ fn a_stored_location_the_form_does_not_offer_stays_on_offer() {
         ticket_for(&effects, |r| {
             matches!(r, SchedulingAdminRequest::EventType { .. })
         }),
-        done(SchedulingAdminData::EventType(row)),
+        done(SchedulingAdminData::EventType(Box::new(row))),
     );
     one(&mut model, EventTypeEvent::OpenEditor);
     let choices = edit_form(&model).location_choices();
@@ -559,7 +562,7 @@ fn turning_off_and_archiving_say_so_and_read_the_type_again() {
     let effects = answer(
         &mut model,
         *ticket,
-        done(SchedulingAdminData::EventType(off)),
+        done(SchedulingAdminData::EventType(Box::new(off))),
     );
     assert_eq!(sent(&effects).len(), 3);
     assert_eq!(
@@ -573,7 +576,7 @@ fn turning_off_and_archiving_say_so_and_read_the_type_again() {
     answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::EventType(on)),
+        done(SchedulingAdminData::EventType(Box::new(on))),
     );
     assert_eq!(actions(&model).write.notice(), Some("Event type turned on"));
     assert_eq!(actions(&model).archive_label(), "Restore");
@@ -587,14 +590,14 @@ fn turning_off_and_archiving_say_so_and_read_the_type_again() {
     answer(
         &mut model,
         *ticket,
-        done(SchedulingAdminData::EventType(types()[0].clone())),
+        done(SchedulingAdminData::EventType(Box::new(types()[0].clone()))),
     );
     assert_eq!(actions(&model).write.notice(), Some("Event type restored"));
     let effects = one(&mut model, EventTypeEvent::ToggleArchived);
     answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::EventType(types()[0].clone())),
+        done(SchedulingAdminData::EventType(Box::new(types()[0].clone()))),
     );
     assert_eq!(actions(&model).write.notice(), Some("Event type archived"));
     let effects = one(&mut model, EventTypeEvent::ToggleArchived);
@@ -861,7 +864,7 @@ fn the_hosts_are_edited_and_saved_whole_with_the_routing_after() {
     let effects = answer(
         &mut model,
         *ticket,
-        done(SchedulingAdminData::EventType(types()[0].clone())),
+        done(SchedulingAdminData::EventType(Box::new(types()[0].clone()))),
     );
     assert!(section(&model).dialog.is_none());
     assert_eq!(sent(&effects).len(), 3);
@@ -1188,7 +1191,7 @@ fn an_answer_for_a_dialog_closed_or_replaced_lands_nowhere() {
     let effects = answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::EventType(types()[0].clone())),
+        done(SchedulingAdminData::EventType(Box::new(types()[0].clone()))),
     );
     assert_eq!(sent(&effects).len(), 3);
     // The list's create, likewise.
@@ -1196,7 +1199,7 @@ fn an_answer_for_a_dialog_closed_or_replaced_lands_nowhere() {
     on_list(&mut model, EventTypesEvent::OpenCreate);
     let mut form = list(&model).editor.as_ref().unwrap().form.clone();
     form.name = "X".into();
-    on_list(&mut model, EventTypesEvent::EditForm(form));
+    on_list(&mut model, EventTypesEvent::EditForm(Box::new(form)));
     let effects = on_list(&mut model, EventTypesEvent::Save);
     on_list(&mut model, EventTypesEvent::CloseEditor);
     answer(&mut model, sent(&effects)[0].0, Err(server_error()));

@@ -537,7 +537,7 @@ pub enum EventTypesEvent {
     /// Open the create form.
     OpenCreate,
     /// The form's fields changed.
-    EditForm(EventTypeForm),
+    EditForm(Box<EventTypeForm>),
     /// Create it.
     Save,
     /// Close the form.
@@ -809,7 +809,7 @@ pub enum EventTypeDialog {
     /// The editor.
     Edit(EventTypeEditor),
     /// The state actions.
-    Actions(ActionsDialog),
+    Actions(Box<ActionsDialog>),
     /// The hosts.
     Hosts(HostsDialog),
     /// The booking questions.
@@ -1061,11 +1061,11 @@ pub(crate) enum Action {
 }
 
 fn send(pending: Pending, request: SchedulingAdminRequest) -> Out {
-    Out::Send(AdminPending::EventTypes(pending), request)
+    Out::Send(AdminPending::EventTypes(pending), Box::new(request))
 }
 
 fn send_detail(pending: DetailPending, request: SchedulingAdminRequest) -> Out {
-    Out::Send(AdminPending::EventType(pending), request)
+    Out::Send(AdminPending::EventType(pending), Box::new(request))
 }
 
 pub(crate) fn enter(admin: &mut SchedulingAdmin, tickets: &mut Tickets) -> Vec<Out> {
@@ -1105,7 +1105,7 @@ pub(crate) fn event(
         }
         EventTypesEvent::EditForm(form) => {
             if let Some(editor) = &mut section.editor {
-                editor.form = form;
+                editor.form = *form;
             }
             Vec::new()
         }
@@ -1217,11 +1217,11 @@ pub(crate) fn detail_event(
             Vec::new()
         }
         (EventTypeEvent::OpenActions, dialog, Some(event_type)) => {
-            *dialog = Some(EventTypeDialog::Actions(ActionsDialog {
+            *dialog = Some(EventTypeDialog::Actions(Box::new(ActionsDialog {
                 event_type,
                 write: WriteState::Idle,
                 confirming_delete: false,
-            }));
+            })));
             Vec::new()
         }
         (EventTypeEvent::OpenHosts, dialog, Some(row)) => {
@@ -1552,7 +1552,7 @@ fn detail_answer(
 ) -> Vec<Out> {
     let slug = section.slug.clone();
     match pending {
-        DetailPending::EventType => section.event_type = load(answer, data!(EventType)),
+        DetailPending::EventType => section.event_type = load(answer, data!(EventType, boxed)),
         DetailPending::Hosts => section.hosts = load(answer, data!(Hosts)),
         DetailPending::Questions => section.questions = load(answer, data!(Questions)),
         // The editor closes on a save, and the event type is read again.
@@ -1701,7 +1701,7 @@ fn action_answered(section: &mut EventTypeSection, action: Action, answer: Answe
         match &answer {
             Ok(data) => {
                 if let SchedulingAdminData::EventType(row) = data {
-                    actions.event_type = row.clone();
+                    actions.event_type = row.as_ref().clone();
                 }
                 actions.write = WriteState::Done(notice);
             }

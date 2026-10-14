@@ -605,11 +605,11 @@ pub(crate) enum DetailPending {
 }
 
 fn send(pending: Pending, request: SchedulingAdminRequest) -> Out {
-    Out::Send(AdminPending::Bookings(pending), request)
+    Out::Send(AdminPending::Bookings(pending), Box::new(request))
 }
 
 fn send_detail(pending: DetailPending, request: SchedulingAdminRequest) -> Out {
-    Out::Send(AdminPending::Booking(pending), request)
+    Out::Send(AdminPending::Booking(pending), Box::new(request))
 }
 
 /// Opens the list: a fresh one, its profile and event types read, and the

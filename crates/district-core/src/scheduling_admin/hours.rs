@@ -666,7 +666,7 @@ pub(crate) enum Pending {
 }
 
 fn send(pending: Pending, request: SchedulingAdminRequest) -> Out {
-    Out::Send(AdminPending::Hours(pending), request)
+    Out::Send(AdminPending::Hours(pending), Box::new(request))
 }
 
 fn section_reads() -> Vec<Out> {

@@ -245,7 +245,7 @@ pub(crate) enum Pending {
 }
 
 fn send(pending: Pending, request: SchedulingAdminRequest) -> Out {
-    Out::Send(AdminPending::Overview(pending), request)
+    Out::Send(AdminPending::Overview(pending), Box::new(request))
 }
 
 /// Opens the register: the four reads that need nothing, at once; the

@@ -1763,7 +1763,7 @@ pub enum Effect {
         /// The workspace.
         workspace_id: String,
         /// The operation and its parameters.
-        request: SchedulingAdminRequest,
+        request: Box<SchedulingAdminRequest>,
     },
     /// Ask for the link that signs the browser in to the scheduler itself,
     /// landing on `next`: the start of a calendar connection. Sent once: it is

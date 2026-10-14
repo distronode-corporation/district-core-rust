@@ -390,7 +390,7 @@ fn a_cancel_sends_the_trimmed_reason_or_none_and_reads_the_list_again() {
     let effects = answer(
         &mut model,
         *ticket,
-        done(SchedulingAdminData::Booking(cancelled)),
+        done(SchedulingAdminData::Booking(Box::new(cancelled))),
     );
     assert!(
         sent(&effects).iter().any(|(_, r)| is_page(r)),
@@ -562,7 +562,7 @@ fn a_taken_time_reads_the_times_again_and_a_move_reads_the_list_again() {
     let effects = answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::Booking(moved)),
+        done(SchedulingAdminData::Booking(Box::new(moved))),
     );
     assert!(sent(&effects).iter().any(|(_, r)| is_page(r)));
     assert_eq!(
@@ -586,7 +586,7 @@ fn a_move_whose_new_time_cannot_be_read_still_says_it_moved() {
     answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::Booking(moved)),
+        done(SchedulingAdminData::Booking(Box::new(moved))),
     );
     assert_eq!(reschedule(&model).write.notice(), Some("Booking moved"));
 }
@@ -713,7 +713,7 @@ fn a_booking_goes_to_a_host_who_is_neither_archived_nor_its_host_now() {
     answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::Booking(booking)),
+        done(SchedulingAdminData::Booking(Box::new(booking))),
     );
     assert_eq!(reassign(&model).write.notice(), Some("Host changed"));
 }
@@ -774,11 +774,11 @@ fn a_write_that_lands_after_its_dialog_closed_still_reads_the_list_again() {
     let effects = answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::Booking(booking(
+        done(SchedulingAdminData::Booking(Box::new(booking(
             "bk-contract-1",
             "cancelled",
             None,
-        ))),
+        )))),
     );
     assert!(sent(&effects).iter().any(|(_, r)| is_page(r)));
 }
@@ -906,11 +906,11 @@ fn a_booking_can_be_cancelled_from_its_page_and_its_answers_are_read_again() {
     let effects = answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::Booking(booking(
+        done(SchedulingAdminData::Booking(Box::new(booking(
             "bk-contract-1",
             "cancelled",
             None,
-        ))),
+        )))),
     );
     assert!(matches!(
         sent(&effects).as_slice(),
@@ -947,11 +947,11 @@ fn a_cancel_that_lands_after_its_dialog_closed_still_reads_the_answers_again() {
     let effects = answer(
         &mut model,
         sent(&effects)[0].0,
-        done(SchedulingAdminData::Booking(booking(
+        done(SchedulingAdminData::Booking(Box::new(booking(
             "bk-contract-1",
             "cancelled",
             None,
-        ))),
+        )))),
     );
     assert_eq!(sent(&effects).len(), 1);
 }
