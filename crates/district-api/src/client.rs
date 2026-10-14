@@ -371,9 +371,13 @@ impl Parts {
                 return Err(invalid(format!("{name} takes no body")));
             }
             BodyKind::Empty => PreparedBody::Empty,
-            BodyKind::Json if self.file.is_some() => {
+            BodyKind::Json | BodyKind::OptionalJson if self.file.is_some() => {
                 return Err(invalid(format!("{name} takes a JSON body, not a file")));
             }
+            BodyKind::OptionalJson => match self.json {
+                Some(object) => PreparedBody::Json(Value::Object(object).to_string().into_bytes()),
+                None => PreparedBody::Empty,
+            },
             BodyKind::Json => {
                 let mut object = self.json.unwrap_or_default();
                 if let Some((WorkspaceIn::Body, id)) = &workspace {

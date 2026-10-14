@@ -1,7 +1,9 @@
 //! This desktop's presence: whether the service counts it as a device a call
 //! can ring.
 //!
-//! The desktop has no push service. While the member has "ring on this
+//! This is not push: District AI for Linux has no push service, and District AI
+//! for Windows registers for Windows push notifications itself, a registration
+//! of another kind on the same installation. While the member has "ring on this
 //! computer" on, it registers its presence with the service and renews it every
 //! [`PRESENCE_HEARTBEAT`]: the service rings a desktop only while its
 //! registration is under ten minutes old, so a machine that went to sleep
@@ -20,6 +22,13 @@
 //! time and drops any that arrives after a later one was sent. Sign-out's
 //! unregistration is ordered by the sign-out's own ticket, so a renewal that
 //! was already on its way can never register a desktop that has signed out.
+//!
+//! # Which registrations go
+//!
+//! The presence going away (the setting off, sleep, quitting) removes the
+//! presence alone, `kind: "desktop"`, so that a push registration of the same
+//! installation stays for exactly the time the app is not there to ring. Only
+//! sign-out removes every kind ([`Presence::unregister_all`]).
 
 use std::fmt;
 use std::future::Future;
@@ -28,7 +37,7 @@ use std::time::Duration;
 
 use district_api::ApiError;
 use district_auth::PresenceHook;
-use district_model::{Platform, PresenceRegistration, PushRegistrationResponse};
+use district_model::{PRESENCE_KIND, Platform, PresenceRegistration, PushRegistrationResponse};
 
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
@@ -227,6 +236,12 @@ pub trait Presence: Send + Sync {
         revision: Ticket,
         registered: bool,
     ) -> impl Future<Output = Result<(), ApiError>> + Send;
+
+    /// Unregisters every kind of registration this installation holds, push
+    /// included, as the change `revision`, under the same rule: what signing
+    /// out does. [`set`](Self::set) removes the presence alone.
+    fn unregister_all(&self, revision: Ticket)
+    -> impl Future<Output = Result<(), ApiError>> + Send;
 }
 
 /// The two calls [`DesktopPresence`] makes. The API client implements it; the
@@ -237,9 +252,11 @@ pub trait PresenceApi: Send + Sync + 'static {
         &self,
         registration: &PresenceRegistration,
     ) -> impl Future<Output = Result<PushRegistrationResponse, ApiError>> + Send;
-    /// Unregisters this installation.
+    /// Unregisters this installation's registrations of `kind`, or every kind
+    /// when `kind` is `None`.
     fn unregister_presence(
         &self,
+        kind: Option<&'static str>,
     ) -> impl Future<Output = Result<PushRegistrationResponse, ApiError>> + Send;
 }
 
@@ -292,20 +309,46 @@ impl<A: PresenceApi> DesktopPresence<A> {
     }
 }
 
-impl<A: PresenceApi> Presence for DesktopPresence<A> {
-    async fn set(&self, revision: Ticket, registered: bool) -> Result<(), ApiError> {
+/// What one change of [`DesktopPresence`] does.
+#[derive(Clone, Copy)]
+enum Change {
+    Register,
+    /// The presence alone.
+    Unregister,
+    /// Every kind of registration the installation holds: sign-out.
+    UnregisterAll,
+}
+
+impl<A: PresenceApi> DesktopPresence<A> {
+    /// Sends `change` as the change `revision`, unless a later one was sent.
+    async fn change(&self, revision: Ticket, change: Change) -> Result<(), ApiError> {
         let shared = &self.shared;
         let mut applied = shared.applied.lock().await;
         if applied.is_some_and(|applied| applied >= revision) {
             return Ok(());
         }
         *applied = Some(revision);
-        if registered {
-            shared.api.register_presence(&shared.registration).await?;
-        } else {
-            shared.api.unregister_presence().await?;
-        }
+        match change {
+            Change::Register => shared.api.register_presence(&shared.registration).await?,
+            Change::Unregister => shared.api.unregister_presence(Some(PRESENCE_KIND)).await?,
+            Change::UnregisterAll => shared.api.unregister_presence(None).await?,
+        };
         Ok(())
+    }
+}
+
+impl<A: PresenceApi> Presence for DesktopPresence<A> {
+    async fn set(&self, revision: Ticket, registered: bool) -> Result<(), ApiError> {
+        let change = if registered {
+            Change::Register
+        } else {
+            Change::Unregister
+        };
+        self.change(revision, change).await
+    }
+
+    async fn unregister_all(&self, revision: Ticket) -> Result<(), ApiError> {
+        self.change(revision, Change::UnregisterAll).await
     }
 }
 
@@ -319,6 +362,6 @@ pub(crate) struct PresenceSignOut<'a, P> {
 
 impl<P: Presence> PresenceHook for PresenceSignOut<'_, P> {
     async fn unregister(&self) -> bool {
-        self.presence.set(self.revision, false).await.is_ok()
+        self.presence.unregister_all(self.revision).await.is_ok()
     }
 }

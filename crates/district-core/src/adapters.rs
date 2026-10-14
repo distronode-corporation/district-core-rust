@@ -872,8 +872,9 @@ impl<S: TokenSource + 'static> PresenceApi for ApiClient<S> {
 
     fn unregister_presence(
         &self,
+        kind: Option<&'static str>,
     ) -> impl Future<Output = Result<PushRegistrationResponse, ApiError>> + Send {
-        ApiClient::unregister_presence(self)
+        ApiClient::unregister_presence(self, kind)
     }
 }
 

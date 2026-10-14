@@ -12,7 +12,7 @@ use district_model::{
     DeskTicketStatus, DirectoryEntry, DraftSaveRequest, HqPendingWrite, HqRole, HqTurn,
     KnowledgeDocumentDraft, KnowledgeMode, MeetRoomName, MemberRole, MessagingAccountSave,
     MessagingChannel, MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials,
-    MessagingDelete, MessagingSetChannelDefault, MessagingSetDefault, NumberSearch,
+    MessagingDelete, MessagingSetChannelDefault, MessagingSetDefault, NumberSearch, PRESENCE_KIND,
     PersonaEngineChoice, PersonaPatch, PersonaPreviewForm, Platform, PresenceRegistration,
     RoutingRule, RoutingRuleField, SendMessageRequest, SipTrunkDraft, SupportRequestDraft,
     SupportRequestKind, ThreadRef, TollFreeVerificationDraft, TwilioCredentials,
@@ -1824,13 +1824,26 @@ pub fn cases() -> Vec<Case> {
             endpoint: Endpoint::PushUnregister,
             retried: false,
             answer: fixture("district-device-unregister.json"),
-            call: call!(c => c.unregister_presence()),
+            call: call!(c => c.unregister_presence(None)),
             method: "POST",
             path: "/api/district/devices/unregister",
             query: vec![],
-            // Android sends `{}` only because its HTTP library needs a body on a
-            // POST; the route reads none.
+            // Signing out: every kind, with no body. Android sends `{}` only
+            // because its HTTP library needs a body on a POST.
             body: Sent::Nothing,
+        },
+        Case {
+            name: "unregister_presence_kind",
+            endpoint: Endpoint::PushUnregister,
+            retried: false,
+            answer: fixture("district-device-unregister.json"),
+            call: call!(c => c.unregister_presence(Some(PRESENCE_KIND))),
+            method: "POST",
+            path: "/api/district/devices/unregister",
+            query: vec![],
+            // The presence going away: its own kind only, so a push
+            // registration of the same installation stays.
+            body: Sent::Json(json!({"kind": "desktop"})),
         },
     ]
 }
