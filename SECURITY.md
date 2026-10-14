@@ -29,7 +29,7 @@ backported, and the apps move their pin to it.
 
 | Version | Supported |
 | --- | --- |
-| 4.0.x (the current release, [4.0.0-beta.4](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
+| 4.0.x (the current release, [4.0.0-beta.5](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
 | Anything older | No |
 
 ## Security model

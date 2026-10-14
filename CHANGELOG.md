@@ -17,6 +17,38 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.0-beta.5] - 2026-10-14
+
+Two places where the desktop apps showed a stored word or a raw timestamp now read as
+labels and dates, in English and in French.
+
+### Added
+
+- `contracts/i18n/` from the service's current localization facts (monorepo 2528233a9):
+  the wire vocabulary has 39 categories, up from 31. `WireCategory` names the eight new
+  ones (`NumberStatus`, `A2pCampaignType`, `A2pRegistrationStatus`,
+  `TollFreeVerificationStatus`, `SipTrunkStatus`, `SchedulingWebhookDeliveryStatus`,
+  `SchedulingHostRole`, `SchedulingQuestionType`), and `catalog/wire.toml` has their 26
+  labels with reviewed French: the service's own wherever the contract has it, byte for
+  byte, and the programme's reviewed French for the ten values the service shows as sent.
+- `scripts/sync-contracts.py --sets` brings only the named sets to the server's commit;
+  each other set is re-read at the commit `SOURCE.toml` records for it and must come out
+  byte for byte as it is here. `SOURCE.toml` now records a commit per set. The fixture
+  sets stay at 46e1740, whose newer fixtures this client has no types for yet.
+
+### Changed
+
+- `EventTypeSection::host_rows` and `question_rows` show a host's role and a question's
+  type by their labels (`Required`, `Rotation · archived`, `Select · required`; in
+  French `Obligatoire`, `Liste déroulante · obligatoire`), and a role or type this build
+  does not know as the generic `Other` (`Autre`), never as the stored word. They used to
+  show the stored word (`required`, `select · required`) in both languages.
+- `DeviceRow::last_active` writes the day through `district_l10n::format` (`Last active
+  Aug 15, 2026`, `Dernière activité : 15 août 2026`) instead of the service's raw
+  ISO 8601 stamp. The day is the one the stamp falls on in UTC, since the core knows no
+  time zone of the computer's; the apps already say the time in local time when they can
+  read the stamp. A stamp that is not an instant is still shown as it came.
+
 ## [4.0.0-beta.4] - 2026-10-14
 
 The catalogs in Canadian French, for testing French in the desktop apps. English is

@@ -333,8 +333,11 @@ server repository re-run
 python3 scripts/sync-contracts.py --monorepo <path to the server repository>
 ```
 
-which vendors every set from the one commit, and refuses while any source
-directory there has changes that commit does not hold.
+which vendors every set from that checkout's commit, and refuses while any source
+directory there has changes that commit does not hold. `--sets i18n` (or any
+comma-separated list) syncs only those sets and keeps each other one at the
+commit `SOURCE.toml` records for it, after proving that commit still reproduces
+it byte for byte; `SOURCE.toml` records a commit per set.
 
 The fixture manifest in `crates/district-model/tests/contracts/manifest.rs`
 accounts for every file, each set against its own pinned count: each is decoded

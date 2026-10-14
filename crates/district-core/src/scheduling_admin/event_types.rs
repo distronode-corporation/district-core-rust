@@ -11,7 +11,7 @@
 //! save a list it has read: it opens on a read and offers no save until it
 //! lands. Deleting an event type is asked once more, naming what survives it.
 
-use district_l10n::scheduling_strings as ss;
+use district_l10n::{WireCategory, scheduling_strings as ss, wire_label};
 use district_model::{
     SchedulingAdminData, SchedulingAdminRequest, SchedulingEventType, SchedulingEventTypeFields,
     SchedulingHost, SchedulingHostAssignment, SchedulingLocationValueKind, SchedulingQuestion,
@@ -874,7 +874,8 @@ impl EventTypeSection {
     }
 
     /// The hosts, as (name, role): an archived host is still on the event
-    /// type, and says so.
+    /// type, and says so. The role reads as its label, and a role this build
+    /// does not know as the generic one, never as the stored word.
     pub fn host_rows(&self) -> Vec<(String, String)> {
         self.hosts
             .value()
@@ -887,10 +888,11 @@ impl EventTypeSection {
                         } else {
                             &host.name
                         };
+                        let role = wire_label(WireCategory::SchedulingHostRole, &host.role, l());
                         let role = if host.archived {
-                            ss::host_archived(l(), &host.role)
+                            ss::host_archived(l(), &role)
                         } else {
-                            host.role.clone()
+                            role
                         };
                         (name.clone(), role)
                     })
@@ -900,7 +902,8 @@ impl EventTypeSection {
     }
 
     /// The questions in the order the booker sees them, as (question, kind):
-    /// "text · required" for a compulsory one.
+    /// "Text · required" for a compulsory one. The kind reads as its label, and
+    /// a kind this build does not know as the generic one.
     pub fn question_rows(&self) -> Vec<(String, String)> {
         let mut questions: Vec<&SchedulingQuestion> = self
             .questions
@@ -910,10 +913,11 @@ impl EventTypeSection {
         questions
             .into_iter()
             .map(|q| {
+                let kind = wire_label(WireCategory::SchedulingQuestionType, &q.kind, l());
                 let kind = if q.required {
-                    ss::question_required(l(), &q.kind)
+                    ss::question_required(l(), &kind)
                 } else {
-                    q.kind.clone()
+                    kind
                 };
                 (q.label.clone(), kind)
             })

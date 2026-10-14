@@ -84,11 +84,27 @@ pub enum WireCategory {
     MessagingCarrier,
     /// `credentialSource` on a messaging account.
     MessagingCredentialSource,
+    /// `status` on one of the workspace's phone numbers.
+    NumberStatus,
+    /// `campaignType` of an A2P 10DLC registration: its use case.
+    A2pCampaignType,
+    /// `status` of an A2P 10DLC registration, as the carrier sends it.
+    A2pRegistrationStatus,
+    /// `status` of a toll-free number's verification, as the carrier sends it.
+    TollFreeVerificationStatus,
+    /// `status` on a SIP trunk.
+    SipTrunkStatus,
+    /// `status` on a scheduling webhook's delivery.
+    SchedulingWebhookDeliveryStatus,
+    /// `role` on an event type's host in the scheduling administration.
+    SchedulingHostRole,
+    /// `type` on a booking question in the scheduling administration.
+    SchedulingQuestionType,
 }
 
 impl WireCategory {
     /// Every category.
-    pub const ALL: [Self; 31] = [
+    pub const ALL: [Self; 39] = [
         Self::CallStatus,
         Self::CallDirection,
         Self::CallType,
@@ -120,6 +136,14 @@ impl WireCategory {
         Self::BillingInvoiceStatus,
         Self::MessagingCarrier,
         Self::MessagingCredentialSource,
+        Self::NumberStatus,
+        Self::A2pCampaignType,
+        Self::A2pRegistrationStatus,
+        Self::TollFreeVerificationStatus,
+        Self::SipTrunkStatus,
+        Self::SchedulingWebhookDeliveryStatus,
+        Self::SchedulingHostRole,
+        Self::SchedulingQuestionType,
     ];
 
     /// The name the vocabulary gives the category (`callStatus`).
@@ -156,6 +180,14 @@ impl WireCategory {
             Self::BillingInvoiceStatus => "billingInvoiceStatus",
             Self::MessagingCarrier => "messagingCarrier",
             Self::MessagingCredentialSource => "messagingCredentialSource",
+            Self::NumberStatus => "numberStatus",
+            Self::A2pCampaignType => "a2pCampaignType",
+            Self::A2pRegistrationStatus => "a2pRegistrationStatus",
+            Self::TollFreeVerificationStatus => "tollFreeVerificationStatus",
+            Self::SipTrunkStatus => "sipTrunkStatus",
+            Self::SchedulingWebhookDeliveryStatus => "schedulingWebhookDeliveryStatus",
+            Self::SchedulingHostRole => "schedulingHostRole",
+            Self::SchedulingQuestionType => "schedulingQuestionType",
         }
     }
 

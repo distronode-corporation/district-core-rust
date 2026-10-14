@@ -4,7 +4,9 @@
 //! losing a laptop, and a remembered row would answer "is it still signed in?"
 //! with a value from before they asked.
 
+use district_l10n::format::{self, CivilDateTime, DateStyle};
 use district_model::{NativeDevice, Platform};
+use jiff::Timestamp;
 
 use crate::failure::FailureText;
 use crate::text::{l, s};
@@ -107,12 +109,30 @@ impl DeviceRow {
     /// installation that is signed in but closed. An installation that has not
     /// renewed yet (every one, for its first ten minutes) reads as a recent
     /// sign-in rather than as missing data.
+    ///
+    /// The day is written by `district_l10n::format` (`Aug 15, 2026`,
+    /// `15 août 2026`), as it falls in UTC: the core knows no time zone of the
+    /// computer's, so it names the day and leaves the clock time to the app,
+    /// which can say it in local time. A stamp that is not an ISO 8601 instant
+    /// is shown as it came.
     pub fn last_active(&self) -> String {
         match &self.device.last_used_at {
-            Some(when) => s::devices_last_active(l(), when),
+            Some(when) => s::devices_last_active(l(), &day_of(when)),
             None => s::devices_signed_in_recently(l()).to_owned(),
         }
     }
+}
+
+/// The day an ISO 8601 instant falls on in UTC, as a reader writes it, or the
+/// text as it came when it is not one.
+fn day_of(when: &str) -> String {
+    when.parse::<Timestamp>().map_or_else(
+        |_| when.to_owned(),
+        |instant| {
+            let day = CivilDateTime::from_unix(instant.as_second(), 0);
+            format::date(l(), day, DateStyle::Medium)
+        },
+    )
 }
 
 /// The question asked before a sign-out.

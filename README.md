@@ -5,8 +5,8 @@ client, sign-in, live updates, the application state and the call engine of
 District AI, the AI voice receptionist from Distronode, with no user interface
 toolkit in any of it.
 
-> **Status: 4.0.0-beta.4 is the current release**
-> ([4.0.0-beta.4](https://github.com/distronode-corporation/district-core-rust/releases/latest)),
+> **Status: 4.0.0-beta.5 is the current release**
+> ([4.0.0-beta.5](https://github.com/distronode-corporation/district-core-rust/releases/latest)),
 > extracted from District AI for Linux 2.1.0 with its history. See the
 > [CHANGELOG](CHANGELOG.md).
 
@@ -57,8 +57,8 @@ hold that version:
 
 ```toml
 [workspace.dependencies]
-district-model = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v4.0.0-beta.4", version = "=4.0.0-beta.4" }
-district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v4.0.0-beta.4", version = "=4.0.0-beta.4" }
+district-model = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v4.0.0-beta.5", version = "=4.0.0-beta.5" }
+district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v4.0.0-beta.5", version = "=4.0.0-beta.5" }
 ```
 
 and so on for each crate it uses, all at the same tag. Cargo.lock then records

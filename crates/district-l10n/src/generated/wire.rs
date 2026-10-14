@@ -5,6 +5,69 @@ use crate::Locale;
 /// True when every entry has French; until then the French arm carries the English.
 pub const FR_COMPLETE: bool = true;
 
+/// `wire.a2p_campaign_type.customer_care`
+#[must_use]
+pub fn wire_a2p_campaign_type_customer_care(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Customer Care",
+        Locale::FrCa => "Service à la clientèle",
+    }
+}
+
+/// `wire.a2p_campaign_type.low_volume`
+#[must_use]
+pub fn wire_a2p_campaign_type_low_volume(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Low Volume Mixed (Under 15k msgs/mo)",
+        Locale::FrCa => "Faible volume mixte (moins de 15 k messages/mois)",
+    }
+}
+
+/// `wire.a2p_campaign_type.marketing`
+#[must_use]
+pub fn wire_a2p_campaign_type_marketing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Marketing / Promotions",
+        Locale::FrCa => "Marketing / promotions",
+    }
+}
+
+/// `wire.a2p_campaign_type.v_2fa`
+#[must_use]
+pub fn wire_a2p_campaign_type_v_2fa(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "2FA / OTP Alerts",
+        Locale::FrCa => "Alertes 2FA / mot de passe à usage unique",
+    }
+}
+
+/// `wire.a2p_registration_status.failed`
+#[must_use]
+pub fn wire_a2p_registration_status_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "FAILED",
+        Locale::FrCa => "ÉCHEC",
+    }
+}
+
+/// `wire.a2p_registration_status.in_progress`
+#[must_use]
+pub fn wire_a2p_registration_status_in_progress(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "IN PROGRESS",
+        Locale::FrCa => "EN COURS",
+    }
+}
+
+/// `wire.a2p_registration_status.verified`
+#[must_use]
+pub fn wire_a2p_registration_status_verified(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "VERIFIED",
+        Locale::FrCa => "VÉRIFIÉE",
+    }
+}
+
 /// `wire.analytics_sentiment.friction_sentiment`
 #[must_use]
 pub fn wire_analytics_sentiment_friction_sentiment(l: Locale) -> &'static str {
@@ -734,6 +797,51 @@ pub fn wire_number_provider_unknown(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.number_status.active`
+#[must_use]
+pub fn wire_number_status_active(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Active",
+        Locale::FrCa => "Actif",
+    }
+}
+
+/// `wire.number_status.fallback`
+#[must_use]
+pub fn wire_number_status_fallback(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Active",
+        Locale::FrCa => "Actif",
+    }
+}
+
+/// `wire.number_status.pending_verification`
+#[must_use]
+pub fn wire_number_status_pending_verification(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Pending verification",
+        Locale::FrCa => "Vérification en attente",
+    }
+}
+
+/// `wire.number_status.released`
+#[must_use]
+pub fn wire_number_status_released(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Released",
+        Locale::FrCa => "Libéré",
+    }
+}
+
+/// `wire.number_status.suspended`
+#[must_use]
+pub fn wire_number_status_suspended(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Suspended",
+        Locale::FrCa => "Suspendu",
+    }
+}
+
 /// `wire.number_type.local`
 #[must_use]
 pub fn wire_number_type_local(l: Locale) -> &'static str {
@@ -1013,6 +1121,87 @@ pub fn wire_research_status_pending(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.scheduling_host_role.optional`
+#[must_use]
+pub fn wire_scheduling_host_role_optional(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Optional",
+        Locale::FrCa => "Facultatif",
+    }
+}
+
+/// `wire.scheduling_host_role.required`
+#[must_use]
+pub fn wire_scheduling_host_role_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Required",
+        Locale::FrCa => "Obligatoire",
+    }
+}
+
+/// `wire.scheduling_host_role.rotation`
+#[must_use]
+pub fn wire_scheduling_host_role_rotation(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Rotation",
+        Locale::FrCa => "Rotation",
+    }
+}
+
+/// `wire.scheduling_question_type.checkbox`
+#[must_use]
+pub fn wire_scheduling_question_type_checkbox(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Checkbox",
+        Locale::FrCa => "Case à cocher",
+    }
+}
+
+/// `wire.scheduling_question_type.select`
+#[must_use]
+pub fn wire_scheduling_question_type_select(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Select",
+        Locale::FrCa => "Liste déroulante",
+    }
+}
+
+/// `wire.scheduling_question_type.text`
+#[must_use]
+pub fn wire_scheduling_question_type_text(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Text",
+        Locale::FrCa => "Texte",
+    }
+}
+
+/// `wire.scheduling_webhook_delivery_status.failed`
+#[must_use]
+pub fn wire_scheduling_webhook_delivery_status_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Failed",
+        Locale::FrCa => "Échec",
+    }
+}
+
+/// `wire.scheduling_webhook_delivery_status.pending`
+#[must_use]
+pub fn wire_scheduling_webhook_delivery_status_pending(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Waiting",
+        Locale::FrCa => "En attente",
+    }
+}
+
+/// `wire.scheduling_webhook_delivery_status.success`
+#[must_use]
+pub fn wire_scheduling_webhook_delivery_status_success(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delivered",
+        Locale::FrCa => "Livré",
+    }
+}
+
 /// `wire.sentiment.negative`
 #[must_use]
 pub fn wire_sentiment_negative(l: Locale) -> &'static str {
@@ -1037,6 +1226,51 @@ pub fn wire_sentiment_positive(l: Locale) -> &'static str {
     match l {
         Locale::En => "Positive",
         Locale::FrCa => "Positif",
+    }
+}
+
+/// `wire.sip_trunk_status.active`
+#[must_use]
+pub fn wire_sip_trunk_status_active(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Active",
+        Locale::FrCa => "Actif",
+    }
+}
+
+/// `wire.toll_free_verification_status.in_review`
+#[must_use]
+pub fn wire_toll_free_verification_status_in_review(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "IN REVIEW",
+        Locale::FrCa => "EN EXAMEN",
+    }
+}
+
+/// `wire.toll_free_verification_status.pending_review`
+#[must_use]
+pub fn wire_toll_free_verification_status_pending_review(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "PENDING REVIEW",
+        Locale::FrCa => "EXAMEN EN ATTENTE",
+    }
+}
+
+/// `wire.toll_free_verification_status.twilio_approved`
+#[must_use]
+pub fn wire_toll_free_verification_status_twilio_approved(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "TWILIO APPROVED",
+        Locale::FrCa => "APPROUVÉE PAR TWILIO",
+    }
+}
+
+/// `wire.toll_free_verification_status.twilio_rejected`
+#[must_use]
+pub fn wire_toll_free_verification_status_twilio_rejected(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "TWILIO REJECTED",
+        Locale::FrCa => "REFUSÉE PAR TWILIO",
     }
 }
 

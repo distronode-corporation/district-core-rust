@@ -1458,6 +1458,278 @@
           "fr": "Service géré"
         }
       ]
+    },
+    "numberStatus": {
+      "description": "`numbers[].status` in GET /api/district/workspace/provider/numbers: a managed number's `PhoneNumberIndex.status` (missing reads as `active`; `released` rows are left out of the list), and for a number on the workspace's own carrier account the carrier's word (`active` from Twilio and Sinch; Telnyx's own status passed through, so another value can arrive). `pending_verification` is a toll-free number under carrier review (POST /api/district/workspace/tfv); `suspended` is set by staff. The portal shows the value itself and has no label for any of them; an empty one shows as `fallback`.",
+      "labelSource": null,
+      "values": [
+        {
+          "value": "active",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/workspace/provider/numbers/route.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "released",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/lib/payments/phone-limits.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "suspended",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/(en)/dashboard/district/admin/adminI18n.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "pending_verification",
+          "definedIn": [
+            "distronode-website/prisma/schema.prisma",
+            "distronode-website/src/app/api/district/workspace/tfv/route.ts"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ],
+      "fallback": {
+        "en": "Active",
+        "fr": "Actif"
+      }
+    },
+    "a2pCampaignType": {
+      "description": "`campaignType` in the POST /api/district/workspace/a2p body: the A2P 10DLC use case a registration is filed under. A request value; the route files any other value as Twilio's MIXED.",
+      "labelSource": "distronode-website/src/components/district/telephonySettingsI18n.ts a2pCampaignTypeLabels",
+      "values": [
+        {
+          "value": "LOW_VOLUME",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/a2p/route.ts",
+            "distronode-website/src/components/district/A2PRegistrationWizard.tsx"
+          ],
+          "en": "Low Volume Mixed (Under 15k msgs/mo)",
+          "fr": "Faible volume mixte (moins de 15 k messages/mois)"
+        },
+        {
+          "value": "CUSTOMER_CARE",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/a2p/route.ts",
+            "distronode-website/src/components/district/A2PRegistrationWizard.tsx"
+          ],
+          "en": "Customer Care",
+          "fr": "Service à la clientèle"
+        },
+        {
+          "value": "MARKETING",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/a2p/route.ts",
+            "distronode-website/src/components/district/A2PRegistrationWizard.tsx"
+          ],
+          "en": "Marketing / Promotions",
+          "fr": "Marketing / promotions"
+        },
+        {
+          "value": "2FA",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/a2p/route.ts",
+            "distronode-website/src/components/district/A2PRegistrationWizard.tsx"
+          ],
+          "en": "2FA / OTP Alerts",
+          "fr": "Alertes 2FA / mot de passe à usage unique"
+        }
+      ]
+    },
+    "a2pRegistrationStatus": {
+      "description": "`status` in the POST /api/district/workspace/a2p answer: Twilio's campaign status, passed through (`IN_PROGRESS` when Twilio sends none). Twilio's SDK types it as a string and names these three as examples, so another value can arrive and is shown as sent. The portal has no label for any of them.",
+      "labelSource": null,
+      "values": [
+        {
+          "value": "IN_PROGRESS",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/a2p/route.ts",
+            "distronode-website/node_modules/twilio/lib/rest/messaging/v1/service/usAppToPerson.d.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "VERIFIED",
+          "definedIn": [
+            "distronode-website/node_modules/twilio/lib/rest/messaging/v1/service/usAppToPerson.d.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "FAILED",
+          "definedIn": [
+            "distronode-website/node_modules/twilio/lib/rest/messaging/v1/service/usAppToPerson.d.ts"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "tollFreeVerificationStatus": {
+      "description": "`status` in the POST /api/district/workspace/tfv answer: Twilio's toll-free verification status, passed through. The portal has no label for any of them.",
+      "labelSource": null,
+      "values": [
+        {
+          "value": "PENDING_REVIEW",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/tfv/route.ts",
+            "distronode-website/node_modules/twilio/lib/rest/messaging/v1/tollfreeVerification.d.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "IN_REVIEW",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/tfv/route.ts",
+            "distronode-website/node_modules/twilio/lib/rest/messaging/v1/tollfreeVerification.d.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "TWILIO_APPROVED",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/tfv/route.ts",
+            "distronode-website/node_modules/twilio/lib/rest/messaging/v1/tollfreeVerification.d.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "TWILIO_REJECTED",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/tfv/route.ts",
+            "distronode-website/node_modules/twilio/lib/rest/messaging/v1/tollfreeVerification.d.ts"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "sipTrunkStatus": {
+      "description": "`trunks[].status` in GET /api/district/workspace/sip and `trunk.status` in its POST: the trunk's billing row status. A trunk's row is written `active` and nothing changes it; the portal badges every listed trunk with this label.",
+      "labelSource": "distronode-website/src/components/district/telephonySettingsI18n.ts sipActive",
+      "values": [
+        {
+          "value": "active",
+          "definedIn": [
+            "distronode-website/src/app/api/district/workspace/sip/route.ts",
+            "distronode-website/prisma/schema.prisma"
+          ],
+          "en": "Active",
+          "fr": "Actif"
+        }
+      ]
+    },
+    "schedulingWebhookDeliveryStatus": {
+      "description": "`items[].status` in the scheduling admin op `webhooks.deliveries`: what the scheduler's worker stores (internal/worker/worker.go in the district-scheduler fork: `pending`, then `success` or `failed`). `failed` has no single label: the portal shows \"No answer\" without a `response_status` and \"Rejected with {code}\" with one (schedulingI18n.ts developer).",
+      "labelSource": "distronode-website/src/components/district/scheduling/schedulingI18n.ts developer",
+      "values": [
+        {
+          "value": "success",
+          "definedIn": [
+            "distronode-website/src/components/district/scheduling/developer-format.ts"
+          ],
+          "en": "Delivered",
+          "fr": "Livré"
+        },
+        {
+          "value": "pending",
+          "definedIn": [
+            "distronode-website/src/components/district/scheduling/developer-format.ts"
+          ],
+          "en": "Waiting",
+          "fr": "En attente"
+        },
+        {
+          "value": "failed",
+          "definedIn": [
+            "distronode-website/src/components/district/scheduling/developer-format.ts"
+          ],
+          "en": null,
+          "fr": null
+        }
+      ]
+    },
+    "schedulingHostRole": {
+      "description": "`role` on an event type's host in the scheduling admin ops `eventTypes.hosts*`.",
+      "labelSource": "distronode-website/src/components/district/scheduling/schedulingI18n.ts hostsTab",
+      "values": [
+        {
+          "value": "required",
+          "definedIn": [
+            "distronode-website/src/lib/district/scheduling/admin-ops.ts",
+            "distronode-website/src/components/district/scheduling/EventTypeHostsTab.tsx"
+          ],
+          "en": "Required",
+          "fr": "Obligatoire"
+        },
+        {
+          "value": "rotation",
+          "definedIn": [
+            "distronode-website/src/lib/district/scheduling/admin-ops.ts",
+            "distronode-website/src/components/district/scheduling/EventTypeHostsTab.tsx"
+          ],
+          "en": "Rotation",
+          "fr": "Rotation"
+        },
+        {
+          "value": "optional",
+          "definedIn": [
+            "distronode-website/src/lib/district/scheduling/admin-ops.ts",
+            "distronode-website/src/components/district/scheduling/EventTypeHostsTab.tsx"
+          ],
+          "en": "Optional",
+          "fr": "Facultatif"
+        }
+      ]
+    },
+    "schedulingQuestionType": {
+      "description": "`type` on a booking question in the scheduling admin ops `eventTypes.questions.*`.",
+      "labelSource": "distronode-website/src/components/district/scheduling/schedulingI18n.ts questions",
+      "values": [
+        {
+          "value": "text",
+          "definedIn": [
+            "distronode-website/src/lib/district/scheduling/admin-ops.ts",
+            "distronode-website/src/components/district/scheduling/EventTypeQuestionsTab.tsx"
+          ],
+          "en": "Text",
+          "fr": "Texte"
+        },
+        {
+          "value": "select",
+          "definedIn": [
+            "distronode-website/src/lib/district/scheduling/admin-ops.ts",
+            "distronode-website/src/components/district/scheduling/EventTypeQuestionsTab.tsx"
+          ],
+          "en": "Select",
+          "fr": "Liste déroulante"
+        },
+        {
+          "value": "checkbox",
+          "definedIn": [
+            "distronode-website/src/lib/district/scheduling/admin-ops.ts",
+            "distronode-website/src/components/district/scheduling/EventTypeQuestionsTab.tsx"
+          ],
+          "en": "Checkbox",
+          "fr": "Case à cocher"
+        }
+      ]
     }
   },
   "placeholders": [
