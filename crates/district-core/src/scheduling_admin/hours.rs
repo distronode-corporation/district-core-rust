@@ -649,6 +649,8 @@ pub enum HoursEvent {
     ConfirmDeleteOverride,
     /// Put away the last outcome.
     DismissNotice,
+    /// Read the open editor's hours again, after its read failed.
+    RetryRead,
     /// Close the editor.
     CloseDialog,
 }
@@ -815,6 +817,10 @@ fn week_event(week: &mut WeekEditor, event: HoursEvent) -> Vec<Out> {
             return vec![send(Pending::WeekStep, first)];
         }
         HoursEvent::DismissNotice => week.write = WriteState::Idle,
+        HoursEvent::RetryRead if week.load.failure().is_some() => {
+            week.load = SectionLoad::Loading;
+            return vec![week_rules()];
+        }
         _ => {}
     }
     Vec::new()
@@ -872,6 +878,13 @@ fn overrides_event(editor: &mut OverridesEditor, event: HoursEvent) -> Vec<Out> 
         HoursEvent::DismissNotice => {
             editor.validation = None;
             editor.write = WriteState::Idle;
+        }
+        HoursEvent::RetryRead if editor.load.failure().is_some() => {
+            editor.load = SectionLoad::Loading;
+            return vec![send(
+                Pending::EditorOverrides,
+                SchedulingAdminRequest::Overrides,
+            )];
         }
         _ => {}
     }

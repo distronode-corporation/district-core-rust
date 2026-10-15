@@ -1081,13 +1081,13 @@ state = "reviewed"
 note = "For a member who is already in a call or a meeting room."
 
 [dialer.hint]
-en = "Enter a number with its country code, for example +1 212 555 0142."
-fr = "Indiquez un numéro avec l'indicatif du pays, par exemple +1 212 555 0142."
+en = "Enter a number with its country code, for example +1\u00A0212\u00A0555\u00A00142."
+fr = "Indiquez un numéro avec l'indicatif du pays, par exemple +1\u00A0212\u00A0555\u00A00142."
 ctx = "placeholder"
 screen = "dialler"
 tier = "T3"
 state = "reviewed"
-note = "Above the keypad: enter the number with its country code. +1 212 555 0142 is an example number; keep it as it is."
+note = "Above the keypad: enter the number with its country code. +1 212 555 0142 is an example number; keep it as it is, with no-break spaces (U+00A0) between its groups so it never breaks after +1."
 
 [dialer.microphone_note]
 en = "Placing a call turns on your microphone."
@@ -1288,6 +1288,15 @@ screen = "any screen"
 tier = "T2"
 state = "reviewed"
 note = "Opening the web from the app signed in: asked too often in the last minute."
+
+[failure.hand_off_unanswered]
+en = "Your browser did not answer District AI in time, so the web was not opened. Try again, and let the browser open District AI if it asks."
+fr = "Votre navigateur n'a pas répondu à District AI à temps, donc la version Web n'a pas été ouverte. Réessayez et laissez le navigateur ouvrir District AI s'il le demande."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+state = "reviewed"
+note = "Opening the web from the app: the browser page the app opened did not hand control back to the app within ten seconds, so nothing was opened. Pressing again starts afresh."
 
 [failure.hand_off_update_needed]
 en = "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app."

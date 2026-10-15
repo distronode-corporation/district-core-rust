@@ -680,3 +680,44 @@ fn a_day_off_needs_no_end_date_and_a_save_with_no_form_sends_nothing() {
     assert!(hours(&mut model, HoursEvent::SaveOverride).is_empty());
     assert_eq!(editor(&model).validation, None);
 }
+
+/// An editor whose read failed is read again on request, and only then:
+/// the week its rules, the overrides theirs.
+#[test]
+fn an_editor_whose_read_failed_is_read_again_on_request() {
+    let mut model = read("agency");
+    let effects = hours(&mut model, HoursEvent::OpenWeek);
+    assert!(
+        hours(&mut model, HoursEvent::RetryRead).is_empty(),
+        "still reading"
+    );
+    answer(&mut model, sent(&effects)[0].0, Err(server_error()));
+    let effects = hours(&mut model, HoursEvent::RetryRead);
+    assert_eq!(
+        sent(&effects)[0].1,
+        SchedulingAdminRequest::Rules {
+            event_type_id: None
+        }
+    );
+    assert_eq!(week(&model).load, SectionLoad::Loading);
+    answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Rules(rules())),
+    );
+    assert!(week(&model).load.value().is_some());
+    assert!(hours(&mut model, HoursEvent::RetryRead).is_empty());
+
+    let effects = hours(&mut model, HoursEvent::OpenOverrides { now: now() });
+    assert!(hours(&mut model, HoursEvent::RetryRead).is_empty());
+    answer(&mut model, sent(&effects)[0].0, Err(server_error()));
+    assert!(editor(&model).load.failure().is_some());
+    let effects = hours(&mut model, HoursEvent::RetryRead);
+    assert_eq!(sent(&effects)[0].1, SchedulingAdminRequest::Overrides);
+    assert_eq!(editor(&model).load, SectionLoad::Loading);
+    assert!(hours(&mut model, HoursEvent::RetryRead).is_empty());
+
+    // No editor open: nothing to read.
+    hours(&mut model, HoursEvent::CloseDialog);
+    assert!(hours(&mut model, HoursEvent::RetryRead).is_empty());
+}

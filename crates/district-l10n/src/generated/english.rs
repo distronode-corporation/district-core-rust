@@ -229,7 +229,7 @@ pub const DEVICES_UNNAMED: &str = "Unnamed device";
 /// `dialer.busy_note` in English.
 pub const DIALER_BUSY_NOTE: &str = "Finish the call or meeting you are in first.";
 /// `dialer.hint` in English.
-pub const DIALER_HINT: &str = "Enter a number with its country code, for example +1 212 555 0142.";
+pub const DIALER_HINT: &str = "Enter a number with its country code, for example +1\u{00A0}212\u{00A0}555\u{00A0}0142.";
 /// `dialer.microphone_note` in English.
 pub const DIALER_MICROPHONE_NOTE: &str = "Placing a call turns on your microphone.";
 /// `directory.add_rejected` in English.
@@ -270,6 +270,8 @@ pub const FAILURE_HAND_OFF_PAGE_REFUSED: &str = "District AI did not accept the 
 pub const FAILURE_HAND_OFF_REFUSED: &str = "District AI could not confirm your sign-in for the web. Sign out, sign in again, and try again.";
 /// `failure.hand_off_too_many` in English.
 pub const FAILURE_HAND_OFF_TOO_MANY: &str = "The web was opened several times just now. Wait a moment and try again.";
+/// `failure.hand_off_unanswered` in English.
+pub const FAILURE_HAND_OFF_UNANSWERED: &str = "Your browser did not answer District AI in time, so the web was not opened. Try again, and let the browser open District AI if it asks.";
 /// `failure.hand_off_update_needed` in English.
 pub const FAILURE_HAND_OFF_UPDATE_NEEDED: &str = "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app.";
 /// `failure.keyring_locked` in English.

@@ -745,7 +745,8 @@ impl SignedIn {
         } else if tickets.accept(Slot::PresenceHeartbeat, ticket) {
             self.presence_due(tickets)
         } else if tickets.accept(Slot::SchedulingHandOffWait, ticket) {
-            self.hand_off_unanswered(tickets)
+            self.hand_off_unanswered();
+            Vec::new()
         } else if tickets.accept(Slot::BillingHandOffWait, ticket) {
             self.mint_purchase(None, tickets)
         } else if tickets.accept(Slot::WorkspaceSetupWait, ticket) {

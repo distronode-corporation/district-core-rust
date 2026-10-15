@@ -39,8 +39,26 @@ when the caller hangs up, as soon as the service says so.
   caller who hung up ends it as `RingEnd::CallEnded`; a timeout, a withdrawal or an
   unknown reason makes it a missed call with the missed-call notification, as the
   local deadline does.
-- Two strings, in English and Canadian French: `ringing.answered_elsewhere` and
-  `live.answered_elsewhere_title`.
+- Three strings, in English and Canadian French: `ringing.answered_elsewhere`,
+  `live.answered_elsewhere_title` and `failure.hand_off_unanswered`.
+- A read that failed can be read again where only closing and reopening could before:
+  `HoursEvent::RetryRead` (the week's editor its rules, the overrides' editor its
+  overrides), `EventTypeEvent::RetryDialogRead` (the hosts dialog's hosts, then the
+  users who could be added, whose read is now `HostsDialog::candidates_load`) and
+  `DeveloperEvent::RetryDeliveries` (the open webhook's deliveries). Each does nothing
+  unless that read failed, as `BookingsEvent::RetryDialogRead` does.
+
+### Changed
+
+- The booking pages' hand-off to the web is never asked for unbound. When the browser
+  has not answered the start page after `HAND_OFF_CALLBACK_WAIT`, the hand-off is given
+  up with a retryable notice (`failure.hand_off_unanswered`, "Your browser did not
+  answer District AI in time, so the web was not opened. Try again, and let the browser
+  open District AI if it asks."), where it used to ask for a link bound to no browser.
+  `Effect::RequestSchedulingHandOff` now always carries a nonce, so the service can
+  require one (`HANDOFF_REQUIRE_NONCE`, security sweep S33).
+- `dialer.hint` writes its example number with no-break spaces between the groups
+  (`+1 212 555 0142`), in English and French, so it never breaks after `+1`.
 
 ### Unchanged on purpose
 
@@ -51,8 +69,9 @@ when the caller hangs up, as soon as the service says so.
 - The local thirty-second deadline stays as the fallback for a cancel that never
   arrives. A repeated cancel, on the socket or a push, does nothing more.
 
-`RingEnd::AnsweredElsewhere` and `TelemetryEventType::CallRingCancelled` are new
-variants of public enums, which this file's rule counts as breaking. They ship in a
+`RingEnd::AnsweredElsewhere`, `TelemetryEventType::CallRingCancelled` and the three
+retry events are new variants of public enums, and `HostsDialog::candidates_load` a new
+field of a public struct, which this file's rule counts as breaking. They ship in a
 patch release because the only apps that pin 4.0, District AI for Linux and District
 AI for Windows, move to this release in their 3.0.1 together with the matching arms.
 

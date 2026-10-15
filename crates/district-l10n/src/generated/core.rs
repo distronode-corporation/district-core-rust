@@ -1080,8 +1080,8 @@ pub fn dialer_busy_note(l: Locale) -> &'static str {
 #[must_use]
 pub fn dialer_hint(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Enter a number with its country code, for example +1 212 555 0142.",
-        Locale::FrCa => "Indiquez un numéro avec l'indicatif du pays, par exemple +1 212 555 0142.",
+        Locale::En => "Enter a number with its country code, for example +1\u{00A0}212\u{00A0}555\u{00A0}0142.",
+        Locale::FrCa => "Indiquez un numéro avec l'indicatif du pays, par exemple +1\u{00A0}212\u{00A0}555\u{00A0}0142.",
     }
 }
 
@@ -1280,6 +1280,15 @@ pub fn failure_hand_off_too_many(l: Locale) -> &'static str {
     match l {
         Locale::En => "The web was opened several times just now. Wait a moment and try again.",
         Locale::FrCa => "La version Web a été ouverte plusieurs fois à l'instant. Attendez un instant, puis réessayez.",
+    }
+}
+
+/// `failure.hand_off_unanswered`
+#[must_use]
+pub fn failure_hand_off_unanswered(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your browser did not answer District AI in time, so the web was not opened. Try again, and let the browser open District AI if it asks.",
+        Locale::FrCa => "Votre navigateur n'a pas répondu à District AI à temps, donc la version Web n'a pas été ouverte. Réessayez et laissez le navigateur ouvrir District AI s'il le demande.",
     }
 }
 
