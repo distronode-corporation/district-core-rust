@@ -17,6 +17,47 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-10-14
+
+The core of District AI for Linux 3.0.0 and District AI for Windows 3.0.0: every word in
+English and Canadian French, scheduling administration, number management, starting a
+conversation and reporting AI-generated content. It is the six 4.0.0 betas below, and
+these changes since 4.0.0-beta.6.
+
+What 4.0.0 brings over 3.1.1:
+
+- **Languages.** `district-l10n`, a new crate: every sentence and label the core writes
+  comes from its catalogs, in English and reviewed Canadian French (`Locale`,
+  `CoreConfig::locale`). The service's error codes, stored values and formats (money,
+  dates, times, durations, numbers) read as the service writes them, held to
+  `contracts/i18n/`. English is unchanged except where a beta below says so.
+- **Scheduling administration**, native in the core (`Route::SchedulingAdmin`): the
+  overview, bookings, event types with their hosts and questions, working hours,
+  calendars, the team, developer access with webhooks, and settings.
+- **Numbers and carriers**: managing the numbers a workspace holds, the carrier
+  accounts, SIP trunks, the passcode sender and the A2P and toll-free registrations.
+- **Conversations and reports**: starting a conversation from the inbox, and reporting
+  AI-generated content from any screen.
+- **Presence**: going away unregisters the desktop presence alone, so a Windows push
+  registration stays.
+- Breaking, for the apps that pin the core: new `Route`, `Event` and `Effect` variants,
+  new fields on `CoreConfig`, `SignedIn` and several screens, and new `DistrictApi`
+  methods; each beta lists its own.
+
+### Changed
+
+- `sip_trunk_meta` shows a SIP trunk's status by its label (`Active`, « Actif »), and a
+  status this build does not know as the generic `Other` (« Autre »), never as stored.
+- README.md and SECURITY.md name 4.0.0 as the current release, used by District AI for
+  Linux 3.0.0 and District AI for Windows 3.0.0; the crate table names
+  `district-l10n`; the README has the project page link and the account paragraph.
+- `scripts/check-version.py` holds README.md and SECURITY.md to the newest release
+  that is not a pre-release, so a beta cut for testing never claims to be the
+  current release, and has a `--self-test` that CI runs first.
+- CHANGELOG.md has the 1.2.1 backport's section.
+- An OpenSSF Scorecard workflow, as district-linux has. Code scanning (CodeQL) is
+  GitHub's default setup on this repository, as on district-linux.
+
 ## [4.0.0-beta.6] - 2026-10-14
 
 Findings from the Linux and Windows French passes: lengths, chart days, balances and
@@ -454,6 +495,16 @@ server's wire vocabulary synced.
   the typing to stop, and sends every draft write queued behind the one on its way.
   Before, a reply typed in the last two seconds before quitting, or queued behind a
   slow save, was lost.
+
+## [1.2.1] - 2026-10-13
+
+### Fixed
+
+- Billing names the plan as the service's pricing page does (`plan_name`): "Voice Solo",
+  "Voice Starter", "Voice Pro" and "Voice Studio", not the tier as the service stores it
+  ("VoicePro"). A tier this build does not know is still shown as the service spells it,
+  and a workspace with no tier still reads "No plan on this workspace". A backport to the
+  1.2 line, for the apps that pin it; nothing an app calls or implements changes.
 
 ## [1.2.0] - 2026-10-08
 
