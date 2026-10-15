@@ -418,6 +418,8 @@ pub const KNOWLEDGE_VIEWER: &str = "You have read-only access to this workspace.
 pub const LIVE_ACTION_ANSWER: &str = "Answer";
 /// `live.action_decline` in English.
 pub const LIVE_ACTION_DECLINE: &str = "Decline";
+/// `live.answered_elsewhere_title` in English.
+pub const LIVE_ANSWERED_ELSEWHERE_TITLE: &str = "Answered on another device";
 /// `live.message_body` in English.
 pub const LIVE_MESSAGE_BODY: &str = "Open District AI to read it.";
 /// `live.message_title` in English.
@@ -612,6 +614,8 @@ pub const PURCHASE_SETTING_SIGN_IN_EVERY_TIME: &str = "Sign in every time";
 pub const PURCHASE_TERM_ANNUAL: &str = "Annual";
 /// `purchase.term_monthly` in English.
 pub const PURCHASE_TERM_MONTHLY: &str = "Monthly";
+/// `ringing.answered_elsewhere` in English.
+pub const RINGING_ANSWERED_ELSEWHERE: &str = "That call was answered on another device.";
 /// `ringing.body` in English.
 pub const RINGING_BODY: &str = "Transferred from your AI receptionist.";
 /// `ringing.call_ended` in English.

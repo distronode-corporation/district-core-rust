@@ -870,7 +870,7 @@ pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[Exclusion {
 
 /// Every file in `contracts/desktop/`. Asserted exactly, for the same reason as
 /// [`EXPECTED_FIXTURE_COUNT`].
-pub const DESKTOP_EXPECTED_FIXTURE_COUNT: usize = 13;
+pub const DESKTOP_EXPECTED_FIXTURE_COUNT: usize = 14;
 
 /// Desktop fixtures decoded by a type in this crate. Sorted by name.
 pub const DESKTOP_IMPLEMENTED: &[(&str, Codec)] = &[
@@ -896,6 +896,10 @@ pub const DESKTOP_IMPLEMENTED: &[(&str, Codec)] = &[
     ),
     (
         "telemetry-event-call-ended.json",
+        codec::<TelemetryEnvelope>,
+    ),
+    (
+        "telemetry-event-call-ring-cancelled.json",
         codec::<TelemetryEnvelope>,
     ),
     (

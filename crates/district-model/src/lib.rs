@@ -174,7 +174,7 @@ pub use support::{
     SupportRequestCreateResponse, SupportRequestDetail, SupportRequestDraft, SupportRequestFiling,
     SupportRequestKind, SupportRequestResponse, SupportRequestSummary, SupportRequestsResponse,
 };
-pub use telemetry::{TelemetryEnvelope, TelemetryEventType, TelemetryToken};
+pub use telemetry::{RingCancelReason, TelemetryEnvelope, TelemetryEventType, TelemetryToken};
 pub use transcript::{
     TRANSCRIPT_CALL_ID_MAX, TRANSCRIPT_SUBSCRIBE_OP, TRANSCRIPT_TEXT_MAX_UTF16, TRANSCRIPT_VERSION,
     TranscriptClientOp, TranscriptEndReason, TranscriptEndedData, TranscriptErrorCode,

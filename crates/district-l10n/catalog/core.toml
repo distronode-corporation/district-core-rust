@@ -1986,6 +1986,15 @@ tier = "T0"
 state = "reviewed"
 note = "Button on an incoming call notification that declines it."
 
+[live.answered_elsewhere_title]
+en = "Answered on another device"
+fr = "Appel pris sur un autre appareil"
+ctx = "label"
+screen = "live updates"
+tier = "T3"
+state = "reviewed"
+note = "Heading of an incoming call that stopped ringing here because it was answered on another device (this member's other computer or phone, or a colleague's)."
+
 [live.message_body]
 en = "Open District AI to read it."
 fr = "Ouvrez District AI pour le lire."
@@ -2913,6 +2922,15 @@ screen = "billing purchase"
 tier = "T1"
 state = "reviewed"
 note = "How often a plan is billed: every month."
+
+[ringing.answered_elsewhere]
+en = "That call was answered on another device."
+fr = "Cet appel a été pris sur un autre appareil."
+ctx = "body"
+screen = "incoming call"
+tier = "T3"
+state = "reviewed"
+note = "After an incoming call stopped ringing here because someone answered it on another device: this member's other computer or phone, or a colleague's."
 
 [ringing.body]
 en = "Transferred from your AI receptionist."

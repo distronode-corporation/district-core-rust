@@ -442,6 +442,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::live_action_answer(Locale::FrCa), "Répondre");
     assert_eq!(strings::live_action_decline(Locale::En), "Decline");
     assert_eq!(strings::live_action_decline(Locale::FrCa), "Refuser");
+    assert_eq!(strings::live_answered_elsewhere_title(Locale::En), "Answered on another device");
+    assert_eq!(strings::live_answered_elsewhere_title(Locale::FrCa), "Appel pris sur un autre appareil");
     assert_eq!(strings::live_message_body(Locale::En), "Open District AI to read it.");
     assert_eq!(strings::live_message_body(Locale::FrCa), "Ouvrez District AI pour le lire.");
     assert_eq!(strings::live_message_title(Locale::En), "New message");
@@ -646,6 +648,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::purchase_term_annual(Locale::FrCa), "Annuel");
     assert_eq!(strings::purchase_term_monthly(Locale::En), "Monthly");
     assert_eq!(strings::purchase_term_monthly(Locale::FrCa), "Mensuel");
+    assert_eq!(strings::ringing_answered_elsewhere(Locale::En), "That call was answered on another device.");
+    assert_eq!(strings::ringing_answered_elsewhere(Locale::FrCa), "Cet appel a été pris sur un autre appareil.");
     assert_eq!(strings::ringing_body(Locale::En), "Transferred from your AI receptionist.");
     assert_eq!(strings::ringing_body(Locale::FrCa), "Appel transféré par votre réceptionniste IA.");
     assert_eq!(strings::ringing_call_ended(Locale::En), "That call ended before you could answer it.");

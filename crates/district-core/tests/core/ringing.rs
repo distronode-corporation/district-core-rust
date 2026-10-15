@@ -782,3 +782,232 @@ fn a_ring_in_a_workspace_no_longer_listed_is_not_answered() {
     }));
     assert!(answered.is_empty(), "{answered:?}");
 }
+
+/// The service's word that it stopped ringing for `call_id`, and why.
+fn cancelled(workspace_id: &str, call_id: &str, reason: &str) -> Event {
+    call_event(
+        workspace_id,
+        call_id,
+        TelemetryEventType::CallRingCancelled,
+        json!({"callId": call_id, "reason": reason}),
+    )
+}
+
+/// Each way the service ends a ring stops the ringtone and takes the ring's
+/// notification away, says why, drops the deadline, and is not acted on twice.
+#[test]
+fn the_service_ending_a_ring_silences_it_and_says_why() {
+    let cases = [
+        (
+            "answered",
+            RingEnd::AnsweredElsewhere,
+            withdraw(),
+            IncomingRing::ANSWERED_ELSEWHERE,
+        ),
+        (
+            "call_ended",
+            RingEnd::CallEnded,
+            withdraw(),
+            IncomingRing::CALL_ENDED,
+        ),
+        (
+            "timeout",
+            RingEnd::Missed,
+            Effect::Notify(missed(CALL)),
+            IncomingRing::MISSED,
+        ),
+        (
+            "withdrawn",
+            RingEnd::Missed,
+            Effect::Notify(missed(CALL)),
+            IncomingRing::MISSED,
+        ),
+        // A reason this build does not know is a missed call, never an error.
+        (
+            "parked",
+            RingEnd::Missed,
+            Effect::Notify(missed(CALL)),
+            IncomingRing::MISSED,
+        ),
+    ];
+    for (reason, end, last, message) in cases {
+        let mut model = ready(AGENCY, "agency");
+        let deadline = rung(&mut model);
+        assert_eq!(
+            model.update(cancelled(AGENCY, CALL, reason)),
+            [Effect::StopRingtone, last],
+            "{reason}"
+        );
+        let ring = ring(&model);
+        assert_eq!(ring.phase, RingPhase::Ended(end), "{reason}");
+        assert_eq!(ring.message(), message, "{reason}");
+        assert!(!ring.is_live() && !ring.can_answer() && !ring.can_decline());
+        // Again, on the other channel or the same one: nothing more.
+        assert!(model.update(cancelled(AGENCY, CALL, reason)).is_empty());
+        assert!(
+            model
+                .update(Event::WaitOver { ticket: deadline })
+                .is_empty()
+        );
+        assert!(
+            model
+                .update(Event::Ring(RingEvent::Answer {
+                    call_id: CALL.to_owned()
+                }))
+                .is_empty()
+        );
+        // Put away, the next call rings.
+        model.update(Event::Ring(RingEvent::Dismiss));
+        rung(&mut model);
+    }
+    assert_eq!(
+        IncomingRing::ANSWERED_ELSEWHERE,
+        "That call was answered on another device."
+    );
+    assert_eq!(
+        IncomingRing::ANSWERED_ELSEWHERE_TITLE,
+        "Answered on another device"
+    );
+}
+
+/// The recorded event, as the service sends it, is read the same way.
+#[test]
+fn the_recorded_cancel_ends_the_ring_it_names() {
+    let recorded: district_model::TelemetryEnvelope =
+        crate::support::desktop_fixture("telemetry-event-call-ring-cancelled.json");
+    assert_eq!(recorded.event_type, TelemetryEventType::CallRingCancelled);
+    assert_eq!(
+        recorded.ring_cancel_reason(),
+        Some(district_model::RingCancelReason::Answered)
+    );
+    let mut model = ready(AGENCY, "agency");
+    let effects = model.update(ringing(AGENCY, &recorded.call_id, &[USER]));
+    assert_eq!(effects.len(), 3, "{effects:?}");
+    let effects = model.update(call_event(
+        AGENCY,
+        &recorded.call_id,
+        recorded.event_type.clone(),
+        recorded.data.clone(),
+    ));
+    assert_eq!(
+        effects,
+        [
+            Effect::StopRingtone,
+            Effect::WithdrawNotification {
+                id: format!("call:{}", recorded.call_id)
+            }
+        ]
+    );
+    assert_eq!(
+        ring(&model).phase,
+        RingPhase::Ended(RingEnd::AnsweredElsewhere)
+    );
+}
+
+/// The cancel reaches the device that answered too, sometimes after the
+/// answer: an answer on its way, and the call it joined, are left alone, and
+/// so is the call's live transcript.
+#[test]
+fn a_cancel_never_touches_a_call_answered_or_being_answered_here() {
+    for reason in ["answered", "timeout", "call_ended", "withdrawn"] {
+        // The answer is on its way.
+        let mut model = ready(AGENCY, "agency");
+        rung(&mut model);
+        let ticket = answer_it(&mut model);
+        assert!(
+            model.update(cancelled(AGENCY, CALL, reason)).is_empty(),
+            "{reason}"
+        );
+        assert_eq!(ring(&model).phase, RingPhase::Answering);
+        let effects = model.update(Event::CallAnswered {
+            ticket,
+            result: Ok(answer()),
+        });
+        connect(&effects);
+        assert!(signed_in(&model).active_call.is_some());
+
+        // The call joined, its media up.
+        let mut model = ready(AGENCY, "agency");
+        let session = in_call(&mut model);
+        model.update(media(session, MediaEvent::Connected));
+        let before = signed_in(&model).active_call.clone();
+        assert!(
+            model.update(cancelled(AGENCY, CALL, reason)).is_empty(),
+            "{reason}"
+        );
+        assert_eq!(signed_in(&model).active_call, before);
+        assert!(!matches!(
+            signed_in(&model).active_call.as_ref().unwrap().phase,
+            CallPhase::Ended(_)
+        ));
+    }
+}
+
+/// Only the ring for the call named stops; with no ring, nothing happens.
+#[test]
+fn a_cancel_for_another_call_or_with_nothing_ringing_does_nothing() {
+    let mut model = ready(AGENCY, "agency");
+    assert!(model.update(cancelled(AGENCY, CALL, "answered")).is_empty());
+    assert_eq!(signed_in(&model).ring.ring, None);
+
+    rung(&mut model);
+    assert!(
+        model
+            .update(cancelled(AGENCY, "call_other", "answered"))
+            .is_empty()
+    );
+    assert_eq!(ring(&model).phase, RingPhase::Ringing);
+}
+
+/// A ring waiting behind a call has no ringtone to stop: its notification goes,
+/// and the call under way carries on.
+#[test]
+fn a_waiting_ring_cancelled_leaves_the_call_under_way() {
+    for (reason, effects, end) in [
+        (
+            "answered",
+            vec![Effect::WithdrawNotification {
+                id: "call:call_second".to_owned(),
+            }],
+            RingEnd::AnsweredElsewhere,
+        ),
+        (
+            "timeout",
+            vec![Effect::Notify(missed("call_second"))],
+            RingEnd::Missed,
+        ),
+    ] {
+        let mut model = ready(AGENCY, "agency");
+        let session = in_call(&mut model);
+        model.update(media(session, MediaEvent::Connected));
+        model.update(ringing(AGENCY, "call_second", &[USER]));
+        assert_eq!(
+            model.update(cancelled(AGENCY, "call_second", reason)),
+            effects
+        );
+        assert_eq!(ring(&model).phase, RingPhase::Ended(end));
+        assert!(!matches!(
+            signed_in(&model).active_call.as_ref().unwrap().phase,
+            CallPhase::Ended(_)
+        ));
+        // The call ending later rings nothing.
+        let effects = and_transcript_read(model.update(Event::Call(CallEvent::HangUp)));
+        assert_eq!(effects, [Effect::DisconnectMedia { session }]);
+    }
+}
+
+/// A ring from a workspace other than the one open is cancelled from that
+/// workspace's socket.
+#[test]
+fn a_ring_in_another_workspace_is_cancelled_from_its_socket() {
+    let mut model = ready(VIEWER, "viewer");
+    rung(&mut model);
+    assert_eq!(
+        model.update(cancelled(AGENCY, CALL, "answered")),
+        [Effect::StopRingtone, withdraw()]
+    );
+    assert_eq!(
+        ring(&model).phase,
+        RingPhase::Ended(RingEnd::AnsweredElsewhere)
+    );
+}

@@ -1976,6 +1976,15 @@ pub fn live_action_decline(l: Locale) -> &'static str {
     }
 }
 
+/// `live.answered_elsewhere_title`
+#[must_use]
+pub fn live_answered_elsewhere_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Answered on another device",
+        Locale::FrCa => "Appel pris sur un autre appareil",
+    }
+}
+
 /// `live.message_body`
 #[must_use]
 pub fn live_message_body(l: Locale) -> &'static str {
@@ -2891,6 +2900,15 @@ pub fn purchase_term_monthly(l: Locale) -> &'static str {
     match l {
         Locale::En => "Monthly",
         Locale::FrCa => "Mensuel",
+    }
+}
+
+/// `ringing.answered_elsewhere`
+#[must_use]
+pub fn ringing_answered_elsewhere(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That call was answered on another device.",
+        Locale::FrCa => "Cet appel a été pris sur un autre appareil.",
     }
 }
 

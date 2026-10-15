@@ -501,8 +501,9 @@ impl SignedIn {
 
     /// An event from the socket of `workspace_id`, a workspace where the member
     /// takes calls that is not the one open. Nothing of it is on screen, so
-    /// nothing is read again: a ring rings, a call's end ends its ring or the
-    /// call answered here, and a new message is notified.
+    /// nothing is read again: a ring rings, a ring's cancel or a call's end
+    /// ends its ring, a call's end ends the call answered here, and a new
+    /// message is notified.
     fn other_event(
         &mut self,
         workspace_id: String,
@@ -511,6 +512,7 @@ impl SignedIn {
     ) -> Vec<Effect> {
         match envelope.event_type {
             TelemetryEventType::CallRinging => self.call_ringing(&envelope, tickets),
+            TelemetryEventType::CallRingCancelled => self.ring_cancelled(&envelope, tickets),
             TelemetryEventType::CallUpdated | TelemetryEventType::CallEnded => {
                 self.ringing_call_changed(&envelope, tickets)
             }
@@ -548,6 +550,9 @@ impl SignedIn {
                 effects
             }
             TelemetryEventType::CallRinging => self.call_ringing(&envelope, tickets),
+            // A ring's end says nothing new about the call: the call's own
+            // events read the log and the call again.
+            TelemetryEventType::CallRingCancelled => self.ring_cancelled(&envelope, tickets),
             // An event type added after this build is left alone for the same
             // reason as a message that could not be read. A transcript frame
             // never reaches here; see `live`.

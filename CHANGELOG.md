@@ -17,6 +17,45 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.2] - 2026-10-15
+
+The core of District AI for Linux 3.0.1 and District AI for Windows 3.0.1: a desktop stops
+ringing when the call is answered on another device, when the ring's window closes, or
+when the caller hangs up, as soon as the service says so.
+
+### Added
+
+- `TelemetryEventType::CallRingCancelled` (`call_ring_cancelled`), whose data is
+  `{callId, reason}`, and `RingCancelReason` (`answered`, `timeout`, `call_ended`,
+  `withdrawn`), read with `TelemetryEnvelope::ring_cancel_reason`. A reason this client
+  does not know reads as `Withdrawn`. Held to the new desktop fixture
+  `telemetry-event-call-ring-cancelled.json` (the desktop set now from 6cd0ff667).
+- The core acts on the event from the open workspace's socket and from every other
+  workspace's where the member takes calls: a ring still ringing or waiting here for
+  that call stops its ringtone and loses its notification, and its deadline is
+  dropped. Answered elsewhere, the ring ends as `RingEnd::AnsweredElsewhere`, which
+  says "That call was answered on another device." (`IncomingRing::ANSWERED_ELSEWHERE`,
+  heading `IncomingRing::ANSWERED_ELSEWHERE_TITLE`, "Answered on another device"); a
+  caller who hung up ends it as `RingEnd::CallEnded`; a timeout, a withdrawal or an
+  unknown reason makes it a missed call with the missed-call notification, as the
+  local deadline does.
+- Two strings, in English and Canadian French: `ringing.answered_elsewhere` and
+  `live.answered_elsewhere_title`.
+
+### Unchanged on purpose
+
+- The event never touches a call this desktop answered or is answering: it reaches the
+  answering device too, sometimes after the answer, so an answer on its way, the call
+  joined and its live transcript are left alone. It is not a `call_ended`: it never
+  runs the hang-up of a call answered here.
+- The local thirty-second deadline stays as the fallback for a cancel that never
+  arrives. A repeated cancel, on the socket or a push, does nothing more.
+
+`RingEnd::AnsweredElsewhere` and `TelemetryEventType::CallRingCancelled` are new
+variants of public enums, which this file's rule counts as breaking. They ship in a
+patch release because the only apps that pin 4.0, District AI for Linux and District
+AI for Windows, move to this release in their 3.0.1 together with the matching arms.
+
 ## [4.0.1] - 2026-10-15
 
 The language signals District AI for Linux 3.0.0 and District AI for Windows 3.0.0 send
