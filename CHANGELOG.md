@@ -55,6 +55,8 @@ What 4.0.0 brings over 3.1.1:
   that is not a pre-release, so a beta cut for testing never claims to be the
   current release, and has a `--self-test` that CI runs first.
 - CHANGELOG.md has the 1.2.1 backport's section.
+- CI checks that every catalog has its reviewed French (`l10n.py check --require fr-CA`),
+  one catalog per call, since a key may be defined in two of them.
 - An OpenSSF Scorecard workflow, as district-linux has. Code scanning (CodeQL) is
   GitHub's default setup on this repository, as on district-linux.
 
