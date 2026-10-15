@@ -308,6 +308,8 @@ pub const FAILURE_REGIONS_DEGRADED: &str = "A region is unreachable, so this cou
 pub const FAILURE_SCHEDULING_NOT_OFFERED: &str = "Booking pages are not offered to this workspace.";
 /// `failure.scheduling_setup_failed` in English.
 pub const FAILURE_SCHEDULING_SETUP_FAILED: &str = "Setting up booking pages did not finish, and no reason was given.";
+/// `failure.scheduling_setup_failed_reason_unshown` in English.
+pub const FAILURE_SCHEDULING_SETUP_FAILED_REASON_UNSHOWN: &str = "Setting up booking pages did not finish.";
 /// `failure.scheduling_too_many` in English.
 pub const FAILURE_SCHEDULING_TOO_MANY: &str = "Booking pages were turned on several times in the last hour for this workspace. Try again later.";
 /// `failure.server` in English.

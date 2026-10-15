@@ -176,3 +176,133 @@ screen = "report"
 tier = "T2"
 state = "reviewed"
 note = "The title of the dialog that reports a call summary, a contact's dossier, a reply or an answer the AI wrote."
+
+[request_status.canceled]
+en = "Canceled"
+fr = "Annulée"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine)"
+note = "A support request's status, from the iOS catalog's support.status_canceled, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.closed]
+en = "Closed"
+fr = "Fermée"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine)"
+note = "A support request's status, from the iOS catalog's support.status_closed, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.declined]
+en = "Declined"
+fr = "Refusée"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine), unlike the same English for a call or a message"
+note = "A support request's status, from the iOS catalog's support.status_declined, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.done]
+en = "Done"
+fr = "Terminée"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine)"
+note = "A support request's status, from the iOS catalog's support.status_done, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.escalated]
+en = "Escalated"
+fr = "Transférée"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine), unlike the same English for a call or a message"
+note = "A support request's status, from the iOS catalog's support.status_escalated, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.in_progress]
+en = "In progress"
+fr = "En cours"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine), unlike the same English for a call or a message"
+note = "A support request's status, from the iOS catalog's support.status_in_progress, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.open]
+en = "Open"
+fr = "Ouverte"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine)"
+note = "A support request's status, from the iOS catalog's support.status_open, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.pending]
+en = "Pending"
+fr = "En attente"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine), unlike the same English for a call or a message"
+note = "A support request's status, from the iOS catalog's support.status_pending, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.received]
+en = "Received"
+fr = "Reçue"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine), unlike the same English for a call or a message"
+note = "A support request's status, from the iOS catalog's support.status_received, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.resolved]
+en = "Resolved"
+fr = "Réglée"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine)"
+note = "A support request's status, from the iOS catalog's support.status_resolved, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.unknown]
+en = "Status unknown"
+fr = "État inconnu"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine), unlike the same English for a call or a message"
+note = "A support request's status, from the iOS catalog's support.status_unknown. The generic label: a help desk status this build does not list reads as its category's label (Open, In progress, Closed, Received), and this one when the category is unknown too. The desk's own word is never shown: the live workflow is localised, so it can be in any language."
+
+[request_status.waiting_for_customer]
+en = "Waiting for your reply"
+fr = "En attente de votre réponse"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine), unlike the same English for a call or a message"
+note = "A support request's status, from the iOS catalog's support.status_waiting_for_customer, word for word in both languages. Reached through support_status_label, never by key."
+
+[request_status.waiting_for_support]
+en = "Waiting for support"
+fr = "En attente du soutien"
+ctx = "label"
+screen = "support"
+tier = "T2"
+state = "reviewed"
+fr_variant = "a support request's status: agrees with « demande » (feminine), unlike the same English for a call or a message"
+note = "A support request's status, from the iOS catalog's support.status_waiting_for_support, word for word in both languages. Reached through support_status_label, never by key."

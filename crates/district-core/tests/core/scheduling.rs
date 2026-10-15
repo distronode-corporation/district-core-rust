@@ -268,6 +268,25 @@ fn enabling_is_one_press_and_the_status_is_read_again_after_it() {
         screen(&model).notice.as_ref().unwrap().message,
         "Setting up booking pages did not finish, and no reason was given."
     );
+
+    // In French the service's English reason is not shown, and the sentence
+    // that replaces it never says that no reason was given.
+    let effects = scheduling(&mut model, SchedulingEvent::Enable);
+    district_core::l10n::with_locale(district_core::Locale::FrCa, || {
+        model.update(Event::SchedulingEnabled {
+            ticket: last_ticket(&effects),
+            result: Ok(SchedulingEnableResponse {
+                ok: false,
+                status: "error".to_owned(),
+                public_host: None,
+                error: Some("The booking host could not be reached.".to_owned()),
+            }),
+        });
+    });
+    assert_eq!(
+        screen(&model).notice.as_ref().unwrap().message,
+        "La configuration des pages de réservation n'a pas abouti."
+    );
 }
 
 #[test]

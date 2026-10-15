@@ -184,3 +184,120 @@ pub fn report_title(l: Locale) -> &'static str {
         Locale::FrCa => "Signaler un contenu généré par l'IA",
     }
 }
+
+/// `request_status.canceled`
+#[must_use]
+pub fn request_status_canceled(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Canceled",
+        Locale::FrCa => "Annulée",
+    }
+}
+
+/// `request_status.closed`
+#[must_use]
+pub fn request_status_closed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Closed",
+        Locale::FrCa => "Fermée",
+    }
+}
+
+/// `request_status.declined`
+#[must_use]
+pub fn request_status_declined(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Declined",
+        Locale::FrCa => "Refusée",
+    }
+}
+
+/// `request_status.done`
+#[must_use]
+pub fn request_status_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Done",
+        Locale::FrCa => "Terminée",
+    }
+}
+
+/// `request_status.escalated`
+#[must_use]
+pub fn request_status_escalated(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Escalated",
+        Locale::FrCa => "Transférée",
+    }
+}
+
+/// `request_status.in_progress`
+#[must_use]
+pub fn request_status_in_progress(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "In progress",
+        Locale::FrCa => "En cours",
+    }
+}
+
+/// `request_status.open`
+#[must_use]
+pub fn request_status_open(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Open",
+        Locale::FrCa => "Ouverte",
+    }
+}
+
+/// `request_status.pending`
+#[must_use]
+pub fn request_status_pending(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Pending",
+        Locale::FrCa => "En attente",
+    }
+}
+
+/// `request_status.received`
+#[must_use]
+pub fn request_status_received(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Received",
+        Locale::FrCa => "Reçue",
+    }
+}
+
+/// `request_status.resolved`
+#[must_use]
+pub fn request_status_resolved(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Resolved",
+        Locale::FrCa => "Réglée",
+    }
+}
+
+/// `request_status.unknown`
+#[must_use]
+pub fn request_status_unknown(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Status unknown",
+        Locale::FrCa => "État inconnu",
+    }
+}
+
+/// `request_status.waiting_for_customer`
+#[must_use]
+pub fn request_status_waiting_for_customer(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Waiting for your reply",
+        Locale::FrCa => "En attente de votre réponse",
+    }
+}
+
+/// `request_status.waiting_for_support`
+#[must_use]
+pub fn request_status_waiting_for_support(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Waiting for support",
+        Locale::FrCa => "En attente du soutien",
+    }
+}

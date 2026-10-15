@@ -278,9 +278,15 @@ impl SupportRequestScreen {
                 .is_some_and(|detail| detail.closeable && !is_resolved(detail))
     }
 
-    /// The confirmation of a close.
+    /// The confirmation of a close. `status` is the desk's own name for it,
+    /// shown through [`district_l10n::support_status_label`] with the resolved
+    /// category, never as it is: the desk's word is English, or the live
+    /// workflow's language.
     pub fn closed_message(status: &str) -> String {
-        s::support_closed_as(l(), status)
+        s::support_closed_as(
+            l(),
+            district_l10n::support_status_label(status, SUPPORT_STATUS_DONE, l()),
+        )
     }
 }
 

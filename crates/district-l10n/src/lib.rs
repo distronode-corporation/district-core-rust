@@ -19,6 +19,8 @@
 //!   service stores in English (a call status, a role, a region), from
 //!   `contracts/i18n/wire-vocabulary.json` through `catalog/wire.toml`. The value
 //!   itself never changes; only its label does.
+//! - [`support_status_label`]: a support request's status, from its name or its
+//!   category, never the help desk's own word.
 //! - [`format`](mod@format): money, dates, times, durations, numbers, percentages, lists
 //!   and plural categories, held byte for byte to the service's own formatting
 //!   vectors (`contracts/i18n/format-vectors.json`).
@@ -39,9 +41,11 @@ use std::sync::atomic::{AtomicBool, Ordering};
 
 mod errors;
 pub mod format;
+mod support_status;
 mod wire;
 
 pub use errors::{FALLBACK_CODE, api_error_text};
+pub use support_status::support_status_label;
 pub use wire::{WireCategory, placeholder_label, region_long_label, wire_label};
 
 /// The core's own sentences and labels, from `catalog/core.toml`.

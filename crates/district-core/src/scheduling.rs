@@ -36,11 +36,12 @@ use district_model::{
     SchedulingHandOffResponse, SchedulingStatusResponse, SchedulingTenant,
 };
 
+use crate::Locale;
 use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::scheduling_admin::SchedulingSection;
 use crate::signed_in::{Next, SignedIn, stay};
-use crate::text::{english_only, l, s};
+use crate::text::{l, s};
 
 /// Where the hand-off lands: the web dashboard's booking pages. The service
 /// replaces anything that is not a path under `/dashboard` with its own default,
@@ -363,10 +364,14 @@ impl SignedIn {
         self.scheduling.enabling = false;
         self.scheduling.notice = match result {
             Ok(answer) if answer.ok => None,
-            Ok(answer) => Some(FailureText::final_(
-                english_only(answer.error)
-                    .unwrap_or_else(|| s::failure_scheduling_setup_failed(l()).to_owned()),
-            )),
+            // The service's reason is its own English: shown as it is in
+            // English, and in French replaced by a sentence that says only
+            // that it did not finish, never that no reason was given.
+            Ok(answer) => Some(FailureText::final_(match answer.error {
+                Some(reason) if l() == Locale::En => reason,
+                Some(_) => s::failure_scheduling_setup_failed_reason_unshown(l()).to_owned(),
+                None => s::failure_scheduling_setup_failed(l()).to_owned(),
+            })),
             Err(ApiError::Forbidden(_)) => {
                 Some(FailureText::final_(s::failure_scheduling_not_offered(l())))
             }

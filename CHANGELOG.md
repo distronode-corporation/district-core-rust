@@ -47,6 +47,19 @@ when the caller hangs up, as soon as the service says so.
   users who could be added, whose read is now `HostsDialog::candidates_load`) and
   `DeveloperEvent::RetryDeliveries` (the open webhook's deliveries). Each does nothing
   unless that read failed, as `BookingsEvent::RetryDialogRead` does.
+- `district_l10n::support_status_label(status_name, category, locale)` (also
+  `district_core::l10n::support_status_label`): a support request's status in the
+  app's language, never the help desk's own word. A name this build lists (`Received`,
+  `Open`, `Waiting for support`, `Waiting for customer`, `In progress`, `Pending`,
+  `Escalated`, `Resolved`, `Done`, `Closed`, `Canceled`, `Declined`, `unknown`, and
+  their spellings) reads as its label; an unlisted one as its category's (`NEW` Open,
+  `INDETERMINATE` In progress, `DONE` Closed, `PENDING` Received), and an unknown
+  category as "Status unknown". The thirteen `request_status.*` labels in
+  `catalog/support.toml` are District AI for iOS's, word for word in both languages.
+- `SentimentShare::name`: the service's own name for a sentiment band (`Positive
+  Sentiment`, `Neutral Sentiment`, `Friction Sentiment`), the same in every language,
+  for an app to key the band's colour on. Keyed on the translated `label`, French drew
+  all three bands in the friction colour.
 
 ### Changed
 
@@ -68,6 +81,9 @@ when the caller hangs up, as soon as the service says so.
   asks for is unbound.
 - `dialer.hint` writes its example number with no-break spaces between the groups
   (`+1 212 555 0142`), in English and French, so it never breaks after `+1`.
+- `SupportRequestScreen::closed_message` names the status through
+  `support_status_label` with the resolved category: "Closed as Done." stays, and the
+  French reads "Fermée (état : Terminée)." where it carried the desk's English.
 
 ### Unchanged on purpose
 
@@ -79,8 +95,8 @@ when the caller hangs up, as soon as the service says so.
   arrives. A repeated cancel, on the socket or a push, does nothing more.
 
 `RingEnd::AnsweredElsewhere`, `TelemetryEventType::CallRingCancelled` and the three
-retry events are new variants of public enums, and `HostsDialog::candidates_load` a new
-field of a public struct, which this file's rule counts as breaking. They ship in a
+retry events are new variants of public enums, and `HostsDialog::candidates_load` and
+`SentimentShare::name` new fields of public structs, which this file's rule counts as breaking. They ship in a
 patch release because the only apps that pin 4.0, District AI for Linux and District
 AI for Windows, move to this release in their 3.0.1 together with the matching arms.
 

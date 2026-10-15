@@ -326,6 +326,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::failure_scheduling_not_offered(Locale::FrCa), "Cet espace de travail n'a pas accès aux pages de réservation.");
     assert_eq!(strings::failure_scheduling_setup_failed(Locale::En), "Setting up booking pages did not finish, and no reason was given.");
     assert_eq!(strings::failure_scheduling_setup_failed(Locale::FrCa), "La configuration des pages de réservation a échoué, et aucune raison n'a été donnée.");
+    assert_eq!(strings::failure_scheduling_setup_failed_reason_unshown(Locale::En), "Setting up booking pages did not finish.");
+    assert_eq!(strings::failure_scheduling_setup_failed_reason_unshown(Locale::FrCa), "La configuration des pages de réservation n'a pas abouti.");
     assert_eq!(strings::failure_scheduling_too_many(Locale::En), "Booking pages were turned on several times in the last hour for this workspace. Try again later.");
     assert_eq!(strings::failure_scheduling_too_many(Locale::FrCa), "Les pages de réservation ont été activées plusieurs fois depuis une heure pour cet espace de travail. Réessayez plus tard.");
     assert_eq!(strings::failure_server(Locale::En), "Something went wrong on our side. Please try again shortly.");
@@ -1748,6 +1750,32 @@ fn every_support_accessor_says_what_its_catalog_says() {
     assert_eq!(support_strings::report_subject(Locale::FrCa), "Report: AI-generated content");
     assert_eq!(support_strings::report_title(Locale::En), "Report AI-generated content");
     assert_eq!(support_strings::report_title(Locale::FrCa), "Signaler un contenu généré par l'IA");
+    assert_eq!(support_strings::request_status_canceled(Locale::En), "Canceled");
+    assert_eq!(support_strings::request_status_canceled(Locale::FrCa), "Annulée");
+    assert_eq!(support_strings::request_status_closed(Locale::En), "Closed");
+    assert_eq!(support_strings::request_status_closed(Locale::FrCa), "Fermée");
+    assert_eq!(support_strings::request_status_declined(Locale::En), "Declined");
+    assert_eq!(support_strings::request_status_declined(Locale::FrCa), "Refusée");
+    assert_eq!(support_strings::request_status_done(Locale::En), "Done");
+    assert_eq!(support_strings::request_status_done(Locale::FrCa), "Terminée");
+    assert_eq!(support_strings::request_status_escalated(Locale::En), "Escalated");
+    assert_eq!(support_strings::request_status_escalated(Locale::FrCa), "Transférée");
+    assert_eq!(support_strings::request_status_in_progress(Locale::En), "In progress");
+    assert_eq!(support_strings::request_status_in_progress(Locale::FrCa), "En cours");
+    assert_eq!(support_strings::request_status_open(Locale::En), "Open");
+    assert_eq!(support_strings::request_status_open(Locale::FrCa), "Ouverte");
+    assert_eq!(support_strings::request_status_pending(Locale::En), "Pending");
+    assert_eq!(support_strings::request_status_pending(Locale::FrCa), "En attente");
+    assert_eq!(support_strings::request_status_received(Locale::En), "Received");
+    assert_eq!(support_strings::request_status_received(Locale::FrCa), "Reçue");
+    assert_eq!(support_strings::request_status_resolved(Locale::En), "Resolved");
+    assert_eq!(support_strings::request_status_resolved(Locale::FrCa), "Réglée");
+    assert_eq!(support_strings::request_status_unknown(Locale::En), "Status unknown");
+    assert_eq!(support_strings::request_status_unknown(Locale::FrCa), "État inconnu");
+    assert_eq!(support_strings::request_status_waiting_for_customer(Locale::En), "Waiting for your reply");
+    assert_eq!(support_strings::request_status_waiting_for_customer(Locale::FrCa), "En attente de votre réponse");
+    assert_eq!(support_strings::request_status_waiting_for_support(Locale::En), "Waiting for support");
+    assert_eq!(support_strings::request_status_waiting_for_support(Locale::FrCa), "En attente du soutien");
 }
 
 #[test]

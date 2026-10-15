@@ -1460,6 +1460,15 @@ tier = "T2"
 state = "reviewed"
 note = "Setting up booking pages ran and failed, and the service gave no reason."
 
+[failure.scheduling_setup_failed_reason_unshown]
+en = "Setting up booking pages did not finish."
+fr = "La configuration des pages de réservation n'a pas abouti."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+state = "reviewed"
+note = "Setting up booking pages ran and failed, and the service gave a reason in its own English, which a French screen does not show. Says only what is true: it did not finish. Never that no reason was given."
+
 [failure.scheduling_too_many]
 en = "Booking pages were turned on several times in the last hour for this workspace. Try again later."
 fr = "Les pages de réservation ont été activées plusieurs fois depuis une heure pour cet espace de travail. Réessayez plus tard."

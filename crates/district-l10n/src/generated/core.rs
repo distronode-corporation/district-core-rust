@@ -1454,6 +1454,15 @@ pub fn failure_scheduling_setup_failed(l: Locale) -> &'static str {
     }
 }
 
+/// `failure.scheduling_setup_failed_reason_unshown`
+#[must_use]
+pub fn failure_scheduling_setup_failed_reason_unshown(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Setting up booking pages did not finish.",
+        Locale::FrCa => "La configuration des pages de réservation n'a pas abouti.",
+    }
+}
+
 /// `failure.scheduling_too_many`
 #[must_use]
 pub fn failure_scheduling_too_many(l: Locale) -> &'static str {
