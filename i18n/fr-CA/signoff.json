@@ -1,7 +1,7 @@
 {
   "signed_off_by": "v3 manager (Opus 5.5 xhigh), final French review, 2026-10-15",
   "release": "v4.0.2",
-  "commit": "03b9062cdbae791112d7c26ec21781cb48c7ccb3",
+  "commit": "894e206cd2ce179af75bc06196f399d69825fa11",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
@@ -9,7 +9,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
-      "sha256": "7a3c58207d4c3beb458e262a5e3da5a0fa2757eba3b35a48b2d781b0c5e9c142"
+      "sha256": "d1d577a6ff68e6368978c99594f54c83f0255b4f406cf6bc6b0bb7238dbb2852"
     },
     {
       "path": "crates/district-l10n/catalog/numbers.toml",
