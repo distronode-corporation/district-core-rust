@@ -85,7 +85,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::billing_read_only(Locale::En), "Plan changes, payment methods and cancellations are made on the District AI website. This screen is read only.");
     assert_eq!(strings::billing_read_only(Locale::FrCa), "Les changements de forfait, moyens de paiement et résiliations se gèrent sur le site Web de District AI. Cet écran est en lecture seule.");
     assert_eq!(strings::billing_read_only_viewer(Locale::En), "This screen is read only. Ask an agency or client member of this workspace to change the plan.");
-    assert_eq!(strings::billing_read_only_viewer(Locale::FrCa), "Cet écran est en lecture seule. Demandez à un membre ayant le rôle Agence ou Client de cet espace de travail de changer de forfait.");
+    assert_eq!(strings::billing_read_only_viewer(Locale::FrCa), "Cet écran est en lecture seule. Demandez à un membre ayant le rôle Administrateur ou Membre de cet espace de travail de changer de forfait.");
     assert_eq!(strings::billing_status_active(Locale::En), "Active");
     assert_eq!(strings::billing_status_active(Locale::FrCa), "Actif");
     assert_eq!(strings::billing_status_cancelled(Locale::En), "Cancelled");
@@ -141,7 +141,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::call_handling_unavailable_viewer(Locale::En), "Viewers are not rung for calls.");
     assert_eq!(strings::call_handling_unavailable_viewer(Locale::FrCa), "Le rôle Lecteur ne reçoit pas d'appels.");
     assert_eq!(strings::call_handling_viewer(Locale::En), "Only agency and client members can change how this workspace answers calls.");
-    assert_eq!(strings::call_handling_viewer(Locale::FrCa), "Seuls les membres Agence et Client peuvent modifier la façon dont cet espace de travail répond aux appels.");
+    assert_eq!(strings::call_handling_viewer(Locale::FrCa), "Seuls les membres ayant le rôle Administrateur ou Membre peuvent modifier la façon dont cet espace de travail répond aux appels.");
     assert_eq!(strings::calls_empty_body(Locale::En), "Calls your receptionist answers will appear here.");
     assert_eq!(strings::calls_empty_body(Locale::FrCa), "Les appels que prend votre réceptionniste apparaîtront ici.");
     assert_eq!(strings::calls_empty_title(Locale::En), "No calls yet");
@@ -295,7 +295,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::failure_keyring_unavailable(Locale::En), "Your sign-in could not be read because no keyring is available. Start your keyring (for example GNOME Keyring or KeePassXC), then try again.");
     assert_eq!(strings::failure_keyring_unavailable(Locale::FrCa), "Vos informations de connexion n'ont pas pu être lues, car aucun trousseau n'est disponible. Démarrez votre trousseau (par exemple GNOME Keyring ou KeePassXC), puis réessayez.");
     assert_eq!(strings::failure_last_agency_member(Locale::En), "Every workspace needs at least one agency member, so this change was not made.");
-    assert_eq!(strings::failure_last_agency_member(Locale::FrCa), "Chaque espace de travail doit avoir au moins un membre ayant le rôle Agence; ce changement n'a donc pas été fait.");
+    assert_eq!(strings::failure_last_agency_member(Locale::FrCa), "Chaque espace de travail doit avoir au moins un membre ayant le rôle Administrateur; ce changement n'a donc pas été fait.");
     assert_eq!(strings::failure_live_forbidden(Locale::En), "Live updates are not available to you in this workspace. New calls and messages appear when you refresh.");
     assert_eq!(strings::failure_live_forbidden(Locale::FrCa), "Les mises à jour en direct vous sont inaccessibles dans cet espace de travail. Actualisez pour voir les nouveaux appels et messages.");
     assert_eq!(strings::failure_live_unusable(Locale::En), "Live updates could not be started, so new calls and messages appear when you refresh. Updating the app may fix it.");
@@ -437,7 +437,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::knowledge_mode_unavailable(Locale::En), "Where this workspace's answers come from could not be read, so it cannot be changed right now.");
     assert_eq!(strings::knowledge_mode_unavailable(Locale::FrCa), "La source des réponses de cet espace de travail n'a pas pu être lue; elle ne peut donc pas être modifiée pour l'instant.");
     assert_eq!(strings::knowledge_viewer(Locale::En), "You have read-only access to this workspace. An agency or client member can add documents and change where answers come from.");
-    assert_eq!(strings::knowledge_viewer(Locale::FrCa), "Votre accès à cet espace de travail est en lecture seule. Un membre ayant le rôle Agence ou Client peut ajouter des documents et changer la source des réponses.");
+    assert_eq!(strings::knowledge_viewer(Locale::FrCa), "Votre accès à cet espace de travail est en lecture seule. Un membre ayant le rôle Administrateur ou Membre peut ajouter des documents et changer la source des réponses.");
     assert_eq!(strings::live_action_answer(Locale::En), "Answer");
     assert_eq!(strings::live_action_answer(Locale::FrCa), "Répondre");
     assert_eq!(strings::live_action_decline(Locale::En), "Decline");
@@ -509,11 +509,11 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::members_remove_title(Locale::En), "Remove this member?");
     assert_eq!(strings::members_remove_title(Locale::FrCa), "Retirer ce membre?");
     assert_eq!(strings::members_role_agency(Locale::En), "Agency");
-    assert_eq!(strings::members_role_agency(Locale::FrCa), "Agence");
+    assert_eq!(strings::members_role_agency(Locale::FrCa), "Administrateur");
     assert_eq!(strings::members_role_agency_body(Locale::En), "Full access, including who belongs here and what each member may do.");
     assert_eq!(strings::members_role_agency_body(Locale::FrCa), "Accès complet, y compris qui fait partie de l'espace et ce que chaque membre peut faire.");
     assert_eq!(strings::members_role_client(Locale::En), "Client");
-    assert_eq!(strings::members_role_client(Locale::FrCa), "Client");
+    assert_eq!(strings::members_role_client(Locale::FrCa), "Membre");
     assert_eq!(strings::members_role_client_body(Locale::En), "Everyday use: calls, contacts, messages and the workspace's settings.");
     assert_eq!(strings::members_role_client_body(Locale::FrCa), "Usage courant\u{00A0}: appels, contacts, messages et paramètres de l'espace de travail.");
     assert_eq!(strings::members_role_viewer(Locale::En), "Viewer");
@@ -825,7 +825,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::settings_saved_stale(Locale::En), "Saved, but the settings could not be read back. Read them again before changing anything else.");
     assert_eq!(strings::settings_saved_stale(Locale::FrCa), "Enregistré, mais les paramètres n'ont pas pu être relus. Actualisez-les avant de modifier autre chose.");
     assert_eq!(strings::settings_viewer_note(Locale::En), "You have read-only access to this workspace. These are the settings you may read; an agency or client member can change them.");
-    assert_eq!(strings::settings_viewer_note(Locale::FrCa), "Votre accès à cet espace de travail est en lecture seule. Voici les paramètres que vous pouvez lire; un membre ayant le rôle Agence ou Client peut les modifier.");
+    assert_eq!(strings::settings_viewer_note(Locale::FrCa), "Votre accès à cet espace de travail est en lecture seule. Voici les paramètres que vous pouvez lire; un membre ayant le rôle Administrateur ou Membre peut les modifier.");
     assert_eq!(strings::studio_leg_out(Locale::En, "{leg}", "{place}"), "{leg}: {place}");
     assert_eq!(strings::studio_leg_out(Locale::FrCa, "{leg}", "{place}"), "{leg}\u{00A0}: {place}");
     assert_eq!(strings::support_capped(Locale::En), "Showing the 100 most recent requests.");
@@ -941,7 +941,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::workflows_campaign_title(Locale::En), "Outbound campaign");
     assert_eq!(strings::workflows_campaign_title(Locale::FrCa), "Campagne sortante");
     assert_eq!(strings::workflows_campaign_viewer(Locale::En), "You are a viewer in this workspace. Ask an agency or client member to change the campaign.");
-    assert_eq!(strings::workflows_campaign_viewer(Locale::FrCa), "Votre rôle dans cet espace de travail est Lecteur. Demandez à un membre ayant le rôle Agence ou Client de modifier la campagne.");
+    assert_eq!(strings::workflows_campaign_viewer(Locale::FrCa), "Votre rôle dans cet espace de travail est Lecteur. Demandez à un membre ayant le rôle Administrateur ou Membre de modifier la campagne.");
     assert_eq!(strings::workflows_campaign_web_only(Locale::En), "The campaign's goal and batch size are changed on the District AI website.");
     assert_eq!(strings::workflows_campaign_web_only(Locale::FrCa), "L'objectif et la taille de lot de la campagne se modifient sur le site Web de District AI.");
     assert_eq!(strings::workflows_confirm_pause_action(Locale::En), "Pause campaign");
@@ -1921,7 +1921,7 @@ fn every_numbers_accessor_says_what_its_catalog_says() {
     assert_eq!(numbers_strings::numbers_verify_on(Locale::En), "Enabled");
     assert_eq!(numbers_strings::numbers_verify_on(Locale::FrCa), "Activé");
     assert_eq!(numbers_strings::numbers_viewer_cannot_provision(Locale::En), "Carrier setup and number changes need an agency or client role. Ask someone on this workspace who has one.");
-    assert_eq!(numbers_strings::numbers_viewer_cannot_provision(Locale::FrCa), "Configurer le transporteur ou les numéros exige un rôle Agence ou Client. Demandez à un membre de cet espace de travail qui en a un.");
+    assert_eq!(numbers_strings::numbers_viewer_cannot_provision(Locale::FrCa), "Configurer le transporteur ou les numéros exige un rôle Administrateur ou Membre. Demandez à un membre de cet espace de travail qui en a un.");
     assert_eq!(numbers_strings::numbers_working(Locale::En), "Working…");
     assert_eq!(numbers_strings::numbers_working(Locale::FrCa), "En cours…");
     assert_eq!(numbers_strings::numbers_write_unrepeatable(Locale::En), "We could not confirm whether that went through, so it is not offered again. Reload to see where things stand.");
@@ -1979,7 +1979,7 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::booking_view_all(Locale::En), "All");
     assert_eq!(scheduling_strings::booking_view_all(Locale::FrCa), "Tout");
     assert_eq!(scheduling_strings::booking_view_cancelled(Locale::En), "Cancelled");
-    assert_eq!(scheduling_strings::booking_view_cancelled(Locale::FrCa), "Annulé");
+    assert_eq!(scheduling_strings::booking_view_cancelled(Locale::FrCa), "Annulés");
     assert_eq!(scheduling_strings::booking_view_past(Locale::En), "Past");
     assert_eq!(scheduling_strings::booking_view_past(Locale::FrCa), "Passés");
     assert_eq!(scheduling_strings::booking_view_upcoming(Locale::En), "Upcoming");
@@ -1997,7 +1997,7 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::bookings_loading_more(Locale::En), "Loading…");
     assert_eq!(scheduling_strings::bookings_loading_more(Locale::FrCa), "Chargement…");
     assert_eq!(scheduling_strings::caldav_connect_action(Locale::En), "Connect calendar");
-    assert_eq!(scheduling_strings::caldav_connect_action(Locale::FrCa), "Connecter le calendrier");
+    assert_eq!(scheduling_strings::caldav_connect_action(Locale::FrCa), "Connecter");
     assert_eq!(scheduling_strings::caldav_connected(Locale::En), "Calendar connected");
     assert_eq!(scheduling_strings::caldav_connected(Locale::FrCa), "Calendrier connecté");
     assert_eq!(scheduling_strings::caldav_connected_to_line(Locale::En, "{account}"), "Calendar connected: {account}");
@@ -2485,7 +2485,7 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::not_public(Locale::En), "Not public");
     assert_eq!(scheduling_strings::not_public(Locale::FrCa), "Non public");
     assert_eq!(scheduling_strings::override_add_button(Locale::En), "Add override");
-    assert_eq!(scheduling_strings::override_add_button(Locale::FrCa), "Ajouter l'exception");
+    assert_eq!(scheduling_strings::override_add_button(Locale::FrCa), "Ajouter une exception");
     assert_eq!(scheduling_strings::override_add_title(Locale::En), "Add an override");
     assert_eq!(scheduling_strings::override_add_title(Locale::FrCa), "Ajouter une exception");
     assert_eq!(scheduling_strings::override_added(Locale::En), "Override added");
@@ -2967,9 +2967,9 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::team_rename_done(Locale::En), "Team renamed");
     assert_eq!(scheduling_strings::team_rename_done(Locale::FrCa), "Équipe renommée");
     assert_eq!(scheduling_strings::team_role_agency(Locale::En), "Agency");
-    assert_eq!(scheduling_strings::team_role_agency(Locale::FrCa), "Agence");
+    assert_eq!(scheduling_strings::team_role_agency(Locale::FrCa), "Administrateur");
     assert_eq!(scheduling_strings::team_role_client(Locale::En), "Client");
-    assert_eq!(scheduling_strings::team_role_client(Locale::FrCa), "Client");
+    assert_eq!(scheduling_strings::team_role_client(Locale::FrCa), "Membre");
     assert_eq!(scheduling_strings::team_role_removed(Locale::En), "Removed from the workspace");
     assert_eq!(scheduling_strings::team_role_removed(Locale::FrCa), "Retiré de l'espace de travail");
     assert_eq!(scheduling_strings::team_role_viewer(Locale::En), "Viewer");
@@ -3037,7 +3037,7 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::webhook_personal_data(Locale::En), "Personal data");
     assert_eq!(scheduling_strings::webhook_personal_data(Locale::FrCa), "Renseignements personnels");
     assert_eq!(scheduling_strings::webhook_save_action(Locale::En), "Save changes");
-    assert_eq!(scheduling_strings::webhook_save_action(Locale::FrCa), "Enregistrer les modifications");
+    assert_eq!(scheduling_strings::webhook_save_action(Locale::FrCa), "Enregistrer");
     assert_eq!(scheduling_strings::webhook_saving(Locale::En), "Saving…");
     assert_eq!(scheduling_strings::webhook_saving(Locale::FrCa), "Sauvegarde…");
     assert_eq!(scheduling_strings::webhook_secret_copy_action(Locale::En), "Copy signing secret");

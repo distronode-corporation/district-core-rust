@@ -37,7 +37,7 @@ use crate::marketplace::OwnedNumbersList;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::l;
-use district_l10n::{format, numbers_strings as ns};
+use district_l10n::{WireCategory, format, numbers_strings as ns, wire_label};
 
 /// The slots of number management, forgotten with the workspace.
 pub(crate) const NUMBER_SLOTS: [Slot; 6] = [
@@ -451,13 +451,14 @@ pub fn carrier_state(entry: &ProviderStatusEntry) -> &'static str {
     }
 }
 
-/// A SIP trunk's line under its name: its state and how many addresses may
-/// use it.
+/// A SIP trunk's line under its name: its state, by its label (a state this
+/// build does not know reads as the generic one, never as stored), and how many
+/// addresses may use it.
 pub fn sip_trunk_meta(trunk: &SipTrunk) -> String {
     let count = i64::try_from(trunk.ip_access_control_list.len()).unwrap_or(i64::MAX);
     ns::numbers_sip_trunk_meta_line(
         l(),
-        &trunk.status,
+        &wire_label(WireCategory::SipTrunkStatus, &trunk.status, l()),
         &ns::numbers_sip_address_count(l(), count),
     )
 }

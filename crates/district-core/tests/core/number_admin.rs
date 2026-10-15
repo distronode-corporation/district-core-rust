@@ -791,7 +791,21 @@ fn the_carrier_tab_says_each_thing_in_words() {
         ..entry(true)
     };
     assert!(carrier_state(&managed).starts_with("Held by Distronode."));
-    assert_eq!(sip_trunk_meta(&trunk()), "active \u{b7} 1 address");
+    // The status by its label, never as stored.
+    assert_eq!(sip_trunk_meta(&trunk()), "Active \u{b7} 1 address");
+    assert_eq!(
+        french(|| sip_trunk_meta(&trunk())),
+        "Actif \u{b7} 1 adresse"
+    );
+    let suspended = SipTrunk {
+        status: "suspended".to_owned(),
+        ..trunk()
+    };
+    assert_eq!(sip_trunk_meta(&suspended), "Other \u{b7} 1 address");
+    assert_eq!(
+        french(|| sip_trunk_meta(&suspended)),
+        "Autre \u{b7} 1 adresse"
+    );
     assert_eq!(verify_state(true), "Enabled");
     assert_eq!(verify_state(false), "Not enabled");
     assert_eq!(MarketplaceTab::carrier_label(), "Carrier");

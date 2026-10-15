@@ -370,7 +370,7 @@ pub fn billing_read_only(l: Locale) -> &'static str {
 pub fn billing_read_only_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "This screen is read only. Ask an agency or client member of this workspace to change the plan.",
-        Locale::FrCa => "Cet écran est en lecture seule. Demandez à un membre ayant le rôle Agence ou Client de cet espace de travail de changer de forfait.",
+        Locale::FrCa => "Cet écran est en lecture seule. Demandez à un membre ayant le rôle Administrateur ou Membre de cet espace de travail de changer de forfait.",
     }
 }
 
@@ -622,7 +622,7 @@ pub fn call_handling_unavailable_viewer(l: Locale) -> &'static str {
 pub fn call_handling_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "Only agency and client members can change how this workspace answers calls.",
-        Locale::FrCa => "Seuls les membres Agence et Client peuvent modifier la façon dont cet espace de travail répond aux appels.",
+        Locale::FrCa => "Seuls les membres ayant le rôle Administrateur ou Membre peuvent modifier la façon dont cet espace de travail répond aux appels.",
     }
 }
 
@@ -1315,7 +1315,7 @@ pub fn failure_keyring_unavailable(l: Locale) -> &'static str {
 pub fn failure_last_agency_member(l: Locale) -> &'static str {
     match l {
         Locale::En => "Every workspace needs at least one agency member, so this change was not made.",
-        Locale::FrCa => "Chaque espace de travail doit avoir au moins un membre ayant le rôle Agence; ce changement n'a donc pas été fait.",
+        Locale::FrCa => "Chaque espace de travail doit avoir au moins un membre ayant le rôle Administrateur; ce changement n'a donc pas été fait.",
     }
 }
 
@@ -1954,7 +1954,7 @@ pub fn knowledge_mode_unavailable(l: Locale) -> &'static str {
 pub fn knowledge_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "You have read-only access to this workspace. An agency or client member can add documents and change where answers come from.",
-        Locale::FrCa => "Votre accès à cet espace de travail est en lecture seule. Un membre ayant le rôle Agence ou Client peut ajouter des documents et changer la source des réponses.",
+        Locale::FrCa => "Votre accès à cet espace de travail est en lecture seule. Un membre ayant le rôle Administrateur ou Membre peut ajouter des documents et changer la source des réponses.",
     }
 }
 
@@ -2278,7 +2278,7 @@ pub fn members_remove_title(l: Locale) -> &'static str {
 pub fn members_role_agency(l: Locale) -> &'static str {
     match l {
         Locale::En => "Agency",
-        Locale::FrCa => "Agence",
+        Locale::FrCa => "Administrateur",
     }
 }
 
@@ -2296,7 +2296,7 @@ pub fn members_role_agency_body(l: Locale) -> &'static str {
 pub fn members_role_client(l: Locale) -> &'static str {
     match l {
         Locale::En => "Client",
-        Locale::FrCa => "Client",
+        Locale::FrCa => "Membre",
     }
 }
 
@@ -3700,7 +3700,7 @@ pub fn settings_saved_stale(l: Locale) -> &'static str {
 pub fn settings_viewer_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "You have read-only access to this workspace. These are the settings you may read; an agency or client member can change them.",
-        Locale::FrCa => "Votre accès à cet espace de travail est en lecture seule. Voici les paramètres que vous pouvez lire; un membre ayant le rôle Agence ou Client peut les modifier.",
+        Locale::FrCa => "Votre accès à cet espace de travail est en lecture seule. Voici les paramètres que vous pouvez lire; un membre ayant le rôle Administrateur ou Membre peut les modifier.",
     }
 }
 
@@ -4222,7 +4222,7 @@ pub fn workflows_campaign_title(l: Locale) -> &'static str {
 pub fn workflows_campaign_viewer(l: Locale) -> &'static str {
     match l {
         Locale::En => "You are a viewer in this workspace. Ask an agency or client member to change the campaign.",
-        Locale::FrCa => "Votre rôle dans cet espace de travail est Lecteur. Demandez à un membre ayant le rôle Agence ou Client de modifier la campagne.",
+        Locale::FrCa => "Votre rôle dans cet espace de travail est Lecteur. Demandez à un membre ayant le rôle Administrateur ou Membre de modifier la campagne.",
     }
 }
 

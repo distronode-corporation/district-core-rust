@@ -6,6 +6,7 @@ matches a release tag.
                                                 # README.md and SECURITY.md agree
     python3 scripts/check-version.py v1.0.0     # ...and with this tag
     python3 scripts/check-version.py 1.0.0      # a bare version works too
+    python3 scripts/check-version.py --self-test
 
 Where the version lives:
 
@@ -13,7 +14,8 @@ Where the version lives:
     crates/*/Cargo.toml  version.workspace = true      inherit it, never restate it
     CHANGELOG.md         the newest `## [x.y.z] - date` once a release exists
     README.md and        the current release, the tag  the newest release in
-    SECURITY.md          the apps pin, the series      CHANGELOG.md
+    SECURITY.md          the apps pin, the series      CHANGELOG.md that is not
+                                                       a pre-release
 
 A member crate that writes its own version literal is an error even when the
 number agrees today, because nothing would keep it agreeing after the next bump.
@@ -24,15 +26,19 @@ The changelog check starts to bite at the first release. Until then
 README.md and SECURITY.md tell people which release to pin and which is
 supported: the release they call current, the tag in the dependency lines an
 app writes, and the supported `x.y.x` series. Every such mention must name the
-newest release in CHANGELOG.md, so the pull request that makes a release changes
-them with it. Each file must still hold at least one mention, so that rewording
-it cannot quietly retire the check.
+newest release in CHANGELOG.md that is not a pre-release (`4.0.0-beta.1` is
+one), so the pull request that makes a release changes them with it, and a
+beta cut for testing never claims to be the release apps should pin. Until a
+release that is not a pre-release exists, they are not checked. Each file must
+still hold at least one mention, so that rewording it cannot quietly retire the
+check.
 
 With a tag, the version must equal the tag and CHANGELOG.md must have a section
 for it, because that section is what the release notes are made from.
 
 Run by the `repo` job in .github/workflows/ci.yml on every push and pull request,
-with no argument.
+with no argument, and with `--self-test`, which checks the rules above against
+made-up files.
 """
 
 from __future__ import annotations
@@ -93,6 +99,17 @@ def changelog_releases() -> list[tuple[str, str]]:
     return [(v, d) for v, d in HEADING.findall(text) if v.lower() != "unreleased"]
 
 
+def is_prerelease(version: str) -> bool:
+    """`4.0.0-beta.1` is a pre-release; `4.0.0` and `4.0.0+build.5` are not."""
+    return "-" in version.split("+", 1)[0]
+
+
+def current_release(releases: list[str]) -> str | None:
+    """The newest release that is not a pre-release, newest first as given, or
+    `None` when there is none."""
+    return next((release for release in releases if not is_prerelease(release)), None)
+
+
 def release_mention_errors(released: str, name: str, text: str) -> list[str]:
     """Each mention of the current release in `text` (the file `name`) that is
     not `released`, or one error if the file mentions no release at all."""
@@ -105,16 +122,17 @@ def release_mention_errors(released: str, name: str, text: str) -> list[str]:
                 if match.group(1) != released:
                     errors.append(
                         f"{name}:{number} names {match.group(1)} as the current release,"
-                        f" but CHANGELOG.md's newest release is {released}"
+                        f" but CHANGELOG.md's newest release that is not a pre-release is"
+                        f" {released}"
                     )
         for match in SERIES.finditer(line):
             found += 1
-            # The series of a pre-release is its version's: 4.0.0-beta.1 is 4.0.x.
             series = re.split(r"[-+]", released, maxsplit=1)[0].rsplit(".", 1)[0]
             if match.group(1) != series:
                 errors.append(
                     f"{name}:{number} supports {match.group(1)}.x as the current series,"
-                    f" but CHANGELOG.md's newest release is {released}"
+                    f" but CHANGELOG.md's newest release that is not a pre-release is"
+                    f" {released}"
                 )
     if not found:
         errors.append(
@@ -124,7 +142,57 @@ def release_mention_errors(released: str, name: str, text: str) -> list[str]:
     return errors
 
 
+def self_test() -> int:
+    """The rules, against made-up versions and files."""
+    failures = []
+
+    def check(label: str, got, want) -> None:
+        if got != want:
+            failures.append(f"{label}: got {got!r}, want {want!r}")
+
+    check("a beta is a pre-release", is_prerelease("4.0.0-beta.6"), True)
+    check("a release is not", is_prerelease("4.0.0"), False)
+    check("build metadata is not a pre-release", is_prerelease("4.0.0+linux.1"), False)
+    check("a hyphen in build metadata is not either", is_prerelease("4.0.0+a-b"), False)
+    check(
+        "the newest beta is skipped for the release before it",
+        current_release(["4.0.0-beta.2", "4.0.0-beta.1", "3.1.1", "3.1.0"]),
+        "3.1.1",
+    )
+    check("a release above its betas is current", current_release(["4.0.0", "4.0.0-beta.6"]), "4.0.0")
+    check("only betas: nothing is current", current_release(["1.0.0-beta.1"]), None)
+    check("no release at all", current_release([]), None)
+
+    readme = (
+        "> **Status: 3.1.1 is the current release**\n"
+        "> ([3.1.1](https://github.com/distronode-corporation/district-core-rust/releases/latest))\n"
+        'district-core = { tag = "v3.1.1", version = "=3.1.1" }\n'
+        "| 3.1.x (the current release, linked) | Yes |\n"
+    )
+    check("the current release passes", release_mention_errors("3.1.1", "README.md", readme), [])
+    beta = readme.replace("3.1.1", "4.0.0-beta.6").replace("3.1.x", "4.0.x")
+    check(
+        "a beta named as current fails at each of the five mentions",
+        len(release_mention_errors("3.1.1", "README.md", beta)),
+        5,
+    )
+    check(
+        "a file that names no release fails once",
+        len(release_mention_errors("3.1.1", "SECURITY.md", "nothing here\n")),
+        1,
+    )
+
+    for failure in failures:
+        print(f"ERROR: self-test: {failure}", file=sys.stderr)
+    if failures:
+        return 1
+    print("self-test passed")
+    return 0
+
+
 def main(argv: list[str]) -> int:
+    if argv[1:] == ["--self-test"]:
+        return self_test()
     version, members = workspace()
     errors: list[str] = []
 
@@ -142,18 +210,20 @@ def main(argv: list[str]) -> int:
         if not DATE.match(date):
             errors.append(f"CHANGELOG.md: heading [{release}] needs its date, `- YYYY-MM-DD`")
 
+    current = current_release(releases)
     print(f"  Cargo.toml    {version} ({len(members)} workspace members)")
     print(f"  CHANGELOG.md  {latest or '(no release yet)'}")
+    print(f"  current       {current or '(no release that is not a pre-release)'}")
 
     if latest is not None and latest != version:
         errors.append(
             f"CHANGELOG.md's newest release is {latest} but Cargo.toml says {version}"
         )
 
-    if latest is not None:
+    if current is not None:
         for name in RELEASE_DOCS:
             text = (ROOT / name).read_text(encoding="utf-8")
-            errors.extend(release_mention_errors(latest, name, text))
+            errors.extend(release_mention_errors(current, name, text))
 
     if len(argv) > 1:
         # Accept `v0.1.0` and `0.1.0`. Anything else is a mistake worth stopping

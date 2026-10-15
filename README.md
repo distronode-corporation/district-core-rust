@@ -1,16 +1,20 @@
 # District AI core for Rust
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/distronode-corporation/district-core-rust/badge)](https://scorecard.dev/viewer/?uri=github.com/distronode-corporation/district-core-rust)
+
 The shared Rust core of the District AI desktop apps: the data types, the HTTP
 client, sign-in, live updates, the application state and the call engine of
 District AI, the AI voice receptionist from Distronode, with no user interface
 toolkit in any of it.
 
-> **Status: 4.0.0-beta.6 is the current release**
-> ([4.0.0-beta.6](https://github.com/distronode-corporation/district-core-rust/releases/latest)),
-> extracted from District AI for Linux 2.1.0 with its history. See the
+> **Status: 4.0.0 is the current release**
+> ([4.0.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)),
+> used by District AI for Linux 3.0.0 and District AI for Windows 3.0.0. The core
+> was extracted from District AI for Linux 2.1.0 with its history. See the
 > [CHANGELOG](CHANGELOG.md).
 
-**Links:** [GitLab mirror](https://gitlab.com/distronode-corporation/district-core-rust)
+**Links:** [project page](https://www.distronode.com/open-source/district-core-rust),
+[GitLab mirror](https://gitlab.com/distronode-corporation/district-core-rust)
 (read-only mirror; issues and pull requests live on GitHub),
 [CHANGELOG](CHANGELOG.md).
 
@@ -22,6 +26,15 @@ Two apps build on these crates, and each pins them by tag:
   a GTK 4 and libadwaita app.
 - [District AI for Windows](https://github.com/distronode-corporation/district-windows),
   a WinUI 3 app that reaches the core through a UniFFI layer of its own.
+
+The District AI service the crates talk to is not open source; signing in needs a
+District AI account. Without one you can still build the crates and run every test.
+
+**Without an account with us.** Today the District AI apps need a District AI account to
+sign in. We want them to work without an account with us too. We have not worked out
+what that looks like or whether it can work, and the answer depends on what people would
+use them with, so we are asking before we build anything:
+[tell us what you would connect them to](https://github.com/distronode-corporation/.github/discussions/1).
 
 The core is shaped so that an app decides nothing. `Model::update` takes an
 `Event` and returns the `Effect`s to run next, plain data; an `EffectRunner` runs
@@ -42,6 +55,7 @@ of `district-core` has the whole shape.
 | `district-live` | The live telemetry WebSocket client. |
 | `district-core` | App state with no user interface toolkit and no IO of its own: the session, routes, role capabilities, a model per screen, and the effect runner with the traits an app implements. |
 | `district-host` | What a desktop app keeps on the machine and how it hears the machine sleep, on any operating system: the device id, the refresh marker, the settings file and the sleep protocol. |
+| `district-l10n` | Every sentence and label the crates write, in English and Canadian French: the catalogs in `catalog/`, the code generated from them, the labels of the values the service stores, and the date, number, money and duration formats, held to the service's own outputs in `contracts/i18n/`. The app chooses the language (`CoreConfig::locale`). |
 | `district-call` | The call engine: `LiveKitCallEngine` behind the optional `livekit` feature (it links libwebrtc), and `UnavailableCallEngine` without it, which joins nothing and says so. |
 
 `contracts/` holds what the crates are tested against: the District AI server's
@@ -57,8 +71,8 @@ hold that version:
 
 ```toml
 [workspace.dependencies]
-district-model = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v4.0.0-beta.6", version = "=4.0.0-beta.6" }
-district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v4.0.0-beta.6", version = "=4.0.0-beta.6" }
+district-model = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v4.0.0", version = "=4.0.0" }
+district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v4.0.0", version = "=4.0.0" }
 ```
 
 and so on for each crate it uses, all at the same tag. Cargo.lock then records

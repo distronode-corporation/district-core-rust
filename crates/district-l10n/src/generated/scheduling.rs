@@ -226,7 +226,7 @@ pub fn booking_view_all(l: Locale) -> &'static str {
 pub fn booking_view_cancelled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancelled",
-        Locale::FrCa => "Annulé",
+        Locale::FrCa => "Annulés",
     }
 }
 
@@ -307,7 +307,7 @@ pub fn bookings_loading_more(l: Locale) -> &'static str {
 pub fn caldav_connect_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Connect calendar",
-        Locale::FrCa => "Connecter le calendrier",
+        Locale::FrCa => "Connecter",
     }
 }
 
@@ -2473,7 +2473,7 @@ pub fn not_public(l: Locale) -> &'static str {
 pub fn override_add_button(l: Locale) -> &'static str {
     match l {
         Locale::En => "Add override",
-        Locale::FrCa => "Ajouter l'exception",
+        Locale::FrCa => "Ajouter une exception",
     }
 }
 
@@ -4627,7 +4627,7 @@ pub fn team_rename_done(l: Locale) -> &'static str {
 pub fn team_role_agency(l: Locale) -> &'static str {
     match l {
         Locale::En => "Agency",
-        Locale::FrCa => "Agence",
+        Locale::FrCa => "Administrateur",
     }
 }
 
@@ -4636,7 +4636,7 @@ pub fn team_role_agency(l: Locale) -> &'static str {
 pub fn team_role_client(l: Locale) -> &'static str {
     match l {
         Locale::En => "Client",
-        Locale::FrCa => "Client",
+        Locale::FrCa => "Membre",
     }
 }
 
@@ -4942,7 +4942,7 @@ pub fn webhook_personal_data(l: Locale) -> &'static str {
 pub fn webhook_save_action(l: Locale) -> &'static str {
     match l {
         Locale::En => "Save changes",
-        Locale::FrCa => "Enregistrer les modifications",
+        Locale::FrCa => "Enregistrer",
     }
 }
 

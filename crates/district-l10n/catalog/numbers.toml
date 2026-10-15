@@ -750,7 +750,7 @@ note = "The one-time passcode sender is in use."
 
 [numbers.viewer_cannot_provision]
 en = "Carrier setup and number changes need an agency or client role. Ask someone on this workspace who has one."
-fr = "Configurer le transporteur ou les numéros exige un rôle Agence ou Client. Demandez à un membre de cet espace de travail qui en a un."
+fr = "Configurer le transporteur ou les numéros exige un rôle Administrateur ou Membre. Demandez à un membre de cet espace de travail qui en a un."
 ctx = "body"
 screen = "numbers"
 tier = "T1"

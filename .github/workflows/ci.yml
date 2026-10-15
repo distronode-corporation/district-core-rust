@@ -203,6 +203,11 @@ jobs:
         with:
           persist-credentials: false
 
+      # Before the check itself, so that a rule which has stopped holding (a beta
+      # named the current release) fails here instead of passing quietly.
+      - name: The version check still catches what it claims to
+        run: python3 scripts/check-version.py --self-test
+
       - name: The version agrees across the workspace, CHANGELOG.md, README.md and SECURITY.md
         run: python3 scripts/check-version.py
 
@@ -223,6 +228,15 @@ jobs:
 
       - name: The generated strings match their catalogs
         run: python3 scripts/gen-l10n.py --check
+
+      # Every entry has reviewed French. One catalog per call: a key may be defined
+      # in two catalogs (failure.forbidden is in core.toml and scheduling.toml), which
+      # one call over all of them refuses as a duplicate.
+      - name: Every catalog has its reviewed French
+        run: |
+          for catalog in crates/district-l10n/catalog/*.toml; do
+            python3 tools/l10n/l10n.py check "$catalog" --require fr-CA
+          done
 
       # The coverage check itself runs in `rust`, after the tests that produce its
       # report. Its self-test needs no report, so it runs here, in seconds.

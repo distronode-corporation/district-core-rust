@@ -763,7 +763,7 @@ pub fn numbers_verify_on(l: Locale) -> &'static str {
 pub fn numbers_viewer_cannot_provision(l: Locale) -> &'static str {
     match l {
         Locale::En => "Carrier setup and number changes need an agency or client role. Ask someone on this workspace who has one.",
-        Locale::FrCa => "Configurer le transporteur ou les numéros exige un rôle Agence ou Client. Demandez à un membre de cet espace de travail qui en a un.",
+        Locale::FrCa => "Configurer le transporteur ou les numéros exige un rôle Administrateur ou Membre. Demandez à un membre de cet espace de travail qui en a un.",
     }
 }
 
