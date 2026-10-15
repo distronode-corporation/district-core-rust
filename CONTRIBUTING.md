@@ -54,7 +54,9 @@ contracts/                What these crates are checked against: the server's
 tools/l10n/               The catalog tools (l10n.py, frcheck.py), vendored from
                           the server repository by `l10n.py vendor`.
 scripts/                  check-version.py, check-public-hygiene.py,
-                          check-coverage.py and gen-l10n.py, run by CI; fetch-libwebrtc.sh, run by
+                          check-coverage.py and gen-l10n.py, run by CI;
+                          check-fr-signoff.py, run on a tag by
+                          release-guard.yml; fetch-libwebrtc.sh, run by
                           voice.yml and by hand for a build with calls;
                           sync-contracts.py, sync-endpoints.py and
                           sync-palette.py (which share _common.py), run by hand,
@@ -197,9 +199,11 @@ request:
    the supported series.
 
 `python3 scripts/check-version.py` checks the three agree, and with the tag as
-its argument checks them against the tag. Once the pull request is merged, tag
-the merge commit, push the tag, and create the GitHub release from the
-CHANGELOG.md section. Then move each app's pin in a pull request of its own.
+its argument checks them against the tag. `python3 scripts/check-fr-signoff.py`
+checks that the catalogs are the signed-off ones (see "Strings and French").
+Once the pull request is merged, tag the merge commit and push the tag;
+`.github/workflows/release-guard.yml` runs the sign-off check on it. Once that
+is green, create the GitHub release from the CHANGELOG.md section. Then move each app's pin in a pull request of its own.
 
 ## The whole local gate
 
@@ -419,3 +423,16 @@ which rewrites the generated Rust and the accessor test; CI runs it with `--chec
 The tools in `tools/l10n/` are vendored, never edited here; maintainers re-vendor
 them from a checkout of the server repository with
 `python3 <checkout>/i18n/tools/l10n.py vendor --dest tools/l10n`.
+
+CI also runs `python3 tools/l10n/frcheck.py all --termbase '' --tm '' .`, the
+French rules (typography, terms, one French version of an English string across
+catalogs) over every catalog; an error fails it, a warning does not.
+
+The French is signed off per release. `i18n/fr-CA/signoff.json` names who signed
+it off, the release and commit the catalogs were read at, and the SHA-256 of
+every catalog; `python3 scripts/check-fr-signoff.py` fails, naming each catalog,
+when one differs, is missing or is not listed. It runs on the tag build
+(`release-guard.yml`), never on pull requests, because catalogs change between
+releases. A release whose catalogs changed (French, or English the French
+follows) needs the manager's review of the French and a new `signoff.json`
+before it is tagged.
