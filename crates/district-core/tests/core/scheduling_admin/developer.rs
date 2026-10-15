@@ -1,10 +1,11 @@
 //! Developer: API keys, connected apps and the MCP address, webhooks and
 //! their deliveries, and the key and secret shown once.
 
+use district_core::l10n::{Locale, with_locale};
 use district_core::scheduling_admin::{
     DeveloperDialog, DeveloperEvent, DeveloperSection, DeveloperTab, KeyDialog, MintedSecret,
-    Removal, SectionLoad, WEBHOOK_FIELDS, WebhookEditor, WriteState, delivery_outcome,
-    is_personal_data,
+    Removal, SectionLoad, WEBHOOK_EVENTS, WEBHOOK_FIELDS, WebhookEditor, WriteState,
+    delivery_outcome, is_personal_data,
 };
 use district_core::{Effect, Model, SchedulingAdminEvent, SchedulingSection, Tone};
 use district_model::{
@@ -266,9 +267,16 @@ fn deliveries_open_under_their_webhook_and_say_what_came_of_each() {
         outcome("failed", Some(410)),
         ("Rejected with 410".into(), Tone::Danger)
     );
+    // A status the vocabulary does not list reads as the generic label, never
+    // as itself.
+    assert_eq!(outcome("delivered", None), ("Other".into(), Tone::Neutral));
     assert_eq!(
-        outcome("delivered", None),
-        ("delivered".into(), Tone::Neutral)
+        with_locale(Locale::FrCa, || outcome("bounced", None)),
+        ("Autre".into(), Tone::Neutral)
+    );
+    assert_eq!(
+        with_locale(Locale::FrCa, || outcome("success", Some(200))).0,
+        "Livr\u{e9}"
     );
 }
 
@@ -443,9 +451,106 @@ fn keys_apps_and_webhooks_are_removed_asked_once_more() {
     assert_eq!(asking.prompt().0, "Delete this webhook?");
     let effects = developer(&mut model, DeveloperEvent::ConfirmRemoval);
     let reread = answer(&mut model, sent(&effects)[0].0, done(ok()));
-    assert_eq!(sent(&reread)[0].1, SchedulingAdminRequest::Webhooks);
-    // The deliveries are read afresh too.
-    assert!(section(&model).deliveries.is_empty());
+    // The webhooks are read again, and the open deliveries afresh beside them.
+    let requests: Vec<SchedulingAdminRequest> = sent(&reread).into_iter().map(|s| s.1).collect();
+    assert_eq!(
+        requests,
+        [
+            SchedulingAdminRequest::Webhooks,
+            SchedulingAdminRequest::WebhookDeliveries {
+                id: "wh-contract-1".into()
+            },
+        ]
+    );
+    assert_eq!(section(&model).deliveries.len(), 1);
+    assert_eq!(
+        section(&model).deliveries["wh-contract-1"],
+        SectionLoad::Loading
+    );
+}
+
+#[test]
+fn a_webhook_save_reads_the_open_deliveries_again_and_a_gone_webhook_closes_them() {
+    let mut model = read("agency");
+    show(
+        &mut model,
+        DeveloperTab::Webhooks,
+        SchedulingAdminData::Webhooks(hooks()),
+    );
+    let effects = developer(
+        &mut model,
+        DeveloperEvent::ToggleDeliveries("wh-contract-1".into()),
+    );
+    let rows: Vec<SchedulingWebhookDelivery> = items("district-scheduling-webhook-deliveries.json");
+    answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Deliveries(rows.clone())),
+    );
+    developer(
+        &mut model,
+        DeveloperEvent::OpenEditWebhook("wh-contract-1".into()),
+    );
+    let effects = developer(&mut model, DeveloperEvent::SaveWebhook);
+    let reread = answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Webhooks(Vec::new())),
+    );
+    let sends = sent(&reread);
+    assert_eq!(sends.len(), 2, "{reread:?}");
+    assert_eq!(sends[0].1, SchedulingAdminRequest::Webhooks);
+    assert_eq!(
+        sends[1].1,
+        SchedulingAdminRequest::WebhookDeliveries {
+            id: "wh-contract-1".into()
+        }
+    );
+    // Still open, and read again: never a list waiting on nothing.
+    assert_eq!(
+        section(&model).open_webhook.as_deref(),
+        Some("wh-contract-1")
+    );
+    assert_eq!(
+        section(&model).deliveries["wh-contract-1"],
+        SectionLoad::Loading
+    );
+    answer(
+        &mut model,
+        sends[1].0,
+        done(SchedulingAdminData::Deliveries(rows)),
+    );
+    answer(
+        &mut model,
+        sends[0].0,
+        done(SchedulingAdminData::Webhooks(hooks())),
+    );
+    assert_eq!(
+        section(&model).deliveries["wh-contract-1"]
+            .value()
+            .map(Vec::len),
+        Some(2)
+    );
+    assert_eq!(
+        section(&model).open_webhook.as_deref(),
+        Some("wh-contract-1")
+    );
+
+    // Read again with the open webhook gone: its deliveries close.
+    let reread = developer(&mut model, DeveloperEvent::Refresh);
+    let sends = sent(&reread);
+    assert_eq!(sends.len(), 2, "{reread:?}");
+    let others: Vec<SchedulingWebhook> = hooks()
+        .into_iter()
+        .filter(|w| w.id != "wh-contract-1")
+        .collect();
+    answer(
+        &mut model,
+        sends[0].0,
+        done(SchedulingAdminData::Webhooks(others)),
+    );
+    assert_eq!(section(&model).open_webhook, None);
+    assert!(!section(&model).deliveries.contains_key("wh-contract-1"));
 }
 
 fn editor(model: &Model) -> &WebhookEditor {
@@ -506,6 +611,17 @@ fn a_webhook_is_added_to_a_public_https_address_and_its_secret_shown_once() {
         DeveloperEvent::EditWebhookUrl(" https://hooks.example.com/b ".into()),
     );
     assert_eq!(editor(&model).url_rejected, None);
+    // Only the four booking events are offered: one about recordings, which
+    // are never made, cannot be ticked.
+    assert_eq!(
+        WEBHOOK_EVENTS,
+        [
+            "booking.created",
+            "booking.cancelled",
+            "booking.rescheduled",
+            "booking.reminder"
+        ]
+    );
     for event in ["notes.ready", "booking.created", "booking.reminder"] {
         developer(&mut model, DeveloperEvent::ToggleEvent(event.into()));
     }
@@ -513,7 +629,7 @@ fn a_webhook_is_added_to_a_public_https_address_and_its_secret_shown_once() {
         &mut model,
         DeveloperEvent::ToggleEvent("booking.reminder".into()),
     );
-    assert_eq!(editor(&model).events, ["booking.created", "notes.ready"]);
+    assert_eq!(editor(&model).events, ["booking.created"]);
     assert_eq!(editor(&model).events_rejected, None);
     developer(&mut model, DeveloperEvent::ToggleField("answers".into()));
     developer(&mut model, DeveloperEvent::ToggleField("id".into()));
@@ -528,7 +644,7 @@ fn a_webhook_is_added_to_a_public_https_address_and_its_secret_shown_once() {
         panic!("{effects:?}");
     };
     assert_eq!(url, "https://hooks.example.com/b");
-    assert_eq!(events, ["booking.created", "notes.ready"]);
+    assert_eq!(events, ["booking.created"]);
     let fields = fields.expect("sent");
     assert_eq!(fields.first().map(String::as_str), Some("status"));
     assert_eq!(fields.last().map(String::as_str), Some("hours_before"));
@@ -655,6 +771,9 @@ fn a_webhooks_events_and_fields_are_changed_its_address_fixed() {
     );
     let e = editor(&model);
     assert_eq!(e.dropped_events(), ["booking.no_show"]);
+    // An event the scheduler knows and the form does not offer is kept, and
+    // cannot be unticked here.
+    assert_eq!(e.kept_events(), ["recording.completed"]);
     assert_eq!(
         e.dropped_line().as_deref(),
         Some(
@@ -664,8 +783,35 @@ fn a_webhooks_events_and_fields_are_changed_its_address_fixed() {
     );
     assert_eq!(e.fields.len(), WEBHOOK_FIELDS.len() - 4);
 
+    assert!(
+        developer(
+            &mut model,
+            DeveloperEvent::ToggleEvent("recording.completed".into())
+        )
+        .is_empty()
+    );
+    developer(
+        &mut model,
+        DeveloperEvent::ToggleEvent("booking.reminder".into()),
+    );
+    assert_eq!(
+        editor(&model).events,
+        ["booking.reminder", "recording.completed"]
+    );
+
     // Answers for a dialog that closed land nowhere.
     let effects = developer(&mut model, DeveloperEvent::SaveWebhook);
+    assert_eq!(
+        sent(&effects)[0].1,
+        SchedulingAdminRequest::PatchWebhook {
+            id: "wh-contract-2".into(),
+            events: Some(vec![
+                "booking.reminder".into(),
+                "recording.completed".into()
+            ]),
+            fields: Some(editor(&model).fields.clone()),
+        }
+    );
     developer(&mut model, DeveloperEvent::CloseDialog);
     answer(&mut model, sent(&effects)[0].0, done(ok()));
     assert!(section(&model).dialog.is_none());

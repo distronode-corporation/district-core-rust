@@ -292,6 +292,18 @@ const VOICE_DEFAULTS: &str = "PersonaDefaults: starting voices keyed by engine i
 const CHANNEL_DEFAULTS: &str = "channel_defaults: a map from channel name to account id, open to \
                                 channels added later";
 
+/// Maps whose keys are data and whose values are strict types. The probe's key is
+/// read as one more entry, so its string value fails as a value of the wrong
+/// type, which is what the probe must see there; each value inside is probed as
+/// a strict object like any other. An entry the probe no longer reaches this way
+/// fails as stale.
+pub const KEYED_MAPS: &[OpaqueObject] = &[OpaqueObject {
+    fixture: "fixtures/district-provider-status.json",
+    path: "$.providers",
+    reason: "ProviderStatusResponse::providers: keyed by carrier id (`twilio`, `sinch`, \
+             `telnyx`), each value a ProviderStatusEntry",
+}];
+
 /// The objects the unknown-field probe leaves alone, because the type carries them
 /// as plain JSON on purpose. An entry must still be opaque, or the probe fails it
 /// as stale: a type that starts modelling one of these gets the probe back.
@@ -388,6 +400,16 @@ pub const OPAQUE_OBJECTS: &[OpaqueObject] = &[
     },
     OpaqueObject {
         fixture: "fixtures/district-persona-options.json",
+        path: "$.defaults.voiceByEngine",
+        reason: VOICE_DEFAULTS,
+    },
+    OpaqueObject {
+        fixture: "fixtures/district-persona-options-fr.json",
+        path: "$.defaults.voiceByDeepgramLanguage",
+        reason: VOICE_DEFAULTS,
+    },
+    OpaqueObject {
+        fixture: "fixtures/district-persona-options-fr.json",
         path: "$.defaults.voiceByEngine",
         reason: VOICE_DEFAULTS,
     },
@@ -490,6 +512,7 @@ fn an_unknown_field_is_rejected_in_every_object_of_every_implemented_fixture() {
     const PROBE_VALUE: &str = "contractProbeValue";
     let mut probes = 0;
     let mut used = BTreeSet::new();
+    let mut used_keyed = BTreeSet::new();
     let mut accepted = Vec::new();
     for manifest in SETS {
         for (name, codec) in manifest.implemented {
@@ -501,6 +524,24 @@ fn an_unknown_field_is_rejected_in_every_object_of_every_implemented_fixture() {
                 let mut planted = original.clone();
                 object_at(&mut planted, &path).insert(PROBE.to_owned(), Value::from(PROBE_VALUE));
                 probes += 1;
+                let keyed = KEYED_MAPS
+                    .iter()
+                    .position(|o| o.fixture == fixture && o.path == path);
+                if let Some(index) = keyed {
+                    match codec(&planted.to_string()) {
+                        Err(error)
+                            if error
+                                .contains(&format!("invalid type: string \"{PROBE_VALUE}\"")) =>
+                        {
+                            used_keyed.insert(index);
+                        }
+                        other => accepted.push(format!(
+                            "{fixture} {path}: a map keyed by data must read the probe as an \
+                             entry of the wrong type, not: {other:?}"
+                        )),
+                    }
+                    continue;
+                }
                 let opaque = OPAQUE_OBJECTS
                     .iter()
                     .position(|o| o.fixture == fixture && within(&path, o.path));
@@ -518,6 +559,14 @@ fn an_unknown_field_is_rejected_in_every_object_of_every_implemented_fixture() {
                     }
                 }
             }
+        }
+    }
+    for (index, keyed) in KEYED_MAPS.iter().enumerate() {
+        if !used_keyed.contains(&index) {
+            accepted.push(format!(
+                "KEYED_MAPS names {} in {}, which the probe never reached as one; remove it ({})",
+                keyed.path, keyed.fixture, keyed.reason
+            ));
         }
     }
     for (index, opaque) in OPAQUE_OBJECTS.iter().enumerate() {

@@ -26,7 +26,7 @@
     },
     "no_password": {
       "en": "This account signs in with Google or Microsoft and has no password to re-enter. Set a password on the web first.",
-      "fr": "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le web."
+      "fr": "Ce compte se connecte avec Google ou Microsoft et n'a aucun mot de passe à ressaisir. Définissez d'abord un mot de passe sur le Web."
     },
     "NO_PASSWORD_SET": {
       "en": "Set a password on this account before changing this setting.",
@@ -138,7 +138,7 @@
     },
     "ticket_not_found": {
       "en": "That support request could not be found.",
-      "fr": "Cette demande d'assistance est introuvable."
+      "fr": "Cette demande de soutien est introuvable."
     },
     "phone_number_not_found": {
       "en": "That phone number is not one of this workspace's numbers.",
@@ -257,7 +257,7 @@
     },
     "dgi_requires_studio": {
       "en": "Lead enrichment is included with Voice Studio. Upgrade to turn it on.",
-      "fr": "L'enrichissement des pistes est inclus avec Voice Studio. Passez à ce forfait pour l'activer."
+      "fr": "L'enrichissement des prospects est inclus avec Voice Studio. Passez à ce forfait pour l'activer."
     },
     "plan_upgrade_required": {
       "en": "That feature is not included in this workspace's plan.",
@@ -265,7 +265,7 @@
     },
     "managed_billing_required": {
       "en": "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan.",
-      "fr": "La facturation gérée auprès des opérateurs n'est pas activée pour cet espace de travail. Communiquez avec l'assistance pour passer à un forfait géré."
+      "fr": "La facturation gérée auprès des transporteurs n'est pas activée pour cet espace de travail. Communiquez avec notre équipe de soutien pour passer à un forfait géré."
     },
     "eu_vat_required": {
       "en": "In the European Union we sell to businesses only. Enter your VAT number and we invoice you under the reverse-charge rule.",
@@ -368,7 +368,7 @@
     },
     "direct_dial_disabled": {
       "en": "Direct dialling is not available for this workspace yet. Contact support to ask about it.",
-      "fr": "La composition directe n'est pas encore offerte pour cet espace de travail. Communiquez avec l'assistance pour vous renseigner."
+      "fr": "La composition directe n'est pas encore offerte pour cet espace de travail. Communiquez avec notre équipe de soutien pour vous renseigner."
     },
     "do_not_call": {
       "en": "That number has opted out of contact from this workspace.",
@@ -420,19 +420,19 @@
     },
     "TRUST_BUNDLES_NOT_APPROVED": {
       "en": "This workspace's carrier registration has not been approved yet. That has to finish first.",
-      "fr": "L'inscription de cet espace de travail auprès de l'opérateur n'est pas encore approuvée. Cette étape doit d'abord être terminée."
+      "fr": "L'inscription de cet espace de travail auprès du transporteur n'est pas encore approuvée. Cette étape doit d'abord être terminée."
     },
     "carrier_rejected": {
       "en": "The carrier refused this registration. Fix the items listed and submit again.",
-      "fr": "L'opérateur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau."
+      "fr": "Le transporteur a refusé cette inscription. Corrigez les éléments indiqués, puis soumettez de nouveau."
     },
     "carrier_error": {
       "en": "The carrier could not complete that. Please try again or contact support.",
-      "fr": "L'opérateur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec l'assistance."
+      "fr": "Le transporteur n'a pas pu effectuer cette opération. Réessayez ou communiquez avec notre équipe de soutien."
     },
     "carrier_funding": {
       "en": "The carrier account could not fund that purchase. Contact support.",
-      "fr": "Le compte auprès de l'opérateur n'a pas pu financer cet achat. Communiquez avec l'assistance."
+      "fr": "Le compte auprès du transporteur n'a pas pu financer cet achat. Communiquez avec notre équipe de soutien."
     },
     "provider_credentials_rejected": {
       "en": "The provider did not accept these credentials. Check them and test the connection again.",
@@ -532,7 +532,7 @@
     },
     "jira_not_connected": {
       "en": "No support project is connected to this workspace.",
-      "fr": "Aucun projet d'assistance n'est connecté à cet espace de travail."
+      "fr": "Aucun projet de soutien n'est connecté à cet espace de travail."
     },
     "service_not_configured": {
       "en": "That is not set up on this deployment yet.",

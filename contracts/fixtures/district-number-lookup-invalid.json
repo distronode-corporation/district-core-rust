@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "info": {
+    "valid": false,
+    "phoneNumber": "+15555550100",
+    "country": null,
+    "type": null,
+    "carrier": null
+  }
+}

@@ -17,6 +17,58 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.0-beta.6] - 2026-10-14
+
+Findings from the Linux and Windows French passes: lengths, chart days, balances and
+prices written the French way, the scheduler's webhooks as the web portal offers them,
+and every contract set synced to the service's pre-release French.
+
+### Added
+
+- `call_duration_label`: a call row's length. English is the service's own text
+  (`1m 5s`); French is written from its seconds as the portal reads them (`1 min 5 s`,
+  `60 min`, `0 min`), held to `formatMinutesSeconds` in `contracts/i18n/format-vectors.json`.
+- `subscription_price` and `invoice_price`: a subscription's or an invoice's amount in
+  the currency the service now names. French writes it as `formatMoney` does
+  (`249,00 $ US`, `249,00 $ CA`); English stays `$249.00` (a plan decision).
+- `scheduling_admin::WEBHOOK_EVENTS`: the four booking events the webhook form offers,
+  as the web portal does. `WebhookEditor::kept_events` names the other events the
+  scheduler knows that a webhook already sends; a save keeps them.
+- `district_l10n::format::day_month`: `Aug 9`, `9 août`, `1er sept.`.
+
+### Changed
+
+- `contracts/` is synced, every set, to monorepo 43eed5fd6: 21 new mobile fixtures
+  (18 decoded by the types this crate already had, three for the account's saved
+  language excluded: no desktop screen reads or saves it), `currency` on billing
+  subscriptions and invoices, and the deliveries fixture's `success` status. The
+  catalogs take the contract's French verbatim: 11 API error sentences
+  (« transporteur », « soutien », « prospects », « Web », and « offerte » where the
+  catalog had kept « disponible » for two codes), « Appels composés au total »,
+  and a help desk ticket's status in the masculine (« Ouvert », « Réglé », « Inconnu »),
+  in the wire labels and the help desk's own.
+- `format_money` ignores the currency in English, which stays `$249.00`.
+- A count the core places in a French sentence was already grouped by
+  `district_l10n::format::integer` (`1 500 numéros dans ce compte`); a test now pins it.
+- `AnalyticsReport::trend` labels each day in French from its `isoDate` (`9 août`);
+  English keeps the service's label (`Aug 9`).
+- `carrier_balance` writes a balance with its currency as money (`Balance $12.50`,
+  `Solde : 12,50 $ US`), and one without as a number with two decimals.
+- A scheduling webhook delivery whose status the vocabulary does not list reads as the
+  generic `Other` (`Autre`), never as the status itself.
+- `ProviderStatusResponse::provider` is `Option<Option<String>>`, so the `null` the
+  service sends with no carrier at all goes back as it came.
+- `scripts/sync-contracts.py` can scope a substitution to the files it applies to, for
+  a stand-in the server already writes: the number lookup fixture's `+14165550142`
+  becomes `+14165550143` there only.
+
+### Fixed
+
+- Saving a webhook, or deleting one, while a webhook's deliveries were open left them
+  loading forever: the webhooks were read again and every webhook's deliveries
+  dropped, but the open one's were never read again. They are now read beside the
+  webhooks, and a webhook that is gone closes its deliveries.
+
 ## [4.0.0-beta.5] - 2026-10-14
 
 Two places where the desktop apps showed a stored word or a raw timestamp now read as

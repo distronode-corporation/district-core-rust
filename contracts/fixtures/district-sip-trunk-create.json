@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "trunk": {
+    "id": "mbi_sip_contract",
+    "name": "Main office",
+    "domain": "contract-office.sip.twilio.com",
+    "ipAccessControlList": [
+      "203.0.113.10",
+      "198.51.100.0/24"
+    ],
+    "domainSid": "SD_contract",
+    "ipAclSid": "AL_contract",
+    "status": "active"
+  }
+}

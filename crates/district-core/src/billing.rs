@@ -16,6 +16,7 @@
 //! second is [`AccountSection::Unavailable`] and is never shown as "no plan".
 
 use district_api::ApiError;
+use district_l10n::{Locale, format};
 use district_model::{
     AccountBillingResponse, BillingInvoice, BillingSubscription, OVERAGE_POLICY_AUTO_BILL,
     OVERAGE_POLICY_HARD_CAP, WorkspaceBilling, WorkspaceBillingResponse,
@@ -240,19 +241,36 @@ pub fn meter_fraction(used: f64, included: i64) -> f64 {
     (used / included as f64).clamp(0.0, 1.0)
 }
 
-/// Cents as dollars, `$249.00` (`249,00 $` in French). Nothing the service
-/// sends names a currency yet, so the symbol is this app's assumption, as the
-/// web console's is. [`format_money`] with no currency.
+/// Cents as dollars, `$249.00` (`249,00 $` in French), with no currency named.
+/// [`format_money`] with no currency.
 pub fn format_cents(cents: i64) -> String {
     format_money(cents, None)
 }
 
-/// An amount in cents in `currency`, the ISO code a subscription or an invoice
-/// names (`usd`, `cad`), the way the service's own pages write it: `CA$249.00`,
-/// `249,00 $ CA`. With no currency it is [`format_cents`]'s `$249.00`, exactly as
-/// this app has always written it.
+/// An amount in cents, with the ISO code of its currency when the service names
+/// it (`usd`, `cad`, as a subscription or an invoice carries it). English is
+/// `$249.00` whatever the currency, exactly as this app has always written a
+/// price (a plan decision). French writes the currency the way the service's
+/// `formatMoney` does (`249,00 $ CA`, `249,00 $ US`), and with none the bare
+/// dollar, `249,00 $`.
 pub fn format_money(cents: i64, currency: Option<&str>) -> String {
-    district_l10n::format::price(l(), cents, currency)
+    match l() {
+        Locale::En => format::price(Locale::En, cents, None),
+        Locale::FrCa => format::price(Locale::FrCa, cents, currency),
+    }
+}
+
+/// A subscription's price per period in its currency ([`format_money`]), or
+/// `None` when it has no price.
+pub fn subscription_price(subscription: &BillingSubscription) -> Option<String> {
+    subscription
+        .amount
+        .map(|cents| format_money(cents, subscription.currency.as_deref()))
+}
+
+/// What an invoice cost ([`invoice_amount`]) in its currency ([`format_money`]).
+pub fn invoice_price(invoice: &BillingInvoice) -> String {
+    format_money(invoice_amount(invoice), invoice.currency.as_deref())
 }
 
 /// What an invoice cost: what was paid once it is paid, its total before.

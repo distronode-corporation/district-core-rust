@@ -428,6 +428,16 @@ pub fn month_year(locale: Locale, year: i32, month: u8) -> String {
     }
 }
 
+/// A day of a month with no year, as a chart's axis labels it: `Aug 9`,
+/// `9 août`, and `1er août` for the first, as [`date`] writes it.
+pub fn day_month(locale: Locale, month: u8, day: u8) -> String {
+    match locale {
+        Locale::En => format!("{} {day}", month_name(&EN_MONTHS_SHORT, month)),
+        Locale::FrCa if day == 1 => format!("1er {}", month_name(&FR_MONTHS_SHORT, month)),
+        Locale::FrCa => format!("{day} {}", month_name(&FR_MONTHS_SHORT, month)),
+    }
+}
+
 /// A date: see [`DateStyle`]. French writes the first of a month `1er`. The
 /// service's `formatDate`.
 pub fn date(locale: Locale, when: CivilDateTime, style: DateStyle) -> String {

@@ -17,6 +17,8 @@ use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 
+use crate::scheduling_admin::nullish;
+
 /// `POST /api/district/workspace/numbers/configure`: the number's calls and
 /// messages pointed back at the workspace. The service answers nothing else.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -98,9 +100,14 @@ pub struct ProviderStatusResponse {
     /// Each carrier with credentials, by its id. Absent when there are none.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub providers: Option<BTreeMap<String, ProviderStatusEntry>>,
-    /// Sent as `null` only with no credentials at all. Never a carrier's name.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub provider: Option<String>,
+    /// Sent as `null` only with no credentials at all, and left out otherwise:
+    /// `None` left out, `Some(None)` null. Never a carrier's name.
+    #[serde(
+        default,
+        deserialize_with = "nullish",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub provider: Option<Option<String>>,
 }
 
 impl ProviderStatusResponse {

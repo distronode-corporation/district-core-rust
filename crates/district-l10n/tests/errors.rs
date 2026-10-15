@@ -13,10 +13,6 @@ fn contract() -> Value {
     serde_json::from_str(&fs::read_to_string(path).expect("api-errors.json")).expect("JSON")
 }
 
-/// Codes whose reviewed French says « disponible » where the website's says
-/// « offerte »: the W3 review chose it, and the website follows later.
-const FRENCH_NOT_THE_WEBSITES: [&str; 2] = ["direct_dial_disabled", "setup_not_available"];
-
 #[test]
 fn every_code_reads_as_the_services_sentence() {
     let contract = contract();
@@ -25,18 +21,11 @@ fn every_code_reads_as_the_services_sentence() {
     let placeholder = contract["itemsPlaceholder"].as_str().expect("placeholder");
     let separator = contract["listSeparator"].as_str().expect("separator");
     for (code, sentence) in codes {
-        let en = sentence["en"].as_str().expect("en");
         for locale in Locale::ALL {
             let (field, without) = match locale {
                 Locale::En => ("en", "enWithoutList"),
                 Locale::FrCa => ("fr", "frWithoutList"),
             };
-            if locale == Locale::FrCa && FRENCH_NOT_THE_WEBSITES.contains(&code.as_str()) {
-                let text = api_error_text(locale, code, &["ignored"]).expect(code);
-                assert!(text.contains("disponible"), "{code}");
-                assert_ne!(text, en, "{code}");
-                continue;
-            }
             let text = sentence[field].as_str().expect(field);
             if sentence.get("listField").is_some() {
                 let items = ["eu", "apac"];

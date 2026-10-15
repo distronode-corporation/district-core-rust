@@ -78,8 +78,8 @@ pub use calendar::{
 pub use clock::{SchedulingDay, times_in};
 pub use developer::{
     DeveloperDialog, DeveloperEvent, DeveloperSection, DeveloperTab, KeyDialog, MintedKey,
-    MintedSecret, Removal, RemovalState, WEBHOOK_FIELDS, WebhookEditor, delivery_outcome,
-    is_personal_data,
+    MintedSecret, Removal, RemovalState, WEBHOOK_EVENTS, WEBHOOK_FIELDS, WebhookEditor,
+    delivery_outcome, is_personal_data,
 };
 pub use event_types::{
     ActionsDialog, DEFAULT_LOCATION, EventTypeDialog, EventTypeEditor, EventTypeEvent,

@@ -10,12 +10,14 @@
 use std::collections::BTreeSet;
 
 use district_api::ApiError;
+use district_l10n::{Locale, format};
 use district_model::{CallDetailResponse, CallSummary, CallTranscriptResponse};
 
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::paging::Paging;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::l;
 
 /// How many calls one page of the log asks for.
 pub const CALL_PAGE_SIZE: u32 = 25;
@@ -66,6 +68,42 @@ impl CallRows {
             },
         }
     }
+}
+
+/// A call row's length. English is the service's own `duration` text
+/// (`1m 5s`), as it has always been shown. French is written from the seconds
+/// (`durationRaw`, or the seconds the service's text names when it sent none)
+/// the way the service's portal reads them: `1 min 5 s`, `60 min`, `0 min`. A
+/// French row whose length cannot be read shows the service's text.
+pub fn call_duration_label(call: &CallSummary) -> String {
+    match l() {
+        Locale::En => call.duration.clone(),
+        Locale::FrCa => call
+            .duration_raw
+            .or_else(|| seconds_of(&call.duration))
+            .map_or_else(
+                || call.duration.clone(),
+                |seconds| format::minutes_seconds(Locale::FrCa, seconds),
+            ),
+    }
+}
+
+/// The seconds in the service's `duration` text: `0s`, `5s`, `1m 5s`,
+/// `62m 0s`, or `None` for anything else.
+fn seconds_of(text: &str) -> Option<i64> {
+    let text = text.trim();
+    if text.is_empty() {
+        return None;
+    }
+    let (minutes, rest) = match text.split_once('m') {
+        Some((minutes, rest)) => (minutes.trim().parse::<i64>().ok()?, rest.trim()),
+        None => (0, text),
+    };
+    let seconds = match rest {
+        "" => 0,
+        rest => rest.strip_suffix('s')?.trim().parse::<i64>().ok()?,
+    };
+    (minutes >= 0 && (0..60).contains(&seconds)).then_some(minutes * 60 + seconds)
 }
 
 /// One call.

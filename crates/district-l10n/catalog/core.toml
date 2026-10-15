@@ -899,7 +899,7 @@ note = "Heading of the help desk settings when they failed to load."
 
 [desk.status_open]
 en = "Open"
-fr = "Ouverte"
+fr = "Ouvert"
 ctx = "label"
 screen = "help desk"
 tier = "T3"
@@ -908,7 +908,7 @@ note = "A help desk ticket's status: open, waiting for the team."
 
 [desk.status_resolved]
 en = "Resolved"
-fr = "Réglée"
+fr = "Réglé"
 ctx = "label"
 screen = "help desk"
 tier = "T3"

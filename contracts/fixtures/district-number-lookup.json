@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "info": {
+    "valid": true,
+    "phoneNumber": "+14165550143",
+    "country": "CA",
+    "type": "mobile",
+    "carrier": "Example Mobile"
+  }
+}

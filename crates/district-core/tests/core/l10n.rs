@@ -11,10 +11,11 @@ use district_api::{ApiError, ErrorDetail};
 use district_core::l10n::{Locale, api_error_text, with_locale};
 use district_core::{
     AnalyticsReport, CAPABILITY_CATALOG, FailureText, NumberSearchForm, OwnedNumbers, SupportForm,
-    capability_label, format_amount, format_cents, format_duration, format_money, month_label,
-    price_label,
+    call_duration_label, capability_label, format_amount, format_cents, format_duration,
+    format_money, invoice_price, month_label, price_label, subscription_price,
 };
-use district_model::AnalyticsRange;
+use district_model::{AccountBillingResponse, AnalyticsRange, CallSummary};
+use serde_json::Value;
 
 use crate::support::fixture;
 
@@ -109,9 +110,168 @@ fn numbers_are_written_the_french_way() {
     });
     english(|| {
         assert_eq!(format_money(24_900, None), "$249.00");
-        assert_eq!(format_money(24_900, Some("cad")), "CA$249.00");
+        // English prices stay `$249.00` whatever the currency: a plan decision.
+        assert_eq!(format_money(24_900, Some("cad")), "$249.00");
+        assert_eq!(format_money(24_900, Some("usd")), "$249.00");
         assert_eq!(price_label(Some(1.15), None).unwrap(), "1.15");
     });
+}
+
+fn format_vectors(name: &str) -> Vec<Value> {
+    let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../contracts/i18n/format-vectors.json");
+    let doc: Value =
+        serde_json::from_str(&std::fs::read_to_string(path).expect("format-vectors.json"))
+            .expect("JSON");
+    doc["categories"]
+        .as_array()
+        .expect("categories")
+        .iter()
+        .flat_map(|category| category["vectors"].as_array().cloned().unwrap_or_default())
+        .filter(|vector| vector["fn"] == name)
+        .collect()
+}
+
+#[test]
+fn billing_amounts_name_their_currency_in_french_as_the_service_does() {
+    // Every formatMoney vector in French with the default display, for the
+    // currencies a subscription or an invoice can carry.
+    let mut checked = 0;
+    for vector in format_vectors("formatMoney") {
+        let display = vector["options"]["display"].as_str();
+        if vector["locale"] != "fr" || !matches!(display, None | Some("symbol")) {
+            continue;
+        }
+        if vector["options"].get("disambiguateDollar").is_some() {
+            continue;
+        }
+        let cents = vector["minorUnits"].as_i64().expect("minorUnits");
+        let currency = vector["currency"].as_str().expect("currency");
+        let output = vector["output"].as_str().expect("output");
+        assert_eq!(
+            french(|| format_money(cents, Some(currency))),
+            output,
+            "{vector}"
+        );
+        // English is the dollar amount it has always been.
+        assert_eq!(
+            english(|| format_money(cents, Some(currency))),
+            english(|| format_cents(cents)),
+            "{vector}"
+        );
+        checked += 1;
+    }
+    assert!(checked >= 6, "{checked} vectors");
+
+    let billing: AccountBillingResponse = crate::support::fixture("district-billing.json");
+    let subscription = &billing.subscriptions[0];
+    let invoice = &billing.invoices[0];
+    assert_eq!(subscription.currency.as_deref(), Some("usd"));
+    assert_eq!(
+        english(|| subscription_price(subscription)).as_deref(),
+        Some("$249.00")
+    );
+    assert_eq!(
+        french(|| subscription_price(subscription)).as_deref(),
+        Some(format!("249,00{NBSP}${NBSP}US").as_str())
+    );
+    assert_eq!(english(|| invoice_price(invoice)), "$249.00");
+    assert_eq!(
+        french(|| invoice_price(invoice)),
+        format!("249,00{NBSP}${NBSP}US")
+    );
+    let canadian = district_model::BillingInvoice {
+        currency: Some("cad".to_owned()),
+        ..invoice.clone()
+    };
+    assert_eq!(english(|| invoice_price(&canadian)), "$249.00");
+    assert_eq!(
+        french(|| invoice_price(&canadian)),
+        format!("249,00{NBSP}${NBSP}CA")
+    );
+    let unnamed = district_model::BillingInvoice {
+        currency: None,
+        ..invoice.clone()
+    };
+    assert_eq!(french(|| invoice_price(&unnamed)), format!("249,00{NBSP}$"));
+}
+
+#[test]
+fn a_call_rows_length_is_the_services_in_english_and_read_from_its_seconds_in_french() {
+    let calls: Vec<CallSummary> = crate::support::fixture("district-calls.json");
+    assert_eq!(calls[0].duration, "1m 5s");
+    assert_eq!(english(|| call_duration_label(&calls[0])), "1m 5s");
+    assert_eq!(
+        french(|| call_duration_label(&calls[0])),
+        format!("1{NBSP}min 5{NBSP}s")
+    );
+    let call = |duration: &str, seconds: Option<i64>| CallSummary {
+        duration: duration.to_owned(),
+        duration_raw: seconds,
+        ..calls[0].clone()
+    };
+    // The French reading of every formatMinutesSeconds vector, from the seconds,
+    // and from the service's own text when it sent no seconds.
+    let mut checked = 0;
+    for vector in format_vectors("formatMinutesSeconds") {
+        let seconds = vector["seconds"].as_i64().expect("seconds");
+        let fr = vector["fr"].as_str().expect("fr");
+        let wire = district_core::l10n::format::call_duration(seconds);
+        assert_eq!(
+            french(|| call_duration_label(&call(&wire, Some(seconds)))),
+            fr
+        );
+        assert_eq!(french(|| call_duration_label(&call(&wire, None))), fr);
+        assert_eq!(
+            english(|| call_duration_label(&call(&wire, Some(seconds)))),
+            wire
+        );
+        checked += 1;
+    }
+    assert!(checked >= 4, "{checked} vectors");
+    assert_eq!(
+        french(|| call_duration_label(&call("2m 34s", None))),
+        format!("2{NBSP}min 34{NBSP}s")
+    );
+    // A length that cannot be read is shown as the service wrote it.
+    assert_eq!(french(|| call_duration_label(&call("", None))), "");
+    assert_eq!(
+        french(|| call_duration_label(&call("a while", None))),
+        "a while"
+    );
+}
+
+#[test]
+fn the_trends_days_are_the_services_in_english_and_written_from_iso_date_in_french() {
+    let report = AnalyticsReport {
+        range: AnalyticsRange::SevenDays,
+        response: fixture("district-analytics.json"),
+        refreshing: false,
+    };
+    let english_labels: Vec<String> = english(|| report.trend())
+        .into_iter()
+        .map(|bar| bar.label)
+        .collect();
+    let french_labels: Vec<String> = french(|| report.trend())
+        .into_iter()
+        .map(|bar| bar.label)
+        .collect();
+    let points = &report.response.engagement_trends;
+    assert_eq!(english_labels[0], "Aug 9");
+    assert_eq!(points[0].iso_date, "2026-08-09");
+    assert_eq!(french_labels[0], "9 ao\u{fb}t");
+    for (point, label) in points.iter().zip(&english_labels) {
+        assert_eq!(&point.date, label);
+    }
+    let mut first = report.clone();
+    first.response.engagement_trends[0].iso_date = "2026-09-01".to_owned();
+    first.response.engagement_trends[1].iso_date = "not a day".to_owned();
+    let labels: Vec<String> = french(|| first.trend())
+        .into_iter()
+        .map(|bar| bar.label)
+        .collect();
+    assert_eq!(labels[0], "1er sept.");
+    assert_eq!(labels[1], "not a day");
 }
 
 #[test]

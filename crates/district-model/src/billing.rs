@@ -180,8 +180,8 @@ pub struct BillingSubscription {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub discount: Option<BillingDiscount>,
     /// The ISO 4217 code of the currency [`amount`](Self::amount) is in, lower
-    /// case (`usd`, `cad`), when the service names it. It does not yet, and
-    /// `None` reads as dollars, as it always has.
+    /// case (`usd`, `cad`). The service names it; `None`, from a server that
+    /// does not, reads as dollars, as it always has.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub currency: Option<String>,
 }
@@ -223,8 +223,8 @@ pub struct BillingInvoice {
     /// Its PDF, likewise.
     pub invoice_pdf: Option<String>,
     /// The ISO 4217 code of the currency its amounts are in, lower case (`usd`,
-    /// `cad`), when the service names it. It does not yet, and `None` reads as
-    /// dollars, as it always has.
+    /// `cad`). The service names it; `None`, from a server that does not, reads
+    /// as dollars, as it always has.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub currency: Option<String>,
 }

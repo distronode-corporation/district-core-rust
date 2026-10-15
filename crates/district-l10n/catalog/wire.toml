@@ -109,6 +109,7 @@ ctx = "label"
 screen = "wire billing_invoice_status"
 tier = "T3"
 state = "reviewed"
+fr_variant = "gender agreement"
 note = "A label for the stored value `open` of billingInvoiceStatus. `invoices[].status` in GET /api/billing: Stripe's invoice status, passed through. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
 
 [wire.billing_invoice_status.paid]
@@ -383,17 +384,16 @@ note = "A label for the stored value `voice-call` of deskTicketSource. `source` 
 
 [wire.desk_ticket_status.fallback]
 en = "Unknown"
-fr = "Inconnue"
+fr = "Inconnu"
 ctx = "label"
 screen = "wire desk_ticket_status"
 tier = "T3"
 state = "reviewed"
-fr_variant = "contract fallback for a ticket status (feminine, as wire-vocabulary.json)"
 note = "The label for a value of deskTicketStatus this build does not know, or none."
 
 [wire.desk_ticket_status.open]
 en = "Open"
-fr = "Ouverte"
+fr = "Ouvert"
 ctx = "label"
 screen = "wire desk_ticket_status"
 tier = "T3"
@@ -402,7 +402,7 @@ note = "A label for the stored value `open` of deskTicketStatus. `status` on a D
 
 [wire.desk_ticket_status.resolved]
 en = "Resolved"
-fr = "Réglée"
+fr = "Réglé"
 ctx = "label"
 screen = "wire desk_ticket_status"
 tier = "T3"
@@ -519,7 +519,7 @@ note = "A label for the stored value `Successful Leads` of funnelStage. `funnelD
 
 [wire.funnel_stage.total_dials]
 en = "Total Dials"
-fr = "Composions totales"
+fr = "Appels composés au total"
 ctx = "label"
 screen = "wire funnel_stage"
 tier = "T3"

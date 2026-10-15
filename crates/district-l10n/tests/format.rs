@@ -195,3 +195,11 @@ fn a_negative_length_reads_as_none() {
     );
     assert_eq!(format::call_duration(-1), "0s");
 }
+
+#[test]
+fn a_day_of_a_month_reads_as_an_axis_labels_it() {
+    assert_eq!(format::day_month(Locale::En, 8, 9), "Aug 9");
+    assert_eq!(format::day_month(Locale::FrCa, 8, 9), "9 ao\u{fb}t");
+    assert_eq!(format::day_month(Locale::FrCa, 9, 1), "1er sept.");
+    assert_eq!(format::day_month(Locale::En, 9, 1), "Sep 1");
+}

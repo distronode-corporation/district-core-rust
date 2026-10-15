@@ -380,7 +380,7 @@
             "distronode-website/src/components/district/analytics/chartI18n.ts"
           ],
           "en": "Total Dials",
-          "fr": "Composions totales"
+          "fr": "Appels composés au total"
         },
         {
           "value": "Connected Calls",
@@ -524,7 +524,7 @@
             "distronode-website/src/lib/desk/desk.ts"
           ],
           "en": "Open",
-          "fr": "Ouverte"
+          "fr": "Ouvert"
         },
         {
           "value": "waiting",
@@ -540,12 +540,12 @@
             "distronode-website/src/lib/desk/desk.ts"
           ],
           "en": "Resolved",
-          "fr": "Réglée"
+          "fr": "Réglé"
         }
       ],
       "fallback": {
         "en": "Unknown",
-        "fr": "Inconnue"
+        "fr": "Inconnu"
       }
     },
     "deskTicketSource": {
