@@ -398,6 +398,7 @@ ctx = "label"
 screen = "wire desk_ticket_status"
 tier = "T3"
 state = "reviewed"
+fr_variant = "Desk ticket status: a « billet », masculine (contract deskTicketStatus); the unit's base « Ouverte » serves invoices (« facture »)"
 note = "A label for the stored value `open` of deskTicketStatus. `status` on a Desk ticket (GET /api/district/desk/tickets, /tickets/{id})."
 
 [wire.desk_ticket_status.resolved]

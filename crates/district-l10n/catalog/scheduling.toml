@@ -223,11 +223,12 @@ note = "Bookings list filter: every booking, whatever its status or date."
 
 [booking.view_cancelled]
 en = "Cancelled"
-fr = "Annulé"
+fr = "Annulés"
 ctx = "label"
 screen = "scheduling bookings"
 tier = "T3"
 state = "reviewed"
+fr_variant = "bookings filter (plural rendez-vous), beside Passés"
 note = "Bookings list filter: the cancelled bookings."
 
 [booking.view_past]
@@ -304,11 +305,12 @@ note = "The Load more button while the next page is on its way."
 
 [caldav.connect_action]
 en = "Connect calendar"
-fr = "Connecter le calendrier"
+fr = "Connecter"
 ctx = "label"
 screen = "scheduling calendar writes"
 tier = "T3"
 state = "reviewed"
+fr_variant = "dialog header action; the longer form squeezes the dialog title (W4 Linux)"
 note = "In the calendars section's dialogs: choosing an account's calendars, connecting one (Google, Microsoft or CalDAV), or disconnecting one."
 
 [caldav.connected]
@@ -2454,7 +2456,7 @@ note = "In place of an event type's booking link when it has none: archived, swi
 
 [override.add_button]
 en = "Add override"
-fr = "Ajouter l'exception"
+fr = "Ajouter une exception"
 ctx = "button"
 screen = "scheduling hours editor"
 tier = "T3"
@@ -4536,7 +4538,7 @@ state = "reviewed"
 
 [team.role_agency]
 en = "Agency"
-fr = "Agence"
+fr = "Administrateur"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
@@ -4545,12 +4547,11 @@ note = "A workspace member's role, as the scheduling team screen names it: the a
 
 [team.role_client]
 en = "Client"
-fr = "Client"
+fr = "Membre"
 ctx = "label"
 screen = "scheduling team"
 tier = "T3"
 state = "reviewed"
-same_ok = true
 note = "A workspace member's role, as the scheduling team screen names it: a member of the client business."
 
 [team.role_removed]
@@ -4840,11 +4841,12 @@ state = "reviewed"
 
 [webhook.save_action]
 en = "Save changes"
-fr = "Enregistrer les modifications"
+fr = "Enregistrer"
 ctx = "button"
 screen = "scheduling developer writes"
 tier = "T3"
 state = "reviewed"
+fr_variant = "dialog header action; the longer form squeezes the dialog title (W4 Linux)"
 
 [webhook.saving]
 en = "Saving…"

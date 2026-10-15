@@ -367,7 +367,7 @@ note = "Note on the billing screen for a member who could manage billing on the 
 
 [billing.read_only_viewer]
 en = "This screen is read only. Ask an agency or client member of this workspace to change the plan."
-fr = "Cet écran est en lecture seule. Demandez à un membre ayant le rôle Agence ou Client de cet espace de travail de changer de forfait."
+fr = "Cet écran est en lecture seule. Demandez à un membre ayant le rôle Administrateur ou Membre de cet espace de travail de changer de forfait."
 ctx = "body"
 screen = "billing"
 tier = "T1"
@@ -620,7 +620,7 @@ note = "Why a viewer cannot be made available for calls."
 
 [call_handling.viewer]
 en = "Only agency and client members can change how this workspace answers calls."
-fr = "Seuls les membres Agence et Client peuvent modifier la façon dont cet espace de travail répond aux appels."
+fr = "Seuls les membres ayant le rôle Administrateur ou Membre peuvent modifier la façon dont cet espace de travail répond aux appels."
 ctx = "body"
 screen = "settings call handling"
 tier = "T3"
@@ -904,6 +904,7 @@ ctx = "label"
 screen = "help desk"
 tier = "T3"
 state = "reviewed"
+fr_variant = "Desk ticket status: a « billet », masculine (contract deskTicketStatus); the unit's base « Ouverte » serves invoices (« facture »)"
 note = "A help desk ticket's status: open, waiting for the team."
 
 [desk.status_resolved]
@@ -1317,7 +1318,7 @@ note = "Linux: no secret store (keyring) is running, so the saved sign-in cannot
 
 [failure.last_agency_member]
 en = "Every workspace needs at least one agency member, so this change was not made."
-fr = "Chaque espace de travail doit avoir au moins un membre ayant le rôle Agence; ce changement n'a donc pas été fait."
+fr = "Chaque espace de travail doit avoir au moins un membre ayant le rôle Administrateur; ce changement n'a donc pas été fait."
 ctx = "error"
 screen = "any screen"
 tier = "T2"
@@ -1960,7 +1961,7 @@ note = "When where answers come from could not be read."
 
 [knowledge.viewer]
 en = "You have read-only access to this workspace. An agency or client member can add documents and change where answers come from."
-fr = "Votre accès à cet espace de travail est en lecture seule. Un membre ayant le rôle Agence ou Client peut ajouter des documents et changer la source des réponses."
+fr = "Votre accès à cet espace de travail est en lecture seule. Un membre ayant le rôle Administrateur ou Membre peut ajouter des documents et changer la source des réponses."
 ctx = "body"
 screen = "settings knowledge"
 tier = "T3"
@@ -2288,7 +2289,7 @@ note = "Confirmation heading before removing a member."
 
 [members.role_agency]
 en = "Agency"
-fr = "Agence"
+fr = "Administrateur"
 ctx = "label"
 screen = "settings members"
 tier = "T3"
@@ -2306,12 +2307,11 @@ note = "What the agency role may do."
 
 [members.role_client]
 en = "Client"
-fr = "Client"
+fr = "Membre"
 ctx = "label"
 screen = "settings members"
 tier = "T3"
 state = "reviewed"
-same_ok = true
 note = "A member's role: everyday use. \"Client\" is the role's name in the product (the business the workspace serves)."
 
 [members.role_client_body]
@@ -3725,7 +3725,7 @@ note = "After a save, when the settings could not be read back."
 
 [settings.viewer_note]
 en = "You have read-only access to this workspace. These are the settings you may read; an agency or client member can change them."
-fr = "Votre accès à cet espace de travail est en lecture seule. Voici les paramètres que vous pouvez lire; un membre ayant le rôle Agence ou Client peut les modifier."
+fr = "Votre accès à cet espace de travail est en lecture seule. Voici les paramètres que vous pouvez lire; un membre ayant le rôle Administrateur ou Membre peut les modifier."
 ctx = "body"
 screen = "settings"
 tier = "T3"
@@ -4253,7 +4253,7 @@ note = "Heading of the outbound campaign card: the receptionist calling and mess
 
 [workflows.campaign_viewer]
 en = "You are a viewer in this workspace. Ask an agency or client member to change the campaign."
-fr = "Votre rôle dans cet espace de travail est Lecteur. Demandez à un membre ayant le rôle Agence ou Client de modifier la campagne."
+fr = "Votre rôle dans cet espace de travail est Lecteur. Demandez à un membre ayant le rôle Administrateur ou Membre de modifier la campagne."
 ctx = "body"
 screen = "workflows"
 tier = "T3"
