@@ -48,7 +48,8 @@ when the caller hangs up, as soon as the service says so.
   `DeveloperEvent::RetryDeliveries` (the open webhook's deliveries). Each does nothing
   unless that read failed, as `BookingsEvent::RetryDialogRead` does.
 - `district_l10n::support_status_label(status_name, category, locale)` (also
-  `district_core::l10n::support_status_label`): a support request's status in the
+  `district_core::l10n::support_status_label`), and `listed_support_status_label`,
+  the label of a listed name only: a support request's status in the
   app's language, never the help desk's own word. A name this build lists (`Received`,
   `Open`, `Waiting for support`, `Waiting for customer`, `In progress`, `Pending`,
   `Escalated`, `Resolved`, `Done`, `Closed`, `Canceled`, `Declined`, `unknown`, and
@@ -81,9 +82,10 @@ when the caller hangs up, as soon as the service says so.
   asks for is unbound.
 - `dialer.hint` writes its example number with no-break spaces between the groups
   (`+1 212 555 0142`), in English and French, so it never breaks after `+1`.
-- `SupportRequestScreen::closed_message` names the status through
-  `support_status_label` with the resolved category: "Closed as Done." stays, and the
-  French reads "Fermée (état : Terminée)." where it carried the desk's English.
+- `SupportRequestScreen::closed_message` names the status by its listed label, and an
+  unlisted one as "Done", the service's default name for a close: "Closed as Done."
+  stays, and the French reads "Fermée (état : Terminée)." where it carried the
+  desk's English.
 
 ### Unchanged on purpose
 

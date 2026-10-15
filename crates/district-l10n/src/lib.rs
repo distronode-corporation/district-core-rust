@@ -45,7 +45,7 @@ mod support_status;
 mod wire;
 
 pub use errors::{FALLBACK_CODE, api_error_text};
-pub use support_status::support_status_label;
+pub use support_status::{listed_support_status_label, support_status_label};
 pub use wire::{WireCategory, placeholder_label, region_long_label, wire_label};
 
 /// The core's own sentences and labels, from `catalog/core.toml`.

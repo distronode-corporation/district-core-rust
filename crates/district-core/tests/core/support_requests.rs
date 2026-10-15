@@ -376,9 +376,21 @@ fn closing_asks_first_and_goes_once() {
         }),
         "Fermée (état\u{a0}: Terminée)."
     );
+    // An unlisted name reads as the service's default close, "Done", never
+    // as the category's "Closed".
     assert_eq!(
         SupportRequestScreen::closed_message("完成"),
-        "Closed as Closed."
+        "Closed as Done."
+    );
+    assert_eq!(
+        district_core::l10n::with_locale(district_core::Locale::FrCa, || {
+            SupportRequestScreen::closed_message("完成")
+        }),
+        "Fermée (état\u{a0}: Terminée)."
+    );
+    assert_eq!(
+        SupportRequestScreen::closed_message("Resolved"),
+        "Closed as Resolved."
     );
     // Resolved: nothing more to close.
     assert!(!screen.can_close());

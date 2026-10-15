@@ -279,13 +279,15 @@ impl SupportRequestScreen {
     }
 
     /// The confirmation of a close. `status` is the desk's own name for it,
-    /// shown through [`district_l10n::support_status_label`] with the resolved
-    /// category, never as it is: the desk's word is English, or the live
-    /// workflow's language.
+    /// never shown as it is (the desk's word is English, or the live
+    /// workflow's language): a name this build lists reads as its label, and
+    /// any other as "Done", the service's own default name for a close. Never
+    /// the category's "Closed", which made "Closed as Closed."
     pub fn closed_message(status: &str) -> String {
         s::support_closed_as(
             l(),
-            district_l10n::support_status_label(status, SUPPORT_STATUS_DONE, l()),
+            district_l10n::listed_support_status_label(status, l())
+                .unwrap_or_else(|| district_l10n::support_strings::request_status_done(l())),
         )
     }
 }

@@ -20,7 +20,14 @@ use crate::support_strings as s;
 /// `PENDING` for a request not filed yet, in either case), else "Status
 /// unknown".
 pub fn support_status_label(status_name: &str, category: &str, locale: Locale) -> &'static str {
-    known(&status_name.trim().to_lowercase(), locale).unwrap_or_else(|| generic(category, locale))
+    listed_support_status_label(status_name, locale).unwrap_or_else(|| generic(category, locale))
+}
+
+/// The label of `status_name` when this build lists it (matched trimmed and
+/// without regard to case), or `None`: for a sentence that has a better
+/// fallback of its own than the category's label.
+pub fn listed_support_status_label(status_name: &str, locale: Locale) -> Option<&'static str> {
+    known(&status_name.trim().to_lowercase(), locale)
 }
 
 /// The label of a status name this build lists, or `None`. The names are the

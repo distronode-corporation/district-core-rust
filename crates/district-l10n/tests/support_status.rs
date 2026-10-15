@@ -3,7 +3,7 @@
 //! a status this build does not list. The same rows as District AI for iOS's
 //! `SupportStatusLabelTests`.
 
-use district_l10n::{Locale, support_status_label};
+use district_l10n::{Locale, listed_support_status_label, support_status_label};
 
 const EN: Locale = Locale::En;
 const FR: Locale = Locale::FrCa;
@@ -96,4 +96,18 @@ fn an_unlisted_name_in_an_unknown_category_is_the_generic_label() {
     );
     assert_eq!(support_status_label("Triage", "", FR), "État inconnu");
     assert_eq!(support_status_label("", "", EN), "Status unknown");
+}
+
+#[test]
+fn only_a_listed_name_has_a_listed_label() {
+    assert_eq!(
+        listed_support_status_label(" Completed ", FR),
+        Some("Terminée")
+    );
+    assert_eq!(
+        listed_support_status_label("Resolved", EN),
+        Some("Resolved")
+    );
+    assert_eq!(listed_support_status_label("完成", EN), None);
+    assert_eq!(listed_support_status_label("", FR), None);
 }
