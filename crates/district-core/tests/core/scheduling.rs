@@ -566,8 +566,8 @@ fn without_an_answer_in_time_the_hand_off_is_given_up_never_unbound() {
     let notice = screen(&model).notice.clone().expect("a notice");
     assert_eq!(
         notice.message,
-        "Your browser did not answer District AI in time, so the web was not opened. \
-         Try again, and let the browser open District AI if it asks."
+        "Your browser didn't respond to District AI in time, so the page wasn't opened. \
+         Try again, and let your browser open District AI if it asks."
     );
     assert!(notice.retryable);
     // Too late: the answer finds nothing awaiting it.

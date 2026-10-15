@@ -288,8 +288,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::failure_hand_off_refused(Locale::FrCa), "District AI n'a pas pu confirmer votre connexion pour la version Web. Déconnectez-vous, reconnectez-vous, puis réessayez.");
     assert_eq!(strings::failure_hand_off_too_many(Locale::En), "The web was opened several times just now. Wait a moment and try again.");
     assert_eq!(strings::failure_hand_off_too_many(Locale::FrCa), "La version Web a été ouverte plusieurs fois à l'instant. Attendez un instant, puis réessayez.");
-    assert_eq!(strings::failure_hand_off_unanswered(Locale::En), "Your browser did not answer District AI in time, so the web was not opened. Try again, and let the browser open District AI if it asks.");
-    assert_eq!(strings::failure_hand_off_unanswered(Locale::FrCa), "Votre navigateur n'a pas répondu à District AI à temps, donc la version Web n'a pas été ouverte. Réessayez et laissez le navigateur ouvrir District AI s'il le demande.");
+    assert_eq!(strings::failure_hand_off_unanswered(Locale::En), "Your browser didn't respond to District AI in time, so the page wasn't opened. Try again, and let your browser open District AI if it asks.");
+    assert_eq!(strings::failure_hand_off_unanswered(Locale::FrCa), "Votre navigateur n'a pas répondu à temps à District AI; la page n'a donc pas été ouverte. Réessayez et autorisez votre navigateur à ouvrir District AI s'il vous le demande.");
     assert_eq!(strings::failure_hand_off_update_needed(Locale::En), "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app.");
     assert_eq!(strings::failure_hand_off_update_needed(Locale::FrCa), "District AI exige désormais que votre navigateur réponde à l'application avant d'ouvrir la version Web, et il ne l'a pas fait. Réessayez et laissez le navigateur ouvrir District AI s'il le demande. Si le problème persiste, mettez à jour l'application.");
     assert_eq!(strings::failure_keyring_locked(Locale::En), "Your keyring is locked. Unlock it, then try again.");

@@ -1287,8 +1287,8 @@ pub fn failure_hand_off_too_many(l: Locale) -> &'static str {
 #[must_use]
 pub fn failure_hand_off_unanswered(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Your browser did not answer District AI in time, so the web was not opened. Try again, and let the browser open District AI if it asks.",
-        Locale::FrCa => "Votre navigateur n'a pas répondu à District AI à temps, donc la version Web n'a pas été ouverte. Réessayez et laissez le navigateur ouvrir District AI s'il le demande.",
+        Locale::En => "Your browser didn't respond to District AI in time, so the page wasn't opened. Try again, and let your browser open District AI if it asks.",
+        Locale::FrCa => "Votre navigateur n'a pas répondu à temps à District AI; la page n'a donc pas été ouverte. Réessayez et autorisez votre navigateur à ouvrir District AI s'il vous le demande.",
     }
 }
 

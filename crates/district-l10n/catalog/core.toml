@@ -1290,8 +1290,8 @@ state = "reviewed"
 note = "Opening the web from the app signed in: asked too often in the last minute."
 
 [failure.hand_off_unanswered]
-en = "Your browser did not answer District AI in time, so the web was not opened. Try again, and let the browser open District AI if it asks."
-fr = "Votre navigateur n'a pas répondu à District AI à temps, donc la version Web n'a pas été ouverte. Réessayez et laissez le navigateur ouvrir District AI s'il le demande."
+en = "Your browser didn't respond to District AI in time, so the page wasn't opened. Try again, and let your browser open District AI if it asks."
+fr = "Votre navigateur n'a pas répondu à temps à District AI; la page n'a donc pas été ouverte. Réessayez et autorisez votre navigateur à ouvrir District AI s'il vous le demande."
 ctx = "error"
 screen = "any screen"
 tier = "T2"

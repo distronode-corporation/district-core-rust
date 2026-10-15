@@ -52,9 +52,10 @@ when the caller hangs up, as soon as the service says so.
 
 - The booking pages' hand-off to the web is never asked for unbound. When the browser
   has not answered the start page after `HAND_OFF_CALLBACK_WAIT`, the hand-off is given
-  up with a retryable notice (`failure.hand_off_unanswered`, "Your browser did not
-  answer District AI in time, so the web was not opened. Try again, and let the browser
-  open District AI if it asks."), where it used to ask for a link bound to no browser.
+  up with a retryable notice (`failure.hand_off_unanswered`, "Your browser didn't
+  respond to District AI in time, so the page wasn't opened. Try again, and let your
+  browser open District AI if it asks."), where it used to ask for a link bound to no
+  browser.
   `Effect::RequestSchedulingHandOff` now always carries a nonce, so the service can
   require one (`HANDOFF_REQUIRE_NONCE`, security sweep S33).
 - The billing hand-off (checkout and the billing page, in the app or the browser) does

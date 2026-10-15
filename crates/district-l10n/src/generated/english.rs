@@ -271,7 +271,7 @@ pub const FAILURE_HAND_OFF_REFUSED: &str = "District AI could not confirm your s
 /// `failure.hand_off_too_many` in English.
 pub const FAILURE_HAND_OFF_TOO_MANY: &str = "The web was opened several times just now. Wait a moment and try again.";
 /// `failure.hand_off_unanswered` in English.
-pub const FAILURE_HAND_OFF_UNANSWERED: &str = "Your browser did not answer District AI in time, so the web was not opened. Try again, and let the browser open District AI if it asks.";
+pub const FAILURE_HAND_OFF_UNANSWERED: &str = "Your browser didn't respond to District AI in time, so the page wasn't opened. Try again, and let your browser open District AI if it asks.";
 /// `failure.hand_off_update_needed` in English.
 pub const FAILURE_HAND_OFF_UPDATE_NEEDED: &str = "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app.";
 /// `failure.keyring_locked` in English.

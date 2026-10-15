@@ -929,7 +929,7 @@ fn an_unanswered_start_page_is_given_up_after_the_wait_never_unbound() {
     assert!(
         notice
             .message
-            .starts_with("Your browser did not answer District AI in time")
+            .starts_with("Your browser didn't respond to District AI in time")
     );
     // The answer arriving after the wait gave up is dropped.
     assert!(
