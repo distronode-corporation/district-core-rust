@@ -914,22 +914,33 @@ fn only_the_answer_to_this_purchase_mints_its_link() {
     answered(&mut model);
 }
 
-/// The view never answers (a service without the start page): after the
-/// wait, the link is asked for unbound, and opened in the same view.
+/// The view never answers: after the wait the purchase is given up with a
+/// notice, and the link is never asked for unbound. Pressing again starts
+/// afresh.
 #[test]
-fn an_unanswered_start_page_mints_an_unbound_link_after_the_wait() {
+fn an_unanswered_start_page_is_given_up_after_the_wait_never_unbound() {
     let mut model = agency();
     let wait = checkout(&mut model);
     let effects = model.update(Event::WaitOver { ticket: wait });
-    let [Effect::RequestBillingHandOff { nonce: None, .. }] = effects.as_slice() else {
-        panic!("{effects:?}");
-    };
+    assert!(effects.is_empty(), "nothing is minted: {effects:?}");
+    assert_eq!(purchase(&model).leg, HandOffLeg::Idle);
+    let notice = purchase(&model).notice.clone().expect("a notice");
+    assert!(notice.retryable);
+    assert!(
+        notice
+            .message
+            .starts_with("Your browser did not answer District AI in time")
+    );
     // The answer arriving after the wait gave up is dropped.
     assert!(
         model
             .update(answer("anything-at-all-0123456789"))
             .is_empty()
     );
+    // Pressing again starts a fresh hand-off, bound to its answer.
+    checkout(&mut model);
+    assert_eq!(purchase(&model).notice, None);
+    answered(&mut model);
 
     // An answer in time cancels the wait.
     let mut model = agency();
@@ -946,11 +957,7 @@ fn an_app_that_cannot_embed_falls_back_to_the_browser_and_says_so() {
     let first_wait = checkout(&mut model);
     let first = awaited_state(&model);
     let effects = model.update(Event::EmbeddedUnavailable);
-    let [
-        Effect::OpenOneTimeUrl { url },
-        Effect::Wait { ticket: wait, .. },
-    ] = effects.as_slice()
-    else {
+    let [Effect::OpenOneTimeUrl { url }, Effect::Wait { .. }] = effects.as_slice() else {
         panic!("{effects:?}");
     };
     let second = awaited_state(&model);
@@ -976,12 +983,9 @@ fn an_app_that_cannot_embed_falls_back_to_the_browser_and_says_so() {
     assert!(model.update(Event::EmbeddedUnavailable).is_empty());
 
     // The link opens in the browser too, which holds the cookie.
-    let effects = model.update(Event::WaitOver { ticket: *wait });
-    let [Effect::RequestBillingHandOff { ticket, .. }] = effects.as_slice() else {
-        panic!("{effects:?}");
-    };
+    let ticket = answered(&mut model);
     let effects = model.update(Event::BillingHandOffReady {
-        ticket: *ticket,
+        ticket,
         result: Ok(hand_off()),
     });
     let [Effect::OpenOneTimeUrl { url }] = effects.as_slice() else {

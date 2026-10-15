@@ -57,6 +57,10 @@ when the caller hangs up, as soon as the service says so.
   open District AI if it asks."), where it used to ask for a link bound to no browser.
   `Effect::RequestSchedulingHandOff` now always carries a nonce, so the service can
   require one (`HANDOFF_REQUIRE_NONCE`, security sweep S33).
+- The billing hand-off (checkout and the billing page, in the app or the browser) does
+  the same: no answer in time gives the purchase up with the same notice, and
+  `Effect::RequestBillingHandOff` always carries a nonce. With both, no link the core
+  asks for is unbound.
 - `dialer.hint` writes its example number with no-break spaces between the groups
   (`+1 212 555 0142`), in English and French, so it never breaks after `+1`.
 

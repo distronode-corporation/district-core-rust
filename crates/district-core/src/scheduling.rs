@@ -391,7 +391,7 @@ impl SignedIn {
             return Next::Stay(self.mint_hand_off(nonce, tickets));
         }
         if let Some(nonce) = answer_to(&self.purchase.leg, link) {
-            return Next::Stay(self.mint_purchase(Some(nonce), tickets));
+            return Next::Stay(self.mint_purchase(nonce, tickets));
         }
         stay()
     }
@@ -476,10 +476,9 @@ pub(crate) fn hand_off_failure(error: Option<&ApiError>) -> FailureText {
         Some(ApiError::RateLimited { .. }) => {
             FailureText::retryable(s::failure_hand_off_too_many(l()))
         }
-        // The service wants a bound hand-off and this one was not: only the
-        // billing hand-off can still be asked for unbound, when its start page
-        // did not answer in time. Pressing again binds it if the browser
-        // answers.
+        // The service wants a bound hand-off and this one was not. This app
+        // always binds both, so only a service that lost the nonce says so.
+        // Pressing again binds it if the browser answers.
         Some(error) if error.code() == Some(CODE_NONCE_REQUIRED) => {
             FailureText::retryable(s::failure_hand_off_update_needed(l()))
         }

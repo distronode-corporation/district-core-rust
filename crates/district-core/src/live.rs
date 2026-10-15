@@ -748,7 +748,8 @@ impl SignedIn {
             self.hand_off_unanswered();
             Vec::new()
         } else if tickets.accept(Slot::BillingHandOffWait, ticket) {
-            self.mint_purchase(None, tickets)
+            self.purchase_unanswered();
+            Vec::new()
         } else if tickets.accept(Slot::WorkspaceSetupWait, ticket) {
             self.list_for_setup(tickets)
         } else {
