@@ -24,7 +24,8 @@ use std::collections::BTreeMap;
 use district_model::{
     A2pRegistrationResponse, BlockedContactsResponse, ContactBlockResponse,
     NumberConfigureResponse, NumberLookupResponse, NumberReleaseResponse, ProviderStatusResponse,
-    SipTrunkCreateResponse, SipTrunksResponse, TollFreeVerificationResponse, VerifyServiceResponse,
+    SettingsResponse, SettingsSaveResponse, SipTrunkCreateResponse, SipTrunksResponse,
+    TollFreeVerificationResponse, VerifyServiceResponse,
 };
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CallAnswerResponse,
@@ -698,6 +699,12 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
         "district-scheduling-zoom-status.json",
         codec::<SchedulingAdminSuccess<SchedulingZoomStatus>>,
     ),
+    // POST /api/settings: the account's language saved.
+    ("district-settings-save.json", codec::<SettingsSaveResponse>),
+    // GET /api/settings for an account that never chose a language: `locale` is null.
+    ("district-settings-unset.json", codec::<SettingsResponse>),
+    // GET /api/settings.
+    ("district-settings.json", codec::<SettingsResponse>),
     // GET /api/district/setup.
     ("district-setup.json", codec::<SetupResponse>),
     // POST /api/district/workspace/sip: the trunk created.
@@ -848,31 +855,18 @@ pub struct Exclusion {
 }
 
 /// Fixtures of endpoints this client will not use, by decision.
-pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
-    Exclusion {
-        reason: "Sign in with Apple's native sheet and its second step belong to the \
+pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[Exclusion {
+    reason: "Sign in with Apple's native sheet and its second step belong to the \
                  Apple apps: `POST /api/auth/native/apple` answering that the account \
                  needs its authenticator code, and `POST /api/auth/native/mfa` trading \
                  the ticket and the code for the grant. A desktop signs in through the \
                  browser, which asks for the second factor itself, and reads the grant \
                  from `POST /api/auth/native/token` (district-auth).",
-        fixtures: &[
-            "district-native-apple-mfa-required.json",
-            "district-native-mfa.json",
-        ],
-    },
-    Exclusion {
-        reason: "The account's saved language, `GET` and `POST /api/settings`, which \
-                 the mobile apps read and write. The core takes its language from \
-                 `CoreConfig::locale`, which the desktop app chooses, and no desktop \
-                 screen reads or saves the account's.",
-        fixtures: &[
-            "district-settings-save.json",
-            "district-settings-unset.json",
-            "district-settings.json",
-        ],
-    },
-];
+    fixtures: &[
+        "district-native-apple-mfa-required.json",
+        "district-native-mfa.json",
+    ],
+}];
 
 /// Every file in `contracts/desktop/`. Asserted exactly, for the same reason as
 /// [`EXPECTED_FIXTURE_COUNT`].

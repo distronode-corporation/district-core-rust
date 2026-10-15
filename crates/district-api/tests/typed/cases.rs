@@ -14,9 +14,9 @@ use district_model::{
     MessagingChannel, MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials,
     MessagingDelete, MessagingSetChannelDefault, MessagingSetDefault, NumberSearch, PRESENCE_KIND,
     PersonaEngineChoice, PersonaPatch, PersonaPreviewForm, Platform, PresenceRegistration,
-    RoutingRule, RoutingRuleField, SendMessageRequest, SipTrunkDraft, SupportRequestDraft,
-    SupportRequestKind, ThreadRef, TollFreeVerificationDraft, TwilioCredentials,
-    UpdateContactRequest, WorkspaceConfig, WorkspaceConfigResponse,
+    RoutingRule, RoutingRuleField, SETTINGS_LANGUAGE_FRENCH, SendMessageRequest, SipTrunkDraft,
+    SupportRequestDraft, SupportRequestKind, ThreadRef, TollFreeVerificationDraft,
+    TwilioCredentials, UpdateContactRequest, WorkspaceConfig, WorkspaceConfigResponse,
 };
 use serde_json::{Value, json};
 
@@ -1021,6 +1021,19 @@ pub fn cases() -> Vec<Case> {
             path: "/api/billing",
             query: vec![],
             body: Sent::Nothing,
+        },
+        // The account's language.
+        Case {
+            name: "save_language",
+            endpoint: Endpoint::SaveSettings,
+            retried: false,
+            answer: fixture("district-settings-save.json"),
+            call: call!(c => c.save_language(SETTINGS_LANGUAGE_FRENCH)),
+            method: "POST",
+            path: "/api/settings",
+            query: vec![],
+            // The language alone, and no workspace: the account's own setting.
+            body: Sent::Json(json!({"profile": {"locale": "fr"}})),
         },
         // Automations.
         Case {

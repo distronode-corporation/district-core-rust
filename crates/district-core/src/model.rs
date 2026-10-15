@@ -600,6 +600,15 @@ pub enum Event {
         /// The service's answer.
         result: Result<AccountBillingResponse, ApiError>,
     },
+    /// The account was told which language the app shows.
+    LanguageSaved {
+        /// The ticket of [`Effect::SaveLanguage`].
+        ticket: Ticket,
+        /// The language written.
+        locale: Locale,
+        /// Whether the service saved it.
+        result: Result<(), ApiError>,
+    },
     /// The workflows were read.
     WorkflowsLoaded {
         /// The ticket of [`Effect::LoadWorkflows`].
@@ -1093,6 +1102,11 @@ impl Event {
             | Event::AccountBillingLoaded {
                 ticket,
                 result: Err(error),
+            }
+            | Event::LanguageSaved {
+                ticket,
+                result: Err(error),
+                ..
             }
             | Event::WorkflowsLoaded {
                 ticket,
@@ -1682,6 +1696,17 @@ pub enum Effect {
     LoadAccountBilling {
         /// Returned in [`Event::AccountBillingLoaded`].
         ticket: Ticket,
+    },
+    /// Tell the account which language the app shows (`POST /api/settings`),
+    /// so that what the service says to the member away from the app is in
+    /// it. After every completed sign-in, and after the session restored at
+    /// start-up, so once per launch. A failure is not retried until the next
+    /// of those.
+    SaveLanguage {
+        /// Returned in [`Event::LanguageSaved`].
+        ticket: Ticket,
+        /// The language to write.
+        locale: Locale,
     },
     /// Read the workflows.
     LoadWorkflows {
@@ -2303,6 +2328,7 @@ impl Effect {
             | Self::NumberAdmin { ticket, .. }
             | Self::LoadWorkspaceBilling { ticket, .. }
             | Self::LoadAccountBilling { ticket }
+            | Self::SaveLanguage { ticket, .. }
             | Self::LoadWorkflows { ticket, .. }
             | Self::LoadWorkflowRuns { ticket, .. }
             | Self::SetWorkflowActive { ticket, .. }
@@ -2388,6 +2414,7 @@ impl Effect {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Slot {
     Restore,
+    Language,
     Retry,
     SignIn,
     SignOut,
@@ -2805,6 +2832,7 @@ impl Model {
         }
         match event {
             Event::SessionRestored { ticket, result } => self.restored(ticket, result),
+            Event::LanguageSaved { ticket, .. } => self.language_saved(ticket),
             Event::RetryDue { ticket } => self.retry_due(ticket),
             Event::RetryRestore => self.retry_restore(),
             Event::SignIn => self.sign_in(),
@@ -3229,7 +3257,12 @@ impl Model {
         match result {
             Ok(claims) => {
                 self.restore_failures = 0;
-                self.start_signed_in(claims.into(), None)
+                // The account is told the app's language once per launch: a
+                // session is restored only at start-up, and the core keeps
+                // nothing across runs to say it was told already.
+                let mut effects = self.start_signed_in(claims.into(), None);
+                effects.insert(0, self.save_language());
+                effects
             }
             Err(RestoreError::Token(TokenError::SignInRequired(reason))) => {
                 self.end_session(SessionEnd::Reauth(reason))
@@ -3364,7 +3397,9 @@ impl Model {
         match result {
             Ok(session) => {
                 let notice = Notice::for_persistence(&session.persistence);
-                self.start_signed_in(session.claims.into(), notice)
+                let mut effects = self.start_signed_in(session.claims.into(), notice);
+                effects.insert(0, self.save_language());
+                effects
             }
             // A link that does not answer this attempt (another program's, or
             // a forged one) leaves the sign-in waiting for its own.
@@ -3435,6 +3470,24 @@ impl Model {
             calls_available,
         )));
         effects
+    }
+
+    /// Tell the account the app's language. Issued after
+    /// [`start_signed_in`](Self::start_signed_in), which forgets every ticket,
+    /// and run first: nothing waits on it.
+    fn save_language(&mut self) -> Effect {
+        Effect::SaveLanguage {
+            ticket: self.tickets.issue(Slot::Language),
+            locale: self.config.locale,
+        }
+    }
+
+    /// The account was told the app's language, or was not. Nothing follows
+    /// either way: a failure waits for the next sign-in or start, never a
+    /// loop, and a session that ended is handled with every other answer.
+    fn language_saved(&mut self, ticket: Ticket) -> Vec<Effect> {
+        self.tickets.accept(Slot::Language, ticket);
+        Vec::new()
     }
 
     /// The session ended without the user asking. With no session stored at all,

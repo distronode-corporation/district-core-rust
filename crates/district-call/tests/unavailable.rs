@@ -57,7 +57,12 @@ fn room_started() -> (Model, Ticket, Effect) {
             expires_at_secs: 4_000_000_000,
         }),
     });
-    let Effect::LoadWorkspaces { ticket } = only(&effects) else {
+    // The account is told the app's language first; nothing waits on it.
+    let [
+        Effect::SaveLanguage { .. },
+        Effect::LoadWorkspaces { ticket },
+    ] = effects.as_slice()
+    else {
         panic!("{effects:?}");
     };
     let list: WorkspaceListResponse = fixture("district-workspace-list.json");

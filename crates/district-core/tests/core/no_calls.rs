@@ -20,7 +20,10 @@ fn signing_in_to_a_build_without_calls_reads_no_ring_setting() {
             result: Ok(claims()),
         });
         assert!(
-            matches!(effects.as_slice(), [Effect::LoadWorkspaces { .. }]),
+            matches!(
+                effects.as_slice(),
+                [Effect::SaveLanguage { .. }, Effect::LoadWorkspaces { .. }]
+            ),
             "{effects:?}"
         );
         assert_eq!(signed_in(&model).presence.ring_here, None);

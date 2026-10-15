@@ -111,6 +111,7 @@ fn a_stored_session_signs_in_and_reads_the_workspaces() {
     assert!(matches!(
         effects.as_slice(),
         [
+            Effect::SaveLanguage { .. },
             Effect::ReadRingSetting { .. },
             Effect::LoadWorkspaces { .. }
         ]
@@ -363,6 +364,7 @@ fn signing_in_opens_the_browser_waits_and_exchanges() {
     assert!(matches!(
         effects.as_slice(),
         [
+            Effect::SaveLanguage { .. },
             Effect::ReadRingSetting { .. },
             Effect::LoadWorkspaces { .. }
         ]
@@ -896,4 +898,47 @@ fn a_signed_in_action_does_nothing_when_nobody_is_signed_in() {
         assert!(model.update(event.clone()).is_empty(), "{event:?}");
     }
     assert_eq!(signed_out(&model).why, SignedOutWhy::NeverSignedIn);
+}
+
+/// The account is told the app's language after the session restored at
+/// start-up and after every sign-in, first, with nothing waiting on it; its
+/// answer, success or failure, asks for nothing more.
+#[test]
+fn the_language_is_written_after_a_restore_and_every_sign_in() {
+    let (mut model, effects) = started(Ok(claims()));
+    let Some(Effect::SaveLanguage { ticket, locale }) = effects.first().cloned() else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(locale, config().locale);
+    assert_eq!(effects[0].ticket(), Some(ticket));
+    for result in [
+        Ok(()),
+        Err(ApiError::Unconfirmed {
+            endpoint: district_api::Endpoint::SaveSettings,
+        }),
+    ] {
+        let effects = model.update(Event::LanguageSaved {
+            ticket,
+            locale,
+            result,
+        });
+        assert!(effects.is_empty(), "{effects:?}");
+        assert!(matches!(model.session(), SessionState::SignedIn(_)));
+    }
+}
+
+/// A language write refused because the session ended signs out, as any
+/// other answer awaited would.
+#[test]
+fn a_language_write_refused_because_the_session_ended_signs_out() {
+    let (mut model, effects) = started(Ok(claims()));
+    let ticket = effects[0].ticket().expect("a ticket");
+    model.update(Event::LanguageSaved {
+        ticket,
+        locale: config().locale,
+        result: Err(ApiError::Unauthorized(UnauthorizedReason::SignInRequired(
+            ReauthReason::RefreshRejected,
+        ))),
+    });
+    assert!(matches!(model.session(), SessionState::SignedOut(_)));
 }

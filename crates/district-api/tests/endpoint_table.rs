@@ -207,6 +207,7 @@ fn only_account_and_device_endpoints_are_unscoped() {
         Endpoint::NativeDeviceRevoke,
         Endpoint::NativeRevokeAll,
         Endpoint::StripeBilling,
+        Endpoint::SaveSettings,
         // An account the app just created buys before it has a workspace; one
         // that is open is a plain body field, recorded and never authorising.
         Endpoint::BillingHandOff,

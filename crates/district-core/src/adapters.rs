@@ -24,12 +24,12 @@ use district_model::{
     MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
     MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
     OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SetupResponse,
-    SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
-    SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
-    UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse, UsageResponse,
-    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
-    WorkspaceListResponse,
+    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
+    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
+    SupportRequestDraft, SupportRequestResponse, SupportRequestsResponse, ThreadRef,
+    TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
+    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
+    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallHandlingPatch, CallHandlingResponse,
@@ -399,6 +399,13 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         &self,
     ) -> impl Future<Output = Result<AccountBillingResponse, ApiError>> + Send {
         ApiClient::account_billing(self)
+    }
+
+    fn save_language(
+        &self,
+        locale: &'static str,
+    ) -> impl Future<Output = Result<SettingsSaveResponse, ApiError>> + Send {
+        ApiClient::save_language(self, locale)
     }
 
     fn workflows(

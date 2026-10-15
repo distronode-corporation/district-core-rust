@@ -8,7 +8,7 @@
 
 use district_model::Platform;
 use reqwest::Response;
-use reqwest::header::{ACCEPT, CONTENT_TYPE};
+use reqwest::header::{ACCEPT, ACCEPT_LANGUAGE, CONTENT_TYPE};
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 use serde_json::{Map, Value};
@@ -138,11 +138,16 @@ impl Transport {
 
     /// One attempt's request, everything but the token. Built afresh for each
     /// attempt because a multipart body can be sent only once.
+    ///
+    /// Every request names the language the app shows (`Accept-Language: fr-CA`
+    /// or `en`, from [`district_l10n::current`]), so that whatever the service
+    /// writes in its answer (an error's sentence, a label) is in that language.
     fn build(&self, prepared: &Prepared) -> Result<reqwest::RequestBuilder, ApiError> {
         let builder = self
             .http
             .request(reqwest_method(prepared.method), prepared.url.clone())
-            .header(ACCEPT, "application/json");
+            .header(ACCEPT, "application/json")
+            .header(ACCEPT_LANGUAGE, district_l10n::current().tag());
         Ok(match &prepared.body {
             PreparedBody::Empty => builder,
             PreparedBody::Json(bytes) => builder
