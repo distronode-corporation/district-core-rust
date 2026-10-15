@@ -206,6 +206,11 @@ endpoint_table! {
     /// The account's subscription and invoices. Read only.
     StripeBilling => Get "/api/billing",
         workspace: None, body: Empty, retry: OnceAfterRefresh;
+    /// Saves the account's own settings; this client writes only the language
+    /// (`{"profile": {"locale": "fr"}}`). A field the body leaves out is kept.
+    /// Scoped to the account.
+    SaveSettings => Post "/api/settings",
+        workspace: None, body: Json, retry: Never;
     /// A single-use code that signs a browser in to the checkout or the billing
     /// page, for an app that buys in the app. Scoped to the account: an account
     /// the app just created has no workspace until checkout makes one, so a

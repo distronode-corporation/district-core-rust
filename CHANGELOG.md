@@ -17,6 +17,33 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-10-15
+
+The language signals District AI for Linux 3.0.0 and District AI for Windows 3.0.0 send
+the service: every request names the app's language, and the account is told it.
+
+### Added
+
+- Every request carries `Accept-Language`: `fr-CA` when the app shows French, `en`
+  otherwise (`district_l10n::current`), so what the service writes in an answer is in
+  that language.
+- `Endpoint::SaveSettings` (`POST /api/settings`, scoped to the account) and
+  `ApiClient::save_language`, which writes the account's language alone
+  (`{"profile": {"locale": "fr"}}`). `district-model`: `SettingsResponse`,
+  `SettingsSaveResponse` and the body `LanguageSave`, held to the three
+  `district-settings*.json` fixtures, which the fixture manifest now decodes rather than
+  excludes.
+- `Effect::SaveLanguage` and `Event::LanguageSaved`, run by the core's own
+  `EffectRunner` through the new `DistrictApi::save_language`. The model asks for
+  it after every completed sign-in and after the session restored at start-up, so
+  once per launch: the core keeps no state across runs that could say the account was
+  told already. A failed write is not retried until the next sign-in or launch.
+
+These are additions to `Effect`, `Event` and `DistrictApi`, which this file's rule
+counts as breaking. They ship in a patch release because the only apps that pin 4.0,
+District AI for Linux 3.0.0 and District AI for Windows 3.0.0, hand every effect to the
+core's `EffectRunner` and implement none of these traits themselves.
+
 ## [4.0.0] - 2026-10-14
 
 The core of District AI for Linux 3.0.0 and District AI for Windows 3.0.0: every word in

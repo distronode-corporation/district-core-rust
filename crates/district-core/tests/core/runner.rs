@@ -6,6 +6,7 @@ use std::time::Duration;
 
 use district_api::{ApiError, ErrorDetail};
 use district_auth::{AccessClaims, DrainReport, HandOffState, RevokeStatus, SignOutReport};
+use district_core::Locale;
 use district_core::{
     Auth, CallEngine, ContactWrite, ContactWritten, DistrictApi, Effect, EffectRunner, Event,
     ExchangeFailure, HAND_OFF_CALLBACK_WAIT, InboxEvent, LiveUpdates, MediaCredential, Model,
@@ -35,12 +36,12 @@ use district_model::{
     MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
     MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
     OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SetupResponse,
-    SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
-    SupportRequestKind, SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor,
-    TimelineResponse, UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse,
-    UsageResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
-    WorkspaceBillingResponse, WorkspaceListResponse,
+    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
+    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
+    SupportRequestDraft, SupportRequestKind, SupportRequestResponse, SupportRequestsResponse,
+    ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
+    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
+    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallHandlingPatch, CallHandlingResponse,
@@ -442,6 +443,11 @@ impl DistrictApi for FakeApi {
     async fn account_billing(&self) -> Result<AccountBillingResponse, ApiError> {
         self.0.push("account billing");
         Ok(fixture("district-billing.json"))
+    }
+
+    async fn save_language(&self, locale: &'static str) -> Result<SettingsSaveResponse, ApiError> {
+        self.0.push(format!("settings language {locale}"));
+        Ok(fixture("district-settings-save.json"))
     }
 
     async fn workflows(&self, workspace_id: &str) -> Result<WorkflowListResponse, ApiError> {
@@ -1512,6 +1518,7 @@ async fn the_loop_runs_from_start_up_to_the_overview() {
             "setup ws-contract-active",
             "unread ws-contract-active",
             "watch [\"ws-contract-active\", \"ws-contract-client\"]",
+            "settings language en",
             "drain outbox",
         ]
     );
@@ -2109,6 +2116,28 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             },
         ),
         (
+            Effect::SaveLanguage {
+                ticket,
+                locale: Locale::FrCa,
+            },
+            Event::LanguageSaved {
+                ticket,
+                locale: Locale::FrCa,
+                result: Ok(()),
+            },
+        ),
+        (
+            Effect::SaveLanguage {
+                ticket,
+                locale: Locale::En,
+            },
+            Event::LanguageSaved {
+                ticket,
+                locale: Locale::En,
+                result: Ok(()),
+            },
+        ),
+        (
             Effect::LoadWorkflows {
                 ticket,
                 workspace_id: ws(),
@@ -2429,6 +2458,8 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             "number call ws-contract-active Configure(\"+12125550142\")",
             "workspace billing ws-contract-active",
             "account billing",
+            "settings language fr",
+            "settings language en",
             "workflows ws-contract-active",
             "runs ws-contract-active wf_contract_active 10 20",
             "workflow ws-contract-active wf_contract_active false",

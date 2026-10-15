@@ -129,6 +129,13 @@ pub struct Addition {
 /// this table.
 pub const DESKTOP_ONLY: &[Addition] = &[
     Addition {
+        endpoint: Endpoint::SaveSettings,
+        reason: "The account's language, written when a desktop app signs in or starts in a \
+                 language the account was not last told, so that what the service says to the \
+                 member away from the app (an email, a text message) is in that language. The \
+                 Android app's 3.0 writes it too; the snapshot predates it.",
+    },
+    Addition {
         endpoint: Endpoint::TelemetryToken,
         reason: "Live calls and messages reach a desktop app over the telemetry socket while it \
                  runs. District AI for Linux has no push service; District AI for Windows can \

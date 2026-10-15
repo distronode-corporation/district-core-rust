@@ -47,6 +47,7 @@ fn signed_in_with(ring_here: bool) -> (Model, Vec<Effect>) {
         result: Ok(claims()),
     });
     let [
+        Effect::SaveLanguage { .. },
         Effect::ReadRingSetting { ticket },
         Effect::LoadWorkspaces { .. },
     ] = effects.as_slice()

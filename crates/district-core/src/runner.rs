@@ -17,6 +17,7 @@ use std::time::Duration;
 
 use district_api::ApiError;
 use district_auth::{AccessClaims, DrainReport, HandOffNonce, SignOutReport};
+use district_l10n::Locale;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
     BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse, CallSummary,
@@ -29,8 +30,9 @@ use district_model::{
     EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqTurn, MarkReadResponse,
     MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
     MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
-    OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SetupResponse,
+    OwnedNumbersResponse, RoomTokenResponse, SETTINGS_LANGUAGE_ENGLISH, SETTINGS_LANGUAGE_FRENCH,
+    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
+    SendMessageRequest, SendMessageResponse, SettingsSaveResponse, SetupResponse,
     SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
     SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
     UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse, UsageResponse,
@@ -300,6 +302,13 @@ pub trait DistrictApi: Send + Sync {
     fn account_billing(
         &self,
     ) -> impl Future<Output = Result<AccountBillingResponse, ApiError>> + Send;
+    /// Tells the account which language the app shows: `locale` is
+    /// [`SETTINGS_LANGUAGE_FRENCH`](district_model::SETTINGS_LANGUAGE_FRENCH) or
+    /// [`SETTINGS_LANGUAGE_ENGLISH`](district_model::SETTINGS_LANGUAGE_ENGLISH).
+    fn save_language(
+        &self,
+        locale: &'static str,
+    ) -> impl Future<Output = Result<SettingsSaveResponse, ApiError>> + Send;
     /// The workflows.
     fn workflows(
         &self,
@@ -1239,6 +1248,15 @@ where
                 ticket,
                 result: self.api.account_billing().await,
             },
+            Effect::SaveLanguage { ticket, locale } => Event::LanguageSaved {
+                ticket,
+                locale,
+                result: self
+                    .api
+                    .save_language(settings_language(locale))
+                    .await
+                    .map(|_| ()),
+            },
             Effect::LoadWorkflows {
                 ticket,
                 workspace_id,
@@ -1880,5 +1898,13 @@ where
                 .await
                 .map(ContactWritten::Blocked),
         }
+    }
+}
+
+/// The account's word for `locale`, as `POST /api/settings` takes it.
+fn settings_language(locale: Locale) -> &'static str {
+    match locale {
+        Locale::En => SETTINGS_LANGUAGE_ENGLISH,
+        Locale::FrCa => SETTINGS_LANGUAGE_FRENCH,
     }
 }

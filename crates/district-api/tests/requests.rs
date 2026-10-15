@@ -82,6 +82,29 @@ async fn ok_server() -> MockServer {
     server
 }
 
+/// Every request names the language the app shows, read when it is built: in
+/// French, `fr-CA`. On a runtime of this thread, which the French is set for.
+#[test]
+fn a_request_names_the_language_the_app_shows() {
+    let runtime = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .expect("a runtime");
+    let languages = district_l10n::with_locale(district_l10n::Locale::FrCa, || {
+        runtime.block_on(async {
+            let server = ok_server().await;
+            let client = client(&server);
+            let _: Value = client.request(Endpoint::AuthMe).send().await.expect("sent");
+            let received = server.received_requests().await.expect("recording is on");
+            received
+                .iter()
+                .map(|request| header(request, "accept-language").map(str::to_owned))
+                .collect::<Vec<_>>()
+        })
+    });
+    assert_eq!(languages, [Some("fr-CA".to_owned())]);
+}
+
 /// The table-driven check: one request per endpoint, each inspected as the
 /// server received it.
 #[tokio::test]
@@ -125,6 +148,8 @@ async fn every_endpoint_is_sent_as_its_spec_says() {
             Some("application/json"),
             "{name}"
         );
+        // The language the app shows: English unless the app chose French.
+        assert_eq!(header(request, "accept-language"), Some("en"), "{name}");
 
         // The workspace, in exactly one place, and the right one.
         let in_query = query_values(request, "workspaceId");

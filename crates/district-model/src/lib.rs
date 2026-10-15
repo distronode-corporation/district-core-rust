@@ -55,6 +55,7 @@ mod overview;
 mod persona;
 mod phone;
 mod pkce;
+mod profile_settings;
 mod push;
 mod rooms;
 mod scheduling;
@@ -151,6 +152,10 @@ pub use persona::{
 };
 pub use phone::{PhoneIntel, PhoneRegion};
 pub use pkce::PkceVector;
+pub use profile_settings::{
+    LanguageSave, LanguageSaveProfile, SETTINGS_LANGUAGE_ENGLISH, SETTINGS_LANGUAGE_FRENCH,
+    SettingsProfile, SettingsResponse, SettingsSaveResponse, SettingsSubscription,
+};
 pub use push::{PRESENCE_KIND, PresenceRegistration, PushRegistrationResponse};
 pub use rooms::{
     GuestInvite, MeetRoomName, MeetingDetail, MeetingSummary, RoomE2ee, RoomTokenResponse,

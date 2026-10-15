@@ -537,7 +537,7 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
         )
         .mount(&server)
         .await;
-    let routes: [(&str, &str, serde_json::Value); 34] = [
+    let routes: [(&str, &str, serde_json::Value); 35] = [
         (
             "POST",
             "/api/district/hq",
@@ -569,6 +569,11 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
             fixture("district-workspace-billing.json"),
         ),
         ("GET", "/api/billing", fixture("district-billing.json")),
+        (
+            "POST",
+            "/api/settings",
+            fixture("district-settings-save.json"),
+        ),
         (
             "GET",
             "/api/district/workflows",
@@ -777,6 +782,12 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
             .invoices
             .len(),
         2
+    );
+    assert!(
+        DistrictApi::save_language(&client, "fr")
+            .await
+            .unwrap()
+            .success
     );
     assert_eq!(
         DistrictApi::workflows(&client, ws)
