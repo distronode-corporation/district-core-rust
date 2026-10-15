@@ -1,0 +1,33 @@
+name: Release guard
+
+# Fires on a `vX.Y.Z` tag. A release here is the tag and a GitHub release made by
+# hand (CONTRIBUTING.md, "Releases"), so this is the one step a tag build runs:
+# every string catalog must be the one i18n/fr-CA/signoff.json records, the
+# catalogs whose Canadian French was reviewed and signed off. A red run means the
+# tag holds French nobody signed off: do not create the GitHub release, and do not
+# move an app's pin to the tag, until a renewed sign-off is released.
+#
+# On tags only, never on pull requests: catalogs change between releases, and the
+# sign-off is renewed per release. ci.yml runs the check's --self-test.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-guard-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  french-signoff:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: The catalogs are the signed-off ones
+        run: python3 scripts/check-fr-signoff.py

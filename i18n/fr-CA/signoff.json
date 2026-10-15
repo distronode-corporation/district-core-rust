@@ -1,0 +1,31 @@
+{
+  "signed_off_by": "xhigh manager review (monorepo docs/i18n_fr_ca_signoff_v3.md)",
+  "release": "v4.0.1",
+  "commit": "2d20db59f3204fa5dc3439f52f239829cc725adc",
+  "catalogs": [
+    {
+      "path": "crates/district-l10n/catalog/api_errors.toml",
+      "sha256": "169c5516f1155d695ef200f0fd41427bc42fed6bbefb2279f7cd75195a5dc1bd"
+    },
+    {
+      "path": "crates/district-l10n/catalog/core.toml",
+      "sha256": "4afc30bc2826bc4776d059405f1aace4e523565d2c69b119586918962278cb0e"
+    },
+    {
+      "path": "crates/district-l10n/catalog/numbers.toml",
+      "sha256": "1f0575e5d6a6df4e56c2e38bd407edece2507b1cf2ba986ad5da96fd3bd89f09"
+    },
+    {
+      "path": "crates/district-l10n/catalog/scheduling.toml",
+      "sha256": "fb88d07aa7a640de82c91693534a8b8c12a327b3e34b8753d7e7ef76ecb15ad2"
+    },
+    {
+      "path": "crates/district-l10n/catalog/support.toml",
+      "sha256": "b268c5eec155f940cb83b7f87f5a3dbc86408a9b8bb7a6e3374b5dda63875cb7"
+    },
+    {
+      "path": "crates/district-l10n/catalog/wire.toml",
+      "sha256": "56e83a1033b265868301a7e9e08ac99dc0704597c7e5def0c8fc8bb29f242db0"
+    }
+  ]
+}
