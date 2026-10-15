@@ -1296,7 +1296,7 @@ ctx = "error"
 screen = "any screen"
 tier = "T2"
 state = "reviewed"
-note = "Opening the web from the app: the browser page the app opened did not hand control back to the app within ten seconds, so nothing was opened. Pressing again starts afresh."
+note = "Opening the web from the app: shown when the browser page the app opened never hands back to the app, so nothing was opened. Pressing again starts afresh."
 
 [failure.hand_off_update_needed]
 en = "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app."
