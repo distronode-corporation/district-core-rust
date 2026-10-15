@@ -58,6 +58,10 @@ when the caller hangs up, as soon as the service says so.
   browser.
   `Effect::RequestSchedulingHandOff` now always carries a nonce, so the service can
   require one (`HANDOFF_REQUIRE_NONCE`, security sweep S33).
+- `HAND_OFF_CALLBACK_WAIT` is 30 seconds (was 10), for both hand-offs, as District Core
+  for Swift waits: it covers the time a person takes on the browser's "Open District
+  AI?" prompt, and running out now costs a retry rather than an unbound link. The
+  service's nonce cookie lives five minutes.
 - The billing hand-off (checkout and the billing page, in the app or the browser) does
   the same: no answer in time gives the purchase up with the same notice, and
   `Effect::RequestBillingHandOff` always carries a nonce. With both, no link the core

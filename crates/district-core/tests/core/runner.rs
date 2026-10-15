@@ -2565,7 +2565,7 @@ async fn an_unanswered_start_page_is_given_up_after_the_wait() {
     );
     let over = waiting.await.unwrap();
     assert_eq!(start.elapsed(), HAND_OFF_CALLBACK_WAIT);
-    assert_eq!(HAND_OFF_CALLBACK_WAIT, Duration::from_secs(10));
+    assert_eq!(HAND_OFF_CALLBACK_WAIT, Duration::from_secs(30));
 
     let effects = model.update(over);
     assert!(effects.is_empty(), "no unbound request: {effects:?}");

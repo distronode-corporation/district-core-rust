@@ -48,8 +48,11 @@ use crate::text::{english_only, l, s};
 pub const SCHEDULING_WEB_PATH: &str = "/dashboard/district/scheduling";
 
 /// How long the browser has to answer the start page before the hand-off is
-/// given up.
-pub const HAND_OFF_CALLBACK_WAIT: Duration = Duration::from_secs(10);
+/// given up. It covers the person's time on the browser's "Open District AI?"
+/// prompt, and a hand-off that runs out is pressed again rather than minted
+/// unbound, so it is generous: thirty seconds, as District Core for Swift waits,
+/// well inside the five minutes the service's nonce cookie lives.
+pub const HAND_OFF_CALLBACK_WAIT: Duration = Duration::from_secs(30);
 
 /// A link that carries a sign-in of its own, or a value that binds one (the
 /// start page's `state`, the browser's nonce). It is opened or checked at once
