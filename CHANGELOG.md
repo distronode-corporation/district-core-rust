@@ -31,6 +31,10 @@ variant, or a field of one. Those take a new major version.
   webhook's new signing secret has its own sentence, `webhook.secret_reveal_warning`
   ("Copy the secret now. It is not shown again.", « Copiez le secret maintenant. Il ne
   sera plus affiché. »), in `MintedSecret::labels()`. Visual QA LD08.
+- A help desk ticket's row in the queue follows a reply or a status change made on the
+  ticket (a reply moves it to `waiting`), and a support request's row follows its
+  close, so the list and the open item no longer disagree until the list is read
+  again. Visual QA LD09.
 - SECURITY.md describes the hand-off as it is since 4.0.2: given up, never asked for
   unbound, when the browser does not answer within `HAND_OFF_CALLBACK_WAIT`.
 

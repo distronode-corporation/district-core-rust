@@ -601,6 +601,13 @@ impl SignedIn {
                 Ok(answer) => {
                     detail.status_category = SUPPORT_STATUS_DONE.to_owned();
                     detail.status_name = answer.status_name.clone();
+                    // The list says so too, without reading it again.
+                    if let SupportList::Ready(held) = &mut self.support.list
+                        && let Some(row) = held.requests.iter_mut().find(|row| row.id == detail.id)
+                    {
+                        row.status_category = SUPPORT_STATUS_DONE.to_owned();
+                        row.status_name.clone_from(&answer.status_name);
+                    }
                     screen.closed_as = Some(answer.status_name);
                 }
                 Err(error) => screen.close_failure = Some(FailureText::from_api_error(&error)),

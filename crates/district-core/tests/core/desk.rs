@@ -598,6 +598,52 @@ fn a_status_change_goes_once_and_adopts_the_answer() {
     assert_eq!(ticket_screen(&model).status_failure, None);
 }
 
+/// The queue's row follows a status change or a reply made on its ticket, so
+/// the list and the ticket agree without reading the queue again (visual QA
+/// LD09).
+#[test]
+fn the_queue_follows_a_change_made_on_its_ticket() {
+    fn row_status(model: &Model) -> String {
+        match &desk(model).queue {
+            DeskQueue::Ready(held) => held
+                .tickets
+                .iter()
+                .find(|row| row.id == TICKET)
+                .expect("the ticket's row")
+                .status
+                .clone(),
+            other => panic!("{other:?}"),
+        }
+    }
+    let mut model = on_queue();
+    assert_eq!(row_status(&model), "open");
+    let effects = model.update(Event::Navigate(Route::DeskTicket {
+        ticket_id: TICKET.to_owned(),
+    }));
+    model.update(Event::DeskTicketLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(fixture("district-desk-ticket.json")),
+    });
+    event(
+        &mut model,
+        DeskEvent::EditReply("Moved to Tuesday.".to_owned()),
+    );
+    let (ticket, ..) = reply_sent(&event(&mut model, DeskEvent::SendReply));
+    model.update(Event::DeskReplied {
+        ticket,
+        result: Ok(fixture("district-desk-ticket-reply.json")),
+    });
+    assert_eq!(row_status(&model), "waiting");
+    let effects = event(&mut model, DeskEvent::SetStatus(DeskTicketStatus::Resolved));
+    model.update(Event::DeskTicketStatusSet {
+        ticket: last_ticket(&effects),
+        result: Ok(fixture("district-desk-ticket-status.json")),
+    });
+    assert_eq!(row_status(&model), "resolved");
+    // The other rows are as they were read.
+    assert_eq!(visible(&model).len(), 3);
+}
+
 #[test]
 fn a_ticket_read_again_keeps_what_it_showed_and_one_never_read_says_why() {
     let mut model = on_ticket(AGENCY, "agency");

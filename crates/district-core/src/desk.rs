@@ -780,6 +780,7 @@ impl SignedIn {
                     screen.last_notified = answer.notified;
                     match answer.ticket {
                         Some(moved) => {
+                            patch_queue(&mut self.desk.queue, &moved);
                             adopt(detail, moved);
                             if let Some(message) = answer.message
                                 && !detail.messages.iter().any(|held| held.id == message.id)
@@ -813,7 +814,10 @@ impl SignedIn {
         {
             screen.status_change = None;
             match result {
-                Ok(answer) => adopt(detail, answer.ticket),
+                Ok(answer) => {
+                    patch_queue(&mut self.desk.queue, &answer.ticket);
+                    adopt(detail, answer.ticket);
+                }
                 Err(error) => screen.status_failure = Some(FailureText::from_api_error(&error)),
             }
         }
@@ -1010,6 +1014,18 @@ fn read_ticket(screen: &DeskTicketScreen, workspace_id: String, tickets: &mut Ti
 }
 
 /// Takes the ticket as the service now has it, keeping the thread already read.
+/// The queue's row for a ticket the service just answered about, brought up to
+/// date with that answer, so the list and the open ticket agree (a reply moves a
+/// ticket to `waiting`) without reading the whole queue again. A queue not read,
+/// or without that ticket, is left as it is; its next read lists it.
+fn patch_queue(queue: &mut DeskQueue, ticket: &DeskTicketSummary) {
+    if let DeskQueue::Ready(held) = queue
+        && let Some(row) = held.tickets.iter_mut().find(|row| row.id == ticket.id)
+    {
+        row.clone_from(ticket);
+    }
+}
+
 fn adopt(detail: &mut DeskTicketDetail, ticket: DeskTicketSummary) {
     let messages = std::mem::take(&mut detail.messages);
     *detail = DeskTicketDetail {
