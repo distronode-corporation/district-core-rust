@@ -13,6 +13,39 @@ fn contract() -> Value {
     serde_json::from_str(&fs::read_to_string(path).expect("api-errors.json")).expect("JSON")
 }
 
+/// French this catalog already words as the service is about to: (code, the
+/// contract's words, the catalog's words). « enregistrement » is banned by the
+/// glossary (the product records nothing), and the service's French moves to
+/// « entrées DNS » too. Once `contracts/i18n/` is synced past that change the
+/// contract no longer holds the old words, and
+/// `the_french_ahead_of_the_contract_still_is` says to remove the row.
+const FRENCH_AHEAD_OF_THE_CONTRACT: &[(&str, &str, &str)] = &[(
+    "sending_domain_provider_changed",
+    "les nouveaux enregistrements DNS",
+    "les nouvelles entrées DNS",
+)];
+
+fn french_as_the_catalog_words_it(code: &str, text: &str) -> String {
+    FRENCH_AHEAD_OF_THE_CONTRACT
+        .iter()
+        .filter(|(ahead, _, _)| *ahead == code)
+        .fold(text.to_owned(), |text, (_, contract, catalog)| {
+            text.replace(contract, catalog)
+        })
+}
+
+#[test]
+fn the_french_ahead_of_the_contract_still_is() {
+    let contract = contract();
+    for (code, words, _) in FRENCH_AHEAD_OF_THE_CONTRACT {
+        let french = contract["codes"][code]["fr"].as_str().expect(code);
+        assert!(
+            french.contains(words),
+            "{code}: the contract no longer says {words:?}; remove its row from FRENCH_AHEAD_OF_THE_CONTRACT"
+        );
+    }
+}
+
 #[test]
 fn every_code_reads_as_the_services_sentence() {
     let contract = contract();
@@ -27,6 +60,10 @@ fn every_code_reads_as_the_services_sentence() {
                 Locale::FrCa => ("fr", "frWithoutList"),
             };
             let text = sentence[field].as_str().expect(field);
+            let text = &match locale {
+                Locale::En => text.to_owned(),
+                Locale::FrCa => french_as_the_catalog_words_it(code, text),
+            };
             if sentence.get("listField").is_some() {
                 let items = ["eu", "apac"];
                 let listed = text.replace(placeholder, &items.join(separator));
@@ -42,7 +79,7 @@ fn every_code_reads_as_the_services_sentence() {
             } else {
                 assert_eq!(
                     api_error_text(locale, code, &["ignored"]).as_deref(),
-                    Some(text),
+                    Some(text.as_str()),
                     "{code}"
                 );
             }

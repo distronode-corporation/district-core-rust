@@ -1210,6 +1210,8 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_security_check_required(Locale::FrCa), "Complétez la vérification de sécurité, puis réessayez.");
     assert_eq!(api_error_strings::api_error_sending_domain_missing(Locale::En), "No sending domain is connected to this workspace.");
     assert_eq!(api_error_strings::api_error_sending_domain_missing(Locale::FrCa), "Aucun domaine d'envoi n'est connecté à cet espace de travail.");
+    assert_eq!(api_error_strings::api_error_sending_domain_provider_changed(Locale::En), "This sending domain was set up with a different email provider. Remove it and connect it again to get the new DNS records.");
+    assert_eq!(api_error_strings::api_error_sending_domain_provider_changed(Locale::FrCa), "Ce domaine d'envoi a été configuré avec un autre fournisseur de courriel. Retirez-le, puis connectez-le de nouveau pour obtenir les nouvelles entrées DNS.");
     assert_eq!(api_error_strings::api_error_server_error(Locale::En), "Something went wrong on our side. Please try again.");
     assert_eq!(api_error_strings::api_error_server_error(Locale::FrCa), "Une erreur est survenue de notre côté. Veuillez réessayer.");
     assert_eq!(api_error_strings::api_error_service_not_configured(Locale::En), "That is not set up on this deployment yet.");
@@ -1640,6 +1642,8 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_dnc(Locale::FrCa), "Liste d'exclusion");
     assert_eq!(wire_strings::wire_workflow_action_reason_dormant(Locale::En), "Dormant");
     assert_eq!(wire_strings::wire_workflow_action_reason_dormant(Locale::FrCa), "Inactif");
+    assert_eq!(wire_strings::wire_workflow_action_reason_email_misconfigured(Locale::En), "Email misconfigured");
+    assert_eq!(wire_strings::wire_workflow_action_reason_email_misconfigured(Locale::FrCa), "Courriel mal configuré");
     assert_eq!(wire_strings::wire_workflow_action_reason_empty_body(Locale::En), "Empty body");
     assert_eq!(wire_strings::wire_workflow_action_reason_empty_body(Locale::FrCa), "Message vide");
     assert_eq!(wire_strings::wire_workflow_action_reason_empty_subject(Locale::En), "Empty subject");
@@ -1666,6 +1670,8 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_report_unavailable(Locale::FrCa), "Rapport indisponible");
     assert_eq!(wire_strings::wire_workflow_action_reason_send_failed(Locale::En), "Send failed");
     assert_eq!(wire_strings::wire_workflow_action_reason_send_failed(Locale::FrCa), "Échec d'envoi");
+    assert_eq!(wire_strings::wire_workflow_action_reason_ses_missing(Locale::En), "Ses missing");
+    assert_eq!(wire_strings::wire_workflow_action_reason_ses_missing(Locale::FrCa), "SES non configuré");
     assert_eq!(wire_strings::wire_workflow_action_reason_tag_already_present(Locale::En), "Tag already present");
     assert_eq!(wire_strings::wire_workflow_action_reason_tag_already_present(Locale::FrCa), "Étiquette déjà présente");
     assert_eq!(wire_strings::wire_workflow_action_reason_tag_not_present(Locale::En), "Tag not present");

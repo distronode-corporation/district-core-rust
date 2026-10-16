@@ -410,6 +410,10 @@
       "en": "No sending domain is connected to this workspace.",
       "fr": "Aucun domaine d'envoi n'est connecté à cet espace de travail."
     },
+    "sending_domain_provider_changed": {
+      "en": "This sending domain was set up with a different email provider. Remove it and connect it again to get the new DNS records.",
+      "fr": "Ce domaine d'envoi a été configuré avec un autre fournisseur de courriel. Retirez-le, puis connectez-le de nouveau pour obtenir les nouveaux enregistrements DNS."
+    },
     "whatsapp_unsupported": {
       "en": "WhatsApp is not available on this workspace's messaging account.",
       "fr": "WhatsApp n'est pas offert sur le compte de messagerie de cet espace de travail."

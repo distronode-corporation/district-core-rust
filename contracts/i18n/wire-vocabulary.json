@@ -880,6 +880,14 @@
           "fr": null
         },
         {
+          "value": "email-misconfigured",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
           "value": "empty-body",
           "definedIn": [
             "distronode-website/src/lib/district/workflows.ts"
@@ -977,6 +985,14 @@
         },
         {
           "value": "send-failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "ses-missing",
           "definedIn": [
             "distronode-website/src/lib/district/workflows.ts"
           ],

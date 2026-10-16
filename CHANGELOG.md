@@ -48,6 +48,14 @@ variant, or a field of one. Those take a new major version.
   again; it used to stay beside the corrected value until the next save. Visual QA LC20.
 - SECURITY.md describes the hand-off as it is since 4.0.2: given up, never asked for
   unbound, when the browser does not answer within `HAND_OFF_CALLBACK_WAIT`.
+- `contracts/i18n/` from the server's 636b8ccb1: the error code
+  `sending_domain_provider_changed` ("This sending domain was set up with a different
+  email provider. Remove it and connect it again to get the new DNS records.") and the
+  workflow skip reasons `email-misconfigured` and `ses-missing`, with their French
+  (« Courriel mal configuré », « SES non configuré »). The error's French says « les
+  nouvelles entrées DNS », never « enregistrements », which the glossary keeps for
+  recordings; the service's French moves to the same words, and
+  `crates/district-l10n/tests/errors.rs` says when the contract has caught up.
 
 ## [4.0.2] - 2026-10-15
 

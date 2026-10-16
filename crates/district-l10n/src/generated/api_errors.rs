@@ -851,6 +851,15 @@ pub fn api_error_sending_domain_missing(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.sending_domain_provider_changed`
+#[must_use]
+pub fn api_error_sending_domain_provider_changed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This sending domain was set up with a different email provider. Remove it and connect it again to get the new DNS records.",
+        Locale::FrCa => "Ce domaine d'envoi a été configuré avec un autre fournisseur de courriel. Retirez-le, puis connectez-le de nouveau pour obtenir les nouvelles entrées DNS.",
+    }
+}
+
 /// `api_error.server_error`
 #[must_use]
 pub fn api_error_server_error(l: Locale) -> &'static str {

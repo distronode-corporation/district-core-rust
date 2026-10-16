@@ -1504,6 +1504,15 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `dormant` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
+[wire.workflow_action_reason.email_misconfigured]
+en = "Email misconfigured"
+fr = "Courriel mal configuré"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "draft"
+note = "A label for the stored value `email-misconfigured` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
 [wire.workflow_action_reason.empty_body]
 en = "Empty body"
 fr = "Message vide"
@@ -1620,6 +1629,15 @@ screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `send-failed` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.ses_missing]
+en = "Ses missing"
+fr = "SES non configuré"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "draft"
+note = "A label for the stored value `ses-missing` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.tag_already_present]
 en = "Tag already present"

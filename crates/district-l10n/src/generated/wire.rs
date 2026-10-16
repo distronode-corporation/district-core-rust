@@ -1490,6 +1490,15 @@ pub fn wire_workflow_action_reason_dormant(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.workflow_action_reason.email_misconfigured`
+#[must_use]
+pub fn wire_workflow_action_reason_email_misconfigured(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Email misconfigured",
+        Locale::FrCa => "Courriel mal configuré",
+    }
+}
+
 /// `wire.workflow_action_reason.empty_body`
 #[must_use]
 pub fn wire_workflow_action_reason_empty_body(l: Locale) -> &'static str {
@@ -1604,6 +1613,15 @@ pub fn wire_workflow_action_reason_send_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send failed",
         Locale::FrCa => "Échec d'envoi",
+    }
+}
+
+/// `wire.workflow_action_reason.ses_missing`
+#[must_use]
+pub fn wire_workflow_action_reason_ses_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Ses missing",
+        Locale::FrCa => "SES non configuré",
     }
 }
 
