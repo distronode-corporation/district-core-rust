@@ -2278,7 +2278,7 @@ fr = "Copiez-la maintenant. Elle ne sera plus affichée."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
-state = "reviewed"
+state = "draft"
 note = "The show-once sentence beside a new API key, and it is the app's own rather than the fork's. `SchedulingAPIKeyCreated.note` carries an English string from a service that does not localise; treating it as the source would make the one sentence a customer has to act on untranslatable. The French pronoun is the key's (une clé, feminine); a webhook's signing secret has its own sentence, webhook.secret_reveal_warning."
 
 [key.revoke_action]
@@ -4879,7 +4879,7 @@ fr = "Copiez le secret maintenant. Il ne sera plus affiché."
 ctx = "body"
 screen = "scheduling developer writes"
 tier = "T3"
-state = "reviewed"
+state = "draft"
 note = "The show-once sentence beside a webhook's new signing secret (un secret, masculine). Its own entry so the API key's sentence can use the key's feminine pronoun (key.reveal_warning, visual QA LD08)."
 
 [webhook.secret_title]

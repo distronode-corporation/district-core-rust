@@ -1220,6 +1220,15 @@ pub fn failure_app_bug(l: Locale) -> &'static str {
     }
 }
 
+/// `failure.contact_exists`
+#[must_use]
+pub fn failure_contact_exists(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Another contact already has this phone number or email address.",
+        Locale::FrCa => "Un autre contact a déjà ce numéro de téléphone ou cette adresse courriel.",
+    }
+}
+
 /// `failure.fallback`
 #[must_use]
 pub fn failure_fallback(l: Locale) -> &'static str {

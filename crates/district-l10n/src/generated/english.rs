@@ -256,6 +256,8 @@ pub const DIRECTORY_UNMODELLABLE_BODY: &str = "This workspace's transfer directo
 pub const DIRECTORY_UNMODELLABLE_TITLE: &str = "Cannot be edited here";
 /// `failure.app_bug` in English.
 pub const FAILURE_APP_BUG: &str = "Something went wrong in the app. Please report it if it keeps happening.";
+/// `failure.contact_exists` in English.
+pub const FAILURE_CONTACT_EXISTS: &str = "Another contact already has this phone number or email address.";
 /// `failure.fallback` in English.
 pub const FAILURE_FALLBACK: &str = "Something went wrong. Please try again.";
 /// `failure.forbidden` in English.

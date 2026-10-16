@@ -104,6 +104,24 @@ impl FailureText {
         }
     }
 
+    /// The text for a contact that could not be added or changed. A conflict
+    /// is another contact already holding that phone number or email address:
+    /// English shows the service's sentence (it says which), any other
+    /// language the catalog's, and neither offers a retry, which would get the
+    /// same answer (visual QA LB7). Anything else reads as it does everywhere.
+    pub fn from_contact_error(error: &ApiError) -> Self {
+        match error {
+            ApiError::Conflict(detail) => Self::final_(match l() {
+                Locale::En => detail
+                    .message
+                    .clone()
+                    .unwrap_or_else(|| s::failure_contact_exists(l()).to_owned()),
+                Locale::FrCa => s::failure_contact_exists(l()).to_owned(),
+            }),
+            other => Self::from_api_error(other),
+        }
+    }
+
     /// The text for a session that is intact but has no token right now. Each
     /// reason has its own remedy, and the sentence names it.
     pub fn from_retry_reason(reason: RetryReason) -> Self {

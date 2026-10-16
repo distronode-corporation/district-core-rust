@@ -35,6 +35,13 @@ variant, or a field of one. Those take a new major version.
   ticket (a reply moves it to `waiting`), and a support request's row follows its
   close, so the list and the open item no longer disagree until the list is read
   again. Visual QA LD09.
+- A contact that could not be added or saved because another contact already holds its
+  phone number or email address (the service's 409) reads as that in French too,
+  « Un autre contact a déjà ce numéro de téléphone ou cette adresse courriel. »
+  (`failure.contact_exists`; English keeps the service's own sentence), and offers no
+  retry, which would get the same answer. It used to read as the generic « Une erreur
+  est survenue. Veuillez réessayer. ». `FailureText::from_contact_error` is new. Visual
+  QA LB7.
 - SECURITY.md describes the hand-off as it is since 4.0.2: given up, never asked for
   unbound, when the browser does not answer within `HAND_OFF_CALLBACK_WAIT`.
 

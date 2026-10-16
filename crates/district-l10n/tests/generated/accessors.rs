@@ -274,6 +274,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::failure_affected_regions(Locale::FrCa, "{regions}"), "Régions touchées\u{00A0}: {regions}");
     assert_eq!(strings::failure_app_bug(Locale::En), "Something went wrong in the app. Please report it if it keeps happening.");
     assert_eq!(strings::failure_app_bug(Locale::FrCa), "Une erreur est survenue dans l'application. Veuillez la signaler si elle se reproduit.");
+    assert_eq!(strings::failure_contact_exists(Locale::En), "Another contact already has this phone number or email address.");
+    assert_eq!(strings::failure_contact_exists(Locale::FrCa), "Un autre contact a déjà ce numéro de téléphone ou cette adresse courriel.");
     assert_eq!(strings::failure_fallback(Locale::En), "Something went wrong. Please try again.");
     assert_eq!(strings::failure_fallback(Locale::FrCa), "Une erreur est survenue. Veuillez réessayer.");
     assert_eq!(strings::failure_forbidden(Locale::En), "Your role in this workspace does not allow this.");
