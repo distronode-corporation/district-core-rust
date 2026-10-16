@@ -17,6 +17,12 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-10-16
+
+The core of District AI for Linux 3.0.2 and District AI for Windows 3.0.2. A major
+version because the hand-off effects' nonce is no longer optional (below); the rest
+is French, lists that follow their item, and booking forms whose complaints clear.
+
 ### Changed
 
 - Breaking: the `nonce` of `Effect::RequestSchedulingHandOff` and of
