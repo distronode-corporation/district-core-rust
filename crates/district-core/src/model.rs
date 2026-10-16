@@ -1776,9 +1776,10 @@ pub enum Effect {
         /// The workspace.
         workspace_id: String,
         /// The nonce from the browser's answer, binding the link to that
-        /// browser; `None` when the browser did not answer in time and the
-        /// link is asked for unbound. Redacted in `Debug`.
-        nonce: Option<HandOffNonce>,
+        /// browser. Always one: a browser that does not answer in time gives
+        /// the hand-off up, and the link is never asked for unbound. Redacted
+        /// in `Debug`.
+        nonce: HandOffNonce,
     },
     /// Ask the booking scheduler's administration: one operation of the
     /// service's catalog, or an image. A write is sent once.
@@ -1983,9 +1984,10 @@ pub enum Effect {
         /// Where it lands, sent as [`BillingDestination::next`].
         destination: BillingDestination,
         /// The nonce from the start page's answer, binding the link to the
-        /// view or browser that holds its cookie; `None` when it did not answer
-        /// in time. Redacted in `Debug`.
-        nonce: Option<HandOffNonce>,
+        /// view or browser that holds its cookie. Always one: a start page that
+        /// does not answer in time gives the purchase up, and the link is never
+        /// asked for unbound. Redacted in `Debug`.
+        nonce: HandOffNonce,
     },
     /// Read the workspace settings row.
     LoadWorkspaceConfig {

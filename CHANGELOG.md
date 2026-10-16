@@ -17,6 +17,18 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Changed
+
+- Breaking: the `nonce` of `Effect::RequestSchedulingHandOff` and of
+  `Effect::RequestBillingHandOff` is a `HandOffNonce`, no longer an
+  `Option<HandOffNonce>`. Since 4.0.2 the core never asks for a hand-off link unbound,
+  so `None` could not happen; the type now says so, and an app that matched
+  `nonce: Some(_)` or read `nonce.as_ref()` reads the nonce itself. The runner still
+  sends it as the body's `nonce`; `ApiClient::scheduling_hand_off` and
+  `ApiClient::billing_hand_off` are unchanged.
+- SECURITY.md describes the hand-off as it is since 4.0.2: given up, never asked for
+  unbound, when the browser does not answer within `HAND_OFF_CALLBACK_WAIT`.
+
 ## [4.0.2] - 2026-10-15
 
 The core of District AI for Linux 3.0.1 and District AI for Windows 3.0.1: a desktop stops

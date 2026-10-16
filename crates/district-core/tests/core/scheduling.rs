@@ -101,7 +101,7 @@ fn press_and_answer(model: &mut Model) -> Vec<Effect> {
     let [Effect::RequestSchedulingHandOff { nonce, .. }] = effects.as_slice() else {
         panic!("{effects:?}");
     };
-    assert_eq!(nonce.as_ref().map(|n| n.as_str()), Some(NONCE));
+    assert_eq!(nonce.as_str(), NONCE);
     effects
 }
 
@@ -492,7 +492,7 @@ fn each_press_opens_the_start_page_with_a_fresh_state() {
     assert_eq!(awaited_state(&model), second);
     // The second one's answer is taken, and its wait no longer counts.
     let effects = model.update(answer(&second));
-    let [Effect::RequestSchedulingHandOff { nonce: Some(_), .. }] = effects.as_slice() else {
+    let [Effect::RequestSchedulingHandOff { .. }] = effects.as_slice() else {
         panic!("{effects:?}");
     };
     assert!(
@@ -534,7 +534,7 @@ fn a_stray_or_forged_answer_is_dropped_and_the_hand_off_still_waits() {
     let effects = model.update(Event::HandOffCallback(OneTimeUrl::new(format!(
         "districtai://handoff/?state={s}&nonce={NONCE}"
     ))));
-    let [Effect::RequestSchedulingHandOff { nonce: Some(_), .. }] = effects.as_slice() else {
+    let [Effect::RequestSchedulingHandOff { .. }] = effects.as_slice() else {
         panic!("{effects:?}");
     };
 }
@@ -597,7 +597,7 @@ fn without_an_answer_in_time_the_hand_off_is_given_up_never_unbound() {
     assert!(
         matches!(
             effects.as_slice(),
-            [Effect::RequestSchedulingHandOff { nonce: Some(_), .. }]
+            [Effect::RequestSchedulingHandOff { .. }]
         ),
         "{effects:?}"
     );
