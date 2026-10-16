@@ -56,6 +56,13 @@ variant, or a field of one. Those take a new major version.
   nouvelles entrées DNS », never « enregistrements », which the glossary keeps for
   recordings; the service's French moves to the same words, and
   `crates/district-l10n/tests/errors.rs` says when the contract has caught up.
+- A call's length in French no longer breaks between the minutes and the seconds:
+  « 3 min 4 s » with a no-break space (U+00A0) between each number and its unit and
+  between the two parts (`format::minutes_seconds`, so a call row's length and the
+  analytics average). It was « 3 min 4 s » with an ordinary space in the middle.
+  The service's format vectors move to the same; until `contracts/i18n/` is synced
+  past that, `crates/district-l10n/tests/vectors.rs` reads their French with the
+  no-break space and says when they no longer need it.
 
 ## [4.0.2] - 2026-10-15
 

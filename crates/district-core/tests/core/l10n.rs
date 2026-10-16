@@ -93,7 +93,7 @@ fn numbers_are_written_the_french_way() {
     french(|| {
         assert_eq!(format_amount(1204.25), format!("1{NBSP}204,25"));
         assert_eq!(format_amount(412.0), "412");
-        assert_eq!(format_duration(125), format!("2{NBSP}min 5{NBSP}s"));
+        assert_eq!(format_duration(125), format!("2{NBSP}min{NBSP}5{NBSP}s"));
         assert_eq!(format_duration(0), format!("0{NBSP}min"));
         assert_eq!(month_label("2026-08"), "ao\u{fb}t 2026");
         assert_eq!(month_label("2026-13"), "2026-13");
@@ -203,7 +203,7 @@ fn a_call_rows_length_is_the_services_in_english_and_read_from_its_seconds_in_fr
     assert_eq!(english(|| call_duration_label(&calls[0])), "1m 5s");
     assert_eq!(
         french(|| call_duration_label(&calls[0])),
-        format!("1{NBSP}min 5{NBSP}s")
+        format!("1{NBSP}min{NBSP}5{NBSP}s")
     );
     let call = |duration: &str, seconds: Option<i64>| CallSummary {
         duration: duration.to_owned(),
@@ -211,11 +211,18 @@ fn a_call_rows_length_is_the_services_in_english_and_read_from_its_seconds_in_fr
         ..calls[0].clone()
     };
     // The French reading of every formatMinutesSeconds vector, from the seconds,
-    // and from the service's own text when it sent no seconds.
+    // and from the service's own text when it sent no seconds. The core keeps the
+    // minutes and the seconds together with a no-break space, where the vectors
+    // still break between them (district-l10n's `vectors.rs` holds that to the
+    // contract and says when it stops).
     let mut checked = 0;
     for vector in format_vectors("formatMinutesSeconds") {
         let seconds = vector["seconds"].as_i64().expect("seconds");
-        let fr = vector["fr"].as_str().expect("fr");
+        let fr = vector["fr"]
+            .as_str()
+            .expect("fr")
+            .replace("min ", &format!("min{NBSP}"));
+        let fr = fr.as_str();
         let wire = district_core::l10n::format::call_duration(seconds);
         assert_eq!(
             french(|| call_duration_label(&call(&wire, Some(seconds)))),
@@ -231,7 +238,7 @@ fn a_call_rows_length_is_the_services_in_english_and_read_from_its_seconds_in_fr
     assert!(checked >= 4, "{checked} vectors");
     assert_eq!(
         french(|| call_duration_label(&call("2m 34s", None))),
-        format!("2{NBSP}min 34{NBSP}s")
+        format!("2{NBSP}min{NBSP}34{NBSP}s")
     );
     // A length that cannot be read is shown as the service wrote it.
     assert_eq!(french(|| call_duration_label(&call("", None))), "");

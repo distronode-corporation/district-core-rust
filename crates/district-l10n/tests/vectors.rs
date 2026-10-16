@@ -160,6 +160,32 @@ fn times_match_every_vector() {
     }
 }
 
+/// The French of a `formatMinutesSeconds` vector as this crate writes it ahead
+/// of the service: a no-break space between the minutes and the seconds
+/// (« 1 min 5 s », every space U+00A0), where these vectors still break
+/// (`1\u{a0}min 5\u{a0}s`). The service's French moves to the same; once
+/// `contracts/i18n/` is synced past that change,
+/// `the_duration_vectors_still_break_between_the_parts` says to remove this.
+fn duration_ahead_of_the_vectors(locale: Locale, expected: &str) -> String {
+    match locale {
+        Locale::En => expected.to_owned(),
+        Locale::FrCa => expected.replace("min ", "min\u{a0}"),
+    }
+}
+
+#[test]
+fn the_duration_vectors_still_break_between_the_parts() {
+    let breaking = cases("durations")
+        .iter()
+        .filter(|case| case["fn"] == "formatMinutesSeconds")
+        .filter(|case| case["fr"].as_str().expect("fr").contains("min "))
+        .count();
+    assert!(
+        breaking > 0,
+        "the service's French lengths no longer break between the parts: remove duration_ahead_of_the_vectors"
+    );
+}
+
 #[test]
 fn durations_match_every_vector() {
     for case in cases("durations") {
@@ -167,6 +193,7 @@ fn durations_match_every_vector() {
         match case["fn"].as_str().expect("fn") {
             "formatMinutesSeconds" => {
                 for (locale, expected) in both(&case) {
+                    let expected = duration_ahead_of_the_vectors(locale, expected);
                     assert_eq!(format::minutes_seconds(locale, seconds), expected, "{case}");
                 }
             }
