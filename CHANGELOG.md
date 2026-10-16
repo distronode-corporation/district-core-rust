@@ -26,6 +26,11 @@ variant, or a field of one. Those take a new major version.
   `nonce: Some(_)` or read `nonce.as_ref()` reads the nonce itself. The runner still
   sends it as the body's `nonce`; `ApiClient::scheduling_hand_off` and
   `ApiClient::billing_hand_off` are unchanged.
+- The French warning beside a new booking API key uses the key's pronoun: « Copiez-la
+  maintenant. Elle ne sera plus affichée. » (was « Copiez-le… Il… », the secret's). A
+  webhook's new signing secret has its own sentence, `webhook.secret_reveal_warning`
+  ("Copy the secret now. It is not shown again.", « Copiez le secret maintenant. Il ne
+  sera plus affiché. »), in `MintedSecret::labels()`. Visual QA LD08.
 - SECURITY.md describes the hand-off as it is since 4.0.2: given up, never asked for
   unbound, when the browser does not answer within `HAND_OFF_CALLBACK_WAIT`.
 

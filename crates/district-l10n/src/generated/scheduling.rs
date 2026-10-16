@@ -2281,7 +2281,7 @@ pub fn key_reveal_title(l: Locale, name: &str) -> String {
 pub fn key_reveal_warning(l: Locale) -> &'static str {
     match l {
         Locale::En => "Copy it now. It is not shown again.",
-        Locale::FrCa => "Copiez-le maintenant. Il ne sera plus affiché.",
+        Locale::FrCa => "Copiez-la maintenant. Elle ne sera plus affichée.",
     }
 }
 
@@ -4970,6 +4970,15 @@ pub fn webhook_secret_note(l: Locale, url: &str) -> String {
     match l {
         Locale::En => format!("Every delivery to {url} is signed with it, in the X-Calnode-Signature header."),
         Locale::FrCa => format!("Chaque envoi vers {url} est signé avec ce secret, dans l'en-tête X-Calnode-Signature."),
+    }
+}
+
+/// `webhook.secret_reveal_warning`
+#[must_use]
+pub fn webhook_secret_reveal_warning(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Copy the secret now. It is not shown again.",
+        Locale::FrCa => "Copiez le secret maintenant. Il ne sera plus affiché.",
     }
 }
 

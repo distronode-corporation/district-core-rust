@@ -671,6 +671,22 @@ fn a_webhook_is_added_to_a_public_https_address_and_its_secret_shown_once() {
          X-Calnode-Signature header."
     );
     assert!(MintedSecret::labels().iter().all(|l| !l.is_empty()));
+    // A key is "la clé" and a secret "le secret": each warning has its own
+    // French pronoun (visual QA LD08).
+    with_locale(Locale::FrCa, || {
+        assert_eq!(
+            MintedSecret::labels()[1],
+            "Copiez le secret maintenant. Il ne sera plus affich\u{e9}."
+        );
+        assert_eq!(
+            KeyDialog::labels()[3],
+            "Copiez-la maintenant. Elle ne sera plus affich\u{e9}e."
+        );
+    });
+    assert_eq!(
+        MintedSecret::labels()[1],
+        "Copy the secret now. It is not shown again."
+    );
     assert_eq!(editor(&model).write, WriteState::Idle);
 
     // Without a secret, the add says it was done.

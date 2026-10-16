@@ -2473,7 +2473,7 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::key_reveal_title(Locale::En, "{name}"), "Your key for {name}");
     assert_eq!(scheduling_strings::key_reveal_title(Locale::FrCa, "{name}"), "Votre clé pour {name}");
     assert_eq!(scheduling_strings::key_reveal_warning(Locale::En), "Copy it now. It is not shown again.");
-    assert_eq!(scheduling_strings::key_reveal_warning(Locale::FrCa), "Copiez-le maintenant. Il ne sera plus affiché.");
+    assert_eq!(scheduling_strings::key_reveal_warning(Locale::FrCa), "Copiez-la maintenant. Elle ne sera plus affichée.");
     assert_eq!(scheduling_strings::key_revoke_action(Locale::En), "Revoke key");
     assert_eq!(scheduling_strings::key_revoke_action(Locale::FrCa), "Révoquer la clé");
     assert_eq!(scheduling_strings::key_revoke_confirm(Locale::En), "Anything using it stops working now.");
@@ -3078,6 +3078,8 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::webhook_secret_copy_action(Locale::FrCa), "Copier le secret");
     assert_eq!(scheduling_strings::webhook_secret_note(Locale::En, "{url}"), "Every delivery to {url} is signed with it, in the X-Calnode-Signature header.");
     assert_eq!(scheduling_strings::webhook_secret_note(Locale::FrCa, "{url}"), "Chaque envoi vers {url} est signé avec ce secret, dans l'en-tête X-Calnode-Signature.");
+    assert_eq!(scheduling_strings::webhook_secret_reveal_warning(Locale::En), "Copy the secret now. It is not shown again.");
+    assert_eq!(scheduling_strings::webhook_secret_reveal_warning(Locale::FrCa), "Copiez le secret maintenant. Il ne sera plus affiché.");
     assert_eq!(scheduling_strings::webhook_secret_title(Locale::En), "Your signing secret");
     assert_eq!(scheduling_strings::webhook_secret_title(Locale::FrCa), "Votre secret de signature");
     assert_eq!(scheduling_strings::webhook_updated(Locale::En), "Webhook updated");
