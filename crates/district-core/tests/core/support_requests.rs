@@ -398,6 +398,39 @@ fn closing_asks_first_and_goes_once() {
     assert_eq!(request_screen(&model).closed_as, None);
 }
 
+/// The list's row follows a close made on its request (visual QA LD09).
+#[test]
+fn the_list_follows_a_close_made_on_its_request() {
+    let (mut model, _) = loaded(CLIENT, "client");
+    let effects = model.update(Event::Navigate(Route::Support));
+    model.update(Event::SupportRequestsLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(fixture("district-support-requests.json")),
+    });
+    let open_before = requests(&model).open().len();
+    let effects = model.update(Event::Navigate(Route::SupportRequest {
+        key: KEY.to_owned(),
+    }));
+    model.update(Event::SupportRequestLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(fixture("district-support-request.json")),
+    });
+    event(&mut model, SupportEvent::AskClose);
+    let effects = event(&mut model, SupportEvent::ConfirmClose);
+    model.update(Event::SupportRequestClosed {
+        ticket: last_ticket(&effects),
+        result: Ok(fixture("district-support-close.json")),
+    });
+    let row = requests(&model)
+        .requests
+        .iter()
+        .find(|row| row.issue_key.as_deref() == Some(KEY))
+        .expect("the request's row");
+    assert_eq!(row.status_category, "DONE");
+    assert_eq!(row.status_name, "Done");
+    assert_eq!(requests(&model).open().len(), open_before - 1);
+}
+
 #[test]
 fn a_refused_close_says_why_and_a_request_that_cannot_close_is_not_offered() {
     let mut model = on_request(AGENCY, "agency");

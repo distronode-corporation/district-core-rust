@@ -382,8 +382,35 @@ fn a_refused_contact_keeps_the_form_and_says_why() {
     });
     let create = signed_in(&model).contacts.create.clone().unwrap();
     assert!(!create.saving);
-    assert_eq!(create.failure.unwrap().message, "Contact already exists");
+    let failure = create.failure.unwrap();
+    assert_eq!(failure.message, "Contact already exists");
+    assert!(!failure.retryable, "the same contact gets the same answer");
     assert_eq!(create.form.name, "Ada");
+    // In French, the catalog's sentence, never a generic "try again" (visual
+    // QA LB7); in English without the service's sentence, the same words.
+    let conflict = |message: Option<&str>| {
+        FailureText::from_contact_error(&ApiError::Conflict(ErrorDetail {
+            message: message.map(str::to_owned),
+            code: Some("invalid_request".to_owned()),
+            ..ErrorDetail::default()
+        }))
+        .message
+    };
+    assert_eq!(
+        district_core::l10n::with_locale(district_core::Locale::FrCa, || conflict(Some(
+            "A contact with this phone number already exists in this workspace."
+        ))),
+        "Un autre contact a d\u{e9}j\u{e0} ce num\u{e9}ro de t\u{e9}l\u{e9}phone ou cette \
+         adresse courriel."
+    );
+    assert_eq!(
+        conflict(None),
+        "Another contact already has this phone number or email address."
+    );
+    assert_eq!(
+        FailureText::from_contact_error(&server_error()),
+        FailureText::from_api_error(&server_error())
+    );
 
     // A success with no new id is not reported as one.
     let created = last_ticket(&contacts_event(&mut model, ContactsEvent::SubmitCreate));
@@ -603,6 +630,21 @@ fn a_refused_edit_keeps_the_form_and_says_why() {
         Some(FailureText::from_api_error(&error))
     );
     assert!(screen(&model).editing.is_some());
+    // Another contact holds the number: said so, with no retry (LB7).
+    let (saved, _) = write(&contacts_event(&mut model, ContactsEvent::SaveEdit));
+    let taken = ApiError::Conflict(ErrorDetail {
+        message: Some("Another contact in this workspace already uses this phone number.".into()),
+        ..ErrorDetail::default()
+    });
+    model.update(Event::ContactWritten {
+        ticket: saved,
+        result: Err(taken.clone()),
+    });
+    assert_eq!(
+        screen(&model).failure,
+        Some(FailureText::from_contact_error(&taken))
+    );
+    assert!(!screen(&model).failure.as_ref().unwrap().retryable);
     contacts_event(&mut model, ContactsEvent::DismissFailure);
     assert_eq!(screen(&model).failure, None);
     contacts_event(&mut model, ContactsEvent::CancelEdit);
@@ -854,6 +896,28 @@ fn an_answer_is_checked_again_when_given() {
     assert!(contacts_event(&mut model, ContactsEvent::Confirm).is_empty());
     assert_eq!(screen(&model).confirming, None);
     assert!(contacts_event(&mut model, ContactsEvent::Confirm).is_empty());
+}
+
+/// A block the service refused as a race reads as any conflict does, with a
+/// retry: only an edit is about another contact's number.
+#[test]
+fn a_blocks_conflict_is_not_a_taken_number() {
+    let mut model = opened("agency", contact(ADA, json!({})));
+    contacts_event(&mut model, ContactsEvent::AskBlock);
+    let (blocked, _) = write(&contacts_event(&mut model, ContactsEvent::Confirm));
+    let race = ApiError::Conflict(ErrorDetail {
+        message: Some("That contact was just created by another request; retry.".into()),
+        ..ErrorDetail::default()
+    });
+    model.update(Event::ContactWritten {
+        ticket: blocked,
+        result: Err(race.clone()),
+    });
+    assert_eq!(
+        screen(&model).failure,
+        Some(FailureText::from_api_error(&race))
+    );
+    assert!(screen(&model).failure.as_ref().unwrap().retryable);
 }
 
 /// Blocking asks both ways, and the answer says which way it went.

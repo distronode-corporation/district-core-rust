@@ -306,8 +306,8 @@ pub fn wire_call_type_outbound(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_contact_research_key_callerintel(l: Locale) -> &'static str {
     match l {
-        Locale::En => "CallerIntel",
-        Locale::FrCa => "Profil de l'appelant",
+        Locale::En => "Caller intelligence",
+        Locale::FrCa => "Renseignements sur l'appelant",
     }
 }
 
@@ -333,8 +333,8 @@ pub fn wire_contact_research_key_dynamicicebreakers(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_contact_research_key_estimatedvalue(l: Locale) -> &'static str {
     match l {
-        Locale::En => "EstimatedValue",
-        Locale::FrCa => "Valeur estimée",
+        Locale::En => "DGI Evaluation",
+        Locale::FrCa => "Évaluation DGI",
     }
 }
 
@@ -351,8 +351,8 @@ pub fn wire_contact_research_key_executivesummary(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_contact_research_key_person(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Person",
-        Locale::FrCa => "Identité",
+        Locale::En => "Contact Profile",
+        Locale::FrCa => "Profil du contact",
     }
 }
 
@@ -809,6 +809,15 @@ pub fn wire_number_status_active(l: Locale) -> &'static str {
 /// `wire.number_status.fallback`
 #[must_use]
 pub fn wire_number_status_fallback(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Active",
+        Locale::FrCa => "Actif",
+    }
+}
+
+/// `wire.number_status.in_use`
+#[must_use]
+pub fn wire_number_status_in_use(l: Locale) -> &'static str {
     match l {
         Locale::En => "Active",
         Locale::FrCa => "Actif",
@@ -1490,6 +1499,15 @@ pub fn wire_workflow_action_reason_dormant(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.workflow_action_reason.email_misconfigured`
+#[must_use]
+pub fn wire_workflow_action_reason_email_misconfigured(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Email misconfigured",
+        Locale::FrCa => "Courriel mal configuré",
+    }
+}
+
 /// `wire.workflow_action_reason.empty_body`
 #[must_use]
 pub fn wire_workflow_action_reason_empty_body(l: Locale) -> &'static str {
@@ -1604,6 +1622,15 @@ pub fn wire_workflow_action_reason_send_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Send failed",
         Locale::FrCa => "Échec d'envoi",
+    }
+}
+
+/// `wire.workflow_action_reason.ses_missing`
+#[must_use]
+pub fn wire_workflow_action_reason_ses_missing(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "SES missing",
+        Locale::FrCa => "SES non configuré",
     }
 }
 

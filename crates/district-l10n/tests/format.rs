@@ -191,7 +191,7 @@ fn a_negative_length_reads_as_none() {
     assert_eq!(format::minutes_seconds(Locale::En, -5), "0m");
     assert_eq!(
         format::minutes_seconds(Locale::FrCa, 7_265),
-        "121\u{a0}min 5\u{a0}s"
+        "121\u{a0}min\u{a0}5\u{a0}s"
     );
     assert_eq!(format::call_duration(-1), "0s");
 }

@@ -256,7 +256,9 @@ pub fn price(locale: Locale, minor_units: i64, currency: Option<&str>) -> String
 
 /// A length as minutes and seconds: `1m 5s`, `1 min 5 s`; whole minutes drop
 /// the seconds, under a minute reads seconds alone, and zero or less reads
-/// `0m`. The service's `formatMinutesSeconds`.
+/// `0m`. The service's `formatMinutesSeconds`. French never breaks a length:
+/// a no-break space (U+00A0) sits between each number and its unit and
+/// between the minutes and the seconds.
 pub fn minutes_seconds(locale: Locale, seconds: i64) -> String {
     let unit = |n: i64, english: &str, french: &str| match locale {
         Locale::En => format!("{n}{english}"),
@@ -268,7 +270,17 @@ pub fn minutes_seconds(locale: Locale, seconds: i64) -> String {
     match (seconds / 60, seconds % 60) {
         (0, rest) => unit(rest, "s", "s"),
         (minutes, 0) => unit(minutes, "m", "min"),
-        (minutes, rest) => format!("{} {}", unit(minutes, "m", "min"), unit(rest, "s", "s")),
+        (minutes, rest) => {
+            let between = match locale {
+                Locale::En => ' ',
+                Locale::FrCa => NBSP,
+            };
+            format!(
+                "{}{between}{}",
+                unit(minutes, "m", "min"),
+                unit(rest, "s", "s")
+            )
+        }
     }
 }
 

@@ -557,9 +557,8 @@ impl SignedIn {
         ]
     }
 
-    /// The link is asked for, bound by `nonce`: always one, so
-    /// [`Effect::RequestBillingHandOff`]'s `nonce` is never `None` from here.
-    /// The workspace open now is recorded with it.
+    /// The link is asked for, bound by `nonce`. The workspace open now is
+    /// recorded with it.
     pub(crate) fn mint_purchase(
         &mut self,
         nonce: HandOffNonce,
@@ -571,7 +570,7 @@ impl SignedIn {
             ticket: tickets.issue(Slot::BillingHandOff),
             workspace_id: self.active_id(),
             destination: self.purchase.destination.clone(),
-            nonce: Some(nonce),
+            nonce,
         }]
     }
 

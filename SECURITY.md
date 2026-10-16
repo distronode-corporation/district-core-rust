@@ -29,7 +29,7 @@ backported, and the apps move their pin to it.
 
 | Version | Supported |
 | --- | --- |
-| 4.0.x (the current release, [4.0.2](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
+| 5.0.x (the current release, [5.0.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
 | Anything older | No |
 
 ## Security model
@@ -71,9 +71,11 @@ that app's SECURITY.md describes it.
   (compared in constant time) and exactly one nonce of the shape the service
   sends. Anything else is dropped and leaves the hand-off waiting for its own
   answer, so a stray or forged link cannot cancel it.
-- If no answer arrives within ten seconds, the link is asked for unbound, which
-  the service accepts until it requires the binding. If no browser took the
-  start page, the hand-off is given up instead.
+- The link is never asked for unbound: `Effect::RequestSchedulingHandOff` and
+  `Effect::RequestBillingHandOff` carry a nonce, not an optional one. If no
+  answer arrives within `HAND_OFF_CALLBACK_WAIT` (30 seconds), or no browser took
+  the start page, the hand-off is given up with a notice and pressing again
+  starts afresh.
 - The `state`, the nonce and the link are held in memory only, redacted from
   `Debug` (the events, effects and screen state that carry them included), and
   never logged.

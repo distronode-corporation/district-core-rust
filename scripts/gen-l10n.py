@@ -98,11 +98,18 @@ def snake(name: str) -> str:
     return re.sub(r"(?<!^)([A-Z])", r"_\1", name).lower()
 
 
+# Words a humanized value writes in capitals, as district-android's
+# scripts/l10n-contracts.py INITIALISMS does ("ses-missing" -> "SES missing").
+INITIALISMS = {w.lower(): w for w in ("SES",)}
+
+
 def humanize(raw: str) -> str:
     """What the desktop apps show today for a value with no label of its own:
-    hyphens and underscores as spaces, the first letter capitalized."""
+    hyphens and underscores as spaces, the first letter capitalized, and an
+    initialism in INITIALISMS in capitals."""
     words = raw.strip().replace("-", " ").replace("_", " ")
-    return words[:1].upper() + words[1:]
+    words = words[:1].upper() + words[1:]
+    return " ".join(INITIALISMS.get(w.lower(), w) for w in words.split(" "))
 
 
 def rust_str(text: str) -> str:

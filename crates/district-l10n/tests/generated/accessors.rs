@@ -274,6 +274,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::failure_affected_regions(Locale::FrCa, "{regions}"), "Régions touchées\u{00A0}: {regions}");
     assert_eq!(strings::failure_app_bug(Locale::En), "Something went wrong in the app. Please report it if it keeps happening.");
     assert_eq!(strings::failure_app_bug(Locale::FrCa), "Une erreur est survenue dans l'application. Veuillez la signaler si elle se reproduit.");
+    assert_eq!(strings::failure_contact_exists(Locale::En), "Another contact already has this phone number or email address.");
+    assert_eq!(strings::failure_contact_exists(Locale::FrCa), "Un autre contact a déjà ce numéro de téléphone ou cette adresse courriel.");
     assert_eq!(strings::failure_fallback(Locale::En), "Something went wrong. Please try again.");
     assert_eq!(strings::failure_fallback(Locale::FrCa), "Une erreur est survenue. Veuillez réessayer.");
     assert_eq!(strings::failure_forbidden(Locale::En), "Your role in this workspace does not allow this.");
@@ -1208,6 +1210,8 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_security_check_required(Locale::FrCa), "Complétez la vérification de sécurité, puis réessayez.");
     assert_eq!(api_error_strings::api_error_sending_domain_missing(Locale::En), "No sending domain is connected to this workspace.");
     assert_eq!(api_error_strings::api_error_sending_domain_missing(Locale::FrCa), "Aucun domaine d'envoi n'est connecté à cet espace de travail.");
+    assert_eq!(api_error_strings::api_error_sending_domain_provider_changed(Locale::En), "This sending domain was set up with a different email provider. Remove it and connect it again to get the new DNS records.");
+    assert_eq!(api_error_strings::api_error_sending_domain_provider_changed(Locale::FrCa), "Ce domaine d'envoi a été configuré avec un autre fournisseur de courriel. Retirez-le, puis connectez-le de nouveau pour obtenir les nouvelles entrées DNS.");
     assert_eq!(api_error_strings::api_error_server_error(Locale::En), "Something went wrong on our side. Please try again.");
     assert_eq!(api_error_strings::api_error_server_error(Locale::FrCa), "Une erreur est survenue de notre côté. Veuillez réessayer.");
     assert_eq!(api_error_strings::api_error_service_not_configured(Locale::En), "That is not set up on this deployment yet.");
@@ -1374,18 +1378,18 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_call_type_missed(Locale::FrCa), "Manqué");
     assert_eq!(wire_strings::wire_call_type_outbound(Locale::En), "Outbound");
     assert_eq!(wire_strings::wire_call_type_outbound(Locale::FrCa), "Sortant");
-    assert_eq!(wire_strings::wire_contact_research_key_callerintel(Locale::En), "CallerIntel");
-    assert_eq!(wire_strings::wire_contact_research_key_callerintel(Locale::FrCa), "Profil de l'appelant");
+    assert_eq!(wire_strings::wire_contact_research_key_callerintel(Locale::En), "Caller intelligence");
+    assert_eq!(wire_strings::wire_contact_research_key_callerintel(Locale::FrCa), "Renseignements sur l'appelant");
     assert_eq!(wire_strings::wire_contact_research_key_corepainpoints(Locale::En), "Inferred CRM Key Challenges");
     assert_eq!(wire_strings::wire_contact_research_key_corepainpoints(Locale::FrCa), "Enjeux CRM déduits");
     assert_eq!(wire_strings::wire_contact_research_key_dynamicicebreakers(Locale::En), "CTO/CEO Conversation Starters");
     assert_eq!(wire_strings::wire_contact_research_key_dynamicicebreakers(Locale::FrCa), "Amorces de conversation pour la direction");
-    assert_eq!(wire_strings::wire_contact_research_key_estimatedvalue(Locale::En), "EstimatedValue");
-    assert_eq!(wire_strings::wire_contact_research_key_estimatedvalue(Locale::FrCa), "Valeur estimée");
+    assert_eq!(wire_strings::wire_contact_research_key_estimatedvalue(Locale::En), "DGI Evaluation");
+    assert_eq!(wire_strings::wire_contact_research_key_estimatedvalue(Locale::FrCa), "Évaluation DGI");
     assert_eq!(wire_strings::wire_contact_research_key_executivesummary(Locale::En), "Executive Dossier Summary");
     assert_eq!(wire_strings::wire_contact_research_key_executivesummary(Locale::FrCa), "Résumé du dossier");
-    assert_eq!(wire_strings::wire_contact_research_key_person(Locale::En), "Person");
-    assert_eq!(wire_strings::wire_contact_research_key_person(Locale::FrCa), "Identité");
+    assert_eq!(wire_strings::wire_contact_research_key_person(Locale::En), "Contact Profile");
+    assert_eq!(wire_strings::wire_contact_research_key_person(Locale::FrCa), "Profil du contact");
     assert_eq!(wire_strings::wire_contact_research_key_recommendedgreeting(Locale::En), "Suggested Receptionist Greeting");
     assert_eq!(wire_strings::wire_contact_research_key_recommendedgreeting(Locale::FrCa), "Accueil suggéré pour la réceptionniste");
     assert_eq!(wire_strings::wire_desk_ticket_source_manual(Locale::En), "Manual");
@@ -1488,6 +1492,8 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_number_status_active(Locale::FrCa), "Actif");
     assert_eq!(wire_strings::wire_number_status_fallback(Locale::En), "Active");
     assert_eq!(wire_strings::wire_number_status_fallback(Locale::FrCa), "Actif");
+    assert_eq!(wire_strings::wire_number_status_in_use(Locale::En), "Active");
+    assert_eq!(wire_strings::wire_number_status_in_use(Locale::FrCa), "Actif");
     assert_eq!(wire_strings::wire_number_status_pending_verification(Locale::En), "Pending verification");
     assert_eq!(wire_strings::wire_number_status_pending_verification(Locale::FrCa), "Vérification en attente");
     assert_eq!(wire_strings::wire_number_status_released(Locale::En), "Released");
@@ -1638,6 +1644,8 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_dnc(Locale::FrCa), "Liste d'exclusion");
     assert_eq!(wire_strings::wire_workflow_action_reason_dormant(Locale::En), "Dormant");
     assert_eq!(wire_strings::wire_workflow_action_reason_dormant(Locale::FrCa), "Inactif");
+    assert_eq!(wire_strings::wire_workflow_action_reason_email_misconfigured(Locale::En), "Email misconfigured");
+    assert_eq!(wire_strings::wire_workflow_action_reason_email_misconfigured(Locale::FrCa), "Courriel mal configuré");
     assert_eq!(wire_strings::wire_workflow_action_reason_empty_body(Locale::En), "Empty body");
     assert_eq!(wire_strings::wire_workflow_action_reason_empty_body(Locale::FrCa), "Message vide");
     assert_eq!(wire_strings::wire_workflow_action_reason_empty_subject(Locale::En), "Empty subject");
@@ -1664,6 +1672,8 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_report_unavailable(Locale::FrCa), "Rapport indisponible");
     assert_eq!(wire_strings::wire_workflow_action_reason_send_failed(Locale::En), "Send failed");
     assert_eq!(wire_strings::wire_workflow_action_reason_send_failed(Locale::FrCa), "Échec d'envoi");
+    assert_eq!(wire_strings::wire_workflow_action_reason_ses_missing(Locale::En), "SES missing");
+    assert_eq!(wire_strings::wire_workflow_action_reason_ses_missing(Locale::FrCa), "SES non configuré");
     assert_eq!(wire_strings::wire_workflow_action_reason_tag_already_present(Locale::En), "Tag already present");
     assert_eq!(wire_strings::wire_workflow_action_reason_tag_already_present(Locale::FrCa), "Étiquette déjà présente");
     assert_eq!(wire_strings::wire_workflow_action_reason_tag_not_present(Locale::En), "Tag not present");
@@ -2473,7 +2483,7 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::key_reveal_title(Locale::En, "{name}"), "Your key for {name}");
     assert_eq!(scheduling_strings::key_reveal_title(Locale::FrCa, "{name}"), "Votre clé pour {name}");
     assert_eq!(scheduling_strings::key_reveal_warning(Locale::En), "Copy it now. It is not shown again.");
-    assert_eq!(scheduling_strings::key_reveal_warning(Locale::FrCa), "Copiez-le maintenant. Il ne sera plus affiché.");
+    assert_eq!(scheduling_strings::key_reveal_warning(Locale::FrCa), "Copiez-la maintenant. Elle ne sera plus affichée.");
     assert_eq!(scheduling_strings::key_revoke_action(Locale::En), "Revoke key");
     assert_eq!(scheduling_strings::key_revoke_action(Locale::FrCa), "Révoquer la clé");
     assert_eq!(scheduling_strings::key_revoke_confirm(Locale::En), "Anything using it stops working now.");
@@ -3078,6 +3088,8 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::webhook_secret_copy_action(Locale::FrCa), "Copier le secret");
     assert_eq!(scheduling_strings::webhook_secret_note(Locale::En, "{url}"), "Every delivery to {url} is signed with it, in the X-Calnode-Signature header.");
     assert_eq!(scheduling_strings::webhook_secret_note(Locale::FrCa, "{url}"), "Chaque envoi vers {url} est signé avec ce secret, dans l'en-tête X-Calnode-Signature.");
+    assert_eq!(scheduling_strings::webhook_secret_reveal_warning(Locale::En), "Copy the secret now. It is not shown again.");
+    assert_eq!(scheduling_strings::webhook_secret_reveal_warning(Locale::FrCa), "Copiez le secret maintenant. Il ne sera plus affiché.");
     assert_eq!(scheduling_strings::webhook_secret_title(Locale::En), "Your signing secret");
     assert_eq!(scheduling_strings::webhook_secret_title(Locale::FrCa), "Votre secret de signature");
     assert_eq!(scheduling_strings::webhook_updated(Locale::En), "Webhook updated");

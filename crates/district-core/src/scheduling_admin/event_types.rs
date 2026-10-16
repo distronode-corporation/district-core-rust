@@ -1344,6 +1344,17 @@ fn actions_event(actions: &mut ActionsDialog, event: EventTypeEvent, slug: Strin
 }
 
 fn hosts_event(hosts: &mut HostsDialog, event: EventTypeEvent, slug: String) -> Vec<Out> {
+    // A change to the list answers the last save's complaint about it: the
+    // complaint goes, and the next save checks again (visual QA LC20).
+    if matches!(
+        event,
+        EventTypeEvent::AddHost(_)
+            | EventTypeEvent::RemoveHost(_)
+            | EventTypeEvent::SetHostRole { .. }
+            | EventTypeEvent::SetHostPriority { .. }
+    ) {
+        hosts.validation = None;
+    }
     match event {
         EventTypeEvent::SetRoutingMode(mode) => hosts.routing_mode = mode,
         EventTypeEvent::SetRotation(rotation) => hosts.rotation = rotation,
@@ -1478,9 +1489,12 @@ fn questions_event(
                 questions.validation = None;
             }
         }
+        // An edit answers the last save's complaint: it goes, and the next
+        // save checks again (visual QA LC20).
         EventTypeEvent::EditQuestionForm(form) => {
             if questions.editing.is_some() {
                 questions.editing = Some(form);
+                questions.validation = None;
             }
         }
         EventTypeEvent::AddOption(option) => {
@@ -1490,11 +1504,13 @@ fn questions_event(
                 && !form.options.contains(&option)
             {
                 form.options.push(option);
+                questions.validation = None;
             }
         }
         EventTypeEvent::RemoveOption(option) => {
             if let Some(form) = &mut questions.editing {
                 form.options.retain(|o| *o != option);
+                questions.validation = None;
             }
         }
         EventTypeEvent::CancelQuestion => {

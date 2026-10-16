@@ -1,15 +1,15 @@
 {
-  "signed_off_by": "v3 manager (Opus 5.5 xhigh), final French review, 2026-10-15",
-  "release": "v4.0.2",
-  "commit": "ef5542b8f58a6d0f2246724c3ededa1b22cae59e",
+  "signed_off_by": "v3 manager (Opus 5.5 xhigh), final French review, 2026-10-16",
+  "release": "v5.0.0",
+  "commit": "6e4a15c4636954d65ff784b37b6f940d0dae91da",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
-      "sha256": "169c5516f1155d695ef200f0fd41427bc42fed6bbefb2279f7cd75195a5dc1bd"
+      "sha256": "3f5a825d9b956c7fd14a4be668a18fdb97c3b8a11460aa9c0dbbf1f51195d018"
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
-      "sha256": "e7bf3a246893e9cea2b5decde8bd5416fb93f367176e0ef32b7bb63666dc9b6e"
+      "sha256": "d3af503833d7e95c539b7ce89c74bacb0eae815272bc8a3087751f71b91c6ced"
     },
     {
       "path": "crates/district-l10n/catalog/numbers.toml",
@@ -17,7 +17,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/scheduling.toml",
-      "sha256": "fb88d07aa7a640de82c91693534a8b8c12a327b3e34b8753d7e7ef76ecb15ad2"
+      "sha256": "20534a7597e686c0b83c2037364da1db79f32c2f921d25170144054f3a148617"
     },
     {
       "path": "crates/district-l10n/catalog/support.toml",
@@ -25,7 +25,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/wire.toml",
-      "sha256": "56e83a1033b265868301a7e9e08ac99dc0704597c7e5def0c8fc8bb29f242db0"
+      "sha256": "541a863d12c54d21bb6bd72cd2391cab6bcad233f86e2db7fa425a650fbecce0"
     }
   ]
 }

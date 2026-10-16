@@ -682,7 +682,7 @@ impl SignedIn {
         let failure = match result.map(|created| created.id) {
             Ok(Some(_)) => None,
             Ok(None) => Some(FailureText::unexpected()),
-            Err(error) => Some(FailureText::from_api_error(&error)),
+            Err(error) => Some(FailureText::from_contact_error(&error)),
         };
         let Some(failure) = failure else {
             // Read from the top rather than put in by hand: the service decides
@@ -931,6 +931,12 @@ fn settle(screen: &mut ContactDetailScreen, result: Result<ContactWritten, ApiEr
         (Ok(_), _) => {
             screen.editing = None;
             Settled::ReadBack
+        }
+        // Only an edit can collide with another contact's number or address;
+        // a block's conflict is a race the service asks to retry.
+        (Err(error), Some(ContactAction::Save)) => {
+            screen.failure = Some(FailureText::from_contact_error(&error));
+            Settled::Failed
         }
         (Err(error), _) => {
             screen.failure = Some(FailureText::from_api_error(&error));

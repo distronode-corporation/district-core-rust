@@ -425,14 +425,13 @@ impl SignedIn {
         }
     }
 
-    /// The link, asked for bound to the browser by `nonce`: always one, so
-    /// [`Effect::RequestSchedulingHandOff`]'s `nonce` is never `None` from here.
+    /// The link, asked for bound to the browser by `nonce`.
     fn mint_hand_off(&mut self, nonce: HandOffNonce, tickets: &mut Tickets) -> Vec<Effect> {
         self.scheduling.hand_off = HandOffLeg::Minting;
         vec![Effect::RequestSchedulingHandOff {
             ticket: tickets.issue(Slot::SchedulingHandOff),
             workspace_id: self.workspace_id(),
-            nonce: Some(nonce),
+            nonce,
         }]
     }
 

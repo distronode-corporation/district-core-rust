@@ -16,7 +16,7 @@ use std::future::Future;
 use std::time::Duration;
 
 use district_api::ApiError;
-use district_auth::{AccessClaims, DrainReport, HandOffNonce, SignOutReport};
+use district_auth::{AccessClaims, DrainReport, SignOutReport};
 use district_l10n::Locale;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
@@ -1325,7 +1325,7 @@ where
             } => {
                 // Nothing is logged about a hand-off (CONTRIBUTING.md, Logging):
                 // whether it was bound is the service's to count, from the request.
-                let nonce = nonce.as_ref().map(HandOffNonce::as_str);
+                let nonce = Some(nonce.as_str());
                 Event::SchedulingHandOffReady {
                     ticket,
                     result: self
@@ -1357,7 +1357,7 @@ where
                 nonce,
             } => {
                 let next = destination.next(workspace_id.is_some());
-                let nonce = nonce.as_ref().map(HandOffNonce::as_str);
+                let nonce = Some(nonce.as_str());
                 Event::BillingHandOffReady {
                     ticket,
                     result: self

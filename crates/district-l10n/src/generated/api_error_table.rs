@@ -112,6 +112,7 @@ pub(crate) fn sentence(locale: Locale, code: &str, items: Option<&str>) -> Optio
         "messaging_provider_not_configured" => s::api_error_messaging_provider_not_configured(locale).to_owned(),
         "no_sending_number" => s::api_error_no_sending_number(locale).to_owned(),
         "sending_domain_missing" => s::api_error_sending_domain_missing(locale).to_owned(),
+        "sending_domain_provider_changed" => s::api_error_sending_domain_provider_changed(locale).to_owned(),
         "whatsapp_unsupported" => s::api_error_whatsapp_unsupported(locale).to_owned(),
         "verify_not_enabled" => s::api_error_verify_not_enabled(locale).to_owned(),
         "TRUST_BUNDLES_NOT_APPROVED" => s::api_error_caps_trust_bundles_not_approved(locale).to_owned(),

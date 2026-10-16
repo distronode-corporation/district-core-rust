@@ -850,6 +850,16 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `sending_domain_missing`, in place of the service's own English."
 
+[api_error.sending_domain_provider_changed]
+en = "This sending domain was set up with a different email provider. Remove it and connect it again to get the new DNS records."
+fr = "Ce domaine d'envoi a été configuré avec un autre fournisseur de courriel. Retirez-le, puis connectez-le de nouveau pour obtenir les nouvelles entrées DNS."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+fr_variant = "« entrées DNS », never « enregistrements DNS »: the glossary bans « enregistrement » (the product records nothing) and frcheck fails on it. The server's French switches to « entrées DNS » too; contracts/i18n/ is re-synced once it has."
+note = "Shown on any screen when the service refuses a request with the error code `sending_domain_provider_changed`, in place of the service's own English."
+
 [api_error.server_error]
 en = "Something went wrong on our side. Please try again."
 fr = "Une erreur est survenue de notre côté. Veuillez réessayer."

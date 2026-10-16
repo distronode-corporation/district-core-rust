@@ -880,6 +880,14 @@
           "fr": null
         },
         {
+          "value": "email-misconfigured",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
           "value": "empty-body",
           "definedIn": [
             "distronode-website/src/lib/district/workflows.ts"
@@ -977,6 +985,14 @@
         },
         {
           "value": "send-failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "ses-missing",
           "definedIn": [
             "distronode-website/src/lib/district/workflows.ts"
           ],
@@ -1222,7 +1238,7 @@
       ]
     },
     "contactResearchKey": {
-      "description": "The keys of `intelligence` on a contact (the lead research blob). The labels are the contact drawer's section headings for them.",
+      "description": "The keys of `intelligence` on a contact (the lead research blob). The labels are the portal's headings for them: the contact drawer's section headings, and for the two the drawer shows without one, the lead research table's column (`estimatedValue`, distronode-website/src/app/(en)/dashboard/district/dgi/dgiI18n.ts colDgiEvaluation) and Voice Studio's caller intelligence section (`callerIntel`, distronode-website/src/components/district/studio/studioI18n.ts callerIntelligenceHeader).",
       "labelSource": "distronode-website/src/components/district/contacts/contactsI18n.ts drawer",
       "values": [
         {
@@ -1240,8 +1256,8 @@
             "distronode-website/src/lib/dgi/types.ts",
             "distronode-website/src/lib/dgi/repository.ts"
           ],
-          "en": null,
-          "fr": null
+          "en": "DGI Evaluation",
+          "fr": "Évaluation DGI"
         },
         {
           "value": "corePainPoints",
@@ -1275,16 +1291,16 @@
           "definedIn": [
             "distronode-website/src/lib/dgi/repository.ts"
           ],
-          "en": null,
-          "fr": null
+          "en": "Contact Profile",
+          "fr": "Profil du contact"
         },
         {
           "value": "callerIntel",
           "definedIn": [
             "distronode-website/src/lib/dgi/repository.ts"
           ],
-          "en": null,
-          "fr": null
+          "en": "Caller intelligence",
+          "fr": "Renseignements sur l'appelant"
         }
       ]
     },
@@ -1460,8 +1476,8 @@
       ]
     },
     "numberStatus": {
-      "description": "`numbers[].status` in GET /api/district/workspace/provider/numbers: a managed number's `PhoneNumberIndex.status` (missing reads as `active`; `released` rows are left out of the list), and for a number on the workspace's own carrier account the carrier's word (`active` from Twilio and Sinch; Telnyx's own status passed through, so another value can arrive). `pending_verification` is a toll-free number under carrier review (POST /api/district/workspace/tfv); `suspended` is set by staff. The portal shows the value itself and has no label for any of them; an empty one shows as `fallback`.",
-      "labelSource": null,
+      "description": "`numbers[].status` in GET /api/district/workspace/provider/numbers: a managed number's `PhoneNumberIndex.status` (missing reads as `active`; `released` rows are left out of the list), and for a number on the workspace's own carrier account the carrier's word (`active` from Twilio and Sinch; Telnyx's own status passed through, so another value can arrive). `pending_verification` is a toll-free number under carrier review (POST /api/district/workspace/tfv); `suspended` is set by staff. `in-use` is Twilio's word for a number in service, carried by the recorded numbers fixtures; it is labelled with the portal's word for an active line (the same as `fallback`), and an app shows that label. The portal shows the value itself and has no label for the others; an empty one shows as `fallback`.",
+      "labelSource": "distronode-website/src/components/district/marketplace/ownedI18n.ts active",
       "values": [
         {
           "value": "active",
@@ -1498,6 +1514,15 @@
           ],
           "en": null,
           "fr": null
+        },
+        {
+          "value": "in-use",
+          "definedIn": [
+            "distronode-website/contracts/mobile/district-provider-numbers.json",
+            "distronode-website/contracts/mobile/district-provider-numbers-partial.json"
+          ],
+          "en": "Active",
+          "fr": "Actif"
         }
       ],
       "fallback": {

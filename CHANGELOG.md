@@ -17,6 +17,63 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-10-16
+
+The core of District AI for Linux 3.0.2 and District AI for Windows 3.0.2. A major
+version because the hand-off effects' nonce is no longer optional (below); the rest
+is French, lists that follow their item, and booking forms whose complaints clear.
+
+### Changed
+
+- Breaking: the `nonce` of `Effect::RequestSchedulingHandOff` and of
+  `Effect::RequestBillingHandOff` is a `HandOffNonce`, no longer an
+  `Option<HandOffNonce>`. Since 4.0.2 the core never asks for a hand-off link unbound,
+  so `None` could not happen; the type now says so, and an app that matched
+  `nonce: Some(_)` or read `nonce.as_ref()` reads the nonce itself. The runner still
+  sends it as the body's `nonce`; `ApiClient::scheduling_hand_off` and
+  `ApiClient::billing_hand_off` are unchanged.
+- The French warning beside a new booking API key uses the key's pronoun: « Copiez-la
+  maintenant. Elle ne sera plus affichée. » (was « Copiez-le… Il… », the secret's). A
+  webhook's new signing secret has its own sentence, `webhook.secret_reveal_warning`
+  ("Copy the secret now. It is not shown again.", « Copiez le secret maintenant. Il ne
+  sera plus affiché. »), in `MintedSecret::labels()`. Visual QA LD08.
+- A help desk ticket's row in the queue follows a reply or a status change made on the
+  ticket (a reply moves it to `waiting`), and a support request's row follows its
+  close, so the list and the open item no longer disagree until the list is read
+  again. Visual QA LD09.
+- A contact that could not be added or saved because another contact already holds its
+  phone number or email address (the service's 409) reads as that in French too,
+  « Un autre contact a déjà ce numéro de téléphone ou cette adresse courriel. »
+  (`failure.contact_exists`; English keeps the service's own sentence), and offers no
+  retry, which would get the same answer. It used to read as the generic « Une erreur
+  est survenue. Veuillez réessayer. ». `FailureText::from_contact_error` is new. Visual
+  QA LB7.
+- In the booking pages, a form's complaint ("A host's priority has to be a whole number,
+  0 or more.", "Pick a date.", "A Select question needs at least one option.") goes as
+  soon as the hosts, the override or the question is changed, and the next save checks
+  again; it used to stay beside the corrected value until the next save. Visual QA LC20.
+- SECURITY.md describes the hand-off as it is since 4.0.2: given up, never asked for
+  unbound, when the browser does not answer within `HAND_OFF_CALLBACK_WAIT`.
+- `contracts/i18n/` from the server's ecf098046: the error code
+  `sending_domain_provider_changed` ("This sending domain was set up with a different
+  email provider. Remove it and connect it again to get the new DNS records."), the
+  workflow skip reasons `email-misconfigured` and `ses-missing` (« Courriel mal
+  configuré », « SES non configuré »; the English "SES missing" keeps the initialism
+  in capitals, as District AI for Android writes it), the number status `in-use` ("Active",
+  « Actif », where it read as the generic label), and the portal's headings for three
+  research keys: `estimatedValue` "DGI Evaluation" (« Évaluation DGI »), `person`
+  "Contact Profile" (« Profil du contact ») and `callerIntel` "Caller intelligence"
+  (« Renseignements sur l'appelant »), which read as the key itself ("EstimatedValue")
+  before. The error's French says « les nouvelles entrées DNS », never
+  « enregistrements », which the glossary keeps for recordings; the service's French
+  moves to the same words, and `crates/district-l10n/tests/errors.rs` says when the
+  contract has caught up.
+- A call's length in French no longer breaks between the minutes and the seconds:
+  « 3 min 4 s » with a no-break space (U+00A0) between each number and its unit and
+  between the two parts (`format::minutes_seconds`, so a call row's length and the
+  analytics average), as the service's format vectors now say. It was
+  « 3 min 4 s », with an ordinary space in the middle.
+
 ## [4.0.2] - 2026-10-15
 
 The core of District AI for Linux 3.0.1 and District AI for Windows 3.0.1: a desktop stops

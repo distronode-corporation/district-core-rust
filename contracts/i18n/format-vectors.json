@@ -1782,7 +1782,7 @@
         "distronode-website/src/lib/district/duration-label.ts",
         "distronode-website/src/lib/district/call-summary.ts"
       ],
-      "notes": "formatMinutesSeconds is the portal's localized reading. formatCallDuration is the wire `duration` string on a call row, the same in every language.",
+      "notes": "formatMinutesSeconds is the portal's localized reading; in French a no-break space (U+00A0) separates every number from its unit and the minutes from the seconds, so no plain space appears. formatCallDuration is the wire `duration` string on a call row, the same in every language.",
       "vectors": [
         {
           "fn": "formatMinutesSeconds",
@@ -1810,7 +1810,7 @@
           "fn": "formatMinutesSeconds",
           "seconds": 65,
           "en": "1m 5s",
-          "fr": "1 min 5 s"
+          "fr": "1 min 5 s"
         },
         {
           "fn": "formatCallDuration",
@@ -1832,7 +1832,7 @@
           "fn": "formatMinutesSeconds",
           "seconds": 3725,
           "en": "62m 5s",
-          "fr": "62 min 5 s"
+          "fr": "62 min 5 s"
         },
         {
           "fn": "formatCallDuration",

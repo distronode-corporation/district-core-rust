@@ -5,7 +5,9 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use district_api::{ApiError, ErrorDetail};
-use district_auth::{AccessClaims, DrainReport, HandOffState, RevokeStatus, SignOutReport};
+use district_auth::{
+    AccessClaims, DrainReport, HandOffNonce, HandOffState, RevokeStatus, SignOutReport,
+};
 use district_core::Locale;
 use district_core::{
     Auth, CallEngine, ContactWrite, ContactWritten, DistrictApi, Effect, EffectRunner, Event,
@@ -1293,6 +1295,20 @@ fn a_ticket() -> Ticket {
     crate::support::ticket(&Model::new(config()).1[1])
 }
 
+/// The nonce in a hand-off answer the runner tests use, and the nonce it
+/// becomes: a hand-off's link is only ever asked for bound to one.
+const RUNNER_NONCE: &str = "r0nce-r0nce_r0nce-r0nce_r0nce-r0nce_r0nce-r";
+
+fn a_nonce() -> HandOffNonce {
+    let state = HandOffState::generate();
+    state
+        .check(&format!(
+            "districtai://handoff?state={}&nonce={RUNNER_NONCE}",
+            state.as_str()
+        ))
+        .unwrap()
+}
+
 #[tokio::test]
 async fn each_effect_calls_its_dependency_and_reports_back() {
     let (runner, log) = fakes(Some(CLIENT), true);
@@ -2217,7 +2233,7 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             Effect::RequestSchedulingHandOff {
                 ticket,
                 workspace_id: ws(),
-                nonce: None,
+                nonce: a_nonce(),
             },
             Event::SchedulingHandOffReady {
                 ticket,
@@ -2467,7 +2483,8 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             "campaign ws-contract-active false",
             "scheduling ws-contract-active",
             "enable scheduling ws-contract-active",
-            "hand-off ws-contract-active Some(\"/dashboard/district/scheduling\") None",
+            "hand-off ws-contract-active Some(\"/dashboard/district/scheduling\") \
+             Some(\"r0nce-r0nce_r0nce-r0nce_r0nce-r0nce_r0nce-r\")",
             "scheduling admin ws-contract-active Some(\"apiKeys.list\")",
             "scheduling sign-in ws-contract-active /v1/calendar",
             "desk settings ws-contract-active",
@@ -2491,9 +2508,8 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
     );
 }
 
-/// A hand-off the browser answered is asked for with the answer's nonce; one
-/// it did not, without. Either way the effect's `Debug` output leaves the
-/// nonce out.
+/// A hand-off the browser answered is asked for with the answer's nonce, and
+/// the effect's `Debug` output leaves the nonce out.
 #[tokio::test]
 async fn a_hand_off_is_asked_for_with_the_nonce_the_browser_answered_with() {
     const NONCE: &str = "n0nce-n0nce_n0nce-n0nce_n0nce-n0nce_n0nce-n";
@@ -2508,7 +2524,7 @@ async fn a_hand_off_is_asked_for_with_the_nonce_the_browser_answered_with() {
     let bound = Effect::RequestSchedulingHandOff {
         ticket,
         workspace_id: AGENCY.to_owned(),
-        nonce: Some(nonce),
+        nonce,
     };
     assert!(!format!("{bound:?}").contains(NONCE));
     let (runner, log) = fakes(None, true);
@@ -3355,7 +3371,7 @@ async fn a_billing_hand_off_is_asked_for_in_the_shape_the_service_admits() {
         ticket,
         workspace_id: Some(AGENCY.to_owned()),
         destination: checkout.clone(),
-        nonce: Some(nonce),
+        nonce,
     };
     assert_eq!(bound.ticket(), Some(ticket));
     assert!(!format!("{bound:?}").contains(NONCE));
@@ -3369,19 +3385,19 @@ async fn a_billing_hand_off_is_asked_for_in_the_shape_the_service_admits() {
     };
     assert_eq!(reported, ticket);
     assert!(!format!("{answer:?}").contains("contract-handoff-code"));
-    let unbound = Effect::RequestBillingHandOff {
+    let no_workspace = Effect::RequestBillingHandOff {
         ticket,
         workspace_id: None,
         destination: checkout,
-        nonce: None,
+        nonce: a_nonce(),
     };
-    runner.run(unbound).await.unwrap();
+    runner.run(no_workspace).await.unwrap();
     runner
         .run(Effect::RequestBillingHandOff {
             ticket,
             workspace_id: Some(AGENCY.to_owned()),
             destination: BillingDestination::BillingPage,
-            nonce: None,
+            nonce: a_nonce(),
         })
         .await
         .unwrap();
@@ -3392,11 +3408,14 @@ async fn a_billing_hand_off_is_asked_for_in_the_shape_the_service_admits() {
                 "billing hand-off Some(\"ws-contract-active\") \
                  /checkout?tier=VoiceStarter&term=monthly Some(\"{NONCE}\")"
             ),
-            "billing hand-off None /checkout?tier=VoiceStarter&term=monthly&reason=no-workspace \
-             None"
-                .to_owned(),
-            "billing hand-off Some(\"ws-contract-active\") /dashboard/district/billing None"
-                .to_owned(),
+            format!(
+                "billing hand-off None /checkout?tier=VoiceStarter&term=monthly&reason=no-workspace \
+                 Some(\"{RUNNER_NONCE}\")"
+            ),
+            format!(
+                "billing hand-off Some(\"ws-contract-active\") /dashboard/district/billing \
+                 Some(\"{RUNNER_NONCE}\")"
+            ),
         ]
     );
 }

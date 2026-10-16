@@ -280,7 +280,7 @@ impl MintedSecret {
     pub fn labels() -> [&'static str; 4] {
         [
             ss::webhook_secret_title(l()),
-            ss::key_reveal_warning(l()),
+            ss::webhook_secret_reveal_warning(l()),
             ss::webhook_secret_copy_action(l()),
             ss::key_done(l()),
         ]

@@ -147,7 +147,7 @@ fn answered(model: &mut Model) -> Ticket {
     let [Effect::RequestBillingHandOff { ticket, nonce, .. }] = effects.as_slice() else {
         panic!("{effects:?}");
     };
-    assert_eq!(nonce.as_ref().map(|n| n.as_str()), Some(NONCE));
+    assert_eq!(nonce.as_str(), NONCE);
     assert!(purchase(model).minting());
     *ticket
 }
@@ -774,7 +774,7 @@ fn checkout_opens_inside_the_app_bound_to_the_view_that_shows_it() {
             ticket,
             workspace_id,
             destination,
-            nonce: Some(_),
+            ..
         },
     ] = effects.as_slice()
     else {

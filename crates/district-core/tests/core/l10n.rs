@@ -93,7 +93,7 @@ fn numbers_are_written_the_french_way() {
     french(|| {
         assert_eq!(format_amount(1204.25), format!("1{NBSP}204,25"));
         assert_eq!(format_amount(412.0), "412");
-        assert_eq!(format_duration(125), format!("2{NBSP}min 5{NBSP}s"));
+        assert_eq!(format_duration(125), format!("2{NBSP}min{NBSP}5{NBSP}s"));
         assert_eq!(format_duration(0), format!("0{NBSP}min"));
         assert_eq!(month_label("2026-08"), "ao\u{fb}t 2026");
         assert_eq!(month_label("2026-13"), "2026-13");
@@ -203,7 +203,7 @@ fn a_call_rows_length_is_the_services_in_english_and_read_from_its_seconds_in_fr
     assert_eq!(english(|| call_duration_label(&calls[0])), "1m 5s");
     assert_eq!(
         french(|| call_duration_label(&calls[0])),
-        format!("1{NBSP}min 5{NBSP}s")
+        format!("1{NBSP}min{NBSP}5{NBSP}s")
     );
     let call = |duration: &str, seconds: Option<i64>| CallSummary {
         duration: duration.to_owned(),
@@ -231,7 +231,7 @@ fn a_call_rows_length_is_the_services_in_english_and_read_from_its_seconds_in_fr
     assert!(checked >= 4, "{checked} vectors");
     assert_eq!(
         french(|| call_duration_label(&call("2m 34s", None))),
-        format!("2{NBSP}min 34{NBSP}s")
+        format!("2{NBSP}min{NBSP}34{NBSP}s")
     );
     // A length that cannot be read is shown as the service wrote it.
     assert_eq!(french(|| call_duration_label(&call("", None))), "");
