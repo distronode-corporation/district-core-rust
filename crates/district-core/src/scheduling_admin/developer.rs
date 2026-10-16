@@ -618,6 +618,8 @@ pub enum DeveloperEvent {
     Refresh,
     /// Open a webhook's deliveries, read the first time, or close them.
     ToggleDeliveries(String),
+    /// Read the open webhook's deliveries again, after their read failed.
+    RetryDeliveries,
     /// Open the key form.
     OpenCreateKey,
     /// The key's name changed.
@@ -809,6 +811,17 @@ fn section_event(
                 if !section.deliveries.contains_key(&id) {
                     return vec![read_deliveries(section, id)];
                 }
+            }
+        }
+        DeveloperEvent::RetryDeliveries => {
+            let failed = section.open_webhook.clone().filter(|id| {
+                section
+                    .deliveries
+                    .get(id)
+                    .is_some_and(|load| load.failure().is_some())
+            });
+            if let Some(id) = failed {
+                return vec![read_deliveries(section, id)];
             }
         }
         DeveloperEvent::AskRevokeKey(id) if can_change && !section.removal.busy => {

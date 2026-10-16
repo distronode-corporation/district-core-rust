@@ -169,7 +169,18 @@ fn the_number_is_kept_as_typed_and_read_grouped() {
     assert!(!signed_in(&model).can_place_call(), "under eight digits");
     assert!(model.update(Event::Dialer(DialerEvent::Dial)).is_empty());
     assert_eq!(MIN_DIAL_DIGITS, 8);
-    assert!(DialerScreen::HINT.contains("+1 212 555 0142"));
+    // The example never breaks after "+1": no-break spaces between its
+    // groups, in both languages.
+    assert!(
+        DialerScreen::HINT.contains("+1\u{a0}212\u{a0}555\u{a0}0142."),
+        "{:?}",
+        DialerScreen::HINT
+    );
+    let french = district_l10n::strings::dialer_hint(district_l10n::Locale::FrCa);
+    assert!(
+        french.contains("+1\u{a0}212\u{a0}555\u{a0}0142."),
+        "{french:?}"
+    );
 }
 
 #[test]

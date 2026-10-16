@@ -71,6 +71,9 @@ pub struct TelemetryEnvelope {
     /// - `call_ringing` carries `{callId, userIds}`, ids only: the members the
     ///   call is ringing for on a desktop. Every socket in the workspace gets the
     ///   event, so a desktop rings only when its own user id is in `userIds`.
+    /// - `call_ring_cancelled` carries `{callId, reason}`, ids and a word only: a
+    ///   ring the service started has ended, read with
+    ///   [`ring_cancel_reason`](Self::ring_cancel_reason).
     /// - `tool_outcome` carries `{tool, result, provider?, reason?}` and nothing
     ///   about the caller.
     /// - The five `transcript_*` events carry one call's live transcript, read
@@ -119,6 +122,13 @@ pub enum TelemetryEventType {
     /// installation's user is among them. The service sends it only while the
     /// desktop keeps its presence registered.
     CallRinging,
+    /// `call_ring_cancelled`: a ring the service started has ended, because
+    /// someone answered (on any device, possibly this one), the window closed,
+    /// the caller hung up, or the service stopped it. The data says which; read
+    /// it with [`ring_cancel_reason`](TelemetryEnvelope::ring_cancel_reason).
+    /// Sent only when a desktop was rung, to every socket in the workspace, and
+    /// possibly more than once.
+    CallRingCancelled,
     /// `tool_outcome`: an action the assistant took during a call (a transfer,
     /// for example) succeeded or failed.
     ToolOutcome,
@@ -151,6 +161,7 @@ impl TelemetryEventType {
             Self::CallUpdated => "call_updated",
             Self::CallEnded => "call_ended",
             Self::CallRinging => "call_ringing",
+            Self::CallRingCancelled => "call_ring_cancelled",
             Self::ToolOutcome => "tool_outcome",
             Self::MessageReceived => "message_received",
             Self::MessageSent => "message_sent",
@@ -184,6 +195,7 @@ impl From<String> for TelemetryEventType {
             "call_updated" => Self::CallUpdated,
             "call_ended" => Self::CallEnded,
             "call_ringing" => Self::CallRinging,
+            "call_ring_cancelled" => Self::CallRingCancelled,
             "tool_outcome" => Self::ToolOutcome,
             "message_received" => Self::MessageReceived,
             "message_sent" => Self::MessageSent,
@@ -194,6 +206,65 @@ impl From<String> for TelemetryEventType {
             "transcript_error" => Self::TranscriptError,
             _ => Self::Unknown(name),
         }
+    }
+}
+
+/// Why a ring ended, as a `call_ring_cancelled` event says.
+///
+/// The service may add reasons; one this client does not know reads as
+/// [`Withdrawn`](Self::Withdrawn), never as a failure to read the event.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum RingCancelReason {
+    /// `answered`: somebody took the call, on some device. That can be this
+    /// desktop: a device that answered the call, or is answering it, ignores
+    /// the event.
+    Answered,
+    /// `timeout`: the ring's window closed with nobody answering, and the
+    /// receptionist kept the call.
+    Timeout,
+    /// `call_ended`: the caller hung up while it rang.
+    CallEnded,
+    /// `withdrawn`: the service stopped ringing for a reason of its own, and
+    /// any reason this client does not know.
+    Withdrawn,
+}
+
+impl RingCancelReason {
+    /// The reason named `name` on the wire.
+    pub fn from_wire(name: &str) -> Self {
+        match name {
+            "answered" => Self::Answered,
+            "timeout" => Self::Timeout,
+            "call_ended" => Self::CallEnded,
+            _ => Self::Withdrawn,
+        }
+    }
+
+    /// The name on the wire.
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Answered => "answered",
+            Self::Timeout => "timeout",
+            Self::CallEnded => "call_ended",
+            Self::Withdrawn => "withdrawn",
+        }
+    }
+}
+
+impl TelemetryEnvelope {
+    /// Why the ring ended, for a `call_ring_cancelled` event, or `None` for any
+    /// other event. A reason missing or not a string reads as
+    /// [`RingCancelReason::Withdrawn`]. The call is
+    /// [`call_id`](Self::call_id).
+    pub fn ring_cancel_reason(&self) -> Option<RingCancelReason> {
+        (self.event_type == TelemetryEventType::CallRingCancelled).then(|| {
+            RingCancelReason::from_wire(
+                self.data
+                    .get("reason")
+                    .and_then(Value::as_str)
+                    .unwrap_or_default(),
+            )
+        })
     }
 }
 
@@ -210,11 +281,12 @@ impl From<TelemetryEventType> for String {
 mod tests {
     use super::*;
 
-    const KNOWN: [(&str, TelemetryEventType); 12] = [
+    const KNOWN: [(&str, TelemetryEventType); 13] = [
         ("call_started", TelemetryEventType::CallStarted),
         ("call_updated", TelemetryEventType::CallUpdated),
         ("call_ended", TelemetryEventType::CallEnded),
         ("call_ringing", TelemetryEventType::CallRinging),
+        ("call_ring_cancelled", TelemetryEventType::CallRingCancelled),
         ("tool_outcome", TelemetryEventType::ToolOutcome),
         ("message_received", TelemetryEventType::MessageReceived),
         ("message_sent", TelemetryEventType::MessageSent),
@@ -267,6 +339,44 @@ mod tests {
             serde_json::to_value(&envelope).unwrap(),
             serde_json::from_str::<Value>(raw).unwrap()
         );
+    }
+
+    #[test]
+    fn a_ring_cancel_reads_its_reason_and_an_unknown_one_as_withdrawn() {
+        let cancel = |data: Value| TelemetryEnvelope {
+            workspace_id: "ws_1".to_owned(),
+            call_id: "call_1".to_owned(),
+            event_type: TelemetryEventType::CallRingCancelled,
+            data,
+            timestamp: "t".to_owned(),
+        };
+        for reason in [
+            RingCancelReason::Answered,
+            RingCancelReason::Timeout,
+            RingCancelReason::CallEnded,
+            RingCancelReason::Withdrawn,
+        ] {
+            let envelope =
+                cancel(serde_json::json!({"callId": "call_1", "reason": reason.as_str()}));
+            assert_eq!(envelope.ring_cancel_reason(), Some(reason));
+            assert_eq!(RingCancelReason::from_wire(reason.as_str()), reason);
+        }
+        for data in [
+            serde_json::json!({"callId": "call_1", "reason": "parked"}),
+            serde_json::json!({"callId": "call_1", "reason": 3}),
+            serde_json::json!({"callId": "call_1"}),
+            serde_json::json!(null),
+        ] {
+            assert_eq!(
+                cancel(data).ring_cancel_reason(),
+                Some(RingCancelReason::Withdrawn)
+            );
+        }
+        let ringing = TelemetryEnvelope {
+            event_type: TelemetryEventType::CallRinging,
+            ..cancel(serde_json::json!({"reason": "answered"}))
+        };
+        assert_eq!(ringing.ring_cancel_reason(), None);
     }
 
     #[test]

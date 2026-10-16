@@ -242,8 +242,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::devices_unnamed(Locale::FrCa), "Appareil sans nom");
     assert_eq!(strings::dialer_busy_note(Locale::En), "Finish the call or meeting you are in first.");
     assert_eq!(strings::dialer_busy_note(Locale::FrCa), "Terminez d'abord votre appel ou votre réunion en cours.");
-    assert_eq!(strings::dialer_hint(Locale::En), "Enter a number with its country code, for example +1 212 555 0142.");
-    assert_eq!(strings::dialer_hint(Locale::FrCa), "Indiquez un numéro avec l'indicatif du pays, par exemple +1 212 555 0142.");
+    assert_eq!(strings::dialer_hint(Locale::En), "Enter a number with its country code, for example +1\u{00A0}212\u{00A0}555\u{00A0}0142.");
+    assert_eq!(strings::dialer_hint(Locale::FrCa), "Indiquez un numéro avec l'indicatif du pays, par exemple +1\u{00A0}212\u{00A0}555\u{00A0}0142.");
     assert_eq!(strings::dialer_microphone_note(Locale::En), "Placing a call turns on your microphone.");
     assert_eq!(strings::dialer_microphone_note(Locale::FrCa), "Passer un appel active votre microphone.");
     assert_eq!(strings::directory_add_rejected(Locale::En), "A name and a phone number are both needed to add someone.");
@@ -288,6 +288,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::failure_hand_off_refused(Locale::FrCa), "District AI n'a pas pu confirmer votre connexion pour la version Web. Déconnectez-vous, reconnectez-vous, puis réessayez.");
     assert_eq!(strings::failure_hand_off_too_many(Locale::En), "The web was opened several times just now. Wait a moment and try again.");
     assert_eq!(strings::failure_hand_off_too_many(Locale::FrCa), "La version Web a été ouverte plusieurs fois à l'instant. Attendez un instant, puis réessayez.");
+    assert_eq!(strings::failure_hand_off_unanswered(Locale::En), "Your browser didn't respond to District AI in time, so the page wasn't opened. Try again, and let your browser open District AI if it asks.");
+    assert_eq!(strings::failure_hand_off_unanswered(Locale::FrCa), "Votre navigateur n'a pas répondu à temps à District AI; la page n'a donc pas été ouverte. Réessayez et autorisez votre navigateur à ouvrir District AI s'il vous le demande.");
     assert_eq!(strings::failure_hand_off_update_needed(Locale::En), "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app.");
     assert_eq!(strings::failure_hand_off_update_needed(Locale::FrCa), "District AI exige désormais que votre navigateur réponde à l'application avant d'ouvrir la version Web, et il ne l'a pas fait. Réessayez et laissez le navigateur ouvrir District AI s'il le demande. Si le problème persiste, mettez à jour l'application.");
     assert_eq!(strings::failure_keyring_locked(Locale::En), "Your keyring is locked. Unlock it, then try again.");
@@ -324,6 +326,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::failure_scheduling_not_offered(Locale::FrCa), "Cet espace de travail n'a pas accès aux pages de réservation.");
     assert_eq!(strings::failure_scheduling_setup_failed(Locale::En), "Setting up booking pages did not finish, and no reason was given.");
     assert_eq!(strings::failure_scheduling_setup_failed(Locale::FrCa), "La configuration des pages de réservation a échoué, et aucune raison n'a été donnée.");
+    assert_eq!(strings::failure_scheduling_setup_failed_reason_unshown(Locale::En), "Setting up booking pages did not finish.");
+    assert_eq!(strings::failure_scheduling_setup_failed_reason_unshown(Locale::FrCa), "La configuration des pages de réservation n'a pas abouti.");
     assert_eq!(strings::failure_scheduling_too_many(Locale::En), "Booking pages were turned on several times in the last hour for this workspace. Try again later.");
     assert_eq!(strings::failure_scheduling_too_many(Locale::FrCa), "Les pages de réservation ont été activées plusieurs fois depuis une heure pour cet espace de travail. Réessayez plus tard.");
     assert_eq!(strings::failure_server(Locale::En), "Something went wrong on our side. Please try again shortly.");
@@ -442,6 +446,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::live_action_answer(Locale::FrCa), "Répondre");
     assert_eq!(strings::live_action_decline(Locale::En), "Decline");
     assert_eq!(strings::live_action_decline(Locale::FrCa), "Refuser");
+    assert_eq!(strings::live_answered_elsewhere_title(Locale::En), "Answered on another device");
+    assert_eq!(strings::live_answered_elsewhere_title(Locale::FrCa), "Appel pris sur un autre appareil");
     assert_eq!(strings::live_message_body(Locale::En), "Open District AI to read it.");
     assert_eq!(strings::live_message_body(Locale::FrCa), "Ouvrez District AI pour le lire.");
     assert_eq!(strings::live_message_title(Locale::En), "New message");
@@ -646,6 +652,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::purchase_term_annual(Locale::FrCa), "Annuel");
     assert_eq!(strings::purchase_term_monthly(Locale::En), "Monthly");
     assert_eq!(strings::purchase_term_monthly(Locale::FrCa), "Mensuel");
+    assert_eq!(strings::ringing_answered_elsewhere(Locale::En), "That call was answered on another device.");
+    assert_eq!(strings::ringing_answered_elsewhere(Locale::FrCa), "Cet appel a été pris sur un autre appareil.");
     assert_eq!(strings::ringing_body(Locale::En), "Transferred from your AI receptionist.");
     assert_eq!(strings::ringing_body(Locale::FrCa), "Appel transféré par votre réceptionniste IA.");
     assert_eq!(strings::ringing_call_ended(Locale::En), "That call ended before you could answer it.");
@@ -1742,6 +1750,32 @@ fn every_support_accessor_says_what_its_catalog_says() {
     assert_eq!(support_strings::report_subject(Locale::FrCa), "Report: AI-generated content");
     assert_eq!(support_strings::report_title(Locale::En), "Report AI-generated content");
     assert_eq!(support_strings::report_title(Locale::FrCa), "Signaler un contenu généré par l'IA");
+    assert_eq!(support_strings::request_status_canceled(Locale::En), "Canceled");
+    assert_eq!(support_strings::request_status_canceled(Locale::FrCa), "Annulée");
+    assert_eq!(support_strings::request_status_closed(Locale::En), "Closed");
+    assert_eq!(support_strings::request_status_closed(Locale::FrCa), "Fermée");
+    assert_eq!(support_strings::request_status_declined(Locale::En), "Declined");
+    assert_eq!(support_strings::request_status_declined(Locale::FrCa), "Refusée");
+    assert_eq!(support_strings::request_status_done(Locale::En), "Done");
+    assert_eq!(support_strings::request_status_done(Locale::FrCa), "Terminée");
+    assert_eq!(support_strings::request_status_escalated(Locale::En), "Escalated");
+    assert_eq!(support_strings::request_status_escalated(Locale::FrCa), "Transférée");
+    assert_eq!(support_strings::request_status_in_progress(Locale::En), "In progress");
+    assert_eq!(support_strings::request_status_in_progress(Locale::FrCa), "En cours");
+    assert_eq!(support_strings::request_status_open(Locale::En), "Open");
+    assert_eq!(support_strings::request_status_open(Locale::FrCa), "Ouverte");
+    assert_eq!(support_strings::request_status_pending(Locale::En), "Pending");
+    assert_eq!(support_strings::request_status_pending(Locale::FrCa), "En attente");
+    assert_eq!(support_strings::request_status_received(Locale::En), "Received");
+    assert_eq!(support_strings::request_status_received(Locale::FrCa), "Reçue");
+    assert_eq!(support_strings::request_status_resolved(Locale::En), "Resolved");
+    assert_eq!(support_strings::request_status_resolved(Locale::FrCa), "Réglée");
+    assert_eq!(support_strings::request_status_unknown(Locale::En), "Status unknown");
+    assert_eq!(support_strings::request_status_unknown(Locale::FrCa), "État inconnu");
+    assert_eq!(support_strings::request_status_waiting_for_customer(Locale::En), "Waiting for your reply");
+    assert_eq!(support_strings::request_status_waiting_for_customer(Locale::FrCa), "En attente de votre réponse");
+    assert_eq!(support_strings::request_status_waiting_for_support(Locale::En), "Waiting for support");
+    assert_eq!(support_strings::request_status_waiting_for_support(Locale::FrCa), "En attente du soutien");
 }
 
 #[test]

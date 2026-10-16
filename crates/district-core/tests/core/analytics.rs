@@ -361,6 +361,7 @@ fn a_workspace_with_no_calls_draws_nothing_rather_than_dividing_by_zero() {
     assert!(sentiment.iter().all(|slice| slice.share == 0.0));
 
     let sentiment = report_of(analytics()).sentiment();
+    assert_eq!(sentiment[0].name, "Positive Sentiment");
     assert_eq!(sentiment[0].label, "Positive Sentiment");
     assert_eq!(sentiment[0].value, 21);
     assert_eq!(sentiment[0].share, 21.0 / 48.0);

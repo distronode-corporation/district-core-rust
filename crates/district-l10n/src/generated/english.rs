@@ -229,7 +229,7 @@ pub const DEVICES_UNNAMED: &str = "Unnamed device";
 /// `dialer.busy_note` in English.
 pub const DIALER_BUSY_NOTE: &str = "Finish the call or meeting you are in first.";
 /// `dialer.hint` in English.
-pub const DIALER_HINT: &str = "Enter a number with its country code, for example +1 212 555 0142.";
+pub const DIALER_HINT: &str = "Enter a number with its country code, for example +1\u{00A0}212\u{00A0}555\u{00A0}0142.";
 /// `dialer.microphone_note` in English.
 pub const DIALER_MICROPHONE_NOTE: &str = "Placing a call turns on your microphone.";
 /// `directory.add_rejected` in English.
@@ -270,6 +270,8 @@ pub const FAILURE_HAND_OFF_PAGE_REFUSED: &str = "District AI did not accept the 
 pub const FAILURE_HAND_OFF_REFUSED: &str = "District AI could not confirm your sign-in for the web. Sign out, sign in again, and try again.";
 /// `failure.hand_off_too_many` in English.
 pub const FAILURE_HAND_OFF_TOO_MANY: &str = "The web was opened several times just now. Wait a moment and try again.";
+/// `failure.hand_off_unanswered` in English.
+pub const FAILURE_HAND_OFF_UNANSWERED: &str = "Your browser didn't respond to District AI in time, so the page wasn't opened. Try again, and let your browser open District AI if it asks.";
 /// `failure.hand_off_update_needed` in English.
 pub const FAILURE_HAND_OFF_UPDATE_NEEDED: &str = "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app.";
 /// `failure.keyring_locked` in English.
@@ -306,6 +308,8 @@ pub const FAILURE_REGIONS_DEGRADED: &str = "A region is unreachable, so this cou
 pub const FAILURE_SCHEDULING_NOT_OFFERED: &str = "Booking pages are not offered to this workspace.";
 /// `failure.scheduling_setup_failed` in English.
 pub const FAILURE_SCHEDULING_SETUP_FAILED: &str = "Setting up booking pages did not finish, and no reason was given.";
+/// `failure.scheduling_setup_failed_reason_unshown` in English.
+pub const FAILURE_SCHEDULING_SETUP_FAILED_REASON_UNSHOWN: &str = "Setting up booking pages did not finish.";
 /// `failure.scheduling_too_many` in English.
 pub const FAILURE_SCHEDULING_TOO_MANY: &str = "Booking pages were turned on several times in the last hour for this workspace. Try again later.";
 /// `failure.server` in English.
@@ -418,6 +422,8 @@ pub const KNOWLEDGE_VIEWER: &str = "You have read-only access to this workspace.
 pub const LIVE_ACTION_ANSWER: &str = "Answer";
 /// `live.action_decline` in English.
 pub const LIVE_ACTION_DECLINE: &str = "Decline";
+/// `live.answered_elsewhere_title` in English.
+pub const LIVE_ANSWERED_ELSEWHERE_TITLE: &str = "Answered on another device";
 /// `live.message_body` in English.
 pub const LIVE_MESSAGE_BODY: &str = "Open District AI to read it.";
 /// `live.message_title` in English.
@@ -612,6 +618,8 @@ pub const PURCHASE_SETTING_SIGN_IN_EVERY_TIME: &str = "Sign in every time";
 pub const PURCHASE_TERM_ANNUAL: &str = "Annual";
 /// `purchase.term_monthly` in English.
 pub const PURCHASE_TERM_MONTHLY: &str = "Monthly";
+/// `ringing.answered_elsewhere` in English.
+pub const RINGING_ANSWERED_ELSEWHERE: &str = "That call was answered on another device.";
 /// `ringing.body` in English.
 pub const RINGING_BODY: &str = "Transferred from your AI receptionist.";
 /// `ringing.call_ended` in English.

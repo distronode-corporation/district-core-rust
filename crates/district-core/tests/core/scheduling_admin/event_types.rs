@@ -1333,3 +1333,45 @@ fn hosts_of_a_type_with_no_routing_stored_route_fixed() {
     assert_eq!(hosts_dialog(&model).routing_mode, "fixed");
     assert_eq!(hosts_dialog(&model).rotation, "even");
 }
+
+/// The hosts dialog's reads are read again on request after a failure: the
+/// hosts first, then the users who could be added.
+#[test]
+fn the_hosts_dialogs_reads_are_read_again_after_a_failure() {
+    let mut model = opened("agency");
+    let effects = one(&mut model, EventTypeEvent::OpenHosts);
+    assert!(one(&mut model, EventTypeEvent::RetryDialogRead).is_empty());
+    answer(&mut model, sent(&effects)[0].0, refused("unavailable"));
+    let effects = one(&mut model, EventTypeEvent::RetryDialogRead);
+    assert_eq!(
+        sent(&effects)[0].1,
+        SchedulingAdminRequest::Hosts { slug: SLUG.into() }
+    );
+    assert_eq!(hosts_dialog(&model).load, SectionLoad::Loading);
+    let effects = answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Hosts(hosts())),
+    );
+    assert_eq!(hosts_dialog(&model).candidates_load, SectionLoad::Loading);
+    assert!(one(&mut model, EventTypeEvent::RetryDialogRead).is_empty());
+    answer(&mut model, sent(&effects)[0].0, Err(server_error()));
+    assert!(hosts_dialog(&model).candidates_load.failure().is_some());
+    assert!(hosts_dialog(&model).candidates.is_empty());
+    assert!(hosts_dialog(&model).can_save(), "the hosts stay editable");
+
+    let effects = one(&mut model, EventTypeEvent::RetryDialogRead);
+    let requests = sent(&effects);
+    let [(ticket, SchedulingAdminRequest::Users { .. })] = requests.as_slice() else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(hosts_dialog(&model).candidates_load, SectionLoad::Loading);
+    answer(
+        &mut model,
+        *ticket,
+        done(SchedulingAdminData::Users(users())),
+    );
+    assert_eq!(hosts_dialog(&model).candidates_load, SectionLoad::Ready(()));
+    assert!(!hosts_dialog(&model).candidates.is_empty());
+    assert!(one(&mut model, EventTypeEvent::RetryDialogRead).is_empty());
+}

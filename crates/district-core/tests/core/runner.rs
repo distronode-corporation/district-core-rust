@@ -2523,11 +2523,11 @@ async fn a_hand_off_is_asked_for_with_the_nonce_the_browser_answered_with() {
     );
 }
 
-/// On the clock: the browser never answers the start page (a service without
-/// one), so after the wait, and not before, the link is asked for unbound and
-/// opened.
+/// On the clock: the browser never answers the start page, so after the wait,
+/// and not before, the hand-off is given up. The link is never asked for
+/// unbound.
 #[tokio::test(start_paused = true)]
-async fn an_unanswered_start_page_falls_back_after_the_wait() {
+async fn an_unanswered_start_page_is_given_up_after_the_wait() {
     let (runner, log) = fakes(None, true);
     let (mut model, _) = loaded(AGENCY, "agency");
     let effects = model.update(Event::Navigate(Route::Scheduling));
@@ -2565,28 +2565,17 @@ async fn an_unanswered_start_page_falls_back_after_the_wait() {
     );
     let over = waiting.await.unwrap();
     assert_eq!(start.elapsed(), HAND_OFF_CALLBACK_WAIT);
-    assert_eq!(HAND_OFF_CALLBACK_WAIT, Duration::from_secs(10));
+    assert_eq!(HAND_OFF_CALLBACK_WAIT, Duration::from_secs(30));
 
     let effects = model.update(over);
-    let [request @ Effect::RequestSchedulingHandOff { nonce: None, .. }] = effects.as_slice()
-    else {
-        panic!("{effects:?}");
-    };
-    let ready = runner.run(request.clone()).await.unwrap();
-    assert_eq!(
-        log.take(),
-        ["hand-off ws-contract-active Some(\"/dashboard/district/scheduling\") None"]
-    );
-    let effects = model.update(ready);
-    let [link @ Effect::OpenOneTimeUrl { .. }] = effects.as_slice() else {
-        panic!("{effects:?}");
-    };
-    assert_eq!(runner.run(link.clone()).await, None);
-    assert_eq!(
-        log.take(),
-        [
-            "open https://www.distronode.com/dashboard/handoff?code=contract-handoff-code&next=%2Fdashboard%2Fdistrict%2Fscheduling"
-        ]
+    assert!(effects.is_empty(), "no unbound request: {effects:?}");
+    assert!(log.take().is_empty());
+    assert!(
+        crate::support::signed_in(&model)
+            .scheduling
+            .notice
+            .as_ref()
+            .is_some_and(|notice| notice.retryable)
     );
 }
 

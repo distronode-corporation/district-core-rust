@@ -48,17 +48,23 @@
 //! alone: the service hands that caller back to the receptionist when its own
 //! window closes.
 //!
-//! # What the service does not say
+//! # How a ring ends
 //!
-//! Nothing is published when someone else takes the call. The ring ends when
+//! The service publishes `call_ring_cancelled` when a ring it started ends:
+//! someone answered (on any device), its window closed, the caller hung up, or
+//! it stopped ringing for its own reason. That event only ever silences and
+//! withdraws a ring still ringing or waiting here for that call; it never
+//! touches a call this desktop answered or is answering, because it reaches
+//! the answering device too, sometimes after the answer. A ring also ends when
 //! the call ends (`call_ended`, or a `call_updated` whose status is no longer
-//! one that can be answered), at the deadline, or when an answer is refused
-//! because the call is over.
+//! one that can be answered), at the deadline, which stays as the fallback for
+//! a cancel that never arrives, or when an answer is refused because the call
+//! is over.
 
 use std::time::Duration;
 
 use district_api::ApiError;
-use district_model::{CallAnswerResponse, TelemetryEnvelope, TelemetryEventType};
+use district_model::{CallAnswerResponse, RingCancelReason, TelemetryEnvelope, TelemetryEventType};
 use serde_json::Value;
 
 use crate::failure::FailureText;
@@ -117,6 +123,9 @@ pub enum RingEnd {
     /// The call ended before it was answered: the caller hung up, or the
     /// receptionist finished with them.
     CallEnded,
+    /// Someone answered it on another device: the member's other computer or
+    /// phone, or a colleague's.
+    AnsweredElsewhere,
     /// The answer was refused, for this reason.
     AnswerFailed(FailureText),
 }
@@ -132,6 +141,11 @@ impl IncomingRing {
     pub const MISSED: &'static str = district_l10n::english::RINGING_MISSED;
     /// The line after a call that ended before it was answered.
     pub const CALL_ENDED: &'static str = district_l10n::english::RINGING_CALL_ENDED;
+    /// The line after a call answered on another device.
+    pub const ANSWERED_ELSEWHERE: &'static str = district_l10n::english::RINGING_ANSWERED_ELSEWHERE;
+    /// The heading of a call answered on another device.
+    pub const ANSWERED_ELSEWHERE_TITLE: &'static str =
+        district_l10n::english::LIVE_ANSWERED_ELSEWHERE_TITLE;
     /// The note beside Answer: answering uses the microphone.
     pub const MICROPHONE_NOTE: &'static str = district_l10n::english::RINGING_MICROPHONE_NOTE;
 
@@ -157,6 +171,9 @@ impl IncomingRing {
             RingPhase::Waiting => s::ringing_waiting_body(l()).to_owned(),
             RingPhase::Ended(RingEnd::Missed) => s::ringing_missed(l()).to_owned(),
             RingPhase::Ended(RingEnd::CallEnded) => s::ringing_call_ended(l()).to_owned(),
+            RingPhase::Ended(RingEnd::AnsweredElsewhere) => {
+                s::ringing_answered_elsewhere(l()).to_owned()
+            }
             RingPhase::Ended(RingEnd::AnswerFailed(failure)) => failure.message.clone(),
         }
     }
@@ -405,6 +422,48 @@ impl SignedIn {
             ring.phase = RingPhase::Ended(RingEnd::CallEnded);
             tickets.cancel(Slot::RingDeadline);
         }
+        effects
+    }
+
+    /// A `call_ring_cancelled` event: the service stopped ringing for the
+    /// call, so a ring still ringing or waiting here for it stops and its
+    /// notification goes. Answered elsewhere, the ring ends saying so; the
+    /// caller gone, as for the call's own end; otherwise it is a missed call,
+    /// as at the deadline.
+    ///
+    /// Nothing else changes. A ring being answered here, a call answered here
+    /// and its transcript are left alone (the event reaches the answering
+    /// device too), as is a ring for another call. Repeats find the ring ended
+    /// and do nothing.
+    pub(crate) fn ring_cancelled(
+        &mut self,
+        envelope: &TelemetryEnvelope,
+        tickets: &mut Tickets,
+    ) -> Vec<Effect> {
+        let reason = envelope
+            .ring_cancel_reason()
+            .unwrap_or(RingCancelReason::Withdrawn);
+        let Some(ring) = self
+            .ring
+            .live(&envelope.call_id)
+            .filter(|ring| ring.can_decline())
+        else {
+            return Vec::new();
+        };
+        tickets.cancel(Slot::RingDeadline);
+        let (end, effects) = match reason {
+            RingCancelReason::Answered => (RingEnd::AnsweredElsewhere, silence(ring)),
+            RingCancelReason::CallEnded => (RingEnd::CallEnded, silence(ring)),
+            RingCancelReason::Timeout | RingCancelReason::Withdrawn => {
+                let mut effects = stop_ringtone(ring);
+                effects.push(Effect::Notify(Notification::missed_call(
+                    &ring.workspace_id,
+                    &ring.call_id,
+                )));
+                (RingEnd::Missed, effects)
+            }
+        };
+        ring.phase = RingPhase::Ended(end);
         effects
     }
 

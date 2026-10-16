@@ -21,9 +21,10 @@
 //! press first opens the service's start page in the browser with a fresh
 //! `state`; the browser answers through `districtai://handoff` with a nonce the
 //! service also left in that browser, and the link is asked for with that
-//! nonce, so only that browser can redeem it. A service that does not yet have
-//! the start page never answers, so after [`HAND_OFF_CALLBACK_WAIT`] the link is
-//! asked for unbound, as before; an answer that arrives after that is dropped.
+//! nonce, so only that browser can redeem it. A browser that has not answered
+//! after [`HAND_OFF_CALLBACK_WAIT`] gives the hand-off up, with a notice; the
+//! link is never asked for unbound, and an answer that arrives after that is
+//! dropped.
 
 use std::fmt;
 use std::time::Duration;
@@ -35,20 +36,24 @@ use district_model::{
     SchedulingHandOffResponse, SchedulingStatusResponse, SchedulingTenant,
 };
 
+use crate::Locale;
 use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::scheduling_admin::SchedulingSection;
 use crate::signed_in::{Next, SignedIn, stay};
-use crate::text::{english_only, l, s};
+use crate::text::{l, s};
 
 /// Where the hand-off lands: the web dashboard's booking pages. The service
 /// replaces anything that is not a path under `/dashboard` with its own default,
 /// so a mistake here costs the deep link and nothing else.
 pub const SCHEDULING_WEB_PATH: &str = "/dashboard/district/scheduling";
 
-/// How long the browser has to answer the start page before the link is asked
-/// for unbound.
-pub const HAND_OFF_CALLBACK_WAIT: Duration = Duration::from_secs(10);
+/// How long the browser has to answer the start page before the hand-off is
+/// given up. It covers the person's time on the browser's "Open District AI?"
+/// prompt, and a hand-off that runs out is pressed again rather than minted
+/// unbound, so it is generous: thirty seconds, as District Core for Swift waits,
+/// well inside the five minutes the service's nonce cookie lives.
+pub const HAND_OFF_CALLBACK_WAIT: Duration = Duration::from_secs(30);
 
 /// A link that carries a sign-in of its own, or a value that binds one (the
 /// start page's `state`, the browser's nonce). It is opened or checked at once
@@ -359,10 +364,14 @@ impl SignedIn {
         self.scheduling.enabling = false;
         self.scheduling.notice = match result {
             Ok(answer) if answer.ok => None,
-            Ok(answer) => Some(FailureText::final_(
-                english_only(answer.error)
-                    .unwrap_or_else(|| s::failure_scheduling_setup_failed(l()).to_owned()),
-            )),
+            // The service's reason is its own English: shown as it is in
+            // English, and in French replaced by a sentence that says only
+            // that it did not finish, never that no reason was given.
+            Ok(answer) => Some(FailureText::final_(match answer.error {
+                Some(reason) if l() == Locale::En => reason,
+                Some(_) => s::failure_scheduling_setup_failed_reason_unshown(l()).to_owned(),
+                None => s::failure_scheduling_setup_failed(l()).to_owned(),
+            })),
             Err(ApiError::Forbidden(_)) => {
                 Some(FailureText::final_(s::failure_scheduling_not_offered(l())))
             }
@@ -387,20 +396,23 @@ impl SignedIn {
     pub(crate) fn hand_off_callback(&mut self, link: &OneTimeUrl, tickets: &mut Tickets) -> Next {
         if let Some(nonce) = answer_to(&self.scheduling.hand_off, link) {
             tickets.cancel(Slot::SchedulingHandOffWait);
-            return Next::Stay(self.mint_hand_off(Some(nonce), tickets));
+            return Next::Stay(self.mint_hand_off(nonce, tickets));
         }
         if let Some(nonce) = answer_to(&self.purchase.leg, link) {
-            return Next::Stay(self.mint_purchase(Some(nonce), tickets));
+            return Next::Stay(self.mint_purchase(nonce, tickets));
         }
         stay()
     }
 
-    /// The browser did not answer in time: the service may not have the start
-    /// page yet, so the link is asked for unbound, as before it had. The wait's
+    /// The browser did not answer in time: the hand-off is given up and says
+    /// so, and pressing again starts afresh. The link is never asked for
+    /// unbound: a link with no nonce signs in whichever browser opens it, and
+    /// the service refuses one once `HANDOFF_REQUIRE_NONCE` is on. The wait's
     /// ticket is awaited only while the browser is: an answer cancels it, and
     /// leaving the workspace forgets it.
-    pub(crate) fn hand_off_unanswered(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
-        self.mint_hand_off(None, tickets)
+    pub(crate) fn hand_off_unanswered(&mut self) {
+        self.scheduling.hand_off = HandOffLeg::Idle;
+        self.scheduling.notice = Some(FailureText::retryable(s::failure_hand_off_unanswered(l())));
     }
 
     /// No browser took a page. One that was to answer a hand-off never will, so
@@ -413,12 +425,14 @@ impl SignedIn {
         }
     }
 
-    fn mint_hand_off(&mut self, nonce: Option<HandOffNonce>, tickets: &mut Tickets) -> Vec<Effect> {
+    /// The link, asked for bound to the browser by `nonce`: always one, so
+    /// [`Effect::RequestSchedulingHandOff`]'s `nonce` is never `None` from here.
+    fn mint_hand_off(&mut self, nonce: HandOffNonce, tickets: &mut Tickets) -> Vec<Effect> {
         self.scheduling.hand_off = HandOffLeg::Minting;
         vec![Effect::RequestSchedulingHandOff {
             ticket: tickets.issue(Slot::SchedulingHandOff),
             workspace_id: self.workspace_id(),
-            nonce,
+            nonce: Some(nonce),
         }]
     }
 
@@ -470,9 +484,9 @@ pub(crate) fn hand_off_failure(error: Option<&ApiError>) -> FailureText {
         Some(ApiError::RateLimited { .. }) => {
             FailureText::retryable(s::failure_hand_off_too_many(l()))
         }
-        // The service wants a bound hand-off and this one was not, because the
-        // browser did not answer in time. Pressing again binds it if the
-        // browser answers.
+        // The service wants a bound hand-off and this one was not. This app
+        // always binds both, so only a service that lost the nonce says so.
+        // Pressing again binds it if the browser answers.
         Some(error) if error.code() == Some(CODE_NONCE_REQUIRED) => {
             FailureText::retryable(s::failure_hand_off_update_needed(l()))
         }

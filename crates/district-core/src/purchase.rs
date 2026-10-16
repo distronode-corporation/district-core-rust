@@ -557,11 +557,12 @@ impl SignedIn {
         ]
     }
 
-    /// The link is asked for, bound by `nonce`, or unbound when the start page
-    /// did not answer in time. The workspace open now is recorded with it.
+    /// The link is asked for, bound by `nonce`: always one, so
+    /// [`Effect::RequestBillingHandOff`]'s `nonce` is never `None` from here.
+    /// The workspace open now is recorded with it.
     pub(crate) fn mint_purchase(
         &mut self,
-        nonce: Option<HandOffNonce>,
+        nonce: HandOffNonce,
         tickets: &mut Tickets,
     ) -> Vec<Effect> {
         self.purchase.leg = HandOffLeg::Minting;
@@ -570,8 +571,17 @@ impl SignedIn {
             ticket: tickets.issue(Slot::BillingHandOff),
             workspace_id: self.active_id(),
             destination: self.purchase.destination.clone(),
-            nonce,
+            nonce: Some(nonce),
         }]
+    }
+
+    /// The start page did not answer in time: the purchase is given up with a
+    /// notice, and pressing again starts afresh. The link is never asked for
+    /// unbound, which would sign in whichever browser opened it (security
+    /// sweep S33); the service refuses one once `HANDOFF_REQUIRE_NONCE` is on.
+    pub(crate) fn purchase_unanswered(&mut self) {
+        self.purchase.leg = HandOffLeg::Idle;
+        self.purchase.notice = Some(FailureText::retryable(s::failure_hand_off_unanswered(l())));
     }
 
     /// The link arrived: open it at once in the view that holds the start

@@ -1080,8 +1080,8 @@ pub fn dialer_busy_note(l: Locale) -> &'static str {
 #[must_use]
 pub fn dialer_hint(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Enter a number with its country code, for example +1 212 555 0142.",
-        Locale::FrCa => "Indiquez un numéro avec l'indicatif du pays, par exemple +1 212 555 0142.",
+        Locale::En => "Enter a number with its country code, for example +1\u{00A0}212\u{00A0}555\u{00A0}0142.",
+        Locale::FrCa => "Indiquez un numéro avec l'indicatif du pays, par exemple +1\u{00A0}212\u{00A0}555\u{00A0}0142.",
     }
 }
 
@@ -1283,6 +1283,15 @@ pub fn failure_hand_off_too_many(l: Locale) -> &'static str {
     }
 }
 
+/// `failure.hand_off_unanswered`
+#[must_use]
+pub fn failure_hand_off_unanswered(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your browser didn't respond to District AI in time, so the page wasn't opened. Try again, and let your browser open District AI if it asks.",
+        Locale::FrCa => "Votre navigateur n'a pas répondu à temps à District AI; la page n'a donc pas été ouverte. Réessayez et autorisez votre navigateur à ouvrir District AI s'il vous le demande.",
+    }
+}
+
 /// `failure.hand_off_update_needed`
 #[must_use]
 pub fn failure_hand_off_update_needed(l: Locale) -> &'static str {
@@ -1442,6 +1451,15 @@ pub fn failure_scheduling_setup_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Setting up booking pages did not finish, and no reason was given.",
         Locale::FrCa => "La configuration des pages de réservation a échoué, et aucune raison n'a été donnée.",
+    }
+}
+
+/// `failure.scheduling_setup_failed_reason_unshown`
+#[must_use]
+pub fn failure_scheduling_setup_failed_reason_unshown(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Setting up booking pages did not finish.",
+        Locale::FrCa => "La configuration des pages de réservation n'a pas abouti.",
     }
 }
 
@@ -1973,6 +1991,15 @@ pub fn live_action_decline(l: Locale) -> &'static str {
     match l {
         Locale::En => "Decline",
         Locale::FrCa => "Refuser",
+    }
+}
+
+/// `live.answered_elsewhere_title`
+#[must_use]
+pub fn live_answered_elsewhere_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Answered on another device",
+        Locale::FrCa => "Appel pris sur un autre appareil",
     }
 }
 
@@ -2891,6 +2918,15 @@ pub fn purchase_term_monthly(l: Locale) -> &'static str {
     match l {
         Locale::En => "Monthly",
         Locale::FrCa => "Mensuel",
+    }
+}
+
+/// `ringing.answered_elsewhere`
+#[must_use]
+pub fn ringing_answered_elsewhere(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That call was answered on another device.",
+        Locale::FrCa => "Cet appel a été pris sur un autre appareil.",
     }
 }
 

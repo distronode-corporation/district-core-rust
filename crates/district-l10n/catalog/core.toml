@@ -1081,13 +1081,13 @@ state = "reviewed"
 note = "For a member who is already in a call or a meeting room."
 
 [dialer.hint]
-en = "Enter a number with its country code, for example +1 212 555 0142."
-fr = "Indiquez un numéro avec l'indicatif du pays, par exemple +1 212 555 0142."
+en = "Enter a number with its country code, for example +1\u00A0212\u00A0555\u00A00142."
+fr = "Indiquez un numéro avec l'indicatif du pays, par exemple +1\u00A0212\u00A0555\u00A00142."
 ctx = "placeholder"
 screen = "dialler"
 tier = "T3"
 state = "reviewed"
-note = "Above the keypad: enter the number with its country code. +1 212 555 0142 is an example number; keep it as it is."
+note = "Above the keypad: enter the number with its country code. +1 212 555 0142 is an example number; keep it as it is, with no-break spaces (U+00A0) between its groups so it never breaks after +1."
 
 [dialer.microphone_note]
 en = "Placing a call turns on your microphone."
@@ -1289,6 +1289,15 @@ tier = "T2"
 state = "reviewed"
 note = "Opening the web from the app signed in: asked too often in the last minute."
 
+[failure.hand_off_unanswered]
+en = "Your browser didn't respond to District AI in time, so the page wasn't opened. Try again, and let your browser open District AI if it asks."
+fr = "Votre navigateur n'a pas répondu à temps à District AI; la page n'a donc pas été ouverte. Réessayez et autorisez votre navigateur à ouvrir District AI s'il vous le demande."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+state = "reviewed"
+note = "Opening the web from the app: shown when the browser page the app opened never hands back to the app, so nothing was opened. Pressing again starts afresh."
+
 [failure.hand_off_update_needed]
 en = "District AI now needs your browser to answer the app before it opens the web, and it did not. Try again, and let the browser open District AI if it asks. If this keeps happening, update the app."
 fr = "District AI exige désormais que votre navigateur réponde à l'application avant d'ouvrir la version Web, et il ne l'a pas fait. Réessayez et laissez le navigateur ouvrir District AI s'il le demande. Si le problème persiste, mettez à jour l'application."
@@ -1450,6 +1459,15 @@ screen = "any screen"
 tier = "T2"
 state = "reviewed"
 note = "Setting up booking pages ran and failed, and the service gave no reason."
+
+[failure.scheduling_setup_failed_reason_unshown]
+en = "Setting up booking pages did not finish."
+fr = "La configuration des pages de réservation n'a pas abouti."
+ctx = "error"
+screen = "any screen"
+tier = "T2"
+state = "reviewed"
+note = "Setting up booking pages ran and failed, and the service gave a reason in its own English, which a French screen does not show. Says only what is true: it did not finish. Never that no reason was given."
 
 [failure.scheduling_too_many]
 en = "Booking pages were turned on several times in the last hour for this workspace. Try again later."
@@ -1985,6 +2003,15 @@ screen = "live updates"
 tier = "T0"
 state = "reviewed"
 note = "Button on an incoming call notification that declines it."
+
+[live.answered_elsewhere_title]
+en = "Answered on another device"
+fr = "Appel pris sur un autre appareil"
+ctx = "label"
+screen = "live updates"
+tier = "T3"
+state = "reviewed"
+note = "Heading of an incoming call that stopped ringing here because it was answered on another device (this member's other computer or phone, or a colleague's)."
 
 [live.message_body]
 en = "Open District AI to read it."
@@ -2913,6 +2940,15 @@ screen = "billing purchase"
 tier = "T1"
 state = "reviewed"
 note = "How often a plan is billed: every month."
+
+[ringing.answered_elsewhere]
+en = "That call was answered on another device."
+fr = "Cet appel a été pris sur un autre appareil."
+ctx = "body"
+screen = "incoming call"
+tier = "T3"
+state = "reviewed"
+note = "After an incoming call stopped ringing here because someone answered it on another device: this member's other computer or phone, or a colleague's."
 
 [ringing.body]
 en = "Transferred from your AI receptionist."

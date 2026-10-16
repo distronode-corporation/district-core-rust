@@ -632,6 +632,10 @@ pub struct HostsDialog {
     /// The scheduler users who could be added: not hosts already, not
     /// archived. Empty when they could not be read.
     pub candidates: Vec<SchedulingUser>,
+    /// The read of those users, which follows the hosts' own. A failure leaves
+    /// the hosts editable, with nobody to add until it is read again
+    /// ([`EventTypeEvent::RetryDialogRead`]).
+    pub candidates_load: SectionLoad<()>,
     /// `fixed`, `round_robin` or `collective`.
     pub routing_mode: String,
     /// For round robin: `even`, `soonest` or `priority`.
@@ -1001,6 +1005,9 @@ pub enum EventTypeEvent {
     },
     /// Save the hosts.
     SaveHosts,
+    /// Read the hosts dialog's hosts, or the users who could be added, again
+    /// after that read failed.
+    RetryDialogRead,
     /// Open the questions.
     OpenQuestions,
     /// Start a new question, placed last.
@@ -1233,6 +1240,7 @@ pub(crate) fn detail_event(
                 load: SectionLoad::Loading,
                 rows: Vec::new(),
                 candidates: Vec::new(),
+                candidates_load: SectionLoad::Loading,
                 routing_mode: row.routing_mode.unwrap_or_else(|| "fixed".to_owned()),
                 rotation: row.rr_strategy.unwrap_or_else(|| "even".to_owned()),
                 validation: None,
@@ -1367,9 +1375,31 @@ fn hosts_event(hosts: &mut HostsDialog, event: EventTypeEvent, slug: String) -> 
             }
         }
         EventTypeEvent::SaveHosts if hosts.can_save() => return save_hosts(hosts, slug),
+        // The hosts first, whose answer reads the users; else the users.
+        EventTypeEvent::RetryDialogRead if hosts.load.failure().is_some() => {
+            hosts.load = SectionLoad::Loading;
+            return vec![send_detail(
+                DetailPending::DialogHosts,
+                SchedulingAdminRequest::Hosts { slug },
+            )];
+        }
+        EventTypeEvent::RetryDialogRead if hosts.candidates_load.failure().is_some() => {
+            hosts.candidates_load = SectionLoad::Loading;
+            return vec![read_candidates()];
+        }
         _ => {}
     }
     Vec::new()
+}
+
+/// The scheduler users, for who could be added as a host.
+fn read_candidates() -> Out {
+    send_detail(
+        DetailPending::Candidates,
+        SchedulingAdminRequest::Users {
+            include_archived: None,
+        },
+    )
 }
 
 fn host_row<'a>(hosts: &'a mut HostsDialog, id: &str) -> Option<&'a mut HostRow> {
@@ -1592,12 +1622,8 @@ fn detail_answer(
                             })
                             .collect();
                         hosts.load = SectionLoad::Ready(());
-                        return vec![send_detail(
-                            DetailPending::Candidates,
-                            SchedulingAdminRequest::Users {
-                                include_archived: None,
-                            },
-                        )];
+                        hosts.candidates_load = SectionLoad::Loading;
+                        return vec![read_candidates()];
                     }
                     Err(failure) => hosts.load = SectionLoad::Failed(failure),
                 }
@@ -1607,12 +1633,17 @@ fn detail_answer(
         DetailPending::Candidates => {
             if let Some(EventTypeDialog::Hosts(hosts)) = &mut section.dialog {
                 let assigned: Vec<String> = hosts.rows.iter().map(|r| r.user_id.clone()).collect();
-                hosts.candidates = match answer {
-                    Ok(SchedulingAdminData::Users(users)) => users
-                        .into_iter()
-                        .filter(|u| !u.archived && !assigned.contains(&u.id))
-                        .collect(),
-                    _ => Vec::new(),
+                let users =
+                    answer.and_then(|data| data!(Users)(data).ok_or_else(FailureText::unexpected));
+                (hosts.candidates, hosts.candidates_load) = match users {
+                    Ok(users) => (
+                        users
+                            .into_iter()
+                            .filter(|u| !u.archived && !assigned.contains(&u.id))
+                            .collect(),
+                        SectionLoad::Ready(()),
+                    ),
+                    Err(failure) => (Vec::new(), SectionLoad::Failed(failure)),
                 };
             }
         }

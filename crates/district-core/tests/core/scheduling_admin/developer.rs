@@ -820,3 +820,48 @@ fn a_webhooks_events_and_fields_are_changed_its_address_fixed() {
     developer(&mut model, DeveloperEvent::OpenCreateKey);
     assert!(developer(&mut model, DeveloperEvent::SaveWebhook).is_empty());
 }
+
+/// Deliveries that could not be read are read again on request, for the
+/// webhook open and only after a failure.
+#[test]
+fn deliveries_that_failed_are_read_again_on_request() {
+    let mut model = read("viewer");
+    show(
+        &mut model,
+        DeveloperTab::Webhooks,
+        SchedulingAdminData::Webhooks(hooks()),
+    );
+    assert!(developer(&mut model, DeveloperEvent::RetryDeliveries).is_empty());
+    let effects = developer(
+        &mut model,
+        DeveloperEvent::ToggleDeliveries("wh-contract-1".into()),
+    );
+    assert!(
+        developer(&mut model, DeveloperEvent::RetryDeliveries).is_empty(),
+        "still reading"
+    );
+    answer(&mut model, sent(&effects)[0].0, Err(server_error()));
+    assert!(
+        section(&model).deliveries["wh-contract-1"]
+            .failure()
+            .is_some()
+    );
+    let effects = developer(&mut model, DeveloperEvent::RetryDeliveries);
+    assert_eq!(
+        sent(&effects)[0].1,
+        SchedulingAdminRequest::WebhookDeliveries {
+            id: "wh-contract-1".into()
+        }
+    );
+    assert_eq!(
+        section(&model).deliveries["wh-contract-1"],
+        SectionLoad::Loading
+    );
+    answer(&mut model, sent(&effects)[0].0, Err(server_error()));
+    // Closed, a failure is not read again.
+    developer(
+        &mut model,
+        DeveloperEvent::ToggleDeliveries("wh-contract-1".into()),
+    );
+    assert!(developer(&mut model, DeveloperEvent::RetryDeliveries).is_empty());
+}

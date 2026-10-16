@@ -40,9 +40,3 @@ pub(crate) fn wire(category: WireCategory, value: &str) -> String {
         Locale::FrCa => wire_label(category, value, Locale::FrCa),
     }
 }
-
-/// A sentence the service wrote itself, in English: kept in English and
-/// dropped in French, where the screen says its own words instead.
-pub(crate) fn english_only(theirs: Option<String>) -> Option<String> {
-    theirs.filter(|_| l() == Locale::En)
-}

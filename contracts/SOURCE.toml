@@ -29,10 +29,10 @@ source_clean = true
 file_count = 187
 
 [sets.desktop]
-commit = "43eed5fd611d96fcceb1702b56719b577c7f6d7d"
+commit = "6cd0ff6674360ce56a83bfc1763315db2a056a24"
 source = "the desktop-only contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
-file_count = 13
+file_count = 14
 
 [sets.i18n]
 commit = "43eed5fd611d96fcceb1702b56719b577c7f6d7d"
@@ -41,7 +41,7 @@ source_clean = true
 file_count = 3
 
 [sync]
-date = "2026-10-14"
+date = "2026-10-15"
 checksums = "SHA256SUMS"
 
 [[substitution]]

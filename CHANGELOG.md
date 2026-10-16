@@ -17,6 +17,91 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [4.0.2] - 2026-10-15
+
+The core of District AI for Linux 3.0.1 and District AI for Windows 3.0.1: a desktop stops
+ringing when the call is answered on another device, when the ring's window closes, or
+when the caller hangs up, as soon as the service says so.
+
+### Added
+
+- `TelemetryEventType::CallRingCancelled` (`call_ring_cancelled`), whose data is
+  `{callId, reason}`, and `RingCancelReason` (`answered`, `timeout`, `call_ended`,
+  `withdrawn`), read with `TelemetryEnvelope::ring_cancel_reason`. A reason this client
+  does not know reads as `Withdrawn`. Held to the new desktop fixture
+  `telemetry-event-call-ring-cancelled.json` (the desktop set now from 6cd0ff667).
+- The core acts on the event from the open workspace's socket and from every other
+  workspace's where the member takes calls: a ring still ringing or waiting here for
+  that call stops its ringtone and loses its notification, and its deadline is
+  dropped. Answered elsewhere, the ring ends as `RingEnd::AnsweredElsewhere`, which
+  says "That call was answered on another device." (`IncomingRing::ANSWERED_ELSEWHERE`,
+  heading `IncomingRing::ANSWERED_ELSEWHERE_TITLE`, "Answered on another device"); a
+  caller who hung up ends it as `RingEnd::CallEnded`; a timeout, a withdrawal or an
+  unknown reason makes it a missed call with the missed-call notification, as the
+  local deadline does.
+- Three strings, in English and Canadian French: `ringing.answered_elsewhere`,
+  `live.answered_elsewhere_title` and `failure.hand_off_unanswered`.
+- A read that failed can be read again where only closing and reopening could before:
+  `HoursEvent::RetryRead` (the week's editor its rules, the overrides' editor its
+  overrides), `EventTypeEvent::RetryDialogRead` (the hosts dialog's hosts, then the
+  users who could be added, whose read is now `HostsDialog::candidates_load`) and
+  `DeveloperEvent::RetryDeliveries` (the open webhook's deliveries). Each does nothing
+  unless that read failed, as `BookingsEvent::RetryDialogRead` does.
+- `district_l10n::support_status_label(status_name, category, locale)` (also
+  `district_core::l10n::support_status_label`), and `listed_support_status_label`,
+  the label of a listed name only: a support request's status in the
+  app's language, never the help desk's own word. A name this build lists (`Received`,
+  `Open`, `Waiting for support`, `Waiting for customer`, `In progress`, `Pending`,
+  `Escalated`, `Resolved`, `Done`, `Closed`, `Canceled`, `Declined`, `unknown`, and
+  their spellings) reads as its label; an unlisted one as its category's (`NEW` Open,
+  `INDETERMINATE` In progress, `DONE` Closed, `PENDING` Received), and an unknown
+  category as "Status unknown". The thirteen `request_status.*` labels in
+  `catalog/support.toml` are District AI for iOS's, word for word in both languages.
+- `SentimentShare::name`: the service's own name for a sentiment band (`Positive
+  Sentiment`, `Neutral Sentiment`, `Friction Sentiment`), the same in every language,
+  for an app to key the band's colour on. Keyed on the translated `label`, French drew
+  all three bands in the friction colour.
+
+### Changed
+
+- The booking pages' hand-off to the web is never asked for unbound. When the browser
+  has not answered the start page after `HAND_OFF_CALLBACK_WAIT`, the hand-off is given
+  up with a retryable notice (`failure.hand_off_unanswered`, "Your browser didn't
+  respond to District AI in time, so the page wasn't opened. Try again, and let your
+  browser open District AI if it asks."), where it used to ask for a link bound to no
+  browser.
+  `Effect::RequestSchedulingHandOff` now always carries a nonce, so the service can
+  require one (`HANDOFF_REQUIRE_NONCE`, security sweep S33).
+- `HAND_OFF_CALLBACK_WAIT` is 30 seconds (was 10), for both hand-offs, as District Core
+  for Swift waits: it covers the time a person takes on the browser's "Open District
+  AI?" prompt, and running out now costs a retry rather than an unbound link. The
+  service's nonce cookie lives five minutes.
+- The billing hand-off (checkout and the billing page, in the app or the browser) does
+  the same: no answer in time gives the purchase up with the same notice, and
+  `Effect::RequestBillingHandOff` always carries a nonce. With both, no link the core
+  asks for is unbound.
+- `dialer.hint` writes its example number with no-break spaces between the groups
+  (`+1 212 555 0142`), in English and French, so it never breaks after `+1`.
+- `SupportRequestScreen::closed_message` names the status by its listed label, and an
+  unlisted one as "Done", the service's default name for a close: "Closed as Done."
+  stays, and the French reads "Fermée (état : Terminée)." where it carried the
+  desk's English.
+
+### Unchanged on purpose
+
+- The event never touches a call this desktop answered or is answering: it reaches the
+  answering device too, sometimes after the answer, so an answer on its way, the call
+  joined and its live transcript are left alone. It is not a `call_ended`: it never
+  runs the hang-up of a call answered here.
+- The local thirty-second deadline stays as the fallback for a cancel that never
+  arrives. A repeated cancel, on the socket or a push, does nothing more.
+
+`RingEnd::AnsweredElsewhere`, `TelemetryEventType::CallRingCancelled` and the three
+retry events are new variants of public enums, and `HostsDialog::candidates_load` and
+`SentimentShare::name` new fields of public structs, which this file's rule counts as breaking. They ship in a
+patch release because the only apps that pin 4.0, District AI for Linux and District
+AI for Windows, move to this release in their 3.0.1 together with the matching arms.
+
 ## [4.0.1] - 2026-10-15
 
 The language signals District AI for Linux 3.0.0 and District AI for Windows 3.0.0 send

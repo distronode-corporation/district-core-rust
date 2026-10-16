@@ -180,6 +180,7 @@ impl AnalyticsReport {
             .iter()
             .zip(shares(&values))
             .map(|(slice, share)| SentimentShare {
+                name: slice.name.clone(),
                 label: text::wire(WireCategory::AnalyticsSentiment, &slice.name),
                 value: slice.value,
                 share,
@@ -250,6 +251,12 @@ pub struct ChartBar {
 /// One band of the sentiment breakdown.
 #[derive(Clone, Debug, PartialEq)]
 pub struct SentimentShare {
+    /// The service's name for the band, as it sent it: a wire value
+    /// (`Positive Sentiment`, `Neutral Sentiment`, `Friction Sentiment`) that
+    /// is the same in every language. Never shown; what decides the band's
+    /// colour, which is never read from [`label`](Self::label), the shown and
+    /// translated one.
+    pub name: String,
     /// Its label.
     pub label: String,
     /// How many calls, as the service counted.

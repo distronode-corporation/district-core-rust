@@ -1,6 +1,6 @@
 //! Booking pages: the card's states, turning them on as the service allows, and
-//! the hand-off link that is opened at once and never kept, bound to the
-//! browser that answered for it or, when none did in time, asked for unbound.
+//! the hand-off link that is opened at once and never kept, always bound to the
+//! browser that answered for it: when none did in time, it is not asked for.
 
 use district_api::{ApiError, ErrorDetail};
 use district_auth::is_valid_hand_off_state;
@@ -268,6 +268,25 @@ fn enabling_is_one_press_and_the_status_is_read_again_after_it() {
         screen(&model).notice.as_ref().unwrap().message,
         "Setting up booking pages did not finish, and no reason was given."
     );
+
+    // In French the service's English reason is not shown, and the sentence
+    // that replaces it never says that no reason was given.
+    let effects = scheduling(&mut model, SchedulingEvent::Enable);
+    district_core::l10n::with_locale(district_core::Locale::FrCa, || {
+        model.update(Event::SchedulingEnabled {
+            ticket: last_ticket(&effects),
+            result: Ok(SchedulingEnableResponse {
+                ok: false,
+                status: "error".to_owned(),
+                public_host: None,
+                error: Some("The booking host could not be reached.".to_owned()),
+            }),
+        });
+    });
+    assert_eq!(
+        screen(&model).notice.as_ref().unwrap().message,
+        "La configuration des pages de réservation n'a pas abouti."
+    );
 }
 
 #[test]
@@ -411,11 +430,11 @@ fn refused_with(message: &str, code: &str) -> ApiError {
 /// service's own (`nonce is malformed`) are not for a person.
 #[test]
 fn a_refused_nonce_says_what_to_do() {
-    // The service wants the browser bound and this hand-off was not: the
-    // browser did not answer in time.
+    // The service says the hand-off was not bound. This app always binds
+    // it, so only a service that lost the nonce could say so; the words are
+    // still this app's.
     let mut model = on_scheduling("agency", status("ready"));
-    let wait = press(&mut model);
-    let effects = model.update(Event::WaitOver { ticket: wait });
+    let effects = press_and_answer(&mut model);
     model.update(Event::SchedulingHandOffReady {
         ticket: last_ticket(&effects),
         result: Err(refused_with(
@@ -443,8 +462,9 @@ fn a_refused_nonce_says_what_to_do() {
     assert!(notice.retryable);
     assert!(!screen(&model).opening());
     // And pressing again starts a fresh hand-off.
-    let fresh = press(&mut model);
-    assert!(model.update(Event::WaitOver { ticket: fresh }).len() == 1);
+    press(&mut model);
+    assert_eq!(screen(&model).notice, None);
+    assert!(screen(&model).opening());
 }
 
 /// The press opens the start page with a fresh `state` of the shape the page
@@ -550,35 +570,38 @@ fn an_answer_nothing_awaits_is_dropped() {
     assert!(model.update(Event::WaitOver { ticket: wait }).is_empty());
 }
 
-/// No answer in time: the link is asked for unbound, as before the start page
-/// existed, and an answer that arrives after that is dropped.
+/// No answer in time: the hand-off is given up with a notice saying so, and
+/// the link is never asked for unbound. An answer after that is dropped, and
+/// pressing again starts afresh.
 #[test]
-fn without_an_answer_in_time_the_link_is_asked_for_unbound() {
+fn without_an_answer_in_time_the_hand_off_is_given_up_never_unbound() {
     let mut model = on_scheduling("agency", status("ready"));
     let wait = press(&mut model);
     let state = awaited_state(&model);
     let effects = model.update(Event::WaitOver { ticket: wait });
-    let [
-        Effect::RequestSchedulingHandOff {
-            workspace_id,
-            nonce: None,
-            ..
-        },
-    ] = effects.as_slice()
-    else {
-        panic!("{effects:?}");
-    };
-    assert_eq!(workspace_id, AGENCY);
-    assert!(screen(&model).minting());
-    // Too late: the unbound request is already on its way.
+    assert!(effects.is_empty(), "nothing is minted: {effects:?}");
+    assert_eq!(screen(&model).hand_off, HandOffLeg::Idle);
+    assert!(!screen(&model).minting());
+    let notice = screen(&model).notice.clone().expect("a notice");
+    assert_eq!(
+        notice.message,
+        "Your browser didn't respond to District AI in time, so the page wasn't opened. \
+         Try again, and let your browser open District AI if it asks."
+    );
+    assert!(notice.retryable);
+    // Too late: the answer finds nothing awaiting it.
     assert!(model.update(answer(&state)).is_empty());
     assert!(model.update(Event::WaitOver { ticket: wait }).is_empty());
-    let opened = handed(&mut model, last_ticket(&effects), hand_off());
-    let [Effect::OpenOneTimeUrl { url }] = opened.as_slice() else {
-        panic!("{opened:?}");
-    };
-    assert_eq!(url.expose(), hand_off().url);
-    assert!(model.update(answer(&state)).is_empty());
+    // Pressing again starts afresh, and binds the link to the new answer.
+    let effects = press_and_answer(&mut model);
+    assert!(
+        matches!(
+            effects.as_slice(),
+            [Effect::RequestSchedulingHandOff { nonce: Some(_), .. }]
+        ),
+        "{effects:?}"
+    );
+    assert_eq!(screen(&model).notice, None);
 }
 
 /// No browser took the start page: nothing will answer, so the hand-off is

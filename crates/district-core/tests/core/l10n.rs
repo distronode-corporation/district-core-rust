@@ -297,6 +297,15 @@ fn chart_labels_and_percentages_follow_the_language() {
     );
     let french_sentiment = french(|| report.sentiment());
     assert!(!french_sentiment.is_empty());
+    // The label is translated; the name an app keys the band's colour on is
+    // the service's, in either language.
+    let english_sentiment = english(|| report.sentiment());
+    for (english_band, french_band) in english_sentiment.iter().zip(&french_sentiment) {
+        assert_ne!(english_band.label, french_band.label);
+        assert_eq!(english_band.name, french_band.name);
+    }
+    assert_eq!(french_sentiment[0].name, "Positive Sentiment");
+    assert_eq!(french_sentiment[0].label, "Sentiment positif");
 }
 
 #[test]
