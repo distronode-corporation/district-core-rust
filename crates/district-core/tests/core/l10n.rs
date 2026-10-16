@@ -211,18 +211,11 @@ fn a_call_rows_length_is_the_services_in_english_and_read_from_its_seconds_in_fr
         ..calls[0].clone()
     };
     // The French reading of every formatMinutesSeconds vector, from the seconds,
-    // and from the service's own text when it sent no seconds. The core keeps the
-    // minutes and the seconds together with a no-break space, where the vectors
-    // still break between them (district-l10n's `vectors.rs` holds that to the
-    // contract and says when it stops).
+    // and from the service's own text when it sent no seconds.
     let mut checked = 0;
     for vector in format_vectors("formatMinutesSeconds") {
         let seconds = vector["seconds"].as_i64().expect("seconds");
-        let fr = vector["fr"]
-            .as_str()
-            .expect("fr")
-            .replace("min ", &format!("min{NBSP}"));
-        let fr = fr.as_str();
+        let fr = vector["fr"].as_str().expect("fr");
         let wire = district_core::l10n::format::call_duration(seconds);
         assert_eq!(
             french(|| call_duration_label(&call(&wire, Some(seconds)))),

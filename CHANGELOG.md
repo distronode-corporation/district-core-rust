@@ -54,21 +54,24 @@ is French, lists that follow their item, and booking forms whose complaints clea
   again; it used to stay beside the corrected value until the next save. Visual QA LC20.
 - SECURITY.md describes the hand-off as it is since 4.0.2: given up, never asked for
   unbound, when the browser does not answer within `HAND_OFF_CALLBACK_WAIT`.
-- `contracts/i18n/` from the server's 636b8ccb1: the error code
+- `contracts/i18n/` from the server's ecf098046: the error code
   `sending_domain_provider_changed` ("This sending domain was set up with a different
-  email provider. Remove it and connect it again to get the new DNS records.") and the
-  workflow skip reasons `email-misconfigured` and `ses-missing`, with their French
-  (« Courriel mal configuré », « SES non configuré »). The error's French says « les
-  nouvelles entrées DNS », never « enregistrements », which the glossary keeps for
-  recordings; the service's French moves to the same words, and
-  `crates/district-l10n/tests/errors.rs` says when the contract has caught up.
+  email provider. Remove it and connect it again to get the new DNS records."), the
+  workflow skip reasons `email-misconfigured` and `ses-missing` (« Courriel mal
+  configuré », « SES non configuré »), the number status `in-use` ("Active",
+  « Actif », where it read as the generic label), and the portal's headings for three
+  research keys: `estimatedValue` "DGI Evaluation" (« Évaluation DGI »), `person`
+  "Contact Profile" (« Profil du contact ») and `callerIntel` "Caller intelligence"
+  (« Renseignements sur l'appelant »), which read as the key itself ("EstimatedValue")
+  before. The error's French says « les nouvelles entrées DNS », never
+  « enregistrements », which the glossary keeps for recordings; the service's French
+  moves to the same words, and `crates/district-l10n/tests/errors.rs` says when the
+  contract has caught up.
 - A call's length in French no longer breaks between the minutes and the seconds:
   « 3 min 4 s » with a no-break space (U+00A0) between each number and its unit and
   between the two parts (`format::minutes_seconds`, so a call row's length and the
-  analytics average). It was « 3 min 4 s » with an ordinary space in the middle.
-  The service's format vectors move to the same; until `contracts/i18n/` is synced
-  past that, `crates/district-l10n/tests/vectors.rs` reads their French with the
-  no-break space and says when they no longer need it.
+  analytics average), as the service's format vectors now say. It was
+  « 3 min 4 s », with an ordinary space in the middle.
 
 ## [4.0.2] - 2026-10-15
 

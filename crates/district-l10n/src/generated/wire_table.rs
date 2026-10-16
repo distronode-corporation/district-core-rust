@@ -163,6 +163,7 @@ pub(crate) fn label(locale: Locale, category: WireCategory, value: &str) -> Opti
         (WireCategory::NumberStatus, "released") => s::wire_number_status_released(locale),
         (WireCategory::NumberStatus, "suspended") => s::wire_number_status_suspended(locale),
         (WireCategory::NumberStatus, "pending_verification") => s::wire_number_status_pending_verification(locale),
+        (WireCategory::NumberStatus, "in-use") => s::wire_number_status_in_use(locale),
         (WireCategory::A2pCampaignType, "low_volume") => s::wire_a2p_campaign_type_low_volume(locale),
         (WireCategory::A2pCampaignType, "customer_care") => s::wire_a2p_campaign_type_customer_care(locale),
         (WireCategory::A2pCampaignType, "marketing") => s::wire_a2p_campaign_type_marketing(locale),

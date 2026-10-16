@@ -35,7 +35,7 @@ source_clean = true
 file_count = 14
 
 [sets.i18n]
-commit = "636b8ccb1e98a84d9e330c1c865679573ae6aeb2"
+commit = "ecf098046130eae0be6ed3be5ad28f70b9037b68"
 source = "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests"
 source_clean = true
 file_count = 3
