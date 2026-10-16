@@ -1672,7 +1672,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_report_unavailable(Locale::FrCa), "Rapport indisponible");
     assert_eq!(wire_strings::wire_workflow_action_reason_send_failed(Locale::En), "Send failed");
     assert_eq!(wire_strings::wire_workflow_action_reason_send_failed(Locale::FrCa), "Échec d'envoi");
-    assert_eq!(wire_strings::wire_workflow_action_reason_ses_missing(Locale::En), "Ses missing");
+    assert_eq!(wire_strings::wire_workflow_action_reason_ses_missing(Locale::En), "SES missing");
     assert_eq!(wire_strings::wire_workflow_action_reason_ses_missing(Locale::FrCa), "SES non configuré");
     assert_eq!(wire_strings::wire_workflow_action_reason_tag_already_present(Locale::En), "Tag already present");
     assert_eq!(wire_strings::wire_workflow_action_reason_tag_already_present(Locale::FrCa), "Étiquette déjà présente");

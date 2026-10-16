@@ -58,7 +58,8 @@ is French, lists that follow their item, and booking forms whose complaints clea
   `sending_domain_provider_changed` ("This sending domain was set up with a different
   email provider. Remove it and connect it again to get the new DNS records."), the
   workflow skip reasons `email-misconfigured` and `ses-missing` (« Courriel mal
-  configuré », « SES non configuré »), the number status `in-use` ("Active",
+  configuré », « SES non configuré »; the English "SES missing" keeps the initialism
+  in capitals, as District AI for Android writes it), the number status `in-use` ("Active",
   « Actif », where it read as the generic label), and the portal's headings for three
   research keys: `estimatedValue` "DGI Evaluation" (« Évaluation DGI »), `person`
   "Contact Profile" (« Profil du contact ») and `callerIntel` "Caller intelligence"

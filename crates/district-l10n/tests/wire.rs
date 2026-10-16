@@ -15,14 +15,28 @@ fn vocabulary() -> Value {
     serde_json::from_str(&fs::read_to_string(path).expect("wire-vocabulary.json")).expect("JSON")
 }
 
-/// What District AI for Linux shows for a value with no label (`humanize`).
+/// Words a humanized value writes in capitals (scripts/gen-l10n.py INITIALISMS).
+const INITIALISMS: [&str; 1] = ["SES"];
+
+/// What District AI for Linux shows for a value with no label (`humanize`),
+/// an initialism in capitals ("ses-missing" reads "SES missing").
 fn humanize(raw: &str) -> String {
     let words = raw.trim().replace(['-', '_'], " ");
     let mut chars = words.chars();
-    chars
+    let words: String = chars
         .next()
         .map(|first| first.to_uppercase().chain(chars).collect())
-        .unwrap_or_default()
+        .unwrap_or_default();
+    words
+        .split(' ')
+        .map(|word| {
+            INITIALISMS
+                .iter()
+                .find(|initialism| initialism.eq_ignore_ascii_case(word))
+                .map_or_else(|| word.to_owned(), |initialism| (*initialism).to_owned())
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 #[test]

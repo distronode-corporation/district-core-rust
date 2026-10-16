@@ -307,7 +307,7 @@ fr = "Renseignements sur l'appelant"
 ctx = "label"
 screen = "wire contact_research_key"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "A label for the stored value `callerIntel` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the portal's headings for them: the contact drawer's section headings, and for the two the drawer shows without one, the lead research table's column (`estimatedValue`, distronode-website/src/app/(en)/dashboard/district/dgi/dgiI18n.ts colDgiEvaluation) and Voice Studio's caller intelligence section (`callerIntel`, distronode-website/src/components/district/studio/studioI18n.ts callerIntelligenceHeader)."
 
 [wire.contact_research_key.corepainpoints]
@@ -334,7 +334,7 @@ fr = "Évaluation DGI"
 ctx = "label"
 screen = "wire contact_research_key"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "A label for the stored value `estimatedValue` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the portal's headings for them: the contact drawer's section headings, and for the two the drawer shows without one, the lead research table's column (`estimatedValue`, distronode-website/src/app/(en)/dashboard/district/dgi/dgiI18n.ts colDgiEvaluation) and Voice Studio's caller intelligence section (`callerIntel`, distronode-website/src/components/district/studio/studioI18n.ts callerIntelligenceHeader)."
 
 [wire.contact_research_key.executivesummary]
@@ -352,7 +352,7 @@ fr = "Profil du contact"
 ctx = "label"
 screen = "wire contact_research_key"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "A label for the stored value `person` of contactResearchKey. The keys of `intelligence` on a contact (the lead research blob). The labels are the portal's headings for them: the contact drawer's section headings, and for the two the drawer shows without one, the lead research table's column (`estimatedValue`, distronode-website/src/app/(en)/dashboard/district/dgi/dgiI18n.ts colDgiEvaluation) and Voice Studio's caller intelligence section (`callerIntel`, distronode-website/src/components/district/studio/studioI18n.ts callerIntelligenceHeader)."
 
 [wire.contact_research_key.recommendedgreeting]
@@ -828,7 +828,7 @@ fr = "Actif"
 ctx = "label"
 screen = "wire number_status"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "A label for the stored value `in-use` of numberStatus. `numbers[].status` in GET /api/district/workspace/provider/numbers: a managed number's `PhoneNumberIndex.status` (missing reads as `active`; `released` rows are left out of the list), and for a number on the workspace's own carrier account the carrier's word (`active` from Twilio and Sinch; Telnyx's own status passed through, so another value can arrive). `pending_verification` is a toll-free number under carrier review (POST /api/district/workspace/tfv); `suspended` is set by staff. `in-use` is Twilio's word for a number in service, carried by the recorded numbers fixtures; it is labelled with the portal's word for an active line (the same as `fallback`), and an app shows that label. The portal shows the value itself and has no label for the others; an empty one shows as `fallback`."
 
 [wire.number_status.pending_verification]
@@ -1519,7 +1519,7 @@ fr = "Courriel mal configuré"
 ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "A label for the stored value `email-misconfigured` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.empty_body]
@@ -1640,12 +1640,12 @@ state = "reviewed"
 note = "A label for the stored value `send-failed` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.ses_missing]
-en = "Ses missing"
+en = "SES missing"
 fr = "SES non configuré"
 ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "A label for the stored value `ses-missing` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.tag_already_present]

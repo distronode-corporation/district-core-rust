@@ -1232,7 +1232,7 @@ fr = "Un autre contact a déjà ce numéro de téléphone ou cette adresse courr
 ctx = "error"
 screen = "contacts"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "Adding or changing a contact: the service refused it (409) because another contact in the workspace already holds the phone number or the email address. English shows the service's own sentence, which says which one; French shows this. Visual QA LB7."
 
 [failure.fallback]

@@ -1629,7 +1629,7 @@ pub fn wire_workflow_action_reason_send_failed(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_workflow_action_reason_ses_missing(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Ses missing",
+        Locale::En => "SES missing",
         Locale::FrCa => "SES non configuré",
     }
 }
