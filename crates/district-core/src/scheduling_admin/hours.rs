@@ -832,9 +832,12 @@ fn overrides_event(editor: &mut OverridesEditor, event: HoursEvent) -> Vec<Out> 
             editor.adding = Some(OverrideForm::default());
             editor.validation = None;
         }
+        // An edit answers the last save's complaint: it goes, and the next
+        // save checks again (visual QA LC20).
         HoursEvent::EditOverride(form) => {
             if editor.adding.is_some() {
                 editor.adding = Some(form);
+                editor.validation = None;
             }
         }
         HoursEvent::CancelOverride => {

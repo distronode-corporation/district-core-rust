@@ -877,6 +877,8 @@ fn the_hosts_are_edited_and_saved_whole_with_the_routing_after() {
             priority: "3".into(),
         },
     );
+    // The edit answers the complaint, so it goes until the next save (LC20).
+    assert_eq!(hosts_dialog(&model).validation, None);
     let effects = one(&mut model, EventTypeEvent::SaveHosts);
     let requests = sent(&effects);
     let [(ticket, SchedulingAdminRequest::SetHosts { hosts, .. })] = requests.as_slice() else {
@@ -934,6 +936,7 @@ fn hosts_are_not_saved_empty_and_each_half_of_a_save_can_fail() {
         Some("An event type needs at least one host.")
     );
     one(&mut model, EventTypeEvent::AddHost("sam".into()));
+    assert_eq!(hosts_dialog(&model).validation, None);
     let effects = one(&mut model, EventTypeEvent::SaveHosts);
     answer(&mut model, sent(&effects)[0].0, refused("rejected"));
     assert!(hosts_dialog(&model).write.failure().is_some());
@@ -1025,14 +1028,23 @@ fn a_question_is_added_last_with_its_choices_and_the_list_read_again() {
         ..form
     };
     one(&mut model, EventTypeEvent::EditQuestionForm(select.clone()));
+    assert_eq!(
+        questions_dialog(&model).validation,
+        None,
+        "an edit answers it"
+    );
     one(&mut model, EventTypeEvent::SaveQuestion);
     assert_eq!(
         questions_dialog(&model).validation,
         Some("A Select question needs at least one option.")
     );
+    // A blank option adds nothing and answers nothing.
+    one(&mut model, EventTypeEvent::AddOption(" ".into()));
+    assert!(questions_dialog(&model).validation.is_some());
     for option in [" A ", "A", " ", "B"] {
         one(&mut model, EventTypeEvent::AddOption(option.into()));
     }
+    assert_eq!(questions_dialog(&model).validation, None);
     one(&mut model, EventTypeEvent::RemoveOption("B".into()));
     assert_eq!(
         questions_dialog(&model).editing.as_ref().unwrap().options,

@@ -512,6 +512,8 @@ fn an_override_is_checked_and_added_as_a_day_a_run_or_custom_hours() {
     ];
     for (form, error) in cases {
         hours(&mut model, HoursEvent::EditOverride(form));
+        // An edit answers the last complaint until the next save (LC20).
+        assert_eq!(editor(&model).validation, None);
         assert!(hours(&mut model, HoursEvent::SaveOverride).is_empty());
         assert_eq!(editor(&model).validation, Some(error));
     }

@@ -42,6 +42,10 @@ variant, or a field of one. Those take a new major version.
   retry, which would get the same answer. It used to read as the generic « Une erreur
   est survenue. Veuillez réessayer. ». `FailureText::from_contact_error` is new. Visual
   QA LB7.
+- In the booking pages, a form's complaint ("A host's priority has to be a whole number,
+  0 or more.", "Pick a date.", "A Select question needs at least one option.") goes as
+  soon as the hosts, the override or the question is changed, and the next save checks
+  again; it used to stay beside the corrected value until the next save. Visual QA LC20.
 - SECURITY.md describes the hand-off as it is since 4.0.2: given up, never asked for
   unbound, when the browser does not answer within `HAND_OFF_CALLBACK_WAIT`.
 
