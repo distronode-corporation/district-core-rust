@@ -17,6 +17,12 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Security
+
+- rustls-webpki 0.103.16 in Cargo.lock, for RUSTSEC-2026-0382 (CVE-2026-111943):
+  0.103.15 could accept a certificate chain through one of the distrusted emSign
+  intermediates, whose private keys are now public.
+
 ## [5.0.0] - 2026-10-16
 
 The core of District AI for Linux 3.0.2 and District AI for Windows 3.0.2. A major
