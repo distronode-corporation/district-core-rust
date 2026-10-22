@@ -17,6 +17,11 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-10-22
+
+The core of District AI for Linux 3.0.3 and District AI for Windows 3.0.3: a security
+update, with no change to anything an app calls.
+
 ### Security
 
 - rustls-webpki 0.103.16 in Cargo.lock, for RUSTSEC-2026-0382 (CVE-2026-111943):
