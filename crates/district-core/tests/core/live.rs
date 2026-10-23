@@ -848,6 +848,59 @@ fn of_two_notifications_opened_while_restoring_the_later_opens() {
     )));
 }
 
+/// The user moving on while the list is read drops the kept notification: it
+/// would otherwise undo their choice when the list arrives.
+#[test]
+fn navigating_while_the_list_is_read_drops_the_kept_notification() {
+    for moved in [Event::Navigate(Route::Contacts), Event::Back] {
+        let (mut model, restore) = starting();
+        model.update(message_target(CLIENT, "m1"));
+        let effects = model.update(Event::SessionRestored {
+            ticket: restore,
+            result: Ok(claims()),
+        });
+        let route = {
+            model.update(moved.clone());
+            signed_in(&model).route.clone()
+        };
+        let effects = model.update(Event::WorkspacesLoaded {
+            ticket: last_ticket(&effects),
+            remembered: None,
+            result: Ok(workspace_list()),
+        });
+        assert_eq!(
+            crate::support::workspaces(&model).active().id,
+            VIEWER,
+            "{moved:?}"
+        );
+        assert_eq!(signed_in(&model).route, route, "{moved:?}");
+        assert!(!has(&effects, |e| matches!(
+            e,
+            Effect::FindMessageThread { .. }
+        )));
+    }
+}
+
+/// Anything else in that wait keeps it: here the window is hidden and shown.
+#[test]
+fn other_events_while_the_list_is_read_keep_the_kept_notification() {
+    let (mut model, restore) = starting();
+    model.update(message_target(CLIENT, "m1"));
+    let effects = model.update(Event::SessionRestored {
+        ticket: restore,
+        result: Ok(claims()),
+    });
+    model.update(Event::WindowVisible(false));
+    model.update(Event::WindowVisible(true));
+    model.update(Event::WorkspacesLoaded {
+        ticket: last_ticket(&effects),
+        remembered: None,
+        result: Ok(workspace_list()),
+    });
+    assert_eq!(crate::support::workspaces(&model).active().id, CLIENT);
+    assert_eq!(signed_in(&model).route, Route::Inbox);
+}
+
 /// A click after the session is back but before the list is read replaces the
 /// one kept from restoring, rather than losing to it.
 #[test]

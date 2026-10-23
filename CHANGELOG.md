@@ -62,6 +62,9 @@ variant, or a field of one. Those take a new major version.
   the workspace list is read. It is dropped if the restore ends with nobody signed in, so it is
   never opened for an account that signs in afterwards, and if the workspace list cannot be
   read or has no workspace. Signed in, a click behaves as before.
+- A notification kept from the restore is dropped if the user navigates (`Event::Navigate` or
+  `Event::Back`) before the workspace list is read, rather than opened afterwards over the
+  screen they chose.
 
 ## [5.0.1] - 2026-10-22
 

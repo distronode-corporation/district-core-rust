@@ -2866,8 +2866,16 @@ impl Model {
                 self.window_visible = visible;
                 self.signed_in(|s, tickets, _| s.window_visible(visible, tickets))
             }
-            Event::Navigate(route) => self.signed_in(|s, tickets, _| s.navigate(route, tickets)),
-            Event::Back => self.signed_in(|s, tickets, _| s.back(tickets)),
+            // The user moving on drops a notification still waiting for the
+            // workspace list: opening it afterwards would undo their choice.
+            Event::Navigate(route) => self.signed_in(|s, tickets, _| {
+                s.pending_open = None;
+                s.navigate(route, tickets)
+            }),
+            Event::Back => self.signed_in(|s, tickets, _| {
+                s.pending_open = None;
+                s.back(tickets)
+            }),
             Event::Refresh => self.signed_in(|s, tickets, _| s.refresh(tickets)),
             Event::SelectWorkspace(id) => self.signed_in(|s, tickets, _| s.select(&id, tickets)),
             Event::OpenFinishSetup => self.signed_in(|s, _, config| s.open_finish_setup(config)),
