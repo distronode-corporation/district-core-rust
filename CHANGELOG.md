@@ -17,6 +17,28 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Added
+
+- `scheduling_admin::time_field_text`, `scheduling_admin::time_field_wire` and
+  `scheduling_admin::TimeFieldError`: a time field's display and parse pair. French shows a
+  scheduler time as « 9 h », « 9 h 30 », « 17 h » to edit (ordinary spaces, as `format::time`),
+  English keeps `09:00`; either language reads back `09:30`, `9:30`, `9 h 30`, `9h30` and
+  `9 h`, with an ordinary, no-break (U+00A0) or narrow no-break (U+202F) space or none around
+  the `h`, and saves `HH:MM`.
+- `time.range_error` in the scheduling catalog: "Enter a time from 00:00 to 23:59." /
+  « Entrez une heure de 0 h à 23 h 59. », for a time past the end of the day.
+
+### Changed
+
+- The working hours editor and the custom-hours override form hold their times as the field
+  shows them (`HoursRange::start`/`end`, `OverrideForm::start`/`end`, the
+  `SetRangeStart`/`SetRangeEnd` values): unchanged in English, « 9 h » in French. The save
+  still sends `HH:MM`. A French member no longer edits « 09:00 ».
+- `25:00`, `9:75` and any other time past 23:59 is refused before the save, with
+  `time.range_error`; until now it reached the scheduler.
+- The French of `time.format_error` gives the French form as its example: « Entrez une heure
+  comme 9 h ou 9 h 30. » (was « Entrez une heure au format HH:MM. »).
+
 ## [5.0.1] - 2026-10-22
 
 The core of District AI for Linux 3.0.3 and District AI for Windows 3.0.3: a security

@@ -19,7 +19,7 @@ use district_model::{
     SchedulingAvailabilityRule, SchedulingOverrideDraft,
 };
 
-use super::clock::{self, SchedulingDay};
+use super::clock::{self, SchedulingDay, TimeFieldError, time_field_text, time_field_wire};
 use super::overview::{display_index, load, summarize_working_hours};
 use super::{Answer, Out, Pending as AdminPending, SchedulingAdmin, SectionLoad, WriteState};
 use crate::failure::FailureText;
@@ -49,10 +49,16 @@ fn wire_day(row: usize) -> i64 {
     ((row + 1) % 7) as i64
 }
 
-/// `HH:MM`, zero-padded, as the scheduler takes it.
-fn well_formed_time(value: &str) -> bool {
-    let bytes = value.as_bytes();
-    bytes.len() == 5 && bytes[2] == b':' && [0, 1, 3, 4].iter().all(|i| bytes[*i].is_ascii_digit())
+/// A window's opening and closing as the scheduler takes them, `HH:MM`, or
+/// why one of the two fields cannot be saved.
+fn window_wire(start: &str, end: &str) -> Result<(String, String), TimeFieldError> {
+    Ok((time_field_wire(start)?, time_field_wire(end)?))
+}
+
+/// What a field holds, as the scheduler takes it; as typed if it cannot be
+/// read, which only a save that `can_save` refused would carry.
+fn wire_or_typed(text: &str) -> String {
+    time_field_wire(text).unwrap_or_else(|_| text.to_owned())
 }
 
 /// `YYYY-MM-DD`, as the scheduler takes it.
@@ -73,7 +79,9 @@ pub struct HoursRange {
     pub key: u64,
     /// The rule it was read from; `None` for a new one.
     pub rule_id: Option<String>,
-    /// When it opens, as typed.
+    /// When it opens, as the field shows and the member types it: `09:00` in
+    /// English and `9 h` in French when read (see [`time_field_text`]). The
+    /// save sends it as `HH:MM`.
     pub start: String,
     /// When it closes, as typed.
     pub end: String,
@@ -300,29 +308,30 @@ pub struct WeekEditor {
 }
 
 impl WeekEditor {
-    /// Each window of `day`'s fault, or `None`: a time not `HH:MM`, an end not
-    /// after its start, or a window that overlaps the one before it.
+    /// Each window of `day`'s fault, or `None`: a time that does not read as
+    /// one (see [`time_field_wire`]) or is past 23:59, an end not after its
+    /// start, or a window that overlaps the one before it.
     pub fn errors(&self, day: usize) -> Vec<Option<&'static str>> {
         let ranges = self.days.get(day).map_or(&[][..], Vec::as_slice);
+        let wires: Vec<(String, String)> = ranges
+            .iter()
+            .map(|r| (wire_or_typed(&r.start), wire_or_typed(&r.end)))
+            .collect();
         let mut errors: Vec<Option<&'static str>> = ranges
             .iter()
-            .map(|r| {
-                if !well_formed_time(&r.start) || !well_formed_time(&r.end) {
-                    Some(ss::time_format_error(l()))
-                } else if r.end <= r.start {
-                    Some(ss::time_order_error(l()))
-                } else {
-                    None
-                }
+            .map(|r| match window_wire(&r.start, &r.end) {
+                Err(error) => Some(error.message()),
+                Ok((start, end)) if end <= start => Some(ss::time_order_error(l())),
+                Ok(_) => None,
             })
             .collect();
         let mut order: Vec<usize> = (0..ranges.len()).collect();
-        order.sort_by(|a, b| ranges[*a].start.cmp(&ranges[*b].start));
+        order.sort_by(|a, b| wires[*a].0.cmp(&wires[*b].0));
         for pair in order.windows(2) {
             let (earlier, index) = (pair[0], pair[1]);
             if errors[earlier].is_none()
                 && errors[index].is_none()
-                && ranges[index].start < ranges[earlier].end
+                && wires[index].0 < wires[earlier].1
             {
                 errors[index] = Some(ss::time_overlap_error(l()));
             }
@@ -380,8 +389,8 @@ impl WeekEditor {
                     .map(|(id, start, end)| HoursRange {
                         key: self.key(),
                         rule_id: Some(id),
-                        start,
-                        end,
+                        start: time_field_text(&start),
+                        end: time_field_text(&end),
                     })
                     .collect()
             })
@@ -402,6 +411,7 @@ impl WeekEditor {
         for (row, ranges) in self.days.iter().enumerate() {
             let day = wire_day(row);
             for range in ranges {
+                let (start, end) = (wire_or_typed(&range.start), wire_or_typed(&range.end));
                 let before = range
                     .rule_id
                     .as_ref()
@@ -410,22 +420,22 @@ impl WeekEditor {
                     Some(before) => {
                         kept.push(before.id.clone());
                         if before.day_of_week != day
-                            || before.start_time != range.start
-                            || before.end_time != range.end
+                            || before.start_time != start
+                            || before.end_time != end
                         {
                             patches.push(SchedulingAdminRequest::PatchRule {
                                 id: before.id.clone(),
                                 day_of_week: Some(day),
-                                start_time: Some(range.start.clone()),
-                                end_time: Some(range.end.clone()),
+                                start_time: Some(start),
+                                end_time: Some(end),
                             });
                         }
                     }
                     None => creates.push(SchedulingAdminRequest::CreateRule {
                         event_type_id: None,
                         day_of_week: day,
-                        start_time: range.start.clone(),
-                        end_time: range.end.clone(),
+                        start_time: start,
+                        end_time: end,
                     }),
                 }
             }
@@ -449,7 +459,9 @@ pub struct OverrideForm {
     pub date: String,
     /// The last day of a run, or empty for one day. Not for custom hours.
     pub end_date: String,
-    /// Custom hours' opening, `HH:MM`.
+    /// Custom hours' opening, as the field shows and the member types it
+    /// (`09:00` in English, `9 h` in French; see [`time_field_text`]). The
+    /// save sends it as `HH:MM`.
     pub start: String,
     /// Custom hours' closing.
     pub end: String,
@@ -461,8 +473,8 @@ impl Default for OverrideForm {
             reason: "day_off".to_owned(),
             date: String::new(),
             end_date: String::new(),
-            start: DEFAULT_START.to_owned(),
-            end: DEFAULT_END.to_owned(),
+            start: time_field_text(DEFAULT_START),
+            end: time_field_text(DEFAULT_END),
         }
     }
 }
@@ -478,12 +490,10 @@ impl OverrideForm {
         if !well_formed_date(&self.date) {
             Some(ss::override_date_missing(l()))
         } else if self.is_custom_hours() {
-            if !well_formed_time(&self.start) || !well_formed_time(&self.end) {
-                Some(ss::time_format_error(l()))
-            } else if self.end <= self.start {
-                Some(ss::time_order_error(l()))
-            } else {
-                None
+            match window_wire(&self.start, &self.end) {
+                Err(error) => Some(error.message()),
+                Ok((start, end)) if end <= start => Some(ss::time_order_error(l())),
+                Ok(_) => None,
             }
         } else if self.end_date.is_empty() {
             None
@@ -503,8 +513,8 @@ impl OverrideForm {
             end_date: Some(self.end_date.clone())
                 .filter(|end| !custom && !end.is_empty() && *end != self.date),
             reason: self.reason.clone(),
-            start_time: custom.then(|| self.start.clone()),
-            end_time: custom.then(|| self.end.clone()),
+            start_time: custom.then(|| wire_or_typed(&self.start)),
+            end_time: custom.then(|| wire_or_typed(&self.end)),
         }
     }
 
@@ -609,7 +619,7 @@ pub enum HoursEvent {
         day: usize,
         /// The window.
         key: u64,
-        /// `HH:MM`, as typed.
+        /// As typed: `09:30`, `9:30`, `9 h 30` or `9h30` (see [`time_field_wire`]).
         value: String,
     },
     /// A window's closing changed.
@@ -618,7 +628,7 @@ pub enum HoursEvent {
         day: usize,
         /// The window.
         key: u64,
-        /// `HH:MM`, as typed.
+        /// As typed: `09:30`, `9:30`, `9 h 30` or `9h30` (see [`time_field_wire`]).
         value: String,
     },
     /// Give every other weekday this day's windows.
@@ -762,8 +772,8 @@ fn week_event(week: &mut WeekEditor, event: HoursEvent) -> Vec<Out> {
             week.days[day].push(HoursRange {
                 key,
                 rule_id: None,
-                start: DEFAULT_START.to_owned(),
-                end: DEFAULT_END.to_owned(),
+                start: time_field_text(DEFAULT_START),
+                end: time_field_text(DEFAULT_END),
             });
         }
         HoursEvent::RemoveRange { day, key } if day < 7 => {
@@ -974,10 +984,8 @@ mod tests {
 
     #[test]
     fn times_and_dates_are_checked_as_the_scheduler_takes_them() {
-        assert!(well_formed_time("09:30"));
-        for bad in ["9:30", "09:3", "0930x", "ab:cd", "09-30"] {
-            assert!(!well_formed_time(bad), "{bad}");
-        }
+        assert_eq!(wire_or_typed("9 h 30"), "09:30");
+        assert_eq!(wire_or_typed("09-30"), "09-30");
         assert!(well_formed_date("2026-09-14"));
         for bad in ["2026-9-14", "2026/09/14", "20260914xx", "abcd-ef-gh"] {
             assert!(!well_formed_date(bad), "{bad}");

@@ -4771,7 +4771,7 @@ pub fn test_email_sent(l: Locale, address: &str) -> String {
 pub fn time_format_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter a time as HH:MM.",
-        Locale::FrCa => "Entrez une heure au format HH:MM.",
+        Locale::FrCa => "Entrez une heure comme 9 h ou 9 h 30.",
     }
 }
 
@@ -4790,6 +4790,15 @@ pub fn time_overlap_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "These hours overlap another range on this day.",
         Locale::FrCa => "Ces heures chevauchent une autre plage de cette journée.",
+    }
+}
+
+/// `time.range_error`
+#[must_use]
+pub fn time_range_error(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Enter a time from 00:00 to 23:59.",
+        Locale::FrCa => "Entrez une heure de 0 h à 23 h 59.",
     }
 }
 

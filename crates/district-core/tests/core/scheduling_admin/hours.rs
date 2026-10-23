@@ -3,6 +3,7 @@
 
 use std::time::Duration;
 
+use district_core::l10n::{Locale, with_locale};
 use district_core::scheduling_admin::{
     HoursDialog, HoursEvent, HoursSection, OverrideForm, OverridesEditor, SectionLoad, WeekEditor,
     WriteState, weekday_name,
@@ -288,6 +289,138 @@ fn the_week_is_edited_window_by_window_and_checked_before_it_is_sent() {
     );
     assert!(week(&model).errors(9).is_empty());
     assert!(week(&model).can_save());
+}
+
+/// Saves the open week, answering every step, and returns what it sent.
+fn save_week(model: &mut Model) -> Vec<SchedulingAdminRequest> {
+    let mut effects = hours(model, HoursEvent::SaveWeek);
+    let mut steps = Vec::new();
+    loop {
+        let requests = sent(&effects);
+        let [(ticket, request)] = requests.as_slice() else {
+            break;
+        };
+        steps.push(request.clone());
+        effects = answer(
+            model,
+            *ticket,
+            done(SchedulingAdminData::Done(SchedulingOk { ok: true })),
+        );
+    }
+    steps
+}
+
+#[test]
+fn in_french_the_week_shows_nine_h_reads_any_way_of_typing_and_saves_hh_mm() {
+    with_locale(Locale::FrCa, || {
+        let mut model = week_open();
+        let days = &week(&model).days;
+        assert_eq!(
+            (days[0][0].start.as_str(), days[0][0].end.as_str()),
+            ("9 h", "17 h")
+        );
+        hours(&mut model, HoursEvent::AddRange { day: 6 });
+        let sunday = key(&model, 6, 0);
+        assert_eq!(week(&model).days[6][0].start, "9 h", "a new window, 9 to 5");
+        for (value, error) in [
+            ("25:00", "Entrez une heure de 0 h \u{e0} 23 h 59."),
+            ("9:75", "Entrez une heure de 0 h \u{e0} 23 h 59."),
+            ("9 h 5", "Entrez une heure comme 9 h ou 9 h 30."),
+            ("18 h", "La fin doit \u{ea}tre apr\u{e8}s le d\u{e9}but."),
+        ] {
+            hours(
+                &mut model,
+                HoursEvent::SetRangeStart {
+                    day: 6,
+                    key: sunday,
+                    value: value.into(),
+                },
+            );
+            assert_eq!(week(&model).errors(6), [Some(error)], "{value:?}");
+            assert!(!week(&model).can_save());
+        }
+        // Each way of writing a time is read, and overlaps are judged on the
+        // time, not on the text ("10 h" sorts before "9 h" as text).
+        hours(
+            &mut model,
+            HoursEvent::SetRangeStart {
+                day: 6,
+                key: sunday,
+                value: "9h30".into(),
+            },
+        );
+        hours(
+            &mut model,
+            HoursEvent::SetRangeEnd {
+                day: 6,
+                key: sunday,
+                value: "12:00".into(),
+            },
+        );
+        hours(&mut model, HoursEvent::AddRange { day: 6 });
+        let second = key(&model, 6, 1);
+        hours(
+            &mut model,
+            HoursEvent::SetRangeStart {
+                day: 6,
+                key: second,
+                value: "10 h".into(),
+            },
+        );
+        assert_eq!(
+            week(&model).errors(6),
+            [
+                None,
+                Some("Ces heures chevauchent une autre plage de cette journ\u{e9}e.")
+            ]
+        );
+        hours(
+            &mut model,
+            HoursEvent::SetRangeStart {
+                day: 6,
+                key: second,
+                value: "13 h".into(),
+            },
+        );
+        let monday = key(&model, 0, 0);
+        hours(
+            &mut model,
+            HoursEvent::SetRangeEnd {
+                day: 0,
+                key: monday,
+                value: "18 h 30".into(),
+            },
+        );
+        assert!(week(&model).can_save());
+        let steps = save_week(&mut model);
+        assert!(
+            steps.contains(&SchedulingAdminRequest::PatchRule {
+                id: "mon".into(),
+                day_of_week: Some(1),
+                start_time: Some("09:00".into()),
+                end_time: Some("18:30".into()),
+            }),
+            "{steps:?}"
+        );
+        for (start, end) in [("09:30", "12:00"), ("13:00", "17:00")] {
+            assert!(
+                steps.contains(&SchedulingAdminRequest::CreateRule {
+                    event_type_id: None,
+                    day_of_week: 0,
+                    start_time: start.into(),
+                    end_time: end.into(),
+                }),
+                "{steps:?}"
+            );
+        }
+        // Tuesday was shown as "9 h" and "13 h" and left alone: no change sent.
+        assert!(
+            !steps
+                .iter()
+                .any(|s| matches!(s, SchedulingAdminRequest::PatchRule { id, .. } if id.starts_with("tue"))),
+            "{steps:?}"
+        );
+    });
 }
 
 #[test]
@@ -586,6 +719,57 @@ fn an_override_is_checked_and_added_as_a_day_a_run_or_custom_hours() {
     assert!(editor(&model).adding.is_none());
     hours(&mut model, HoursEvent::DismissNotice);
     assert_eq!(editor(&model).write, WriteState::Idle);
+}
+
+#[test]
+fn in_french_custom_hours_show_nine_h_and_are_sent_as_hh_mm() {
+    with_locale(Locale::FrCa, || {
+        let form = OverrideForm::default();
+        assert_eq!((form.start.as_str(), form.end.as_str()), ("9 h", "17 h"));
+        let mut model = overrides_open();
+        hours(&mut model, HoursEvent::AddOverride);
+        for (start, error) in [
+            ("24 h", "Entrez une heure de 0 h \u{e0} 23 h 59."),
+            ("neuf", "Entrez une heure comme 9 h ou 9 h 30."),
+        ] {
+            hours(
+                &mut model,
+                HoursEvent::EditOverride(OverrideForm {
+                    reason: "custom_hours".into(),
+                    date: "2026-10-02".into(),
+                    start: start.into(),
+                    ..OverrideForm::default()
+                }),
+            );
+            assert!(hours(&mut model, HoursEvent::SaveOverride).is_empty());
+            assert_eq!(editor(&model).validation, Some(error));
+        }
+        hours(
+            &mut model,
+            HoursEvent::EditOverride(OverrideForm {
+                reason: "custom_hours".into(),
+                date: "2026-10-02".into(),
+                start: "8 h 30".into(),
+                end: "12h".into(),
+                ..OverrideForm::default()
+            }),
+        );
+        let effects = hours(&mut model, HoursEvent::SaveOverride);
+        let requests = sent(&effects);
+        let [(_, request)] = requests.as_slice() else {
+            panic!("{effects:?}");
+        };
+        assert_eq!(
+            *request,
+            SchedulingAdminRequest::CreateOverride(SchedulingOverrideDraft {
+                date: "2026-10-02".into(),
+                end_date: None,
+                reason: "custom_hours".into(),
+                start_time: Some("08:30".into()),
+                end_time: Some("12:00".into()),
+            })
+        );
+    });
 }
 
 #[test]

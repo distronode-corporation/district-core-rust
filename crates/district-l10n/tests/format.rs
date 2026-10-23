@@ -179,8 +179,9 @@ fn a_time_of_day_reads_nine_h_in_french_and_keeps_its_english() {
         minute,
     };
     // The house style: no leading zero and no colon, the hour and the minutes
-    // joined by "h" between ordinary spaces (U+0020), as the catalogs write
-    // "de 9 h à 20 h" and the service's formatTime vectors read.
+    // joined by "h" between ordinary spaces (U+0020), byte for byte as the
+    // service's formatTime vectors (contracts/i18n/format-vectors.json) and the
+    // catalogs ("de 9 h à 20 h") write it.
     for (hour, minute, french) in [
         (9, 0, "9 h"),
         (9, 30, "9 h 30"),
@@ -191,7 +192,10 @@ fn a_time_of_day_reads_nine_h_in_french_and_keeps_its_english() {
         assert_eq!(format::time(Locale::FrCa, at(hour, minute), false), french);
         // French never reads a twelve-hour clock, whatever is asked.
         assert_eq!(format::time(Locale::FrCa, at(hour, minute), true), french);
-        assert!(!french.contains(NBSP) && !french.contains('\u{202f}'));
+        assert!(
+            !french.contains([NBSP, '\u{202f}']),
+            "{french:?}: U+0020 only"
+        );
     }
     // English is unchanged: 24 hours with a leading zero, or 12 with a.m./p.m.
     assert_eq!(format::time(Locale::En, at(9, 0), false), "09:00");
