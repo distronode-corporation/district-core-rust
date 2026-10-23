@@ -3043,7 +3043,7 @@ fn every_scheduling_accessor_says_what_its_catalog_says() {
     assert_eq!(scheduling_strings::test_email_sent(Locale::En, "{address}"), "Test email sent to {address}");
     assert_eq!(scheduling_strings::test_email_sent(Locale::FrCa, "{address}"), "Courriel d'essai envoyé à {address}");
     assert_eq!(scheduling_strings::time_format_error(Locale::En), "Enter a time as HH:MM.");
-    assert_eq!(scheduling_strings::time_format_error(Locale::FrCa), "Entrez une heure au format HH:MM.");
+    assert_eq!(scheduling_strings::time_format_error(Locale::FrCa), "Entrez une heure, par exemple 9 h ou 13 h 30.");
     assert_eq!(scheduling_strings::time_order_error(Locale::En), "The end has to be after the start.");
     assert_eq!(scheduling_strings::time_order_error(Locale::FrCa), "La fin doit être après le début.");
     assert_eq!(scheduling_strings::time_overlap_error(Locale::En), "These hours overlap another range on this day.");

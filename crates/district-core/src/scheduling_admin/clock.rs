@@ -7,6 +7,7 @@
 
 use std::time::SystemTime;
 
+use district_l10n::Locale;
 use district_l10n::format::{self, CivilDateTime, DateStyle};
 use district_l10n::scheduling_strings as ss;
 use jiff::Timestamp;
@@ -155,6 +156,77 @@ pub(crate) fn relative(text: &str, zone: &str, now: SystemTime) -> Option<String
     })
 }
 
+/// Why a time field cannot be saved. Both read as the same sentence,
+/// `time.format_error`, as on the other platforms.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum TimeFieldError {
+    /// It does not read as a time of day.
+    Unreadable,
+    /// It reads as one, but past 23:59 (`25:00`, `9:75`).
+    OutOfRange,
+}
+
+impl TimeFieldError {
+    /// The sentence the field shows.
+    pub fn message(self) -> &'static str {
+        match self {
+            Self::Unreadable | Self::OutOfRange => ss::time_format_error(l()),
+        }
+    }
+}
+
+/// The hour and the minute digits of `text`, both up to two digits, unchecked.
+/// Reads `09:30`, `9:30`, `9 h 30`, `9h30`, `9 h` and `9h`, with any space
+/// (ordinary or no-break) around the `h`, in either language.
+fn time_field_parts(text: &str) -> Option<(u32, u32)> {
+    let text = text.trim();
+    let digits = |s: &str, max: usize| {
+        (!s.is_empty() && s.len() <= max && s.bytes().all(|b| b.is_ascii_digit()))
+            .then(|| s.parse::<u32>().ok())
+            .flatten()
+    };
+    let (hour, minute) = if let Some((hour, minute)) = text.split_once(':') {
+        (hour, Some(minute))
+    } else {
+        let (hour, minute) = text.split_once(['h', 'H'])?;
+        let spaces: &[char] = &[' ', '\u{a0}', '\u{202f}'];
+        let minute = minute.trim_matches(spaces);
+        (
+            hour.trim_end_matches(spaces),
+            (!minute.is_empty()).then_some(minute),
+        )
+    };
+    let hour = digits(hour, 2)?;
+    let minute = match minute {
+        // After a colon the minutes are two digits; after an `h` too, or none.
+        Some(minute) if minute.len() == 2 => digits(minute, 2)?,
+        Some(_) => return None,
+        None => 0,
+    };
+    Some((hour, minute))
+}
+
+/// What a member typed in a time field, as the scheduler takes it: `HH:MM`,
+/// zero-padded (`9 h 30`, `9h30`, `9:30` and `09:30` are all `09:30`). The
+/// scheduler refuses anything else, so this is what a save sends.
+pub fn time_field_wire(text: &str) -> Result<String, TimeFieldError> {
+    let (hour, minute) = time_field_parts(text).ok_or(TimeFieldError::Unreadable)?;
+    if hour > 23 || minute > 59 {
+        return Err(TimeFieldError::OutOfRange);
+    }
+    Ok(format!("{hour:02}:{minute:02}"))
+}
+
+/// A scheduler time (`09:00`) as a time field shows it to edit: unchanged in
+/// English, and `9 h`, `9 h 30` in French. [`time_field_wire`] reads either
+/// back. A value that is not a time comes back as it was.
+pub fn time_field_text(wire: &str) -> String {
+    match (l(), time_field_wire(wire)) {
+        (Locale::FrCa, Ok(normal)) => hour_minute(&normal, "UTC"),
+        _ => wire.to_owned(),
+    }
+}
+
 /// `09:00` as a reader reads it in `zone`'s convention: `9:00 a.m.`, `09:00`
 /// or `9 h`. A value that is not `HH:MM` comes back as it was.
 pub(crate) fn hour_minute(value: &str, zone: &str) -> String {
@@ -189,7 +261,7 @@ pub(crate) fn is_after(text: &str, now: SystemTime) -> bool {
 mod tests {
     use std::time::{Duration, UNIX_EPOCH};
 
-    use district_l10n::{Locale, with_locale};
+    use district_l10n::with_locale;
 
     use super::*;
 
@@ -279,6 +351,125 @@ mod tests {
             let beyond = UNIX_EPOCH + Duration::from_secs(400_000_000_000);
             assert_eq!(SchedulingDay::today(beyond, "UTC").key(), "1970-01-01");
         });
+    }
+
+    #[test]
+    fn a_time_field_reads_every_way_of_writing_a_time_and_saves_hh_mm() {
+        for locale in [Locale::En, Locale::FrCa] {
+            with_locale(locale, || {
+                for (typed, wire) in [
+                    ("09:30", "09:30"),
+                    ("9:30", "09:30"),
+                    ("9 h 30", "09:30"),
+                    ("9h30", "09:30"),
+                    ("9H30", "09:30"),
+                    ("9\u{a0}h\u{a0}30", "09:30"),
+                    ("9\u{202f}h\u{202f}30", "09:30"),
+                    (" 9 h ", "09:00"),
+                    ("9h", "09:00"),
+                    ("17 h", "17:00"),
+                    ("0 h 15", "00:15"),
+                    ("00:00", "00:00"),
+                    ("23:59", "23:59"),
+                    ("23 h 59", "23:59"),
+                ] {
+                    assert_eq!(time_field_wire(typed).as_deref(), Ok(wire), "{typed:?}");
+                }
+                for typed in ["25:00", "24:00", "9:75", "9 h 60", "99h"] {
+                    assert_eq!(
+                        time_field_wire(typed),
+                        Err(TimeFieldError::OutOfRange),
+                        "{typed:?}"
+                    );
+                }
+                for typed in [
+                    "", "9", "nine", "9:3", "9:300", "09-30", "9 h 5", "9:", "h30", "123:00",
+                    "9 h 30 x", "9.30", "-9:30", "+9:30",
+                ] {
+                    assert_eq!(
+                        time_field_wire(typed),
+                        Err(TimeFieldError::Unreadable),
+                        "{typed:?}"
+                    );
+                }
+            });
+        }
+    }
+
+    #[test]
+    fn a_time_field_shows_nine_h_in_french_and_the_wire_in_english() {
+        with_locale(Locale::En, || {
+            for wire in ["09:00", "09:30", "17:00", "00:15", "not a time"] {
+                assert_eq!(time_field_text(wire), wire);
+            }
+            assert_eq!(
+                TimeFieldError::Unreadable.message(),
+                "Enter a time as HH:MM."
+            );
+            assert_eq!(
+                TimeFieldError::OutOfRange.message(),
+                "Enter a time as HH:MM."
+            );
+        });
+        with_locale(Locale::FrCa, || {
+            for (wire, shown) in [
+                ("09:00", "9 h"),
+                ("09:30", "9 h 30"),
+                ("17:00", "17 h"),
+                ("00:15", "0 h 15"),
+                ("25:00", "25:00"),
+                ("not a time", "not a time"),
+            ] {
+                assert_eq!(time_field_text(wire), shown);
+                assert!(!time_field_text(wire).contains(['\u{a0}', '\u{202f}']));
+                if let Ok(back) = time_field_wire(&time_field_text(wire)) {
+                    assert_eq!(back, wire, "what French shows reads back as it was");
+                }
+            }
+            assert_eq!(
+                TimeFieldError::Unreadable.message(),
+                "Entrez une heure, par exemple 9 h ou 13 h 30."
+            );
+            assert_eq!(
+                TimeFieldError::OutOfRange.message(),
+                "Entrez une heure, par exemple 9 h ou 13 h 30."
+            );
+        });
+    }
+
+    /// French shows a time to edit byte for byte as the service's formatTime
+    /// vectors write it, ordinary spaces (U+0020) around the `h` included.
+    #[test]
+    fn a_french_time_field_matches_the_services_vectors_byte_for_byte() {
+        let path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../contracts/i18n/format-vectors.json"
+        );
+        let vectors: serde_json::Value =
+            serde_json::from_str(&std::fs::read_to_string(path).expect("the vectors"))
+                .expect("JSON");
+        let times = vectors["categories"]
+            .as_array()
+            .expect("categories")
+            .iter()
+            .find(|c| c["category"] == "times")
+            .expect("the times");
+        let mut checked = 0;
+        with_locale(Locale::FrCa, || {
+            for case in times["vectors"].as_array().expect("vectors") {
+                if case["fn"] != "formatTime" {
+                    continue;
+                }
+                let local = case["local"].as_str().expect("local");
+                let french = case["fr"].as_str().expect("fr");
+                let shown = time_field_text(local);
+                assert_eq!(shown.as_bytes(), french.as_bytes(), "{case}");
+                assert!(!shown.contains(['\u{a0}', '\u{202f}']), "{shown:?}");
+                assert_eq!(time_field_wire(&shown).as_deref(), Ok(local));
+                checked += 1;
+            }
+        });
+        assert!(checked >= 4, "only {checked} vectors");
     }
 
     #[test]
