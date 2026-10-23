@@ -213,8 +213,8 @@ pub use model::{CoreConfig, Effect, Event, Model, RESTORE_RETRY_FIRST, RESTORE_R
 pub use number_admin::{
     A2pForm, CarrierStatus, NumberAdmin, NumberAdminEvent, NumberAnswer, NumberCall,
     NumberConfirmation, NumberWrite, SipTrunkForm, SipTrunks, TollFreeForm, VerifyService,
-    carrier_balance, carrier_number_count, carrier_state, number_actions_note, numbers_scope_note,
-    sip_trunk_meta, verify_state,
+    carrier_balance, carrier_number_count, carrier_state, number_actions_note, number_row_note,
+    numbers_scope_note, sip_trunk_meta, verify_state,
 };
 pub use overview::{
     FINISH_SETUP_ACTION, FINISH_SETUP_BODY, FINISH_SETUP_TITLE, OverviewContent, OverviewScreen,

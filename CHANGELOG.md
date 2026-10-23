@@ -17,8 +17,36 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Added
+
+- `scheduling_admin::time_field_text`, `scheduling_admin::time_field_wire` and
+  `scheduling_admin::TimeFieldError`: a time field's display and parse pair. French shows a
+  scheduler time as « 9 h », « 9 h 30 », « 17 h » to edit (ordinary spaces, as `format::time`),
+  English keeps `09:00`; either language reads back `09:30`, `9:30`, `9 h 30`, `9h30` and
+  `9 h`, with an ordinary, no-break (U+00A0) or narrow no-break (U+202F) space or none around
+  the `h`, and saves `HH:MM`.
+- `number_row_note(number, can_change)`: the sentence to show on a held number's row. It is
+  `number_actions_note`'s sentence except a viewer's, which the screen's note
+  (`numbers_scope_note`) already says once; until now a viewer read "Carrier setup and number
+  changes need an agency or client role..." on the screen and again on every number. Keep
+  gating the row's actions on `number_actions_note(..).is_none()`.
+
 ### Changed
 
+- The working hours editor and the custom-hours override form hold their times as the field
+  shows them (`HoursRange::start`/`end`, `OverrideForm::start`/`end`, the
+  `SetRangeStart`/`SetRangeEnd` values): unchanged in English, « 9 h » in French. The save
+  still sends `HH:MM`. A French member no longer edits « 09:00 ».
+- `25:00`, `9:75` and any other time past 23:59 is refused before the save, with
+  `time.format_error` as an unreadable time is; until now it reached the scheduler.
+- The French of `time.format_error` gives the French form as its example: « Entrez une heure,
+  par exemple 9 h ou 13 h 30. » (was « Entrez une heure au format HH:MM. »).
+- `marketplace.web_caption` (`MarketplaceScreen::WEB_CAPTION`, the caption under the link to
+  the web marketplace) is now "Opens in your browser." / « S'ouvre dans votre navigateur. »
+  (was "Numbers are bought on the District AI website. This opens it in your browser."). The
+  caption no longer explains where numbers are bought: the screen's note
+  (`MarketplaceScreen::scope_note`, `numbers.purchase_elsewhere` for a member who can buy) is
+  that one explanation, so an app must show the scope note to every member, buyers included.
 - Desk is called the Desk: the English of `desk.failed_title`, `desk.off_title`,
   `desk.off_body`, `desk.settings_failed_title` and `desk.turn_on` names it "the Desk" instead
   of "the help desk", as the apps do ("Could not load the Desk", "The Desk is off", "Turn on

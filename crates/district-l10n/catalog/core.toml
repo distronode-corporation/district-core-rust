@@ -2197,13 +2197,13 @@ state = "reviewed"
 note = "Button that opens the number marketplace in the web browser."
 
 [marketplace.web_caption]
-en = "Numbers are bought on the District AI website. This opens it in your browser."
-fr = "Les numéros s'achètent sur le site Web de District AI. Ce bouton l'ouvre dans votre navigateur."
+en = "Opens in your browser."
+fr = "S'ouvre dans votre navigateur."
 ctx = "body"
 screen = "phone numbers"
 tier = "T1"
 state = "reviewed"
-note = "Caption under that button: numbers are bought on the website, which opens in the browser."
+note = "Caption under that button: it opens the website in the browser. Where numbers are bought is said once, by the screen's note above (numbers.purchase_elsewhere), so the caption does not say it again."
 
 [media.connect_failed]
 en = "The room could not be joined. Try again."

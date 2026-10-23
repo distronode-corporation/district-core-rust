@@ -392,7 +392,9 @@ pub fn numbers_scope_note(can_change: bool) -> &'static str {
 }
 
 /// What can be done to a held number: `None` when nothing, with the sentence
-/// saying why (a number Distronode holds, or a viewer).
+/// saying why (a number Distronode holds, or a viewer). It decides whether to
+/// offer the number's actions; the sentence to show on its row is
+/// [`number_row_note`].
 pub fn number_actions_note(number: &OwnedNumber, can_change: bool) -> Option<&'static str> {
     if number.managed {
         Some(ns::numbers_managed_no_release(l()))
@@ -401,6 +403,15 @@ pub fn number_actions_note(number: &OwnedNumber, can_change: bool) -> Option<&'s
     } else {
         None
     }
+}
+
+/// The sentence to show on a held number's row, beside the screen's note
+/// ([`numbers_scope_note`]): why a number Distronode holds cannot be released
+/// or reconfigured. A viewer's reason is the screen's note already, so it is
+/// not said again on every row. Offer the row's actions only when
+/// [`number_actions_note`] is `None`.
+pub fn number_row_note(number: &OwnedNumber, can_change: bool) -> Option<&'static str> {
+    number_actions_note(number, can_change).filter(|note| *note != numbers_scope_note(can_change))
 }
 
 /// A carrier account's balance, or `None` when it gave no balance. With the
