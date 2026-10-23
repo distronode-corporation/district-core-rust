@@ -4771,7 +4771,7 @@ pub fn test_email_sent(l: Locale, address: &str) -> String {
 pub fn time_format_error(l: Locale) -> &'static str {
     match l {
         Locale::En => "Enter a time as HH:MM.",
-        Locale::FrCa => "Entrez une heure au format HH:MM.",
+        Locale::FrCa => "Entrez une heure, par exemple 9 h ou 13 h 30.",
     }
 }
 

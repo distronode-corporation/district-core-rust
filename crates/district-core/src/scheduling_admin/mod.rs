@@ -75,7 +75,7 @@ pub use calendar::{
     CalendarEvent, CalendarPicker, CalendarSection, ConnectState, ConnectionCard, DisconnectState,
     OAUTH_PROVIDERS, connect_next, provider_label,
 };
-pub use clock::{SchedulingDay, times_in};
+pub use clock::{SchedulingDay, TimeFieldError, time_field_text, time_field_wire, times_in};
 pub use developer::{
     DeveloperDialog, DeveloperEvent, DeveloperSection, DeveloperTab, KeyDialog, MintedKey,
     MintedSecret, Removal, RemovalState, WEBHOOK_EVENTS, WEBHOOK_FIELDS, WebhookEditor,

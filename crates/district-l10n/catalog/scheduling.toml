@@ -4681,12 +4681,12 @@ note = "The test email was handed over for sending. {address} is where it went."
 
 [time.format_error]
 en = "Enter a time as HH:MM."
-fr = "Entrez une heure au format HH:MM."
+fr = "Entrez une heure, par exemple 9 h ou 13 h 30."
 ctx = "error"
 screen = "scheduling hours editor"
 tier = "T3"
 state = "reviewed"
-note = "A time is not written as HH:MM. Nothing was sent."
+note = "A time field does not read as a time of day, or is past 23:59 (25:00, 9:75). Nothing was sent. The field takes 09:30 and 9:30 in both languages, and 9 h 30, 9h30 and 9 h too; French shows times as 9 h 30, so its sentence gives that form as the example. Worded as core-swift words it."
 
 [time.order_error]
 en = "The end has to be after the start."
