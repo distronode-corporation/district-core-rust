@@ -52,6 +52,17 @@ variant, or a field of one. Those take a new major version.
   of "the help desk", as the apps do ("Could not load the Desk", "The Desk is off", "Turn on
   the Desk"). The French already said « comptoir ». No key or function changed.
 
+### Fixed
+
+- A notification opened while the stored session is still being restored is no longer
+  dropped. At a cold start from a notification that outlived the app, the app sends
+  `Event::OpenNotification` before the session is back, and until now the click did nothing:
+  the window opened on the overview. The core now keeps the latest such click (one only, the
+  later replacing the earlier) and opens it, workspace and all, once the session restores and
+  the workspace list is read. It is dropped if the restore ends with nobody signed in, so it is
+  never opened for an account that signs in afterwards, and if the workspace list cannot be
+  read or has no workspace. Signed in, a click behaves as before.
+
 ## [5.0.1] - 2026-10-22
 
 The core of District AI for Linux 3.0.3 and District AI for Windows 3.0.3: a security

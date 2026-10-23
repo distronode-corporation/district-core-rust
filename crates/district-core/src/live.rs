@@ -652,18 +652,39 @@ impl SignedIn {
         ))])
     }
 
-    /// The user opened a notification: open its workspace's inbox, then ask the
-    /// service for the message's thread and open that. A workspace no longer in
-    /// the list opens nothing.
+    /// The user opened a notification. One opened while the session was being
+    /// restored is still waiting for the workspace list: this one replaces it,
+    /// the latest click being the one the user means.
     pub(crate) fn open_notification(
         &mut self,
         target: NotificationTarget,
         tickets: &mut Tickets,
     ) -> Next {
+        if self.pending_open.is_some() {
+            self.pending_open = Some(target);
+            return stay();
+        }
+        Next::Stay(self.open_target(target, tickets))
+    }
+
+    /// Opens the notification kept while the session was being restored, now
+    /// that the workspace list is read. It is opened once at most: a list with
+    /// no workspace in it opens nothing, and drops it.
+    pub(crate) fn open_pending(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        match self.pending_open.take() {
+            Some(target) if self.active_id().is_some() => self.open_target(target, tickets),
+            _ => Vec::new(),
+        }
+    }
+
+    /// Opens what a notification is about: its workspace's inbox, then the
+    /// message's thread once the service names it, or the call. A workspace no
+    /// longer in the list opens nothing.
+    fn open_target(&mut self, target: NotificationTarget, tickets: &mut Tickets) -> Vec<Effect> {
         let (workspace_id, message_id, route) = match target {
             // The ring is on the window already: bring the window forward.
             NotificationTarget::IncomingCall { .. } => {
-                return Next::Stay(vec![Effect::PresentWindow]);
+                return vec![Effect::PresentWindow];
             }
             NotificationTarget::Message {
                 workspace_id,
@@ -677,7 +698,7 @@ impl SignedIn {
         let mut effects = Vec::new();
         if self.active_id().as_deref() != Some(workspace_id.as_str()) {
             let Some(switched) = self.switch_to(&workspace_id, tickets) else {
-                return stay();
+                return Vec::new();
             };
             effects = switched;
         }
@@ -689,7 +710,7 @@ impl SignedIn {
                 message_id,
             });
         }
-        Next::Stay(effects)
+        effects
     }
 
     /// The thread of an opened notification's message is known. Open it, unless
