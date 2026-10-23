@@ -846,7 +846,7 @@ pub fn desk_empty_title(l: Locale) -> &'static str {
 #[must_use]
 pub fn desk_failed_title(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Could not load the help desk",
+        Locale::En => "Could not load Desk",
         Locale::FrCa => "Impossible de charger le comptoir",
     }
 }
@@ -873,7 +873,7 @@ pub fn desk_none_matching(l: Locale) -> &'static str {
 #[must_use]
 pub fn desk_off_body(l: Locale) -> &'static str {
     match l {
-        Locale::En => "While the desk is off, no tickets are recorded. Turn it on to start taking them.",
+        Locale::En => "While Desk is off, no tickets are recorded. Turn it on to start taking them.",
         Locale::FrCa => "Tant que le comptoir est désactivé, aucun billet n'est consigné. Activez-le pour en recevoir.",
     }
 }
@@ -882,7 +882,7 @@ pub fn desk_off_body(l: Locale) -> &'static str {
 #[must_use]
 pub fn desk_off_title(l: Locale) -> &'static str {
     match l {
-        Locale::En => "The help desk is off",
+        Locale::En => "Desk is off",
         Locale::FrCa => "Le comptoir est désactivé",
     }
 }
@@ -891,7 +891,7 @@ pub fn desk_off_title(l: Locale) -> &'static str {
 #[must_use]
 pub fn desk_settings_failed_title(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Could not load the desk's settings",
+        Locale::En => "Could not load Desk settings",
         Locale::FrCa => "Paramètres du comptoir indisponibles",
     }
 }
@@ -945,7 +945,7 @@ pub fn desk_ticket_raised(l: Locale, reference: &str) -> String {
 #[must_use]
 pub fn desk_turn_on(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Turn on the help desk",
+        Locale::En => "Turn on Desk",
         Locale::FrCa => "Activer le comptoir",
     }
 }

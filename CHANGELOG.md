@@ -17,6 +17,13 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Changed
+
+- Desk is called Desk: the English of `desk.failed_title`, `desk.off_title`, `desk.off_body`,
+  `desk.settings_failed_title` and `desk.turn_on` names it "Desk" instead of "the help desk"
+  ("Could not load Desk", "Desk is off", "Turn on Desk"). The French already said
+  « comptoir ». No key or function changed.
+
 ## [5.0.1] - 2026-10-22
 
 The core of District AI for Linux 3.0.3 and District AI for Windows 3.0.3: a security
