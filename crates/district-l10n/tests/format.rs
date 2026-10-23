@@ -170,6 +170,38 @@ fn dates_in_every_style_and_month() {
 }
 
 #[test]
+fn a_time_of_day_reads_nine_h_in_french_and_keeps_its_english() {
+    let at = |hour: u8, minute: u8| CivilDateTime {
+        year: 2026,
+        month: 10,
+        day: 23,
+        hour,
+        minute,
+    };
+    // The house style: no leading zero and no colon, the hour and the minutes
+    // joined by "h" between ordinary spaces (U+0020), as the catalogs write
+    // "de 9 h à 20 h" and the service's formatTime vectors read.
+    for (hour, minute, french) in [
+        (9, 0, "9 h"),
+        (9, 30, "9 h 30"),
+        (17, 0, "17 h"),
+        (0, 15, "0 h 15"),
+        (13, 5, "13 h 05"),
+    ] {
+        assert_eq!(format::time(Locale::FrCa, at(hour, minute), false), french);
+        // French never reads a twelve-hour clock, whatever is asked.
+        assert_eq!(format::time(Locale::FrCa, at(hour, minute), true), french);
+        assert!(!french.contains(NBSP) && !french.contains('\u{202f}'));
+    }
+    // English is unchanged: 24 hours with a leading zero, or 12 with a.m./p.m.
+    assert_eq!(format::time(Locale::En, at(9, 0), false), "09:00");
+    assert_eq!(format::time(Locale::En, at(9, 30), false), "09:30");
+    assert_eq!(format::time(Locale::En, at(17, 0), false), "17:00");
+    assert_eq!(format::time(Locale::En, at(9, 0), true), "9:00 a.m.");
+    assert_eq!(format::time(Locale::En, at(17, 0), true), "5:00 p.m.");
+}
+
+#[test]
 fn noon_and_midnight_on_a_twelve_hour_clock() {
     let at = |hour: u8, minute: u8| CivilDateTime {
         year: 2026,
