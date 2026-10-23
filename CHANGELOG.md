@@ -19,10 +19,10 @@ variant, or a field of one. Those take a new major version.
 
 ### Changed
 
-- Desk is called Desk: the English of `desk.failed_title`, `desk.off_title`, `desk.off_body`,
-  `desk.settings_failed_title` and `desk.turn_on` names it "Desk" instead of "the help desk"
-  ("Could not load Desk", "Desk is off", "Turn on Desk"). The French already said
-  « comptoir ». No key or function changed.
+- Desk is called the Desk: the English of `desk.failed_title`, `desk.off_title`,
+  `desk.off_body`, `desk.settings_failed_title` and `desk.turn_on` names it "the Desk" instead
+  of "the help desk", as the apps do ("Could not load the Desk", "The Desk is off", "Turn on
+  the Desk"). The French already said « comptoir ». No key or function changed.
 
 ## [5.0.1] - 2026-10-22
 

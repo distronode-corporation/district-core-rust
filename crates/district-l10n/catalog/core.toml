@@ -844,13 +844,13 @@ state = "reviewed"
 note = "Heading of the ticket queue when it has no tickets."
 
 [desk.failed_title]
-en = "Could not load Desk"
+en = "Could not load the Desk"
 fr = "Impossible de charger le comptoir"
 ctx = "title"
 screen = "desk"
 tier = "T2"
 state = "reviewed"
-note = "Heading of Desk (« comptoir ») when it failed to load."
+note = "Heading of the Desk (« comptoir ») when it failed to load."
 
 [desk.logo_file_kept]
 en = "The logo is no longer shown to customers, but its file could not be deleted and may still be reachable at its address."
@@ -871,31 +871,31 @@ state = "reviewed"
 note = "The ticket queue when the status filter matches no ticket."
 
 [desk.off_body]
-en = "While Desk is off, no tickets are recorded. Turn it on to start taking them."
+en = "While the Desk is off, no tickets are recorded. Turn it on to start taking them."
 fr = "Tant que le comptoir est désactivé, aucun billet n'est consigné. Activez-le pour en recevoir."
 ctx = "body"
 screen = "desk"
 tier = "T3"
 state = "reviewed"
-note = "Body when Desk (« comptoir ») is off: no tickets are recorded until it is turned on."
+note = "Body when the Desk (« comptoir ») is off: no tickets are recorded until it is turned on."
 
 [desk.off_title]
-en = "Desk is off"
+en = "The Desk is off"
 fr = "Le comptoir est désactivé"
 ctx = "title"
 screen = "desk"
 tier = "T3"
 state = "reviewed"
-note = "Heading of Desk (« comptoir ») when it is turned off."
+note = "Heading of the Desk (« comptoir ») when it is turned off."
 
 [desk.settings_failed_title]
-en = "Could not load Desk settings"
+en = "Could not load the Desk settings"
 fr = "Paramètres du comptoir indisponibles"
 ctx = "title"
 screen = "desk"
 tier = "T2"
 state = "reviewed"
-note = "Heading of Desk settings when they failed to load."
+note = "Heading of the Desk settings when they failed to load."
 
 [desk.status_open]
 en = "Open"
@@ -945,13 +945,13 @@ state = "reviewed"
 note = "After raising a ticket. {reference} is its reference, for example DESK-42."
 
 [desk.turn_on]
-en = "Turn on Desk"
+en = "Turn on the Desk"
 fr = "Activer le comptoir"
 ctx = "button"
 screen = "desk"
 tier = "T3"
 state = "reviewed"
-note = "Button that turns Desk (« comptoir ») on."
+note = "Button that turns the Desk (« comptoir ») on."
 
 [devices.action_sign_out]
 en = "Sign out"
