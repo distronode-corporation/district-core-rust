@@ -488,8 +488,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::marketplace_search_none_title(Locale::FrCa), "Aucun résultat");
     assert_eq!(strings::marketplace_web_action(Locale::En), "Open the number marketplace on the web");
     assert_eq!(strings::marketplace_web_action(Locale::FrCa), "Ouvrir la place de marché des numéros sur le Web");
-    assert_eq!(strings::marketplace_web_caption(Locale::En), "Numbers are bought on the District AI website. This opens it in your browser.");
-    assert_eq!(strings::marketplace_web_caption(Locale::FrCa), "Les numéros s'achètent sur le site Web de District AI. Ce bouton l'ouvre dans votre navigateur.");
+    assert_eq!(strings::marketplace_web_caption(Locale::En), "Opens in your browser.");
+    assert_eq!(strings::marketplace_web_caption(Locale::FrCa), "S'ouvre dans votre navigateur.");
     assert_eq!(strings::media_connect_failed(Locale::En), "The room could not be joined. Try again.");
     assert_eq!(strings::media_connect_failed(Locale::FrCa), "Impossible de rejoindre la salle. Réessayez.");
     assert_eq!(strings::media_connection_lost(Locale::En), "The connection was lost and could not be resumed.");

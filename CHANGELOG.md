@@ -17,6 +17,23 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Added
+
+- `number_row_note(number, can_change)`: the sentence to show on a held number's row. It is
+  `number_actions_note`'s sentence except a viewer's, which the screen's note
+  (`numbers_scope_note`) already says once; until now a viewer read "Carrier setup and number
+  changes need an agency or client role..." on the screen and again on every number. Keep
+  gating the row's actions on `number_actions_note(..).is_none()`.
+
+### Changed
+
+- `marketplace.web_caption` (`MarketplaceScreen::WEB_CAPTION`, the caption under the link to
+  the web marketplace) is now "Opens in your browser." / « S'ouvre dans votre navigateur. »
+  (was "Numbers are bought on the District AI website. This opens it in your browser."). The
+  caption no longer explains where numbers are bought: the screen's note
+  (`MarketplaceScreen::scope_note`, `numbers.purchase_elsewhere` for a member who can buy) is
+  that one explanation, so an app must show the scope note to every member, buyers included.
+
 ## [5.0.1] - 2026-10-22
 
 The core of District AI for Linux 3.0.3 and District AI for Windows 3.0.3: a security
