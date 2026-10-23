@@ -156,10 +156,11 @@ pub(crate) fn relative(text: &str, zone: &str, now: SystemTime) -> Option<String
     })
 }
 
-/// Why a time field cannot be saved.
+/// Why a time field cannot be saved. Both read as the same sentence,
+/// `time.format_error`, as on the other platforms.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum TimeFieldError {
-    /// It does not read as a time of day: "Enter a time as HH:MM.".
+    /// It does not read as a time of day.
     Unreadable,
     /// It reads as one, but past 23:59 (`25:00`, `9:75`).
     OutOfRange,
@@ -169,8 +170,7 @@ impl TimeFieldError {
     /// The sentence the field shows.
     pub fn message(self) -> &'static str {
         match self {
-            Self::Unreadable => ss::time_format_error(l()),
-            Self::OutOfRange => ss::time_range_error(l()),
+            Self::Unreadable | Self::OutOfRange => ss::time_format_error(l()),
         }
     }
 }
@@ -408,7 +408,7 @@ mod tests {
             );
             assert_eq!(
                 TimeFieldError::OutOfRange.message(),
-                "Enter a time from 00:00 to 23:59."
+                "Enter a time as HH:MM."
             );
         });
         with_locale(Locale::FrCa, || {
@@ -428,11 +428,11 @@ mod tests {
             }
             assert_eq!(
                 TimeFieldError::Unreadable.message(),
-                "Entrez une heure comme 9 h ou 9 h 30."
+                "Entrez une heure, par exemple 9 h ou 13 h 30."
             );
             assert_eq!(
                 TimeFieldError::OutOfRange.message(),
-                "Entrez une heure de 0 h \u{e0} 23 h 59."
+                "Entrez une heure, par exemple 9 h ou 13 h 30."
             );
         });
     }

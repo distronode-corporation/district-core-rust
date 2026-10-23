@@ -323,9 +323,9 @@ fn in_french_the_week_shows_nine_h_reads_any_way_of_typing_and_saves_hh_mm() {
         let sunday = key(&model, 6, 0);
         assert_eq!(week(&model).days[6][0].start, "9 h", "a new window, 9 to 5");
         for (value, error) in [
-            ("25:00", "Entrez une heure de 0 h \u{e0} 23 h 59."),
-            ("9:75", "Entrez une heure de 0 h \u{e0} 23 h 59."),
-            ("9 h 5", "Entrez une heure comme 9 h ou 9 h 30."),
+            ("25:00", "Entrez une heure, par exemple 9 h ou 13 h 30."),
+            ("9:75", "Entrez une heure, par exemple 9 h ou 13 h 30."),
+            ("9 h 5", "Entrez une heure, par exemple 9 h ou 13 h 30."),
             ("18 h", "La fin doit \u{ea}tre apr\u{e8}s le d\u{e9}but."),
         ] {
             hours(
@@ -729,8 +729,8 @@ fn in_french_custom_hours_show_nine_h_and_are_sent_as_hh_mm() {
         let mut model = overrides_open();
         hours(&mut model, HoursEvent::AddOverride);
         for (start, error) in [
-            ("24 h", "Entrez une heure de 0 h \u{e0} 23 h 59."),
-            ("neuf", "Entrez une heure comme 9 h ou 9 h 30."),
+            ("24 h", "Entrez une heure, par exemple 9 h ou 13 h 30."),
+            ("neuf", "Entrez une heure, par exemple 9 h ou 13 h 30."),
         ] {
             hours(
                 &mut model,
