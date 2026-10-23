@@ -2187,8 +2187,8 @@ pub fn marketplace_web_action(l: Locale) -> &'static str {
 #[must_use]
 pub fn marketplace_web_caption(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Numbers are bought on the District AI website. This opens it in your browser.",
-        Locale::FrCa => "Les numéros s'achètent sur le site Web de District AI. Ce bouton l'ouvre dans votre navigateur.",
+        Locale::En => "Opens in your browser.",
+        Locale::FrCa => "S'ouvre dans votre navigateur.",
     }
 }
 

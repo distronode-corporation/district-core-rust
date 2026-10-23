@@ -12,7 +12,7 @@ use district_core::{
     Model, NumberAdmin, NumberAdminEvent, NumberAnswer, NumberCall, NumberConfirmation,
     NumberWrite, OwnedNumbersList, Route, SessionState, SipTrunkForm, SipTrunks, Ticket,
     TollFreeForm, VerifyService, carrier_balance, carrier_number_count, carrier_state,
-    number_actions_note, sip_trunk_meta, verify_state,
+    number_actions_note, number_row_note, sip_trunk_meta, verify_state,
 };
 use district_model::{
     A2pRegistrationDraft, A2pRegistrationResponse, NumberLookupInfo, NumberLookupResponse,
@@ -822,6 +822,17 @@ fn the_carrier_tab_says_each_thing_in_words() {
             .unwrap()
             .starts_with("Carrier setup")
     );
+    // On the row: a held number's own reason, never the viewer's, which the
+    // screen's note says once.
+    assert_eq!(number_row_note(&held.numbers[0], true), None);
+    assert_eq!(number_row_note(&held.numbers[0], false), None);
+    for can_change in [true, false] {
+        assert_eq!(
+            number_row_note(&held.numbers[1], can_change),
+            number_actions_note(&held.numbers[1], true)
+        );
+        assert!(number_row_note(&held.numbers[1], can_change).is_some());
+    }
 
     let use_cases = TollFreeForm::use_cases();
     assert_eq!(use_cases[0], ("Customer Support", "Customer Support"));

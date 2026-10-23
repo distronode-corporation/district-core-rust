@@ -277,6 +277,10 @@ fn the_web_marketplace_opens_for_a_member_who_could_buy_there() {
          including releasing it, is here."
     );
     assert!(MarketplaceScreen::scope_note(&viewer).starts_with("Carrier setup and number changes"));
+    // The note says where numbers are bought; the caption under the link
+    // does not say it again.
+    assert_eq!(MarketplaceScreen::WEB_CAPTION, "Opens in your browser.");
+    assert!(!MarketplaceScreen::WEB_CAPTION.contains("bought"));
 }
 
 #[test]

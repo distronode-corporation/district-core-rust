@@ -463,7 +463,7 @@ pub const MARKETPLACE_SEARCH_NONE_TITLE: &str = "No matches";
 /// `marketplace.web_action` in English.
 pub const MARKETPLACE_WEB_ACTION: &str = "Open the number marketplace on the web";
 /// `marketplace.web_caption` in English.
-pub const MARKETPLACE_WEB_CAPTION: &str = "Numbers are bought on the District AI website. This opens it in your browser.";
+pub const MARKETPLACE_WEB_CAPTION: &str = "Opens in your browser.";
 /// `media.connect_failed` in English.
 pub const MEDIA_CONNECT_FAILED: &str = "The room could not be joined. Try again.";
 /// `media.connection_lost` in English.
