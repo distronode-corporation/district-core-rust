@@ -47,6 +47,10 @@ variant, or a field of one. Those take a new major version.
   caption no longer explains where numbers are bought: the screen's note
   (`MarketplaceScreen::scope_note`, `numbers.purchase_elsewhere` for a member who can buy) is
   that one explanation, so an app must show the scope note to every member, buyers included.
+- Desk is called the Desk: the English of `desk.failed_title`, `desk.off_title`,
+  `desk.off_body`, `desk.settings_failed_title` and `desk.turn_on` names it "the Desk" instead
+  of "the help desk", as the apps do ("Could not load the Desk", "The Desk is off", "Turn on
+  the Desk"). The French already said « comptoir ». No key or function changed.
 
 ## [5.0.1] - 2026-10-22
 

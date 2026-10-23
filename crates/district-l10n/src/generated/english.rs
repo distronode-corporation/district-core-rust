@@ -181,17 +181,17 @@ pub const DESK_EMPTY_BODY: &str = "Tickets your customers raise will appear here
 /// `desk.empty_title` in English.
 pub const DESK_EMPTY_TITLE: &str = "No tickets yet";
 /// `desk.failed_title` in English.
-pub const DESK_FAILED_TITLE: &str = "Could not load the help desk";
+pub const DESK_FAILED_TITLE: &str = "Could not load the Desk";
 /// `desk.logo_file_kept` in English.
 pub const DESK_LOGO_FILE_KEPT: &str = "The logo is no longer shown to customers, but its file could not be deleted and may still be reachable at its address.";
 /// `desk.none_matching` in English.
 pub const DESK_NONE_MATCHING: &str = "No tickets with this status.";
 /// `desk.off_body` in English.
-pub const DESK_OFF_BODY: &str = "While the desk is off, no tickets are recorded. Turn it on to start taking them.";
+pub const DESK_OFF_BODY: &str = "While the Desk is off, no tickets are recorded. Turn it on to start taking them.";
 /// `desk.off_title` in English.
-pub const DESK_OFF_TITLE: &str = "The help desk is off";
+pub const DESK_OFF_TITLE: &str = "The Desk is off";
 /// `desk.settings_failed_title` in English.
-pub const DESK_SETTINGS_FAILED_TITLE: &str = "Could not load the desk's settings";
+pub const DESK_SETTINGS_FAILED_TITLE: &str = "Could not load the Desk settings";
 /// `desk.status_open` in English.
 pub const DESK_STATUS_OPEN: &str = "Open";
 /// `desk.status_resolved` in English.
@@ -201,7 +201,7 @@ pub const DESK_STATUS_WAITING: &str = "Waiting on the customer";
 /// `desk.ticket_already_raised` in English.
 pub const DESK_TICKET_ALREADY_RAISED: &str = "That ticket was already raised.";
 /// `desk.turn_on` in English.
-pub const DESK_TURN_ON: &str = "Turn on the help desk";
+pub const DESK_TURN_ON: &str = "Turn on the Desk";
 /// `devices.action_sign_out` in English.
 pub const DEVICES_ACTION_SIGN_OUT: &str = "Sign out";
 /// `devices.confirm_device` in English.
