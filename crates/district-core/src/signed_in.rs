@@ -30,7 +30,7 @@ use crate::dialer::{DialerScreen, PendingDial};
 use crate::failure::FailureText;
 use crate::hq::HqScreen;
 use crate::inbox::{ConversationList, InboxScreen};
-use crate::live::LiveState;
+use crate::live::{LiveState, NotificationTarget};
 use crate::marketplace::MarketplaceScreen;
 use crate::media::MediaSession;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets, WORKSPACE_SLOTS};
@@ -154,6 +154,10 @@ pub struct SignedIn {
     pub media: Option<MediaSession>,
     /// This desktop's presence, which is what lets calls ring it.
     pub presence: PresenceState,
+    /// The notification opened while the session was being restored, opened
+    /// once the workspace list is read: before that there is no workspace to
+    /// switch to.
+    pub(crate) pending_open: Option<NotificationTarget>,
     /// The dial whose answer is awaited.
     pub(crate) pending_dial: Option<PendingDial>,
     /// The live transcript the call's socket was last asked for.
@@ -230,6 +234,7 @@ impl SignedIn {
             ring: RingController::default(),
             media: None,
             presence: PresenceState::default(),
+            pending_open: None,
             pending_dial: None,
             transcript_watch: None,
             draft_writes: DraftWrites::default(),
@@ -549,6 +554,7 @@ impl SignedIn {
         }
         let mut effects = self.workspaces_listed(remembered, result, tickets);
         effects.extend(self.setup_listed(tickets));
+        effects.extend(self.open_pending(tickets));
         Next::Stay(effects)
     }
 

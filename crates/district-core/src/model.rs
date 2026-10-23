@@ -2762,6 +2762,11 @@ pub struct Model {
     /// Whether the main window is showing. Kept here as well as in the session,
     /// because it outlives any one session.
     window_visible: bool,
+    /// The notification the user opened while the session was being restored,
+    /// the latest only. Kept only while restoring: it goes to the session that
+    /// restores, and is dropped by any other way out of restoring, so it never
+    /// reaches an account that signs in afterwards.
+    pending_open: Option<NotificationTarget>,
 }
 
 impl Model {
@@ -2781,6 +2786,7 @@ impl Model {
             tickets,
             restore_failures: 0,
             window_visible: true,
+            pending_open: None,
         };
         (
             model,
@@ -2829,6 +2835,14 @@ impl Model {
 
     /// Applies `event`, and returns the effects to run.
     pub fn update(&mut self, event: Event) -> Vec<Effect> {
+        let effects = self.apply(event);
+        if !matches!(self.session, SessionState::Restoring(_)) {
+            self.pending_open = None;
+        }
+        effects
+    }
+
+    fn apply(&mut self, event: Event) -> Vec<Effect> {
         if let Some(end) = self.ended_by(&event) {
             return self.end_session(end);
         }
@@ -2852,8 +2866,16 @@ impl Model {
                 self.window_visible = visible;
                 self.signed_in(|s, tickets, _| s.window_visible(visible, tickets))
             }
-            Event::Navigate(route) => self.signed_in(|s, tickets, _| s.navigate(route, tickets)),
-            Event::Back => self.signed_in(|s, tickets, _| s.back(tickets)),
+            // The user moving on drops a notification still waiting for the
+            // workspace list: opening it afterwards would undo their choice.
+            Event::Navigate(route) => self.signed_in(|s, tickets, _| {
+                s.pending_open = None;
+                s.navigate(route, tickets)
+            }),
+            Event::Back => self.signed_in(|s, tickets, _| {
+                s.pending_open = None;
+                s.back(tickets)
+            }),
             Event::Refresh => self.signed_in(|s, tickets, _| s.refresh(tickets)),
             Event::SelectWorkspace(id) => self.signed_in(|s, tickets, _| s.select(&id, tickets)),
             Event::OpenFinishSetup => self.signed_in(|s, _, config| s.open_finish_setup(config)),
@@ -2923,9 +2945,7 @@ impl Model {
             Event::EmbeddedClosed => {
                 self.signed_in(|s, tickets, config| s.embedded_closed(tickets, config))
             }
-            Event::OpenNotification(target) => {
-                self.signed_in(|s, tickets, _| s.open_notification(target, tickets))
-            }
+            Event::OpenNotification(target) => self.open_notification(target),
             Event::Live(update) => self.signed_in(|s, tickets, _| s.live(update, tickets)),
             Event::Dialer(event) => self.signed_in(|s, tickets, _| s.dialer_event(event, tickets)),
             Event::Call(event) => self.signed_in(|s, tickets, _| s.call_event(event, tickets)),
@@ -3246,6 +3266,17 @@ impl Model {
         }
     }
 
+    /// The user opened a notification. While the session is being restored
+    /// there is nothing to open it in yet, so it is kept for the session that
+    /// restores (a cold start from a notification that outlived the app).
+    fn open_notification(&mut self, target: NotificationTarget) -> Vec<Effect> {
+        if let SessionState::Restoring(_) = self.session {
+            self.pending_open = Some(target);
+            return Vec::new();
+        }
+        self.signed_in(|s, tickets, _| s.open_notification(target, tickets))
+    }
+
     fn restored(
         &mut self,
         ticket: Ticket,
@@ -3465,12 +3496,10 @@ impl Model {
         }
         let ticket = self.tickets.issue(Slot::Workspaces);
         effects.push(Effect::LoadWorkspaces { ticket });
-        self.session = SessionState::SignedIn(Box::new(SignedIn::new(
-            identity,
-            notice,
-            self.window_visible,
-            calls_available,
-        )));
+        let mut signed_in = SignedIn::new(identity, notice, self.window_visible, calls_available);
+        // Only a restore can have one: nothing is kept outside restoring.
+        signed_in.pending_open = self.pending_open.take();
+        self.session = SessionState::SignedIn(Box::new(signed_in));
         effects
     }
 

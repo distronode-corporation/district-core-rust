@@ -3,10 +3,12 @@
 //! window's visibility. Also the one rule every result follows: a result still
 //! awaited that says the session ended, ends it.
 
-use district_api::{ApiError, ErrorDetail};
+use district_api::{ApiError, ErrorDetail, ReauthReason, RetryReason, TokenError};
+use district_auth::{AccessClaims, Persistence};
 use district_core::{
     ContactsEvent, Effect, Event, FailureText, LiveStatus, Model, Notification, NotificationTarget,
-    Route, SessionState, SignedOutWhy, ThreadEvent, Urgency,
+    RestoreError, Route, SessionState, SignedInSession, SignedOutWhy, ThreadEvent, Ticket, Urgency,
+    WorkspacesState,
 };
 use district_live::{Disconnect, EndpointError, LiveError, LiveUpdate, WorkspaceUpdate};
 use district_model::{
@@ -753,6 +755,312 @@ fn a_notification_for_another_workspace_opens_that_workspace() {
             }))
             .is_empty()
     );
+}
+
+// Opening a notification at a cold start, while the session is being restored.
+
+fn message_target(workspace_id: &str, message_id: &str) -> Event {
+    Event::OpenNotification(NotificationTarget::Message {
+        workspace_id: workspace_id.to_owned(),
+        message_id: message_id.to_owned(),
+    })
+}
+
+fn call_target(workspace_id: &str, call_id: &str) -> Event {
+    Event::OpenNotification(NotificationTarget::Call {
+        workspace_id: workspace_id.to_owned(),
+        call_id: call_id.to_owned(),
+    })
+}
+
+/// A model at start-up, still restoring, and the restore check's ticket.
+fn starting() -> (Model, Ticket) {
+    let (model, effects) = Model::new(config());
+    (model, last_ticket(&effects))
+}
+
+/// The session restores, and the workspace list read that follows answers with
+/// no remembered workspace, so the account's default (the viewer one) would
+/// open. Returns the list's effects.
+fn restore_and_list(model: &mut Model, restore: Ticket) -> Vec<Effect> {
+    let effects = model.update(Event::SessionRestored {
+        ticket: restore,
+        result: Ok(claims()),
+    });
+    // Nothing to open it in yet: the list is still being read.
+    assert_eq!(signed_in(model).route, Route::Overview);
+    assert!(!has(&effects, |e| matches!(
+        e,
+        Effect::FindMessageThread { .. }
+    )));
+    model.update(Event::WorkspacesLoaded {
+        ticket: last_ticket(&effects),
+        remembered: None,
+        result: Ok(workspace_list()),
+    })
+}
+
+/// A notification that outlived the app is clicked at a cold start: the app
+/// opens and sends it before the stored session is restored. It is kept, and
+/// opened in its workspace once the workspace list is read.
+#[test]
+fn a_notification_opened_while_restoring_opens_once_the_workspaces_are_read() {
+    let (mut model, restore) = starting();
+    assert!(model.update(message_target(CLIENT, "m1")).is_empty());
+    let effects = restore_and_list(&mut model, restore);
+    assert_eq!(crate::support::workspaces(&model).active().id, CLIENT);
+    assert_eq!(signed_in(&model).route, Route::Inbox);
+    assert!(has(&effects, |e| matches!(
+        e,
+        Effect::RememberWorkspace { workspace_id: Some(id) } if id == CLIENT
+    )));
+    let found: Vec<_> = effects
+        .iter()
+        .filter_map(|e| match e {
+            Effect::FindMessageThread {
+                workspace_id,
+                message_id,
+                ..
+            } => Some((workspace_id.as_str(), message_id.as_str())),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(found, [(CLIENT, "m1")]);
+}
+
+/// Two clicks before the session is back: the later one is opened, and only it.
+#[test]
+fn of_two_notifications_opened_while_restoring_the_later_opens() {
+    let (mut model, restore) = starting();
+    assert!(model.update(message_target(CLIENT, "m1")).is_empty());
+    assert!(model.update(call_target(AGENCY, "call-1")).is_empty());
+    let effects = restore_and_list(&mut model, restore);
+    assert_eq!(crate::support::workspaces(&model).active().id, AGENCY);
+    assert_eq!(
+        signed_in(&model).route,
+        Route::CallDetail {
+            call_id: "call-1".to_owned()
+        }
+    );
+    assert!(!has(&effects, |e| matches!(
+        e,
+        Effect::FindMessageThread { .. }
+    )));
+}
+
+/// The user moving on while the list is read drops the kept notification: it
+/// would otherwise undo their choice when the list arrives.
+#[test]
+fn navigating_while_the_list_is_read_drops_the_kept_notification() {
+    for moved in [Event::Navigate(Route::Contacts), Event::Back] {
+        let (mut model, restore) = starting();
+        model.update(message_target(CLIENT, "m1"));
+        let effects = model.update(Event::SessionRestored {
+            ticket: restore,
+            result: Ok(claims()),
+        });
+        let route = {
+            model.update(moved.clone());
+            signed_in(&model).route.clone()
+        };
+        let effects = model.update(Event::WorkspacesLoaded {
+            ticket: last_ticket(&effects),
+            remembered: None,
+            result: Ok(workspace_list()),
+        });
+        assert_eq!(
+            crate::support::workspaces(&model).active().id,
+            VIEWER,
+            "{moved:?}"
+        );
+        assert_eq!(signed_in(&model).route, route, "{moved:?}");
+        assert!(!has(&effects, |e| matches!(
+            e,
+            Effect::FindMessageThread { .. }
+        )));
+    }
+}
+
+/// Anything else in that wait keeps it: here the window is hidden and shown.
+#[test]
+fn other_events_while_the_list_is_read_keep_the_kept_notification() {
+    let (mut model, restore) = starting();
+    model.update(message_target(CLIENT, "m1"));
+    let effects = model.update(Event::SessionRestored {
+        ticket: restore,
+        result: Ok(claims()),
+    });
+    model.update(Event::WindowVisible(false));
+    model.update(Event::WindowVisible(true));
+    model.update(Event::WorkspacesLoaded {
+        ticket: last_ticket(&effects),
+        remembered: None,
+        result: Ok(workspace_list()),
+    });
+    assert_eq!(crate::support::workspaces(&model).active().id, CLIENT);
+    assert_eq!(signed_in(&model).route, Route::Inbox);
+}
+
+/// A click after the session is back but before the list is read replaces the
+/// one kept from restoring, rather than losing to it.
+#[test]
+fn a_later_click_while_the_list_is_read_replaces_the_one_kept() {
+    let (mut model, restore) = starting();
+    model.update(message_target(CLIENT, "m1"));
+    let effects = model.update(Event::SessionRestored {
+        ticket: restore,
+        result: Ok(claims()),
+    });
+    assert!(model.update(call_target(AGENCY, "call-2")).is_empty());
+    model.update(Event::WorkspacesLoaded {
+        ticket: last_ticket(&effects),
+        remembered: None,
+        result: Ok(workspace_list()),
+    });
+    assert_eq!(
+        signed_in(&model).route,
+        Route::CallDetail {
+            call_id: "call-2".to_owned()
+        }
+    );
+}
+
+/// A wait to try the restore again (offline at start-up) keeps the click; it
+/// opens when the session finally restores.
+#[test]
+fn a_notification_kept_while_restoring_survives_a_retry() {
+    let (mut model, restore) = starting();
+    model.update(message_target(CLIENT, "m1"));
+    let effects = model.update(Event::SessionRestored {
+        ticket: restore,
+        result: Err(RestoreError::Token(TokenError::RetryLater(
+            RetryReason::Offline,
+        ))),
+    });
+    let effects = model.update(Event::RetryDue {
+        ticket: last_ticket(&effects),
+    });
+    restore_and_list(&mut model, last_ticket(&effects));
+    assert_eq!(crate::support::workspaces(&model).active().id, CLIENT);
+    assert_eq!(signed_in(&model).route, Route::Inbox);
+}
+
+/// A restore that ends with nobody signed in drops the click: it is never
+/// opened for whoever signs in next, which may be another account.
+#[test]
+fn a_restore_that_ends_signed_out_drops_the_notification() {
+    for result in [
+        Err(RestoreError::Token(TokenError::SignInRequired(
+            ReauthReason::NoSession,
+        ))),
+        Err(RestoreError::UnreadableToken),
+    ] {
+        let (mut model, restore) = starting();
+        model.update(message_target(CLIENT, "m1"));
+        model.update(Event::SessionRestored {
+            ticket: restore,
+            result,
+        });
+        assert!(matches!(model.session(), SessionState::SignedOut(_)));
+
+        let effects = model.update(Event::SignIn);
+        model.update(Event::SignInBrowser {
+            ticket: last_ticket(&effects),
+            opened: true,
+        });
+        let effects = model.update(Event::SignInCallback(
+            "districtai://auth?code=c&state=s".to_owned(),
+        ));
+        let effects = model.update(Event::SignInCompleted {
+            ticket: last_ticket(&effects),
+            result: Ok(SignedInSession {
+                claims: AccessClaims {
+                    user_id: "user-someone-else".to_owned(),
+                    ..claims()
+                },
+                persistence: Persistence::Saved,
+            }),
+        });
+        let effects = model.update(Event::WorkspacesLoaded {
+            ticket: last_ticket(&effects),
+            remembered: None,
+            result: Ok(workspace_list()),
+        });
+        assert_eq!(crate::support::workspaces(&model).active().id, VIEWER);
+        assert_eq!(signed_in(&model).route, Route::Overview);
+        assert!(!has(&effects, |e| matches!(
+            e,
+            Effect::FindMessageThread { .. }
+        )));
+    }
+}
+
+/// A list with nothing to open drops the click, and a list read again later
+/// does not bring it back.
+#[test]
+fn a_workspace_list_that_cannot_be_read_drops_the_notification() {
+    let (mut model, restore) = starting();
+    model.update(message_target(CLIENT, "m1"));
+    let effects = model.update(Event::SessionRestored {
+        ticket: restore,
+        result: Ok(claims()),
+    });
+    model.update(Event::WorkspacesLoaded {
+        ticket: last_ticket(&effects),
+        remembered: None,
+        result: Err(server_error()),
+    });
+    assert!(matches!(
+        signed_in(&model).workspaces,
+        WorkspacesState::Unavailable(_)
+    ));
+    let effects = model.update(Event::Refresh);
+    model.update(Event::WorkspacesLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadWorkspaces { .. })),
+        remembered: None,
+        result: Ok(workspace_list()),
+    });
+    assert_eq!(crate::support::workspaces(&model).active().id, VIEWER);
+    assert_eq!(signed_in(&model).route, Route::Overview);
+}
+
+/// A kept notification for a workspace no longer listed opens nothing, and a
+/// kept ring brings the window forward, as either does when signed in.
+#[test]
+fn a_kept_notification_opens_as_it_would_when_signed_in() {
+    let (mut model, restore) = starting();
+    model.update(message_target("ws-gone", "m1"));
+    let effects = restore_and_list(&mut model, restore);
+    assert_eq!(crate::support::workspaces(&model).active().id, VIEWER);
+    assert_eq!(signed_in(&model).route, Route::Overview);
+    assert!(!has(&effects, |e| matches!(
+        e,
+        Effect::RememberWorkspace { .. } | Effect::FindMessageThread { .. }
+    )));
+
+    let (mut model, restore) = starting();
+    model.update(Event::OpenNotification(NotificationTarget::IncomingCall {
+        workspace_id: AGENCY.to_owned(),
+        call_id: "call-3".to_owned(),
+    }));
+    let effects = restore_and_list(&mut model, restore);
+    assert!(has(&effects, |e| matches!(e, Effect::PresentWindow)));
+}
+
+/// Signed in already, nothing changes: a click while the list is still being
+/// read, with nothing kept from restoring, has no workspace to open and opens
+/// nothing, then or later.
+#[test]
+fn signed_in_a_click_before_the_list_is_read_still_opens_nothing() {
+    let (mut model, ticket) = crate::support::restored();
+    assert!(model.update(message_target(CLIENT, "m1")).is_empty());
+    model.update(Event::WorkspacesLoaded {
+        ticket,
+        remembered: None,
+        result: Ok(workspace_list()),
+    });
+    assert_eq!(crate::support::workspaces(&model).active().id, VIEWER);
+    assert_eq!(signed_in(&model).route, Route::Overview);
 }
 
 // The window.
