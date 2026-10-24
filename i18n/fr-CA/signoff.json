@@ -1,7 +1,7 @@
 {
-  "signed_off_by": "v3 manager (Opus 5.5 xhigh), final French review, 2026-10-16",
-  "release": "v5.0.0",
-  "commit": "6e4a15c4636954d65ff784b37b6f940d0dae91da",
+  "signed_off_by": "iMac manager distronode-com (Opus 5.5), district-core-rust 5.1.0: core.toml and scheduling.toml changes since v5.0.0 (#41, #42, #43) reviewed; the two French string changes (« S'ouvre dans votre navigateur. », « Entrez une heure, par exemple 9 h ou 13 h 30. ») are correct and the Desk renames keep « comptoir » per Sean's decision, 2026-10-24",
+  "release": "v5.1.0",
+  "commit": "9bdd1bfdd61b2f83d6454774dea29e2288bf394d",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
@@ -9,7 +9,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
-      "sha256": "d3af503833d7e95c539b7ce89c74bacb0eae815272bc8a3087751f71b91c6ced"
+      "sha256": "6424985078b29c8207ade40ba6e8b475c9545fdfc553ebb5e2a4d4b8c6463b3d"
     },
     {
       "path": "crates/district-l10n/catalog/numbers.toml",
@@ -17,7 +17,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/scheduling.toml",
-      "sha256": "20534a7597e686c0b83c2037364da1db79f32c2f921d25170144054f3a148617"
+      "sha256": "a541eaf69f3d8dd26f7f4d73e69f1aa95cf59e31b1b1aa1dd2bde453ee919a5a"
     },
     {
       "path": "crates/district-l10n/catalog/support.toml",
