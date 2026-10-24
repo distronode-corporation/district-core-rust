@@ -17,6 +17,23 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-10-24
+
+The core of the next releases of District AI for Linux and District AI for Windows. A
+minor version: new functions for the scheduler's time fields and a held number's row note,
+with French time fields, one explanation of where numbers are bought, the Desk's name in
+English and a notification click at a cold start that is no longer lost. Nothing an app
+calls or implements is removed or changed in a way that breaks it. Pull requests #41, #42,
+#43, #45 and #48.
+
+### Security
+
+- webpki-root-certs 1.0.10 in Cargo.lock, for RUSTSEC-2026-0383 (CVE-2026-111943): 1.0.9
+  still bundled emSign ECC Root CA - G3, which can let a certificate path through the
+  distrusted emSign intermediates. It reaches the lock through rustls-platform-verifier
+  0.7, which builds it only for wasm32, so neither app's build compiled it; lock-based
+  scanners (OpenSSF Scorecard) reported it all the same (#37).
+
 ### Added
 
 - `scheduling_admin::time_field_text`, `scheduling_admin::time_field_wire` and

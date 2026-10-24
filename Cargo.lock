@@ -603,7 +603,7 @@ dependencies = [
 
 [[package]]
 name = "district-api"
-version = "5.0.1"
+version = "5.1.0"
 dependencies = [
  "district-l10n",
  "district-model",
@@ -620,7 +620,7 @@ dependencies = [
 
 [[package]]
 name = "district-auth"
-version = "5.0.1"
+version = "5.1.0"
 dependencies = [
  "base64 0.22.1",
  "district-api",
@@ -639,7 +639,7 @@ dependencies = [
 
 [[package]]
 name = "district-call"
-version = "5.0.1"
+version = "5.1.0"
 dependencies = [
  "base64 0.22.1",
  "district-auth",
@@ -660,7 +660,7 @@ dependencies = [
 
 [[package]]
 name = "district-core"
-version = "5.0.1"
+version = "5.1.0"
 dependencies = [
  "base64 0.22.1",
  "district-api",
@@ -679,7 +679,7 @@ dependencies = [
 
 [[package]]
 name = "district-host"
-version = "5.0.1"
+version = "5.1.0"
 dependencies = [
  "district-auth",
  "district-core",
@@ -693,14 +693,14 @@ dependencies = [
 
 [[package]]
 name = "district-l10n"
-version = "5.0.1"
+version = "5.1.0"
 dependencies = [
  "serde_json",
 ]
 
 [[package]]
 name = "district-live"
-version = "5.0.1"
+version = "5.1.0"
 dependencies = [
  "district-api",
  "district-model",
@@ -720,7 +720,7 @@ dependencies = [
 
 [[package]]
 name = "district-model"
-version = "5.0.1"
+version = "5.1.0"
 dependencies = [
  "district-model",
  "serde",
@@ -3357,9 +3357,9 @@ dependencies = [
 
 [[package]]
 name = "webpki-root-certs"
-version = "1.0.9"
+version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b96554aa2acc8ccdb7e1c9a58a7a68dd5d13bccc69cd124cb09406db612a1c9b"
+checksum = "58ec80e73fd8baf57bf0d9615554c75348bda990d6d5bbeab964dd068319fecb"
 dependencies = [
  "rustls-pki-types",
 ]
