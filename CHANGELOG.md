@@ -33,7 +33,10 @@ and an app that does not depend on the new crate builds exactly what it did. Git
   `Status::Off(OffReason)`; called again with `Consent::Denied` it closes the reporter,
   after sending what was queued, and with consent again it opens a new one. Called again
   with consent and changed settings, it opens the new reporter and puts it in the old
-  one's place before closing the old one, so reporting is never off in between. While
+  one's place before closing the old one, so reporting is never off in between. Either
+  way, a report already under way on the old reporter (a panic or `capture_error` on
+  another thread) is sent before it is closed, waiting up to two seconds for it, and
+  once `apply` with `Consent::Denied` has returned nothing more is sent. While
   on, a panic on any thread is reported before the previous panic handler runs, and
   `capture_error` reports an error the app chooses to. A report carries the debug images
   of the main executable and of the image holding the reporter's code (the app's own
