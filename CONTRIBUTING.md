@@ -44,6 +44,12 @@ crates/district-l10n/     The words the core writes, in English and Canadian
                           Rust generated from them, the service's error sentences
                           and wire value labels, and the number, money, date and
                           duration formats. See "Strings and French" below.
+crates/district-crash/    Opt-in crash reports (Sentry, rustls): nothing is set
+                          up or sent until the app passes both a DSN and the
+                          user's consent; the consent can be withdrawn at any
+                          time. Home directory paths are scrubbed from every
+                          report. An app that does not depend on it builds no
+                          Sentry code.
 contracts/                What these crates are checked against: the server's
                           recorded responses, the Android set and the desktop-only
                           set, and its localization facts in i18n/ (vendored and
@@ -66,6 +72,8 @@ coverage-floors.toml      Each crate's line coverage floor (see Coverage below).
 
 Dependencies point one way: `district-model` at the bottom, `district-core` above
 the client crates, and `district-host` and `district-call` on top of the core.
+`district-crash` depends on none of them, so an app can report a crash that
+happens before the core is set up.
 Nothing here depends on a user interface toolkit or on a crate that builds on only
 one operating system, which is what lets both apps build on every crate, and lets
 every test run without a display, a keyring or a network.

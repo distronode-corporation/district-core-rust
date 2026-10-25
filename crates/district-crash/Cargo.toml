@@ -1,0 +1,32 @@
+[package]
+name = "district-crash"
+description = "Opt-in crash reports for the District AI desktop apps: nothing is set up or sent without a DSN and the user's consent."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish.workspace = true
+
+# A crate of its own rather than a feature of another, so an app that does not
+# offer crash reports does not depend on it and builds no Sentry code at all,
+# and so the default build measures every line of it (see Coverage in
+# CONTRIBUTING.md). Nothing here may name a crate that builds on only one
+# operating system: both apps build on it.
+[dependencies]
+# The client, the protocol types and the transport; the features are chosen in
+# the workspace manifest.
+sentry = { workspace = true }
+# The report as JSON, walked to take every home directory path out of it.
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+# Runs the mock server the proof tests point the DSN at; nothing in the tests
+# leaves this machine.
+tokio = { workspace = true, features = ["rt"] }
+wiremock = { workspace = true }
+
+[lints]
+workspace = true

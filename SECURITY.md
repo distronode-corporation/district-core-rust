@@ -157,6 +157,25 @@ participants' identities (which can be a caller's number) at debug and info.
 A test in district-live fails if the ceiling goes, and so does one among
 district-call's engine tests, which voice.yml runs.
 
+### Crash reports (district-crash)
+
+- Off until the user turns them on. Nothing is set up, no panic handler is
+  installed and nothing is sent unless the app passes both a DSN and the user's
+  consent; a `SENTRY_DSN`, `SENTRY_RELEASE` or `SSL_VERIFY` in the environment is
+  never read. Withdrawing consent closes the reporter at once, after what was
+  already queued is sent.
+- A report holds the panic message or the error and its sources, the stack, the
+  operating system and Rust version, and the release and environment the app
+  names. Every home directory path in it (`/home/<name>`, `/Users/<name>`,
+  `C:\Users\<name>`), in any field, has the user's name replaced. The machine's
+  name, the user, the request and personal data are never sent, and there are
+  no breadcrumbs, sessions or lists of loaded libraries.
+- HTTPS with the same TLS configuration and certificate store as the API calls;
+  plain `http` is refused unless the DSN names this machine. Nothing is written
+  to disk, and Sentry's own diagnostics stay off, so nothing is printed.
+- The tests count what a local mock server receives: nothing while off, exactly
+  one scrubbed report for a panic or a captured error while on.
+
 ### The core's decisions (district-core)
 
 - A billed or irreversible action (a reply written by the model, research on a

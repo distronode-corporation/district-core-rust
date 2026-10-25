@@ -17,6 +17,23 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+Opt-in crash reports, in a new crate. Nothing an app calls or implements changes, and an
+app that does not depend on the new crate builds exactly what it did.
+
+### Added
+
+- `district-crash`: crash reports through Sentry (0.49.3, rustls, no OpenSSL), off until the
+  user turns them on. `district_crash::apply(&Settings, Consent)` sets reporting up only
+  when the app passes both a DSN and `Consent::Granted`, and returns `Status::On` or
+  `Status::Off(OffReason)`; called again with `Consent::Denied` it closes the reporter,
+  after sending what was queued, and with consent again it opens a new one. While on, a
+  panic on any thread is reported before the previous panic handler runs, and
+  `capture_error` reports an error the app chooses to. Every home directory path in a
+  report has the user's name replaced, and the machine's name, the user and any address
+  are removed. Nothing is read from the environment (a `SENTRY_DSN` there is ignored), and
+  plain `http` is refused unless the DSN names this machine (`CrashError`). The asking
+  (once at first start, "Don't send" first) and the settings switch are the apps'.
+
 ## [6.0.0] - 2026-10-24
 
 A real decline. Until now declining a ring here told the service nothing, so a
