@@ -2627,6 +2627,65 @@
           ]
         },
         "latency": null
+      },
+      {
+        "model": "claude-haiku-5-5",
+        "label": "Claude Haiku 5.5",
+        "channel": "preview",
+        "channelLabel": "Preview",
+        "available": false,
+        "offered": false,
+        "defaultLocation": "auto",
+        "locations": [
+          {
+            "value": "auto",
+            "label": "Your region (United States)",
+            "residency": {
+              "processedIn": "US",
+              "inRegion": true,
+              "text": "Processed in the United States",
+              "vendorsOutOfRegion": []
+            }
+          },
+          {
+            "value": "anthropic",
+            "label": "United States (anthropic)",
+            "residency": {
+              "processedIn": "US",
+              "inRegion": true,
+              "text": "Processed in the United States",
+              "vendorsOutOfRegion": []
+            }
+          }
+        ],
+        "thinking": [
+          {
+            "value": "off",
+            "label": "Off"
+          },
+          {
+            "value": "low",
+            "label": "Low"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "high",
+            "label": "High"
+          }
+        ],
+        "defaultThinking": "off",
+        "temperatureMin": 1,
+        "temperatureMax": 1,
+        "residency": {
+          "processedIn": "US",
+          "inRegion": true,
+          "text": "Processed in the United States",
+          "vendorsOutOfRegion": []
+        },
+        "latency": null
       }
     ],
     "tts": [
@@ -5538,6 +5597,14 @@
           "model": "gemini-3.8-flash",
           "min": 0,
           "max": 2,
+          "default": null,
+          "useDefaultLabel": null
+        },
+        {
+          "provider": "",
+          "model": "claude-haiku-5-5",
+          "min": 1,
+          "max": 1,
           "default": null,
           "useDefaultLabel": null
         }

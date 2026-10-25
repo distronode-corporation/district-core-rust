@@ -87,8 +87,8 @@ pub use call_handling::{
     MAX_APP_RING_SECONDS, MIN_APP_RING_SECONDS, clamp_app_ring_seconds,
 };
 pub use calls::{
-    CallAnalysis, CallDetailResponse, CallFollowUp, CallHangUpResponse, CallSummary,
-    CallTranscriptResponse,
+    CallAnalysis, CallDeclineResponse, CallDetailResponse, CallFollowUp, CallHangUpResponse,
+    CallSummary, CallTranscriptResponse,
 };
 pub use client::{ClientIdentity, Platform};
 pub use compose::{

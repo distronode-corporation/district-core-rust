@@ -10,7 +10,7 @@ use std::collections::BTreeSet;
 
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CHANNEL_EMAIL, CHANNEL_SMS,
-    CallAnswerResponse, CallDetailResponse, CallHangUpResponse, CallSummary,
+    CallAnswerResponse, CallDeclineResponse, CallDetailResponse, CallHangUpResponse, CallSummary,
     CallTranscriptResponse, CampaignStatusResponse, ClearIntelResponse, ContactDetailResponse,
     ContactListResponse, ContactMutationResponse, ConversationsResponse, DIRECT_ROOM_PREFIX,
     DIRECTION_FLAT, DIRECTION_UP, DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsResponse,
@@ -1506,6 +1506,12 @@ fn the_dial_refusals_are_error_envelopes_with_the_services_words() {
             "{name}: a sentence to show"
         );
     }
+}
+
+#[test]
+fn a_decline_is_acknowledged_and_nothing_more() {
+    let answer: CallDeclineResponse = decode("district-call-decline.json");
+    assert!(answer.success);
 }
 
 #[test]

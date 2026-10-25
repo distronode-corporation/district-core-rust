@@ -432,8 +432,8 @@ pub fn wire_disposition_booked(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_disposition_callback(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Callback",
-        Locale::FrCa => "À rappeler",
+        Locale::En => "Callback requested",
+        Locale::FrCa => "Rappel demandé",
     }
 }
 
@@ -441,8 +441,8 @@ pub fn wire_disposition_callback(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_disposition_escalated(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Escalated",
-        Locale::FrCa => "Transmis à l'équipe",
+        Locale::En => "Passed to a person",
+        Locale::FrCa => "Transmis à une personne",
     }
 }
 
@@ -450,8 +450,8 @@ pub fn wire_disposition_escalated(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_disposition_info(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Info",
-        Locale::FrCa => "Information",
+        Locale::En => "Information only",
+        Locale::FrCa => "Information seulement",
     }
 }
 
@@ -1400,6 +1400,15 @@ pub fn wire_workflow_action_add_crm_tag(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.workflow_action.notify_member_push`
+#[must_use]
+pub fn wire_workflow_action_notify_member_push(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Notify the Team in the App",
+        Locale::FrCa => "Notifier l'équipe dans l'application",
+    }
+}
+
 /// `wire.workflow_action.notify_ops`
 #[must_use]
 pub fn wire_workflow_action_notify_ops(l: Locale) -> &'static str {
@@ -1535,6 +1544,42 @@ pub fn wire_workflow_action_reason_empty_tag(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.workflow_action_reason.fallback_email`
+#[must_use]
+pub fn wire_workflow_action_reason_fallback_email(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted, so it was emailed instead",
+        Locale::FrCa => "Texto non envoyé, l'alerte est partie par courriel à la place",
+    }
+}
+
+/// `wire.workflow_action_reason.fallback_email_push`
+#[must_use]
+pub fn wire_workflow_action_reason_fallback_email_push(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted, so it was emailed and sent to the app instead",
+        Locale::FrCa => "Texto non envoyé, l'alerte est partie par courriel et dans l'application à la place",
+    }
+}
+
+/// `wire.workflow_action_reason.fallback_failed`
+#[must_use]
+pub fn wire_workflow_action_reason_fallback_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted, and the email and app fallback failed too",
+        Locale::FrCa => "Texto non envoyé, et le courriel et l'application de secours ont aussi échoué",
+    }
+}
+
+/// `wire.workflow_action_reason.fallback_push`
+#[must_use]
+pub fn wire_workflow_action_reason_fallback_push(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted and the email failed, so it was sent to the app instead",
+        Locale::FrCa => "Texto non envoyé et courriel en échec, l'alerte est partie dans l'application à la place",
+    }
+}
+
 /// `wire.workflow_action_reason.http_status`
 #[must_use]
 pub fn wire_workflow_action_reason_http_status(l: Locale) -> &'static str {
@@ -1559,6 +1604,24 @@ pub fn wire_workflow_action_reason_missing_webhook_url(l: Locale) -> &'static st
     match l {
         Locale::En => "Missing webhook url",
         Locale::FrCa => "URL du webhook manquante",
+    }
+}
+
+/// `wire.workflow_action_reason.no_devices`
+#[must_use]
+pub fn wire_workflow_action_reason_no_devices(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No team member has the app on a device that can receive notifications",
+        Locale::FrCa => "Aucun membre de l'équipe n'a l'application sur un appareil qui peut recevoir des notifications",
+    }
+}
+
+/// `wire.workflow_action_reason.no_message`
+#[must_use]
+pub fn wire_workflow_action_reason_no_message(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Notifying the team works only with the trigger for a message taken during a call",
+        Locale::FrCa => "La notification de l'équipe ne fonctionne qu'avec le déclencheur d'un message pris pendant un appel",
     }
 }
 
@@ -1598,6 +1661,42 @@ pub fn wire_workflow_action_reason_postmark_missing(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.workflow_action_reason.push_lookup_failed`
+#[must_use]
+pub fn wire_workflow_action_reason_push_lookup_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The list of team devices could not be read",
+        Locale::FrCa => "La liste des appareils de l'équipe n'a pas pu être lue",
+    }
+}
+
+/// `wire.workflow_action_reason.push_not_delivered`
+#[must_use]
+pub fn wire_workflow_action_reason_push_not_delivered(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No device accepted the notification",
+        Locale::FrCa => "Aucun appareil n'a accepté la notification",
+    }
+}
+
+/// `wire.workflow_action_reason.recipient_not_member`
+#[must_use]
+pub fn wire_workflow_action_reason_recipient_not_member(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The person to text is no longer a member of this workspace",
+        Locale::FrCa => "La personne à qui envoyer le texto n'est plus membre de cet espace de travail",
+    }
+}
+
+/// `wire.workflow_action_reason.recipient_number_held`
+#[must_use]
+pub fn wire_workflow_action_reason_recipient_number_held(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not sent: the person's mobile is a business number on District",
+        Locale::FrCa => "Non envoyé\u{00A0}: le cellulaire de cette personne est un numéro d'entreprise sur District",
+    }
+}
+
 /// `wire.workflow_action_reason.report_recipient_refused`
 #[must_use]
 pub fn wire_workflow_action_reason_report_recipient_refused(l: Locale) -> &'static str {
@@ -1631,6 +1730,15 @@ pub fn wire_workflow_action_reason_ses_missing(l: Locale) -> &'static str {
     match l {
         Locale::En => "SES missing",
         Locale::FrCa => "SES non configuré",
+    }
+}
+
+/// `wire.workflow_action_reason.signing_unavailable`
+#[must_use]
+pub fn wire_workflow_action_reason_signing_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not sent: the webhook signing secret could not be read",
+        Locale::FrCa => "Non envoyé\u{00A0}: le secret de signature des webhooks n'a pas pu être lu",
     }
 }
 
@@ -1760,6 +1868,15 @@ pub fn wire_workflow_trigger_call_ended_unanswered(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.workflow_trigger.call_triaged`
+#[must_use]
+pub fn wire_workflow_trigger_call_triaged(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When a Call is Triaged (urgency, type, details)",
+        Locale::FrCa => "Quand un appel est trié (urgence, type, détails)",
+    }
+}
+
 /// `wire.workflow_trigger.contact_created`
 #[must_use]
 pub fn wire_workflow_trigger_contact_created(l: Locale) -> &'static str {
@@ -1784,6 +1901,15 @@ pub fn wire_workflow_trigger_intent_detected(l: Locale) -> &'static str {
     match l {
         Locale::En => "When Specific Intent Detected",
         Locale::FrCa => "Quand une intention précise est détectée",
+    }
+}
+
+/// `wire.workflow_trigger.message_taken`
+#[must_use]
+pub fn wire_workflow_trigger_message_taken(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When a Message is Taken During a Call",
+        Locale::FrCa => "Quand un message est pris pendant un appel",
     }
 }
 
