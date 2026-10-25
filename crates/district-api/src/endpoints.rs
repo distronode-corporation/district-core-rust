@@ -359,6 +359,14 @@ endpoint_table! {
     /// confirmation changes the workspace.
     Hq => Post "/api/district/hq",
         workspace: Body, body: Json, retry: Never;
+    /// The credential for an HQ voice session. Each one starts a billed voice
+    /// model session, so it is never repeated.
+    HqVoiceToken => Post "/api/district/hq/voice-token",
+        workspace: Body, body: Json, retry: Never;
+    /// Cancels a change the HQ voice agent proposed, named by `proposalId`. A
+    /// write, never repeated.
+    HqProposalCancel => Post "/api/district/hq/proposals/cancel",
+        workspace: Body, body: Json, retry: Never;
 
     // Phone numbers. Buying one stays on the web: a number is a recurring
     // carrier charge, so there is no purchase here.

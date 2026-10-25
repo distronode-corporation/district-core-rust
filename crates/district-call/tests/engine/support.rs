@@ -228,6 +228,9 @@ fn mint(room: &str, identity: &str, kind: Kind, secret: &str, can_publish: bool)
             "canPublish": can_publish,
             "canSubscribe": true,
             "canPublishData": true,
+            // An agent sets its own attributes (`lk.agent.state`), as the
+            // voice agents do.
+            "canUpdateOwnMetadata": matches!(kind, Kind::Agent),
         },
     });
     let signing_input = format!(

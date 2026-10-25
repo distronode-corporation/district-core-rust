@@ -340,14 +340,56 @@ pub const HQ_DISMISS_ACTION: &str = "Dismiss";
 pub const HQ_EMPTY_BODY: &str = "Ask about your calls, contacts, the receptionist or your knowledge base.";
 /// `hq.empty_title` in English.
 pub const HQ_EMPTY_TITLE: &str = "Ask District HQ";
+/// `hq.note_already_handled` in English.
+pub const HQ_NOTE_ALREADY_HANDLED: &str = "This change was already handled.";
 /// `hq.note_applied` in English.
 pub const HQ_NOTE_APPLIED: &str = "Done. The change is in place.";
+/// `hq.note_cancelled` in English.
+pub const HQ_NOTE_CANCELLED: &str = "Cancelled. Nothing was changed.";
+/// `hq.note_expired` in English.
+pub const HQ_NOTE_EXPIRED: &str = "This change expired before it was confirmed. Ask again to make it.";
 /// `hq.note_mismatched` in English.
 pub const HQ_NOTE_MISMATCHED: &str = "District AI reports a change other than the one you confirmed. Check your workspace settings before relying on it.";
 /// `hq.note_not_applied` in English.
 pub const HQ_NOTE_NOT_APPLIED: &str = "That change was not made.";
 /// `hq.thinking` in English.
 pub const HQ_THINKING: &str = "Thinking.";
+/// `hq.voice_agent_joining` in English.
+pub const HQ_VOICE_AGENT_JOINING: &str = "Waiting for District HQ to join.";
+/// `hq.voice_cancel_action` in English.
+pub const HQ_VOICE_CANCEL_ACTION: &str = "Cancel";
+/// `hq.voice_cancelling` in English.
+pub const HQ_VOICE_CANCELLING: &str = "Cancelling the change.";
+/// `hq.voice_card_note` in English.
+pub const HQ_VOICE_CARD_NOTE: &str = "Nothing has changed yet. Say \"confirm\" or click Confirm to apply it, or cancel it.";
+/// `hq.voice_connecting` in English.
+pub const HQ_VOICE_CONNECTING: &str = "Connecting to District HQ.";
+/// `hq.voice_disclosure` in English.
+pub const HQ_VOICE_DISCLOSURE: &str = "Your voice is processed in the United States. Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded.";
+/// `hq.voice_disclosure_accept` in English.
+pub const HQ_VOICE_DISCLOSURE_ACCEPT: &str = "Start voice";
+/// `hq.voice_disclosure_decline` in English.
+pub const HQ_VOICE_DISCLOSURE_DECLINE: &str = "Not now";
+/// `hq.voice_disclosure_title` in English.
+pub const HQ_VOICE_DISCLOSURE_TITLE: &str = "Where your voice is processed";
+/// `hq.voice_ended_agent` in English.
+pub const HQ_VOICE_ENDED_AGENT: &str = "Voice session ended because District HQ left the session.";
+/// `hq.voice_ended_time_limit` in English.
+pub const HQ_VOICE_ENDED_TIME_LIMIT: &str = "Voice session ended after reaching its 30-minute limit.";
+/// `hq.voice_fallback_summary` in English.
+pub const HQ_VOICE_FALLBACK_SUMMARY: &str = "District HQ proposed a change.";
+/// `hq.voice_listening` in English.
+pub const HQ_VOICE_LISTENING: &str = "Listening. Speak to District HQ.";
+/// `hq.voice_speaking` in English.
+pub const HQ_VOICE_SPEAKING: &str = "District HQ is speaking.";
+/// `hq.voice_start` in English.
+pub const HQ_VOICE_START: &str = "Voice";
+/// `hq.voice_stop` in English.
+pub const HQ_VOICE_STOP: &str = "Stop voice";
+/// `hq.voice_thinking` in English.
+pub const HQ_VOICE_THINKING: &str = "District HQ is working on it.";
+/// `hq.voice_unencrypted` in English.
+pub const HQ_VOICE_UNENCRYPTED: &str = "The voice session could not be end-to-end encrypted, so it was not started.";
 /// `inbox.compose_action` in English.
 pub const INBOX_COMPOSE_ACTION: &str = "New message";
 /// `inbox.compose_cancel` in English.

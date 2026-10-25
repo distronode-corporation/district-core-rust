@@ -24,6 +24,9 @@ livekit = { workspace = true, optional = true }
 rustls = { workspace = true, optional = true }
 # To read the media server's address before anything is sent to it.
 url = { workspace = true, optional = true }
+# With `livekit` only: the names of the HQ voice agent's attribute and of the
+# transcription streams' topic and attributes.
+district-model = { workspace = true, optional = true }
 # With `livekit` only, and only for its `max_level_warn` feature: see the
 # workspace manifest. Held here as well as in district-live because this crate
 # brings in the library that logs the room's key.
@@ -50,7 +53,7 @@ sha2 = { workspace = true }
 # build compiles no WebRTC stack and has `UnavailableCallEngine`, which joins
 # nothing and says so. Building with it links libwebrtc: see "Building with
 # calls" in CONTRIBUTING.md.
-livekit = ["dep:livekit", "dep:futures-util", "dep:log", "dep:rustls", "dep:url", "tokio/rt", "tokio/time", "tokio/macros"]
+livekit = ["dep:livekit", "dep:district-model", "dep:futures-util", "dep:log", "dep:rustls", "dep:url", "tokio/rt", "tokio/time", "tokio/macros"]
 
 # The engine against a real media server on this machine: two engines in one
 # room, the tone one sends and the other hears, encryption, the people in the

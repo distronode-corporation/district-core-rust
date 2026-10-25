@@ -1598,12 +1598,39 @@ pub fn hq_empty_title(l: Locale) -> &'static str {
     }
 }
 
+/// `hq.note_already_handled`
+#[must_use]
+pub fn hq_note_already_handled(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This change was already handled.",
+        Locale::FrCa => "Ce changement a déjà été traité.",
+    }
+}
+
 /// `hq.note_applied`
 #[must_use]
 pub fn hq_note_applied(l: Locale) -> &'static str {
     match l {
         Locale::En => "Done. The change is in place.",
         Locale::FrCa => "Terminé. Le changement est en place.",
+    }
+}
+
+/// `hq.note_cancelled`
+#[must_use]
+pub fn hq_note_cancelled(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Cancelled. Nothing was changed.",
+        Locale::FrCa => "Annulé. Rien n'a été modifié.",
+    }
+}
+
+/// `hq.note_expired`
+#[must_use]
+pub fn hq_note_expired(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This change expired before it was confirmed. Ask again to make it.",
+        Locale::FrCa => "Ce changement a expiré avant d'être confirmé. Demandez-le de nouveau pour l'appliquer.",
     }
 }
 
@@ -1631,6 +1658,168 @@ pub fn hq_thinking(l: Locale) -> &'static str {
     match l {
         Locale::En => "Thinking.",
         Locale::FrCa => "Réflexion en cours.",
+    }
+}
+
+/// `hq.voice_agent_joining`
+#[must_use]
+pub fn hq_voice_agent_joining(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Waiting for District HQ to join.",
+        Locale::FrCa => "En attente de District HQ.",
+    }
+}
+
+/// `hq.voice_cancel_action`
+#[must_use]
+pub fn hq_voice_cancel_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Cancel",
+        Locale::FrCa => "Annuler",
+    }
+}
+
+/// `hq.voice_cancelling`
+#[must_use]
+pub fn hq_voice_cancelling(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Cancelling the change.",
+        Locale::FrCa => "Annulation en cours.",
+    }
+}
+
+/// `hq.voice_card_note`
+#[must_use]
+pub fn hq_voice_card_note(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Nothing has changed yet. Say \"confirm\" or click Confirm to apply it, or cancel it.",
+        Locale::FrCa => "Rien n'a encore été modifié. Dites «\u{00A0}je confirme\u{00A0}» ou cliquez sur Confirmer pour l'appliquer, ou annulez-le.",
+    }
+}
+
+/// `hq.voice_connecting`
+#[must_use]
+pub fn hq_voice_connecting(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connecting to District HQ.",
+        Locale::FrCa => "Connexion à District HQ en cours.",
+    }
+}
+
+/// `hq.voice_disclosure`
+#[must_use]
+pub fn hq_voice_disclosure(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your voice is processed in the United States. Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded.",
+        Locale::FrCa => "Votre voix est traitée aux États-Unis. Le mode vocal utilise Gemini Live dans la région us-east4 de Google Cloud pour tous les espaces de travail, quelle que soit la région du vôtre. Rien n'est enregistré.",
+    }
+}
+
+/// `hq.voice_disclosure_accept`
+#[must_use]
+pub fn hq_voice_disclosure_accept(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Start voice",
+        Locale::FrCa => "Démarrer le mode vocal",
+    }
+}
+
+/// `hq.voice_disclosure_decline`
+#[must_use]
+pub fn hq_voice_disclosure_decline(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not now",
+        Locale::FrCa => "Pas maintenant",
+    }
+}
+
+/// `hq.voice_disclosure_title`
+#[must_use]
+pub fn hq_voice_disclosure_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Where your voice is processed",
+        Locale::FrCa => "Où votre voix est traitée",
+    }
+}
+
+/// `hq.voice_ended_agent`
+#[must_use]
+pub fn hq_voice_ended_agent(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Voice session ended because District HQ left the session.",
+        Locale::FrCa => "Session vocale terminée, car District HQ a quitté la session.",
+    }
+}
+
+/// `hq.voice_ended_time_limit`
+#[must_use]
+pub fn hq_voice_ended_time_limit(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Voice session ended after reaching its 30-minute limit.",
+        Locale::FrCa => "Session vocale terminée, car la limite de 30 minutes a été atteinte.",
+    }
+}
+
+/// `hq.voice_fallback_summary`
+#[must_use]
+pub fn hq_voice_fallback_summary(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "District HQ proposed a change.",
+        Locale::FrCa => "District HQ a proposé un changement.",
+    }
+}
+
+/// `hq.voice_listening`
+#[must_use]
+pub fn hq_voice_listening(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Listening. Speak to District HQ.",
+        Locale::FrCa => "À l'écoute. Parlez à District HQ.",
+    }
+}
+
+/// `hq.voice_speaking`
+#[must_use]
+pub fn hq_voice_speaking(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "District HQ is speaking.",
+        Locale::FrCa => "District HQ parle.",
+    }
+}
+
+/// `hq.voice_start`
+#[must_use]
+pub fn hq_voice_start(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Voice",
+        Locale::FrCa => "Vocal",
+    }
+}
+
+/// `hq.voice_stop`
+#[must_use]
+pub fn hq_voice_stop(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Stop voice",
+        Locale::FrCa => "Arrêter le mode vocal",
+    }
+}
+
+/// `hq.voice_thinking`
+#[must_use]
+pub fn hq_voice_thinking(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "District HQ is working on it.",
+        Locale::FrCa => "District HQ y travaille.",
+    }
+}
+
+/// `hq.voice_unencrypted`
+#[must_use]
+pub fn hq_voice_unencrypted(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The voice session could not be end-to-end encrypted, so it was not started.",
+        Locale::FrCa => "La session vocale n'a pas pu être chiffrée de bout en bout, donc elle n'a pas été lancée.",
     }
 }
 

@@ -119,6 +119,7 @@ mod devices;
 mod dialer;
 mod failure;
 mod hq;
+mod hq_voice;
 mod inbox;
 mod live;
 mod marketplace;
@@ -194,6 +195,7 @@ pub use failure::FailureText;
 pub use hq::{
     HqAuthor, HqControls, HqEvent, HqMessage, HqNote, HqPhase, HqScreen, HqText, is_web_link,
 };
+pub use hq_voice::{HqCardState, HqVoice, HqVoiceCard, HqVoiceControls, HqVoiceEnd, HqVoicePhase};
 pub use inbox::{
     ConversationList, Conversations, InboxEvent, InboxScreen, SEARCH_DEBOUNCE, SearchState,
 };
@@ -207,7 +209,7 @@ pub use marketplace::{
 };
 pub use media::{
     CallEngine, DisconnectReason, MediaConnection, MediaCredential, MediaEvent, MediaOwner,
-    MediaSession, MediaUpdate, MicrophoneState, Participant, TrackKind,
+    MediaSession, MediaUpdate, MicrophoneState, Participant, Speaker, SpeechSegment, TrackKind,
 };
 pub use model::{CoreConfig, Effect, Event, Model, RESTORE_RETRY_FIRST, RESTORE_RETRY_MAX, Ticket};
 pub use number_admin::{

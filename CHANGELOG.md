@@ -17,6 +17,44 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+District HQ by voice. Breaking for the apps (a new major version when released):
+`DistrictApi` has three new methods, `Event`, `Effect`, `HqEvent`, `HqText`, `HqNote`,
+`MediaEvent` and `MediaOwner` have new variants, and `HqScreen` a new field.
+
+### Added
+
+- `district_model::{HqVoiceTokenResponse, HqProposalCancelResponse, HqVoiceProposal,
+  HqVoiceResolution, HqResolutionStatus, HqVoicePacket, HqAgentState, read_packet}` and the
+  topic and attribute names of a voice session (`HQ_PROPOSAL_TOPIC`, `TRANSCRIPTION_TOPIC`,
+  `ATTR_*`). `read_packet` reads the voice agent's `HQ_PROPOSAL` and `HQ_PROPOSAL_RESOLVED`
+  packets as the web client does and ignores anything that does not validate, never
+  panicking. The credential's `Debug` leaves out the media token and the passphrase.
+- `ApiClient::hq_voice_token`, `hq_confirm_voice` and `hq_proposal_cancel`
+  (`POST /api/district/hq/voice-token`, `POST /api/district/hq` with `confirm.proposalId`,
+  `POST /api/district/hq/proposals/cancel`), none ever repeated, listed in `DESKTOP_ONLY`
+  until the Android app's endpoint snapshot has them. A typed proposal's confirmation still
+  sends no `proposalId` at all, which the service would take for a voice card's.
+- `HqScreen::voice` (`HqVoice`): the residency statement before the first session in a
+  workspace, the session in its encrypted room (`MediaOwner::HqVoice`, never joined
+  without a passphrase), the agent's state, the 30-minute limit, and a card per change
+  proposed by voice (`HqVoiceCard`), resolved only by the member: by voice, which the agent
+  acts on, or by a click on Confirm or Cancel, one request in flight per card, the refusal
+  codes `already_resolved`, `expired`, `not_found` and `invalid_request` read from the body.
+  Spoken words join the conversation as `HqText::Spoken` and are sent as history once
+  final. The voice session ends when the member leaves the HQ screen or the workspace,
+  signs out, or the desktop sleeps or quits.
+- `MediaEvent::AgentData`, `MediaEvent::AgentState` and `MediaEvent::Speech`, which
+  `LiveKitCallEngine` reports from an agent participant's data packets, its
+  `lk.agent.state` attribute and the `lk.transcription` text streams (the member's words
+  included), in an encrypted room decrypted with the room's passphrase.
+- The new sentences in `core.toml` (`hq.voice_*`, `hq.note_cancelled`,
+  `hq.note_already_handled`, `hq.note_expired`), with French marked `draft` for review.
+
+### Changed
+
+- Retrying a failed HQ question sends the member's last typed question, even when spoken
+  words or a note came after it.
+
 ## [5.1.0] - 2026-10-24
 
 The core of the next releases of District AI for Linux and District AI for Windows. A

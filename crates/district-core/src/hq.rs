@@ -18,11 +18,16 @@
 //!
 //! Every prompt is a billed model run and every confirmation a write, so each is
 //! one at a time.
+//!
+//! The same conversation can be spoken: see [`crate::HqVoice`]. Spoken words
+//! join the transcript as they are transcribed, and a change proposed by voice
+//! has a card of its own, keyed by its id, beside the typed one.
 
 use district_api::ApiError;
 use district_model::{HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqRole, HqTurn};
 
 use crate::failure::FailureText;
+use crate::hq_voice::HqVoice;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
@@ -36,6 +41,8 @@ pub struct HqScreen {
     pub transcript: Vec<HqMessage>,
     /// What the conversation is doing now.
     pub phase: HqPhase,
+    /// The voice session, and the changes proposed by voice.
+    pub voice: HqVoice,
 }
 
 impl HqScreen {
@@ -55,6 +62,12 @@ impl HqScreen {
     pub const DISMISS_ACTION: &'static str = district_l10n::english::HQ_DISMISS_ACTION;
     /// The line while a confirmed change is being applied.
     pub const APPLYING: &'static str = district_l10n::english::HQ_APPLYING;
+
+    /// Everything said so far, as the turns to send with a prompt or to start
+    /// a voice session with.
+    pub(crate) fn history(&self) -> Vec<HqTurn> {
+        turns(&self.transcript)
+    }
 
     /// What the screen may offer a member with `capabilities` now.
     pub fn controls(&self, capabilities: &Capabilities) -> HqControls {
@@ -105,14 +118,20 @@ impl HqMessage {
     }
 
     /// The turn to send back with the next prompt. The app's own notes are not
-    /// sent: neither party said them.
+    /// sent: neither party said them. Nor are spoken words still being
+    /// transcribed.
     fn turn(&self) -> Option<HqTurn> {
         match &self.text {
-            HqText::Said(text) => Some(HqTurn {
+            HqText::Said(text)
+            | HqText::Spoken {
+                text,
+                is_final: true,
+                ..
+            } => Some(HqTurn {
                 role: self.author.role(),
                 text: text.clone(),
             }),
-            HqText::Note(_) => None,
+            HqText::Note(_) | HqText::Spoken { .. } => None,
         }
     }
 }
@@ -144,6 +163,16 @@ pub enum HqText {
     Said(String),
     /// What became of a confirmed change, written by the app.
     Note(HqNote),
+    /// Words spoken in a voice session, as transcribed: the member's or the
+    /// assistant's, which grow until they are final.
+    Spoken {
+        /// The transcription's segment, which the words update.
+        segment: String,
+        /// The words so far. Plain text, never Markdown.
+        text: String,
+        /// Whether they are the segment's last.
+        is_final: bool,
+    },
 }
 
 /// What became of a confirmed change.
@@ -155,6 +184,14 @@ pub enum HqNote {
     NotApplied,
     /// The service reports making a change other than the one confirmed.
     Mismatched,
+    /// A change proposed by voice was cancelled, by voice or by click.
+    Cancelled,
+    /// A change proposed by voice had already been confirmed or cancelled
+    /// when the member clicked: by voice, or by another click.
+    AlreadyHandled,
+    /// A change proposed by voice was too old to confirm when the member
+    /// clicked.
+    Expired,
 }
 
 impl HqNote {
@@ -164,6 +201,9 @@ impl HqNote {
             Self::Applied => s::hq_note_applied(l()),
             Self::NotApplied => s::hq_note_not_applied(l()),
             Self::Mismatched => s::hq_note_mismatched(l()),
+            Self::Cancelled => s::hq_note_cancelled(l()),
+            Self::AlreadyHandled => s::hq_note_already_handled(l()),
+            Self::Expired => s::hq_note_expired(l()),
         }
     }
 
@@ -228,6 +268,23 @@ pub enum HqEvent {
     Confirm,
     /// Set the proposed change aside.
     Dismiss,
+    /// Start talking to HQ: the residency statement first, the first time in
+    /// a workspace.
+    StartVoice,
+    /// Accept the residency statement, which starts the session and the
+    /// microphone.
+    AcceptVoiceDisclosure,
+    /// Close the residency statement without starting anything.
+    DeclineVoiceDisclosure,
+    /// End the voice session.
+    StopVoice,
+    /// Apply the change proposed by voice with this id, by click.
+    ConfirmVoiceCard(String),
+    /// Cancel the change proposed by voice with this id, by click.
+    CancelVoiceCard(String),
+    /// Dismiss what the voice controls are saying: why a session ended or
+    /// could not start, or why a card went.
+    DismissVoiceNotice,
     /// Open a link in an answer, in the browser. Only a web page is opened
     /// ([`is_web_link`]): an answer is written by a model, and a link it wrote
     /// to anything else (a file, another program's scheme) is not followed.
@@ -287,6 +344,19 @@ impl SignedIn {
                 .then_some(Effect::OpenUrl { url })
                 .into_iter()
                 .collect(),
+            HqEvent::StartVoice => self.start_hq_voice(tickets),
+            HqEvent::AcceptVoiceDisclosure => self.accept_hq_voice_disclosure(tickets),
+            HqEvent::DeclineVoiceDisclosure => {
+                self.decline_hq_voice_disclosure();
+                Vec::new()
+            }
+            HqEvent::StopVoice => self.stop_hq_voice(tickets),
+            HqEvent::ConfirmVoiceCard(id) => self.confirm_hq_voice_card(&id, tickets),
+            HqEvent::CancelVoiceCard(id) => self.cancel_hq_voice_card(&id, tickets),
+            HqEvent::DismissVoiceNotice => {
+                self.dismiss_hq_voice_notice();
+                Vec::new()
+            }
         };
         Next::Stay(effects)
     }
@@ -367,22 +437,15 @@ fn ask(
     }]
 }
 
-/// Sends the unanswered question at the end of the transcript again, after the
-/// turns before it.
+/// Sends the unanswered question again, after the turns before it. It is the
+/// member's last typed line: words spoken or a note written since the failure
+/// may follow it.
 fn retry(hq: &mut HqScreen, workspace_id: String, tickets: &mut Tickets) -> Vec<Effect> {
-    let (prompt, history) = match (&hq.phase, hq.transcript.split_last()) {
-        (
-            HqPhase::Failed(_),
-            Some((
-                HqMessage {
-                    author: HqAuthor::Member,
-                    text: HqText::Said(prompt),
-                },
-                earlier,
-            )),
-        ) => (prompt.clone(), turns(earlier)),
-        _ => return Vec::new(),
+    let failed = matches!(hq.phase, HqPhase::Failed(_));
+    let Some((index, prompt)) = failed.then(|| last_question(&hq.transcript)).flatten() else {
+        return Vec::new();
     };
+    let history = turns(&hq.transcript[..index]);
     hq.phase = HqPhase::Thinking;
     vec![Effect::AskHq {
         ticket: tickets.issue(Slot::HqAsk),
@@ -390,6 +453,18 @@ fn retry(hq: &mut HqScreen, workspace_id: String, tickets: &mut Tickets) -> Vec<
         prompt,
         history,
     }]
+}
+
+/// Where the member's last typed question is, and what it says.
+fn last_question(messages: &[HqMessage]) -> Option<(usize, String)> {
+    messages
+        .iter()
+        .enumerate()
+        .rev()
+        .find_map(|(index, message)| match (message.author, &message.text) {
+            (HqAuthor::Member, HqText::Said(prompt)) => Some((index, prompt.clone())),
+            _ => None,
+        })
 }
 
 /// The turns to send as history: everything said, oldest first. The service

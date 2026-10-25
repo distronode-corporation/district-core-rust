@@ -27,17 +27,17 @@ use district_model::{
     DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse,
     DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse,
     DeviceRevokeResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest,
-    EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqTurn, MarkReadResponse,
-    MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
-    MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
-    OwnedNumbersResponse, RoomTokenResponse, SETTINGS_LANGUAGE_ENGLISH, SETTINGS_LANGUAGE_FRENCH,
-    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
-    SendMessageRequest, SendMessageResponse, SettingsSaveResponse, SetupResponse,
-    SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
-    SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
-    UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse, UsageResponse,
-    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
-    WorkspaceListResponse,
+    EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse,
+    HqTurn, HqVoiceProposal, HqVoiceTokenResponse, MarkReadResponse, MediaUploadResponse,
+    MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse, MessageThreadResponse,
+    NumberSearch, NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, RoomTokenResponse,
+    SETTINGS_LANGUAGE_ENGLISH, SETTINGS_LANGUAGE_FRENCH, SchedulingEnableResponse,
+    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
+    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WorkflowListResponse,
+    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallHandlingPatch, CallHandlingResponse,
@@ -258,6 +258,27 @@ pub trait DistrictApi: Send + Sync {
         workspace_id: &str,
         proposal: &HqPendingWrite,
     ) -> impl Future<Output = Result<HqConfirmResponse, ApiError>> + Send;
+    /// The credential of an HQ voice session speaking `locale`, after the
+    /// conversation in `history`. Billed; sent once.
+    fn hq_voice_token(
+        &self,
+        workspace_id: &str,
+        locale: Locale,
+        history: &[HqTurn],
+    ) -> impl Future<Output = Result<HqVoiceTokenResponse, ApiError>> + Send;
+    /// Applies the change the voice agent proposed in `proposal`. Sent once.
+    fn hq_confirm_voice(
+        &self,
+        workspace_id: &str,
+        proposal: &HqVoiceProposal,
+    ) -> impl Future<Output = Result<HqConfirmResponse, ApiError>> + Send;
+    /// Cancels the change the voice agent proposed as `proposal_id`. Sent
+    /// once.
+    fn hq_proposal_cancel(
+        &self,
+        workspace_id: &str,
+        proposal_id: &str,
+    ) -> impl Future<Output = Result<HqProposalCancelResponse, ApiError>> + Send;
     /// Call analytics over `range`.
     fn analytics(
         &self,
@@ -1190,6 +1211,37 @@ where
             } => Event::HqConfirmed {
                 ticket,
                 result: self.api.hq_confirm(&workspace_id, &proposal).await,
+            },
+            Effect::RequestHqVoice {
+                ticket,
+                workspace_id,
+                locale,
+                history,
+            } => Event::HqVoiceIssued {
+                ticket,
+                result: self
+                    .api
+                    .hq_voice_token(&workspace_id, locale, &history)
+                    .await,
+            },
+            Effect::ConfirmHqVoice {
+                ticket,
+                workspace_id,
+                proposal,
+            } => Event::HqVoiceConfirmed {
+                ticket,
+                result: self.api.hq_confirm_voice(&workspace_id, &proposal).await,
+            },
+            Effect::CancelHqVoice {
+                ticket,
+                workspace_id,
+                proposal_id,
+            } => Event::HqVoiceCancelled {
+                ticket,
+                result: self
+                    .api
+                    .hq_proposal_cancel(&workspace_id, &proposal_id)
+                    .await,
             },
             Effect::LoadAnalytics {
                 ticket,

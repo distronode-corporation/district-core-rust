@@ -34,16 +34,17 @@ use district_model::{
     DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse, DeskTicketStatus,
     DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
     DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
-    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqRole, HqTurn, MarkReadResponse,
-    MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
-    MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
-    OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
-    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
-    SupportRequestDraft, SupportRequestKind, SupportRequestResponse, SupportRequestsResponse,
-    ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
-    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
-    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
+    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqRole, HqTurn,
+    HqVoiceProposal, HqVoiceTokenResponse, MarkReadResponse, MediaUploadResponse, MeetRoomName,
+    MeetingDetail, MeetingSummary, MessageSearchResponse, MessageThreadResponse, NumberSearch,
+    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, RoomTokenResponse,
+    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
+    SendMessageRequest, SendMessageResponse, SettingsSaveResponse, SetupResponse,
+    SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
+    SupportRequestKind, SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor,
+    TimelineResponse, UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse,
+    UsageResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
+    WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallHandlingPatch, CallHandlingResponse,
@@ -63,7 +64,7 @@ use district_model::{
 
 use crate::support::{
     AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, overview,
-    workspace_list,
+    voice_credential, voice_proposal, workspace_list,
 };
 
 /// What every fake did, in order.
@@ -381,6 +382,41 @@ impl DistrictApi for FakeApi {
         self.0
             .push(format!("hq confirm {workspace_id} {}", proposal.tool));
         Ok(fixture("district-hq-confirm.json"))
+    }
+
+    async fn hq_voice_token(
+        &self,
+        workspace_id: &str,
+        locale: Locale,
+        history: &[HqTurn],
+    ) -> Result<HqVoiceTokenResponse, ApiError> {
+        self.0.push(format!(
+            "hq voice {workspace_id} {locale:?} after {}",
+            history.len()
+        ));
+        Ok(voice_credential())
+    }
+
+    async fn hq_confirm_voice(
+        &self,
+        workspace_id: &str,
+        proposal: &HqVoiceProposal,
+    ) -> Result<HqConfirmResponse, ApiError> {
+        self.0.push(format!(
+            "hq voice confirm {workspace_id} {} {}",
+            proposal.proposal_id, proposal.tool
+        ));
+        Ok(fixture("district-hq-confirm.json"))
+    }
+
+    async fn hq_proposal_cancel(
+        &self,
+        workspace_id: &str,
+        proposal_id: &str,
+    ) -> Result<HqProposalCancelResponse, ApiError> {
+        self.0
+            .push(format!("hq voice cancel {workspace_id} {proposal_id}"));
+        Ok(HqProposalCancelResponse { success: true })
     }
 
     async fn analytics(
@@ -2048,6 +2084,43 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             },
         ),
         (
+            Effect::RequestHqVoice {
+                ticket,
+                workspace_id: ws(),
+                locale: Locale::FrCa,
+                history: vec![HqTurn {
+                    role: HqRole::User,
+                    text: "Hi".to_owned(),
+                }],
+            },
+            Event::HqVoiceIssued {
+                ticket,
+                result: Ok(voice_credential()),
+            },
+        ),
+        (
+            Effect::ConfirmHqVoice {
+                ticket,
+                workspace_id: ws(),
+                proposal: voice_proposal(),
+            },
+            Event::HqVoiceConfirmed {
+                ticket,
+                result: Ok(fixture("district-hq-confirm.json")),
+            },
+        ),
+        (
+            Effect::CancelHqVoice {
+                ticket,
+                workspace_id: ws(),
+                proposal_id: "p-1".to_owned(),
+            },
+            Event::HqVoiceCancelled {
+                ticket,
+                result: Ok(HqProposalCancelResponse { success: true }),
+            },
+        ),
+        (
             Effect::LoadAnalytics {
                 ticket,
                 workspace_id: ws(),
@@ -2466,6 +2539,9 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
         [
             "hq ws-contract-active Change the greeting after 1",
             "hq confirm ws-contract-active update_persona",
+            "hq voice ws-contract-active FrCa after 1",
+            "hq voice confirm ws-contract-active 11111111-1111-4111-8111-111111111111 update_persona",
+            "hq voice cancel ws-contract-active p-1",
             "analytics ws-contract-active 30d",
             "usage ws-contract-active",
             "usage history ws-contract-active 3",

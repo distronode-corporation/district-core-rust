@@ -12,6 +12,8 @@
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
+use crate::hq_voice::HqVoiceProposal;
+
 /// Who said a turn of an HQ conversation.
 ///
 /// The words are the model's own vocabulary, `user` and `model`, not
@@ -116,6 +118,12 @@ impl HqConfirmResponse {
     pub fn is_the_proposal(&self, proposal: &HqPendingWrite) -> bool {
         self.tool == proposal.tool && self.args == proposal.args
     }
+
+    /// Whether the service applied exactly the change the voice agent proposed
+    /// in `proposal`: the same write, with the same arguments.
+    pub fn is_the_voice_proposal(&self, proposal: &HqVoiceProposal) -> bool {
+        self.tool == proposal.tool && self.args == proposal.args
+    }
 }
 
 #[cfg(test)]
@@ -174,5 +182,21 @@ mod tests {
         );
         assert!(!applied("update_persona", json!({"greeting": "Hi."})).is_the_proposal(&proposal));
         assert!(!applied("update_tools", json!({"greeting": "Hello."})).is_the_proposal(&proposal));
+
+        let spoken = HqVoiceProposal {
+            proposal_id: "p-1".to_owned(),
+            tool: proposal.tool.clone(),
+            args: proposal.args.clone(),
+            summary: String::new(),
+        };
+        assert!(
+            applied("update_persona", json!({"greeting": "Hello."})).is_the_voice_proposal(&spoken)
+        );
+        assert!(
+            !applied("update_persona", json!({"greeting": "Hi."})).is_the_voice_proposal(&spoken)
+        );
+        assert!(
+            !applied("update_tools", json!({"greeting": "Hello."})).is_the_voice_proposal(&spoken)
+        );
     }
 }

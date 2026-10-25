@@ -4,6 +4,7 @@
 use std::collections::{HashMap, HashSet};
 
 use district_core::{DisconnectReason, MediaEvent, Participant, TrackKind};
+use district_model::ATTR_AGENT_STATE;
 use livekit::e2ee::EncryptionType;
 use livekit::prelude::{
     Participant as RoomParticipant, RemoteAudioTrack, RemoteParticipant, RemoteTrack,
@@ -81,6 +82,7 @@ impl Follower {
                 // will ever announce.
                 for (participant, publications) in participants_with_tracks {
                     reports.push(self.people.joined(&participant));
+                    reports.extend(agent_state(&participant));
                     for publication in publications {
                         self.published(&participant, &publication, reports);
                     }
@@ -88,6 +90,25 @@ impl Follower {
             }
             RoomEvent::ParticipantConnected(participant) => {
                 reports.push(self.people.joined(&participant));
+                reports.extend(agent_state(&participant));
+            }
+            // What an agent is doing, whenever its attributes change.
+            RoomEvent::ParticipantAttributesChanged {
+                participant: RoomParticipant::Remote(participant),
+                ..
+            } => reports.extend(agent_state(&participant)),
+            // Data from an agent, which is how the HQ voice agent sends what it
+            // proposes. Data from anyone else is not the app's to read.
+            RoomEvent::DataReceived {
+                payload,
+                topic,
+                participant: Some(participant),
+                ..
+            } if participant.kind() == ParticipantKind::Agent => {
+                reports.push(MediaEvent::AgentData {
+                    topic: topic.unwrap_or_default(),
+                    payload: (*payload).clone(),
+                });
             }
             RoomEvent::ParticipantDisconnected(participant) => {
                 let identity = participant.identity().to_string();
@@ -305,6 +326,18 @@ impl Follower {
         self.decrypted.remove(identity);
         self.undecryptable.remove(identity);
     }
+}
+
+/// An agent's `lk.agent.state` attribute, when `participant` is an agent and
+/// has one.
+fn agent_state(participant: &RemoteParticipant) -> Option<MediaEvent> {
+    if participant.kind() != ParticipantKind::Agent {
+        return None;
+    }
+    participant
+        .attributes()
+        .get(ATTR_AGENT_STATE)
+        .map(|state| MediaEvent::AgentState(state.clone()))
 }
 
 /// The audio packets received so far on `track`.

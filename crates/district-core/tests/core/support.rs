@@ -132,6 +132,36 @@ pub fn desktop_fixture<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_str(&text).unwrap_or_else(|error| panic!("{name}: {error}"))
 }
 
+/// An HQ voice session's credential, as the route writes it. No route of HQ
+/// voice has a recorded response yet; this is its contract's shape.
+pub fn voice_credential() -> district_model::HqVoiceTokenResponse {
+    serde_json::from_value(json!({
+        "success": true,
+        "token": "contract-livekit-hq-voice-jwt",
+        "url": "wss://media.example.com",
+        "roomName": "hq_ws-contract-test_00000000-0000-4000-8000-000000000000",
+        "processingRegion": "us",
+        "e2ee": {"key": "YFT+/ceW4bhgizPFpeX9E5a3PVZ9T07aWRQq4uwQwW0="},
+    }))
+    .expect("a voice credential")
+}
+
+/// A draft HQ voice packet's bytes, from district-model's drafts.
+pub fn voice_packet(name: &str) -> Vec<u8> {
+    let file = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../district-model/tests/hq-voice-drafts")
+        .join(name);
+    fs::read(&file).unwrap_or_else(|error| panic!("cannot read {}: {error}", file.display()))
+}
+
+/// The change the draft proposal packet proposes.
+pub fn voice_proposal() -> district_model::HqVoiceProposal {
+    match district_model::read_packet(&voice_packet("hq-voice-packet-proposal.json")) {
+        Some(district_model::HqVoicePacket::Proposal(proposal)) => proposal,
+        other => panic!("{other:?}"),
+    }
+}
+
 /// A failure the service could answer for anything: a server error.
 pub fn server_error() -> ApiError {
     ApiError::Server {

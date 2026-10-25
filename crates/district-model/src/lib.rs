@@ -45,6 +45,7 @@ mod contacts;
 mod desk;
 mod devices;
 mod hq;
+mod hq_voice;
 mod inbox;
 mod knowledge;
 mod members;
@@ -110,6 +111,13 @@ pub use desk::{
 };
 pub use devices::{DeviceListResponse, DeviceRevokeResponse, NativeDevice, NativeRevokeResponse};
 pub use hq::{HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqRole, HqTurn};
+pub use hq_voice::{
+    ATTR_AGENT_STATE, ATTR_SEGMENT_ID, ATTR_TRANSCRIBED_TRACK_ID, ATTR_TRANSCRIPTION_FINAL,
+    HQ_PROPOSAL_TOPIC, HQ_ROOM_PREFIX, HQ_VOICE_HISTORY_MAX_CHARS, HQ_VOICE_HISTORY_MAX_TURNS,
+    HQ_VOICE_SESSION_SECONDS, HqAgentState, HqProposalCancelResponse, HqResolutionStatus,
+    HqVoicePacket, HqVoiceProposal, HqVoiceResolution, HqVoiceTokenResponse, TRANSCRIPTION_TOPIC,
+    read_packet,
+};
 pub use inbox::{
     CHANNEL_EMAIL, CHANNEL_SMS, ConversationLastMessage, ConversationSummary,
     ConversationsResponse, MESSAGE_SEARCH_MIN_QUERY_LENGTH, MessageSearchHit,

@@ -45,18 +45,19 @@ use district_model::{
     DeskTicketDraft, DeskTicketResponse, DeskTicketStatus, DeskTicketStatusResponse,
     DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DialResponse, DirectoryEntry,
     DraftListResponse, DraftResponse, DraftSaveRequest, HqConfirmResponse, HqPendingWrite,
-    HqPromptResponse, HqTurn, KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode,
-    KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail,
-    MeetingSummary, MemberListResponse, MessageSearchResponse, MessageThreadResponse,
-    MessagingCredentials, MessagingResponse, MessagingTestResponse, NumberSearch,
-    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, PersonaOptionsResponse,
-    PersonaPatch, PersonaPreviewForm, PersonaPreviewTokenResponse, RenameResponse,
-    RoomTokenResponse, RoutingRule, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SupportCloseResponse,
-    SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
-    SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
-    UnreadCountResponse, UsageHistoryResponse, UsageResponse, VoiceStudioResponse,
-    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
+    HqPromptResponse, HqProposalCancelResponse, HqTurn, HqVoiceProposal, HqVoiceTokenResponse,
+    KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode, KnowledgeModeResponse,
+    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    MemberListResponse, MessageSearchResponse, MessageThreadResponse, MessagingCredentials,
+    MessagingResponse, MessagingTestResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
+    OwnedNumbersResponse, PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm,
+    PersonaPreviewTokenResponse, RenameResponse, RoomTokenResponse, RoutingRule,
+    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
+    SendMessageRequest, SendMessageResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UsageHistoryResponse, UsageResponse, VoiceStudioResponse, WorkflowListResponse,
+    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
     WorkspaceConfigResponse, WorkspaceListResponse,
 };
 use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
@@ -536,6 +537,27 @@ pub enum Event {
         ticket: Ticket,
         /// The service's answer.
         result: Result<HqPromptResponse, ApiError>,
+    },
+    /// The credential of an HQ voice session landed.
+    HqVoiceIssued {
+        /// The ticket of [`Effect::RequestHqVoice`].
+        ticket: Ticket,
+        /// The service's answer. Its `Debug` output leaves the credential out.
+        result: Result<HqVoiceTokenResponse, ApiError>,
+    },
+    /// A click Confirm on a change proposed by voice landed.
+    HqVoiceConfirmed {
+        /// The ticket of [`Effect::ConfirmHqVoice`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<HqConfirmResponse, ApiError>,
+    },
+    /// A click Cancel on a change proposed by voice landed.
+    HqVoiceCancelled {
+        /// The ticket of [`Effect::CancelHqVoice`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<HqProposalCancelResponse, ApiError>,
     },
     /// A confirmed change was applied, or not.
     HqConfirmed {
@@ -1068,6 +1090,18 @@ impl Event {
                 result: Err(error),
             }
             | Event::HqConfirmed {
+                ticket,
+                result: Err(error),
+            }
+            | Event::HqVoiceIssued {
+                ticket,
+                result: Err(error),
+            }
+            | Event::HqVoiceConfirmed {
+                ticket,
+                result: Err(error),
+            }
+            | Event::HqVoiceCancelled {
                 ticket,
                 result: Err(error),
             }
@@ -1633,6 +1667,37 @@ pub enum Effect {
         workspace_id: String,
         /// The change, as the service proposed it.
         proposal: HqPendingWrite,
+    },
+    /// Ask for an HQ voice session's credential. Each one starts a billed
+    /// voice session, so it is sent once.
+    RequestHqVoice {
+        /// Returned in [`Event::HqVoiceIssued`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The language the session speaks.
+        locale: Locale,
+        /// The conversation before it, oldest first.
+        history: Vec<HqTurn>,
+    },
+    /// Apply a change proposed by voice, exactly as proposed, with its id.
+    /// Sent once.
+    ConfirmHqVoice {
+        /// Returned in [`Event::HqVoiceConfirmed`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The change, as the voice agent proposed it.
+        proposal: HqVoiceProposal,
+    },
+    /// Cancel a change proposed by voice. Sent once.
+    CancelHqVoice {
+        /// Returned in [`Event::HqVoiceCancelled`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The proposal's id.
+        proposal_id: String,
     },
     /// Read call analytics over a window.
     LoadAnalytics {
@@ -2322,6 +2387,9 @@ impl Effect {
             | Self::LoadBlocked { ticket, .. }
             | Self::AskHq { ticket, .. }
             | Self::ConfirmHq { ticket, .. }
+            | Self::RequestHqVoice { ticket, .. }
+            | Self::ConfirmHqVoice { ticket, .. }
+            | Self::CancelHqVoice { ticket, .. }
             | Self::LoadAnalytics { ticket, .. }
             | Self::LoadUsage { ticket, .. }
             | Self::LoadUsageHistory { ticket, .. }
@@ -2460,6 +2528,10 @@ pub(crate) enum Slot {
     BlockedWrite,
     HqAsk,
     HqConfirm,
+    HqVoiceToken,
+    /// Keyed by proposal id.
+    HqVoiceCard,
+    HqVoiceLimit,
     AnalyticsReport,
     Usage,
     UsageHistory,
@@ -2558,7 +2630,7 @@ const SLOTS: usize = Slot::RingDeadline as usize + 1;
 /// forgotten with the sections. The draft write is not among them: a reply
 /// saved as the workspace closes still lands, and the writes waiting behind it
 /// go after it.
-pub(crate) const WORKSPACE_SLOTS: [Slot; 65] = [
+pub(crate) const WORKSPACE_SLOTS: [Slot; 68] = [
     Slot::Unread,
     Slot::Conversations,
     Slot::DraftKeys,
@@ -2588,6 +2660,9 @@ pub(crate) const WORKSPACE_SLOTS: [Slot; 65] = [
     Slot::BlockedWrite,
     Slot::HqAsk,
     Slot::HqConfirm,
+    Slot::HqVoiceToken,
+    Slot::HqVoiceCard,
+    Slot::HqVoiceLimit,
     Slot::AnalyticsReport,
     Slot::Usage,
     Slot::UsageHistory,
@@ -3077,6 +3152,15 @@ impl Model {
             }
             Event::HqConfirmed { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.hq_confirmed(ticket, result, tickets))
+            }
+            Event::HqVoiceIssued { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.hq_voice_issued(ticket, result, tickets))
+            }
+            Event::HqVoiceConfirmed { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.hq_voice_confirmed(ticket, result, tickets))
+            }
+            Event::HqVoiceCancelled { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.hq_voice_cancelled(ticket, result, tickets))
             }
             Event::AnalyticsLoaded { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.analytics_loaded(ticket, result, tickets))
