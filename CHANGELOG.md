@@ -17,8 +17,13 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
-Opt-in crash reports, in a new crate. Nothing an app calls or implements changes, and an
-app that does not depend on the new crate builds exactly what it did.
+## [6.1.0] - 2026-10-25
+
+Opt-in crash reports for the desktop apps, in a new crate. A minor version. Reports are off
+until the user says yes (the apps ask once, at first start), and nothing is set up or sent
+without a DSN and that consent. A report holds what symbolicates a stripped build and
+nothing that names the user or the machine. Nothing an app calls or implements changes,
+and an app that does not depend on the new crate builds exactly what it did. GitLab #230.
 
 ### Added
 
@@ -34,9 +39,10 @@ app that does not depend on the new crate builds exactly what it did.
   and architecture, so the stack of a stripped build can be symbolicated against the
   release's uploaded debug files. No other loaded library is listed. Every home
   directory path in a report, the images' files included, has the user's name replaced,
-  and the machine's name, the user and any address are removed. Nothing is read from the environment (a `SENTRY_DSN` there is ignored), and
-  plain `http` is refused unless the DSN names this machine (`CrashError`). The asking
-  (once at first start, "Don't send" first) and the settings switch are the apps'.
+  and the machine's name, the user and any address are removed. Nothing is read from the
+  environment (a `SENTRY_DSN` there is ignored), and plain `http` is refused unless the
+  DSN names this machine (`CrashError`). The asking (once at first start, "Don't send"
+  first) and the settings switch are the apps'.
 
 ## [6.0.0] - 2026-10-24
 
