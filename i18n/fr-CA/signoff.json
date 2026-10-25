@@ -1,7 +1,7 @@
 {
-  "signed_off_by": "ThinkPad manager session 78da7e6a (Opus 5.5), 2026-10-25: xhigh fr-CA review of every catalog change since v5.1.0 (the service's French in api_errors.toml and wire.toml, generated from contracts/i18n at the server's a9cf0ef7a). By Sean's decision the service's French ships as the server has it; its two must-fixes and six suggestions are fixed upstream in the next monorepo batch and arrive with the next contract sync.",
-  "release": "v6.0.0",
-  "commit": "2b6bedf7ad9804f96c00ad0ca1af3c56f10128bd",
+  "signed_off_by": "ThinkPad manager session 78da7e6a (Opus 5.5), 2026-10-25: the catalogs are unchanged since the v6.0.0 sign-off by the ThinkPad manager session 78da7e6a, so the same hashes are renewed for v6.1.0.",
+  "release": "v6.1.0",
+  "commit": "190103dada71f269c8ec4eb4a0e53fbef19644f3",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
