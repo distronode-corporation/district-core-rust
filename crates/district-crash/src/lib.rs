@@ -10,7 +10,8 @@
 //!   user's [`Consent::Granted`]. Without either nothing is set up, no panic
 //!   handler is installed and nothing is ever sent. Called again with
 //!   [`Consent::Denied`] it closes the reporter, after sending what was already
-//!   queued; with consent again it opens a new one.
+//!   queued, a report already under way included; with consent again it opens
+//!   a new one.
 //! - While it is on, a panic on any thread is reported before the panic goes
 //!   on as it would have (the previous panic handler still runs), and
 //!   [`capture_error`] reports an error the app chooses to.
@@ -53,8 +54,10 @@ mod scrub;
 
 use std::net::IpAddr;
 use std::panic::{self, PanicHookInfo};
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex, Once, PoisonError, RwLock};
-use std::time::Duration;
+use std::thread;
+use std::time::{Duration, Instant};
 
 use sentry::integrations::backtrace::{ProcessStacktraceIntegration, current_stacktrace};
 use sentry::integrations::contexts::ContextIntegration;
@@ -121,11 +124,14 @@ pub enum CrashError {
 const PANIC_FLUSH: Duration = Duration::from_secs(2);
 /// The longest turning reporting off waits for what was queued.
 const CLOSE_FLUSH: Duration = Duration::from_secs(2);
+/// The longest a reporter that was swapped out waits for the reports already
+/// under way on it before it is closed.
+const CAPTURE_WAIT: Duration = Duration::from_secs(2);
 
 /// The reporter while one is on. Read by the panic handler on any thread, so
 /// it is never held while anything is built or sent, and nothing that can
 /// panic runs while it is.
-static CLIENT: RwLock<Option<Arc<Client>>> = RwLock::new(None);
+static CLIENT: RwLock<Option<Arc<Reporter>>> = RwLock::new(None);
 /// One [`apply`] at a time, so one's open, swap and close are not interleaved
 /// with another's.
 static APPLYING: Mutex<()> = Mutex::new(());
@@ -138,10 +144,13 @@ static PANIC_HANDLER: Once = Once::new();
 /// then takes the place of whatever was on before in one step, so changed
 /// settings with consent never leave reporting off, and a panic on another
 /// thread meanwhile is reported by the one or the other. Last, the one that
-/// was on before is closed, after the reports it had queued are sent (waiting
-/// up to two seconds), so once this returns [`Consent::Denied`] sends nothing
-/// more. Call it at start with the stored answer, and again whenever the user
-/// changes it.
+/// was on before finishes the reports already under way on it (a panic or a
+/// [`capture_error`] on another thread that began before the swap; waiting up
+/// to two seconds for them), and is closed after what it had queued is sent
+/// (up to two seconds more). So a report under way when [`Consent::Denied`]
+/// is passed may still be sent, before this returns, and once it has returned
+/// nothing more is. Call it at start with the stored answer, and again
+/// whenever the user changes it.
 ///
 /// # Errors
 ///
@@ -154,19 +163,18 @@ pub fn apply(settings: &Settings, consent: Consent) -> Result<Status, CrashError
     if opened.is_ok() {
         PANIC_HANDLER.call_once(install_panic_handler);
     }
-    // Closed outside the slot's lock. A panic that read `previous` just
-    // before the swap and has not yet handed it its report loses the report
-    // here: a window of the few instructions between the two, not the whole
-    // close and open it was while the slot stood empty.
-    if let Some(previous) = replace(opened.ok()) {
-        previous.close(Some(CLOSE_FLUSH));
+    // Waited for and closed outside the slot's lock, so neither a report on
+    // the new reporter nor a panic while waiting is held up by it.
+    if let Some(previous) = replace(opened.ok().map(Reporter::new)) {
+        previous.wait_for_captures(CAPTURE_WAIT);
+        previous.client.close(Some(CLOSE_FLUSH));
     }
     status
 }
 
 /// The reporter `settings` and `consent` call for, or, when they call for
 /// none, what [`apply`] returns instead.
-fn open(settings: &Settings, consent: Consent) -> Result<Arc<Client>, Result<Status, CrashError>> {
+fn open(settings: &Settings, consent: Consent) -> Result<Client, Result<Status, CrashError>> {
     if consent == Consent::Denied {
         return Err(Ok(Status::Off(OffReason::NoConsent)));
     }
@@ -182,7 +190,65 @@ fn open(settings: &Settings, consent: Consent) -> Result<Arc<Client>, Result<Sta
     if dsn.scheme() == Scheme::Http && !is_loopback(dsn.host()) {
         return Err(Err(CrashError::InsecureDsn));
     }
-    Ok(Arc::new(Client::from(options(dsn, settings))))
+    Ok(Client::from(options(dsn, settings)))
+}
+
+/// A reporter, and how many reports are under way on it.
+struct Reporter {
+    client: Client,
+    captures: AtomicUsize,
+}
+
+impl Reporter {
+    fn new(client: Client) -> Arc<Self> {
+        Arc::new(Self {
+            client,
+            captures: AtomicUsize::new(0),
+        })
+    }
+
+    /// Waits, up to `timeout`, for the reports under way on this reporter to
+    /// be handed to it. Only a reporter already swapped out is waited for, so
+    /// no new report can begin on it, and no lock is held: a panic while
+    /// waiting, on this thread or another, reports as usual, and the wait ends
+    /// at `timeout` whatever happens.
+    fn wait_for_captures(&self, timeout: Duration) {
+        let deadline = Instant::now() + timeout;
+        while self.captures.load(Ordering::Acquire) > 0 && Instant::now() < deadline {
+            thread::sleep(Duration::from_millis(1));
+        }
+    }
+}
+
+/// A report under way on the reporter that was on when it began, counted from
+/// before that reporter could be swapped out until the report is handed to
+/// it, so [`apply`] closes a reporter only once its reports are in.
+struct Capture(Arc<Reporter>);
+
+impl Capture {
+    fn begin() -> Option<Self> {
+        let slot = CLIENT.read().unwrap_or_else(PoisonError::into_inner);
+        let reporter = slot.as_ref()?;
+        // Counted under the slot's lock, which a swap takes to write, so the
+        // reporter a swap takes out has counted every report that read it.
+        reporter.captures.fetch_add(1, Ordering::AcqRel);
+        Some(Self(Arc::clone(reporter)))
+    }
+
+    fn client(&self) -> &Client {
+        &self.0.client
+    }
+
+    /// The reporter, with this report no longer counted as under way.
+    fn end(self) -> Arc<Reporter> {
+        Arc::clone(&self.0)
+    }
+}
+
+impl Drop for Capture {
+    fn drop(&mut self) {
+        self.0.captures.fetch_sub(1, Ordering::Release);
+    }
 }
 
 /// Whether reporting is on.
@@ -194,31 +260,31 @@ pub fn is_enabled() -> bool {
 /// report's id, or `None` when reporting is off, in which case nothing is
 /// sent.
 pub fn capture_error<E: std::error::Error + ?Sized>(error: &E) -> Option<String> {
-    let client = current()?;
+    let capture = Capture::begin()?;
     let mut event = sentry::event_from_error(error);
     if let Some(outermost) = event.exception.values.last_mut() {
         outermost.stacktrace = current_stacktrace();
     }
-    let id = client.capture_event(event, None);
+    let id = capture.client().capture_event(event, None);
     Some(id.simple().to_string())
 }
 
 /// Waits up to `timeout` for queued reports to be sent; `true` when nothing is
 /// left (and when reporting is off).
 pub fn flush(timeout: Duration) -> bool {
-    current().is_none_or(|client| client.flush(Some(timeout)))
+    current().is_none_or(|reporter| reporter.client.flush(Some(timeout)))
 }
 
-fn current() -> Option<Arc<Client>> {
+fn current() -> Option<Arc<Reporter>> {
     CLIENT
         .read()
         .unwrap_or_else(PoisonError::into_inner)
         .clone()
 }
 
-fn replace(client: Option<Arc<Client>>) -> Option<Arc<Client>> {
+fn replace(reporter: Option<Arc<Reporter>>) -> Option<Arc<Reporter>> {
     let mut slot = CLIENT.write().unwrap_or_else(PoisonError::into_inner);
-    std::mem::replace(&mut *slot, client)
+    std::mem::replace(&mut *slot, reporter)
 }
 
 fn is_loopback(host: &str) -> bool {
@@ -267,9 +333,12 @@ fn install_panic_handler() {
 }
 
 fn report_panic(info: &PanicHookInfo<'_>) {
-    if let Some(client) = current() {
-        client.capture_event(panic_event(info), None);
-        client.flush(Some(PANIC_FLUSH));
+    if let Some(capture) = Capture::begin() {
+        capture.client().capture_event(panic_event(info), None);
+        // Handed over, so the count ends before the flush: a swap does not
+        // wait the flush out, and the close sends what this queued.
+        let reporter = capture.end();
+        reporter.client.flush(Some(PANIC_FLUSH));
     }
 }
 

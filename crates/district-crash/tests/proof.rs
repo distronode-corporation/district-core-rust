@@ -221,6 +221,32 @@ impl Error for Outer {
 
 impl Error for Inner {}
 
+/// An error whose text is not ready until the test lets it go: it says when
+/// it is first asked for its text, then waits for `release` to be dropped.
+/// Reporting it is under way for as long as the test likes.
+struct Held {
+    asked: mpsc::Sender<()>,
+    release: mpsc::Receiver<()>,
+}
+
+impl fmt::Debug for Held {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("Held")
+    }
+}
+
+impl fmt::Display for Held {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // Either can fail only once the test is over with it, when there is
+        // nothing more to wait for.
+        let _ = self.asked.send(());
+        let _ = self.release.recv();
+        f.write_str("held at /home/alice/x")
+    }
+}
+
+impl Error for Held {}
+
 fn panic_on_a_thread(f: impl FnOnce() + Send + 'static) {
     assert!(thread::spawn(f).join().is_err(), "the thread panicked");
 }
@@ -503,6 +529,57 @@ fn a_reapply_never_leaves_reporting_off() {
     assert_eq!(old.bodies().len(), 1, "and none by the old one");
 
     district_crash::apply(&new.settings(), Consent::Denied).unwrap();
+}
+
+/// A report already under way when its reporter is swapped out is sent by
+/// that reporter before it is closed. Here the user turns reporting off while
+/// an error on another thread is being reported, its text held back by the
+/// test. Reporting reads as off the moment the swap is done, and only then is
+/// the text let go, so the report is handed over after the swap on every run,
+/// with no sleep deciding it. It has arrived by the time `apply` returns, and
+/// nothing is sent after.
+#[test]
+fn a_report_under_way_is_sent_before_its_reporter_closes() {
+    let _turn = serial();
+    let server = Server::start();
+    district_crash::apply(&server.settings(), Consent::Granted).unwrap();
+
+    let (asked, was_asked) = mpsc::channel();
+    let (release, held) = mpsc::channel::<()>();
+    let reporting = thread::spawn(move || {
+        district_crash::capture_error(&Held {
+            asked,
+            release: held,
+        })
+    });
+    was_asked.recv().unwrap();
+
+    let settings = server.settings();
+    let withdraw = thread::spawn(move || district_crash::apply(&settings, Consent::Denied));
+    while district_crash::is_enabled() {
+        thread::sleep(Duration::from_millis(1));
+    }
+    assert!(!withdraw.is_finished(), "the close waits for the report");
+    drop(release);
+    assert!(
+        reporting.join().unwrap().is_some(),
+        "the report began while on"
+    );
+    assert_eq!(
+        withdraw.join().unwrap(),
+        Ok(Status::Off(OffReason::NoConsent))
+    );
+
+    let bodies = server.bodies();
+    assert_eq!(bodies.len(), 1, "sent before apply returned");
+    let event = event(&bodies[0]);
+    assert_clean(&event);
+    assert_eq!(
+        event["exception"]["values"][0]["value"],
+        "held at /home/<user>/x"
+    );
+    panic_on_a_thread(|| panic!("after off"));
+    assert_eq!(server.settle(1).len(), 1, "and nothing after");
 }
 
 #[test]
