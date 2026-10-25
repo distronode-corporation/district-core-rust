@@ -28,9 +28,13 @@ app that does not depend on the new crate builds exactly what it did.
   `Status::Off(OffReason)`; called again with `Consent::Denied` it closes the reporter,
   after sending what was queued, and with consent again it opens a new one. While on, a
   panic on any thread is reported before the previous panic handler runs, and
-  `capture_error` reports an error the app chooses to. Every home directory path in a
-  report has the user's name replaced, and the machine's name, the user and any address
-  are removed. Nothing is read from the environment (a `SENTRY_DSN` there is ignored), and
+  `capture_error` reports an error the app chooses to. A report carries the debug images
+  of the main executable and of the image holding the reporter's code (the app's own
+  library on Windows): file, build id (ELF) or PDB id and age (PE), load address, size
+  and architecture, so the stack of a stripped build can be symbolicated against the
+  release's uploaded debug files. No other loaded library is listed. Every home
+  directory path in a report, the images' files included, has the user's name replaced,
+  and the machine's name, the user and any address are removed. Nothing is read from the environment (a `SENTRY_DSN` there is ignored), and
   plain `http` is refused unless the DSN names this machine (`CrashError`). The asking
   (once at first start, "Don't send" first) and the settings switch are the apps'.
 

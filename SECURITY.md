@@ -165,16 +165,23 @@ district-call's engine tests, which voice.yml runs.
   never read. Withdrawing consent closes the reporter at once, after what was
   already queued is sent.
 - A report holds the panic message or the error and its sources, the stack, the
-  operating system and Rust version, and the release and environment the app
-  names. Every home directory path in it (`/home/<name>`, `/Users/<name>`,
-  `C:\Users\<name>`), in any field, has the user's name replaced. The machine's
-  name, the user, the request and personal data are never sent, and there are
-  no breadcrumbs, sessions or lists of loaded libraries.
+  operating system and Rust version, the release and environment the app names,
+  and the debug images that let the stack of a stripped build be symbolicated:
+  the main executable and the image holding the crash reporter's code (the
+  app's own library on Windows), each with its file, build id or PDB id and
+  age, load address, size and architecture. No other loaded library is
+  listed, because the list would describe the machine (system libraries, their
+  versions, and whatever else is loaded into the process). Every home directory
+  path in a report (`/home/<name>`, `/Users/<name>`, `C:\Users\<name>`), in any
+  field, the images' files included, has the user's name replaced. The
+  machine's name, the user, the request and personal data are never sent, and
+  there are no breadcrumbs or sessions.
 - HTTPS with the same TLS configuration and certificate store as the API calls;
   plain `http` is refused unless the DSN names this machine. Nothing is written
   to disk, and Sentry's own diagnostics stay off, so nothing is printed.
 - The tests count what a local mock server receives: nothing while off, exactly
-  one scrubbed report for a panic or a captured error while on.
+  one scrubbed report for a panic or a captured error while on, whose debug
+  image carries the test binary's own build id (or PDB id).
 
 ### The core's decisions (district-core)
 

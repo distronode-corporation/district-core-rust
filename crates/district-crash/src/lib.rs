@@ -15,9 +15,14 @@
 //!   on as it would have (the previous panic handler still runs), and
 //!   [`capture_error`] reports an error the app chooses to.
 //! - What is sent: the panic message or the error, the stack, the operating
-//!   system and the Rust version, and the release and environment the app
-//!   names. Every home directory path in it has the user's name replaced, and
-//!   the machine's name, the user and any address are removed. Nothing is
+//!   system and the Rust version, the release and environment the app names,
+//!   and two debug images, the main executable and the image holding this
+//!   crate's code (the app's own library on Windows), with their ids, load
+//!   address, size and architecture, so the stack of a stripped build can be
+//!   symbolicated against the debug files uploaded for the release. No other
+//!   loaded library is listed. Every home directory path in it has the user's
+//!   name replaced, and the machine's name, the user and any address are
+//!   removed. Nothing is
 //!   kept on disk, nothing is read from the environment (a `SENTRY_DSN` there
 //!   is ignored), and nothing is sent at start up or on a clean quit.
 //!
@@ -43,6 +48,7 @@
 
 #![forbid(unsafe_code)]
 
+mod images;
 mod scrub;
 
 use std::net::IpAddr;
@@ -211,8 +217,8 @@ fn is_loopback(host: &str) -> bool {
 
 /// The reporter's options, built by hand rather than by `sentry::init`, which
 /// would read a DSN, a release and a certificate check switch from the
-/// environment, and whose default integrations include the loaded libraries'
-/// paths. No breadcrumbs (they come from logging, and nothing here logs), no
+/// environment, and whose default integrations list every library loaded
+/// (here only the app's own images are, see [`images`]). No breadcrumbs (they come from logging, and nothing here logs), no
 /// personal data, and [`scrub::scrub_event`] the last thing before sending.
 fn options(dsn: Dsn, settings: &Settings) -> ClientOptions {
     let mut options = ClientOptions::default();
@@ -225,6 +231,7 @@ fn options(dsn: Dsn, settings: &Settings) -> ClientOptions {
     options.integrations = vec![
         Arc::new(ContextIntegration::new()),
         Arc::new(ProcessStacktraceIntegration),
+        Arc::new(images::OwnImages::new()),
     ];
     options.before_send = Some(Arc::new(scrub::scrub_event));
     options.transport = Some(Arc::new(DefaultTransportFactory));

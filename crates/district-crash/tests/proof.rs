@@ -16,6 +16,8 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 use district_crash::{Consent, CrashError, OffReason, Settings, Status};
+use object::Object;
+use sentry::types::DebugId;
 use serde_json::Value;
 use wiremock::matchers::method;
 use wiremock::{Mock, MockServer, ResponseTemplate};
@@ -157,6 +159,31 @@ fn real_home() -> Option<String> {
     known.then_some(home)
 }
 
+/// The report's debug image for this test binary, found by the id the binary
+/// itself carries: its GNU build id (ELF, which the image names as its code
+/// id), or its PDB's id and age (PE, the image's debug id, `id`).
+fn image_of_this_binary(event: &Value) -> &Value {
+    let data = std::fs::read(std::env::current_exe().unwrap()).unwrap();
+    let file = object::File::parse(&*data).expect("the test binary is an object file");
+    let (key, id) = match file.build_id().unwrap() {
+        Some(build_id) => {
+            let hex: String = build_id.iter().map(|byte| format!("{byte:02x}")).collect();
+            ("code_id", hex)
+        }
+        None => {
+            let pdb = file.pdb_info().unwrap().expect("a build id or a PDB id");
+            let id = DebugId::from_guid_age(&pdb.guid(), pdb.age()).unwrap();
+            ("id", id.to_string())
+        }
+    };
+    event["debug_meta"]["images"]
+        .as_array()
+        .expect("debug images")
+        .iter()
+        .find(|image| image[key] == id.as_str())
+        .unwrap_or_else(|| panic!("no image with {key} {id}: {event:#}"))
+}
+
 fn frames(exception: &Value) -> &Vec<Value> {
     exception["stacktrace"]["frames"]
         .as_array()
@@ -291,6 +318,44 @@ fn consent_granted_sends_one_scrubbed_report_of_a_panic() {
                 .as_str()
                 .is_some_and(|path| path.contains("<user>") && path.ends_with("proof.rs"))),
             "this file's frame, scrubbed: {event:#}"
+        );
+    }
+    // The debug image Sentry needs to symbolicate a stripped build: this test
+    // binary's, by the id the binary itself carries, and no other library
+    // than the main executable and the one holding district-crash's code
+    // (both this binary here).
+    let images = event["debug_meta"]["images"]
+        .as_array()
+        .expect("debug images");
+    assert!(
+        (1..=2).contains(&images.len()),
+        "only the app's own images: {event:#}"
+    );
+    let image = image_of_this_binary(&event);
+    let arch = match std::env::consts::ARCH {
+        "aarch64" => "arm64",
+        other => other,
+    };
+    assert_eq!(image["type"], "symbolic");
+    assert_eq!(image["arch"], arch);
+    // `id` is the debug id, which the service also reads as `debug_id`.
+    assert!(image["id"].as_str().is_some_and(|id| !id.is_empty()));
+    assert!(
+        image["image_addr"]
+            .as_str()
+            .is_some_and(|a| a.starts_with("0x"))
+    );
+    assert!(image["image_size"].as_u64().is_some_and(|size| size > 0));
+    let exe = std::env::current_exe().unwrap();
+    let exe_name = exe.file_name().unwrap().to_string_lossy().into_owned();
+    // `name` is the code file: what sentry-types writes, which the service
+    // reads as `code_file`.
+    let code_file = image["name"].as_str().expect("a code file");
+    assert!(code_file.ends_with(&exe_name), "{code_file}");
+    if real_home().is_some_and(|home| exe.starts_with(home)) {
+        assert!(
+            code_file.contains("<user>"),
+            "the code file, scrubbed: {code_file}"
         );
     }
 

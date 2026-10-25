@@ -23,6 +23,9 @@ serde_json = { workspace = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
+# Reads the test binary's own build id or PDB id, which a report's debug image
+# must carry.
+object = { workspace = true }
 # Runs the mock server the proof tests point the DSN at; nothing in the tests
 # leaves this machine.
 tokio = { workspace = true, features = ["rt"] }

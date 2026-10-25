@@ -147,14 +147,20 @@ pbkdf2 = { version = "0.12.2", default-features = false, features = ["hmac"] }
 # Crash reports, and only in district-crash, which an app depends on only when it
 # offers them: an app that does not builds no Sentry code at all. No default
 # features: `backtrace` for the stack, `contexts` for the operating system and
-# Rust version, and `reqwest` with `rustls` for the transport, the same reqwest
-# and rustls the API client uses (no OpenSSL, the operating system's trust
-# store). Left out on purpose: `panic` (district-crash installs its own handler,
-# which reads the reporter the user's consent controls rather than Sentry's
-# per-thread hubs), `debug-images` (the path of every library loaded, which
-# names the user's home directory), `logs`, `metrics`, `release-health`
-# (sessions are sent at every start, crash or not) and `native-tls`.
-sentry = { version = "0.49.3", default-features = false, features = ["backtrace", "contexts", "reqwest", "rustls"] }
+# Rust version, `debug-images` for reading the loaded images' ids (district-crash
+# lists only the app's own, never the whole list Sentry's integration would
+# send), and `reqwest` with `rustls` for the transport, the same reqwest and
+# rustls the API client uses (no OpenSSL, the operating system's trust store).
+# Left out on purpose: `panic` (district-crash installs its own handler, which
+# reads the reporter the user's consent controls rather than Sentry's per-thread
+# hubs), `logs`, `metrics`, `release-health` (sessions are sent at every start,
+# crash or not) and `native-tls`.
+sentry = { version = "0.49.3", default-features = false, features = ["backtrace", "contexts", "debug-images", "reqwest", "rustls"] }
+
+# Test only: district-crash's proof test reads the test binary's own build id
+# (ELF) or PDB id (PE) to check the report's debug image against it. The same
+# object backtrace already locks; parsing only, no compression.
+object = { version = "0.37.3", default-features = false, features = ["read_core", "elf", "pe", "std"] }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
