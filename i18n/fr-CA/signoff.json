@@ -1,11 +1,11 @@
 {
-  "signed_off_by": "iMac manager distronode-com (Opus 5.5), district-core-rust 5.1.0: core.toml and scheduling.toml changes since v5.0.0 (#41, #42, #43) reviewed; the two French string changes (« S'ouvre dans votre navigateur. », « Entrez une heure, par exemple 9 h ou 13 h 30. ») are correct and the Desk renames keep « comptoir » per Sean's decision, 2026-10-24",
-  "release": "v5.1.0",
-  "commit": "9bdd1bfdd61b2f83d6454774dea29e2288bf394d",
+  "signed_off_by": "ThinkPad manager session 78da7e6a (Opus 5.5), 2026-10-25: xhigh fr-CA review of every catalog change since v5.1.0 (the service's French in api_errors.toml and wire.toml, generated from contracts/i18n at the server's a9cf0ef7a). By Sean's decision the service's French ships as the server has it; its two must-fixes and six suggestions are fixed upstream in the next monorepo batch and arrive with the next contract sync.",
+  "release": "v6.0.0",
+  "commit": "2b6bedf7ad9804f96c00ad0ca1af3c56f10128bd",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
-      "sha256": "3f5a825d9b956c7fd14a4be668a18fdb97c3b8a11460aa9c0dbbf1f51195d018"
+      "sha256": "36277110cc75007e8f70bdbab0ad9cf20e81fc9dc2bef7d8ba3ee8a5f24dddbe"
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
@@ -25,7 +25,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/wire.toml",
-      "sha256": "541a863d12c54d21bb6bd72cd2391cab6bcad233f86e2db7fa425a650fbecce0"
+      "sha256": "66476aa6ef1447a997acd8bd0ddea4de723c57b0565b1157d87b008cc52ba0fd"
     }
   ]
 }
