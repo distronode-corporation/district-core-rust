@@ -21,14 +21,17 @@
 //! service would still have taken the answer, which turns a slow hand into a
 //! missed call.
 //!
-//! # Declining says nothing to the service
+//! # Declining tells the service; nothing else does
 //!
-//! Declining, and a ring that runs out, are the same thing from outside: the
-//! service learns only that nobody answered, and the caller goes back to the
-//! receptionist. Telling it which would let a deliberate refusal be told apart
-//! from a desktop nobody was at, and there is no version of that distinction
-//! the product wants. The service's hang-up is also for calls this desktop
-//! placed, and refuses this kind.
+//! A member's press of Decline is sent ([`Effect::DeclineCall`]), so that once
+//! every member rung has declined the receptionist takes a message at once
+//! instead of holding the caller until the ring runs out. Only a person's
+//! decision is sent: a ring that runs out, one the service withdraws, and one
+//! dropped because the desktop sleeps, quits or signs out send nothing, so a
+//! desktop nobody was at still reads to the service as nobody answering. This
+//! reverses the earlier rule that a decline sent nothing either (decided
+//! 2026-10-24, decisions log note 4083623386). The service's hang-up is for
+//! calls this desktop placed, and refuses this kind.
 //!
 //! # Answering
 //!
@@ -217,7 +220,8 @@ pub enum RingEvent {
         /// The call.
         call_id: String,
     },
-    /// Decline it. Nothing is sent to the service.
+    /// Decline it: the member's own refusal, sent to the service as
+    /// [`Effect::DeclineCall`]. Never sent for a ring that ends by itself.
     Decline {
         /// The call.
         call_id: String,
@@ -335,7 +339,11 @@ impl SignedIn {
         let Some(ring) = self.ring.live(call_id).filter(|ring| ring.can_decline()) else {
             return Vec::new();
         };
-        let effects = silence(ring);
+        let mut effects = silence(ring);
+        effects.push(Effect::DeclineCall {
+            workspace_id: ring.workspace_id.clone(),
+            call_id: ring.call_id.clone(),
+        });
         self.ring.ring = None;
         tickets.cancel(Slot::RingDeadline);
         effects
@@ -429,7 +437,15 @@ impl SignedIn {
     /// call, so a ring still ringing or waiting here for it stops and its
     /// notification goes. Answered elsewhere, the ring ends saying so; the
     /// caller gone, as for the call's own end; otherwise it is a missed call,
-    /// as at the deadline.
+    /// as at the deadline. Declined (every member rung declined, this one
+    /// among them, here or on another device), it goes as a decline here does:
+    /// silenced and put away, with no missed call, because the member chose
+    /// not to take it.
+    ///
+    /// Residual: the service's cancel is per call, not per person. A member who
+    /// declines on another device while a colleague is still rung is not told
+    /// here, so this desktop rings on until the ring ends for everyone
+    /// (answered, every member declined, the caller gone, or the deadline).
     ///
     /// Nothing else changes. A ring being answered here, a call answered here
     /// and its transcript are left alone (the event reaches the answering
@@ -452,6 +468,11 @@ impl SignedIn {
         };
         tickets.cancel(Slot::RingDeadline);
         let (end, effects) = match reason {
+            RingCancelReason::Declined => {
+                let effects = silence(ring);
+                self.ring.ring = None;
+                return effects;
+            }
             RingCancelReason::Answered => (RingEnd::AnsweredElsewhere, silence(ring)),
             RingCancelReason::CallEnded => (RingEnd::CallEnded, silence(ring)),
             RingCancelReason::Timeout | RingCancelReason::Withdrawn => {
@@ -496,7 +517,9 @@ impl SignedIn {
     }
 
     /// Silences and drops a live ring, for a desktop about to sleep, quit or
-    /// sign out. Nothing is told to the service, as for a decline.
+    /// sign out. Nothing is told to the service: no person declined, so the
+    /// ring runs out there as one nobody was at does. Only a press of Decline
+    /// sends [`Effect::DeclineCall`].
     pub(crate) fn drop_ring(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         let Some(ring) = self.ring.ring.take() else {
             return Vec::new();

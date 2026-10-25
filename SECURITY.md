@@ -195,7 +195,10 @@ district-call's engine tests, which voice.yml runs.
 - The core rings only for a `call_ringing` event that names its own user, while
   the setting is on and the member's role may answer. The event carries ids only.
   Answering asks the service for the call's media credential once, only when the
-  member answers; declining sends nothing.
+  member answers. Declining sends the call's id and workspace once, only when the
+  member presses Decline; a ring that runs out, that the service withdraws, or
+  that is dropped because the machine sleeps, the app quits or the member signs
+  out sends nothing.
 - Media credentials and encryption passphrases are kept in memory only, redacted
   from `Debug` (the events and effects that carry them included), and dropped
   when the call, room or audition ends.

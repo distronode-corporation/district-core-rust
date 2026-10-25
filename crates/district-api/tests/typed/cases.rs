@@ -584,6 +584,17 @@ pub fn cases() -> Vec<Case> {
             query: vec![],
             body: Sent::Json(json!({"workspaceId": WS})),
         },
+        Case {
+            name: "decline_call",
+            endpoint: Endpoint::CallDecline,
+            retried: false,
+            answer: fixture("district-call-decline.json"),
+            call: call!(c => c.decline_call(WS, "call_contract_ringing")),
+            method: "POST",
+            path: "/api/district/calls/call_contract_ringing/decline",
+            query: vec![],
+            body: Sent::Json(json!({"workspaceId": WS})),
+        },
         // Contacts.
         Case {
             name: "contacts",

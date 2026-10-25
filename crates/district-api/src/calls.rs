@@ -1,15 +1,15 @@
 //! Typed calls for the call log (the log, one call, and its transcript) and for
-//! calls on the desktop (placing one, answering one that rings here, and ending
-//! a placed one at the carrier).
+//! calls on the desktop (placing one, answering or declining one that rings
+//! here, and ending a placed one at the carrier).
 //!
 //! The three log calls are reads, repeated once after a refused access token.
-//! The three call controls are never repeated: a dial repeated is a second call
+//! The four call controls are never repeated: a dial repeated is a second call
 //! to the same person, billed again, and an answer repeated tells the
 //! receptionist twice that a person took the call. Call recordings are not
 //! here: the service stores none.
 
 use district_model::{
-    CallAnswerResponse, CallDetailResponse, CallHangUpResponse, CallSummary,
+    CallAnswerResponse, CallDeclineResponse, CallDetailResponse, CallHangUpResponse, CallSummary,
     CallTranscriptResponse, DialResponse,
 };
 
@@ -114,6 +114,29 @@ impl<S: TokenSource> ApiClient<S> {
             .send()
             .await?;
         confirm(Endpoint::CallAnswer, answer.success)?;
+        Ok(answer)
+    }
+
+    /// Declines the call `call_id` of `workspace_id`, which rang for this member
+    /// and which the member chose not to take.
+    ///
+    /// Sent on the member's press of Decline and at no other time: a ring that
+    /// runs out, is withdrawn, or is dropped because the desktop sleeps, quits
+    /// or signs out sends nothing, because no person decided anything. Safe to
+    /// repeat, but never repeated automatically. A call that is gone is
+    /// [`ApiError::NotFound`].
+    pub async fn decline_call(
+        &self,
+        workspace_id: &str,
+        call_id: &str,
+    ) -> Result<CallDeclineResponse, ApiError> {
+        let answer: CallDeclineResponse = self
+            .request(Endpoint::CallDecline)
+            .path_param("callId", call_id)
+            .workspace(workspace_id)
+            .send()
+            .await?;
+        confirm(Endpoint::CallDecline, answer.success)?;
         Ok(answer)
     }
 
