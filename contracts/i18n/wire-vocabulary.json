@@ -170,8 +170,8 @@
       ]
     },
     "disposition": {
-      "description": "`disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them.",
-      "labelSource": null,
+      "description": "`disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized).",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/calls/callsI18n.ts dispositionLabels",
       "values": [
         {
           "value": "booked",
@@ -179,8 +179,8 @@
             "district-voice-agent/src/call_analyzer.py",
             "distronode-website/prisma/schema.prisma"
           ],
-          "en": null,
-          "fr": null
+          "en": "Booked",
+          "fr": "Rendez-vous pris"
         },
         {
           "value": "interested",
@@ -188,8 +188,8 @@
             "district-voice-agent/src/call_analyzer.py",
             "distronode-website/prisma/schema.prisma"
           ],
-          "en": null,
-          "fr": null
+          "en": "Interested",
+          "fr": "Intéressé"
         },
         {
           "value": "not-interested",
@@ -197,8 +197,8 @@
             "district-voice-agent/src/call_analyzer.py",
             "distronode-website/prisma/schema.prisma"
           ],
-          "en": null,
-          "fr": null
+          "en": "Not interested",
+          "fr": "Pas intéressé"
         },
         {
           "value": "callback",
@@ -206,8 +206,8 @@
             "district-voice-agent/src/call_analyzer.py",
             "distronode-website/prisma/schema.prisma"
           ],
-          "en": null,
-          "fr": null
+          "en": "Callback requested",
+          "fr": "Rappel demandé"
         },
         {
           "value": "info",
@@ -215,8 +215,8 @@
             "district-voice-agent/src/call_analyzer.py",
             "distronode-website/prisma/schema.prisma"
           ],
-          "en": null,
-          "fr": null
+          "en": "Information only",
+          "fr": "Information seulement"
         },
         {
           "value": "voicemail",
@@ -224,8 +224,8 @@
             "district-voice-agent/src/call_analyzer.py",
             "distronode-website/prisma/schema.prisma"
           ],
-          "en": null,
-          "fr": null
+          "en": "Voicemail",
+          "fr": "Boîte vocale"
         },
         {
           "value": "wrong-number",
@@ -233,8 +233,8 @@
             "district-voice-agent/src/call_analyzer.py",
             "distronode-website/prisma/schema.prisma"
           ],
-          "en": null,
-          "fr": null
+          "en": "Wrong number",
+          "fr": "Mauvais numéro"
         },
         {
           "value": "escalated",
@@ -242,8 +242,8 @@
             "district-voice-agent/src/call_analyzer.py",
             "distronode-website/prisma/schema.prisma"
           ],
-          "en": null,
-          "fr": null
+          "en": "Passed to a person",
+          "fr": "Transmis à une personne"
         },
         {
           "value": "other",
@@ -251,8 +251,8 @@
             "district-voice-agent/src/call_analyzer.py",
             "distronode-website/prisma/schema.prisma"
           ],
-          "en": null,
-          "fr": null
+          "en": "Other",
+          "fr": "Autre"
         }
       ]
     },
@@ -657,6 +657,22 @@
           "fr": "Quand le sentiment de l'appel est neutre"
         },
         {
+          "value": "call_triaged",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When a Call is Triaged (urgency, type, details)",
+          "fr": "Quand un appel est trié (urgence, type, détails)"
+        },
+        {
+          "value": "message_taken",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "When a Message is Taken During a Call",
+          "fr": "Quand un message est pris pendant un appel"
+        },
+        {
           "value": "intent_detected",
           "definedIn": [
             "distronode-website/src/lib/district/workflows.ts"
@@ -815,6 +831,14 @@
           ],
           "en": "Notify Ops Webhook",
           "fr": "Notifier le webhook des opérations"
+        },
+        {
+          "value": "notify_member_push",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Notify the Team in the App",
+          "fr": "Notifier l'équipe dans l'application"
         }
       ]
     },
@@ -852,8 +876,8 @@
       ]
     },
     "workflowActionReason": {
-      "description": "The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail.",
-      "labelSource": null,
+      "description": "The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail.",
+      "labelSource": "distronode-website/src/app/(en)/dashboard/district/workflows/workflowsI18n.ts reasonLabel",
       "values": [
         {
           "value": "contact-not-found",
@@ -890,7 +914,7 @@
         {
           "value": "empty-body",
           "definedIn": [
-            "distronode-website/src/lib/district/workflows.ts"
+            "distronode-website/src/lib/district/workflow-plan.ts"
           ],
           "en": null,
           "fr": null
@@ -898,7 +922,7 @@
         {
           "value": "empty-subject",
           "definedIn": [
-            "distronode-website/src/lib/district/workflows.ts"
+            "distronode-website/src/lib/district/workflow-plan.ts"
           ],
           "en": null,
           "fr": null
@@ -906,10 +930,42 @@
         {
           "value": "empty-tag",
           "definedIn": [
-            "distronode-website/src/lib/district/workflows.ts"
+            "distronode-website/src/lib/district/workflow-plan.ts"
           ],
           "en": null,
           "fr": null
+        },
+        {
+          "value": "fallback-email",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflow-member-alert.ts"
+          ],
+          "en": "Not texted, so it was emailed instead",
+          "fr": "Texto non envoyé, l'alerte est partie par courriel à la place"
+        },
+        {
+          "value": "fallback-email-push",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflow-member-alert.ts"
+          ],
+          "en": "Not texted, so it was emailed and sent to the app instead",
+          "fr": "Texto non envoyé, l'alerte est partie par courriel et dans l'application à la place"
+        },
+        {
+          "value": "fallback-failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflow-member-alert.ts"
+          ],
+          "en": "Not texted, and the email and app fallback failed too",
+          "fr": "Texto non envoyé, et le courriel et l'application de secours ont aussi échoué"
+        },
+        {
+          "value": "fallback-push",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflow-member-alert.ts"
+          ],
+          "en": "Not texted and the email failed, so it was sent to the app instead",
+          "fr": "Texto non envoyé et courriel en échec, l'alerte est partie dans l'application à la place"
         },
         {
           "value": "http-{status}",
@@ -922,7 +978,7 @@
         {
           "value": "invalid-recipient",
           "definedIn": [
-            "distronode-website/src/lib/district/workflows.ts"
+            "distronode-website/src/lib/district/workflow-plan.ts"
           ],
           "en": null,
           "fr": null
@@ -930,10 +986,26 @@
         {
           "value": "missing-webhook-url",
           "definedIn": [
-            "distronode-website/src/lib/district/workflows.ts"
+            "distronode-website/src/lib/district/workflow-plan.ts"
           ],
           "en": null,
           "fr": null
+        },
+        {
+          "value": "no-devices",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "No team member has the app on a device that can receive notifications",
+          "fr": "Aucun membre de l'équipe n'a l'application sur un appareil qui peut recevoir des notifications"
+        },
+        {
+          "value": "no-message",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflow-plan.ts"
+          ],
+          "en": "Notifying the team works only with the trigger for a message taken during a call",
+          "fr": "La notification de l'équipe ne fonctionne qu'avec le déclencheur d'un message pris pendant un appel"
         },
         {
           "value": "no-provider-credentials",
@@ -946,7 +1018,8 @@
         {
           "value": "no-recipient",
           "definedIn": [
-            "distronode-website/src/lib/district/workflows.ts"
+            "distronode-website/src/lib/district/workflow-plan.ts",
+            "distronode-website/src/lib/district/workflow-member-alert.ts"
           ],
           "en": null,
           "fr": null
@@ -968,9 +1041,49 @@
           "fr": null
         },
         {
-          "value": "report-recipient-refused",
+          "value": "priority",
           "definedIn": [
             "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": null,
+          "fr": null
+        },
+        {
+          "value": "push-lookup-failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "The list of team devices could not be read",
+          "fr": "La liste des appareils de l'équipe n'a pas pu être lue"
+        },
+        {
+          "value": "push-not-delivered",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "No device accepted the notification",
+          "fr": "Aucun appareil n'a accepté la notification"
+        },
+        {
+          "value": "recipient-not-member",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflow-member-alert.ts"
+          ],
+          "en": "The person to text is no longer a member of this workspace",
+          "fr": "La personne à qui envoyer le texto n'est plus membre de cet espace de travail"
+        },
+        {
+          "value": "recipient-number-held",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflow-member-alert.ts"
+          ],
+          "en": "Not sent: the person's mobile is a business number on District",
+          "fr": "Non envoyé : le cellulaire de cette personne est un numéro d'entreprise sur District"
+        },
+        {
+          "value": "report-recipient-refused",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflow-plan.ts"
           ],
           "en": null,
           "fr": null
@@ -1000,6 +1113,14 @@
           "fr": null
         },
         {
+          "value": "signing-unavailable",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Not sent: the webhook signing secret could not be read",
+          "fr": "Non envoyé : le secret de signature des webhooks n'a pas pu être lu"
+        },
+        {
           "value": "tag-already-present",
           "definedIn": [
             "distronode-website/src/lib/district/workflows.ts"
@@ -1018,7 +1139,7 @@
         {
           "value": "unknown-action-type",
           "definedIn": [
-            "distronode-website/src/lib/district/workflows.ts"
+            "distronode-website/src/lib/district/workflow-plan.ts"
           ],
           "en": null,
           "fr": null
@@ -1797,7 +1918,7 @@
         "Call.callerName (outbound campaign calls)"
       ],
       "definedIn": [
-        "distronode-website/src/app/api/district/calls/outbound/route.ts"
+        "distronode-website/src/lib/district/ai-outbound-call.ts"
       ],
       "fr": null,
       "frSource": null

@@ -282,6 +282,15 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `emergency_number`, in place of the service's own English."
 
+[api_error.engine_unavailable]
+en = "This voice engine is not available for this workspace yet. Choose another engine."
+fr = "Ce moteur vocal n'est pas encore offert pour cet espace de travail. Choisissez un autre moteur."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `engine_unavailable`, in place of the service's own English."
+
 [api_error.eu_vat_required]
 en = "In the European Union we sell to businesses only. Enter your VAT number and we invoice you under the reverse-charge rule."
 fr = "Dans l'Union européenne, nous vendons uniquement aux entreprises. Saisissez votre numéro de TVA et nous vous facturons selon le régime de l'autoliquidation."
@@ -445,6 +454,78 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `jira_not_connected`, in place of the service's own English."
 
+[api_error.knowledge_url_blocked]
+en = "That address points to a private or internal network, so it cannot be imported."
+fr = "Cette adresse mène à un réseau privé ou interne. Elle ne peut donc pas être importée."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `knowledge_url_blocked`, in place of the service's own English."
+
+[api_error.knowledge_url_empty]
+en = "That page has no readable text to import."
+fr = "Cette page ne contient aucun texte lisible à importer."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `knowledge_url_empty`, in place of the service's own English."
+
+[api_error.knowledge_url_invalid]
+en = "Enter a full web address that starts with https://, with no port number or password."
+fr = "Entrez une adresse Web complète qui commence par https://, sans numéro de port ni mot de passe."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `knowledge_url_invalid`, in place of the service's own English."
+
+[api_error.knowledge_url_pdf_unsupported]
+en = "PDF import is not available yet. Paste the text from the PDF instead."
+fr = "L'importation de fichiers PDF n'est pas encore offerte. Collez plutôt le texte du PDF."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `knowledge_url_pdf_unsupported`, in place of the service's own English."
+
+[api_error.knowledge_url_timeout]
+en = "That page took too long to answer. Try again in a moment."
+fr = "Cette page a mis trop de temps à répondre. Réessayez dans un instant."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `knowledge_url_timeout`, in place of the service's own English."
+
+[api_error.knowledge_url_too_large]
+en = "That page is larger than 2 MB. Import a smaller page or paste the text instead."
+fr = "Cette page dépasse 2 Mo. Importez une page plus petite ou collez plutôt le texte."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `knowledge_url_too_large`, in place of the service's own English."
+
+[api_error.knowledge_url_unreachable]
+en = "That page could not be reached. Check the address and that the page is public, then try again."
+fr = "Impossible d'atteindre cette page. Vérifiez l'adresse et assurez-vous que la page est publique, puis réessayez."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `knowledge_url_unreachable`, in place of the service's own English."
+
+[api_error.knowledge_url_unsupported_type]
+en = "Only web pages (HTML) and plain text can be imported. Paste the text instead."
+fr = "Seuls les pages Web (HTML) et le texte brut peuvent être importés. Collez plutôt le texte."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `knowledge_url_unsupported_type`, in place of the service's own English."
+
 [api_error.language_unavailable]
 en = "This language is not available for this workspace yet. Choose another language."
 fr = "Cette langue n'est pas encore offerte pour cet espace de travail. Choisissez une autre langue."
@@ -507,6 +588,87 @@ screen = "api_error"
 tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `member_not_found`, in place of the service's own English."
+
+[api_error.member_phone_business_number]
+en = "This number belongs to a business on District, so it cannot receive alerts. Enter your own mobile number."
+fr = "Ce numéro appartient à une entreprise sur District, alors il ne peut pas recevoir d'alertes. Entrez votre propre numéro de cellulaire."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `member_phone_business_number`, in place of the service's own English."
+
+[api_error.member_phone_cannot_text]
+en = "This business cannot send texts yet. Texts start once its number's text messaging is approved. Until then, alerts come by email and in the app."
+fr = "Cette entreprise ne peut pas encore envoyer de textos. Les textos commenceront dès que la messagerie texte de son numéro sera approuvée. D'ici là, les alertes vous parviennent par courriel et dans l'application."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `member_phone_cannot_text`, in place of the service's own English."
+
+[api_error.member_phone_code_expired]
+en = "That code has expired or was already used. Send a new one."
+fr = "Ce code est expiré ou a déjà été utilisé. Demandez-en un nouveau."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `member_phone_code_expired`, in place of the service's own English."
+
+[api_error.member_phone_code_wrong]
+en = "That code is not right. Check the text message and try again."
+fr = "Ce code n'est pas le bon. Vérifiez le texto, puis réessayez."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `member_phone_code_wrong`, in place of the service's own English."
+
+[api_error.member_phone_invalid]
+en = "Enter a mobile number with its country code, for example +1 416 555 0123."
+fr = "Entrez un numéro de cellulaire avec son indicatif de pays, par exemple +1 416 555 0123."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `member_phone_invalid`, in place of the service's own English."
+
+[api_error.member_phone_opted_out]
+en = "This number has opted out of texts from this business, so no code can be sent to it."
+fr = "Ce numéro a choisi de ne plus recevoir de textos de cette entreprise, alors aucun code ne peut lui être envoyé."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `member_phone_opted_out`, in place of the service's own English."
+
+[api_error.member_phone_resend_too_soon]
+en = "A code was sent less than a minute ago. Wait a moment before asking for another."
+fr = "Un code a été envoyé il y a moins d'une minute. Attendez un moment avant d'en demander un autre."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `member_phone_resend_too_soon`, in place of the service's own English."
+
+[api_error.member_phone_too_many_attempts]
+en = "Too many wrong codes. Send a new code to try again."
+fr = "Trop de codes erronés. Demandez un nouveau code pour réessayer."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `member_phone_too_many_attempts`, in place of the service's own English."
+
+[api_error.member_phone_too_many_codes]
+en = "Five codes were sent to you in the last 24 hours. Try again tomorrow."
+fr = "Cinq codes vous ont été envoyés au cours des dernières 24 heures. Réessayez demain."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `member_phone_too_many_codes`, in place of the service's own English."
 
 [api_error.message_not_found]
 en = "That message could not be found."
@@ -1013,6 +1175,204 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `token_invalid`, in place of the service's own English."
 
+[api_error.transfer_already_exists]
+en = "A transfer for this number is already open in this workspace. Continue that one instead."
+fr = "Un transfert est déjà ouvert pour ce numéro dans cet espace de travail. Poursuivez plutôt celui-là."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_already_exists`, in place of the service's own English."
+
+[api_error.transfer_cancel_refused]
+en = "This transfer can no longer be cancelled here, usually because the transfer date is close. Contact support."
+fr = "Ce transfert ne peut plus être annulé ici, généralement parce que la date du transfert approche. Communiquez avec notre équipe de soutien."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_cancel_refused`, in place of the service's own English."
+
+[api_error.transfer_country_unsupported]
+en = "Only United States and Canadian numbers can be transferred in today."
+fr = "Seuls les numéros des États-Unis et du Canada peuvent être transférés pour l'instant."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_country_unsupported`, in place of the service's own English."
+
+[api_error.transfer_document_limit]
+en = "This transfer already has the most documents it can hold. Remove one before adding another."
+fr = "Ce transfert contient déjà le nombre maximal de documents. Retirez-en un avant d'en ajouter un autre."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_document_limit`, in place of the service's own English."
+
+[api_error.transfer_emergency_acknowledgement_required]
+en = "Confirm that you understand that after the transfer this line will not reach 9-1-1, and that desk phones on it will stop working."
+fr = "Confirmez que vous comprenez qu'après le transfert, cette ligne ne joindra plus le 9-1-1 et que les téléphones de bureau qui l'utilisent cesseront de fonctionner."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_emergency_acknowledgement_required`, in place of the service's own English."
+
+[api_error.transfer_incomplete]
+en = "Some details or documents for this transfer are still missing. Complete every step, then try again."
+fr = "Il manque encore des renseignements ou des documents pour ce transfert. Remplissez chaque étape, puis réessayez."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_incomplete`, in place of the service's own English."
+
+[api_error.transfer_line_type_unknown]
+en = "We could not confirm that this is a local line, so it cannot be transferred in yet."
+fr = "Nous n'avons pas pu confirmer qu'il s'agit d'une ligne locale. Ce numéro ne peut donc pas encore être transféré."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_line_type_unknown`, in place of the service's own English."
+
+[api_error.transfer_managed_only]
+en = "Bringing your existing number is available to workspaces on our managed phone service."
+fr = "Le transfert d'un numéro existant est accessible aux espaces de travail qui utilisent notre service téléphonique géré."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_managed_only`, in place of the service's own English."
+
+[api_error.transfer_mobile_unsupported]
+en = "Mobile numbers cannot be transferred in yet. Only local numbers can."
+fr = "Les numéros de cellulaire ne peuvent pas encore être transférés. Seuls les numéros locaux peuvent l'être."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_mobile_unsupported`, in place of the service's own English."
+
+[api_error.transfer_not_cancellable]
+en = "This transfer is already finished and cannot be cancelled."
+fr = "Ce transfert est déjà terminé et ne peut pas être annulé."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_not_cancellable`, in place of the service's own English."
+
+[api_error.transfer_not_editable]
+en = "This transfer has already been sent and can no longer be changed here."
+fr = "Ce transfert a déjà été envoyé et ne peut plus être modifié ici."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_not_editable`, in place of the service's own English."
+
+[api_error.transfer_not_found]
+en = "That number transfer could not be found."
+fr = "Ce transfert de numéro est introuvable."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_not_found`, in place of the service's own English."
+
+[api_error.transfer_number_already_held]
+en = "This workspace already has that number."
+fr = "Cet espace de travail possède déjà ce numéro."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_number_already_held`, in place of the service's own English."
+
+[api_error.transfer_number_country_mismatch]
+en = "That number does not belong to the country you chose. Check the number and the country."
+fr = "Ce numéro n'appartient pas au pays choisi. Vérifiez le numéro et le pays."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_number_country_mismatch`, in place of the service's own English."
+
+[api_error.transfer_number_unavailable]
+en = "That number cannot be transferred into this workspace right now."
+fr = "Ce numéro ne peut pas être transféré dans cet espace de travail pour le moment."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_number_unavailable`, in place of the service's own English."
+
+[api_error.transfer_refused_by_provider]
+en = "Your current provider reports that this number cannot be transferred. Contact them to ask why."
+fr = "Votre fournisseur actuel indique que ce numéro ne peut pas être transféré. Communiquez avec lui pour en connaître la raison."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_refused_by_provider`, in place of the service's own English."
+
+[api_error.transfer_region_unsupported]
+en = "This workspace's region cannot take that number in a transfer yet."
+fr = "La région de cet espace de travail ne peut pas encore recevoir ce numéro par transfert."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_region_unsupported`, in place of the service's own English."
+
+[api_error.transfer_release_confirmation_required]
+en = "This number was transferred here from your previous provider. Releasing it gives it up for good. To keep it, transfer it to another provider first."
+fr = "Ce numéro a été transféré ici depuis votre ancien fournisseur. Le libérer vous le fait perdre définitivement. Pour le conserver, transférez-le d'abord vers un autre fournisseur."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_release_confirmation_required`, in place of the service's own English."
+
+[api_error.transfer_resubmit_unsupported]
+en = "This transfer cannot be sent again from here. Cancel it and start a new one with the corrected details."
+fr = "Ce transfert ne peut pas être envoyé de nouveau d'ici. Annulez-le et commencez-en un nouveau avec les renseignements corrigés."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_resubmit_unsupported`, in place of the service's own English."
+
+[api_error.transfer_signature_required]
+en = "Type the authorized person's full name and confirm the authorization before sending the transfer."
+fr = "Saisissez le nom complet de la personne autorisée et confirmez l'autorisation avant d'envoyer le transfert."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_signature_required`, in place of the service's own English."
+
+[api_error.transfer_submit_in_progress]
+en = "This transfer is being sent right now. Wait a minute, then refresh."
+fr = "Ce transfert est en cours d'envoi. Attendez une minute, puis actualisez la page."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_submit_in_progress`, in place of the service's own English."
+
+[api_error.transfer_toll_free_unsupported]
+en = "Toll-free numbers cannot be transferred in yet. Only local numbers can."
+fr = "Les numéros sans frais ne peuvent pas encore être transférés. Seuls les numéros locaux peuvent l'être."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `transfer_toll_free_unsupported`, in place of the service's own English."
+
 [api_error.unauthorized]
 en = "Please sign in to continue."
 fr = "Veuillez vous connecter pour continuer."
@@ -1084,6 +1444,60 @@ screen = "api_error"
 tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `whatsapp_unsupported`, in place of the service's own English."
+
+[api_error.workflow_action_needs_message]
+en = "Notifying the team works only with the trigger for a message taken during a call."
+fr = "La notification de l'équipe ne fonctionne qu'avec le déclencheur d'un message pris pendant un appel."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `workflow_action_needs_message`, in place of the service's own English."
+
+[api_error.workflow_conditions_invalid]
+en = "One of this workflow's conditions is not valid. Check each condition and try again."
+fr = "Une des conditions de ce flux n'est pas valide. Vérifiez chaque condition, puis réessayez."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `workflow_conditions_invalid`, in place of the service's own English."
+
+[api_error.workflow_conditions_not_allowed]
+en = "Conditions can only be added to a workflow that runs after a call."
+fr = "Les conditions ne peuvent s'ajouter qu'à un flux qui s'exécute après un appel."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `workflow_conditions_not_allowed`, in place of the service's own English."
+
+[api_error.workflow_member_push_roles_invalid]
+en = "Choose who gets the notification: administrators, members, or both."
+fr = "Choisissez qui reçoit la notification\u00A0: les administrateurs, les membres ou les deux."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `workflow_member_push_roles_invalid`, in place of the service's own English."
+
+[api_error.workflow_sms_recipient_invalid]
+en = "A text can be sent to the caller, the owner or a team member only."
+fr = "Un texto ne peut être envoyé qu'à l'appelant, au propriétaire ou à un membre de l'équipe."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `workflow_sms_recipient_invalid`, in place of the service's own English."
+
+[api_error.workflow_sms_recipient_not_member]
+en = "That person is not a member of this workspace, so workflow texts cannot be sent to them."
+fr = "Cette personne n'est pas membre de cet espace de travail, alors les textos des flux ne peuvent pas lui être envoyés."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `workflow_sms_recipient_not_member`, in place of the service's own English."
 
 [api_error.workspace_access_denied]
 en = "You are not a member of that workspace."

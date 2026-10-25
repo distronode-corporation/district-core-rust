@@ -190,6 +190,23 @@ pub struct CallHangUpResponse {
     pub ended: bool,
 }
 
+/// `POST /api/district/calls/{callId}/decline`: a member declined a call that
+/// rang for them.
+///
+/// The service records who declined, and once every member it rang has, ends
+/// the ring at once and the receptionist takes a message, rather than holding
+/// the caller until the ring's window closes. It is safe to repeat, and a
+/// service that cannot record it still answers `success`: the ring then runs
+/// out as it always did.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct CallDeclineResponse {
+    /// `true` on a successful answer.
+    #[serde(default)]
+    pub success: bool,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -23,10 +23,10 @@
 # `sha256sum -c SHA256SUMS` checks them.
 
 [sets.fixtures]
-commit = "43eed5fd611d96fcceb1702b56719b577c7f6d7d"
+commit = "f5ffc0a3c8cefd4d84c689f162b095a224144b17"
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
-file_count = 187
+file_count = 190
 
 [sets.desktop]
 commit = "6cd0ff6674360ce56a83bfc1763315db2a056a24"
@@ -35,13 +35,13 @@ source_clean = true
 file_count = 14
 
 [sets.i18n]
-commit = "ecf098046130eae0be6ed3be5ad28f70b9037b68"
+commit = "f5ffc0a3c8cefd4d84c689f162b095a224144b17"
 source = "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests"
 source_clean = true
 file_count = 3
 
 [sync]
-date = "2026-10-16"
+date = "2026-10-25"
 checksums = "SHA256SUMS"
 
 [[substitution]]
@@ -343,7 +343,7 @@ kind = "text"
 original = " \u2014 "
 replacement = " - "
 reason = "the em dash is not allowed in this repository; the fixtures use it as a spaced separator"
-count = 16
+count = 13
 
 [substitution.files]
 "fixtures/district-ai-draft.json" = 1
@@ -353,6 +353,6 @@ count = 16
 "fixtures/district-drafts-list.json" = 1
 "fixtures/district-member-last-agency.json" = 1
 "fixtures/district-message-send-email.json" = 1
-"fixtures/district-persona-options.json" = 7
+"fixtures/district-persona-options.json" = 4
 "fixtures/district-timeline.json" = 1
 "i18n/wire-vocabulary.json" = 1

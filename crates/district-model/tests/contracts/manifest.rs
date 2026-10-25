@@ -29,20 +29,20 @@ use district_model::{
 };
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CallAnswerResponse,
-    CallDetailResponse, CallHangUpResponse, CallSummary, CallTranscriptResponse,
-    CampaignStatusResponse, ClearIntelResponse, ContactDetailResponse, ContactListResponse,
-    ContactMutationResponse, ConversationsResponse, DeskLogoRemovalResponse, DeskReplyResponse,
-    DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketResponse, DeskTicketStatusResponse,
-    DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DialResponse,
-    DraftDeleteResponse, DraftListResponse, DraftResponse, EnrichResponse, HqConfirmResponse,
-    HqPromptResponse, KnowledgeCreateResponse, KnowledgeDeleteResponse, KnowledgeListResponse,
-    KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse, MeetingDetail, MeetingSummary,
-    MemberListResponse, MemberRemovalResponse, MemberResponse, MessageThreadResponse,
-    MessagingAccountSaveResponse, MessagingChannelDefaultResponse, MessagingDefaultResponse,
-    MessagingMetaResponse, MessagingResponse, MessagingTestResponse, NativeRevokeResponse,
-    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, PersonaOptionsResponse,
-    PersonaPreviewTokenResponse, PkceVector, PushRegistrationResponse, RenameResponse,
-    RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
+    CallDeclineResponse, CallDetailResponse, CallHangUpResponse, CallSummary,
+    CallTranscriptResponse, CampaignStatusResponse, ClearIntelResponse, ContactDetailResponse,
+    ContactListResponse, ContactMutationResponse, ConversationsResponse, DeskLogoRemovalResponse,
+    DeskReplyResponse, DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketResponse,
+    DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
+    DialResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, EnrichResponse,
+    HqConfirmResponse, HqPromptResponse, KnowledgeCreateResponse, KnowledgeDeleteResponse,
+    KnowledgeListResponse, KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse,
+    MeetingDetail, MeetingSummary, MemberListResponse, MemberRemovalResponse, MemberResponse,
+    MessageThreadResponse, MessagingAccountSaveResponse, MessagingChannelDefaultResponse,
+    MessagingDefaultResponse, MessagingMetaResponse, MessagingResponse, MessagingTestResponse,
+    NativeRevokeResponse, NumberSearchResponse, OverviewResponse, OwnedNumbersResponse,
+    PersonaOptionsResponse, PersonaPreviewTokenResponse, PkceVector, PushRegistrationResponse,
+    RenameResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
     SchedulingStatusResponse, SendMessageResponse, SetupResponse, SupportCloseResponse,
     SupportReplyResponse, SupportRequestCreateResponse, SupportRequestResponse,
     SupportRequestsResponse, TelemetryEnvelope, TelemetryToken, TimelineResponse,
@@ -114,7 +114,7 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 187;
+pub const EXPECTED_FIXTURE_COUNT: usize = 190;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
@@ -149,6 +149,9 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     // POST /api/district/calls/{callId}/answer: the credential to join a call
     // that rang here.
     ("district-call-answer.json", codec::<CallAnswerResponse>),
+    // POST /api/district/calls/{callId}/decline: a member declined a call that
+    // rang here.
+    ("district-call-decline.json", codec::<CallDeclineResponse>),
     // GET /api/district/calls/{callId}: the call log's row for one call.
     ("district-call-detail.json", codec::<CallDetailResponse>),
     // GET /api/district/calls/{callId}/transcript.
@@ -855,18 +858,29 @@ pub struct Exclusion {
 }
 
 /// Fixtures of endpoints this client will not use, by decision.
-pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[Exclusion {
-    reason: "Sign in with Apple's native sheet and its second step belong to the \
+pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
+    Exclusion {
+        reason: "Sign in with Apple's native sheet and its second step belong to the \
                  Apple apps: `POST /api/auth/native/apple` answering that the account \
                  needs its authenticator code, and `POST /api/auth/native/mfa` trading \
                  the ticket and the code for the grant. A desktop signs in through the \
                  browser, which asks for the second factor itself, and reads the grant \
                  from `POST /api/auth/native/token` (district-auth).",
-    fixtures: &[
-        "district-native-apple-mfa-required.json",
-        "district-native-mfa.json",
-    ],
-}];
+        fixtures: &[
+            "district-native-apple-mfa-required.json",
+            "district-native-mfa.json",
+        ],
+    },
+    Exclusion {
+        reason: "A message notification's sender name, read by a phone's notification \
+                 service before the app runs: `POST /api/auth/native/notify-token` mints \
+                 a read-only token for it, and `GET \
+                 /api/district/messages/{id}/sender` answers the name. A desktop learns \
+                 of a message on its live socket while it runs, already signed in, and \
+                 reads the thread with its own session.",
+        fixtures: &["district-message-sender.json", "district-notify-token.json"],
+    },
+];
 
 /// Every file in `contracts/desktop/`. Asserted exactly, for the same reason as
 /// [`EXPECTED_FIXTURE_COUNT`].
