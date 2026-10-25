@@ -1041,14 +1041,6 @@
           "fr": null
         },
         {
-          "value": "priority",
-          "definedIn": [
-            "distronode-website/src/lib/district/workflows.ts"
-          ],
-          "en": null,
-          "fr": null
-        },
-        {
           "value": "push-lookup-failed",
           "definedIn": [
             "distronode-website/src/lib/district/workflows.ts"

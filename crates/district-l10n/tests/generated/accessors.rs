@@ -1772,8 +1772,6 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_no_sending_number(Locale::FrCa), "Aucun numéro d'envoi");
     assert_eq!(wire_strings::wire_workflow_action_reason_postmark_missing(Locale::En), "Postmark missing");
     assert_eq!(wire_strings::wire_workflow_action_reason_postmark_missing(Locale::FrCa), "Postmark non configuré");
-    assert_eq!(wire_strings::wire_workflow_action_reason_priority(Locale::En), "Priority");
-    assert_eq!(wire_strings::wire_workflow_action_reason_priority(Locale::FrCa), "Priorité");
     assert_eq!(wire_strings::wire_workflow_action_reason_push_lookup_failed(Locale::En), "The list of team devices could not be read");
     assert_eq!(wire_strings::wire_workflow_action_reason_push_lookup_failed(Locale::FrCa), "La liste des appareils de l'équipe n'a pas pu être lue");
     assert_eq!(wire_strings::wire_workflow_action_reason_push_not_delivered(Locale::En), "No device accepted the notification");

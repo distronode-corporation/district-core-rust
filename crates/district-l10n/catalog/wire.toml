@@ -1675,15 +1675,6 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `postmark-missing` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
-[wire.workflow_action_reason.priority]
-en = "Priority"
-fr = "Priorité"
-ctx = "label"
-screen = "wire workflow_action_reason"
-tier = "T3"
-state = "draft"
-note = "A label for the stored value `priority` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
-
 [wire.workflow_action_reason.push_lookup_failed]
 en = "The list of team devices could not be read"
 fr = "La liste des appareils de l'équipe n'a pas pu être lue"

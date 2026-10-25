@@ -1661,15 +1661,6 @@ pub fn wire_workflow_action_reason_postmark_missing(l: Locale) -> &'static str {
     }
 }
 
-/// `wire.workflow_action_reason.priority`
-#[must_use]
-pub fn wire_workflow_action_reason_priority(l: Locale) -> &'static str {
-    match l {
-        Locale::En => "Priority",
-        Locale::FrCa => "Priorité",
-    }
-}
-
 /// `wire.workflow_action_reason.push_lookup_failed`
 #[must_use]
 pub fn wire_workflow_action_reason_push_lookup_failed(l: Locale) -> &'static str {

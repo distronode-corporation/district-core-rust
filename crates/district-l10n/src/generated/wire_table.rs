@@ -116,7 +116,6 @@ pub(crate) fn label(locale: Locale, category: WireCategory, value: &str) -> Opti
         (WireCategory::WorkflowActionReason, "no-recipient") => s::wire_workflow_action_reason_no_recipient(locale),
         (WireCategory::WorkflowActionReason, "no-sending-number") => s::wire_workflow_action_reason_no_sending_number(locale),
         (WireCategory::WorkflowActionReason, "postmark-missing") => s::wire_workflow_action_reason_postmark_missing(locale),
-        (WireCategory::WorkflowActionReason, "priority") => s::wire_workflow_action_reason_priority(locale),
         (WireCategory::WorkflowActionReason, "push-lookup-failed") => s::wire_workflow_action_reason_push_lookup_failed(locale),
         (WireCategory::WorkflowActionReason, "push-not-delivered") => s::wire_workflow_action_reason_push_not_delivered(locale),
         (WireCategory::WorkflowActionReason, "recipient-not-member") => s::wire_workflow_action_reason_recipient_not_member(locale),

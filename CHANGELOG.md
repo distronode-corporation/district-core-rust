@@ -27,7 +27,8 @@ sent: a ring that runs out, one the service withdraws, and one dropped for a sle
 or a sign-out still send nothing. This reverses the rule that a decline sent nothing
 (decided 2026-10-24). A major version because `Effect`, `DistrictApi`, `Endpoint` and
 `RingCancelReason` each gain a member an app matches on or implements. The contracts move
-to the server's f5ffc0a3c, with the French of every new error sentence and wire label.
+to the server's f5ffc0a3c (`contracts/i18n/` to its a9cf0ef7a), with the French of every
+new error sentence and wire label.
 
 ### Added
 
@@ -48,7 +49,9 @@ to the server's f5ffc0a3c, with the French of every new error sentence and wire 
 
 ### Changed
 
-- `contracts/fixtures/` and `contracts/i18n/` from the server's f5ffc0a3c. New: the call
+- `contracts/fixtures/` from the server's f5ffc0a3c and `contracts/i18n/` from its
+  a9cf0ef7a, which drops a `priority` workflow action reason the server's contract scanner
+  had read out of a comment. New: the call
   decline answer (decoded), and the message sender name and notify-read token fixtures,
   excluded by decision (a phone's notification service reads them; a desktop has its
   live socket and its session). The recorded persona options list four engines (was
@@ -56,9 +59,7 @@ to the server's f5ffc0a3c, with the French of every new error sentence and wire 
 - The error table and wire labels have the service's new codes and values, with the
   service's French: workflow conditions and the team notification action, number
   transfers, a member's mobile number, knowledge imports from a web address, and the voice
-  engine that is not offered yet. Call dispositions now have labels. The one value the
-  service has no label for, the workflow action reason `priority`, reads « Priorité »
-  (a draft, for review with the French sign-off).
+  engine that is not offered yet. Call dispositions now have labels.
 
 ### Known limits
 
