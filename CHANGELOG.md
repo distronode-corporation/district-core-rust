@@ -17,6 +17,33 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [6.1.0] - 2026-10-25
+
+Opt-in crash reports for the desktop apps, in a new crate. A minor version. Reports are off
+until the user says yes (the apps ask once, at first start), and nothing is set up or sent
+without a DSN and that consent. A report holds what symbolicates a stripped build and
+nothing that names the user or the machine. Nothing an app calls or implements changes,
+and an app that does not depend on the new crate builds exactly what it did. GitLab #230.
+
+### Added
+
+- `district-crash`: crash reports through Sentry (0.49.3, rustls, no OpenSSL), off until the
+  user turns them on. `district_crash::apply(&Settings, Consent)` sets reporting up only
+  when the app passes both a DSN and `Consent::Granted`, and returns `Status::On` or
+  `Status::Off(OffReason)`; called again with `Consent::Denied` it closes the reporter,
+  after sending what was queued, and with consent again it opens a new one. While on, a
+  panic on any thread is reported before the previous panic handler runs, and
+  `capture_error` reports an error the app chooses to. A report carries the debug images
+  of the main executable and of the image holding the reporter's code (the app's own
+  library on Windows): file, build id (ELF) or PDB id and age (PE), load address, size
+  and architecture, so the stack of a stripped build can be symbolicated against the
+  release's uploaded debug files. No other loaded library is listed. Every home
+  directory path in a report, the images' files included, has the user's name replaced,
+  and the machine's name, the user and any address are removed. Nothing is read from the
+  environment (a `SENTRY_DSN` there is ignored), and plain `http` is refused unless the
+  DSN names this machine (`CrashError`). The asking (once at first start, "Don't send"
+  first) and the settings switch are the apps'.
+
 ## [6.0.0] - 2026-10-24
 
 A real decline. Until now declining a ring here told the service nothing, so a
