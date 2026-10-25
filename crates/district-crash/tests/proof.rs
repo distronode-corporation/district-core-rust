@@ -37,6 +37,11 @@ struct Server {
 
 impl Server {
     fn start() -> Self {
+        Self::answering_after(Duration::ZERO)
+    }
+
+    /// One that takes `delay` to answer each report.
+    fn answering_after(delay: Duration) -> Self {
         let runtime = tokio::runtime::Builder::new_current_thread()
             .enable_all()
             .build()
@@ -46,7 +51,7 @@ impl Server {
             // test can be counted here.
             let server = MockServer::builder().start().await;
             Mock::given(method("POST"))
-                .respond_with(ResponseTemplate::new(200))
+                .respond_with(ResponseTemplate::new(200).set_delay(delay))
                 .mount(&server)
                 .await;
             server
@@ -449,6 +454,55 @@ fn consent_turns_off_and_on_at_runtime() {
     assert_eq!(second["exception"]["values"][0]["value"], "Box<dyn Any>");
 
     district_crash::apply(&settings, Consent::Denied).unwrap();
+}
+
+/// Consent again with another DSN (settings an app changed) while the old
+/// reporter is still sending: the new reporter takes the old one's place
+/// before the old one is closed, so reporting never reads as off, and a panic
+/// on another thread meanwhile is reported once, by the new one. The old
+/// server answers later than a close waits, so the close lasts its whole two
+/// seconds, and the panic comes one second in. Nothing in the crate says when
+/// a re-apply is half way, so the second is the test's; the read of
+/// `is_enabled` on every turn of the loop does not depend on it.
+#[test]
+fn a_reapply_never_leaves_reporting_off() {
+    let _turn = serial();
+    let old = Server::answering_after(Duration::from_secs(5));
+    let new = Server::start();
+    district_crash::apply(&old.settings(), Consent::Granted).unwrap();
+    district_crash::capture_error(&Inner).expect("reporting is on");
+    assert_eq!(
+        old.settle(1).len(),
+        1,
+        "the old reporter's report is in flight"
+    );
+
+    let settings = new.settings();
+    let reapply = thread::spawn(move || district_crash::apply(&settings, Consent::Granted));
+    let started = Instant::now();
+    let mut panicked = false;
+    while !reapply.is_finished() {
+        assert!(district_crash::is_enabled(), "off during a re-apply");
+        if !panicked && started.elapsed() >= Duration::from_secs(1) {
+            panic_on_a_thread(|| panic!("during a re-apply, at /home/alice/x"));
+            panicked = true;
+        }
+        thread::sleep(Duration::from_millis(1));
+    }
+    assert!(panicked, "the re-apply waited for the old reporter");
+    assert_eq!(reapply.join().unwrap(), Ok(Status::On));
+
+    let bodies = new.settle(1);
+    assert_eq!(bodies.len(), 1, "exactly one report, by the new reporter");
+    let event = event(&bodies[0]);
+    assert_clean(&event);
+    assert_eq!(
+        event["exception"]["values"][0]["value"],
+        "during a re-apply, at /home/<user>/x"
+    );
+    assert_eq!(old.bodies().len(), 1, "and none by the old one");
+
+    district_crash::apply(&new.settings(), Consent::Denied).unwrap();
 }
 
 #[test]

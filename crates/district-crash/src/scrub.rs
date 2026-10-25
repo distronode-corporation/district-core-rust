@@ -48,7 +48,10 @@ fn scrub_value(value: &mut Value) {
 /// `<drive>:\Users\<name>` (Windows, either slash, any case). The name runs to
 /// the next path separator or to a character no user name may hold; on the
 /// Windows form a space does not end it (Windows names may hold one), on the
-/// others it does. Borrowed when there was nothing to replace.
+/// others it does. Either side of `Users` the separator may be doubled, as
+/// every backslash is in a `Debug`-formatted string or in JSON text held in a
+/// string (and twice over when escaped twice); the separators are kept as
+/// they were. Borrowed when there was nothing to replace.
 pub(crate) fn scrub_home_paths(text: &str) -> Cow<'_, str> {
     let bytes = text.as_bytes();
     let mut clean = String::new();
@@ -87,22 +90,32 @@ fn home_at(bytes: &[u8], at: usize) -> Option<(usize, bool)> {
     if rest.starts_with(b"/home/") {
         return Some((at + 6, false));
     }
-    let [open, u, s, e, r, s2, close, ..] = *rest else {
-        return None;
-    };
-    let word = [u, s, e, r, s2];
-    if !(is_separator(open) && is_separator(close) && word.eq_ignore_ascii_case(b"users")) {
+    let open = separators(rest);
+    if open == 0 {
         return None;
     }
-    let drive = at >= 2 && bytes[at - 1] == b':' && bytes[at - 2].is_ascii_alphabetic();
-    let windows = drive || open == b'\\' || close == b'\\';
+    let word = rest.get(open..open + 5)?;
+    let close = separators(&rest[open + 5..]);
+    if close == 0 || !word.eq_ignore_ascii_case(b"users") {
+        return None;
+    }
+    // A drive is directly before the last separator of the run, as it is
+    // before the one separator of a plain path, so `https://users/` is not
+    // one.
+    let last = at + open - 1;
+    let drive = last >= 2 && bytes[last - 1] == b':' && bytes[last - 2].is_ascii_alphabetic();
+    let windows = drive || rest[..open + 5 + close].contains(&b'\\');
     // Without a drive or a backslash it is macOS, whose folder is `Users`
     // exactly; a lower case `/users/` is more likely part of an address.
-    (windows || &word == b"Users").then_some((at + 7, windows))
+    (windows || word == b"Users").then_some((at + open + 5 + close, windows))
 }
 
-fn is_separator(byte: u8) -> bool {
-    byte == b'/' || byte == b'\\'
+/// How many path separators `bytes` starts with.
+fn separators(bytes: &[u8]) -> usize {
+    bytes
+        .iter()
+        .take_while(|&&byte| byte == b'/' || byte == b'\\')
+        .count()
 }
 
 /// Whether `byte` cannot be part of a user's name, so ends it. Windows refuses
@@ -149,6 +162,42 @@ mod tests {
     }
 
     #[test]
+    fn escaped_and_doubled_separators_lose_the_name_too() {
+        // `Debug` of a Windows path, as in an `unwrap` panic or an error's
+        // derived `Debug`: every backslash is doubled.
+        let debug = format!("{:?}", std::path::Path::new(r"C:\Users\alice\x"));
+        assert_eq!(scrubbed(&debug), r#""C:\\Users\\<user>\\x""#);
+        assert_eq!(
+            scrubbed(r#"Os { code: 5, path: "C:\\Users\\alice\\AppData" }"#),
+            r#"Os { code: 5, path: "C:\\Users\\<user>\\AppData" }"#
+        );
+        // JSON text held in a string escapes them the same way, and a string
+        // escaped twice doubles them twice.
+        assert_eq!(
+            scrubbed(r#"{"path":"c:\\users\\Alice Smith\\x"}"#),
+            r#"{"path":"c:\\users\\<user>\\x"}"#
+        );
+        assert_eq!(
+            scrubbed(r"C:\\\\Users\\\\alice\\\\x"),
+            r"C:\\\\Users\\\\<user>\\\\x"
+        );
+        // The verbatim prefix and a UNC share, plain and escaped.
+        assert_eq!(
+            scrubbed(r"\\host\c$\Users\alice\x"),
+            r"\\host\c$\Users\<user>\x"
+        );
+        assert_eq!(
+            scrubbed(r"\\\\?\\C:\\Users\\alice\\x"),
+            r"\\\\?\\C:\\Users\\<user>\\x"
+        );
+        // Either slash, doubled or mixed, and a home at the very end.
+        assert_eq!(scrubbed("C:/Users/alice/x"), "C:/Users/<user>/x");
+        assert_eq!(scrubbed(r"C:\\Users/alice\\x"), r"C:\\Users/<user>\\x");
+        assert_eq!(scrubbed("//Users//alice"), "//Users//<user>");
+        assert_eq!(scrubbed(r"C:\\Users\\alice"), r"C:\\Users\\<user>");
+    }
+
+    #[test]
     fn every_home_in_a_sentence_and_one_at_the_very_end() {
         assert_eq!(
             scrubbed("cannot open /home/bob/a: no such file, nor /Users/carol"),
@@ -181,6 +230,11 @@ mod tests {
             "https://example.com/api/users/42",
             "/users/x",
             "C:\\Users",
+            r"C:\\Users\\",
+            r"C:\\Users\\\\",
+            r"\\Users",
+            "https://example.com//users//42",
+            "https://users/42",
             "C:\\Program Files\\x",
             "xUsersx",
             "Users/home",
@@ -250,6 +304,35 @@ mod tests {
             clean.tags.get("list").map(String::as_str),
             Some("/home/<user>")
         );
+    }
+
+    /// The walk reads each string decoded, so a plain path in a field is one
+    /// backslash per separator (above) whatever the envelope's JSON makes of
+    /// it; what holds a doubled one is a string that itself holds escaped
+    /// text, which is scrubbed as it is and stays escaped on the way out.
+    #[test]
+    fn an_event_holding_escaped_paths_loses_the_names() {
+        let mut raw = event();
+        let path = std::path::Path::new(r"C:\Users\alice\x.toml");
+        raw.message = Some(format!(
+            "called `Result::unwrap()` on an `Err` value: {path:?}"
+        ));
+        raw.extra.insert(
+            "body".into(),
+            Value::from(serde_json::json!({ "file": r"C:\Users\alice\y" }).to_string()),
+        );
+        let clean = scrub_event(raw).expect("the event survives");
+
+        assert_eq!(
+            clean.message.as_deref(),
+            Some(r#"called `Result::unwrap()` on an `Err` value: "C:\\Users\\<user>\\x.toml""#)
+        );
+        assert_eq!(
+            clean.extra.get("body"),
+            Some(&Value::from(r#"{"file":"C:\\Users\\<user>\\y"}"#))
+        );
+        let wire = serde_json::to_string(&clean).unwrap();
+        assert!(!wire.contains("alice"), "{wire}");
     }
 
     #[test]
