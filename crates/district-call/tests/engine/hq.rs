@@ -177,11 +177,14 @@ fn what_the_voice_agent_sends_in_an_encrypted_room_is_reported() {
             .send_text("hello", StreamTextOptions::new_with_topic("lk.chat"))
             .await
             .expect("the agent chats");
+        // What follows is at most the end of the agent's stream, reported once
+        // more as it closes: nothing from the chat.
         let later = member.reports.during(Duration::from_secs(2)).await;
         assert!(
-            later
-                .iter()
-                .all(|update| !matches!(update.event, MediaEvent::Speech(_))),
+            later.iter().all(|update| match &update.event {
+                MediaEvent::Speech(segment) => segment.segment_id == "agent-1",
+                _ => true,
+            }),
             "{later:?}"
         );
 
