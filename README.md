@@ -1,6 +1,7 @@
 # District AI core for Rust
 
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/distronode-corporation/district-core-rust/badge)](https://scorecard.dev/viewer/?uri=github.com/distronode-corporation/district-core-rust)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/15876/badge)](https://www.bestpractices.dev/projects/15876)
 
 The shared Rust core of the District AI desktop apps: the data types, the HTTP
 client, sign-in, live updates, the application state and the call engine of
