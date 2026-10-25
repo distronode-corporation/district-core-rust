@@ -126,18 +126,22 @@ const CLOSE_FLUSH: Duration = Duration::from_secs(2);
 /// it is never held while anything is built or sent, and nothing that can
 /// panic runs while it is.
 static CLIENT: RwLock<Option<Arc<Client>>> = RwLock::new(None);
-/// One [`apply`] at a time, so a close and the open after it are not
-/// interleaved with another's.
+/// One [`apply`] at a time, so one's open, swap and close are not interleaved
+/// with another's.
 static APPLYING: Mutex<()> = Mutex::new(());
 static PANIC_HANDLER: Once = Once::new();
 
 /// Turns reporting on or off for this process, and says which it is.
 ///
-/// Whatever was on before is closed first, after the reports it had queued
-/// are sent (waiting up to two seconds). Then, only with [`Consent::Granted`]
-/// and a DSN, a new reporter is opened and, the first time, the panic handler
-/// is installed. Call it at start with the stored answer, and again whenever
-/// the user changes it.
+/// Only with [`Consent::Granted`] and a DSN, a new reporter is opened and,
+/// the first time, the panic handler is installed. The new reporter (or none)
+/// then takes the place of whatever was on before in one step, so changed
+/// settings with consent never leave reporting off, and a panic on another
+/// thread meanwhile is reported by the one or the other. Last, the one that
+/// was on before is closed, after the reports it had queued are sent (waiting
+/// up to two seconds), so once this returns [`Consent::Denied`] sends nothing
+/// more. Call it at start with the stored answer, and again whenever the user
+/// changes it.
 ///
 /// # Errors
 ///
@@ -145,12 +149,26 @@ static PANIC_HANDLER: Once = Once::new();
 /// is then off.
 pub fn apply(settings: &Settings, consent: Consent) -> Result<Status, CrashError> {
     let _one_at_a_time = APPLYING.lock().unwrap_or_else(PoisonError::into_inner);
-    let previous = replace(None);
-    if let Some(client) = previous {
-        client.close(Some(CLOSE_FLUSH));
+    let opened = open(settings, consent);
+    let status = opened.as_ref().map_or_else(|off| *off, |_| Ok(Status::On));
+    if opened.is_ok() {
+        PANIC_HANDLER.call_once(install_panic_handler);
     }
+    // Closed outside the slot's lock. A panic that read `previous` just
+    // before the swap and has not yet handed it its report loses the report
+    // here: a window of the few instructions between the two, not the whole
+    // close and open it was while the slot stood empty.
+    if let Some(previous) = replace(opened.ok()) {
+        previous.close(Some(CLOSE_FLUSH));
+    }
+    status
+}
+
+/// The reporter `settings` and `consent` call for, or, when they call for
+/// none, what [`apply`] returns instead.
+fn open(settings: &Settings, consent: Consent) -> Result<Arc<Client>, Result<Status, CrashError>> {
     if consent == Consent::Denied {
-        return Ok(Status::Off(OffReason::NoConsent));
+        return Err(Ok(Status::Off(OffReason::NoConsent)));
     }
     let Some(dsn) = settings
         .dsn
@@ -158,16 +176,13 @@ pub fn apply(settings: &Settings, consent: Consent) -> Result<Status, CrashError
         .map(str::trim)
         .filter(|d| !d.is_empty())
     else {
-        return Ok(Status::Off(OffReason::NoDsn));
+        return Err(Ok(Status::Off(OffReason::NoDsn)));
     };
-    let dsn: Dsn = dsn.parse().map_err(|_| CrashError::InvalidDsn)?;
+    let dsn: Dsn = dsn.parse().map_err(|_| Err(CrashError::InvalidDsn))?;
     if dsn.scheme() == Scheme::Http && !is_loopback(dsn.host()) {
-        return Err(CrashError::InsecureDsn);
+        return Err(Err(CrashError::InsecureDsn));
     }
-    let client = Arc::new(Client::from(options(dsn, settings)));
-    PANIC_HANDLER.call_once(install_panic_handler);
-    replace(Some(client));
-    Ok(Status::On)
+    Ok(Arc::new(Client::from(options(dsn, settings))))
 }
 
 /// Whether reporting is on.
