@@ -372,6 +372,10 @@ pub const HQ_VOICE_DISCLOSURE_ACCEPT: &str = "Start voice";
 pub const HQ_VOICE_DISCLOSURE_DECLINE: &str = "Not now";
 /// `hq.voice_disclosure_title` in English.
 pub const HQ_VOICE_DISCLOSURE_TITLE: &str = "Where your voice is processed";
+/// `hq.voice_dock_label` in English.
+pub const HQ_VOICE_DOCK_LABEL: &str = "District HQ voice";
+/// `hq.voice_dock_review` in English.
+pub const HQ_VOICE_DOCK_REVIEW: &str = "Review in District HQ";
 /// `hq.voice_ended_agent` in English.
 pub const HQ_VOICE_ENDED_AGENT: &str = "Voice session ended because District HQ left the session.";
 /// `hq.voice_ended_time_limit` in English.

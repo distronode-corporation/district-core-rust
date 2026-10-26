@@ -1748,6 +1748,24 @@ tier = "T1"
 state = "draft"
 note = "Heading of the residency statement shown before the first voice session."
 
+[hq.voice_dock_label]
+en = "District HQ voice"
+fr = "Mode vocal de District HQ"
+ctx = "title"
+screen = "voice dock"
+tier = "T2"
+state = "draft"
+note = "Heading and accessible name of the voice dock, the strip that holds a live HQ voice session's controls and cards on every screen but District HQ. The web dashboard's words."
+
+[hq.voice_dock_review]
+en = "Review in District HQ"
+fr = "Vérifier dans District HQ"
+ctx = "button"
+screen = "voice dock"
+tier = "T2"
+state = "draft"
+note = "Button in the voice dock, shown while changes proposed by voice are waiting: opens District HQ, where the whole conversation is. The web dashboard's words."
+
 [hq.voice_ended_agent]
 en = "Voice session ended because District HQ left the session."
 fr = "Session vocale terminée, car District HQ a quitté la session."

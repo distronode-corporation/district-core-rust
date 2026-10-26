@@ -61,7 +61,8 @@ District HQ by voice. Breaking for the apps (a new major version when released):
   `LiveKitCallEngine` reports from an agent participant's data packets, its
   `lk.agent.state` attribute and the `lk.transcription` text streams (the member's words
   included), in an encrypted room decrypted with the room's passphrase.
-- The new sentences in `core.toml` (`hq.voice_*`, `hq.note_cancelled`,
+- The new sentences in `core.toml` (`hq.voice_*`, the voice dock's `hq.voice_dock_label`
+  and `hq.voice_dock_review` among them, `hq.note_cancelled`,
   `hq.note_already_handled`, `hq.note_expired`), with French marked `draft` for review.
 
 ### Changed

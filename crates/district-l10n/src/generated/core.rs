@@ -1742,6 +1742,24 @@ pub fn hq_voice_disclosure_title(l: Locale) -> &'static str {
     }
 }
 
+/// `hq.voice_dock_label`
+#[must_use]
+pub fn hq_voice_dock_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "District HQ voice",
+        Locale::FrCa => "Mode vocal de District HQ",
+    }
+}
+
+/// `hq.voice_dock_review`
+#[must_use]
+pub fn hq_voice_dock_review(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Review in District HQ",
+        Locale::FrCa => "Vérifier dans District HQ",
+    }
+}
+
 /// `hq.voice_ended_agent`
 #[must_use]
 pub fn hq_voice_ended_agent(l: Locale) -> &'static str {

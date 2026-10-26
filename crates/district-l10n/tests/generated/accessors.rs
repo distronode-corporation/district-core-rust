@@ -390,6 +390,10 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::hq_voice_disclosure_decline(Locale::FrCa), "Pas maintenant");
     assert_eq!(strings::hq_voice_disclosure_title(Locale::En), "Where your voice is processed");
     assert_eq!(strings::hq_voice_disclosure_title(Locale::FrCa), "Où votre voix est traitée");
+    assert_eq!(strings::hq_voice_dock_label(Locale::En), "District HQ voice");
+    assert_eq!(strings::hq_voice_dock_label(Locale::FrCa), "Mode vocal de District HQ");
+    assert_eq!(strings::hq_voice_dock_review(Locale::En), "Review in District HQ");
+    assert_eq!(strings::hq_voice_dock_review(Locale::FrCa), "Vérifier dans District HQ");
     assert_eq!(strings::hq_voice_ended_agent(Locale::En), "Voice session ended because District HQ left the session.");
     assert_eq!(strings::hq_voice_ended_agent(Locale::FrCa), "Session vocale terminée, car District HQ a quitté la session.");
     assert_eq!(strings::hq_voice_ended_time_limit(Locale::En), "Voice session ended after reaching its 30-minute limit.");
