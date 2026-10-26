@@ -383,7 +383,7 @@ pub const HQ_VOICE_LISTENING: &str = "Listening. Speak to District HQ.";
 /// `hq.voice_speaking` in English.
 pub const HQ_VOICE_SPEAKING: &str = "District HQ is speaking.";
 /// `hq.voice_start` in English.
-pub const HQ_VOICE_START: &str = "Voice";
+pub const HQ_VOICE_START: &str = "Start voice";
 /// `hq.voice_stop` in English.
 pub const HQ_VOICE_STOP: &str = "Stop voice";
 /// `hq.voice_thinking` in English.

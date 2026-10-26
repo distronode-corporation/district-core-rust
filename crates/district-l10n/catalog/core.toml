@@ -1794,13 +1794,13 @@ state = "draft"
 note = "The voice agent is answering aloud."
 
 [hq.voice_start]
-en = "Voice"
-fr = "Vocal"
+en = "Start voice"
+fr = "Démarrer le mode vocal"
 ctx = "button"
 screen = "District HQ"
 tier = "T2"
 state = "draft"
-note = "Button on District HQ that starts a voice session (the member talks to the assistant instead of typing)."
+note = "Button on District HQ that starts a voice session (the member talks to the assistant instead of typing). The web dashboard's words, beside a microphone icon; the pair of hq.voice_stop."
 
 [hq.voice_stop]
 en = "Stop voice"

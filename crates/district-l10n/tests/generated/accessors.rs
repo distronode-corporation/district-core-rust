@@ -400,8 +400,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::hq_voice_listening(Locale::FrCa), "À l'écoute. Parlez à District HQ.");
     assert_eq!(strings::hq_voice_speaking(Locale::En), "District HQ is speaking.");
     assert_eq!(strings::hq_voice_speaking(Locale::FrCa), "District HQ parle.");
-    assert_eq!(strings::hq_voice_start(Locale::En), "Voice");
-    assert_eq!(strings::hq_voice_start(Locale::FrCa), "Vocal");
+    assert_eq!(strings::hq_voice_start(Locale::En), "Start voice");
+    assert_eq!(strings::hq_voice_start(Locale::FrCa), "Démarrer le mode vocal");
     assert_eq!(strings::hq_voice_stop(Locale::En), "Stop voice");
     assert_eq!(strings::hq_voice_stop(Locale::FrCa), "Arrêter le mode vocal");
     assert_eq!(strings::hq_voice_thinking(Locale::En), "District HQ is working on it.");

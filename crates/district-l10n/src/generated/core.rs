@@ -1791,8 +1791,8 @@ pub fn hq_voice_speaking(l: Locale) -> &'static str {
 #[must_use]
 pub fn hq_voice_start(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Voice",
-        Locale::FrCa => "Vocal",
+        Locale::En => "Start voice",
+        Locale::FrCa => "Démarrer le mode vocal",
     }
 }
 
