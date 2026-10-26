@@ -365,7 +365,7 @@ pub const HQ_VOICE_CARD_NOTE: &str = "Nothing has changed yet. Say \"confirm\" o
 /// `hq.voice_connecting` in English.
 pub const HQ_VOICE_CONNECTING: &str = "Connecting to District HQ.";
 /// `hq.voice_disclosure` in English.
-pub const HQ_VOICE_DISCLOSURE: &str = "Your voice is processed in the United States. Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded.";
+pub const HQ_VOICE_DISCLOSURE: &str = "Your voice is processed in the United States, and so is what District HQ reads for you during a voice session (calls, contacts, messages and knowledge). Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded.";
 /// `hq.voice_disclosure_accept` in English.
 pub const HQ_VOICE_DISCLOSURE_ACCEPT: &str = "Start voice";
 /// `hq.voice_disclosure_decline` in English.

@@ -1610,7 +1610,7 @@ fr = "Ce changement a déjà été traité."
 ctx = "toast"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "After the member clicked Confirm or Cancel on a change proposed by voice that had already been confirmed or cancelled, by voice or another click. Said once, neutrally."
 
 [hq.note_applied]
@@ -1624,11 +1624,11 @@ note = "After a confirmed change was applied."
 
 [hq.note_cancelled]
 en = "Cancelled. Nothing was changed."
-fr = "Annulé. Rien n'a été modifié."
+fr = "Annulé, aucun changement n'a été apporté."
 ctx = "toast"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "After a change proposed by voice was cancelled, by voice or by click."
 
 [hq.note_expired]
@@ -1637,7 +1637,7 @@ fr = "Ce changement a expiré avant d'être confirmé. Demandez-le de nouveau po
 ctx = "toast"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "A change proposed by voice can be confirmed for 30 minutes; the member clicked after that."
 
 [hq.note_mismatched]
@@ -1673,7 +1673,7 @@ fr = "En attente de District HQ."
 ctx = "label"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "Voice session joined, the assistant (a voice agent) has not joined the room yet or is getting ready."
 
 [hq.voice_cancel_action]
@@ -1682,7 +1682,7 @@ fr = "Annuler"
 ctx = "button"
 screen = "District HQ"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "Button on a change proposed by voice that cancels it. Nothing has been changed yet."
 
 [hq.voice_cancelling]
@@ -1691,16 +1691,16 @@ fr = "Annulation en cours."
 ctx = "label"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "While a click Cancel on a change proposed by voice is being sent."
 
 [hq.voice_card_note]
 en = "Nothing has changed yet. Say \"confirm\" or click Confirm to apply it, or cancel it."
-fr = "Rien n'a encore été modifié. Dites «\u00A0je confirme\u00A0» ou cliquez sur Confirmer pour l'appliquer, ou annulez-le."
+fr = "Rien n'a encore changé. Dites «\u00A0je confirme\u00A0» ou cliquez sur Confirmer pour l'appliquer, ou annulez-le."
 ctx = "body"
 screen = "District HQ"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "Under a change proposed by voice. The spoken word is the one the voice agent listens for: \"confirm\" in English, « je confirme » in French. With more than one change open, the agent asks which one; clicking always works."
 
 [hq.voice_connecting]
@@ -1709,16 +1709,16 @@ fr = "Connexion à District HQ en cours."
 ctx = "label"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "While the voice session's credential is being asked for and the room joined."
 
 [hq.voice_disclosure]
-en = "Your voice is processed in the United States. Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded."
-fr = "Votre voix est traitée aux États-Unis. Le mode vocal utilise Gemini Live dans la région us-east4 de Google Cloud pour tous les espaces de travail, quelle que soit la région du vôtre. Rien n'est enregistré."
+en = "Your voice is processed in the United States, and so is what District HQ reads for you during a voice session (calls, contacts, messages and knowledge). Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded."
+fr = "Votre voix est traitée aux États-Unis, tout comme ce que District HQ lit pour vous pendant une session vocale (appels, contacts, messages et base de connaissances). Le mode vocal utilise Gemini Live dans la région us-east4 de Google Cloud pour tous les espaces de travail, quelle que soit la région du vôtre. Rien n'est enregistré."
 ctx = "body"
 screen = "District HQ"
 tier = "T0"
-state = "draft"
+state = "reviewed"
 note = "Shown before the microphone starts, every first voice session in a workspace. A residency statement, kept word for word with the web dashboard's: where the member's voice is processed, by whom, and that nothing is recorded."
 
 [hq.voice_disclosure_accept]
@@ -1727,7 +1727,8 @@ fr = "Démarrer le mode vocal"
 ctx = "button"
 screen = "District HQ"
 tier = "T2"
-state = "draft"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
 note = "Button under the residency statement that starts the voice session and the microphone."
 
 [hq.voice_disclosure_decline]
@@ -1736,7 +1737,8 @@ fr = "Pas maintenant"
 ctx = "button"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
+waive = { LEN = "reviewed TM row for Not now" }
 note = "Button under the residency statement that closes it without starting anything."
 
 [hq.voice_disclosure_title]
@@ -1745,16 +1747,16 @@ fr = "Où votre voix est traitée"
 ctx = "title"
 screen = "District HQ"
 tier = "T1"
-state = "draft"
+state = "reviewed"
 note = "Heading of the residency statement shown before the first voice session."
 
 [hq.voice_dock_label]
 en = "District HQ voice"
-fr = "Mode vocal de District HQ"
+fr = "Mode vocal District HQ"
 ctx = "title"
 screen = "voice dock"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "Heading and accessible name of the voice dock, the strip that holds a live HQ voice session's controls and cards on every screen but District HQ. The web dashboard's words."
 
 [hq.voice_dock_review]
@@ -1763,7 +1765,7 @@ fr = "Vérifier dans District HQ"
 ctx = "button"
 screen = "voice dock"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "Button in the voice dock, shown while changes proposed by voice are waiting: opens District HQ, where the whole conversation is. The web dashboard's words."
 
 [hq.voice_ended_agent]
@@ -1772,7 +1774,7 @@ fr = "Session vocale terminée, car District HQ a quitté la session."
 ctx = "body"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "The voice agent closed the session (it ends a quiet session, or the member said goodbye)."
 
 [hq.voice_ended_time_limit]
@@ -1781,7 +1783,7 @@ fr = "Session vocale terminée, car la limite de 30 minutes a été atteinte."
 ctx = "body"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "A voice session lasts at most 30 minutes."
 
 [hq.voice_fallback_summary]
@@ -1790,7 +1792,7 @@ fr = "District HQ a proposé un changement."
 ctx = "body"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "On a change proposed by voice that came without its own description. The service normally describes every change."
 
 [hq.voice_listening]
@@ -1799,7 +1801,7 @@ fr = "À l'écoute. Parlez à District HQ."
 ctx = "label"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "The voice agent is listening to the member."
 
 [hq.voice_speaking]
@@ -1808,7 +1810,7 @@ fr = "District HQ parle."
 ctx = "label"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "The voice agent is answering aloud."
 
 [hq.voice_start]
@@ -1817,7 +1819,8 @@ fr = "Démarrer le mode vocal"
 ctx = "button"
 screen = "District HQ"
 tier = "T2"
-state = "draft"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
 note = "Button on District HQ that starts a voice session (the member talks to the assistant instead of typing). The web dashboard's words, beside a microphone icon; the pair of hq.voice_stop."
 
 [hq.voice_stop]
@@ -1826,7 +1829,8 @@ fr = "Arrêter le mode vocal"
 ctx = "button"
 screen = "District HQ"
 tier = "T2"
-state = "draft"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
 note = "Button that ends the voice session and the microphone."
 
 [hq.voice_thinking]
@@ -1835,16 +1839,16 @@ fr = "District HQ y travaille."
 ctx = "label"
 screen = "District HQ"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "The voice agent is working out an answer."
 
 [hq.voice_unencrypted]
 en = "The voice session could not be end-to-end encrypted, so it was not started."
-fr = "La session vocale n'a pas pu être chiffrée de bout en bout, donc elle n'a pas été lancée."
+fr = "La session vocale n'a pas pu être chiffrée de bout en bout, donc elle n'a pas été démarrée."
 ctx = "error"
 screen = "District HQ"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "The service answered without the room's encryption key. The app never joins a voice session unencrypted."
 
 [inbox.compose_action]

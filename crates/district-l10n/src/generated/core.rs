@@ -1621,7 +1621,7 @@ pub fn hq_note_applied(l: Locale) -> &'static str {
 pub fn hq_note_cancelled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Cancelled. Nothing was changed.",
-        Locale::FrCa => "Annulé. Rien n'a été modifié.",
+        Locale::FrCa => "Annulé, aucun changement n'a été apporté.",
     }
 }
 
@@ -1693,7 +1693,7 @@ pub fn hq_voice_cancelling(l: Locale) -> &'static str {
 pub fn hq_voice_card_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing has changed yet. Say \"confirm\" or click Confirm to apply it, or cancel it.",
-        Locale::FrCa => "Rien n'a encore été modifié. Dites «\u{00A0}je confirme\u{00A0}» ou cliquez sur Confirmer pour l'appliquer, ou annulez-le.",
+        Locale::FrCa => "Rien n'a encore changé. Dites «\u{00A0}je confirme\u{00A0}» ou cliquez sur Confirmer pour l'appliquer, ou annulez-le.",
     }
 }
 
@@ -1710,8 +1710,8 @@ pub fn hq_voice_connecting(l: Locale) -> &'static str {
 #[must_use]
 pub fn hq_voice_disclosure(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Your voice is processed in the United States. Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded.",
-        Locale::FrCa => "Votre voix est traitée aux États-Unis. Le mode vocal utilise Gemini Live dans la région us-east4 de Google Cloud pour tous les espaces de travail, quelle que soit la région du vôtre. Rien n'est enregistré.",
+        Locale::En => "Your voice is processed in the United States, and so is what District HQ reads for you during a voice session (calls, contacts, messages and knowledge). Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded.",
+        Locale::FrCa => "Votre voix est traitée aux États-Unis, tout comme ce que District HQ lit pour vous pendant une session vocale (appels, contacts, messages et base de connaissances). Le mode vocal utilise Gemini Live dans la région us-east4 de Google Cloud pour tous les espaces de travail, quelle que soit la région du vôtre. Rien n'est enregistré.",
     }
 }
 
@@ -1747,7 +1747,7 @@ pub fn hq_voice_disclosure_title(l: Locale) -> &'static str {
 pub fn hq_voice_dock_label(l: Locale) -> &'static str {
     match l {
         Locale::En => "District HQ voice",
-        Locale::FrCa => "Mode vocal de District HQ",
+        Locale::FrCa => "Mode vocal District HQ",
     }
 }
 
@@ -1837,7 +1837,7 @@ pub fn hq_voice_thinking(l: Locale) -> &'static str {
 pub fn hq_voice_unencrypted(l: Locale) -> &'static str {
     match l {
         Locale::En => "The voice session could not be end-to-end encrypted, so it was not started.",
-        Locale::FrCa => "La session vocale n'a pas pu être chiffrée de bout en bout, donc elle n'a pas été lancée.",
+        Locale::FrCa => "La session vocale n'a pas pu être chiffrée de bout en bout, donc elle n'a pas été démarrée.",
     }
 }
 

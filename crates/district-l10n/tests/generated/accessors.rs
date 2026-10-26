@@ -363,7 +363,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::hq_note_applied(Locale::En), "Done. The change is in place.");
     assert_eq!(strings::hq_note_applied(Locale::FrCa), "Terminé. Le changement est en place.");
     assert_eq!(strings::hq_note_cancelled(Locale::En), "Cancelled. Nothing was changed.");
-    assert_eq!(strings::hq_note_cancelled(Locale::FrCa), "Annulé. Rien n'a été modifié.");
+    assert_eq!(strings::hq_note_cancelled(Locale::FrCa), "Annulé, aucun changement n'a été apporté.");
     assert_eq!(strings::hq_note_expired(Locale::En), "This change expired before it was confirmed. Ask again to make it.");
     assert_eq!(strings::hq_note_expired(Locale::FrCa), "Ce changement a expiré avant d'être confirmé. Demandez-le de nouveau pour l'appliquer.");
     assert_eq!(strings::hq_note_mismatched(Locale::En), "District AI reports a change other than the one you confirmed. Check your workspace settings before relying on it.");
@@ -379,11 +379,11 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::hq_voice_cancelling(Locale::En), "Cancelling the change.");
     assert_eq!(strings::hq_voice_cancelling(Locale::FrCa), "Annulation en cours.");
     assert_eq!(strings::hq_voice_card_note(Locale::En), "Nothing has changed yet. Say \"confirm\" or click Confirm to apply it, or cancel it.");
-    assert_eq!(strings::hq_voice_card_note(Locale::FrCa), "Rien n'a encore été modifié. Dites «\u{00A0}je confirme\u{00A0}» ou cliquez sur Confirmer pour l'appliquer, ou annulez-le.");
+    assert_eq!(strings::hq_voice_card_note(Locale::FrCa), "Rien n'a encore changé. Dites «\u{00A0}je confirme\u{00A0}» ou cliquez sur Confirmer pour l'appliquer, ou annulez-le.");
     assert_eq!(strings::hq_voice_connecting(Locale::En), "Connecting to District HQ.");
     assert_eq!(strings::hq_voice_connecting(Locale::FrCa), "Connexion à District HQ en cours.");
-    assert_eq!(strings::hq_voice_disclosure(Locale::En), "Your voice is processed in the United States. Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded.");
-    assert_eq!(strings::hq_voice_disclosure(Locale::FrCa), "Votre voix est traitée aux États-Unis. Le mode vocal utilise Gemini Live dans la région us-east4 de Google Cloud pour tous les espaces de travail, quelle que soit la région du vôtre. Rien n'est enregistré.");
+    assert_eq!(strings::hq_voice_disclosure(Locale::En), "Your voice is processed in the United States, and so is what District HQ reads for you during a voice session (calls, contacts, messages and knowledge). Voice mode runs on Gemini Live in Google Cloud's us-east4 region for every workspace, whatever your workspace's region. Nothing is recorded.");
+    assert_eq!(strings::hq_voice_disclosure(Locale::FrCa), "Votre voix est traitée aux États-Unis, tout comme ce que District HQ lit pour vous pendant une session vocale (appels, contacts, messages et base de connaissances). Le mode vocal utilise Gemini Live dans la région us-east4 de Google Cloud pour tous les espaces de travail, quelle que soit la région du vôtre. Rien n'est enregistré.");
     assert_eq!(strings::hq_voice_disclosure_accept(Locale::En), "Start voice");
     assert_eq!(strings::hq_voice_disclosure_accept(Locale::FrCa), "Démarrer le mode vocal");
     assert_eq!(strings::hq_voice_disclosure_decline(Locale::En), "Not now");
@@ -391,7 +391,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::hq_voice_disclosure_title(Locale::En), "Where your voice is processed");
     assert_eq!(strings::hq_voice_disclosure_title(Locale::FrCa), "Où votre voix est traitée");
     assert_eq!(strings::hq_voice_dock_label(Locale::En), "District HQ voice");
-    assert_eq!(strings::hq_voice_dock_label(Locale::FrCa), "Mode vocal de District HQ");
+    assert_eq!(strings::hq_voice_dock_label(Locale::FrCa), "Mode vocal District HQ");
     assert_eq!(strings::hq_voice_dock_review(Locale::En), "Review in District HQ");
     assert_eq!(strings::hq_voice_dock_review(Locale::FrCa), "Vérifier dans District HQ");
     assert_eq!(strings::hq_voice_ended_agent(Locale::En), "Voice session ended because District HQ left the session.");
@@ -411,7 +411,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::hq_voice_thinking(Locale::En), "District HQ is working on it.");
     assert_eq!(strings::hq_voice_thinking(Locale::FrCa), "District HQ y travaille.");
     assert_eq!(strings::hq_voice_unencrypted(Locale::En), "The voice session could not be end-to-end encrypted, so it was not started.");
-    assert_eq!(strings::hq_voice_unencrypted(Locale::FrCa), "La session vocale n'a pas pu être chiffrée de bout en bout, donc elle n'a pas été lancée.");
+    assert_eq!(strings::hq_voice_unencrypted(Locale::FrCa), "La session vocale n'a pas pu être chiffrée de bout en bout, donc elle n'a pas été démarrée.");
     assert_eq!(strings::inbox_compose_action(Locale::En), "New message");
     assert_eq!(strings::inbox_compose_action(Locale::FrCa), "Nouveau message");
     assert_eq!(strings::inbox_compose_cancel(Locale::En), "Cancel");
