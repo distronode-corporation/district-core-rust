@@ -292,27 +292,26 @@ impl SignedIn {
         Next::Stay(self.show(route, tickets))
     }
 
-    /// Leaves the current screen for `route` and reads what `route` shows,
-    /// and tells a live HQ voice session where the member is now.
+    /// Leaves the current screen for `route` and reads what `route` shows.
     pub(crate) fn show(&mut self, route: Route, tickets: &mut Tickets) -> Vec<Effect> {
         let mut effects = self.leave(&route, tickets);
         self.route = route;
         effects.extend(self.enter(tickets));
-        effects.extend(self.report_hq_voice_screen());
         effects
     }
 
     /// Closes the detail screen showing, unless `next` is the same screen. The
     /// rooms lobby drops the credential it held, a settings section its
-    /// edits, typed credentials and audition, and District HQ its voice
-    /// session.
+    /// edits, typed credentials and audition, and District HQ the residency
+    /// statement it showed. An HQ voice session goes on: the app's voice dock
+    /// holds its controls on every other screen.
     fn leave(&mut self, next: &Route, tickets: &mut Tickets) -> Vec<Effect> {
         if self.route == *next {
             return Vec::new();
         }
         let mut effects = self.close_settings(tickets);
         if self.route == Route::Hq {
-            effects.extend(self.stop_hq_voice(tickets));
+            self.decline_hq_voice_disclosure();
         }
         self.close_call(tickets);
         self.close_contact(tickets);

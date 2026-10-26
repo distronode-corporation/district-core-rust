@@ -20,16 +20,22 @@
 //! too, which the agent transcribes), so a typed question afterwards carries
 //! them as history. The session ends when the member stops it, when the agent
 //! leaves or closes the room, when the connection is lost for good, or after
-//! [`HQ_VOICE_SESSION_SECONDS`], whichever is first. It also ends when the
-//! member leaves the HQ screen, as a meeting room does when the member leaves
-//! the lobby: the microphone is never live without the controls that stop it
-//! on screen.
+//! [`HQ_VOICE_SESSION_SECONDS`], whichever is first; and when the workspace
+//! closes, the member signs out, or the desktop sleeps or quits. It goes on
+//! when the member leaves the HQ screen, as the web dashboard's does: the app
+//! shows its controls (the microphone, Stop voice, what the agent is doing,
+//! and the cards) in a voice dock on every other screen, so the microphone is
+//! never live without the controls that stop it on screen. An app whose
+//! window can close while it runs on stops the session when it closes. The
+//! residency statement, unanswered, goes with the HQ screen.
 //!
 //! While the session is live, what is on screen (the page, and the record
 //! open on it) is reported to it, for the agent to read, as the web
-//! dashboard reports its own: once as the session starts, and again on each
-//! change of screen ([`Route::hq_voice_page`]). Only ids leave this way, never
-//! a name, a number or what was typed.
+//! dashboard reports its own: once as the session starts, and again after
+//! anything that changes the screen ([`Route::hq_voice_page`]); a screen with
+//! no page in the service's table is not reported. Only ids leave this way,
+//! never a name, a number or what was typed. A card can be confirmed or
+//! cancelled from any screen.
 //!
 //! # Changes
 //!
@@ -363,7 +369,6 @@ impl SignedIn {
             ticket: tickets.issue(Slot::HqVoiceLimit),
             delay: Duration::from_secs(HQ_VOICE_SESSION_SECONDS),
         });
-        effects.extend(self.report_hq_voice_screen());
         Next::Stay(effects)
     }
 

@@ -41,8 +41,12 @@ District HQ by voice. Breaking for the apps (a new major version when released):
   acts on, or by a click on Confirm or Cancel, one request in flight per card, the refusal
   codes `already_resolved`, `expired`, `not_found` and `invalid_request` read from the body.
   Spoken words join the conversation as `HqText::Spoken` and are sent as history once
-  final. The voice session ends when the member leaves the HQ screen or the workspace,
-  signs out, or the desktop sleeps or quits.
+  final. The voice session goes on when the member leaves the HQ screen, as the web
+  dashboard's does, so an app shows its controls and its cards on every other screen (a
+  voice dock), and a card can be confirmed or cancelled from any screen; an app whose
+  window closes while it runs on sends `HqEvent::StopVoice`. The session ends when the
+  member stops it or leaves the workspace, signs out, or the desktop sleeps or quits. The
+  residency statement, unanswered, closes with the HQ screen.
 - What is on screen is told to a live voice session, as the web dashboard tells it, so
   the voice agent knows the page without asking: `ApiClient::hq_voice_context`
   (`POST /api/district/hq/voice-context`, never repeated, in `DESKTOP_ONLY` with the
@@ -51,8 +55,8 @@ District HQ by voice. Breaking for the apps (a new major version when released):
   service's page table names it (`Route::hq_voice_page`) and the call, contact or inbox
   thread open on it (`HqVoiceSelection`, `HqVoiceRecordKind`), by an id the service takes
   (`HQ_VOICE_RECORD_ID_MAX`) and never anything else. It is sent as the session starts and
-  on each change of screen after that, counted from 1 in each session. While a session
-  ends when the member leaves District HQ, the page is always `hq`.
+  after every step that changes the screen, counted from 1 in each session. A screen the
+  service's table has no page for (four workspace settings sections) is not reported.
 - `MediaEvent::AgentData`, `MediaEvent::AgentState` and `MediaEvent::Speech`, which
   `LiveKitCallEngine` reports from an agent participant's data packets, its
   `lk.agent.state` attribute and the `lk.transcription` text streams (the member's words

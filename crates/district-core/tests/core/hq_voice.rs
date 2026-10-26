@@ -291,15 +291,86 @@ fn leaving_the_screen_closes_the_statement_and_nothing_starts_while_a_room_joins
     assert_eq!(voice(&model).phase, HqVoicePhase::Off);
 }
 
+/// The screen reported in `effects`, if any.
+fn reported(effects: &[Effect]) -> Option<HqVoiceScreen> {
+    effects.iter().find_map(|effect| match effect {
+        Effect::ReportHqVoiceScreen { screen, .. } => Some(screen.clone()),
+        _ => None,
+    })
+}
+
+fn screen(version: u64, page: &str, selected: Option<HqVoiceSelection>) -> Option<HqVoiceScreen> {
+    Some(HqVoiceScreen {
+        version,
+        page: page.to_owned(),
+        selected,
+    })
+}
+
 #[test]
-fn leaving_the_screen_leaves_the_session() {
+fn the_session_goes_on_from_screen_to_screen_and_each_one_is_reported() {
     let (mut model, session) = live();
-    let effects = model.update(Event::Navigate(Route::Inbox));
+    let effects = model.update(Event::Navigate(Route::Calls));
+    assert!(
+        !effects.contains(&Effect::DisconnectMedia { session }),
+        "{effects:?}"
+    );
+    assert!(matches!(voice(&model).phase, HqVoicePhase::Live { .. }));
+    assert_eq!(reported(&effects), screen(2, "calls", None));
+    let effects = model.update(Event::Navigate(Route::CallDetail {
+        call_id: "call_1".to_owned(),
+    }));
+    assert_eq!(
+        reported(&effects),
+        screen(
+            3,
+            "calls",
+            HqVoiceSelection::new(HqVoiceRecordKind::Call, "call_1")
+        )
+    );
+    // Back, to the log: the same page, with nothing open on it.
+    assert_eq!(
+        reported(&model.update(Event::Back)),
+        screen(4, "calls", None)
+    );
+    let effects = model.update(Event::Navigate(Route::Thread {
+        thread_key: "contact:c_1".to_owned(),
+    }));
+    assert_eq!(
+        reported(&effects),
+        screen(
+            5,
+            "inbox",
+            HqVoiceSelection::new(HqVoiceRecordKind::Conversation, "c_1")
+        )
+    );
+    // A screen the service's table has no page for is not reported.
+    let effects = model.update(Event::Navigate(Route::Workspace(
+        district_core::WorkspaceSection::Tools,
+    )));
+    assert_eq!(reported(&effects), None, "{effects:?}");
+    assert_eq!(
+        reported(&model.update(Event::Navigate(Route::Hq))),
+        screen(6, "hq", None)
+    );
+}
+
+#[test]
+fn a_card_is_settled_and_the_session_stopped_from_another_screen() {
+    let (mut model, session) = proposed();
+    model.update(Event::Navigate(Route::Contacts));
+    let (_, sent) = confirmation(&hq(&mut model, HqEvent::ConfirmVoiceCard(ID.to_owned())));
+    assert_eq!(sent.proposal_id, ID);
+    let effects = hq(&mut model, HqEvent::StopVoice);
     assert!(
         effects.contains(&Effect::DisconnectMedia { session }),
         "{effects:?}"
     );
     assert_eq!(voice(&model).phase, HqVoicePhase::Off);
+    assert!(
+        reported(&model.update(Event::Navigate(Route::Calls))).is_none(),
+        "nothing is reported once the session is over"
+    );
 }
 
 #[test]

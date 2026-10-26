@@ -3359,8 +3359,15 @@ impl Model {
         &mut self,
         step: impl FnOnce(&mut SignedIn, &mut Tickets, &CoreConfig) -> Next,
     ) -> Vec<Effect> {
-        let next = signed_in_state(&mut self.session)
-            .map(|signed_in| step(signed_in, &mut self.tickets, &self.config));
+        let next = signed_in_state(&mut self.session).map(|signed_in| {
+            let mut next = step(signed_in, &mut self.tickets, &self.config);
+            // Whatever moved the member (a click, Back, a notification, a role
+            // narrowed), a live HQ voice session hears of the new screen.
+            if let Next::Stay(effects) = &mut next {
+                effects.extend(signed_in.report_hq_voice_screen());
+            }
+            next
+        });
         self.carry_out(next)
     }
 
