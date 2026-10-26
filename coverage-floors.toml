@@ -55,3 +55,7 @@ reason = "Measured, not a target: voice.yml's tests against a real media server 
 [crates.district-l10n]
 floor = 100
 reason = "Pure functions of a locale and a value; the generated accessor test calls every accessor in both languages, and the vectors test reaches every format."
+
+[crates.district-crash]
+floor = 100
+reason = "A local mock server stands in for the report service, so the tests reach every line: off, on, a panic, a captured error and the scrubber."

@@ -1,7 +1,7 @@
 //! A call ringing here: only for this member, only with "ring on this
 //! computer" on, for as long as the service holds the caller; answered once and
-//! joined through the engine; declined without a word to the service; missed at
-//! the deadline; ended when the call does; and shown without a sound behind a
+//! joined through the engine; declined with the service told, on the member's
+//! press only; missed at the deadline; ended when the call does; and shown without a sound behind a
 //! call already under way.
 
 use district_api::{ApiError, ErrorDetail};
@@ -134,6 +134,19 @@ fn decline(model: &mut Model) -> Vec<Effect> {
     model.update(Event::Ring(RingEvent::Decline {
         call_id: CALL.to_owned(),
     }))
+}
+
+/// The service told that the member declined `call_id`.
+fn declined(call_id: &str) -> Effect {
+    Effect::DeclineCall {
+        workspace_id: AGENCY.to_owned(),
+        call_id: call_id.to_owned(),
+    }
+}
+
+/// Whether any of `effects` tells the service of a decline.
+fn tells_of_a_decline(effects: &[Effect]) -> bool {
+    has(effects, |e| matches!(e, Effect::DeclineCall { .. }))
 }
 
 fn withdraw() -> Effect {
@@ -282,10 +295,13 @@ fn opening_a_rings_notification_brings_the_window_forward() {
 }
 
 #[test]
-fn declining_silences_the_ring_and_tells_the_service_nothing() {
+fn declining_silences_the_ring_and_tells_the_service_once() {
     let mut model = ready(AGENCY, "agency");
     let deadline = rung(&mut model);
-    assert_eq!(decline(&mut model), [Effect::StopRingtone, withdraw()]);
+    assert_eq!(
+        decline(&mut model),
+        [Effect::StopRingtone, withdraw(), declined(CALL)]
+    );
     assert_eq!(signed_in(&model).ring.ring, None);
     assert!(
         model
@@ -607,9 +623,12 @@ fn a_waiting_ring_is_declined_and_missed_without_a_ringtone() {
         model.update(Event::Ring(RingEvent::Decline {
             call_id: "call_second".to_owned()
         })),
-        [Effect::WithdrawNotification {
-            id: "call:call_second".to_owned()
-        }]
+        [
+            Effect::WithdrawNotification {
+                id: "call:call_second".to_owned()
+            },
+            declined("call_second"),
+        ]
     );
 }
 
@@ -868,6 +887,87 @@ fn the_service_ending_a_ring_silences_it_and_says_why() {
         IncomingRing::ANSWERED_ELSEWHERE_TITLE,
         "Answered on another device"
     );
+}
+
+/// Every member rung declined, this one among them (here or on another of their
+/// devices): the ring goes as a decline here does, silenced and put away with
+/// no missed call, and nothing is sent back.
+#[test]
+fn every_member_declining_puts_the_ring_away_without_a_missed_call() {
+    let mut model = ready(AGENCY, "agency");
+    let deadline = rung(&mut model);
+    assert_eq!(
+        model.update(cancelled(AGENCY, CALL, "declined")),
+        [Effect::StopRingtone, withdraw()]
+    );
+    assert_eq!(signed_in(&model).ring.ring, None);
+    assert!(model.update(cancelled(AGENCY, CALL, "declined")).is_empty());
+    assert!(
+        model
+            .update(Event::WaitOver { ticket: deadline })
+            .is_empty()
+    );
+    // Nothing to put away: the next call rings.
+    rung(&mut model);
+
+    // A ring waiting behind a call under way goes the same way, without a
+    // ringtone to stop.
+    let mut model = ready(AGENCY, "agency");
+    let session = in_call(&mut model);
+    model.update(media(session, MediaEvent::Connected));
+    model.update(ringing(AGENCY, "call_second", &[USER]));
+    assert_eq!(
+        model.update(cancelled(AGENCY, "call_second", "declined")),
+        [Effect::WithdrawNotification {
+            id: "call:call_second".to_owned()
+        }]
+    );
+    assert!(signed_in(&model).active_call.is_some());
+}
+
+/// Only a person's press of Decline is sent. A ring that runs out, one the
+/// service ends for any reason, one whose call ends, and one dropped for a
+/// sleep or a sign-out tell the service nothing.
+#[test]
+fn a_ring_that_ends_by_itself_tells_the_service_nothing() {
+    let mut model = ready(AGENCY, "agency");
+    let deadline = rung(&mut model);
+    assert!(!tells_of_a_decline(
+        &model.update(Event::WaitOver { ticket: deadline })
+    ));
+
+    for reason in [
+        "answered",
+        "call_ended",
+        "timeout",
+        "withdrawn",
+        "declined",
+        "parked",
+    ] {
+        let mut model = ready(AGENCY, "agency");
+        rung(&mut model);
+        assert!(
+            !tells_of_a_decline(&model.update(cancelled(AGENCY, CALL, reason))),
+            "{reason}"
+        );
+    }
+
+    let mut model = ready(AGENCY, "agency");
+    rung(&mut model);
+    assert!(!tells_of_a_decline(&model.update(call_event(
+        AGENCY,
+        CALL,
+        TelemetryEventType::CallEnded,
+        json!({}),
+    ))));
+
+    for leaving in [Event::Suspending, Event::SignOut] {
+        let mut model = ready(AGENCY, "agency");
+        rung(&mut model);
+        let effects = model.update(leaving);
+        assert!(has(&effects, |e| *e == withdraw()), "{effects:?}");
+        assert!(!tells_of_a_decline(&effects), "{effects:?}");
+    }
 }
 
 /// The recorded event, as the service sends it, is read the same way.

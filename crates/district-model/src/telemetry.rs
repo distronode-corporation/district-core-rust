@@ -224,6 +224,12 @@ pub enum RingCancelReason {
     Timeout,
     /// `call_ended`: the caller hung up while it rang.
     CallEnded,
+    /// `declined`: every member it rang declined it, this one among them (on
+    /// this desktop or another of their devices), and the receptionist takes a
+    /// message. Not a missed call: the member chose not to take it. A service
+    /// older than this reason never sends it, and a client older than it reads
+    /// it as [`Withdrawn`](Self::Withdrawn).
+    Declined,
     /// `withdrawn`: the service stopped ringing for a reason of its own, and
     /// any reason this client does not know.
     Withdrawn,
@@ -236,6 +242,7 @@ impl RingCancelReason {
             "answered" => Self::Answered,
             "timeout" => Self::Timeout,
             "call_ended" => Self::CallEnded,
+            "declined" => Self::Declined,
             _ => Self::Withdrawn,
         }
     }
@@ -246,6 +253,7 @@ impl RingCancelReason {
             Self::Answered => "answered",
             Self::Timeout => "timeout",
             Self::CallEnded => "call_ended",
+            Self::Declined => "declined",
             Self::Withdrawn => "withdrawn",
         }
     }
@@ -354,6 +362,7 @@ mod tests {
             RingCancelReason::Answered,
             RingCancelReason::Timeout,
             RingCancelReason::CallEnded,
+            RingCancelReason::Declined,
             RingCancelReason::Withdrawn,
         ] {
             let envelope =
@@ -363,6 +372,7 @@ mod tests {
         }
         for data in [
             serde_json::json!({"callId": "call_1", "reason": "parked"}),
+            serde_json::json!({"callId": "call_1", "reason": "Declined"}),
             serde_json::json!({"callId": "call_1", "reason": 3}),
             serde_json::json!({"callId": "call_1"}),
             serde_json::json!(null),

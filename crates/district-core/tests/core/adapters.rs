@@ -1901,6 +1901,13 @@ async fn the_api_client_places_answers_and_ends_calls_and_sets_presence() {
     serve(
         &server,
         "POST",
+        "/api/district/calls/call_contract_ringing/decline",
+        fixture("district-call-decline.json"),
+    )
+    .await;
+    serve(
+        &server,
+        "POST",
         "/api/district/devices/register",
         desktop_fixture("district-device-register-desktop.json"),
     )
@@ -1930,13 +1937,19 @@ async fn the_api_client_places_answers_and_ends_calls_and_sets_presence() {
             .unwrap()
             .ended
     );
+    assert!(
+        DistrictApi::decline_call(&*client, ws, "call_contract_ringing")
+            .await
+            .unwrap()
+            .success
+    );
 
     let presence = DesktopPresence::new(Arc::clone(&client), Platform::Linux);
     let [first, second, _] = revisions();
     presence.set(first, true).await.unwrap();
     presence.set(second, false).await.unwrap();
     let requests = server.received_requests().await.unwrap();
-    let register = &requests[3];
+    let register = &requests[4];
     let body: serde_json::Value = serde_json::from_slice(&register.body).unwrap();
     assert_eq!(body["platform"], "linux");
     assert_eq!(body["kind"], "desktop");
@@ -1946,8 +1959,8 @@ async fn the_api_client_places_answers_and_ends_calls_and_sets_presence() {
     assert!(!format!("{presence:?}").contains(token));
     // The presence going away names its own kind, so a push registration of
     // the same installation stays.
-    assert_eq!(requests[4].url.path(), "/api/district/devices/unregister");
-    let unregister: serde_json::Value = serde_json::from_slice(&requests[4].body).unwrap();
+    assert_eq!(requests[5].url.path(), "/api/district/devices/unregister");
+    let unregister: serde_json::Value = serde_json::from_slice(&requests[5].body).unwrap();
     assert_eq!(unregister, json!({"kind": "desktop"}));
 
     // Each presence makes its own value, and registers as the platform it was
@@ -1955,7 +1968,7 @@ async fn the_api_client_places_answers_and_ends_calls_and_sets_presence() {
     let other = DesktopPresence::new(Arc::clone(&client), Platform::Windows);
     other.set(first, true).await.unwrap();
     let requests = server.received_requests().await.unwrap();
-    let again: serde_json::Value = serde_json::from_slice(&requests[5].body).unwrap();
+    let again: serde_json::Value = serde_json::from_slice(&requests[6].body).unwrap();
     assert_ne!(again["token"], body["token"]);
     assert_eq!(again["platform"], "windows");
 
@@ -1963,8 +1976,8 @@ async fn the_api_client_places_answers_and_ends_calls_and_sets_presence() {
     let [.., last] = revisions();
     other.unregister_all(last).await.unwrap();
     let requests = server.received_requests().await.unwrap();
-    assert_eq!(requests[6].url.path(), "/api/district/devices/unregister");
-    assert!(requests[6].body.is_empty());
+    assert_eq!(requests[7].url.path(), "/api/district/devices/unregister");
+    assert!(requests[7].body.is_empty());
 
     // The client is the presence's API as it is.
     PresenceApi::unregister_presence(&*client, None)

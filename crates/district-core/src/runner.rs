@@ -40,16 +40,17 @@ use district_model::{
     WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
-    AvailabilityResponse, CallAnswerResponse, CallHandlingPatch, CallHandlingResponse,
-    CallHangUpResponse, DialResponse, DirectoryEntry, KnowledgeCreateResponse,
-    KnowledgeDeleteResponse, KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode,
-    KnowledgeModeResponse, MemberListResponse, MemberRemovalResponse, MemberResponse, MemberRole,
-    MessagingAccountSave, MessagingAccountSaveResponse, MessagingChannelDefaultResponse,
-    MessagingCreatorCell, MessagingCredentials, MessagingDefaultResponse, MessagingDelete,
-    MessagingMetaResponse, MessagingResponse, MessagingSetChannelDefault, MessagingSetDefault,
-    MessagingTestResponse, PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm,
-    PersonaPreviewTokenResponse, RenameResponse, RoutingRule, VoiceStudioResponse,
-    WorkspaceConfigResponse, WorkspaceSaveResponse,
+    AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
+    CallHandlingResponse, CallHangUpResponse, DialResponse, DirectoryEntry,
+    KnowledgeCreateResponse, KnowledgeDeleteResponse, KnowledgeDocumentDraft,
+    KnowledgeListResponse, KnowledgeMode, KnowledgeModeResponse, MemberListResponse,
+    MemberRemovalResponse, MemberResponse, MemberRole, MessagingAccountSave,
+    MessagingAccountSaveResponse, MessagingChannelDefaultResponse, MessagingCreatorCell,
+    MessagingCredentials, MessagingDefaultResponse, MessagingDelete, MessagingMetaResponse,
+    MessagingResponse, MessagingSetChannelDefault, MessagingSetDefault, MessagingTestResponse,
+    PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm, PersonaPreviewTokenResponse,
+    RenameResponse, RoutingRule, VoiceStudioResponse, WorkspaceConfigResponse,
+    WorkspaceSaveResponse,
 };
 use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
 
@@ -696,6 +697,13 @@ pub trait DistrictApi: Send + Sync {
         workspace_id: &str,
         call_id: &str,
     ) -> impl Future<Output = Result<CallHangUpResponse, ApiError>> + Send;
+    /// Declines the call `call_id`, ringing for this member. Sent once, only on
+    /// the member's press.
+    fn decline_call(
+        &self,
+        workspace_id: &str,
+        call_id: &str,
+    ) -> impl Future<Output = Result<CallDeclineResponse, ApiError>> + Send;
 }
 
 /// Signing in and out.
@@ -1827,6 +1835,16 @@ where
                 // Recorded nowhere: the call is over here whatever the answer,
                 // and a failure is not tried again.
                 let _ = self.api.hang_up_call(&workspace_id, &call_id).await;
+                return None;
+            }
+            Effect::DeclineCall {
+                workspace_id,
+                call_id,
+            } => {
+                // Recorded nowhere: the ring is gone here whatever the answer,
+                // and a failure is not tried again. A decline the service never
+                // heard leaves the ring to run out, as before declines were sent.
+                let _ = self.api.decline_call(&workspace_id, &call_id).await;
                 return None;
             }
             Effect::ConnectMedia {

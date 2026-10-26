@@ -55,6 +55,89 @@ District HQ by voice. Breaking for the apps (a new major version when released):
 - Retrying a failed HQ question sends the member's last typed question, even when spoken
   words or a note came after it.
 
+## [6.1.0] - 2026-10-25
+
+Opt-in crash reports for the desktop apps, in a new crate. A minor version. Reports are off
+until the user says yes (the apps ask once, at first start), and nothing is set up or sent
+without a DSN and that consent. A report holds what symbolicates a stripped build and
+nothing that names the user or the machine. Nothing an app calls or implements changes,
+and an app that does not depend on the new crate builds exactly what it did. GitLab #230.
+
+### Added
+
+- `district-crash`: crash reports through Sentry (0.49.3, rustls, no OpenSSL), off until the
+  user turns them on. `district_crash::apply(&Settings, Consent)` sets reporting up only
+  when the app passes both a DSN and `Consent::Granted`, and returns `Status::On` or
+  `Status::Off(OffReason)`; called again with `Consent::Denied` it closes the reporter,
+  after sending what was queued, and with consent again it opens a new one. Called again
+  with consent and changed settings, it opens the new reporter and puts it in the old
+  one's place before closing the old one, so reporting is never off in between. Either
+  way, a report already under way on the old reporter (a panic or `capture_error` on
+  another thread) is sent before it is closed, waiting up to two seconds for it, and
+  once `apply` with `Consent::Denied` has returned nothing more is sent. While
+  on, a panic on any thread is reported before the previous panic handler runs, and
+  `capture_error` reports an error the app chooses to. A report carries the debug images
+  of the main executable and of the image holding the reporter's code (the app's own
+  library on Windows): file, build id (ELF) or PDB id and age (PE), load address, size
+  and architecture, so the stack of a stripped build can be symbolicated against the
+  release's uploaded debug files. No other loaded library is listed. Every home
+  directory path in a report, the images' files included, has the user's name replaced
+  (a Windows one also with its backslashes escaped, as in a `Debug`-formatted path or
+  JSON text in a message), and the machine's name, the user and any address are
+  removed. Nothing is read from the environment (a `SENTRY_DSN` there is ignored), and
+  plain `http` is refused unless the DSN names this machine (`CrashError`). The asking
+  (once at first start, "Don't send" first) and the settings switch are the apps'.
+
+## [6.0.0] - 2026-10-24
+
+A real decline. Until now declining a ring here told the service nothing, so a
+deliberate refusal and a desktop nobody was at were the same thing to it and the caller
+waited out the whole ring. A member's press of Decline is now sent, and once every member
+rung has declined the receptionist takes a message at once. Only a person's decision is
+sent: a ring that runs out, one the service withdraws, and one dropped for a sleep, a quit
+or a sign-out still send nothing. This reverses the rule that a decline sent nothing
+(decided 2026-10-24). A major version because `Effect`, `DistrictApi`, `Endpoint` and
+`RingCancelReason` each gain a member an app matches on or implements. The contracts move
+to the server's f5ffc0a3c (`contracts/i18n/` to its a9cf0ef7a), with the French of every
+new error sentence and wire label.
+
+### Added
+
+- `Effect::DeclineCall { workspace_id, call_id }`, emitted by `RingEvent::Decline` on a
+  ringing or waiting ring, after the ringtone stops and the notification goes. Breaking for
+  an app that matches every `Effect`: run it through the core's runner (it reports nothing
+  back, and a failure is not tried again) or send `ApiClient::decline_call` yourself.
+- `DistrictApi::decline_call`, which the runner calls for that effect. Breaking for an app
+  or a test that implements `DistrictApi` by hand; `ApiClient` implements it.
+- `ApiClient::decline_call` and `Endpoint::CallDecline`
+  (`POST /api/district/calls/{callId}/decline`, `{workspaceId}`, never repeated), with
+  `district_model::CallDeclineResponse`. The endpoint is in `DESKTOP_ONLY` until the
+  endpoint snapshot is refreshed from an Android release that declines too.
+- `RingCancelReason::Declined` (`declined` on the wire): every member rung declined, this
+  one among them, here or on another device. A ring cancelled for it is silenced and put
+  away as a decline here is, with no missed call. Breaking for an exhaustive match on
+  `RingCancelReason`. A reason this client does not know still reads as `Withdrawn`.
+
+### Changed
+
+- `contracts/fixtures/` from the server's f5ffc0a3c and `contracts/i18n/` from its
+  a9cf0ef7a, which drops a `priority` workflow action reason the server's contract scanner
+  had read out of a comment. New: the call
+  decline answer (decoded), and the message sender name and notify-read token fixtures,
+  excluded by decision (a phone's notification service reads them; a desktop has its
+  live socket and its session). The recorded persona options list four engines (was
+  seven). `contracts/desktop/` is unchanged.
+- The error table and wire labels have the service's new codes and values, with the
+  service's French: workflow conditions and the team notification action, number
+  transfers, a member's mobile number, knowledge imports from a web address, and the voice
+  engine that is not offered yet. Call dispositions now have labels.
+
+### Known limits
+
+- The service's ring cancel is per call, not per person. A member who declines on another
+  device while a colleague is still rung is not told here, so this desktop rings on until
+  the ring ends for everyone.
+
 ## [5.1.0] - 2026-10-24
 
 The core of the next releases of District AI for Linux and District AI for Windows. A

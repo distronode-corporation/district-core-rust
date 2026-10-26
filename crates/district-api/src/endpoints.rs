@@ -261,6 +261,12 @@ endpoint_table! {
     /// Ends a call.
     CallHangUp => Post "/api/district/calls/{callId}/hangup",
         workspace: Body, body: Json, retry: Never;
+    /// Declines a call ringing for this member: sent on the member's own press
+    /// of Decline, and on nothing else. Once every member rung has declined,
+    /// the receptionist takes a message at once instead of holding the caller
+    /// until the ring runs out.
+    CallDecline => Post "/api/district/calls/{callId}/decline",
+        workspace: Body, body: Json, retry: Never;
     /// A media token to join an existing call or meeting room as a listener or
     /// participant. The service works out the workspace from the room, so no
     /// `workspaceId` is sent. It stores nothing and spends nothing (it signs a

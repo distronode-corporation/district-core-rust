@@ -133,7 +133,9 @@ fn the_form_starts_from_what_is_stored_and_offers_only_the_options() {
         ),
         (DEEPGRAM, "en-US", "aura-2-asteria-en", "concise")
     );
-    assert_eq!(section.engines().len(), 7);
+    // The recorded options: Gemini Live and the Deepgram, AWS and Cartesia
+    // pipelines.
+    assert_eq!(section.engines().len(), 4);
     assert_eq!(section.languages().len(), 7, "the Deepgram list");
     assert_eq!(section.response_lengths().len(), 3);
     assert!(section.text_editable() && section.engine_editable());

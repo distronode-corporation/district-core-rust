@@ -29,7 +29,7 @@ backported, and the apps move their pin to it.
 
 | Version | Supported |
 | --- | --- |
-| 5.1.x (the current release, [5.1.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
+| 6.1.x (the current release, [6.1.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
 | Anything older | No |
 
 ## Security model
@@ -157,6 +157,32 @@ participants' identities (which can be a caller's number) at debug and info.
 A test in district-live fails if the ceiling goes, and so does one among
 district-call's engine tests, which voice.yml runs.
 
+### Crash reports (district-crash)
+
+- Off until the user turns them on. Nothing is set up, no panic handler is
+  installed and nothing is sent unless the app passes both a DSN and the user's
+  consent; a `SENTRY_DSN`, `SENTRY_RELEASE` or `SSL_VERIFY` in the environment is
+  never read. Withdrawing consent closes the reporter at once, after what was
+  already queued is sent.
+- A report holds the panic message or the error and its sources, the stack, the
+  operating system and Rust version, the release and environment the app names,
+  and the debug images that let the stack of a stripped build be symbolicated:
+  the main executable and the image holding the crash reporter's code (the
+  app's own library on Windows), each with its file, build id or PDB id and
+  age, load address, size and architecture. No other loaded library is
+  listed, because the list would describe the machine (system libraries, their
+  versions, and whatever else is loaded into the process). Every home directory
+  path in a report (`/home/<name>`, `/Users/<name>`, `C:\Users\<name>`), in any
+  field, the images' files included, has the user's name replaced. The
+  machine's name, the user, the request and personal data are never sent, and
+  there are no breadcrumbs or sessions.
+- HTTPS with the same TLS configuration and certificate store as the API calls;
+  plain `http` is refused unless the DSN names this machine. Nothing is written
+  to disk, and Sentry's own diagnostics stay off, so nothing is printed.
+- The tests count what a local mock server receives: nothing while off, exactly
+  one scrubbed report for a panic or a captured error while on, whose debug
+  image carries the test binary's own build id (or PDB id).
+
 ### The core's decisions (district-core)
 
 - A billed or irreversible action (a reply written by the model, research on a
@@ -195,7 +221,10 @@ district-call's engine tests, which voice.yml runs.
 - The core rings only for a `call_ringing` event that names its own user, while
   the setting is on and the member's role may answer. The event carries ids only.
   Answering asks the service for the call's media credential once, only when the
-  member answers; declining sends nothing.
+  member answers. Declining sends the call's id and workspace once, only when the
+  member presses Decline; a ring that runs out, that the service withdraws, or
+  that is dropped because the machine sleeps, the app quits or the member signs
+  out sends nothing.
 - Media credentials and encryption passphrases are kept in memory only, redacted
   from `Debug` (the events and effects that carry them included), and dropped
   when the call, room or audition ends.

@@ -34,16 +34,17 @@ use district_model::{
     WorkspaceListResponse,
 };
 use district_model::{
-    AvailabilityResponse, CallAnswerResponse, CallHandlingPatch, CallHandlingResponse,
-    CallHangUpResponse, DialResponse, DirectoryEntry, KnowledgeCreateResponse,
-    KnowledgeDeleteResponse, KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode,
-    KnowledgeModeResponse, MemberListResponse, MemberRemovalResponse, MemberResponse, MemberRole,
-    MessagingAccountSave, MessagingAccountSaveResponse, MessagingChannelDefaultResponse,
-    MessagingCreatorCell, MessagingCredentials, MessagingDefaultResponse, MessagingDelete,
-    MessagingMetaResponse, MessagingResponse, MessagingSetChannelDefault, MessagingSetDefault,
-    MessagingTestResponse, PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm,
-    PersonaPreviewTokenResponse, PresenceRegistration, PushRegistrationResponse, RenameResponse,
-    RoutingRule, VoiceStudioResponse, WorkspaceConfigResponse, WorkspaceSaveResponse,
+    AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
+    CallHandlingResponse, CallHangUpResponse, DialResponse, DirectoryEntry,
+    KnowledgeCreateResponse, KnowledgeDeleteResponse, KnowledgeDocumentDraft,
+    KnowledgeListResponse, KnowledgeMode, KnowledgeModeResponse, MemberListResponse,
+    MemberRemovalResponse, MemberResponse, MemberRole, MessagingAccountSave,
+    MessagingAccountSaveResponse, MessagingChannelDefaultResponse, MessagingCreatorCell,
+    MessagingCredentials, MessagingDefaultResponse, MessagingDelete, MessagingMetaResponse,
+    MessagingResponse, MessagingSetChannelDefault, MessagingSetDefault, MessagingTestResponse,
+    PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm, PersonaPreviewTokenResponse,
+    PresenceRegistration, PushRegistrationResponse, RenameResponse, RoutingRule,
+    VoiceStudioResponse, WorkspaceConfigResponse, WorkspaceSaveResponse,
 };
 use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
 use tokio::sync::mpsc::UnboundedReceiver;
@@ -910,6 +911,14 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         call_id: &str,
     ) -> impl Future<Output = Result<CallHangUpResponse, ApiError>> + Send {
         ApiClient::hang_up_call(self, workspace_id, call_id)
+    }
+
+    fn decline_call(
+        &self,
+        workspace_id: &str,
+        call_id: &str,
+    ) -> impl Future<Output = Result<CallDeclineResponse, ApiError>> + Send {
+        ApiClient::decline_call(self, workspace_id, call_id)
     }
 }
 

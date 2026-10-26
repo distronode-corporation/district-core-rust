@@ -47,16 +47,17 @@ use district_model::{
     WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
-    AvailabilityResponse, CallAnswerResponse, CallHandlingPatch, CallHandlingResponse,
-    CallHangUpResponse, DialResponse, DirectoryEntry, KnowledgeCreateResponse,
-    KnowledgeDeleteResponse, KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode,
-    KnowledgeModeResponse, MemberListResponse, MemberRemovalResponse, MemberResponse, MemberRole,
-    MessagingAccountSave, MessagingAccountSaveResponse, MessagingChannelDefaultResponse,
-    MessagingCreatorCell, MessagingCredentials, MessagingDefaultResponse, MessagingDelete,
-    MessagingMetaResponse, MessagingResponse, MessagingSetChannelDefault, MessagingSetDefault,
-    MessagingTestResponse, PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm,
-    PersonaPreviewTokenResponse, RenameResponse, RoutingRule, VoiceStudioResponse,
-    WorkspaceConfigResponse, WorkspaceSaveResponse,
+    AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
+    CallHandlingResponse, CallHangUpResponse, DialResponse, DirectoryEntry,
+    KnowledgeCreateResponse, KnowledgeDeleteResponse, KnowledgeDocumentDraft,
+    KnowledgeListResponse, KnowledgeMode, KnowledgeModeResponse, MemberListResponse,
+    MemberRemovalResponse, MemberResponse, MemberRole, MessagingAccountSave,
+    MessagingAccountSaveResponse, MessagingChannelDefaultResponse, MessagingCreatorCell,
+    MessagingCredentials, MessagingDefaultResponse, MessagingDelete, MessagingMetaResponse,
+    MessagingResponse, MessagingSetChannelDefault, MessagingSetDefault, MessagingTestResponse,
+    PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm, PersonaPreviewTokenResponse,
+    RenameResponse, RoutingRule, VoiceStudioResponse, WorkspaceConfigResponse,
+    WorkspaceSaveResponse,
 };
 use district_model::{
     CallHandlingMode, MessagingChannel, MessagingCredentialSource, TwilioCredentials,
@@ -1067,6 +1068,15 @@ impl DistrictApi for FakeApi {
         call_id: &str,
     ) -> Result<CallHangUpResponse, ApiError> {
         self.0.push(format!("hang up {workspace_id} {call_id}"));
+        Err(server_error())
+    }
+
+    async fn decline_call(
+        &self,
+        workspace_id: &str,
+        call_id: &str,
+    ) -> Result<CallDeclineResponse, ApiError> {
+        self.0.push(format!("decline {workspace_id} {call_id}"));
         Err(server_error())
     }
 }
@@ -3177,6 +3187,17 @@ async fn each_voice_effect_calls_its_dependency_and_reports_back() {
             .await,
         None
     );
+    // Nor is a failed decline: the ring is gone here, and the service's own
+    // window ends it there.
+    assert_eq!(
+        runner
+            .run(Effect::DeclineCall {
+                workspace_id: AGENCY.to_owned(),
+                call_id: "call_1".to_owned(),
+            })
+            .await,
+        None
+    );
     let (_, connect) = call_connect();
     let Effect::ConnectMedia { session, .. } = connect else {
         panic!("{connect:?}");
@@ -3206,6 +3227,7 @@ async fn each_voice_effect_calls_its_dependency_and_reports_back() {
             "dial ws-contract-active +1 212 555 0142",
             "answer ws-contract-active call_1",
             "hang up ws-contract-active CA01",
+            "decline ws-contract-active call_1",
             "connect wss://media.example.com passphrase false microphone true",
             "microphone false",
             "disconnect",

@@ -2306,6 +2306,17 @@ pub enum Effect {
         /// The id the dial answered with.
         call_id: String,
     },
+    /// Tell the service the member declined a call that rang here. Sent once,
+    /// only on the member's press of Decline: never when a ring runs out, is
+    /// withdrawn, or is dropped because the desktop sleeps, quits or signs
+    /// out. Reports nothing back: the ring is gone here whatever the service
+    /// says, and it is not tried again.
+    DeclineCall {
+        /// The call's workspace.
+        workspace_id: String,
+        /// The call.
+        call_id: String,
+    },
     /// Join a room through the call engine, as the session `session`. Reports
     /// nothing back: the engine reports on the session as [`Event::Media`]. Its
     /// `Debug` output leaves the credential out.
@@ -2468,6 +2479,7 @@ impl Effect {
             | Self::SavePurchaseSetting { .. }
             | Self::SaveRingSetting { .. }
             | Self::HangUpCall { .. }
+            | Self::DeclineCall { .. }
             | Self::ConnectMedia { .. }
             | Self::SetMicrophone { .. }
             | Self::DisconnectMedia { .. }

@@ -284,6 +284,15 @@ pub fn api_error_emergency_number(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.engine_unavailable`
+#[must_use]
+pub fn api_error_engine_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This voice engine is not available for this workspace yet. Choose another engine.",
+        Locale::FrCa => "Ce moteur vocal n'est pas encore offert pour cet espace de travail. Choisissez un autre moteur.",
+    }
+}
+
 /// `api_error.eu_vat_required`
 #[must_use]
 pub fn api_error_eu_vat_required(l: Locale) -> &'static str {
@@ -446,6 +455,78 @@ pub fn api_error_jira_not_connected(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.knowledge_url_blocked`
+#[must_use]
+pub fn api_error_knowledge_url_blocked(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That address points to a private or internal network, so it cannot be imported.",
+        Locale::FrCa => "Cette adresse mène à un réseau privé ou interne. Elle ne peut donc pas être importée.",
+    }
+}
+
+/// `api_error.knowledge_url_empty`
+#[must_use]
+pub fn api_error_knowledge_url_empty(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That page has no readable text to import.",
+        Locale::FrCa => "Cette page ne contient aucun texte lisible à importer.",
+    }
+}
+
+/// `api_error.knowledge_url_invalid`
+#[must_use]
+pub fn api_error_knowledge_url_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Enter a full web address that starts with https://, with no port number or password.",
+        Locale::FrCa => "Entrez une adresse Web complète qui commence par https://, sans numéro de port ni mot de passe.",
+    }
+}
+
+/// `api_error.knowledge_url_pdf_unsupported`
+#[must_use]
+pub fn api_error_knowledge_url_pdf_unsupported(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "PDF import is not available yet. Paste the text from the PDF instead.",
+        Locale::FrCa => "L'importation de fichiers PDF n'est pas encore offerte. Collez plutôt le texte du PDF.",
+    }
+}
+
+/// `api_error.knowledge_url_timeout`
+#[must_use]
+pub fn api_error_knowledge_url_timeout(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That page took too long to answer. Try again in a moment.",
+        Locale::FrCa => "Cette page a mis trop de temps à répondre. Réessayez dans un instant.",
+    }
+}
+
+/// `api_error.knowledge_url_too_large`
+#[must_use]
+pub fn api_error_knowledge_url_too_large(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That page is larger than 2 MB. Import a smaller page or paste the text instead.",
+        Locale::FrCa => "Cette page dépasse 2 Mo. Importez une page plus petite ou collez plutôt le texte.",
+    }
+}
+
+/// `api_error.knowledge_url_unreachable`
+#[must_use]
+pub fn api_error_knowledge_url_unreachable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That page could not be reached. Check the address and that the page is public, then try again.",
+        Locale::FrCa => "Impossible d'atteindre cette page. Vérifiez l'adresse et assurez-vous que la page est publique, puis réessayez.",
+    }
+}
+
+/// `api_error.knowledge_url_unsupported_type`
+#[must_use]
+pub fn api_error_knowledge_url_unsupported_type(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Only web pages (HTML) and plain text can be imported. Paste the text instead.",
+        Locale::FrCa => "Seuls les pages Web (HTML) et le texte brut peuvent être importés. Collez plutôt le texte.",
+    }
+}
+
 /// `api_error.language_unavailable`
 #[must_use]
 pub fn api_error_language_unavailable(l: Locale) -> &'static str {
@@ -506,6 +587,87 @@ pub fn api_error_member_not_found(l: Locale) -> &'static str {
     match l {
         Locale::En => "That person is not a member of this workspace.",
         Locale::FrCa => "Cette personne n'est pas membre de cet espace de travail.",
+    }
+}
+
+/// `api_error.member_phone_business_number`
+#[must_use]
+pub fn api_error_member_phone_business_number(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This number belongs to a business on District, so it cannot receive alerts. Enter your own mobile number.",
+        Locale::FrCa => "Ce numéro appartient à une entreprise sur District, alors il ne peut pas recevoir d'alertes. Entrez votre propre numéro de cellulaire.",
+    }
+}
+
+/// `api_error.member_phone_cannot_text`
+#[must_use]
+pub fn api_error_member_phone_cannot_text(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This business cannot send texts yet. Texts start once its number's text messaging is approved. Until then, alerts come by email and in the app.",
+        Locale::FrCa => "Cette entreprise ne peut pas encore envoyer de textos. Les textos commenceront dès que la messagerie texte de son numéro sera approuvée. D'ici là, les alertes vous parviennent par courriel et dans l'application.",
+    }
+}
+
+/// `api_error.member_phone_code_expired`
+#[must_use]
+pub fn api_error_member_phone_code_expired(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That code has expired or was already used. Send a new one.",
+        Locale::FrCa => "Ce code est expiré ou a déjà été utilisé. Demandez-en un nouveau.",
+    }
+}
+
+/// `api_error.member_phone_code_wrong`
+#[must_use]
+pub fn api_error_member_phone_code_wrong(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That code is not right. Check the text message and try again.",
+        Locale::FrCa => "Ce code n'est pas le bon. Vérifiez le texto, puis réessayez.",
+    }
+}
+
+/// `api_error.member_phone_invalid`
+#[must_use]
+pub fn api_error_member_phone_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Enter a mobile number with its country code, for example +1 416 555 0123.",
+        Locale::FrCa => "Entrez un numéro de cellulaire avec son indicatif de pays, par exemple +1 416 555 0123.",
+    }
+}
+
+/// `api_error.member_phone_opted_out`
+#[must_use]
+pub fn api_error_member_phone_opted_out(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This number has opted out of texts from this business, so no code can be sent to it.",
+        Locale::FrCa => "Ce numéro a choisi de ne plus recevoir de textos de cette entreprise, alors aucun code ne peut lui être envoyé.",
+    }
+}
+
+/// `api_error.member_phone_resend_too_soon`
+#[must_use]
+pub fn api_error_member_phone_resend_too_soon(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A code was sent less than a minute ago. Wait a moment before asking for another.",
+        Locale::FrCa => "Un code a été envoyé il y a moins d'une minute. Attendez un moment avant d'en demander un autre.",
+    }
+}
+
+/// `api_error.member_phone_too_many_attempts`
+#[must_use]
+pub fn api_error_member_phone_too_many_attempts(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Too many wrong codes. Send a new code to try again.",
+        Locale::FrCa => "Trop de codes erronés. Demandez un nouveau code pour réessayer.",
+    }
+}
+
+/// `api_error.member_phone_too_many_codes`
+#[must_use]
+pub fn api_error_member_phone_too_many_codes(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Five codes were sent to you in the last 24 hours. Try again tomorrow.",
+        Locale::FrCa => "Cinq codes vous ont été envoyés au cours des dernières 24 heures. Réessayez demain.",
     }
 }
 
@@ -1013,6 +1175,204 @@ pub fn api_error_token_invalid(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.transfer_already_exists`
+#[must_use]
+pub fn api_error_transfer_already_exists(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A transfer for this number is already open in this workspace. Continue that one instead.",
+        Locale::FrCa => "Un transfert est déjà ouvert pour ce numéro dans cet espace de travail. Poursuivez plutôt celui-là.",
+    }
+}
+
+/// `api_error.transfer_cancel_refused`
+#[must_use]
+pub fn api_error_transfer_cancel_refused(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This transfer can no longer be cancelled here, usually because the transfer date is close. Contact support.",
+        Locale::FrCa => "Ce transfert ne peut plus être annulé ici, généralement parce que la date du transfert approche. Communiquez avec notre équipe de soutien.",
+    }
+}
+
+/// `api_error.transfer_country_unsupported`
+#[must_use]
+pub fn api_error_transfer_country_unsupported(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Only United States and Canadian numbers can be transferred in today.",
+        Locale::FrCa => "Seuls les numéros des États-Unis et du Canada peuvent être transférés pour l'instant.",
+    }
+}
+
+/// `api_error.transfer_document_limit`
+#[must_use]
+pub fn api_error_transfer_document_limit(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This transfer already has the most documents it can hold. Remove one before adding another.",
+        Locale::FrCa => "Ce transfert contient déjà le nombre maximal de documents. Retirez-en un avant d'en ajouter un autre.",
+    }
+}
+
+/// `api_error.transfer_emergency_acknowledgement_required`
+#[must_use]
+pub fn api_error_transfer_emergency_acknowledgement_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Confirm that you understand that after the transfer this line will not reach 9-1-1, and that desk phones on it will stop working.",
+        Locale::FrCa => "Confirmez que vous comprenez qu'après le transfert, cette ligne ne joindra plus le 9-1-1 et que les téléphones de bureau qui l'utilisent cesseront de fonctionner.",
+    }
+}
+
+/// `api_error.transfer_incomplete`
+#[must_use]
+pub fn api_error_transfer_incomplete(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Some details or documents for this transfer are still missing. Complete every step, then try again.",
+        Locale::FrCa => "Il manque encore des renseignements ou des documents pour ce transfert. Remplissez chaque étape, puis réessayez.",
+    }
+}
+
+/// `api_error.transfer_line_type_unknown`
+#[must_use]
+pub fn api_error_transfer_line_type_unknown(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We could not confirm that this is a local line, so it cannot be transferred in yet.",
+        Locale::FrCa => "Nous n'avons pas pu confirmer qu'il s'agit d'une ligne locale. Ce numéro ne peut donc pas encore être transféré.",
+    }
+}
+
+/// `api_error.transfer_managed_only`
+#[must_use]
+pub fn api_error_transfer_managed_only(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Bringing your existing number is available to workspaces on our managed phone service.",
+        Locale::FrCa => "Le transfert d'un numéro existant est accessible aux espaces de travail qui utilisent notre service téléphonique géré.",
+    }
+}
+
+/// `api_error.transfer_mobile_unsupported`
+#[must_use]
+pub fn api_error_transfer_mobile_unsupported(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Mobile numbers cannot be transferred in yet. Only local numbers can.",
+        Locale::FrCa => "Les numéros de cellulaire ne peuvent pas encore être transférés. Seuls les numéros locaux peuvent l'être.",
+    }
+}
+
+/// `api_error.transfer_not_cancellable`
+#[must_use]
+pub fn api_error_transfer_not_cancellable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This transfer is already finished and cannot be cancelled.",
+        Locale::FrCa => "Ce transfert est déjà terminé et ne peut pas être annulé.",
+    }
+}
+
+/// `api_error.transfer_not_editable`
+#[must_use]
+pub fn api_error_transfer_not_editable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This transfer has already been sent and can no longer be changed here.",
+        Locale::FrCa => "Ce transfert a déjà été envoyé et ne peut plus être modifié ici.",
+    }
+}
+
+/// `api_error.transfer_not_found`
+#[must_use]
+pub fn api_error_transfer_not_found(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That number transfer could not be found.",
+        Locale::FrCa => "Ce transfert de numéro est introuvable.",
+    }
+}
+
+/// `api_error.transfer_number_already_held`
+#[must_use]
+pub fn api_error_transfer_number_already_held(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace already has that number.",
+        Locale::FrCa => "Cet espace de travail possède déjà ce numéro.",
+    }
+}
+
+/// `api_error.transfer_number_country_mismatch`
+#[must_use]
+pub fn api_error_transfer_number_country_mismatch(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That number does not belong to the country you chose. Check the number and the country.",
+        Locale::FrCa => "Ce numéro n'appartient pas au pays choisi. Vérifiez le numéro et le pays.",
+    }
+}
+
+/// `api_error.transfer_number_unavailable`
+#[must_use]
+pub fn api_error_transfer_number_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That number cannot be transferred into this workspace right now.",
+        Locale::FrCa => "Ce numéro ne peut pas être transféré dans cet espace de travail pour le moment.",
+    }
+}
+
+/// `api_error.transfer_refused_by_provider`
+#[must_use]
+pub fn api_error_transfer_refused_by_provider(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your current provider reports that this number cannot be transferred. Contact them to ask why.",
+        Locale::FrCa => "Votre fournisseur actuel indique que ce numéro ne peut pas être transféré. Communiquez avec lui pour en connaître la raison.",
+    }
+}
+
+/// `api_error.transfer_region_unsupported`
+#[must_use]
+pub fn api_error_transfer_region_unsupported(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace's region cannot take that number in a transfer yet.",
+        Locale::FrCa => "La région de cet espace de travail ne peut pas encore recevoir ce numéro par transfert.",
+    }
+}
+
+/// `api_error.transfer_release_confirmation_required`
+#[must_use]
+pub fn api_error_transfer_release_confirmation_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This number was transferred here from your previous provider. Releasing it gives it up for good. To keep it, transfer it to another provider first.",
+        Locale::FrCa => "Ce numéro a été transféré ici depuis votre ancien fournisseur. Le libérer vous le fait perdre définitivement. Pour le conserver, transférez-le d'abord vers un autre fournisseur.",
+    }
+}
+
+/// `api_error.transfer_resubmit_unsupported`
+#[must_use]
+pub fn api_error_transfer_resubmit_unsupported(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This transfer cannot be sent again from here. Cancel it and start a new one with the corrected details.",
+        Locale::FrCa => "Ce transfert ne peut pas être envoyé de nouveau d'ici. Annulez-le et commencez-en un nouveau avec les renseignements corrigés.",
+    }
+}
+
+/// `api_error.transfer_signature_required`
+#[must_use]
+pub fn api_error_transfer_signature_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Type the authorized person's full name and confirm the authorization before sending the transfer.",
+        Locale::FrCa => "Saisissez le nom complet de la personne autorisée et confirmez l'autorisation avant d'envoyer le transfert.",
+    }
+}
+
+/// `api_error.transfer_submit_in_progress`
+#[must_use]
+pub fn api_error_transfer_submit_in_progress(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This transfer is being sent right now. Wait a minute, then refresh.",
+        Locale::FrCa => "Ce transfert est en cours d'envoi. Attendez une minute, puis actualisez la page.",
+    }
+}
+
+/// `api_error.transfer_toll_free_unsupported`
+#[must_use]
+pub fn api_error_transfer_toll_free_unsupported(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Toll-free numbers cannot be transferred in yet. Only local numbers can.",
+        Locale::FrCa => "Les numéros sans frais ne peuvent pas encore être transférés. Seuls les numéros locaux peuvent l'être.",
+    }
+}
+
 /// `api_error.unauthorized`
 #[must_use]
 pub fn api_error_unauthorized(l: Locale) -> &'static str {
@@ -1082,6 +1442,60 @@ pub fn api_error_whatsapp_unsupported(l: Locale) -> &'static str {
     match l {
         Locale::En => "WhatsApp is not available on this workspace's messaging account.",
         Locale::FrCa => "WhatsApp n'est pas offert sur le compte de messagerie de cet espace de travail.",
+    }
+}
+
+/// `api_error.workflow_action_needs_message`
+#[must_use]
+pub fn api_error_workflow_action_needs_message(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Notifying the team works only with the trigger for a message taken during a call.",
+        Locale::FrCa => "La notification de l'équipe ne fonctionne qu'avec le déclencheur d'un message pris pendant un appel.",
+    }
+}
+
+/// `api_error.workflow_conditions_invalid`
+#[must_use]
+pub fn api_error_workflow_conditions_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "One of this workflow's conditions is not valid. Check each condition and try again.",
+        Locale::FrCa => "Une des conditions de ce flux n'est pas valide. Vérifiez chaque condition, puis réessayez.",
+    }
+}
+
+/// `api_error.workflow_conditions_not_allowed`
+#[must_use]
+pub fn api_error_workflow_conditions_not_allowed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Conditions can only be added to a workflow that runs after a call.",
+        Locale::FrCa => "Les conditions ne peuvent s'ajouter qu'à un flux qui s'exécute après un appel.",
+    }
+}
+
+/// `api_error.workflow_member_push_roles_invalid`
+#[must_use]
+pub fn api_error_workflow_member_push_roles_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose who gets the notification: administrators, members, or both.",
+        Locale::FrCa => "Choisissez qui reçoit la notification\u{00A0}: les administrateurs, les membres ou les deux.",
+    }
+}
+
+/// `api_error.workflow_sms_recipient_invalid`
+#[must_use]
+pub fn api_error_workflow_sms_recipient_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A text can be sent to the caller, the owner or a team member only.",
+        Locale::FrCa => "Un texto ne peut être envoyé qu'à l'appelant, au propriétaire ou à un membre de l'équipe.",
+    }
+}
+
+/// `api_error.workflow_sms_recipient_not_member`
+#[must_use]
+pub fn api_error_workflow_sms_recipient_not_member(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That person is not a member of this workspace, so workflow texts cannot be sent to them.",
+        Locale::FrCa => "Cette personne n'est pas membre de cet espace de travail, alors les textos des flux ne peuvent pas lui être envoyés.",
     }
 }
 

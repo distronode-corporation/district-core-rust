@@ -8,10 +8,10 @@ client, sign-in, live updates, the application state and the call engine of
 District AI, the AI voice receptionist from Distronode, with no user interface
 toolkit in any of it.
 
-> **Status: 5.1.0 is the current release**
-> ([5.1.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)).
+> **Status: 6.1.0 is the current release**
+> ([6.1.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)).
 > District AI for Linux 3.0.3 and District AI for Windows 3.0.3 are built on 5.0.1
-> and move to 5.1.0 in their next releases. The core
+> and move to 6.1.0 in their next releases. The core
 > was extracted from District AI for Linux 2.1.0 with its history. See the
 > [CHANGELOG](CHANGELOG.md).
 
@@ -58,6 +58,7 @@ of `district-core` has the whole shape.
 | `district-core` | App state with no user interface toolkit and no IO of its own: the session, routes, role capabilities, a model per screen, and the effect runner with the traits an app implements. |
 | `district-host` | What a desktop app keeps on the machine and how it hears the machine sleep, on any operating system: the device id, the refresh marker, the settings file and the sleep protocol. |
 | `district-l10n` | Every sentence and label the crates write, in English and Canadian French: the catalogs in `catalog/`, the code generated from them, the labels of the values the service stores, and the date, number, money and duration formats, held to the service's own outputs in `contracts/i18n/`. The app chooses the language (`CoreConfig::locale`). |
+| `district-crash` | Opt-in crash reports, sent only once the app passes a DSN and the user's consent. A report holds a panic or an error the app captures, its stack, the operating system and Rust version, the release, and the debug images of the app's own executable and library (ids, address, size, architecture) so a stripped build can be symbolicated; no other loaded library, no machine name, user or address, and every home directory path with the user's name replaced. Its own crate, so an app that does not offer crash reports builds no Sentry code. |
 | `district-call` | The call engine: `LiveKitCallEngine` behind the optional `livekit` feature (it links libwebrtc), and `UnavailableCallEngine` without it, which joins nothing and says so. |
 
 `contracts/` holds what the crates are tested against: the District AI server's
@@ -73,8 +74,8 @@ hold that version:
 
 ```toml
 [workspace.dependencies]
-district-model = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v5.1.0", version = "=5.1.0" }
-district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v5.1.0", version = "=5.1.0" }
+district-model = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v6.1.0", version = "=6.1.0" }
+district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v6.1.0", version = "=6.1.0" }
 ```
 
 and so on for each crate it uses, all at the same tag. Cargo.lock then records

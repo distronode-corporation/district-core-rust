@@ -426,34 +426,34 @@ ctx = "label"
 screen = "wire disposition"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `booked` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `booked` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized)."
 
 [wire.disposition.callback]
-en = "Callback"
-fr = "À rappeler"
+en = "Callback requested"
+fr = "Rappel demandé"
 ctx = "label"
 screen = "wire disposition"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `callback` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `callback` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized)."
 
 [wire.disposition.escalated]
-en = "Escalated"
-fr = "Transmis à l'équipe"
+en = "Passed to a person"
+fr = "Transmis à une personne"
 ctx = "label"
 screen = "wire disposition"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `escalated` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `escalated` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized)."
 
 [wire.disposition.info]
-en = "Info"
-fr = "Information"
+en = "Information only"
+fr = "Information seulement"
 ctx = "label"
 screen = "wire disposition"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `info` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `info` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized)."
 
 [wire.disposition.interested]
 en = "Interested"
@@ -462,7 +462,7 @@ ctx = "label"
 screen = "wire disposition"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `interested` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `interested` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized)."
 
 [wire.disposition.not_interested]
 en = "Not interested"
@@ -471,7 +471,7 @@ ctx = "label"
 screen = "wire disposition"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `not-interested` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `not-interested` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized)."
 
 [wire.disposition.other]
 en = "Other"
@@ -480,7 +480,7 @@ ctx = "label"
 screen = "wire disposition"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `other` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `other` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized)."
 
 [wire.disposition.voicemail]
 en = "Voicemail"
@@ -489,7 +489,7 @@ ctx = "label"
 screen = "wire disposition"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `voicemail` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `voicemail` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized)."
 
 [wire.disposition.wrong_number]
 en = "Wrong number"
@@ -498,7 +498,7 @@ ctx = "label"
 screen = "wire disposition"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `wrong-number` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The portal shows the value itself (hyphens as spaces, capitalized); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `wrong-number` of disposition. `disposition` on a call row, written by the voice agent's post-call analysis. The call log and the workflow builder's \"Call Outcome\" condition share these labels; a value outside the list is shown as sent (hyphens as spaces, capitalized)."
 
 [wire.funnel_stage.connected_calls]
 en = "Connected Calls"
@@ -1414,6 +1414,15 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `add_crm_tag` of workflowAction. `actionResults[].type` on a workflow run, and `actions[].type` on a workflow."
 
+[wire.workflow_action.notify_member_push]
+en = "Notify the Team in the App"
+fr = "Notifier l'équipe dans l'application"
+ctx = "label"
+screen = "wire workflow_action"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `notify_member_push` of workflowAction. `actionResults[].type` on a workflow run, and `actions[].type` on a workflow."
+
 [wire.workflow_action.notify_ops]
 en = "Notify Ops Webhook"
 fr = "Notifier le webhook des opérations"
@@ -1493,7 +1502,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `contact-not-found` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `contact-not-found` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.dnc]
 en = "Dnc"
@@ -1502,7 +1511,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `dnc` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `dnc` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.dormant]
 en = "Dormant"
@@ -1511,7 +1520,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `dormant` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `dormant` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.email_misconfigured]
 en = "Email misconfigured"
@@ -1520,7 +1529,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `email-misconfigured` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `email-misconfigured` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.empty_body]
 en = "Empty body"
@@ -1529,7 +1538,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `empty-body` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `empty-body` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.empty_subject]
 en = "Empty subject"
@@ -1538,7 +1547,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `empty-subject` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `empty-subject` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.empty_tag]
 en = "Empty tag"
@@ -1547,7 +1556,43 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `empty-tag` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `empty-tag` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.fallback_email]
+en = "Not texted, so it was emailed instead"
+fr = "Texto non envoyé, l'alerte est partie par courriel à la place"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `fallback-email` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
+[wire.workflow_action_reason.fallback_email_push]
+en = "Not texted, so it was emailed and sent to the app instead"
+fr = "Texto non envoyé, l'alerte est partie par courriel et dans l'application à la place"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `fallback-email-push` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
+[wire.workflow_action_reason.fallback_failed]
+en = "Not texted, and the email and app fallback failed too"
+fr = "Texto non envoyé, et le courriel et l'application de secours ont aussi échoué"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `fallback-failed` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
+[wire.workflow_action_reason.fallback_push]
+en = "Not texted and the email failed, so it was sent to the app instead"
+fr = "Texto non envoyé et courriel en échec, l'alerte est partie dans l'application à la place"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `fallback-push` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
 
 [wire.workflow_action_reason.http_status]
 en = "Http {{status}}"
@@ -1556,7 +1601,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `http-{status}` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `http-{status}` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.invalid_recipient]
 en = "Invalid recipient"
@@ -1565,7 +1610,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `invalid-recipient` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `invalid-recipient` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.missing_webhook_url]
 en = "Missing webhook url"
@@ -1574,7 +1619,25 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `missing-webhook-url` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `missing-webhook-url` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.no_devices]
+en = "No team member has the app on a device that can receive notifications"
+fr = "Aucun membre de l'équipe n'a l'application sur un appareil qui peut recevoir des notifications"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `no-devices` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
+[wire.workflow_action_reason.no_message]
+en = "Notifying the team works only with the trigger for a message taken during a call"
+fr = "La notification de l'équipe ne fonctionne qu'avec le déclencheur d'un message pris pendant un appel"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `no-message` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
 
 [wire.workflow_action_reason.no_provider_credentials]
 en = "No provider credentials"
@@ -1583,7 +1646,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `no-provider-credentials` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `no-provider-credentials` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.no_recipient]
 en = "No recipient"
@@ -1592,7 +1655,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `no-recipient` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `no-recipient` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.no_sending_number]
 en = "No sending number"
@@ -1601,7 +1664,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `no-sending-number` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `no-sending-number` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.postmark_missing]
 en = "Postmark missing"
@@ -1610,7 +1673,43 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `postmark-missing` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `postmark-missing` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.push_lookup_failed]
+en = "The list of team devices could not be read"
+fr = "La liste des appareils de l'équipe n'a pas pu être lue"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `push-lookup-failed` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
+[wire.workflow_action_reason.push_not_delivered]
+en = "No device accepted the notification"
+fr = "Aucun appareil n'a accepté la notification"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `push-not-delivered` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
+[wire.workflow_action_reason.recipient_not_member]
+en = "The person to text is no longer a member of this workspace"
+fr = "La personne à qui envoyer le texto n'est plus membre de cet espace de travail"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `recipient-not-member` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
+[wire.workflow_action_reason.recipient_number_held]
+en = "Not sent: the person's mobile is a business number on District"
+fr = "Non envoyé\u00A0: le cellulaire de cette personne est un numéro d'entreprise sur District"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `recipient-number-held` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
 
 [wire.workflow_action_reason.report_recipient_refused]
 en = "Report recipient refused"
@@ -1619,7 +1718,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `report-recipient-refused` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `report-recipient-refused` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.report_unavailable]
 en = "Report unavailable"
@@ -1628,7 +1727,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `report-unavailable` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `report-unavailable` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.send_failed]
 en = "Send failed"
@@ -1637,7 +1736,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `send-failed` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `send-failed` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.ses_missing]
 en = "SES missing"
@@ -1646,7 +1745,16 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `ses-missing` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `ses-missing` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.signing_unavailable]
+en = "Not sent: the webhook signing secret could not be read"
+fr = "Non envoyé\u00A0: le secret de signature des webhooks n'a pas pu être lu"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `signing-unavailable` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
 
 [wire.workflow_action_reason.tag_already_present]
 en = "Tag already present"
@@ -1655,7 +1763,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `tag-already-present` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `tag-already-present` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.tag_not_present]
 en = "Tag not present"
@@ -1664,7 +1772,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `tag-not-present` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `tag-not-present` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.unknown_action_type]
 en = "Unknown action type"
@@ -1673,7 +1781,7 @@ ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `unknown-action-type` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent and labels none of them; an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `unknown-action-type` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_run_status.failed]
 en = "Failed"
@@ -1774,6 +1882,15 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `call_ended_unanswered` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
 
+[wire.workflow_trigger.call_triaged]
+en = "When a Call is Triaged (urgency, type, details)"
+fr = "Quand un appel est trié (urgence, type, détails)"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `call_triaged` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
 [wire.workflow_trigger.contact_created]
 en = "When New Contact Created"
 fr = "Quand un contact est créé"
@@ -1800,6 +1917,15 @@ screen = "wire workflow_trigger"
 tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `intent_detected` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
+
+[wire.workflow_trigger.message_taken]
+en = "When a Message is Taken During a Call"
+fr = "Quand un message est pris pendant un appel"
+ctx = "label"
+screen = "wire workflow_trigger"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `message_taken` of workflowTrigger. `trigger` on a workflow (GET /api/district/workflows)."
 
 [wire.workflow_trigger.negative_sentiment]
 en = "When Call Sentiment is Negative"

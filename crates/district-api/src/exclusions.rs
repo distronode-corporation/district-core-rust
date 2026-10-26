@@ -217,6 +217,13 @@ pub const DESKTOP_ONLY: &[Addition] = &[
                  Mac apps; the Android app has no screen for it yet.",
     },
     Addition {
+        endpoint: Endpoint::CallDecline,
+        reason: "Telling the service a member declined a call that rang here, so that once \
+                 every member rung has declined the receptionist takes a message at once. \
+                 The Android app adds the same call (declineCall); this entry leaves once \
+                 the endpoint snapshot is refreshed from an Android release that has it.",
+    },
+    Addition {
         endpoint: Endpoint::BillingHandOff,
         reason: "Checkout and the billing page inside District AI for Windows, the one app that \
                  buys in the app. Every other app's billing is read only.",
