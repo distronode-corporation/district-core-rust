@@ -22,16 +22,16 @@ use district_model::{
     DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse,
     DeviceRevokeResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest,
     EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse,
-    HqTurn, HqVoiceProposal, HqVoiceTokenResponse, MarkReadResponse, MediaUploadResponse,
-    MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse, MessageThreadResponse,
-    NumberSearch, NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, RoomTokenResponse,
-    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
-    SendMessageRequest, SendMessageResponse, SettingsSaveResponse, SetupResponse,
-    SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
-    SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
-    UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse, UsageResponse,
-    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
-    WorkspaceListResponse,
+    HqTurn, HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse,
+    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
+    OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse,
+    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
+    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WorkflowListResponse,
+    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -337,6 +337,15 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         proposal_id: &str,
     ) -> impl Future<Output = Result<HqProposalCancelResponse, ApiError>> + Send {
         ApiClient::hq_proposal_cancel(self, workspace_id, proposal_id)
+    }
+
+    fn hq_voice_context(
+        &self,
+        workspace_id: &str,
+        room_name: &str,
+        screen: &HqVoiceScreen,
+    ) -> impl Future<Output = Result<HqVoiceContextResponse, ApiError>> + Send {
+        ApiClient::hq_voice_context(self, workspace_id, room_name, screen)
     }
 
     fn analytics(

@@ -11,12 +11,14 @@
 //! voice agent proposed is confirmed on the same route as a typed one, with
 //! the proposal's id, or cancelled on a route of its own. None of the three is
 //! ever repeated either: a credential starts a billed voice session, and the
-//! other two are writes.
+//! other two are writes. While a session is live, what is on the member's
+//! screen is reported on a fourth route, for the voice agent to read.
 
 use district_l10n::Locale;
 use district_model::{
     HQ_VOICE_HISTORY_MAX_CHARS, HQ_VOICE_HISTORY_MAX_TURNS, HqConfirmResponse, HqPendingWrite,
-    HqPromptResponse, HqProposalCancelResponse, HqTurn, HqVoiceProposal, HqVoiceTokenResponse,
+    HqPromptResponse, HqProposalCancelResponse, HqTurn, HqVoiceContextResponse, HqVoiceProposal,
+    HqVoiceScreen, HqVoiceTokenResponse,
 };
 use serde::Serialize;
 use serde_json::{Map, Value};
@@ -202,6 +204,31 @@ impl<S: TokenSource> ApiClient<S> {
             .await?;
         confirm(Endpoint::HqProposalCancel, cancelled.success)?;
         Ok(cancelled)
+    }
+
+    /// Reports `screen`, what is on the member's screen, to the voice session
+    /// in `room_name` (the room its credential named), for the voice agent to
+    /// read.
+    ///
+    /// Only the member's own session reads it, and the service keeps only the
+    /// last report. It refuses the whole report over a page its table does
+    /// not have or a record id it would not take. Never repeated: the next
+    /// report replaces a lost one.
+    pub async fn hq_voice_context(
+        &self,
+        workspace_id: &str,
+        room_name: &str,
+        screen: &HqVoiceScreen,
+    ) -> Result<HqVoiceContextResponse, ApiError> {
+        let recorded: HqVoiceContextResponse = self
+            .request(Endpoint::HqVoiceContext)
+            .workspace(workspace_id)
+            .field("roomName", room_name)
+            .field("snapshot", screen)
+            .send()
+            .await?;
+        confirm(Endpoint::HqVoiceContext, recorded.success)?;
+        Ok(recorded)
     }
 }
 

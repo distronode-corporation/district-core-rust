@@ -18,7 +18,7 @@ variant, or a field of one. Those take a new major version.
 ## [Unreleased]
 
 District HQ by voice. Breaking for the apps (a new major version when released):
-`DistrictApi` has three new methods, `Event`, `Effect`, `HqEvent`, `HqText`, `HqNote`,
+`DistrictApi` has four new methods, `Event`, `Effect`, `HqEvent`, `HqText`, `HqNote`,
 `MediaEvent` and `MediaOwner` have new variants, and `HqScreen` a new field.
 
 ### Added
@@ -43,6 +43,16 @@ District HQ by voice. Breaking for the apps (a new major version when released):
   Spoken words join the conversation as `HqText::Spoken` and are sent as history once
   final. The voice session ends when the member leaves the HQ screen or the workspace,
   signs out, or the desktop sleeps or quits.
+- What is on screen is told to a live voice session, as the web dashboard tells it, so
+  the voice agent knows the page without asking: `ApiClient::hq_voice_context`
+  (`POST /api/district/hq/voice-context`, never repeated, in `DESKTOP_ONLY` with the
+  other two), `DistrictApi::hq_voice_context`, and `Effect::ReportHqVoiceScreen`, which
+  reports nothing back. The screen is `district_model::HqVoiceScreen`: the page as the
+  service's page table names it (`Route::hq_voice_page`) and the call, contact or inbox
+  thread open on it (`HqVoiceSelection`, `HqVoiceRecordKind`), by an id the service takes
+  (`HQ_VOICE_RECORD_ID_MAX`) and never anything else. It is sent as the session starts and
+  on each change of screen after that, counted from 1 in each session. While a session
+  ends when the member leaves District HQ, the page is always `hq`.
 - `MediaEvent::AgentData`, `MediaEvent::AgentState` and `MediaEvent::Speech`, which
   `LiveKitCallEngine` reports from an agent participant's data packets, its
   `lk.agent.state` attribute and the `lk.transcription` text streams (the member's words

@@ -45,19 +45,19 @@ use district_model::{
     DeskTicketDraft, DeskTicketResponse, DeskTicketStatus, DeskTicketStatusResponse,
     DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DialResponse, DirectoryEntry,
     DraftListResponse, DraftResponse, DraftSaveRequest, HqConfirmResponse, HqPendingWrite,
-    HqPromptResponse, HqProposalCancelResponse, HqTurn, HqVoiceProposal, HqVoiceTokenResponse,
-    KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode, KnowledgeModeResponse,
-    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
-    MemberListResponse, MessageSearchResponse, MessageThreadResponse, MessagingCredentials,
-    MessagingResponse, MessagingTestResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
-    OwnedNumbersResponse, PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm,
-    PersonaPreviewTokenResponse, RenameResponse, RoomTokenResponse, RoutingRule,
-    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
-    SendMessageRequest, SendMessageResponse, SupportCloseResponse, SupportReplyResponse,
-    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
-    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
-    UsageHistoryResponse, UsageResponse, VoiceStudioResponse, WorkflowListResponse,
-    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
+    HqPromptResponse, HqProposalCancelResponse, HqTurn, HqVoiceProposal, HqVoiceScreen,
+    HqVoiceTokenResponse, KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode,
+    KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail,
+    MeetingSummary, MemberListResponse, MessageSearchResponse, MessageThreadResponse,
+    MessagingCredentials, MessagingResponse, MessagingTestResponse, NumberSearch,
+    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, PersonaOptionsResponse,
+    PersonaPatch, PersonaPreviewForm, PersonaPreviewTokenResponse, RenameResponse,
+    RoomTokenResponse, RoutingRule, SchedulingEnableResponse, SchedulingHandOffResponse,
+    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SupportCloseResponse,
+    SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
+    SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
+    UnreadCountResponse, UsageHistoryResponse, UsageResponse, VoiceStudioResponse,
+    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
     WorkspaceConfigResponse, WorkspaceListResponse,
 };
 use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
@@ -1690,6 +1690,17 @@ pub enum Effect {
         /// The change, as the voice agent proposed it.
         proposal: HqVoiceProposal,
     },
+    /// Report what is on the member's screen to the live HQ voice session, for
+    /// the voice agent to read. Reports nothing back: a report lost is
+    /// replaced by the next one, and it is not tried again.
+    ReportHqVoiceScreen {
+        /// The workspace.
+        workspace_id: String,
+        /// The session's room, as its credential named it.
+        room_name: String,
+        /// What is on screen.
+        screen: HqVoiceScreen,
+    },
     /// Cancel a change proposed by voice. Sent once.
     CancelHqVoice {
         /// Returned in [`Event::HqVoiceCancelled`].
@@ -2480,6 +2491,7 @@ impl Effect {
             | Self::SaveRingSetting { .. }
             | Self::HangUpCall { .. }
             | Self::DeclineCall { .. }
+            | Self::ReportHqVoiceScreen { .. }
             | Self::ConnectMedia { .. }
             | Self::SetMicrophone { .. }
             | Self::DisconnectMedia { .. }

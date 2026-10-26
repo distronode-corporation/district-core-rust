@@ -35,16 +35,16 @@ use district_model::{
     DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
     DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
     HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqRole, HqTurn,
-    HqVoiceProposal, HqVoiceTokenResponse, MarkReadResponse, MediaUploadResponse, MeetRoomName,
-    MeetingDetail, MeetingSummary, MessageSearchResponse, MessageThreadResponse, NumberSearch,
-    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, RoomTokenResponse,
-    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
-    SendMessageRequest, SendMessageResponse, SettingsSaveResponse, SetupResponse,
-    SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
-    SupportRequestKind, SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor,
-    TimelineResponse, UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse,
-    UsageResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
-    WorkspaceBillingResponse, WorkspaceListResponse,
+    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, MarkReadResponse,
+    MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
+    MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
+    OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
+    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
+    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
+    SupportRequestDraft, SupportRequestKind, SupportRequestResponse, SupportRequestsResponse,
+    ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
+    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
+    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -418,6 +418,19 @@ impl DistrictApi for FakeApi {
         self.0
             .push(format!("hq voice cancel {workspace_id} {proposal_id}"));
         Ok(HqProposalCancelResponse { success: true })
+    }
+
+    async fn hq_voice_context(
+        &self,
+        workspace_id: &str,
+        room_name: &str,
+        screen: &HqVoiceScreen,
+    ) -> Result<HqVoiceContextResponse, ApiError> {
+        self.0.push(format!(
+            "hq voice context {workspace_id} {room_name} {} {}",
+            screen.version, screen.page
+        ));
+        Err(server_error())
     }
 
     async fn analytics(
@@ -3187,6 +3200,22 @@ async fn each_voice_effect_calls_its_dependency_and_reports_back() {
             .await,
         None
     );
+    // Nor is a failed screen report: the next change on screen is reported
+    // again.
+    assert_eq!(
+        runner
+            .run(Effect::ReportHqVoiceScreen {
+                workspace_id: AGENCY.to_owned(),
+                room_name: "hq_room".to_owned(),
+                screen: HqVoiceScreen {
+                    version: 1,
+                    page: "hq".to_owned(),
+                    selected: None,
+                },
+            })
+            .await,
+        None
+    );
     // Nor is a failed decline: the ring is gone here, and the service's own
     // window ends it there.
     assert_eq!(
@@ -3227,6 +3256,7 @@ async fn each_voice_effect_calls_its_dependency_and_reports_back() {
             "dial ws-contract-active +1 212 555 0142",
             "answer ws-contract-active call_1",
             "hang up ws-contract-active CA01",
+            "hq voice context ws-contract-active hq_room 1 hq",
             "decline ws-contract-active call_1",
             "connect wss://media.example.com passphrase false microphone true",
             "microphone false",

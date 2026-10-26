@@ -12,7 +12,7 @@ use district_core::{
 };
 use district_model::{
     HQ_PROPOSAL_TOPIC, HQ_VOICE_SESSION_SECONDS, HqAgentState, HqConfirmResponse, HqRole, HqTurn,
-    HqVoiceProposal,
+    HqVoiceProposal, HqVoiceRecordKind, HqVoiceScreen, HqVoiceSelection,
 };
 use serde_json::json;
 
@@ -82,7 +82,23 @@ fn live() -> (Model, Ticket) {
                 microphone: true,
             },
             Effect::Wait { delay, .. },
+            Effect::ReportHqVoiceScreen {
+                workspace_id,
+                room_name,
+                screen,
+            },
         ] => {
+            assert_eq!(workspace_id, AGENCY);
+            assert_eq!(room_name, &voice_credential().room_name);
+            assert_eq!(
+                screen,
+                &HqVoiceScreen {
+                    version: 1,
+                    page: "hq".to_owned(),
+                    selected: None,
+                },
+                "where the member is, as the session starts"
+            );
             assert_eq!(credential.url(), "wss://media.example.com");
             assert_eq!(
                 credential.passphrase(),
@@ -284,6 +300,169 @@ fn leaving_the_screen_leaves_the_session() {
         "{effects:?}"
     );
     assert_eq!(voice(&model).phase, HqVoicePhase::Off);
+}
+
+#[test]
+fn the_screen_is_reported_once_as_the_session_starts_and_not_again_unchanged() {
+    let (mut model, _) = live();
+    let effects = model.update(Event::Navigate(Route::Hq));
+    assert!(
+        !effects
+            .iter()
+            .any(|effect| matches!(effect, Effect::ReportHqVoiceScreen { .. })),
+        "the same screen is not reported twice: {effects:?}"
+    );
+    // Nothing is reported without a live session, wherever the member goes.
+    let mut model = on_hq("agency");
+    for route in [Route::Calls, Route::Hq] {
+        let effects = model.update(Event::Navigate(route));
+        assert!(
+            !effects
+                .iter()
+                .any(|effect| matches!(effect, Effect::ReportHqVoiceScreen { .. })),
+            "{effects:?}"
+        );
+    }
+}
+
+#[test]
+fn every_screen_is_named_as_the_web_dashboards_page_with_its_record_by_id() {
+    use district_core::WorkspaceSection as W;
+    use district_core::scheduling_admin::SchedulingSection as S;
+    let selected = |kind, id| HqVoiceSelection::new(kind, id);
+    type Page = Option<(&'static str, Option<HqVoiceSelection>)>;
+    let cases: Vec<(Route, Page)> = vec![
+        (Route::Overview, Some(("home", None))),
+        (Route::Inbox, Some(("inbox", None))),
+        (
+            Route::Thread {
+                thread_key: "contact:c_1".to_owned(),
+            },
+            Some(("inbox", selected(HqVoiceRecordKind::Conversation, "c_1"))),
+        ),
+        (
+            Route::Thread {
+                thread_key: "addr:+15145550100".to_owned(),
+            },
+            Some(("inbox", None)),
+        ),
+        (Route::Calls, Some(("calls", None))),
+        (
+            Route::CallDetail {
+                call_id: "call_1".to_owned(),
+            },
+            Some(("calls", selected(HqVoiceRecordKind::Call, "call_1"))),
+        ),
+        (Route::Dialer, Some(("phone", None))),
+        (Route::Contacts, Some(("contacts", None))),
+        (Route::BlockedContacts, Some(("contacts", None))),
+        (
+            Route::ContactDetail {
+                contact_id: "c_1".to_owned(),
+            },
+            Some(("contacts", selected(HqVoiceRecordKind::Contact, "c_1"))),
+        ),
+        (
+            Route::ContactDetail {
+                contact_id: "not an id".to_owned(),
+            },
+            Some(("contacts", None)),
+        ),
+        (Route::Hq, Some(("hq", None))),
+        (Route::Analytics, Some(("analytics", None))),
+        (Route::Marketplace, Some(("marketplace", None))),
+        (Route::Workspace(W::Numbers), Some(("marketplace", None))),
+        (Route::Billing, Some(("billing", None))),
+        (Route::Workflows, Some(("workflows", None))),
+        (Route::Scheduling, Some(("scheduling", None))),
+        (
+            Route::SchedulingAdmin(S::Overview),
+            Some(("scheduling", None)),
+        ),
+        (
+            Route::SchedulingAdmin(S::EventTypes),
+            Some(("scheduling-event-types", None)),
+        ),
+        (
+            Route::SchedulingAdmin(S::EventType {
+                slug: "intro".to_owned(),
+            }),
+            Some(("scheduling-event-type", None)),
+        ),
+        (
+            Route::SchedulingAdmin(S::Hours),
+            Some(("scheduling-hours", None)),
+        ),
+        (
+            Route::SchedulingAdmin(S::Bookings),
+            Some(("scheduling-bookings", None)),
+        ),
+        (
+            Route::SchedulingAdmin(S::Booking {
+                id: "b_1".to_owned(),
+            }),
+            Some(("scheduling-bookings", None)),
+        ),
+        (
+            Route::SchedulingAdmin(S::Calendar),
+            Some(("scheduling-calendar", None)),
+        ),
+        (
+            Route::SchedulingAdmin(S::Team),
+            Some(("scheduling-team", None)),
+        ),
+        (
+            Route::SchedulingAdmin(S::Settings),
+            Some(("scheduling-settings", None)),
+        ),
+        (
+            Route::SchedulingAdmin(S::Developer),
+            Some(("scheduling-developer", None)),
+        ),
+        (Route::Desk, Some(("desk", None))),
+        (
+            Route::DeskTicket {
+                ticket_id: "t_1".to_owned(),
+            },
+            Some(("desk", None)),
+        ),
+        (Route::DeskSettings, Some(("desk", None))),
+        (Route::Support, Some(("support", None))),
+        (
+            Route::SupportRequest {
+                key: "DA-42".to_owned(),
+            },
+            Some(("support", None)),
+        ),
+        (Route::Rooms, Some(("rooms", None))),
+        (Route::Account, Some(("account", None))),
+        (Route::Devices, Some(("account", None))),
+        (Route::Workspace(W::Hub), Some(("studio", None))),
+        (Route::Workspace(W::Persona), Some(("studio-persona", None))),
+        (
+            Route::Workspace(W::VoiceStudio),
+            Some(("studio-voice", None)),
+        ),
+        (
+            Route::Workspace(W::CallHandling),
+            Some(("studio-call-handling", None)),
+        ),
+        (
+            Route::Workspace(W::Routing),
+            Some(("studio-call-handling", None)),
+        ),
+        (
+            Route::Workspace(W::Knowledge),
+            Some(("studio-knowledge", None)),
+        ),
+        (Route::Workspace(W::Tools), None),
+        (Route::Workspace(W::Directory), None),
+        (Route::Workspace(W::Messaging), None),
+        (Route::Workspace(W::Members), None),
+    ];
+    for (route, page) in cases {
+        assert_eq!(route.hq_voice_page(), page, "{route:?}");
+    }
 }
 
 #[test]
@@ -682,7 +861,7 @@ fn people_before_the_agent_joins_end_nothing() {
         ticket,
         result: Ok(voice_credential()),
     });
-    let [Effect::ConnectMedia { session, .. }, _] = effects.as_slice() else {
+    let [Effect::ConnectMedia { session, .. }, _, _] = effects.as_slice() else {
         panic!("{effects:?}");
     };
     let person = Participant::new("someone", None, false);
@@ -741,6 +920,7 @@ fn the_session_is_left_at_its_time_limit() {
     let [
         Effect::ConnectMedia { session, .. },
         Effect::Wait { ticket: wait, .. },
+        Effect::ReportHqVoiceScreen { .. },
     ] = effects.as_slice()
     else {
         panic!("{effects:?}");

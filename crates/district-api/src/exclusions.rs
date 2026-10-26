@@ -139,6 +139,11 @@ pub const DESKTOP_ONLY: &[Addition] = &[
                  as the voice credential.",
     },
     Addition {
+        endpoint: Endpoint::HqVoiceContext,
+        reason: "What is on screen during an HQ voice session, for the voice agent, for the \
+                 same reason as the voice credential.",
+    },
+    Addition {
         endpoint: Endpoint::SaveSettings,
         reason: "The account's language, written when a desktop app signs in or starts in a \
                  language the account was not last told, so that what the service says to the \

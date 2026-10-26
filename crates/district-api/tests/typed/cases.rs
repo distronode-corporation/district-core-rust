@@ -11,14 +11,14 @@ use district_model::{
     A2pRegistrationDraft, AnalyticsRange, BlockTarget, CHANNEL_SMS, CallHandlingMode,
     CallHandlingPatch, CreateContactRequest, DeskBrandName, DeskSettingsPatch, DeskTicketDraft,
     DeskTicketStatus, DirectoryEntry, DraftSaveRequest, HqPendingWrite, HqRole, HqTurn,
-    HqVoiceProposal, KnowledgeDocumentDraft, KnowledgeMode, MeetRoomName, MemberRole,
-    MessagingAccountSave, MessagingChannel, MessagingCreatorCell, MessagingCredentialSource,
-    MessagingCredentials, MessagingDelete, MessagingSetChannelDefault, MessagingSetDefault,
-    NumberSearch, PRESENCE_KIND, PersonaEngineChoice, PersonaPatch, PersonaPreviewForm, Platform,
-    PresenceRegistration, RoutingRule, RoutingRuleField, SETTINGS_LANGUAGE_FRENCH,
-    SendMessageRequest, SipTrunkDraft, SupportRequestDraft, SupportRequestKind, ThreadRef,
-    TollFreeVerificationDraft, TwilioCredentials, UpdateContactRequest, WorkspaceConfig,
-    WorkspaceConfigResponse,
+    HqVoiceProposal, HqVoiceRecordKind, HqVoiceScreen, HqVoiceSelection, KnowledgeDocumentDraft,
+    KnowledgeMode, MeetRoomName, MemberRole, MessagingAccountSave, MessagingChannel,
+    MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials, MessagingDelete,
+    MessagingSetChannelDefault, MessagingSetDefault, NumberSearch, PRESENCE_KIND,
+    PersonaEngineChoice, PersonaPatch, PersonaPreviewForm, Platform, PresenceRegistration,
+    RoutingRule, RoutingRuleField, SETTINGS_LANGUAGE_FRENCH, SendMessageRequest, SipTrunkDraft,
+    SupportRequestDraft, SupportRequestKind, ThreadRef, TollFreeVerificationDraft,
+    TwilioCredentials, UpdateContactRequest, WorkspaceConfig, WorkspaceConfigResponse,
 };
 use serde_json::{Value, json};
 
@@ -845,6 +845,33 @@ pub fn cases() -> Vec<Case> {
             body: Sent::Json(json!({
                 "workspaceId": WS,
                 "proposalId": "11111111-1111-4111-8111-111111111111",
+            })),
+        },
+        Case {
+            name: "hq_voice_context",
+            endpoint: Endpoint::HqVoiceContext,
+            retried: false,
+            answer: json!({"success": true}),
+            call: call!(c => c.hq_voice_context(
+                WS,
+                "hq_ws-contract-test_00000000-0000-4000-8000-000000000000",
+                &HqVoiceScreen {
+                    version: 2,
+                    page: "calls".to_owned(),
+                    selected: HqVoiceSelection::new(HqVoiceRecordKind::Call, "call_contract_ringing"),
+                },
+            )),
+            method: "POST",
+            path: "/api/district/hq/voice-context",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "roomName": "hq_ws-contract-test_00000000-0000-4000-8000-000000000000",
+                "snapshot": {
+                    "version": 2,
+                    "page": "calls",
+                    "selected": {"kind": "call", "id": "call_contract_ringing"},
+                },
             })),
         },
         // Analytics and usage.

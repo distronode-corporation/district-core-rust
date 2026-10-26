@@ -122,6 +122,81 @@ pub struct HqProposalCancelResponse {
     pub success: bool,
 }
 
+/// The longest record id a screen report may name. The service refuses the
+/// whole report over a longer one, or one with any character outside
+/// `A-Z`, `a-z`, `0-9`, `_` and `-`.
+pub const HQ_VOICE_RECORD_ID_MAX: usize = 128;
+
+/// The kind of record a screen report names, as the service's page table
+/// names it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum HqVoiceRecordKind {
+    /// A call, by its id.
+    Call,
+    /// A contact, by its id.
+    Contact,
+    /// A conversation in the inbox, by its contact's id.
+    Conversation,
+}
+
+/// The record open on screen: its kind and its id, never anything that names
+/// a person.
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize)]
+pub struct HqVoiceSelection {
+    /// What it is.
+    pub kind: HqVoiceRecordKind,
+    /// Its id.
+    pub id: String,
+}
+
+impl HqVoiceSelection {
+    /// The record `id` of `kind`, or `None` when the service would refuse the
+    /// id (empty, longer than [`HQ_VOICE_RECORD_ID_MAX`], or with a character
+    /// other than an ASCII letter, a digit, `_` or `-`): a report naming it
+    /// would be refused whole, so it is reported without one.
+    pub fn new(kind: HqVoiceRecordKind, id: &str) -> Option<Self> {
+        let valid = !id.is_empty()
+            && id.len() <= HQ_VOICE_RECORD_ID_MAX
+            && id
+                .bytes()
+                .all(|byte| byte.is_ascii_alphanumeric() || byte == b'_' || byte == b'-');
+        valid.then(|| Self {
+            kind,
+            id: id.to_owned(),
+        })
+    }
+}
+
+/// What is on the member's screen during a voice session: the `snapshot` of
+/// `POST /api/district/hq/voice-context`, which the voice agent reads back so
+/// it knows the page without asking. The web dashboard reports the same.
+///
+/// Free of personal data by construction: a page id from the service's page
+/// table and a record's id. The service refuses anything else, and stores
+/// nothing else.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+pub struct HqVoiceScreen {
+    /// The session's count of reports, from 1, one more for every change
+    /// reported. The agent reads the screen again when it moves.
+    pub version: u64,
+    /// The page: an id of the service's page table (`hq`, `calls`, ...).
+    pub page: String,
+    /// The record open on the page, if any.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selected: Option<HqVoiceSelection>,
+}
+
+/// `POST /api/district/hq/voice-context`: the screen was recorded.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct HqVoiceContextResponse {
+    /// `true` when it was recorded.
+    #[serde(default)]
+    pub success: bool,
+}
+
 /// A change the voice agent proposed, as its `HQ_PROPOSAL` packet carries it.
 ///
 /// Nothing has been changed. Show [`summary`](Self::summary); confirming by
@@ -470,5 +545,57 @@ mod tests {
         // Absent, never null, and left out again when written.
         let bare = token(without(credential(), "e2ee"));
         assert!(serde_json::to_value(&bare).unwrap().get("e2ee").is_none());
+    }
+
+    #[test]
+    fn a_screen_is_reported_as_the_service_reads_it() {
+        let call = HqVoiceSelection::new(HqVoiceRecordKind::Call, "call_A-1").unwrap();
+        let screen = HqVoiceScreen {
+            version: 3,
+            page: "calls".to_owned(),
+            selected: Some(call),
+        };
+        assert_eq!(
+            serde_json::to_value(&screen).unwrap(),
+            json!({"version": 3, "page": "calls", "selected": {"kind": "call", "id": "call_A-1"}})
+        );
+        let bare = HqVoiceScreen {
+            selected: None,
+            ..screen
+        };
+        assert_eq!(
+            serde_json::to_value(&bare).unwrap(),
+            json!({"version": 3, "page": "calls"}),
+            "no record is left out, never null"
+        );
+        for (kind, wire) in [
+            (HqVoiceRecordKind::Contact, "contact"),
+            (HqVoiceRecordKind::Conversation, "conversation"),
+        ] {
+            assert_eq!(serde_json::to_value(kind).unwrap(), json!(wire));
+        }
+        let answer: HqVoiceContextResponse =
+            serde_json::from_value(json!({"success": true})).unwrap();
+        assert!(answer.success);
+    }
+
+    #[test]
+    fn a_record_id_the_service_would_refuse_is_not_reported() {
+        let longest = "a".repeat(HQ_VOICE_RECORD_ID_MAX);
+        assert!(HqVoiceSelection::new(HqVoiceRecordKind::Contact, &longest).is_some());
+        for refused in [
+            String::new(),
+            "a".repeat(HQ_VOICE_RECORD_ID_MAX + 1),
+            "+15145550100".to_owned(),
+            "ada@example.com".to_owned(),
+            "two words".to_owned(),
+            "caf\u{e9}".to_owned(),
+        ] {
+            assert_eq!(
+                HqVoiceSelection::new(HqVoiceRecordKind::Contact, &refused),
+                None,
+                "{refused}"
+            );
+        }
     }
 }

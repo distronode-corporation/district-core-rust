@@ -292,11 +292,13 @@ impl SignedIn {
         Next::Stay(self.show(route, tickets))
     }
 
-    /// Leaves the current screen for `route` and reads what `route` shows.
+    /// Leaves the current screen for `route` and reads what `route` shows,
+    /// and tells a live HQ voice session where the member is now.
     pub(crate) fn show(&mut self, route: Route, tickets: &mut Tickets) -> Vec<Effect> {
         let mut effects = self.leave(&route, tickets);
         self.route = route;
         effects.extend(self.enter(tickets));
+        effects.extend(self.report_hq_voice_screen());
         effects
     }
 

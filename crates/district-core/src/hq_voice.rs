@@ -25,6 +25,12 @@
 //! the lobby: the microphone is never live without the controls that stop it
 //! on screen.
 //!
+//! While the session is live, what is on screen (the page, and the record
+//! open on it) is reported to it, for the agent to read, as the web
+//! dashboard reports its own: once as the session starts, and again on each
+//! change of screen ([`Route::hq_voice_page`]). Only ids leave this way, never
+//! a name, a number or what was typed.
+//!
 //! # Changes
 //!
 //! A change the agent proposes is a card, keyed by its id, and nothing has
@@ -42,8 +48,8 @@ use std::time::Duration;
 use district_api::ApiError;
 use district_model::{
     HQ_PROPOSAL_TOPIC, HQ_VOICE_SESSION_SECONDS, HqAgentState, HqConfirmResponse,
-    HqProposalCancelResponse, HqResolutionStatus, HqVoicePacket, HqVoiceProposal,
-    HqVoiceTokenResponse, read_packet,
+    HqProposalCancelResponse, HqResolutionStatus, HqVoicePacket, HqVoiceProposal, HqVoiceScreen,
+    HqVoiceSelection, HqVoiceTokenResponse, read_packet,
 };
 
 use crate::failure::FailureText;
@@ -52,6 +58,8 @@ use crate::media::{
     DisconnectReason, MediaCredential, MediaEvent, MediaOwner, MediaSession, Speaker, SpeechSegment,
 };
 use crate::model::{Effect, Slot, Ticket, Tickets};
+#[cfg(doc)]
+use crate::route::Route;
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::{l, s};
 
@@ -79,6 +87,18 @@ pub struct HqVoice {
     disclosed: bool,
     /// Whether an agent has been in this session's room.
     agent_seen: bool,
+    /// The last session's room, and what was last reported to it.
+    room: Option<VoiceRoom>,
+}
+
+/// A session's room, as its credential named it, and what was reported to it.
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct VoiceRoom {
+    name: String,
+    /// How many screens were reported to it.
+    reports: u64,
+    /// The last screen reported: its page and the record open on it.
+    last: Option<(&'static str, Option<HqVoiceSelection>)>,
 }
 
 impl HqVoice {
@@ -332,13 +352,51 @@ impl SignedIn {
         };
         self.hq.voice.phase = HqVoicePhase::Live { agent: None };
         self.hq.voice.agent_seen = false;
+        self.hq.voice.room = Some(VoiceRoom {
+            name: credential.room_name.clone(),
+            reports: 0,
+            last: None,
+        });
         let media = MediaCredential::from_hq_voice(&credential);
         let mut effects = self.start_media(MediaOwner::HqVoice, media, true, tickets);
         effects.push(Effect::Wait {
             ticket: tickets.issue(Slot::HqVoiceLimit),
             delay: Duration::from_secs(HQ_VOICE_SESSION_SECONDS),
         });
+        effects.extend(self.report_hq_voice_screen());
         Next::Stay(effects)
+    }
+
+    /// What is on screen, for a live session, when it is not what was last
+    /// reported to it: the first report of a session is version 1, and each
+    /// one after it one more. Nothing for a session that is not live, or a
+    /// screen with no page in the service's table.
+    pub(crate) fn report_hq_voice_screen(&mut self) -> Vec<Effect> {
+        let workspace_id = self.workspace_id();
+        let voice = &mut self.hq.voice;
+        let (HqVoicePhase::Live { .. }, Some(room), Some((page, selected))) = (
+            &voice.phase,
+            voice.room.as_mut(),
+            self.route.hq_voice_page(),
+        ) else {
+            return Vec::new();
+        };
+        let now = Some((page, selected.clone()));
+        if room.last == now {
+            return Vec::new();
+        }
+        room.last = now;
+        room.reports += 1;
+        let screen = HqVoiceScreen {
+            version: room.reports,
+            page: page.to_owned(),
+            selected,
+        };
+        vec![Effect::ReportHqVoiceScreen {
+            workspace_id,
+            room_name: room.name.clone(),
+            screen,
+        }]
     }
 
     /// The session's time is up. The agent closes it at the same moment; this

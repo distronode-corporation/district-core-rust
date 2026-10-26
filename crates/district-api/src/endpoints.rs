@@ -373,6 +373,11 @@ endpoint_table! {
     /// write, never repeated.
     HqProposalCancel => Post "/api/district/hq/proposals/cancel",
         workspace: Body, body: Json, retry: Never;
+    /// Reports what is on the member's screen during an HQ voice session, for
+    /// the voice agent to read. A lost report is replaced by the next one, so
+    /// it is never repeated.
+    HqVoiceContext => Post "/api/district/hq/voice-context",
+        workspace: Body, body: Json, retry: Never;
 
     // Phone numbers. Buying one stays on the web: a number is a recurring
     // carrier charge, so there is no purchase here.

@@ -28,16 +28,17 @@ use district_model::{
     DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse,
     DeviceRevokeResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest,
     EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse,
-    HqTurn, HqVoiceProposal, HqVoiceTokenResponse, MarkReadResponse, MediaUploadResponse,
-    MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse, MessageThreadResponse,
-    NumberSearch, NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, RoomTokenResponse,
-    SETTINGS_LANGUAGE_ENGLISH, SETTINGS_LANGUAGE_FRENCH, SchedulingEnableResponse,
-    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
-    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
-    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
-    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
-    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WorkflowListResponse,
-    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
+    HqTurn, HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse,
+    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
+    OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SETTINGS_LANGUAGE_ENGLISH,
+    SETTINGS_LANGUAGE_FRENCH, SchedulingEnableResponse, SchedulingHandOffResponse,
+    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
+    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
+    SupportRequestDraft, SupportRequestResponse, SupportRequestsResponse, ThreadRef,
+    TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
+    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
+    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -280,6 +281,14 @@ pub trait DistrictApi: Send + Sync {
         workspace_id: &str,
         proposal_id: &str,
     ) -> impl Future<Output = Result<HqProposalCancelResponse, ApiError>> + Send;
+    /// Reports `screen` to the voice session in `room_name`, for the voice
+    /// agent to read. Sent once; the next report replaces a lost one.
+    fn hq_voice_context(
+        &self,
+        workspace_id: &str,
+        room_name: &str,
+        screen: &HqVoiceScreen,
+    ) -> impl Future<Output = Result<HqVoiceContextResponse, ApiError>> + Send;
     /// Call analytics over `range`.
     fn analytics(
         &self,
@@ -1835,6 +1844,19 @@ where
                 // Recorded nowhere: the call is over here whatever the answer,
                 // and a failure is not tried again.
                 let _ = self.api.hang_up_call(&workspace_id, &call_id).await;
+                return None;
+            }
+            Effect::ReportHqVoiceScreen {
+                workspace_id,
+                room_name,
+                screen,
+            } => {
+                // Recorded nowhere: the next change on screen is reported
+                // again, and the agent reads the last report it has.
+                let _ = self
+                    .api
+                    .hq_voice_context(&workspace_id, &room_name, &screen)
+                    .await;
                 return None;
             }
             Effect::DeclineCall {
