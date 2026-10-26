@@ -68,6 +68,8 @@ use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::route::Route;
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::{l, s};
+use crate::workspaces::WorkspacesState;
+use district_l10n::{WireCategory, wire_label};
 
 /// The refusal code of a proposal already confirmed or cancelled, by voice or
 /// by another click.
@@ -256,6 +258,23 @@ impl SignedIn {
             ),
             can_confirm: can_change,
         }
+    }
+
+    /// The line above the residency statement for a workspace whose data lives
+    /// in another region than the one its voice sessions are processed in
+    /// (the United States, for every workspace today): that its data stays
+    /// in its region and its voice conversations do not. `None` for a United
+    /// States workspace, a region this build cannot name, or no open
+    /// workspace. The web dashboard shows the same line.
+    pub fn hq_voice_region_notice(&self) -> Option<String> {
+        let WorkspacesState::Ready(workspaces) = &self.workspaces else {
+            return None;
+        };
+        let region = workspaces.active().region.as_str();
+        matches!(region, "ca" | "eu" | "apac").then(|| {
+            let name = wire_label(WireCategory::Region, region, l());
+            s::hq_voice_region_disclosure(l(), &name)
+        })
     }
 
     /// The voice session's room, for its connection and its microphone.

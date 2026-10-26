@@ -47,6 +47,10 @@ District HQ by voice. Breaking for the apps (a new major version when released):
   window closes while it runs on sends `HqEvent::StopVoice`. The session ends when the
   member stops it or leaves the workspace, signs out, or the desktop sleeps or quits. The
   residency statement, unanswered, closes with the HQ screen.
+- `SignedIn::hq_voice_region_notice`: for a workspace whose data lives in Canada, Europe or
+  Asia-Pacific, the line an app shows above the residency statement, the web's own: its
+  data stays in its region, its voice conversations are processed in the United States
+  (`hq.voice_region_disclosure`). `None` for a United States workspace.
 - What is on screen is told to a live voice session, as the web dashboard tells it, so
   the voice agent knows the page without asking: `ApiClient::hq_voice_context`
   (`POST /api/district/hq/voice-context`, never repeated, in `DESKTOP_ONLY` with the
@@ -63,7 +67,8 @@ District HQ by voice. Breaking for the apps (a new major version when released):
   included), in an encrypted room decrypted with the room's passphrase.
 - The new sentences in `core.toml` (`hq.voice_*`, the voice dock's `hq.voice_dock_label`
   and `hq.voice_dock_review` among them, `hq.note_cancelled`,
-  `hq.note_already_handled`, `hq.note_expired`), with French marked `draft` for review.
+  `hq.note_already_handled`, `hq.note_expired`), their French reviewed. The residency
+  statement is the web's current one, byte for byte, in both languages.
 
 ### Changed
 

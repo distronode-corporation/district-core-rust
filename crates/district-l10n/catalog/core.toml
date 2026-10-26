@@ -1804,6 +1804,16 @@ tier = "T3"
 state = "reviewed"
 note = "The voice agent is listening to the member."
 
+[hq.voice_region_disclosure]
+en = "This workspace's data lives in {region}, but District HQ voice conversations are processed in the United States."
+fr = "Les données de cet espace de travail se trouvent dans la région {region}, mais les conversations vocales avec District HQ sont traitées aux États-Unis."
+ctx = "body"
+screen = "District HQ"
+tier = "T0"
+args = { region = "str" }
+state = "reviewed"
+note = "Above the residency statement, only for a workspace whose data lives outside the United States (Canada, Europe, Asia-Pacific): its data stays there, its voice sessions do not. {region} is the region's short name in the reader's language (wire.region). The web dashboard's reviewed words, byte for byte (hqVoiceI18n regionDisclosure)."
+
 [hq.voice_speaking]
 en = "District HQ is speaking."
 fr = "District HQ parle."

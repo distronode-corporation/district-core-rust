@@ -1796,6 +1796,15 @@ pub fn hq_voice_listening(l: Locale) -> &'static str {
     }
 }
 
+/// `hq.voice_region_disclosure`
+#[must_use]
+pub fn hq_voice_region_disclosure(l: Locale, region: &str) -> String {
+    match l {
+        Locale::En => format!("This workspace's data lives in {region}, but District HQ voice conversations are processed in the United States."),
+        Locale::FrCa => format!("Les données de cet espace de travail se trouvent dans la région {region}, mais les conversations vocales avec District HQ sont traitées aux États-Unis."),
+    }
+}
+
 /// `hq.voice_speaking`
 #[must_use]
 pub fn hq_voice_speaking(l: Locale) -> &'static str {

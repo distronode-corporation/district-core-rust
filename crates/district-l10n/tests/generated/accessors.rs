@@ -402,6 +402,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::hq_voice_fallback_summary(Locale::FrCa), "District HQ a proposé un changement.");
     assert_eq!(strings::hq_voice_listening(Locale::En), "Listening. Speak to District HQ.");
     assert_eq!(strings::hq_voice_listening(Locale::FrCa), "À l'écoute. Parlez à District HQ.");
+    assert_eq!(strings::hq_voice_region_disclosure(Locale::En, "{region}"), "This workspace's data lives in {region}, but District HQ voice conversations are processed in the United States.");
+    assert_eq!(strings::hq_voice_region_disclosure(Locale::FrCa, "{region}"), "Les données de cet espace de travail se trouvent dans la région {region}, mais les conversations vocales avec District HQ sont traitées aux États-Unis.");
     assert_eq!(strings::hq_voice_speaking(Locale::En), "District HQ is speaking.");
     assert_eq!(strings::hq_voice_speaking(Locale::FrCa), "District HQ parle.");
     assert_eq!(strings::hq_voice_start(Locale::En), "Start voice");

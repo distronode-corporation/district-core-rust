@@ -17,8 +17,8 @@ use district_model::{
 use serde_json::json;
 
 use crate::support::{
-    AGENCY, VIEWER, fixture, last_ticket, loaded, server_error, signed_in, voice_credential,
-    voice_packet, voice_proposal, without_calls,
+    AGENCY, CLIENT, VIEWER, fixture, last_ticket, loaded, restored, server_error, signed_in,
+    voice_credential, voice_packet, voice_proposal, without_calls,
 };
 
 const ID: &str = "11111111-1111-4111-8111-111111111111";
@@ -247,6 +247,30 @@ fn the_residency_statement_comes_first_and_only_once_per_workspace() {
 
     // Accepted once, the next start asks for a credential at once.
     requested(&hq(&mut model, HqEvent::StartVoice));
+}
+
+#[test]
+fn a_workspace_outside_the_united_states_is_told_its_voice_is_not() {
+    let (model, _) = restored();
+    assert_eq!(
+        signed_in(&model).hq_voice_region_notice(),
+        None,
+        "no workspace open yet"
+    );
+    let (model, _) = loaded(AGENCY, "agency");
+    assert_eq!(
+        signed_in(&model).hq_voice_region_notice(),
+        None,
+        "a United States workspace"
+    );
+    let (model, _) = loaded(CLIENT, "client");
+    assert_eq!(
+        signed_in(&model).hq_voice_region_notice().as_deref(),
+        Some(
+            "This workspace's data lives in Canada, but District HQ voice conversations are \
+             processed in the United States."
+        )
+    );
 }
 
 #[test]
