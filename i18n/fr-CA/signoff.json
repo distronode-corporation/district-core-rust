@@ -1,7 +1,7 @@
 {
-  "signed_off_by": "ThinkPad manager session 78da7e6a (Opus 5.5), 2026-10-25: the catalogs are unchanged since the v6.0.0 sign-off by the ThinkPad manager session 78da7e6a, so the same hashes are renewed for v6.1.0.",
-  "release": "v6.1.0",
-  "commit": "190103dada71f269c8ec4eb4a0e53fbef19644f3",
+  "signed_off_by": "ThinkPad manager session 78da7e6a (Opus 5.5), 2026-10-26: reviewed the 23 District HQ voice sentences in core.toml (applied in 780b7de) and approved its four length waivers. hq.voice_region_disclosure was added after that review by worker W6, copied byte for byte from the web dashboard's French, for the manager to confirm. Every other catalog is unchanged since the v6.1.0 sign-off. Recorded for the next release, a new major version with HQ voice.",
+  "release": "v7.0.0",
+  "commit": "7e7def485429325a465e3ee9056c3fc445887dc2",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
@@ -9,7 +9,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
-      "sha256": "6424985078b29c8207ade40ba6e8b475c9545fdfc553ebb5e2a4d4b8c6463b3d"
+      "sha256": "45e456af42bec8d35ebc36aaa51b11abce998b61312696185fc751f41870ac5b"
     },
     {
       "path": "crates/district-l10n/catalog/numbers.toml",
