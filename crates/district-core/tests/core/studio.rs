@@ -435,6 +435,81 @@ fn a_brain_away_from_the_regions_own_location_or_thinking_is_not_measured() {
     );
 }
 
+/// The read with every fixed engine's brain at `thinking`.
+fn presets_at(thinking: &str) -> VoiceStudioResponse {
+    let mut studio = studio();
+    for preset in &mut studio.catalog.presets {
+        preset.engine_mix.llm.thinking = thinking.to_owned();
+    }
+    studio
+}
+
+/// Whether an edit of the saved chain at the region's own location, with the
+/// brain at `thinking`, counts the brain's measured median, checked on both the
+/// block and the meter.
+fn brain_counted(studio: &VoiceStudioResponse, thinking: &str) -> bool {
+    let mut mix = saved_mix();
+    mix.llm.location = "us-east4".to_owned();
+    mix.llm.thinking = thinking.to_owned();
+    let engine = chained(mix);
+    let meter = meter(&engine, studio);
+    let counted = meter.stages[1].value != LatencyText::None;
+    assert_eq!(
+        blocks(&engine, studio)[2].latency != LatencyText::None,
+        counted
+    );
+    let expected = if counted {
+        MeterHeadline::Local {
+            ms: 970.0,
+            at_least: false,
+            text: "About 970\u{a0}ms".to_owned(),
+        }
+    } else {
+        MeterHeadline::Local {
+            ms: 520.0,
+            at_least: true,
+            text: "At least 520\u{a0}ms".to_owned(),
+        }
+    };
+    assert_eq!(meter.headline, expected, "{thinking}");
+    counted
+}
+
+#[test]
+fn the_brain_is_measured_at_the_fixed_engines_thinking_level_not_at_off() {
+    // The service measures its fixed engines' brain at "minimal" since
+    // 2026-10-25: an edit there is the measured setting, and "off" is not.
+    let studio = presets_at("minimal");
+    assert!(brain_counted(&studio, "minimal"));
+    assert!(!brain_counted(&studio, "off"));
+    assert!(!brain_counted(&studio, "dynamic"));
+}
+
+#[test]
+fn the_measured_thinking_level_moves_with_the_presets() {
+    let studio = presets_at("low");
+    assert!(brain_counted(&studio, "low"));
+    assert!(!brain_counted(&studio, "minimal"));
+    assert!(!brain_counted(&studio, "off"));
+}
+
+#[test]
+fn presets_that_disagree_or_are_missing_measure_no_brain() {
+    // Split presets name no one measured level.
+    let mut split = presets_at("minimal");
+    assert!(split.catalog.presets.len() > 1);
+    split.catalog.presets[0].engine_mix.llm.thinking = "off".to_owned();
+    for thinking in ["minimal", "off"] {
+        assert!(!brain_counted(&split, thinking), "{thinking}");
+    }
+    // A read with no presets names none either.
+    let mut empty = studio();
+    empty.catalog.presets.clear();
+    for thinking in ["minimal", "off"] {
+        assert!(!brain_counted(&empty, thinking), "{thinking}");
+    }
+}
+
 #[test]
 fn a_lab_number_is_shown_on_a_brain_block_wherever_it_runs() {
     let mut studio = studio();

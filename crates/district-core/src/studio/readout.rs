@@ -11,9 +11,10 @@
 //! (a model's residency, a location's, a leg's latency text), and every number
 //! is a measured median it sent. A stage without one is missing, and a missing
 //! stage makes the meter "at least". The chain meter is the region's end of
-//! turn, plus the brain's only at the region's own location with thinking off
-//! (where it was measured), plus the voice's (per voice for Deepgram, per model
-//! for the rest); a realtime meter is a missing end of turn plus the model's.
+//! turn, plus the brain's only at the region's own location at the fixed
+//! engines' thinking level (where it was measured, `measured_thinking`), plus
+//! the voice's (per voice for Deepgram, per model for the rest); a realtime
+//! meter is a missing end of turn plus the model's.
 
 use std::collections::BTreeMap;
 
@@ -29,7 +30,6 @@ use crate::text::{l, s};
 
 const MEASURED: &str = "measured";
 const AUTO: &str = "auto";
-const THINKING_OFF: &str = "off";
 const PER_VOICE_VENDOR: &str = "deepgram";
 const STABLE: &str = "stable";
 
@@ -280,10 +280,30 @@ fn placed<'a>(
         .map_or(fallback, |place| &place.residency)
 }
 
+/// The thinking level a brain's median was measured at: the fixed engines'
+/// (the service's `PRESET_LLM`, which every preset's chain carries), or `None`
+/// when the read carries no presets or they do not agree on one.
+///
+/// Read from the response, never a copy of the service's constant. This was a
+/// hard-coded "off" until the service moved its fixed engines to Gemini 3.5
+/// Flash at "minimal": the copy then refused the very setting the service
+/// measures, so an edited chain lost its brain's median and read "at least",
+/// and a stray "off" would have claimed a number nobody measured. `None`
+/// measures nothing, the rule's safe side.
+fn measured_thinking(studio: &VoiceStudioResponse) -> Option<&str> {
+    let mut levels = studio
+        .catalog
+        .presets
+        .iter()
+        .map(|preset| preset.engine_mix.llm.thinking.as_str());
+    let first = levels.next()?;
+    levels.all(|level| level == first).then_some(first)
+}
+
 /// Whether the brain runs where its median was measured: the region's own
-/// location, with thinking off.
-fn brain_local(mix: &EngineMix, brain: &StudioLlmModel) -> bool {
-    if mix.llm.thinking != THINKING_OFF {
+/// location, at the fixed engines' thinking level.
+fn brain_local(mix: &EngineMix, brain: &StudioLlmModel, studio: &VoiceStudioResponse) -> bool {
+    if measured_thinking(studio) != Some(mix.llm.thinking.as_str()) {
         return false;
     }
     if mix.llm.location == AUTO {
@@ -342,7 +362,7 @@ fn local_meter(engine: &StudioEngine, studio: &VoiceStudioResponse) -> MeterView
             let brain = legs
                 .as_ref()
                 .and_then(|legs| measured(legs.brain.latency.as_ref()).zip(Some(legs.brain)))
-                .filter(|(_, brain)| brain_local(mix, brain))
+                .filter(|(_, brain)| brain_local(mix, brain, studio))
                 .map(|(ms, brain)| (ms, LatencyText::of(brain.latency.as_ref())));
             let mouth = legs.as_ref().and_then(|legs| {
                 if mouth_is_model(mix, legs.mouth) {
@@ -479,7 +499,7 @@ fn chain_blocks(mix: &EngineMix, legs: &Legs<'_>, studio: &VoiceStudioResponse) 
     let brain_latency = brain
         .latency
         .as_ref()
-        .filter(|latency| latency.source != MEASURED || brain_local(mix, brain));
+        .filter(|latency| latency.source != MEASURED || brain_local(mix, brain, studio));
     let mouth_latency = if mouth_is_model(mix, mouth) {
         LatencyText::of(mouth.latency.as_ref())
     } else {
