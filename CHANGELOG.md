@@ -75,6 +75,16 @@ District HQ by voice. Breaking for the apps (a new major version when released):
 - Retrying a failed HQ question sends the member's last typed question, even when spoken
   words or a note came after it.
 
+### Fixed
+
+- Voice Studio counts the brain's measured median in an unsaved edit's chain and meter again
+  at the setting the service measured it on. The thinking level was a copy of the service's
+  old one ("off"), and the service now measures its fixed engines at "minimal", so an edit
+  there read "At least 520 ms" where the service says "About 970 ms". The level is now read
+  from the read's presets (`catalog.presets`, every fixed engine's chain): the one level they
+  all carry is the measured one, and with no presets, or presets that disagree, no brain
+  number is claimed. Nothing an app calls changes.
+
 ## [6.1.0] - 2026-10-25
 
 Opt-in crash reports for the desktop apps, in a new crate. A minor version. Reports are off
