@@ -17,6 +17,8 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [7.0.0] - 2026-10-27
+
 District HQ by voice. Breaking for the apps (a new major version when released):
 `DistrictApi` has four new methods, `Event`, `Effect`, `HqEvent`, `HqText`, `HqNote`,
 `MediaEvent` and `MediaOwner` have new variants, and `HqScreen` a new field.
