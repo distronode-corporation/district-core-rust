@@ -10,6 +10,7 @@ use district_auth::{
     NativeAuthApi, RefreshApi, RevokeApi, SessionStore, SignOut, SignOutReport,
     TokenRefreshCoordinator,
 };
+use district_l10n::Locale;
 use district_live::{LiveConfig, TelemetryHub, TokenMinter, WorkspaceUpdate};
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
@@ -20,16 +21,17 @@ use district_model::{
     DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse,
     DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse,
     DeviceRevokeResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest,
-    EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqTurn, MarkReadResponse,
-    MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
-    MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
-    OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
-    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
-    SupportRequestDraft, SupportRequestResponse, SupportRequestsResponse, ThreadRef,
-    TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
-    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
-    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
+    EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse,
+    HqTurn, HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse,
+    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
+    OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse,
+    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
+    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WorkflowListResponse,
+    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -310,6 +312,40 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         proposal: &HqPendingWrite,
     ) -> impl Future<Output = Result<HqConfirmResponse, ApiError>> + Send {
         ApiClient::hq_confirm(self, workspace_id, proposal)
+    }
+
+    fn hq_voice_token(
+        &self,
+        workspace_id: &str,
+        locale: Locale,
+        history: &[HqTurn],
+    ) -> impl Future<Output = Result<HqVoiceTokenResponse, ApiError>> + Send {
+        ApiClient::hq_voice_token(self, workspace_id, locale, history)
+    }
+
+    fn hq_confirm_voice(
+        &self,
+        workspace_id: &str,
+        proposal: &HqVoiceProposal,
+    ) -> impl Future<Output = Result<HqConfirmResponse, ApiError>> + Send {
+        ApiClient::hq_confirm_voice(self, workspace_id, proposal)
+    }
+
+    fn hq_proposal_cancel(
+        &self,
+        workspace_id: &str,
+        proposal_id: &str,
+    ) -> impl Future<Output = Result<HqProposalCancelResponse, ApiError>> + Send {
+        ApiClient::hq_proposal_cancel(self, workspace_id, proposal_id)
+    }
+
+    fn hq_voice_context(
+        &self,
+        workspace_id: &str,
+        room_name: &str,
+        screen: &HqVoiceScreen,
+    ) -> impl Future<Output = Result<HqVoiceContextResponse, ApiError>> + Send {
+        ApiClient::hq_voice_context(self, workspace_id, room_name, screen)
     }
 
     fn analytics(

@@ -129,6 +129,21 @@ pub struct Addition {
 /// this table.
 pub const DESKTOP_ONLY: &[Addition] = &[
     Addition {
+        endpoint: Endpoint::HqVoiceToken,
+        reason: "District HQ by voice. The desktop apps build it first; the Android app's voice \
+                 mode is being built against the same contract, and the snapshot predates it.",
+    },
+    Addition {
+        endpoint: Endpoint::HqProposalCancel,
+        reason: "Cancelling a change the HQ voice agent proposed, by click, for the same reason \
+                 as the voice credential.",
+    },
+    Addition {
+        endpoint: Endpoint::HqVoiceContext,
+        reason: "What is on screen during an HQ voice session, for the voice agent, for the \
+                 same reason as the voice credential.",
+    },
+    Addition {
         endpoint: Endpoint::SaveSettings,
         reason: "The account's language, written when a desktop app signs in or starts in a \
                  language the account was not last told, so that what the service says to the \

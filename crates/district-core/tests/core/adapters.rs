@@ -39,6 +39,7 @@ use wiremock::{Mock, MockServer, ResponseTemplate};
 
 use crate::support::{
     AGENCY, THIS_DEVICE, USER, claims, desktop_fixture, fixture, listed, loaded, ticket,
+    voice_credential, voice_proposal,
 };
 
 /// The app on `platform`; the Linux one is the Linux app at this release.
@@ -537,7 +538,22 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
         )
         .mount(&server)
         .await;
-    let routes: [(&str, &str, serde_json::Value); 35] = [
+    let routes: [(&str, &str, serde_json::Value); 38] = [
+        (
+            "POST",
+            "/api/district/hq/voice-token",
+            serde_json::to_value(voice_credential()).unwrap(),
+        ),
+        (
+            "POST",
+            "/api/district/hq/proposals/cancel",
+            json!({"success": true}),
+        ),
+        (
+            "POST",
+            "/api/district/hq/voice-context",
+            json!({"success": true}),
+        ),
         (
             "POST",
             "/api/district/hq",
@@ -718,6 +734,34 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
     let ws = "ws-contract-test";
     let key = Some("7a1c4b52-0d8e-4f3a-9b6c-2e5d8f1a3c70");
 
+    let credential = DistrictApi::hq_voice_token(&client, ws, district_core::Locale::En, &[])
+        .await
+        .unwrap();
+    assert!(credential.is_joinable());
+    let spoken = voice_proposal();
+    assert!(
+        DistrictApi::hq_confirm_voice(&client, ws, &spoken)
+            .await
+            .unwrap()
+            .is_the_voice_proposal(&spoken)
+    );
+    assert!(
+        DistrictApi::hq_proposal_cancel(&client, ws, &spoken.proposal_id)
+            .await
+            .unwrap()
+            .success
+    );
+    let screen = district_model::HqVoiceScreen {
+        version: 1,
+        page: "hq".to_owned(),
+        selected: None,
+    };
+    assert!(
+        DistrictApi::hq_voice_context(&client, ws, &credential.room_name, &screen)
+            .await
+            .unwrap()
+            .success
+    );
     let answer = DistrictApi::hq_prompt(&client, ws, "Change the greeting", &[])
         .await
         .unwrap();

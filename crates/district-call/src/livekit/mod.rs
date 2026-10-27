@@ -25,6 +25,7 @@
 
 mod audio;
 mod room;
+mod speech;
 
 pub use audio::{Audio, FrameAudio};
 
@@ -447,6 +448,8 @@ async fn follow(
 ) {
     let mut check = tokio::time::interval(DECRYPTION_CHECK);
     check.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
+    // The transcription streams being read, each stopped with this task.
+    let mut streams: Vec<Task> = Vec::new();
     loop {
         let mut reports = Vec::new();
         let mut reconnected = false;
@@ -459,6 +462,26 @@ async fn follow(
                     reconnected = true;
                     follower.resubscribe(&room);
                     follower.on_event(RoomEvent::Reconnected, &mut reports)
+                }
+                Some(RoomEvent::TextStreamOpened {
+                    reader,
+                    topic,
+                    participant_identity,
+                }) => {
+                    let reader = reader.take().filter(|_| speech::is_transcription(&topic));
+                    let speaker = reader.as_ref().and_then(|reader| {
+                        speech::speaker(&room, &participant_identity, reader)
+                    });
+                    if let (Some(reader), Some(speaker)) = (reader, speaker) {
+                        streams.retain(|stream| !stream.is_finished());
+                        streams.push(Task::spawn(speech::read(
+                            Arc::clone(&shared),
+                            Arc::clone(&session),
+                            reader,
+                            speaker,
+                        )));
+                    }
+                    None
                 }
                 Some(event) => follower.on_event(event, &mut reports),
                 None => return,
@@ -539,6 +562,11 @@ struct Task(JoinHandle<()>);
 impl Task {
     fn spawn(future: impl Future<Output = ()> + Send + 'static) -> Self {
         Self(tokio::spawn(future))
+    }
+
+    /// Whether it has run to its end.
+    fn is_finished(&self) -> bool {
+        self.0.is_finished()
     }
 }
 

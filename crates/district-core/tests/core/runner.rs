@@ -34,7 +34,8 @@ use district_model::{
     DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse, DeskTicketStatus,
     DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
     DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
-    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqRole, HqTurn, MarkReadResponse,
+    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqRole, HqTurn,
+    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, MarkReadResponse,
     MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
     MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
     OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
@@ -64,7 +65,7 @@ use district_model::{
 
 use crate::support::{
     AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, overview,
-    workspace_list,
+    voice_credential, voice_proposal, workspace_list,
 };
 
 /// What every fake did, in order.
@@ -382,6 +383,54 @@ impl DistrictApi for FakeApi {
         self.0
             .push(format!("hq confirm {workspace_id} {}", proposal.tool));
         Ok(fixture("district-hq-confirm.json"))
+    }
+
+    async fn hq_voice_token(
+        &self,
+        workspace_id: &str,
+        locale: Locale,
+        history: &[HqTurn],
+    ) -> Result<HqVoiceTokenResponse, ApiError> {
+        self.0.push(format!(
+            "hq voice {workspace_id} {locale:?} after {}",
+            history.len()
+        ));
+        Ok(voice_credential())
+    }
+
+    async fn hq_confirm_voice(
+        &self,
+        workspace_id: &str,
+        proposal: &HqVoiceProposal,
+    ) -> Result<HqConfirmResponse, ApiError> {
+        self.0.push(format!(
+            "hq voice confirm {workspace_id} {} {}",
+            proposal.proposal_id, proposal.tool
+        ));
+        Ok(fixture("district-hq-confirm.json"))
+    }
+
+    async fn hq_proposal_cancel(
+        &self,
+        workspace_id: &str,
+        proposal_id: &str,
+    ) -> Result<HqProposalCancelResponse, ApiError> {
+        self.0
+            .push(format!("hq voice cancel {workspace_id} {proposal_id}"));
+        Ok(HqProposalCancelResponse { success: true })
+    }
+
+    async fn hq_voice_context(
+        &self,
+        workspace_id: &str,
+        room_name: &str,
+        screen: &HqVoiceScreen,
+    ) -> Result<HqVoiceContextResponse, ApiError> {
+        self.0.push(format!(
+            "hq voice context {workspace_id} {room_name} {} {}",
+            screen.version, screen.page
+        ));
+        Err(server_error())
     }
 
     async fn analytics(
@@ -2058,6 +2107,43 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             },
         ),
         (
+            Effect::RequestHqVoice {
+                ticket,
+                workspace_id: ws(),
+                locale: Locale::FrCa,
+                history: vec![HqTurn {
+                    role: HqRole::User,
+                    text: "Hi".to_owned(),
+                }],
+            },
+            Event::HqVoiceIssued {
+                ticket,
+                result: Ok(voice_credential()),
+            },
+        ),
+        (
+            Effect::ConfirmHqVoice {
+                ticket,
+                workspace_id: ws(),
+                proposal: voice_proposal(),
+            },
+            Event::HqVoiceConfirmed {
+                ticket,
+                result: Ok(fixture("district-hq-confirm.json")),
+            },
+        ),
+        (
+            Effect::CancelHqVoice {
+                ticket,
+                workspace_id: ws(),
+                proposal_id: "p-1".to_owned(),
+            },
+            Event::HqVoiceCancelled {
+                ticket,
+                result: Ok(HqProposalCancelResponse { success: true }),
+            },
+        ),
+        (
             Effect::LoadAnalytics {
                 ticket,
                 workspace_id: ws(),
@@ -2476,6 +2562,9 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
         [
             "hq ws-contract-active Change the greeting after 1",
             "hq confirm ws-contract-active update_persona",
+            "hq voice ws-contract-active FrCa after 1",
+            "hq voice confirm ws-contract-active 11111111-1111-4111-8111-111111111111 update_persona",
+            "hq voice cancel ws-contract-active p-1",
             "analytics ws-contract-active 30d",
             "usage ws-contract-active",
             "usage history ws-contract-active 3",
@@ -3111,6 +3200,22 @@ async fn each_voice_effect_calls_its_dependency_and_reports_back() {
             .await,
         None
     );
+    // Nor is a failed screen report: the next change on screen is reported
+    // again.
+    assert_eq!(
+        runner
+            .run(Effect::ReportHqVoiceScreen {
+                workspace_id: AGENCY.to_owned(),
+                room_name: "hq_room".to_owned(),
+                screen: HqVoiceScreen {
+                    version: 1,
+                    page: "hq".to_owned(),
+                    selected: None,
+                },
+            })
+            .await,
+        None
+    );
     // Nor is a failed decline: the ring is gone here, and the service's own
     // window ends it there.
     assert_eq!(
@@ -3151,6 +3256,7 @@ async fn each_voice_effect_calls_its_dependency_and_reports_back() {
             "dial ws-contract-active +1 212 555 0142",
             "answer ws-contract-active call_1",
             "hang up ws-contract-active CA01",
+            "hq voice context ws-contract-active hq_room 1 hq",
             "decline ws-contract-active call_1",
             "connect wss://media.example.com passphrase false microphone true",
             "microphone false",

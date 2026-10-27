@@ -20,9 +20,12 @@
 //!   request sends.
 //! - `transcript`: the live transcript's frames read into their typed events,
 //!   and the ops a client sends.
+//! - `hq_voice`: HQ voice mode's packets and click answers, from the draft
+//!   fixtures in `tests/hq-voice-drafts/` until the server records them.
 
 mod checksums;
 mod fixtures;
+mod hq_voice;
 mod manifest;
 mod round_trip;
 mod scheduling_admin;

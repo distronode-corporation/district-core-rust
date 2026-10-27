@@ -8,6 +8,8 @@
 //! workspace, so switching workspaces leaves a detail for its list (see
 //! [`Route::after_workspace_switch`]).
 
+use district_model::{HqVoiceRecordKind, HqVoiceSelection, ThreadRef};
+
 use crate::scheduling_admin::SchedulingSection;
 
 /// The five destinations the navigation bar always offers, in its order.
@@ -244,6 +246,71 @@ impl Route {
                 self.tab().route()
             }
             other => other.clone(),
+        }
+    }
+
+    /// This screen as District HQ's voice agent knows the web dashboard's
+    /// pages: the page's id in the service's page table, and the record open
+    /// on it (a call, a contact, or an inbox thread by its contact), which is
+    /// reported only by an id the service takes. `None` for a screen the table
+    /// has no page for, which is not reported at all.
+    pub fn hq_voice_page(&self) -> Option<(&'static str, Option<HqVoiceSelection>)> {
+        use HqVoiceRecordKind::{Call, Contact, Conversation};
+        let page = |id: &'static str| Some((id, None));
+        match self {
+            Self::Overview => page("home"),
+            Self::Inbox => page("inbox"),
+            Self::Thread { thread_key } => {
+                let selected = match ThreadRef::from_thread_key(thread_key) {
+                    Some(ThreadRef::Contact(id)) => HqVoiceSelection::new(Conversation, &id),
+                    _ => None,
+                };
+                Some(("inbox", selected))
+            }
+            Self::Calls => page("calls"),
+            Self::CallDetail { call_id } => Some(("calls", HqVoiceSelection::new(Call, call_id))),
+            Self::Dialer => page("phone"),
+            Self::Contacts | Self::BlockedContacts => page("contacts"),
+            Self::ContactDetail { contact_id } => {
+                Some(("contacts", HqVoiceSelection::new(Contact, contact_id)))
+            }
+            Self::Hq => page("hq"),
+            Self::Analytics => page("analytics"),
+            Self::Marketplace | Self::Workspace(WorkspaceSection::Numbers) => page("marketplace"),
+            Self::Billing => page("billing"),
+            Self::Workflows => page("workflows"),
+            Self::Scheduling => page("scheduling"),
+            Self::SchedulingAdmin(section) => page(match section {
+                SchedulingSection::Overview => "scheduling",
+                SchedulingSection::EventTypes => "scheduling-event-types",
+                SchedulingSection::EventType { .. } => "scheduling-event-type",
+                SchedulingSection::Hours => "scheduling-hours",
+                SchedulingSection::Bookings | SchedulingSection::Booking { .. } => {
+                    "scheduling-bookings"
+                }
+                SchedulingSection::Calendar => "scheduling-calendar",
+                SchedulingSection::Team => "scheduling-team",
+                SchedulingSection::Settings => "scheduling-settings",
+                SchedulingSection::Developer => "scheduling-developer",
+            }),
+            Self::Desk | Self::DeskTicket { .. } | Self::DeskSettings => page("desk"),
+            Self::Support | Self::SupportRequest { .. } => page("support"),
+            Self::Rooms => page("rooms"),
+            Self::Account | Self::Devices => page("account"),
+            Self::Workspace(WorkspaceSection::Hub) => page("studio"),
+            Self::Workspace(WorkspaceSection::Persona) => page("studio-persona"),
+            Self::Workspace(WorkspaceSection::VoiceStudio) => page("studio-voice"),
+            Self::Workspace(WorkspaceSection::CallHandling | WorkspaceSection::Routing) => {
+                page("studio-call-handling")
+            }
+            Self::Workspace(WorkspaceSection::Knowledge) => page("studio-knowledge"),
+            // No page of the table is these sections.
+            Self::Workspace(
+                WorkspaceSection::Tools
+                | WorkspaceSection::Directory
+                | WorkspaceSection::Messaging
+                | WorkspaceSection::Members,
+            ) => None,
         }
     }
 }

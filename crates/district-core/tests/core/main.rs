@@ -17,6 +17,7 @@ mod devices;
 mod dialer;
 mod failure;
 mod hq;
+mod hq_voice;
 mod inbox;
 mod knowledge;
 mod l10n;

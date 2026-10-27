@@ -6,13 +6,15 @@ use std::path::PathBuf;
 use std::pin::Pin;
 
 use district_api::{ApiClient, ApiError, Endpoint};
+use district_l10n::Locale;
 use district_model::{
     A2pRegistrationDraft, AnalyticsRange, BlockTarget, CHANNEL_SMS, CallHandlingMode,
     CallHandlingPatch, CreateContactRequest, DeskBrandName, DeskSettingsPatch, DeskTicketDraft,
     DeskTicketStatus, DirectoryEntry, DraftSaveRequest, HqPendingWrite, HqRole, HqTurn,
-    KnowledgeDocumentDraft, KnowledgeMode, MeetRoomName, MemberRole, MessagingAccountSave,
-    MessagingChannel, MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials,
-    MessagingDelete, MessagingSetChannelDefault, MessagingSetDefault, NumberSearch, PRESENCE_KIND,
+    HqVoiceProposal, HqVoiceRecordKind, HqVoiceScreen, HqVoiceSelection, KnowledgeDocumentDraft,
+    KnowledgeMode, MeetRoomName, MemberRole, MessagingAccountSave, MessagingChannel,
+    MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials, MessagingDelete,
+    MessagingSetChannelDefault, MessagingSetDefault, NumberSearch, PRESENCE_KIND,
     PersonaEngineChoice, PersonaPatch, PersonaPreviewForm, Platform, PresenceRegistration,
     RoutingRule, RoutingRuleField, SETTINGS_LANGUAGE_FRENCH, SendMessageRequest, SipTrunkDraft,
     SupportRequestDraft, SupportRequestKind, ThreadRef, TollFreeVerificationDraft,
@@ -193,6 +195,29 @@ fn history() -> Vec<HqTurn> {
 fn proposal() -> HqPendingWrite {
     let answer = fixture("district-hq-pending-write.json");
     serde_json::from_value(answer["pendingWrite"].clone()).expect("a proposal")
+}
+
+/// A change the voice agent proposed: the typed proposal's write, with an id.
+fn voice_proposal() -> HqVoiceProposal {
+    let typed = proposal();
+    HqVoiceProposal {
+        proposal_id: "11111111-1111-4111-8111-111111111111".to_owned(),
+        tool: typed.tool,
+        args: typed.args,
+        summary: typed.summary,
+    }
+}
+
+/// A voice session's credential, as the route writes it.
+fn voice_credential() -> Value {
+    json!({
+        "success": true,
+        "token": "contract-livekit-hq-voice-jwt",
+        "url": "wss://media.example.com",
+        "roomName": "hq_ws-contract-test_00000000-0000-4000-8000-000000000000",
+        "processingRegion": "us",
+        "e2ee": {"key": "YFT+/ceW4bhgizPFpeX9E5a3PVZ9T07aWRQq4uwQwW0="},
+    })
 }
 
 fn toronto_numbers() -> NumberSearch {
@@ -765,6 +790,87 @@ pub fn cases() -> Vec<Case> {
                     "args": {
                         "greeting": "Good afternoon, thanks for calling Analytical Engines.",
                     },
+                },
+            })),
+        },
+        // District HQ by voice. No route here has a recorded response yet, so
+        // the answers are written from the routes' contract.
+        Case {
+            name: "hq_voice_token",
+            endpoint: Endpoint::HqVoiceToken,
+            retried: false,
+            answer: voice_credential(),
+            call: call!(c => c.hq_voice_token(WS, Locale::FrCa, &history())),
+            method: "POST",
+            path: "/api/district/hq/voice-token",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "locale": "fr",
+                "history": [
+                    {"role": "user", "text": "How many calls did we miss?"},
+                    {"role": "model", "text": "Three this week."},
+                ],
+            })),
+        },
+        Case {
+            name: "hq_confirm_voice",
+            endpoint: Endpoint::Hq,
+            retried: false,
+            answer: fixture("district-hq-confirm.json"),
+            call: call!(c => c.hq_confirm_voice(WS, &voice_proposal())),
+            method: "POST",
+            path: "/api/district/hq",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "confirm": {
+                    "tool": "update_persona",
+                    "args": {
+                        "greeting": "Good afternoon, thanks for calling Analytical Engines.",
+                    },
+                    "proposalId": "11111111-1111-4111-8111-111111111111",
+                },
+            })),
+        },
+        Case {
+            name: "hq_proposal_cancel",
+            endpoint: Endpoint::HqProposalCancel,
+            retried: false,
+            answer: json!({"success": true}),
+            call: call!(c => c.hq_proposal_cancel(WS, "11111111-1111-4111-8111-111111111111")),
+            method: "POST",
+            path: "/api/district/hq/proposals/cancel",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "proposalId": "11111111-1111-4111-8111-111111111111",
+            })),
+        },
+        Case {
+            name: "hq_voice_context",
+            endpoint: Endpoint::HqVoiceContext,
+            retried: false,
+            answer: json!({"success": true}),
+            call: call!(c => c.hq_voice_context(
+                WS,
+                "hq_ws-contract-test_00000000-0000-4000-8000-000000000000",
+                &HqVoiceScreen {
+                    version: 2,
+                    page: "calls".to_owned(),
+                    selected: HqVoiceSelection::new(HqVoiceRecordKind::Call, "call_contract_ringing"),
+                },
+            )),
+            method: "POST",
+            path: "/api/district/hq/voice-context",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "roomName": "hq_ws-contract-test_00000000-0000-4000-8000-000000000000",
+                "snapshot": {
+                    "version": 2,
+                    "page": "calls",
+                    "selected": {"kind": "call", "id": "call_contract_ringing"},
                 },
             })),
         },

@@ -30,7 +30,8 @@ use std::fmt;
 use std::future::Future;
 
 use district_model::{
-    CallAnswerResponse, DialResponse, PersonaPreviewTokenResponse, RoomE2ee, RoomTokenResponse,
+    CallAnswerResponse, DialResponse, HqVoiceTokenResponse, PersonaPreviewTokenResponse, RoomE2ee,
+    RoomTokenResponse,
 };
 
 use crate::model::{Effect, Ticket, Tickets};
@@ -63,6 +64,11 @@ impl MediaCredential {
 
     /// An audition's credential and passphrase.
     pub(crate) fn from_audition(credential: &PersonaPreviewTokenResponse) -> Self {
+        Self::new(&credential.url, &credential.token, credential.e2ee.as_ref())
+    }
+
+    /// An HQ voice session's credential and passphrase.
+    pub(crate) fn from_hq_voice(credential: &HqVoiceTokenResponse) -> Self {
         Self::new(&credential.url, &credential.token, credential.e2ee.as_ref())
     }
 
@@ -159,6 +165,13 @@ impl fmt::Debug for MediaCredential {
 ///   change ([`MediaEvent::Microphone`]), a connection lost and being resumed
 ///   ([`MediaEvent::Reconnecting`], then [`MediaEvent::Connected`] again), and a
 ///   failure to decrypt ([`MediaEvent::EncryptionFailed`]).
+/// - Report what an agent participant sends: its data packets, with their
+///   topic ([`MediaEvent::AgentData`]), the value of its `lk.agent.state`
+///   attribute whenever it is known or changes ([`MediaEvent::AgentState`]),
+///   and the transcription streams on `lk.transcription` ([`MediaEvent::Speech`]),
+///   the member's own words included, which the agent sends on their behalf.
+///   Data from anyone who is not an agent is not reported. In an encrypted
+///   room, data is decrypted with the same passphrase as the media.
 /// - Treat [`disconnect`](Self::disconnect) as idempotent (a hang-up can race
 ///   the far end's), release the microphone, and report nothing more for that
 ///   session.
@@ -223,6 +236,51 @@ pub enum MediaEvent {
     /// Media from someone in the room could not be decrypted: their key and
     /// this session's do not agree.
     EncryptionFailed,
+    /// An agent participant sent a data packet. `Debug` leaves the payload
+    /// out.
+    AgentData {
+        /// The packet's topic, empty when it had none.
+        topic: String,
+        /// Its bytes, as sent.
+        payload: Vec<u8>,
+    },
+    /// An agent participant's `lk.agent.state` attribute, as it now reads.
+    AgentState(String),
+    /// Words spoken in the room, transcribed. `Debug` leaves the words out.
+    Speech(SpeechSegment),
+}
+
+/// Who said a transcribed segment.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum Speaker {
+    /// The member, on this computer.
+    Member,
+    /// An agent participant.
+    Agent,
+}
+
+/// One segment of transcribed speech, as it stands. The same segment is
+/// reported again as its text grows, until it is final.
+#[derive(Clone, PartialEq, Eq)]
+pub struct SpeechSegment {
+    /// The segment's id, unique for its speaker.
+    pub segment_id: String,
+    /// Who said it.
+    pub speaker: Speaker,
+    /// The words so far.
+    pub text: String,
+    /// Whether these are its last words.
+    pub is_final: bool,
+}
+
+impl fmt::Debug for SpeechSegment {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SpeechSegment")
+            .field("speaker", &self.speaker)
+            .field("text", &"<redacted>")
+            .field("is_final", &self.is_final)
+            .finish()
+    }
 }
 
 impl fmt::Debug for MediaEvent {
@@ -250,6 +308,13 @@ impl fmt::Debug for MediaEvent {
                 .finish(),
             Self::Microphone(state) => f.debug_tuple("Microphone").field(state).finish(),
             Self::EncryptionFailed => f.write_str("EncryptionFailed"),
+            Self::AgentData { topic, payload } => f
+                .debug_struct("AgentData")
+                .field("topic", topic)
+                .field("payload", &format_args!("<{} bytes>", payload.len()))
+                .finish(),
+            Self::AgentState(state) => f.debug_tuple("AgentState").field(state).finish(),
+            Self::Speech(segment) => f.debug_tuple("Speech").field(segment).finish(),
         }
     }
 }
@@ -381,6 +446,8 @@ pub enum MediaOwner {
     /// The persona audition,
     /// [`PersonaSection::preview`](crate::PersonaSection::preview).
     Audition,
+    /// District HQ by voice, [`HqScreen::voice`](crate::HqScreen::voice).
+    HqVoice,
 }
 
 /// Where a session's connection stands. Its end is not a state here: the
@@ -423,6 +490,8 @@ pub(crate) enum MediaChange {
     People,
     /// The session is over, for this reason.
     Ended(DisconnectReason),
+    /// Something an agent said or sent, for the owner to read.
+    Agent(MediaEvent),
 }
 
 impl MediaSession {
@@ -516,6 +585,9 @@ impl MediaSession {
                 self.encryption_failed = true;
                 MediaChange::Nothing
             }
+            event @ (MediaEvent::AgentData { .. }
+            | MediaEvent::AgentState(_)
+            | MediaEvent::Speech(_)) => MediaChange::Agent(event),
         }
     }
 
@@ -551,6 +623,7 @@ impl SignedIn {
                 .persona
                 .as_ref()
                 .is_some_and(|section| section.preview_minting())
+            || self.hq.voice.minting()
     }
 
     /// Holds a new session for `owner` and asks the engine to join it. Any
@@ -632,6 +705,7 @@ impl SignedIn {
             MediaChange::Nothing => Vec::new(),
             MediaChange::Connected => self.media_connected(owner, tickets),
             MediaChange::People => self.media_people_changed(owner, tickets),
+            MediaChange::Agent(event) => self.media_agent(owner, event),
             MediaChange::Ended(reason) => {
                 self.media = None;
                 let mut effects = self.media_ended(owner, reason, tickets);
@@ -644,13 +718,27 @@ impl SignedIn {
     fn media_connected(&mut self, owner: MediaOwner, tickets: &mut Tickets) -> Vec<Effect> {
         match owner {
             MediaOwner::Call => self.call_media_connected(tickets),
-            MediaOwner::Room | MediaOwner::Audition => Vec::new(),
+            MediaOwner::Room | MediaOwner::Audition | MediaOwner::HqVoice => Vec::new(),
+        }
+    }
+
+    /// Only an HQ voice session reads what an agent says or sends: the
+    /// receptionist on a call and the Companion in a room send nothing a screen
+    /// shows.
+    fn media_agent(&mut self, owner: MediaOwner, event: MediaEvent) -> Vec<Effect> {
+        match owner {
+            MediaOwner::HqVoice => {
+                self.hq_voice_agent(event);
+                Vec::new()
+            }
+            MediaOwner::Call | MediaOwner::Room | MediaOwner::Audition => Vec::new(),
         }
     }
 
     fn media_people_changed(&mut self, owner: MediaOwner, tickets: &mut Tickets) -> Vec<Effect> {
         match owner {
             MediaOwner::Call => self.call_people_changed(tickets),
+            MediaOwner::HqVoice => self.hq_voice_people_changed(tickets),
             MediaOwner::Room | MediaOwner::Audition => Vec::new(),
         }
     }
@@ -668,6 +756,10 @@ impl SignedIn {
                 Vec::new()
             }
             MediaOwner::Audition => self.audition_media_ended(reason, tickets),
+            MediaOwner::HqVoice => {
+                self.hq_voice_media_ended(reason, tickets);
+                Vec::new()
+            }
         }
     }
 }

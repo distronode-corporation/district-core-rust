@@ -14,6 +14,7 @@ mod support;
 mod audio;
 mod devices;
 mod encryption;
+mod hq;
 mod lifecycle;
 mod logging;
 mod people;
