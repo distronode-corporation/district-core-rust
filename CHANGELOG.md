@@ -17,6 +17,18 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [7.0.1] - 2026-10-29
+
+A patch release: the media dependencies move, and nothing an app calls or implements changes.
+
+### Changed
+
+- `livekit` 0.9.7, built against the audio-only libwebrtc `a545de4` release
+  (`libwebrtc-a545de4-audio-1`) through `webrtc-sys-build` 0.3.21.
+  `scripts/fetch-libwebrtc.sh` and NOTICE name that release and its SHA-256.
+- `livekit-signaling` stays at 0.1.7: 0.1.8 removed a field livekit 0.9.7 still sets.
+- `deny.toml` drops the three `zip` 0.6.6 advisory ignores; the lock now has `zip` 9.1.3.
+
 ## [7.0.0] - 2026-10-27
 
 District HQ by voice. Breaking for the apps (a new major version when released):
