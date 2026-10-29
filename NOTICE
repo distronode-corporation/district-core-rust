@@ -15,12 +15,12 @@ libwebrtc
 A build with calls (district-call's `livekit` feature) statically links
 libwebrtc. On Linux it is the library District AI for Linux builds for the
 LiveKit Rust SDK: LiveKit's own recipe and pinned sources for release
-webrtc-89d790b of github.com/livekit/rust-sdks, with every patch LiveKit
+webrtc-a545de4 of github.com/livekit/rust-sdks, with every patch LiveKit
 applies, built by that repository's scripts/build-libwebrtc.sh without the H.264
 and H.265 codecs or FFmpeg. The archive is webrtc-linux-x64-release.zip in
-release libwebrtc-89d790b-audio-1 of
+release libwebrtc-a545de4-audio-1 of
 github.com/distronode-corporation/district-linux, SHA-256
-2355bc8c6cdaf9613c471da944ac901bb293f346dda5e94cdbe6249a36914317, which is the
+d5344123e42e7bdc6717d080e9af654d662c051fa7462c1134a7dc4b0cbce31e, which is the
 pin in scripts/fetch-libwebrtc.sh. The archive's LICENSE.md, which that script unpacks
 beside the library, holds the full licence text of every component below, and a
 distribution of such a build must ship it with the binary, as District AI for
