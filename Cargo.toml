@@ -160,7 +160,7 @@ sentry = { version = "0.49.3", default-features = false, features = ["backtrace"
 # Test only: district-crash's proof test reads the test binary's own build id
 # (ELF) or PDB id (PE) to check the report's debug image against it. The same
 # object backtrace already locks; parsing only, no compression.
-object = { version = "0.37.3", default-features = false, features = ["read_core", "elf", "pe", "std"] }
+object = { version = "0.40.0", default-features = false, features = ["read_core", "elf", "pe", "std"] }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
