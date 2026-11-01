@@ -1,7 +1,14 @@
-# District AI core for Rust
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/distronode-logo-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/assets/distronode-logo-light.png">
+  <img alt="Distronode" src=".github/assets/distronode-logo-light.png" width="220">
+</picture>
+
+# District Core for Rust
 
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/distronode-corporation/district-core-rust/badge)](https://scorecard.dev/viewer/?uri=github.com/distronode-corporation/district-core-rust)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/15876/badge)](https://www.bestpractices.dev/projects/15876)
+[![Latest release](https://img.shields.io/github/v/release/distronode-corporation/district-core-rust?label=release)](https://github.com/distronode-corporation/district-core-rust/releases/latest)
 
 The shared Rust core of the District AI desktop apps: the data types, the HTTP
 client, sign-in, live updates, the application state and the call engine of
@@ -10,8 +17,8 @@ toolkit in any of it.
 
 > **Status: 7.0.1 is the current release**
 > ([7.0.1](https://github.com/distronode-corporation/district-core-rust/releases/latest)).
-> District AI for Linux 3.1.0 and District AI for Windows 3.1.0 are built on 6.1.0
-> and move to 7.0.x in their next releases. The core
+> District AI for Linux 3.2.0 and District AI for Windows 3.2.0 are built on 7.0.0,
+> and Linux's main branch has moved to 7.0.1. The core
 > was extracted from District AI for Linux 2.1.0 with its history. See the
 > [CHANGELOG](CHANGELOG.md).
 
