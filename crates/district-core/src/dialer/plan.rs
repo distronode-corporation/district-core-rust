@@ -293,10 +293,17 @@ fn finish(
 }
 
 /// The national number as it is dialled inside `iso`, trunk prefix included.
+///
+/// A `+` and a calling code with no digit after it yet stay as they are, so the
+/// next digit is still read after the code. Shown as an empty national number
+/// instead, the next digit would be read as a local one, and a trunk prefix
+/// would swallow it: Saint Petersburg's 812 typed after +7 would lose its 8 to
+/// Russia's trunk 8. A national number is empty only after a trunk prefix,
+/// which is shown as typed.
 fn format_national(iso: &str, code: &str, nsn: &str, typed_trunk: bool) -> String {
     if nsn.is_empty() {
         return match (typed_trunk, code) {
-            (false, _) => String::new(),
+            (false, _) => format!("+{code}"),
             (true, "1") => "1".to_owned(),
             (true, _) => trunk_prefix(iso).unwrap_or("0").to_owned(),
         };
@@ -896,6 +903,26 @@ mod tests {
         assert_eq!(read("8", "RU").national, "8", "the trunk alone is shown");
         assert_eq!(read("+7", "KZ").iso, Some("KZ"));
         assert_eq!(read("+7", "CA").iso, Some("RU"));
+    }
+
+    /// A calling code with no digit after it yet stays in the field, so the
+    /// next digit is read after the code. Typed key by key, Saint Petersburg's
+    /// +7 812 kept its 8 only this way: shown as an empty local number, the 8
+    /// was read as Russia's trunk prefix and dropped.
+    #[test]
+    fn a_code_with_no_digit_after_it_stays_in_the_field() {
+        let code_only = read("+7", "CA");
+        assert_eq!(
+            (code_only.national.as_str(), code_only.iso),
+            ("+7", Some("RU"))
+        );
+        assert_eq!(read(&plus("44"), "CA").national, plus("44"));
+        let typed = type_keys(&plus("78121234567"), Some("CA"));
+        assert_eq!(typed.iso, Some("RU"));
+        assert_eq!(typed.e164, Some(plus("78121234567")));
+        assert_eq!(typed.national, read(&plus("7 812 123 4567"), "CA").national);
+        // A trunk 0 pasted after the code is still dropped, and the code stays.
+        assert_eq!(read(&plus("440"), "CA").national, plus("44"));
     }
 
     /// The same for +1, which already re-read its area code: typed key by key

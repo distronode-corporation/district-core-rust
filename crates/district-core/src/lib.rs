@@ -187,7 +187,7 @@ pub use devices::{Confirmation, DeviceRow, DevicesEvent, DevicesList, DevicesScr
 pub use dialer::{
     COUNTRIES, DeleteDirection, DialCountry, DialReading, DialStatus, DialerEvent, DialerScreen,
     MAX_DIAL_DIGITS, MIN_DIAL_DIGITS, calling_code, caret_after_entry_chars, clean_dial_input,
-    country_name, edit_dial_input, entry_chars_before, flag, format_call_duration,
+    country_name, edit_dial_input, entry_chars_before, entry_for_pick, flag, format_call_duration,
     format_dial_entry, format_phone_number, home_country, national_example, read_dial_entry,
     search_countries, sorted_countries, suggested_countries,
 };

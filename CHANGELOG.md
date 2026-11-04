@@ -39,8 +39,8 @@ typed the local way under a country the member can see, and is sent as E.164. Br
 - `DialerScreen`: `country`, `home` and `length_checked`, and `reading`, `hint`,
   `placeholder`, `destination` ("Rings Canada · +1 416 555 0199"), `problem` and
   `country_label`. `DialerEvent::PickCountry` and `DialerEvent::CheckLength`.
-- `edit_dial_input`, `clean_dial_input`, `entry_chars_before` and
-  `caret_after_entry_chars`, for a shell whose field the core writes after every edit.
+- `edit_dial_input`, `clean_dial_input`, `entry_chars_before`, `caret_after_entry_chars`
+  and `entry_for_pick`, for a shell whose field the core writes after every edit.
 - Catalog entries `dialer.countries_all`, `countries_no_match`, `countries_suggested`,
   `country`, `country_button`, `country_search`, `emergency`, `hint_local`,
   `needs_country`, `rings`, `unrecognised` and `wrong_length`, their French in state

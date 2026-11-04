@@ -193,9 +193,9 @@ impl DialerScreen {
         let Some(country) = plan::find_country(iso) else {
             return;
         };
+        let kept = entry_for_pick(&self.entry, self.country.as_deref());
         self.country = Some(country.iso.to_owned());
-        let digits: String = self.entry.chars().filter(char::is_ascii_digit).collect();
-        self.absorb(&digits);
+        self.absorb(&kept);
     }
 
     /// The workspace's home country is known (or known to be none). The button
@@ -224,6 +224,23 @@ pub enum DialerEvent {
     /// Place the call. Refused (a wrong length then said) unless
     /// [`SignedIn::can_place_call`].
     Dial,
+}
+
+/// What the field keeps when a country is picked, read in the button's
+/// `country`: its digits, to be read again in the country picked. A field still
+/// showing a `+` (a code with no digit after it yet, or a code no country uses)
+/// gives up the plus and its code and keeps the digits after a known one, so
+/// picking a country means "this number is in that country"; a plus with no
+/// known code is cleared, or it would ring nowhere beside the country picked.
+pub fn entry_for_pick(entry: &str, country: Option<&str>) -> String {
+    if clean_dial_input(entry).starts_with('+') {
+        let reading = read_dial_entry(entry, country);
+        return match reading.iso {
+            Some(_) => reading.national_number,
+            None => String::new(),
+        };
+    }
+    entry.chars().filter(char::is_ascii_digit).collect()
 }
 
 /// Which way a single-character delete went, for [`edit_dial_input`].
@@ -740,6 +757,26 @@ mod tests {
             (Some("FR"), "")
         );
         assert_eq!(dialer.suggested(), ["GB", "CA", "US"]);
+    }
+
+    /// Picking a country over a `+` that has no digit after its code yet, or
+    /// a code no country uses, clears it, so the button shows the pick.
+    #[test]
+    fn a_pick_over_a_plus_keeps_only_the_digits_after_a_known_code() {
+        assert_eq!(entry_for_pick("+7", Some("RU")), "");
+        assert_eq!(entry_for_pick(&plus("9991234"), None), "");
+        assert_eq!(entry_for_pick("(416) 555", Some("CA")), "416555");
+        let mut dialer = screen("", Some("CA"));
+        dialer.absorb(&plus("44"));
+        assert_eq!(
+            (dialer.entry.clone(), dialer.country.as_deref()),
+            (plus("44"), Some("GB"))
+        );
+        dialer.pick("FR");
+        assert_eq!(
+            (dialer.entry.as_str(), dialer.country.as_deref()),
+            ("", Some("FR"))
+        );
     }
 
     /// The button moves to the home country only if the member has not
