@@ -454,7 +454,7 @@ fn nanp_country(nsn: &str, fallback: Option<&str>) -> &'static str {
 
 /// Whether a +1 national number is toll-free, shared by every country of the
 /// plan.
-fn is_nanp_toll_free(nsn: &str) -> bool {
+pub(crate) fn is_nanp_toll_free(nsn: &str) -> bool {
     nsn.get(..3)
         .is_some_and(|area| NANP_TOLL_FREE.contains(&area))
 }

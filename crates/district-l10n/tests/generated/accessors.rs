@@ -255,7 +255,7 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::dialer_country_search(Locale::En), "Country name or code");
     assert_eq!(strings::dialer_country_search(Locale::FrCa), "Nom du pays ou indicatif");
     assert_eq!(strings::dialer_emergency(Locale::En), "Emergency calls cannot be placed from District AI. Use your phone's own dialer to call for help.");
-    assert_eq!(strings::dialer_emergency(Locale::FrCa), "District AI ne peut pas passer d'appels d'urgence. Utilisez le clavier de votre propre téléphone pour demander de l'aide.");
+    assert_eq!(strings::dialer_emergency(Locale::FrCa), "District AI ne peut pas passer d'appels d'urgence. Utilisez le composeur de votre propre téléphone pour demander de l'aide.");
     assert_eq!(strings::dialer_hint_local(Locale::En, "{country}"), "Type the number as you would dial it locally ({country}), or start with + and its country code.");
     assert_eq!(strings::dialer_hint_local(Locale::FrCa, "{country}"), "Saisissez le numéro comme vous le composeriez sur place ({country}), ou commencez par + et l'indicatif du pays.");
     assert_eq!(strings::dialer_microphone_note(Locale::En), "Placing a call turns on your microphone.");
@@ -264,6 +264,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::dialer_needs_country(Locale::FrCa), "Choisissez un pays, ou commencez par + et l'indicatif du pays.");
     assert_eq!(strings::dialer_rings(Locale::En, "{country}", "{number}"), "Rings {country} · {number}");
     assert_eq!(strings::dialer_rings(Locale::FrCa, "{country}", "{number}"), "Pays de destination\u{00A0}: {country} · {number}");
+    assert_eq!(strings::dialer_rings_no_country(Locale::En, "{number}"), "Rings {number}. This number does not belong to one country. Check it before you call.");
+    assert_eq!(strings::dialer_rings_no_country(Locale::FrCa, "{number}"), "Numéro composé\u{00A0}: {number}. Ce numéro n'appartient à aucun pays en particulier. Vérifiez-le avant d'appeler.");
     assert_eq!(strings::dialer_unrecognised(Locale::En), "Unrecognised country code. Check the number before calling.");
     assert_eq!(strings::dialer_unrecognised(Locale::FrCa), "Cet indicatif de pays n'est pas reconnu. Vérifiez le numéro avant d'appeler.");
     assert_eq!(strings::dialer_wrong_length(Locale::En), "That is the wrong number of digits for a number in the country it rings. Check it before you call.");

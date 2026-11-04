@@ -43,8 +43,12 @@ typed the local way under a country the member can see, and is sent as E.164. Br
   and `entry_for_pick`, for a shell whose field the core writes after every edit.
 - Catalog entries `dialer.countries_all`, `countries_no_match`, `countries_suggested`,
   `country`, `country_button`, `country_search`, `emergency`, `hint_local`,
-  `needs_country`, `rings`, `unrecognised` and `wrong_length`, their French in state
-  `draft` until it is reviewed.
+  `needs_country`, `rings`, `rings_no_country`, `unrecognised` and `wrong_length`, with
+  reviewed French.
+- A +1 toll-free number (800, 833, 844, 855, 866, 877, 888) is said to belong to no one
+  country ("Rings +1 800 555 0100. This number does not belong to one country. Check it
+  before you call."), as the web dialler says it, never "Rings Canada" or "Rings United
+  States".
 
 ### Changed
 

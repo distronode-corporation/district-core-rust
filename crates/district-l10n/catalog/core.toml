@@ -1086,7 +1086,7 @@ fr = "Tous les pays"
 ctx = "label"
 screen = "dialler"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "Heading of the country list's second group: every country, alphabetical. The iOS app's and the web's words."
 
 [dialer.countries_no_match]
@@ -1095,7 +1095,7 @@ fr = "Aucun pays ne correspond."
 ctx = "body"
 screen = "dialler"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "In the country list when the search finds nothing. The iOS app's words."
 
 [dialer.countries_suggested]
@@ -1104,7 +1104,7 @@ fr = "Suggestions"
 ctx = "label"
 screen = "dialler"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "Heading of the country list's first group: the workspace's own country, the one chosen, then Canada and the United States."
 
 [dialer.country]
@@ -1113,7 +1113,7 @@ fr = "Pays"
 ctx = "label"
 screen = "dialler"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "The country button in front of the number, before any country is chosen, and the country list's title."
 
 [dialer.country_button]
@@ -1123,7 +1123,7 @@ ctx = "a11y"
 screen = "dialler"
 tier = "T2"
 args = { country = "str", code = "str" }
-state = "draft"
+state = "reviewed"
 note = "Screen reader name of the flag button in front of the number. {country} is a country name, {code} its calling code digits (1, 44). The iOS app's words."
 
 [dialer.country_search]
@@ -1132,16 +1132,16 @@ fr = "Nom du pays ou indicatif"
 ctx = "placeholder"
 screen = "dialler"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "Placeholder of the search box above the country list: a name, an ISO code or a calling code finds a country. The iOS app's words."
 
 [dialer.emergency]
 en = "Emergency calls cannot be placed from District AI. Use your phone's own dialer to call for help."
-fr = "District AI ne peut pas passer d'appels d'urgence. Utilisez le clavier de votre propre téléphone pour demander de l'aide."
+fr = "District AI ne peut pas passer d'appels d'urgence. Utilisez le composeur de votre propre téléphone pour demander de l'aide."
 ctx = "error"
 screen = "dialler"
 tier = "T0"
-state = "draft"
+state = "reviewed"
 note = "Under the number when it is an emergency code (911, 112, 999 ...). It must send the member to their own phone: District AI cannot place an emergency call and must not seem as if it might. The web dialler's words."
 
 [dialer.hint_local]
@@ -1151,7 +1151,7 @@ ctx = "body"
 screen = "dialler"
 tier = "T2"
 args = { country = "str" }
-state = "draft"
+state = "reviewed"
 note = "Under the number with a country chosen: a number without + is read there. {country} is a country name. The web dialler's words."
 
 [dialer.microphone_note]
@@ -1169,7 +1169,7 @@ fr = "Choisissez un pays, ou commencez par + et l'indicatif du pays."
 ctx = "body"
 screen = "dialler"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "Under the number when no country is chosen: digits alone cannot be read until one is, or the number starts with +. The web dialler's words."
 
 [dialer.rings]
@@ -1179,8 +1179,18 @@ ctx = "body"
 screen = "dialler"
 tier = "T0"
 args = { country = "str", number = "str" }
-state = "draft"
+state = "reviewed"
 note = "Shown before Call: the country the call rings and the whole international number that is sent, +1 416 555 0199 for example. It is the guard against calling the wrong country. The iOS app's and the web's words."
+
+[dialer.rings_no_country]
+en = "Rings {number}. This number does not belong to one country. Check it before you call."
+fr = "Numéro composé\u00A0: {number}. Ce numéro n'appartient à aucun pays en particulier. Vérifiez-le avant d'appeler."
+ctx = "body"
+screen = "dialler"
+tier = "T0"
+args = { number = "str" }
+state = "reviewed"
+note = "Shown before Call, in place of the Rings line, for a +1 toll-free number (800, 833, 844, 855, 866, 877, 888), which belongs to no one country. {number} is the whole international number, +1 800 555 0100 for example. The web dialler's words."
 
 [dialer.unrecognised]
 en = "Unrecognised country code. Check the number before calling."
@@ -1188,7 +1198,7 @@ fr = "Cet indicatif de pays n'est pas reconnu. Vérifiez le numéro avant d'appe
 ctx = "body"
 screen = "dialler"
 tier = "T1"
-state = "draft"
+state = "reviewed"
 note = "Shown before Call for a number whose + code no country in the list uses. It stays callable. The iOS app's words."
 
 [dialer.wrong_length]
@@ -1197,7 +1207,7 @@ fr = "Ce numéro n'a pas le bon nombre de chiffres pour le pays de destination. 
 ctx = "error"
 screen = "dialler"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "Under the number once the member stops typing (the field loses focus, Enter, or a refused Call), never while digits are still arriving. Call stays off. The web dialler's words."
 
 [directory.add_rejected]

@@ -1135,7 +1135,7 @@ pub fn dialer_country_search(l: Locale) -> &'static str {
 pub fn dialer_emergency(l: Locale) -> &'static str {
     match l {
         Locale::En => "Emergency calls cannot be placed from District AI. Use your phone's own dialer to call for help.",
-        Locale::FrCa => "District AI ne peut pas passer d'appels d'urgence. Utilisez le clavier de votre propre téléphone pour demander de l'aide.",
+        Locale::FrCa => "District AI ne peut pas passer d'appels d'urgence. Utilisez le composeur de votre propre téléphone pour demander de l'aide.",
     }
 }
 
@@ -1172,6 +1172,15 @@ pub fn dialer_rings(l: Locale, country: &str, number: &str) -> String {
     match l {
         Locale::En => format!("Rings {country} · {number}"),
         Locale::FrCa => format!("Pays de destination\u{00A0}: {country} · {number}"),
+    }
+}
+
+/// `dialer.rings_no_country`
+#[must_use]
+pub fn dialer_rings_no_country(l: Locale, number: &str) -> String {
+    match l {
+        Locale::En => format!("Rings {number}. This number does not belong to one country. Check it before you call."),
+        Locale::FrCa => format!("Numéro composé\u{00A0}: {number}. Ce numéro n'appartient à aucun pays en particulier. Vérifiez-le avant d'appeler."),
     }
 }
 

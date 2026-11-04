@@ -130,6 +130,13 @@ impl DialerScreen {
                 && reading.national.len() > 3;
             return unknown.then(|| s::dialer_unrecognised(l()).to_owned());
         }
+        // A +1 toll-free number (800, 833, 844, 855, 866, 877, 888) belongs to
+        // the whole plan and to no one country, so it is not said to ring the
+        // country on the button: the web dialler's rule (its area-code table
+        // gives these codes no country) and its words.
+        if reading.calling_code == "1" && plan::is_nanp_toll_free(&reading.national_number) {
+            return Some(s::dialer_rings_no_country(l(), &reading.international));
+        }
         Some(match reading.iso {
             Some(iso) => s::dialer_rings(l(), country_name(iso, l()), &reading.international),
             None => s::dialer_unrecognised(l()).to_owned(),
@@ -757,6 +764,56 @@ mod tests {
             (Some("FR"), "")
         );
         assert_eq!(dialer.suggested(), ["GB", "CA", "US"]);
+    }
+
+    /// A +1 toll-free number says it belongs to no one country, whatever +1
+    /// country is on the button, typed locally or with its code; nothing is
+    /// said before it is whole, and an ordinary +1 number still names its
+    /// country.
+    #[test]
+    fn a_toll_free_number_rings_no_one_country() {
+        let none = |number: &str| {
+            format!(
+                "Rings {number}. This number does not belong to one country. Check it \
+                 before you call."
+            )
+        };
+        for code in ["800", "833", "844", "855", "866", "877", "888"] {
+            let international = format!("+1 {code} 555 0100");
+            for (entry, country) in [
+                (format!("{code}5550100"), Some("CA")),
+                (format!("{code}5550100"), Some("US")),
+                (format!("+1{code}5550100"), None),
+            ] {
+                let mut dialer = screen("", country);
+                dialer.absorb(&entry);
+                assert_eq!(
+                    dialer.destination(),
+                    Some(none(&international)),
+                    "{entry} under {country:?}"
+                );
+                assert_eq!(dialer.reading().e164, Some(format!("+1{code}5550100")));
+            }
+            // Partial: nothing is said until the number is whole.
+            let mut partial = screen("", Some("CA"));
+            partial.absorb(&format!("{code}555"));
+            assert_eq!(partial.destination(), None, "{code} partial");
+        }
+        // A control: an ordinary +1 number names its country.
+        assert_eq!(
+            screen("(416) 555-0199", Some("US"))
+                .destination()
+                .as_deref(),
+            Some("Rings Canada \u{b7} +1 416 555 0199")
+        );
+        // Not toll-free where 800 is not an area code: after +44 it is a UK
+        // number.
+        let mut uk = screen("", None);
+        uk.absorb(&plus("448001111"));
+        assert_eq!(
+            uk.destination().as_deref(),
+            Some(format!("Rings United Kingdom \u{b7} {}", plus("44 8001 111")).as_str())
+        );
     }
 
     /// Picking a country over a `+` that has no digit after its code yet, or
