@@ -9,6 +9,13 @@ use crate::client::Platform;
 /// The kind of registration a desktop makes: presence, not a push token.
 pub const PRESENCE_KIND: &str = "desktop";
 
+/// The capability an installation declares when it lists and opens Messenger
+/// and Instagram threads (it reads the inbox with `metaChannels=1`). The service
+/// pushes a Messenger or Instagram message only to a registration that declared
+/// it, so an app declares it only once it renders those threads. The service
+/// drops a value it does not know, and never refuses a registration over one.
+pub const META_CHANNELS_CAPABILITY: &str = "metaChannels";
+
 /// `POST /api/district/devices/register` and `POST /api/district/devices/unregister`:
 /// whether the service took the registration, or dropped it.
 ///
@@ -56,6 +63,8 @@ pub struct PresenceRegistration {
     token: String,
     platform: &'static str,
     kind: &'static str,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    capabilities: Vec<&'static str>,
 }
 
 impl PresenceRegistration {
@@ -66,7 +75,16 @@ impl PresenceRegistration {
             token: token.into(),
             platform: platform.wire(),
             kind: PRESENCE_KIND,
+            capabilities: Vec::new(),
         }
+    }
+
+    /// The same registration declaring [`META_CHANNELS_CAPABILITY`]. The
+    /// service replaces an installation's capabilities at every registration,
+    /// so one made without it declares none.
+    pub fn with_meta_channels(mut self) -> Self {
+        self.capabilities = vec![META_CHANNELS_CAPABILITY];
+        self
     }
 
     /// The token, as sent.
@@ -81,6 +99,7 @@ impl fmt::Debug for PresenceRegistration {
             .field("token", &"<redacted>")
             .field("platform", &self.platform)
             .field("kind", &self.kind)
+            .field("capabilities", &self.capabilities)
             .finish()
     }
 }
@@ -109,6 +128,22 @@ mod tests {
             assert!(!printed.contains("install-nonce-1"), "{printed}");
             assert!(printed.contains("desktop"));
         }
+    }
+
+    #[test]
+    fn a_registration_declares_meta_channels_only_when_asked() {
+        let registration =
+            PresenceRegistration::desktop("install-nonce-1", Platform::Linux).with_meta_channels();
+        assert_eq!(
+            serde_json::to_value(&registration).unwrap(),
+            json!({
+                "token": "install-nonce-1",
+                "platform": "linux",
+                "kind": "desktop",
+                "capabilities": ["metaChannels"]
+            })
+        );
+        assert!(format!("{registration:?}").contains("metaChannels"));
     }
 
     #[test]

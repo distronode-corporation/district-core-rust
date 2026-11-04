@@ -1861,6 +1861,16 @@ tier = "T2"
 state = "reviewed"
 note = "The service answered without the room's encryption key. The app never joins a voice session unencrypted."
 
+[inbox.assigned_to]
+en = "Assigned to {email}"
+fr = "Assignée à {email}"
+ctx = "label"
+screen = "inbox"
+tier = "T3"
+args = { email = "str" }
+state = "reviewed"
+note = "Under an inbox row: the member who owns the conversation. {email} is their email address. Feminine agreement with the French word for conversation. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
 [inbox.compose_action]
 en = "New message"
 fr = "Nouveau message"
@@ -4127,6 +4137,15 @@ tier = "T3"
 state = "reviewed"
 note = "After sending a support request whose reference is not known yet. It was received."
 
+[thread.assign_label]
+en = "Assigned to"
+fr = "Assignée à"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Label of the picker in the conversation header that gives the conversation to a member of the workspace. Feminine agreement with the French word for conversation. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
 [thread.attachment_size]
 en = "Attachments must be between 1 byte and {megabytes} MB."
 fr = "Les pièces jointes doivent faire entre 1 octet et {megabytes} Mo."
@@ -4136,6 +4155,54 @@ tier = "T2"
 args = { megabytes = "int" }
 state = "reviewed"
 note = "When an image to attach is empty or too large. {megabytes} is the largest size in megabytes. MB is the unit (Mo in French)."
+
+[thread.attachments_sms_only]
+en = "Attachments can only go by text message. Remove them to send on this channel."
+fr = "Les pièces jointes ne peuvent partir que par texto. Retirez-les pour envoyer sur ce canal."
+ctx = "body"
+screen = "conversation"
+tier = "T3"
+state = "draft"
+note = "Beside the attached images when the reply channel chosen is not text messages (email, WhatsApp, Messenger and Instagram carry no attachments from here). Send is off until they are removed. New French, not on the web."
+
+[thread.channel_instagram]
+en = "Instagram"
+fr = "Instagram"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "The Instagram reply channel, and the label on an Instagram conversation in the inbox. A brand name, the same in both languages. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.channel_label]
+en = "Reply channel"
+fr = "Canal de réponse"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Label of the choice of channel a reply goes on (text message, email, WhatsApp, Messenger or Instagram). Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.channel_messenger]
+en = "Messenger"
+fr = "Messenger"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "The Facebook Messenger reply channel, and the label on a Messenger conversation in the inbox. A brand name, the same in both languages. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.channel_whatsapp]
+en = "WhatsApp"
+fr = "WhatsApp"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "The WhatsApp reply channel. A brand name, the same in both languages. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
 
 [thread.no_reply_target]
 en = "Replies cannot be sent on this conversation from here."
@@ -4155,6 +4222,100 @@ tier = "T3"
 state = "reviewed"
 note = "In place of the reply box for a member whose role cannot reply."
 
+[thread.template_label]
+en = "Template"
+fr = "Modèle de message"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Label of the picker of WhatsApp message templates, offered when the window is closed. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_option]
+en = "{name} ({language})"
+fr = "{name} ({language})"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+args = { name = "str", language = "str" }
+state = "reviewed"
+same_ok = true
+note = "One template in the picker: {name} is its name at WhatsApp, {language} its language code (en_US). Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_placeholder]
+en = "Choose an approved template"
+fr = "Choisir un modèle approuvé"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "The template picker before a template is chosen. Only templates WhatsApp approved are listed. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_preview]
+en = "Preview"
+fr = "Aperçu"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Label of the template's text with the variables filled in, as the customer will read it. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_send]
+en = "Send template"
+fr = "Envoyer le modèle"
+ctx = "button"
+screen = "conversation"
+tier = "T2"
+state = "reviewed"
+note = "Sends the chosen WhatsApp template, filled. Billed. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_variable]
+en = "Variable {placeholder}"
+fr = "Variable {placeholder}"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+args = { placeholder = "str" }
+state = "reviewed"
+same_ok = true
+note = "Label of the field for one of the template's variables. {placeholder} is the variable as the template writes it, {{1}}, {{2}} and on. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_variable_required]
+en = "Fill in this variable"
+fr = "Remplissez cette variable"
+ctx = "error"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Under a template variable left empty; the template cannot be sent until every one is filled. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.templates_failed]
+en = "The templates could not be loaded. Try again in a moment."
+fr = "Les modèles n'ont pas pu être chargés. Réessayez dans un instant."
+ctx = "error"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "When the WhatsApp templates could not be read. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.templates_loading]
+en = "Loading templates"
+fr = "Chargement des modèles"
+ctx = "body"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "While the WhatsApp templates are read. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.templates_none]
+en = "No approved template for this number yet. Refresh the templates in Messaging settings."
+fr = "Aucun modèle approuvé pour ce numéro pour l'instant. Actualisez les modèles dans les paramètres de messagerie."
+ctx = "body"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "When the WhatsApp number has no approved template the app can send. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
 [thread.too_many_attachments]
 en = "You can attach up to {count} images to one message."
 fr = "Vous pouvez joindre jusqu'à {count} images à un même message."
@@ -4165,6 +4326,15 @@ args = { count = "int" }
 state = "reviewed"
 note = "When attaching one image too many to a text message. {count} is the most allowed (more than one)."
 
+[thread.unassigned]
+en = "Unassigned"
+fr = "Non assignée"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "The owner picker's choice for nobody: the conversation is not assigned to anyone. Feminine agreement with the French word for conversation. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
 [thread.untitled]
 en = "Conversation"
 fr = "Conversation"
@@ -4174,6 +4344,15 @@ tier = "T3"
 state = "reviewed"
 same_ok = true
 note = "Title of a conversation with a contact the app knows nothing else about yet."
+
+[thread.whatsapp_window_closed]
+en = "Window closed: WhatsApp only allows a template now"
+fr = "Fenêtre fermée\u00A0: WhatsApp n'accepte maintenant qu'un modèle de message"
+ctx = "body"
+screen = "conversation"
+tier = "T2"
+state = "reviewed"
+note = "Over the composer on WhatsApp once the 24-hour customer-service window has closed: free text cannot be sent, only an approved message template. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
 
 [tools.book_appointment]
 en = "Book appointments"

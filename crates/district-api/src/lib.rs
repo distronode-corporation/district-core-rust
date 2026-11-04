@@ -40,7 +40,9 @@
 //!   [`ApiClient::hang_up_call`]) and this desktop's presence
 //!   ([`ApiClient::register_presence`], [`ApiClient::unregister_presence`]);
 //! - the inbox ([`ApiClient::conversations`], [`ApiClient::timeline`],
-//!   [`ApiClient::send_message`] and the rest);
+//!   [`ApiClient::send_message`] and the rest), who owns a thread
+//!   ([`ApiClient::assign_conversation`]) and the WhatsApp composer's window and
+//!   templates ([`ApiClient::whatsapp_window`], [`ApiClient::whatsapp_templates`]);
 //! - contacts ([`ApiClient::contacts`], [`ApiClient::contact`],
 //!   [`ApiClient::update_contact`] and the rest);
 //! - District HQ ([`ApiClient::hq_prompt`], and [`ApiClient::hq_confirm`] for a
@@ -151,4 +153,5 @@ pub use error::{
     TransportError, TransportKind, UnauthorizedReason,
 };
 pub use exclusions::{Addition, DESKTOP_ONLY, EXCLUDED, Exclusion, PathMatch, normalize_template};
+pub use inbox::ConversationsQuery;
 pub use token::{AccessToken, ReauthReason, RetryReason, TokenCell, TokenError, TokenSource};

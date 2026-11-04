@@ -61,7 +61,7 @@ async fn an_older_page_of_an_address_thread_sends_the_cursor_it_was_given() {
     let thread = ThreadRef::Address("ada@example.com".to_owned());
 
     client(&server)
-        .timeline(WS, &thread, Some(&cursor))
+        .timeline(WS, &thread, Some(&cursor), false)
         .await
         .unwrap();
 
@@ -158,14 +158,14 @@ async fn a_search_query_is_sent_as_typed() {
 async fn a_message_lookup_refusal_is_not_found_or_a_conflict() {
     let server = answering(404, json!({"success": false, "error": "Message not found"})).await;
     let missing = client(&server)
-        .message_thread(WS, "msg_elsewhere")
+        .message_thread(WS, "msg_elsewhere", false)
         .await
         .unwrap_err();
     assert!(matches!(missing, ApiError::NotFound(_)), "{missing:?}");
 
     let server = answering(409, json!({"success": false, "error": "No counterpart"})).await;
     let orphan = client(&server)
-        .message_thread(WS, "msg_orphan")
+        .message_thread(WS, "msg_orphan", false)
         .await
         .unwrap_err();
     assert!(matches!(orphan, ApiError::Conflict(_)), "{orphan:?}");
@@ -971,4 +971,48 @@ async fn a_hang_up_of_a_call_already_over_is_a_success_and_of_another_kind_a_con
         .await
         .unwrap_err();
     assert_eq!(inbound.code(), Some("call_not_direct_dial"), "{inbound:?}");
+}
+
+/// A Viewer cannot be given a thread: the recorded refusal comes back with its
+/// code, which the error table reads, and nothing is retried.
+#[tokio::test]
+async fn assigning_a_viewer_is_a_coded_refusal() {
+    let server = answering(400, fixture("district-conversation-assign-viewer.json")).await;
+
+    let refused = client(&server)
+        .assign_conversation(WS, "addr:14165550181", Some("auditor@example.com"))
+        .await
+        .unwrap_err();
+
+    assert_eq!(refused.code(), Some("assignee_is_viewer"), "{refused:?}");
+    assert_eq!(
+        body(&only_request(&server).await),
+        json!({
+            "workspaceId": WS,
+            "threadKey": "addr:14165550181",
+            "assigneeEmail": "auditor@example.com",
+        })
+    );
+}
+
+/// The recorded closed window decodes with the sender the templates are then
+/// read by, and the open one with its closing instant.
+#[tokio::test]
+async fn the_whatsapp_window_names_its_sender_open_or_closed() {
+    let server = answering(200, fixture("district-whatsapp-window.json")).await;
+    let open = client(&server)
+        .whatsapp_window(WS, "+14165550177")
+        .await
+        .unwrap();
+    assert!(open.window.open);
+    assert!(open.window.expires_at.is_some());
+
+    let server = answering(200, fixture("district-whatsapp-window-closed.json")).await;
+    let closed = client(&server)
+        .whatsapp_window(WS, "+14165550177")
+        .await
+        .unwrap();
+    assert!(!closed.window.open);
+    assert_eq!(closed.window.expires_at, None);
+    assert_eq!(closed.sender_id.as_deref(), Some("wa_sender_contract"));
 }

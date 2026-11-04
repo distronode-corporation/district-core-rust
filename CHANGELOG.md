@@ -17,20 +17,69 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+App parity (1), (2), (3) and (5) on the desktop: the reply channels the service lists for a
+thread, Messenger and Instagram threads, who owns a thread, and the WhatsApp templates a closed
+window offers. Breaking for the apps (8.0.0 when released): `CoreConfig` gains `meta_channels`,
+`DesktopPresence::new` takes it, `DistrictApi` has three new methods and four changed ones,
+`Effect`, `Event`, `ThreadEvent`, `ThreadScreen` and `ThreadControls` gain variants and
+fields, and `SendMessageRequest` gains three fields.
+
 ### Added
 
+- `CoreConfig::meta_channels`, for an app that lists and answers Messenger and Instagram
+  threads. With it, the thread list, the timeline, the unread count and the message lookup
+  ask for them (`metaChannels=1`), and the app passes the same value to
+  `DesktopPresence::new`, whose registration then declares `capabilities: ["metaChannels"]`
+  (`PresenceRegistration::with_meta_channels`, `META_CHANNELS_CAPABILITY`). Without it the
+  inbox is exactly as before.
+- Reply channels: `ThreadScreen::reply_choices` holds the thread's reply options in the
+  service's order (`ConversationSummary::reply_choices`), less any on a channel this build
+  does not know or with no address; the first is chosen when the thread opens, and
+  `ThreadEvent::ChooseChannel` chooses another (`ThreadControls::can_choose_channel`). No
+  options is no composer. Attachments go by text message only: on another channel send waits
+  until they are removed (`ThreadScreen::attachments_blocked`). `reply_channel_label` names
+  each channel, `InboxScreen::meta_channel_label` a Messenger or Instagram row.
+- Thread owners: the thread list is always read with `assignments=1`, so each row carries its
+  owner (`ConversationSummary::assignee`, `InboxScreen::assignee_line`). The open thread's
+  `ThreadAssignment` holds the owner and the picker's members (the workspace's Agency and
+  Client members, read with `Effect::LoadMembers` for a member who may assign; a Viewer is
+  never offered, and one who already owns the thread keeps showing).
+  `ThreadEvent::Assign(Some(email))` and `Assign(None)` send
+  `POST /api/district/conversations/assign` once (`Effect::AssignConversation`,
+  `Event::ConversationAssigned`); a refusal (`assignee_is_viewer`, `assignee_not_member`) is
+  shown beside the picker. A Viewer sees the owner and cannot change it.
+- WhatsApp: choosing the channel reads the customer-service window
+  (`Effect::LoadWhatsAppWindow`, `GET /api/district/workspace/whatsapp/window`). Open or
+  unreadable, free text goes, from the sender the window was read for (`whatsappSenderId`).
+  Closed, free text is not offered, and the sender's templates are read
+  (`Effect::LoadWhatsAppTemplates`, `GET /api/district/workspace/whatsapp/templates`); only
+  approved ones with numbered variables, of no sender or this one, are offered
+  (`WhatsAppTemplate::sendable_variables`, the web composer's rule). `ChooseTemplate`,
+  `TemplateVariable` and `SendTemplate` fill and send one; the preview and the body sent are
+  `fill_whatsapp_template`, the service's own fill. Free text the service refuses with
+  `whatsapp_window_closed` turns the composer to templates.
+- `ApiClient::assign_conversation`, `ApiClient::whatsapp_window`,
+  `ApiClient::whatsapp_templates` and `ConversationsQuery`; the three endpoints are
+  desktop-only additions to the table. `SendMessageRequest` gains `whatsapp_sender_id`,
+  `template_id` and `template_variables`, and derives `Default`. `CHANNEL_WHATSAPP`,
+  `CHANNEL_MESSENGER`, `CHANNEL_INSTAGRAM`, `REPLY_CHANNELS` and `TEMPLATE_STATUS_APPROVED`.
+- Nineteen catalog entries for these screens. Eighteen carry the web Inbox's reviewed French
+  verbatim; `thread.attachments_sms_only` is new French and is a draft until it is signed
+  off, so `l10n.py check --require fr-CA` fails on it until then.
 - `district_model` types for the app parity fixtures, decoded strictly and round-tripped by
   the fixture manifest: `ReplyOption`, `ConversationAssignment`,
   `ConversationAssignmentsResponse`, `ConversationAssignResponse`,
   `WhatsAppWindowResponse`, `WhatsAppWindow`, `WhatsAppTemplatesResponse`,
   `WhatsAppTemplate` and `RefusalResponse` (a route's `{success, error, code}` refusal).
-  No screen uses them yet.
 - `ConversationSummary` gains `reply_options`, `assignee_email` and `assigned_to_me`, sent
   only when the list is asked for with `metaChannels=1` or `assignments=1`. Breaking for an
   app that builds a `ConversationSummary` with a struct literal.
 
 ### Changed
 
+- `DistrictApi::conversations` takes a `ConversationsQuery`, and `timeline`,
+  `unread_count` and `message_thread` a `meta_channels` flag; `Effect::LoadConversations`,
+  `LoadUnreadCount`, `LoadTimeline` and `FindMessageThread` carry them.
 - `contracts/fixtures/` and `contracts/i18n/` from the server's 84c34dbd2. New: the
   conversation list's reply options and assignee, thread assignment (assign, unassign, the
   list, and the refusal to assign a Viewer), the WhatsApp window (open and closed) and

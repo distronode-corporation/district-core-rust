@@ -167,6 +167,9 @@ pub struct SignedIn {
     /// Whether this build can carry a call's audio
     /// ([`CoreConfig::calls_available`]).
     pub(crate) calls_available: bool,
+    /// Whether the app lists and answers Messenger and Instagram threads
+    /// ([`CoreConfig::meta_channels`](crate::CoreConfig::meta_channels)).
+    pub(crate) meta_channels: bool,
 }
 
 /// What a signed-in step decided.
@@ -239,6 +242,7 @@ impl SignedIn {
             transcript_watch: None,
             draft_writes: DraftWrites::default(),
             calls_available,
+            meta_channels: false,
         }
     }
 
