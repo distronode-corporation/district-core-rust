@@ -117,7 +117,11 @@ pub fn read_dial_entry(raw: &str, country: Option<&str>) -> DialReading {
     let mut plus = compact.starts_with('+');
     let mut digits: String = compact.chars().filter(char::is_ascii_digit).collect();
     if is_emergency(&compact) {
-        return DialReading::shown(DialStatus::Emergency, country.map(|c| c.iso), &digits);
+        // Shown as typed, its `+` kept: `+911` is refused, but it is also
+        // the start of every Indian number beginning +91 1, and the next digit
+        // must still be read after the code rather than as a local number.
+        let shown = if plus { format!("+{digits}") } else { digits };
+        return DialReading::shown(DialStatus::Emergency, country.map(|c| c.iso), &shown);
     }
     if !plus && let Some(rest) = drop_exit_code(&digits, country) {
         digits = rest.to_owned();
@@ -1009,6 +1013,12 @@ mod tests {
             "911",
             "shown as typed, not formatted"
         );
+        assert_eq!(read("+911", "CA").national, "+911", "its plus kept");
+        // Typed key by key, an Indian number that passes through +911 is
+        // still read after its code once the next digit arrives.
+        let india = type_keys(&plus("911234567890"), Some("CA"));
+        assert_eq!(india.iso, Some("IN"));
+        assert_eq!(india.e164, Some(plus("911234567890")));
     }
 
     /// Whole numbers only: a North American number beginning 911 is ordinary.
