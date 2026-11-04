@@ -13,17 +13,14 @@ fn contract() -> Value {
     serde_json::from_str(&fs::read_to_string(path).expect("api-errors.json")).expect("JSON")
 }
 
-/// French this catalog already words as the service is about to: (code, the
-/// contract's words, the catalog's words). « enregistrement » is banned by the
-/// glossary (the product records nothing), and the service's French moves to
-/// « entrées DNS » too. Once `contracts/i18n/` is synced past that change the
-/// contract no longer holds the old words, and
-/// `the_french_ahead_of_the_contract_still_is` says to remove the row.
-const FRENCH_AHEAD_OF_THE_CONTRACT: &[(&str, &str, &str)] = &[(
-    "sending_domain_provider_changed",
-    "les nouveaux enregistrements DNS",
-    "les nouvelles entrées DNS",
-)];
+/// French this catalog words differently from the service: (code, the
+/// contract's words, the catalog's words). The service's « réglages » is the
+/// Apple word for settings; a non-Apple catalog says « paramètres » (frcheck's
+/// OS-WORD rule), as district-android does. Once the contract no longer holds
+/// the service's words, `the_french_ahead_of_the_contract_still_is` says to
+/// remove the row.
+const FRENCH_AHEAD_OF_THE_CONTRACT: &[(&str, &str, &str)] =
+    &[("live_changed", "réglages", "paramètres")];
 
 fn french_as_the_catalog_words_it(code: &str, text: &str) -> String {
     FRENCH_AHEAD_OF_THE_CONTRACT

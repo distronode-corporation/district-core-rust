@@ -451,7 +451,7 @@ pub fn wire_disposition_escalated(l: Locale) -> &'static str {
 pub fn wire_disposition_info(l: Locale) -> &'static str {
     match l {
         Locale::En => "Information only",
-        Locale::FrCa => "Information seulement",
+        Locale::FrCa => "Demande de renseignements",
     }
 }
 
@@ -1481,6 +1481,24 @@ pub fn wire_workflow_action_outcome_skipped(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.workflow_action_reason.automated_sender`
+#[must_use]
+pub fn wire_workflow_action_reason_automated_sender(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted: the message came from an automated sender, such as a verification code",
+        Locale::FrCa => "Texto non envoyé\u{00A0}: le message venait d'un expéditeur automatisé, comme un code de vérification",
+    }
+}
+
+/// `wire.workflow_action_reason.consent_check_failed`
+#[must_use]
+pub fn wire_workflow_action_reason_consent_check_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted: the texting consent could not be checked",
+        Locale::FrCa => "Texto non envoyé\u{00A0}: le consentement aux textos n'a pas pu être vérifié",
+    }
+}
+
 /// `wire.workflow_action_reason.contact_not_found`
 #[must_use]
 pub fn wire_workflow_action_reason_contact_not_found(l: Locale) -> &'static str {
@@ -1567,7 +1585,7 @@ pub fn wire_workflow_action_reason_fallback_email_push(l: Locale) -> &'static st
 pub fn wire_workflow_action_reason_fallback_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not texted, and the email and app fallback failed too",
-        Locale::FrCa => "Texto non envoyé, et le courriel et l'application de secours ont aussi échoué",
+        Locale::FrCa => "Texto non envoyé, et l'envoi par courriel et dans l'application a aussi échoué",
     }
 }
 
@@ -1598,12 +1616,39 @@ pub fn wire_workflow_action_reason_invalid_recipient(l: Locale) -> &'static str 
     }
 }
 
+/// `wire.workflow_action_reason.loop_check_failed`
+#[must_use]
+pub fn wire_workflow_action_reason_loop_check_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted: the recent messages with this number could not be checked",
+        Locale::FrCa => "Texto non envoyé\u{00A0}: les messages récents avec ce numéro n'ont pas pu être vérifiés",
+    }
+}
+
+/// `wire.workflow_action_reason.loop_paused`
+#[must_use]
+pub fn wire_workflow_action_reason_loop_paused(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted: this number answered automatically several times in a row, so texts to it are paused for an hour",
+        Locale::FrCa => "Texto non envoyé\u{00A0}: ce numéro a répondu automatiquement plusieurs fois de suite, les textos vers lui sont donc suspendus pendant une heure",
+    }
+}
+
 /// `wire.workflow_action_reason.missing_webhook_url`
 #[must_use]
 pub fn wire_workflow_action_reason_missing_webhook_url(l: Locale) -> &'static str {
     match l {
         Locale::En => "Missing webhook url",
         Locale::FrCa => "URL du webhook manquante",
+    }
+}
+
+/// `wire.workflow_action_reason.no_consent`
+#[must_use]
+pub fn wire_workflow_action_reason_no_consent(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted: no call or text from them in the last 24 hours, and no consent on record",
+        Locale::FrCa => "Texto non envoyé\u{00A0}: aucun appel ni texto de cette personne depuis 24\u{00A0}heures, et aucun consentement au dossier",
     }
 }
 
@@ -1679,6 +1724,15 @@ pub fn wire_workflow_action_reason_push_not_delivered(l: Locale) -> &'static str
     }
 }
 
+/// `wire.workflow_action_reason.quiet_hours`
+#[must_use]
+pub fn wire_workflow_action_reason_quiet_hours(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Not texted: it was outside 8am to 9pm where their phone may be",
+        Locale::FrCa => "Texto non envoyé\u{00A0}: il était en dehors de 8\u{00A0}h à 21\u{00A0}h là où se trouve peut-être son téléphone",
+    }
+}
+
 /// `wire.workflow_action_reason.recipient_not_member`
 #[must_use]
 pub fn wire_workflow_action_reason_recipient_not_member(l: Locale) -> &'static str {
@@ -1693,7 +1747,7 @@ pub fn wire_workflow_action_reason_recipient_not_member(l: Locale) -> &'static s
 pub fn wire_workflow_action_reason_recipient_number_held(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not sent: the person's mobile is a business number on District",
-        Locale::FrCa => "Non envoyé\u{00A0}: le cellulaire de cette personne est un numéro d'entreprise sur District",
+        Locale::FrCa => "Non envoyé\u{00A0}: le numéro de cellulaire de cette personne appartient à une entreprise sur District",
     }
 }
 

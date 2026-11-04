@@ -214,7 +214,7 @@ fn every_edit_goes_to_the_studio_and_says_how_far_it_went() {
         &mut model,
         StudioEdit::Pick {
             kind: PickerKind::Location,
-            value: "europe-west4".to_owned(),
+            value: "europe-west3".to_owned(),
         },
     );
     assert_eq!(
@@ -227,7 +227,7 @@ fn every_edit_goes_to_the_studio_and_says_how_far_it_went() {
         &mut model,
         StudioEdit::Pick {
             kind: PickerKind::Location,
-            value: "europe-west4".to_owned(),
+            value: "europe-west3".to_owned(),
         },
     );
     edit(
@@ -241,7 +241,7 @@ fn every_edit_goes_to_the_studio_and_says_how_far_it_went() {
         &mut model,
         StudioEdit::Choice {
             key: "engineMix.llm.thinking".to_owned(),
-            value: "dynamic".to_owned(),
+            value: "low".to_owned(),
         },
     );
     assert_eq!(

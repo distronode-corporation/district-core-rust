@@ -148,6 +148,78 @@ pub struct ConversationSummary {
     /// How many messages the thread holds.
     #[serde(default)]
     pub total_messages: i64,
+    /// The `{channel, to}` pairs the send route takes, in order, the first being
+    /// the channel to open the composer on. Sent only when the list is asked for
+    /// with `metaChannels=1`; empty, and left out, otherwise.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub reply_options: Vec<ReplyOption>,
+    /// The member who owns the thread: `None` when the list was not asked for
+    /// with `assignments=1`, `Some(None)` for a thread nobody owns.
+    #[serde(
+        default,
+        deserialize_with = "crate::scheduling_admin::nullish",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub assignee_email: Option<Option<String>>,
+    /// Whether the signed-in member owns the thread, decided by the service. Sent
+    /// with [`assignee_email`](Self::assignee_email).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub assigned_to_me: Option<bool>,
+}
+
+/// One way to answer a thread: a channel, and the address to send to on it.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct ReplyOption {
+    /// `sms`, `email`, `whatsapp`, `messenger` or `instagram`.
+    pub channel: String,
+    /// The address the send route takes as `to`.
+    pub to: String,
+}
+
+/// One thread's owner, as `GET /api/district/conversations/assignments` reports
+/// it, keyed on the same thread key the conversation list carries. Who made the
+/// assignment is not on the wire.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct ConversationAssignment {
+    /// The thread, as [`ConversationSummary::thread_key`].
+    pub thread_key: String,
+    /// The member who owns it.
+    pub assignee_email: String,
+    /// When, as an ISO 8601 instant.
+    pub assigned_at: String,
+}
+
+/// `GET /api/district/conversations/assignments`: every assigned thread in the
+/// workspace. A thread nobody owns has no row.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct ConversationAssignmentsResponse {
+    /// `true` on a successful answer.
+    #[serde(default)]
+    pub success: bool,
+    /// The assigned threads.
+    #[serde(default)]
+    pub assignments: Vec<ConversationAssignment>,
+}
+
+/// `POST /api/district/conversations/assign`: the thread's new owner, or `None`
+/// when the request unassigned it (`assigneeEmail: null`). A Viewer cannot be
+/// assigned a thread; the service refuses that with the code
+/// `assignee_is_viewer`.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct ConversationAssignResponse {
+    /// `true` on a successful answer.
+    #[serde(default)]
+    pub success: bool,
+    /// The assignment made, or `None` after an unassign.
+    pub assignment: Option<ConversationAssignment>,
 }
 
 impl ConversationSummary {

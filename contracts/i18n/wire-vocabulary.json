@@ -216,7 +216,7 @@
             "distronode-website/prisma/schema.prisma"
           ],
           "en": "Information only",
-          "fr": "Information seulement"
+          "fr": "Demande de renseignements"
         },
         {
           "value": "voicemail",
@@ -880,6 +880,22 @@
       "labelSource": "distronode-website/src/app/(en)/dashboard/district/workflows/workflowsI18n.ts reasonLabel",
       "values": [
         {
+          "value": "automated-sender",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Not texted: the message came from an automated sender, such as a verification code",
+          "fr": "Texto non envoyé : le message venait d'un expéditeur automatisé, comme un code de vérification"
+        },
+        {
+          "value": "consent-check-failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Not texted: the texting consent could not be checked",
+          "fr": "Texto non envoyé : le consentement aux textos n'a pas pu être vérifié"
+        },
+        {
           "value": "contact-not-found",
           "definedIn": [
             "distronode-website/src/lib/district/workflows.ts"
@@ -957,7 +973,7 @@
             "distronode-website/src/lib/district/workflow-member-alert.ts"
           ],
           "en": "Not texted, and the email and app fallback failed too",
-          "fr": "Texto non envoyé, et le courriel et l'application de secours ont aussi échoué"
+          "fr": "Texto non envoyé, et l'envoi par courriel et dans l'application a aussi échoué"
         },
         {
           "value": "fallback-push",
@@ -984,12 +1000,36 @@
           "fr": null
         },
         {
+          "value": "loop-check-failed",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Not texted: the recent messages with this number could not be checked",
+          "fr": "Texto non envoyé : les messages récents avec ce numéro n'ont pas pu être vérifiés"
+        },
+        {
+          "value": "loop-paused",
+          "definedIn": [
+            "distronode-website/src/lib/district/workflows.ts"
+          ],
+          "en": "Not texted: this number answered automatically several times in a row, so texts to it are paused for an hour",
+          "fr": "Texto non envoyé : ce numéro a répondu automatiquement plusieurs fois de suite, les textos vers lui sont donc suspendus pendant une heure"
+        },
+        {
           "value": "missing-webhook-url",
           "definedIn": [
             "distronode-website/src/lib/district/workflow-plan.ts"
           ],
           "en": null,
           "fr": null
+        },
+        {
+          "value": "no-consent",
+          "definedIn": [
+            "distronode-website/src/lib/district/sms-consent.ts"
+          ],
+          "en": "Not texted: no call or text from them in the last 24 hours, and no consent on record",
+          "fr": "Texto non envoyé : aucun appel ni texto de cette personne depuis 24 heures, et aucun consentement au dossier"
         },
         {
           "value": "no-devices",
@@ -1057,6 +1097,14 @@
           "fr": "Aucun appareil n'a accepté la notification"
         },
         {
+          "value": "quiet-hours",
+          "definedIn": [
+            "distronode-website/src/lib/district/sms-consent.ts"
+          ],
+          "en": "Not texted: it was outside 8am to 9pm where their phone may be",
+          "fr": "Texto non envoyé : il était en dehors de 8 h à 21 h là où se trouve peut-être son téléphone"
+        },
+        {
           "value": "recipient-not-member",
           "definedIn": [
             "distronode-website/src/lib/district/workflow-member-alert.ts"
@@ -1070,7 +1118,7 @@
             "distronode-website/src/lib/district/workflow-member-alert.ts"
           ],
           "en": "Not sent: the person's mobile is a business number on District",
-          "fr": "Non envoyé : le cellulaire de cette personne est un numéro d'entreprise sur District"
+          "fr": "Non envoyé : le numéro de cellulaire de cette personne appartient à une entreprise sur District"
         },
         {
           "value": "report-recipient-refused",

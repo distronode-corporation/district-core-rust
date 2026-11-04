@@ -23,9 +23,11 @@ use std::collections::BTreeMap;
 
 use district_model::{
     A2pRegistrationResponse, BlockedContactsResponse, ContactBlockResponse,
-    NumberConfigureResponse, NumberLookupResponse, NumberReleaseResponse, ProviderStatusResponse,
+    ConversationAssignResponse, ConversationAssignmentsResponse, NumberConfigureResponse,
+    NumberLookupResponse, NumberReleaseResponse, ProviderStatusResponse, RefusalResponse,
     SettingsResponse, SettingsSaveResponse, SipTrunkCreateResponse, SipTrunksResponse,
-    TollFreeVerificationResponse, VerifyServiceResponse,
+    TollFreeVerificationResponse, VerifyServiceResponse, WhatsAppTemplatesResponse,
+    WhatsAppWindowResponse,
 };
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CallAnswerResponse,
@@ -114,7 +116,7 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 190;
+pub const EXPECTED_FIXTURE_COUNT: usize = 203;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
@@ -207,6 +209,39 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ),
     // GET /api/district/contacts: a full row and a sparse, phone-less one.
     ("district-contacts.json", codec::<ContactListResponse>),
+    // POST /api/district/conversations/assign naming a Viewer: refused with the
+    // code `assignee_is_viewer`.
+    (
+        "district-conversation-assign-viewer.json",
+        codec::<RefusalResponse>,
+    ),
+    // POST /api/district/conversations/assign: the thread's new owner.
+    (
+        "district-conversation-assign.json",
+        codec::<ConversationAssignResponse>,
+    ),
+    // GET /api/district/conversations/assignments: every assigned thread.
+    (
+        "district-conversation-assignments.json",
+        codec::<ConversationAssignmentsResponse>,
+    ),
+    // POST /api/district/conversations/assign with no assignee: unassigned.
+    (
+        "district-conversation-unassign.json",
+        codec::<ConversationAssignResponse>,
+    ),
+    // GET /api/district/conversations?assignments=1: each thread's owner, or
+    // null.
+    (
+        "district-conversations-assignee.json",
+        codec::<ConversationsResponse>,
+    ),
+    // GET /api/district/conversations?metaChannels=1: the Messenger and
+    // Instagram threads too, and each thread's reply options.
+    (
+        "district-conversations-reply-options.json",
+        codec::<ConversationsResponse>,
+    ),
     // GET /api/district/conversations: a mixed-channel contact thread and a bare
     // address thread.
     (
@@ -336,6 +371,11 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     // POST /api/district/messages/send, a text message with an attachment.
     (
         "district-message-send-media.json",
+        codec::<SendMessageResponse>,
+    ),
+    // POST /api/district/messages/send, a WhatsApp template.
+    (
+        "district-message-send-whatsapp-template.json",
         codec::<SendMessageResponse>,
     ),
     // POST /api/district/messages/send, the text-message branch.
@@ -745,6 +785,9 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
         "district-tfv-submission.json",
         codec::<TollFreeVerificationResponse>,
     ),
+    // GET /api/district/timeline: a call's summary and transcript flag, an
+    // attachment, an email's subject and a Messenger message.
+    ("district-timeline-meta.json", codec::<TimelineResponse>),
     // GET /api/district/timeline, an older page that fills its window.
     ("district-timeline-page.json", codec::<TimelineResponse>),
     // GET /api/district/timeline: messages of each channel and calls, interleaved.
@@ -772,6 +815,22 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ("district-verify.json", codec::<VerifyServiceResponse>),
     // GET /api/district/workspace/persona/voice-studio: the Studio, read.
     ("district-voice-studio.json", codec::<VoiceStudioResponse>),
+    // GET /api/district/workspace/whatsapp/templates: a positional and a named
+    // template.
+    (
+        "district-whatsapp-templates.json",
+        codec::<WhatsAppTemplatesResponse>,
+    ),
+    // GET /api/district/workspace/whatsapp/window, closed.
+    (
+        "district-whatsapp-window-closed.json",
+        codec::<WhatsAppWindowResponse>,
+    ),
+    // GET /api/district/workspace/whatsapp/window, open.
+    (
+        "district-whatsapp-window.json",
+        codec::<WhatsAppWindowResponse>,
+    ),
     // GET /api/district/workflows/runs: a run of each status.
     ("district-workflow-runs.json", codec::<WorkflowRunsResponse>),
     // PATCH /api/district/workflows.
@@ -879,6 +938,18 @@ pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
                  of a message on its live socket while it runs, already signed in, and \
                  reads the thread with its own session.",
         fixtures: &["district-message-sender.json", "district-notify-token.json"],
+    },
+    Exclusion {
+        reason: "An iPhone's Live Activity for a call: `POST \
+                 /api/district/calls/{callId}/live-activity` registering one call \
+                 card's update token, and `POST \
+                 /api/district/live-activity/start-token` registering the \
+                 push-to-start token that lets the service start one. A desktop \
+                 shows a call in its own window and has no Live Activities.",
+        fixtures: &[
+            "district-call-live-activity.json",
+            "district-live-activity-start-token.json",
+        ],
     },
 ];
 

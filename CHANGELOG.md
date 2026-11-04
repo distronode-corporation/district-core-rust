@@ -23,6 +23,15 @@ typed the local way under a country the member can see, and is sent as E.164. Br
 
 ### Added
 
+- `district_model` types for the app parity fixtures, decoded strictly and round-tripped by
+  the fixture manifest: `ReplyOption`, `ConversationAssignment`,
+  `ConversationAssignmentsResponse`, `ConversationAssignResponse`,
+  `WhatsAppWindowResponse`, `WhatsAppWindow`, `WhatsAppTemplatesResponse`,
+  `WhatsAppTemplate` and `RefusalResponse` (a route's `{success, error, code}` refusal).
+  No screen uses them yet.
+- `ConversationSummary` gains `reply_options`, `assignee_email` and `assigned_to_me`, sent
+  only when the list is asked for with `metaChannels=1` or `assignments=1`. Breaking for an
+  app that builds a `ConversationSummary` with a struct literal.
 - `district_core::dialer::plan`: `read_dial_entry` reads what was typed in a country
   (`DialReading`, `DialStatus`): the local form for the field, the international form, and
   the E.164 number, set only for a whole number. A `+`, `011` (from a +1 country) or `00`
@@ -52,6 +61,16 @@ typed the local way under a country the member can see, and is sent as E.164. Br
 
 ### Changed
 
+- `contracts/fixtures/` and `contracts/i18n/` from the server's 84c34dbd2. New: the
+  conversation list's reply options and assignee, thread assignment (assign, unassign, the
+  list, and the refusal to assign a Viewer), the WhatsApp window (open and closed) and
+  templates, a WhatsApp template send and a richer timeline (all decoded), and an iPhone's
+  call Live Activity tokens (excluded by decision). The recorded Voice Studio offers Gemini
+  3.5 Flash as the stable brain (was 2.5), with `minimal` to `high` thinking, and the
+  studio tests read the new catalogue. `contracts/desktop/` is unchanged.
+- The error table and wire labels have the service's new codes and values with its French,
+  and take the service's newer French for six sentences and labels. `live_changed` keeps
+  « paramètres » where the service says « réglages » (the Apple word).
 - Call sends the E.164 number the line before Call showed, no longer the text as typed,
   and works only for a whole number in a known shape. A wrong length keeps Call off, and
   is said only once the member stops typing (`CheckLength`, or a refused `Dial`).
