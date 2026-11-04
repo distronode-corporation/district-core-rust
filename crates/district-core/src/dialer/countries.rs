@@ -327,15 +327,40 @@ pub(super) const TRUNK_ZERO: &[&str] = &[
     "VE", "VN", "XK", "YE", "ZA", "ZM", "ZW",
 ];
 
-/// Trunk prefixes that are not a single `0`. Without them `8 495 123 4567`
-/// typed in Russia would keep its `8` and send +7 849, a wrong number that
-/// still dials.
-pub(super) const OTHER_TRUNK_PREFIXES: &[(&str, &str)] =
-    &[("RU", "8"), ("KZ", "8"), ("BY", "80"), ("HU", "06")];
+/// Trunk prefixes that are not a single `0`: libphonenumber's national prefix
+/// for every country outside +1 that has one and it is not `0`
+/// (libphonenumber-js 1.13.14), as in the iOS, Mac and Android diallers.
+/// Without them `8 495 123 4567` typed in Russia would keep its `8` and send
+/// +7 849, a wrong number that still dials. Belarus is `8`, not `80`: `80` is
+/// one of [`PARSING_TRUNK_PREFIXES`].
+pub(super) const OTHER_TRUNK_PREFIXES: &[(&str, &str)] = &[
+    ("BY", "8"),
+    ("HU", "06"),
+    ("KZ", "8"),
+    ("MH", "1"),
+    ("RU", "8"),
+    ("TM", "8"),
+];
+
+/// The other prefixes libphonenumber strips when it reads a national number,
+/// where its `national_prefix_for_parsing` is a plain list of them: Belarus
+/// `0|80?`, Lithuania `[08]` (its trunk prefix became `0` in 2025, and the old
+/// `8` is still dialled) and the UK's `180020`. They are read, never shown: the
+/// local form keeps the trunk prefix. The rules that are not a plain list
+/// (carrier codes and area-code rewrites: AR, AU, BO, BR, CN, CO, JP, KR, LI,
+/// MG) are not modelled, as in the apps.
+pub(super) const PARSING_TRUNK_PREFIXES: &[(&str, &[&str])] =
+    &[("BY", &["80", "0"]), ("GB", &["180020"]), ("LT", &["8"])];
 
 /// The +1 toll-free area codes. They belong to the whole plan, so they never
 /// name a country and never vote for a workspace's home country.
 pub(super) const NANP_TOLL_FREE: &[&str] = &["800", "833", "844", "855", "866", "877", "888"];
+
+/// The other +1 area codes the web's table gives no country (its
+/// `nanp-area-codes.ts`, `country: null`): the non-geographic 500, 600, 700,
+/// 710 and 900. With the toll-free ones, the line before Call names no country
+/// for them.
+pub(super) const NANP_NO_COUNTRY_OTHER: &[&str] = &["500", "600", "700", "710", "900"];
 
 /// Canadian area codes, so a +1 number reads Canada or the United States by its
 /// first three digits.

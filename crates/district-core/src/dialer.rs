@@ -121,17 +121,18 @@ impl DialerScreen {
     /// to send yet; the button already names the country while it is typed.
     pub fn destination(&self) -> Option<String> {
         let reading = self.reading();
-        // A +1 toll-free number (800, 833, 844, 855, 866, 877, 888) belongs to
-        // the whole plan and to no one country, so it is never said to ring the
-        // country on the button. The web dialler's rule, copied: its area-code
-        // table gives these codes no country, and it says so from the moment
+        // A +1 toll-free number (800, 833, 844, 855, 866, 877, 888), or one of
+        // the non-geographic 500, 600, 700, 710 and 900, belongs to no one
+        // country, so it is never said to ring the country on the button. The
+        // web dialler's rule, copied: its area-code table gives these codes no
+        // country, and it says so from the moment
         // the entry has eight digits (its MIN_DIAL_DIGITS, the calling code
         // counted) up to E.164's fifteen, whole or not. A whole number is
         // written grouped; one that is not, as its bare digits, as the web
         // writes a number that is not valid.
         let total = reading.calling_code.len() + reading.national_number.len();
         if reading.calling_code == "1"
-            && plan::is_nanp_toll_free(&reading.national_number)
+            && plan::is_nanp_no_country(&reading.national_number)
             && (MIN_DIAL_DIGITS..=MAX_DIAL_DIGITS).contains(&total)
         {
             let number = match reading.status {
@@ -813,7 +814,10 @@ mod tests {
                  before you call."
             )
         };
-        for code in ["800", "833", "844", "855", "866", "877", "888"] {
+        // The toll-free codes and the web's other no-country codes alike.
+        for code in [
+            "800", "833", "844", "855", "866", "877", "888", "500", "600", "700", "710", "900",
+        ] {
             let international = format!("+1 {code} 555 0100");
             for (entry, country) in [
                 (format!("{code}5550100"), Some("CA")),
