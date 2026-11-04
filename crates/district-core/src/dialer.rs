@@ -774,7 +774,10 @@ mod tests {
         let mut dialer = screen("4165550199", None);
         dialer.pick("gb");
         assert_eq!(dialer.country.as_deref(), Some("GB"));
-        assert_eq!(dialer.entry, "04165 550199", "with the trunk 0 of the UK");
+        assert_eq!(
+            dialer.entry, "4165 550199",
+            "no trunk 0 shown where none was typed"
+        );
         dialer.pick("ZZ");
         assert_eq!(
             dialer.country.as_deref(),

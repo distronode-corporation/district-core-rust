@@ -202,6 +202,7 @@ fn read_national(digits: &str, country: Option<&'static DialCountry>) -> DialRea
     let code = country.code;
     let mut nsn = digits;
     let mut typed_trunk = false;
+    let mut shown_prefix: Option<&'static str> = None;
     if code == "1" {
         if let Some(rest) = nsn.strip_prefix('1') {
             nsn = rest;
@@ -219,13 +220,23 @@ fn read_national(digits: &str, country: Option<&'static DialCountry>) -> DialRea
             };
         }
         // And the other prefixes libphonenumber strips, longest first:
-        // Lithuania's old `8`, Belarus's `80`, the UK's `180020`.
+        // Lithuania's old `8`, Belarus's `80`, the UK's `180020`, each only
+        // where libphonenumber would read it off.
         if let Some(typed) = national_prefixes(country.iso, trunk)
             .into_iter()
-            .find(|prefix| nsn.starts_with(prefix))
+            .find(|prefix| nsn.starts_with(prefix) && strips_prefix(prefix, nsn, country.iso))
         {
             nsn = &nsn[typed.len()..];
             typed_trunk = true;
+            // The prefix typed is the one shown: Lithuania's old `8` shown as
+            // its trunk `0` made the next `0` read `00`, the exit code.
+            if typed != trunk {
+                shown_prefix = Some(typed);
+            }
+        } else if national_number_pattern(country.iso).is_some() {
+            // And none when none was read off, there: a whole number keeps its
+            // own first digits, or Belarus's `8029123` would show a second 8.
+            shown_prefix = Some("");
         }
     }
     // A code several countries share is read again as each digit arrives,
@@ -235,7 +246,7 @@ fn read_national(digits: &str, country: Option<&'static DialCountry>) -> DialRea
     // national number; read only in the country on the button, a Kazakh
     // number would stay "Rings Russia".
     let iso = country_for_code(code, nsn, country.iso, Some(country.iso));
-    finish(iso, code, nsn, typed_trunk, false)
+    finish(iso, code, nsn, typed_trunk, false, shown_prefix)
 }
 
 fn read_international(digits: &str, current: Option<&DialCountry>) -> DialReading {
@@ -253,7 +264,7 @@ fn read_international(digits: &str, current: Option<&DialCountry>) -> DialReadin
         {
             nsn = rest;
         }
-        return finish(iso, first.code, nsn, false, true);
+        return finish(iso, first.code, nsn, false, true, None);
     }
     // An unknown code is said plainly and stays dialable: this client is not
     // the authority on which codes exist.
@@ -298,6 +309,7 @@ fn finish(
     nsn: &str,
     typed_trunk: bool,
     plus: bool,
+    shown_prefix: Option<&str>,
 ) -> DialReading {
     let international = if nsn.is_empty() {
         format!("+{code}")
@@ -309,7 +321,7 @@ fn finish(
         iso: Some(iso),
         calling_code: code,
         national_number: nsn.to_owned(),
-        national: format_national(iso, code, nsn, typed_trunk),
+        national: format_national(iso, code, nsn, typed_trunk, shown_prefix),
         international,
         named_its_country: plus,
         e164: None,
@@ -333,12 +345,24 @@ fn finish(
 /// would swallow it: Saint Petersburg's 812 typed after +7 would lose its 8 to
 /// Russia's trunk 8. A national number is empty only after a trunk prefix,
 /// which is shown as typed.
-fn format_national(iso: &str, code: &str, nsn: &str, typed_trunk: bool) -> String {
+///
+/// `shown_prefix`, for the countries with prefixes read but not their trunk
+/// (Belarus, the UK, Lithuania): the prefix that was typed where it is not the
+/// trunk prefix, or empty for none; `None` everywhere else, which shows the
+/// trunk prefix.
+fn format_national(
+    iso: &str,
+    code: &str,
+    nsn: &str,
+    typed_trunk: bool,
+    shown_prefix: Option<&str>,
+) -> String {
+    let prefix = shown_prefix.or_else(|| trunk_prefix(iso));
     if nsn.is_empty() {
         return match (typed_trunk, code) {
             (false, _) => format!("+{code}"),
             (true, "1") => "1".to_owned(),
-            (true, _) => trunk_prefix(iso).unwrap_or("0").to_owned(),
+            (true, _) => prefix.unwrap_or("0").to_owned(),
         };
     }
     if code == "1" {
@@ -364,8 +388,8 @@ fn format_national(iso: &str, code: &str, nsn: &str, typed_trunk: bool) -> Strin
     if iso == "AU" && !nsn.starts_with('4') && parts.len() > 1 {
         return format!("(0{}) {}", parts[0], parts[1..].join(" "));
     }
-    if let Some(trunk) = trunk_prefix(iso) {
-        parts[0] = format!("{trunk}{}", parts[0]);
+    if let Some(prefix) = prefix {
+        parts[0] = format!("{prefix}{}", parts[0]);
     }
     parts.join(" ")
 }
@@ -460,16 +484,16 @@ pub fn calling_code(iso: &str) -> Option<&'static str> {
 
 /// Which +1 country an area code belongs to: Canada, a Caribbean or Pacific
 /// member of the plan, or else the United States. Before three digits, and for
-/// a toll-free code, `fallback` when it is a +1 country, else the United
-/// States.
+/// a code of no one country (toll-free, or 500, 600, 700, 710, 900), `fallback`
+/// when it is a +1 country, else the United States.
 fn nanp_country(nsn: &str, fallback: Option<&str>) -> &'static str {
     let plus_one = fallback
         .and_then(find_country)
         .filter(|c| c.code == "1")
         .map_or("US", |c| c.iso);
-    // A toll-free code (800, 888 ...) belongs to no one country, so it keeps
-    // the +1 country already on screen rather than claiming the United States.
-    let Some(area) = nsn.get(..3).filter(|_| !is_nanp_toll_free(nsn)) else {
+    // A code of no one country keeps the +1 country already on screen rather
+    // than claiming one: 600 claimed Canada beside a line saying it had none.
+    let Some(area) = nsn.get(..3).filter(|_| !is_nanp_no_country(nsn)) else {
         return plus_one;
     };
     if CANADIAN_AREA_CODES.contains(&area) {
@@ -481,21 +505,74 @@ fn nanp_country(nsn: &str, fallback: Option<&str>) -> &'static str {
         .map_or("US", |(_, iso)| iso)
 }
 
-/// Whether a +1 national number is toll-free, shared by every country of the
-/// plan.
-pub(crate) fn is_nanp_toll_free(nsn: &str) -> bool {
-    nsn.get(..3)
-        .is_some_and(|area| NANP_TOLL_FREE.contains(&area))
-}
-
 /// Whether a +1 national number belongs to no one country, as the web's table
 /// has it: the toll-free codes and the non-geographic 500, 600, 700, 710 and
 /// 900.
 pub(crate) fn is_nanp_no_country(nsn: &str) -> bool {
-    is_nanp_toll_free(nsn)
-        || nsn
-            .get(..3)
-            .is_some_and(|area| NANP_NO_COUNTRY_OTHER.contains(&area))
+    nsn.get(..3)
+        .is_some_and(|area| NANP_TOLL_FREE.contains(&area) || NANP_NO_COUNTRY_OTHER.contains(&area))
+}
+
+/// libphonenumber's national number pattern (libphonenumber-js 1.13.14) for
+/// each country with prefixes read but not its trunk, as the apps hold it, so
+/// a prefix is read off only where libphonenumber would read it off. Written
+/// out by hand, one arm per alternative of the pattern, since the core has no
+/// regex engine:
+///
+/// - BY `(?:[12]\d|33|44|902)\d{7}|8(?:0[0-79]\d{5,7}|[1-7]\d{9})|8(?:1[0-489]|[5-79]\d)\d{7}|8[1-79]\d{6,7}|8[0-79]\d{5}|8\d{5}`
+/// - GB `[1-357-9]\d{9}|[18]\d{8}|8\d{6}`
+/// - LT `(?:[3469]\d|52|[78]0)\d{6}`
+fn national_number_pattern(iso: &str) -> Option<fn(&[u8]) -> bool> {
+    match iso {
+        "BY" => Some(belarus_national),
+        "GB" => Some(uk_national),
+        "LT" => Some(lithuania_national),
+        _ => None,
+    }
+}
+
+fn belarus_national(d: &[u8]) -> bool {
+    let n = d.len();
+    let at = |i: usize| d.get(i).copied().unwrap_or(b'x');
+    let not8 = |c: u8| c != b'8' && c.is_ascii_digit();
+    (n == 9 && (matches!(at(0), b'1' | b'2') || d.starts_with(b"33") || d.starts_with(b"44")))
+        || (n == 10 && d.starts_with(b"902"))
+        || (at(0) == b'8' && at(1) == b'0' && not8(at(2)) && (8..=10).contains(&n))
+        || (at(0) == b'8' && (b'1'..=b'7').contains(&at(1)) && n == 11)
+        || (at(0) == b'8'
+            && n == 10
+            && ((at(1) == b'1' && matches!(at(2), b'0'..=b'4' | b'8' | b'9'))
+                || matches!(at(1), b'5'..=b'7' | b'9')))
+        || (at(0) == b'8' && not8(at(1)) && at(1) != b'0' && (8..=9).contains(&n))
+        || (at(0) == b'8' && not8(at(1)) && n == 7)
+        || (at(0) == b'8' && n == 6)
+}
+
+fn uk_national(d: &[u8]) -> bool {
+    let first = d.first().copied().unwrap_or(b'x');
+    (d.len() == 10 && matches!(first, b'1'..=b'3' | b'5' | b'7'..=b'9'))
+        || (d.len() == 9 && matches!(first, b'1' | b'8'))
+        || (d.len() == 7 && first == b'8')
+}
+
+fn lithuania_national(d: &[u8]) -> bool {
+    d.len() == 8
+        && (matches!(d[0], b'3' | b'4' | b'6' | b'9')
+            || d.starts_with(b"52")
+            || d.starts_with(b"70")
+            || d.starts_with(b"80"))
+}
+
+/// Whether `prefix`, which `digits` starts with, is read off as a prefix in
+/// `iso`: libphonenumber's test, for the countries with a national number
+/// pattern. Not when `digits` already match the pattern and what is left would
+/// not.
+fn strips_prefix(prefix: &str, digits: &str, iso: &str) -> bool {
+    let Some(matches) = national_number_pattern(iso) else {
+        return true;
+    };
+    let rest = &digits.as_bytes()[prefix.len()..];
+    !(matches(digits.as_bytes()) && !matches(rest))
 }
 
 /// Every prefix a national number typed in `iso` may start with that is not
@@ -606,14 +683,15 @@ pub fn suggested_countries(home: Option<&str>, current: Option<&str>) -> Vec<&'s
 /// The country most of `numbers` (a workspace's own, in E.164) belong to; on a
 /// tie, the first listed. `None` when none of them reads as a listed country.
 ///
-/// A toll-free +1 number is no evidence of any country: a Canadian workspace
-/// with only 1-800 numbers would otherwise read as American.
+/// A +1 number of no one country (toll-free, or 500, 600, 700, 710, 900) is no
+/// evidence of any country: a Canadian workspace with only 1-800 numbers would
+/// otherwise read as American.
 pub fn home_country<'a>(numbers: impl IntoIterator<Item = &'a str>) -> Option<&'static str> {
     let mut counts: Vec<(&'static str, usize)> = Vec::new();
     for number in numbers {
         let reading = read_dial_entry(number, None);
         let Some(iso) = reading.iso else { continue };
-        if reading.calling_code == "1" && is_nanp_toll_free(&reading.national_number) {
+        if reading.calling_code == "1" && is_nanp_no_country(&reading.national_number) {
             continue;
         }
         match counts.iter_mut().find(|(seen, _)| *seen == iso) {
@@ -863,18 +941,11 @@ mod tests {
             assert_eq!(trunk_prefix(country), Some(trunk), "{country}");
             let reading = read(typed, country);
             assert_eq!(reading.e164, Some(plus(sent)), "{country}");
-            // Shown with its trunk in front of the national number, every
-            // digit kept.
-            let digits: String = reading
-                .national
-                .chars()
-                .filter(char::is_ascii_digit)
-                .collect();
-            assert_eq!(
-                digits,
-                format!("{trunk}{}", reading.national_number),
-                "{country}"
-            );
+            // Shown with the prefix typed in front of the national number,
+            // every digit kept.
+            let digits =
+                |text: &str| -> String { text.chars().filter(char::is_ascii_digit).collect() };
+            assert_eq!(digits(&reading.national), digits(typed), "{country}");
         }
         let pinned: Vec<(&str, &str)> = OTHER_TRUNK_PREFIXES.to_vec();
         assert_eq!(
@@ -897,23 +968,144 @@ mod tests {
         for typed in ["80 17 123 4567", "8 17 123 4567", "0 17 123 4567"] {
             let belarus = read(typed, "BY");
             assert_eq!(belarus.e164, Some(plus("375171234567")), "{typed}");
+            let prefix = typed.split(' ').next().unwrap();
             assert!(
-                belarus.national.starts_with('8'),
-                "{typed}: shown with the 8"
+                belarus.national.starts_with(prefix),
+                "{typed}: shown as typed"
             );
         }
         let lithuania = read("8 612 34567", "LT");
         assert_eq!(lithuania.e164, Some(plus("37061234567")));
-        assert!(lithuania.national.starts_with('0'), "shown with today's 0");
+        assert!(
+            lithuania.national.starts_with('8'),
+            "shown with the 8 typed"
+        );
         assert_eq!(read("0 612 34567", "LT").e164, Some(plus("37061234567")));
         let uk = read("180020 20 7946 0958", "GB");
         assert_eq!(uk.e164, Some(plus("442079460958")));
-        assert_eq!(uk.national, "020 7946 0958");
+        assert!(uk.national.starts_with("180020"), "shown as typed");
         // Each reads back to the same number.
         for reading in [read("80 17 123 4567", "BY"), read("8 612 34567", "LT"), uk] {
             let again = read(&reading.national, reading.iso.unwrap());
             assert_eq!(again.e164, reading.e164);
         }
+    }
+
+    /// The hand-written national number patterns accept what libphonenumber's
+    /// do, one case per alternative, and refuse the rest.
+    #[test]
+    fn the_national_number_patterns_are_libphonenumbers() {
+        let by = national_number_pattern("BY").unwrap();
+        for yes in [
+            "171234567",
+            "291234567",
+            "331234567",
+            "441234567",
+            "9021234567",
+            "80012345",
+            "8001234567",
+            "81234567890",
+            "8101234567",
+            "8591234567",
+            "81234567",
+            "812345678",
+            "8012345",
+            "812345",
+        ] {
+            assert!(by(yes.as_bytes()), "BY {yes}");
+        }
+        for no in [
+            "01234567",
+            "551234567",
+            "9031234567",
+            "8812345",
+            "88123456",
+            "1",
+        ] {
+            assert!(!by(no.as_bytes()), "BY {no}");
+        }
+        let gb = national_number_pattern("GB").unwrap();
+        for yes in ["2079460958", "800111111", "1234567890", "8001111"] {
+            assert!(gb(yes.as_bytes()), "GB {yes}");
+        }
+        for no in ["4079460958", "212345678", "1234567", ""] {
+            assert!(!gb(no.as_bytes()), "GB {no}");
+        }
+        let lt = national_number_pattern("LT").unwrap();
+        for yes in ["61234567", "52123456", "70012345", "80012345", "31234567"] {
+            assert!(lt(yes.as_bytes()), "LT {yes}");
+        }
+        for no in ["51234567", "71234567", "6123456", "00012345"] {
+            assert!(!lt(no.as_bytes()), "LT {no}");
+        }
+        assert!(national_number_pattern("FR").is_none());
+        assert!(
+            strips_prefix("0", "0612345678", "FR"),
+            "no pattern: always read off"
+        );
+    }
+
+    /// The twelve no-country +1 codes keep the +1 country on screen and do
+    /// not vote for a workspace's home country (iOS #98, Mac #94, Android
+    /// #114).
+    #[test]
+    fn a_no_country_code_moves_no_flag_and_casts_no_vote() {
+        for code in [
+            "800", "833", "844", "855", "866", "877", "888", "500", "600", "700", "710", "900",
+        ] {
+            let number = format!("{code}5550100");
+            assert_eq!(read(&number, "US").iso, Some("US"), "{code} under the US");
+            assert_eq!(read(&number, "CA").iso, Some("CA"), "{code} under Canada");
+            assert_eq!(read(&number, "JM").iso, Some("JM"), "{code} under Jamaica");
+            assert_eq!(
+                home_country([format!("+1{number}").as_str()]),
+                None,
+                "{code} votes"
+            );
+        }
+        assert!(!CANADIAN_AREA_CODES.contains(&"600"));
+    }
+
+    /// For Belarus, the UK and Lithuania a prefix is read off only where
+    /// libphonenumber would: not when the digits already make a whole number
+    /// there and would not without it.
+    #[test]
+    fn a_whole_number_keeps_a_leading_digit_that_looks_like_a_prefix() {
+        let lithuania = read("800 12345", "LT");
+        assert_eq!(
+            lithuania.e164,
+            Some(plus("37080012345")),
+            "a toll-free number"
+        );
+        let belarus = read("800 123 45 67", "BY");
+        assert_eq!(belarus.e164, Some(plus("3758001234567")));
+        assert_ne!(belarus.e164, Some(plus("37501234567")));
+        let whole = read("8029123", "BY");
+        let digits: String = whole
+            .national
+            .chars()
+            .filter(char::is_ascii_digit)
+            .collect();
+        assert_eq!(digits, "8029123", "no second 8 shown in front");
+    }
+
+    /// For those three, the field shows the prefix typed, so typed key by key
+    /// Lithuania's old 8 never comes back as 0 and makes the 00 exit code.
+    #[test]
+    fn the_field_shows_the_prefix_that_was_typed() {
+        let typed = type_keys("80012345", Some("LT"));
+        assert_eq!(typed.iso, Some("LT"));
+        assert_eq!(typed.e164, Some(plus("37080012345")));
+        assert!(read("8 612 34567", "LT").national.starts_with('8'));
+        assert!(read("0 17 123 4567", "BY").national.starts_with('0'));
+        assert!(read("80 17 123 4567", "BY").national.starts_with("80"));
+        assert!(
+            read("180020 20 7946 0958", "GB")
+                .national
+                .starts_with("180020")
+        );
+        // Every other country still shows its trunk prefix.
+        assert!(read("8 495 123 4567", "RU").national.starts_with('8'));
     }
 
     /// A +1 toll-free number names no country, so the +1 country on screen

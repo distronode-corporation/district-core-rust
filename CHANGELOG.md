@@ -41,8 +41,12 @@ typed the local way under a country the member can see, and is sent as E.164. Br
   national prefix libphonenumber-js 1.13.14 gives as `0`, `8` in Russia, Kazakhstan, Belarus
   and Turkmenistan, `06` in Hungary, `1` in the Marshall Islands) are dropped from what is
   sent, and so are the prefixes libphonenumber also strips when reading (Belarus `80` and
-  `0`, Lithuania's old `8`, the UK's `180020`), never shown. Carrier and area-code rewrites
-  (AR, AU, BO, BR, CN, CO, JP, KR, LI, MG) are not modelled, as in the apps. Emergency
+  `0`, Lithuania's old `8`, the UK's `180020`). For those three a prefix is read off only
+  where libphonenumber would (a whole number such as Lithuania's `800 12345` keeps its 8),
+  and the field shows the prefix that was typed, or none. Carrier and area-code rewrites
+  (AR, AU, BO, BR, CN, CO, JP, KR, LI, MG) are not modelled, as in the apps. Known limit:
+  in the other trunk-prefix countries, a whole number typed without its trunk prefix may
+  lose a leading digit equal to that prefix. Emergency
   codes are refused before any country is asked for.
 - 226 countries (`COUNTRIES`) with their calling code and CLDR name in English and
   Canadian French; `search_countries` (exact ISO code, then name prefix, then calling
@@ -59,7 +63,8 @@ typed the local way under a country the member can see, and is sent as E.164. Br
   `needs_country`, `rings`, `rings_no_country`, `unrecognised` and `wrong_length`, with
   reviewed French.
 - A +1 toll-free number (800, 833, 844, 855, 866, 877, 888), or one of the web's
-  non-geographic 500, 600, 700, 710 and 900, is said to belong to no one country ("Rings +1 800 555 0100. This number does not belong to one country. Check it
+  non-geographic 500, 600, 700, 710 and 900, is said to belong to no one country,
+  keeps the +1 country on the button and does not vote for the home country ("Rings +1 800 555 0100. This number does not belong to one country. Check it
   before you call."), as the web dialler says it, never "Rings Canada" or "Rings United
   States". As on the web it is said from eight digits (the 1 counted) to fifteen, with the
   bare digits until the number is whole; Call stays off and the wrong length is still
