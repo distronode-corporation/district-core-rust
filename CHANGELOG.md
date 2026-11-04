@@ -57,7 +57,9 @@ typed the local way under a country the member can see, and is sent as E.164. Br
 - A +1 toll-free number (800, 833, 844, 855, 866, 877, 888) is said to belong to no one
   country ("Rings +1 800 555 0100. This number does not belong to one country. Check it
   before you call."), as the web dialler says it, never "Rings Canada" or "Rings United
-  States".
+  States". As on the web it is said from eight digits (the 1 counted) to fifteen, with the
+  bare digits until the number is whole; Call stays off and the wrong length is still
+  said only once the member stops.
 
 ### Changed
 

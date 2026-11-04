@@ -121,6 +121,25 @@ impl DialerScreen {
     /// to send yet; the button already names the country while it is typed.
     pub fn destination(&self) -> Option<String> {
         let reading = self.reading();
+        // A +1 toll-free number (800, 833, 844, 855, 866, 877, 888) belongs to
+        // the whole plan and to no one country, so it is never said to ring the
+        // country on the button. The web dialler's rule, copied: its area-code
+        // table gives these codes no country, and it says so from the moment
+        // the entry has eight digits (its MIN_DIAL_DIGITS, the calling code
+        // counted) up to E.164's fifteen, whole or not. A whole number is
+        // written grouped; one that is not, as its bare digits, as the web
+        // writes a number that is not valid.
+        let total = reading.calling_code.len() + reading.national_number.len();
+        if reading.calling_code == "1"
+            && plan::is_nanp_toll_free(&reading.national_number)
+            && (MIN_DIAL_DIGITS..=MAX_DIAL_DIGITS).contains(&total)
+        {
+            let number = match reading.status {
+                DialStatus::Ready => reading.international,
+                _ => format!("+1{}", reading.national_number),
+            };
+            return Some(s::dialer_rings_no_country(l(), &number));
+        }
         if reading.status != DialStatus::Ready {
             // A `+` and three digits that name no country is already worth
             // saying.
@@ -129,13 +148,6 @@ impl DialerScreen {
                 && reading.iso.is_none()
                 && reading.national.len() > 3;
             return unknown.then(|| s::dialer_unrecognised(l()).to_owned());
-        }
-        // A +1 toll-free number (800, 833, 844, 855, 866, 877, 888) belongs to
-        // the whole plan and to no one country, so it is not said to ring the
-        // country on the button: the web dialler's rule (its area-code table
-        // gives these codes no country) and its words.
-        if reading.calling_code == "1" && plan::is_nanp_toll_free(&reading.national_number) {
-            return Some(s::dialer_rings_no_country(l(), &reading.international));
         }
         Some(match reading.iso {
             Some(iso) => s::dialer_rings(l(), country_name(iso, l()), &reading.international),
@@ -794,11 +806,36 @@ mod tests {
                 );
                 assert_eq!(dialer.reading().e164, Some(format!("+1{code}5550100")));
             }
-            // Partial: nothing is said until the number is whole.
+            // Partial, as the web: nothing under eight digits (the 1
+            // counted), the line from eight, with the bare digits, while Call
+            // stays off and no wrong length is said until the member stops.
             let mut partial = screen("", Some("CA"));
             partial.absorb(&format!("{code}555"));
-            assert_eq!(partial.destination(), None, "{code} partial");
+            assert_eq!(partial.destination(), None, "{code} at seven digits");
+            for (typed, digits) in [
+                (format!("{code}5550"), format!("+1{code}5550")),
+                (format!("{code}55501"), format!("+1{code}55501")),
+            ] {
+                partial.absorb(&typed);
+                assert_eq!(partial.destination(), Some(none(&digits)), "{typed}");
+                assert_eq!(partial.reading().e164, None);
+                assert_eq!(partial.problem(), None, "nothing while typing");
+                partial.length_checked = true;
+                assert!(partial.problem().is_some(), "said once stopped");
+            }
+            // Too long for +1 but within E.164's fifteen: still the line,
+            // with its digits.
+            partial.absorb(&format!("{code}55501001"));
+            assert_eq!(
+                partial.destination(),
+                Some(none(&format!("+1{code}55501001"))),
+                "{code} too long"
+            );
         }
+        // Past fifteen digits there is no line, as on the web.
+        let mut far = screen("", None);
+        far.absorb("+1800555010012345");
+        assert_eq!(far.destination(), None);
         // A control: an ordinary +1 number names its country.
         assert_eq!(
             screen("(416) 555-0199", Some("US"))
