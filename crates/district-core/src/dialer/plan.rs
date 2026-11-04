@@ -108,7 +108,30 @@ impl DialReading {
 ///
 /// The emergency test comes first, before any country: `911` must reach the
 /// hand-off sentence, never "choose a country".
+///
+/// What the field shows ([`DialReading::national`]) is read again on the next
+/// edit, so it must read back to the same number. A local form that would not
+/// (a +1 number whose digits after the code start with 1, which a local reading
+/// takes as the trunk prefix: `+1 1416…` would come back as `416…` and offer a
+/// different, callable number) is shown in its international form instead,
+/// which reads back exactly.
 pub fn read_dial_entry(raw: &str, country: Option<&str>) -> DialReading {
+    let mut reading = read_entry(raw, country);
+    if reading.status != DialStatus::Emergency
+        && !reading.calling_code.is_empty()
+        && !reading.national.starts_with('+')
+    {
+        let again = read_entry(&reading.national, reading.iso);
+        if again.calling_code != reading.calling_code
+            || again.national_number != reading.national_number
+        {
+            reading.national = format!("+{}{}", reading.calling_code, reading.national_number);
+        }
+    }
+    reading
+}
+
+fn read_entry(raw: &str, country: Option<&str>) -> DialReading {
     let country = country.and_then(find_country);
     let compact: String = raw
         .chars()
@@ -943,6 +966,32 @@ mod tests {
         assert_eq!(typed.national, read(&plus("7 812 123 4567"), "CA").national);
         // A trunk 0 pasted after the code is still dropped, and the code stays.
         assert_eq!(read(&plus("440"), "CA").national, plus("44"));
+    }
+
+    /// What the field shows reads back to the same number: a +1 number whose
+    /// digits after the code start with 1 keeps its international form, so it
+    /// never turns into a different, callable Canadian number on the next read.
+    #[test]
+    fn what_the_field_shows_reads_back_to_the_same_number() {
+        let pasted = read(&plus("1 1 416 555 0199"), "CA");
+        assert_eq!(pasted.status, DialStatus::TooLong);
+        assert_eq!(pasted.national, plus("114165550199"));
+        let again = read(&pasted.national, pasted.iso.unwrap());
+        assert_eq!((again.status, again.e164), (DialStatus::TooLong, None));
+        assert_eq!(again.national, pasted.national);
+        // Every case the reading covers reads back alike.
+        for (raw, country) in [
+            ("4165550199", "CA"),
+            ("020 7946 0958", "GB"),
+            ("8 495 123 4567", "RU"),
+            ("1300 123 456", "AU"),
+            ("06 1 234 5678", "HU"),
+        ] {
+            let first = read(raw, country);
+            let second = read(&first.national, first.iso.unwrap());
+            assert_eq!(second.e164, first.e164, "{raw} in {country}");
+            assert_eq!(second.national, first.national, "{raw} in {country}");
+        }
     }
 
     /// The same for +1, which already re-read its area code: typed key by key
