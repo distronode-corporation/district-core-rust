@@ -93,9 +93,9 @@
           "location": null
         },
         "llm": {
-          "model": "gemini-2.5-flash",
+          "model": "gemini-3.5-flash",
           "location": "auto",
-          "thinking": "off",
+          "thinking": "minimal",
           "temperature": null
         },
         "tts": {
@@ -153,7 +153,7 @@
           "leg": "llm",
           "title": "Brain",
           "role": "Reasoning",
-          "model": "Gemini 2.5 Flash",
+          "model": "Gemini 3.5 Flash",
           "channel": "stable",
           "channelLabel": "Stable",
           "where": "Processed in the United States",
@@ -294,9 +294,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -349,7 +349,7 @@
             "leg": "llm",
             "title": "Brain",
             "role": "Reasoning",
-            "model": "Gemini 2.5 Flash",
+            "model": "Gemini 3.5 Flash",
             "channel": "stable",
             "channelLabel": "Stable",
             "where": "Processed in the United States",
@@ -398,9 +398,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -479,9 +479,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -539,7 +539,7 @@
             "leg": "llm",
             "title": "Brain",
             "role": "Reasoning",
-            "model": "Gemini 2.5 Flash",
+            "model": "Gemini 3.5 Flash",
             "channel": "stable",
             "channelLabel": "Stable",
             "where": "Processed in the United States",
@@ -642,9 +642,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -697,7 +697,7 @@
             "leg": "llm",
             "title": "Brain",
             "role": "Reasoning",
-            "model": "Gemini 2.5 Flash",
+            "model": "Gemini 3.5 Flash",
             "channel": "stable",
             "channelLabel": "Stable",
             "where": "Processed in the United States",
@@ -960,9 +960,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -1020,7 +1020,7 @@
             "leg": "llm",
             "title": "Brain",
             "role": "Reasoning",
-            "model": "Gemini 2.5 Flash",
+            "model": "Gemini 3.5 Flash",
             "channel": "stable",
             "channelLabel": "Stable",
             "where": "Processed in the United States",
@@ -1123,9 +1123,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -1178,7 +1178,7 @@
             "leg": "llm",
             "title": "Brain",
             "role": "Reasoning",
-            "model": "Gemini 2.5 Flash",
+            "model": "Gemini 3.5 Flash",
             "channel": "stable",
             "channelLabel": "Stable",
             "where": "Processed in the United States",
@@ -1222,9 +1222,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -1303,9 +1303,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -1358,7 +1358,7 @@
             "leg": "llm",
             "title": "Brain",
             "role": "Reasoning",
-            "model": "Gemini 2.5 Flash",
+            "model": "Gemini 3.5 Flash",
             "channel": "stable",
             "channelLabel": "Stable",
             "where": "Processed in the United States",
@@ -1402,9 +1402,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -1826,9 +1826,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -1886,7 +1886,7 @@
             "leg": "llm",
             "title": "Brain",
             "role": "Reasoning",
-            "model": "Gemini 2.5 Flash",
+            "model": "Gemini 3.5 Flash",
             "channel": "stable",
             "channelLabel": "Stable",
             "where": "Processed in the United States",
@@ -1947,9 +1947,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -1978,9 +1978,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -2009,9 +2009,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -2040,9 +2040,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -2071,9 +2071,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -2102,9 +2102,9 @@
             "location": null
           },
           "llm": {
-            "model": "gemini-2.5-flash",
+            "model": "gemini-3.5-flash",
             "location": "auto",
-            "thinking": "off",
+            "thinking": "minimal",
             "temperature": null
           },
           "tts": {
@@ -2354,8 +2354,8 @@
     },
     "llm": [
       {
-        "model": "gemini-2.5-flash",
-        "label": "Gemini 2.5 Flash",
+        "model": "gemini-3.5-flash",
+        "label": "Gemini 3.5 Flash",
         "channel": "stable",
         "channelLabel": "Stable",
         "available": true,
@@ -2373,13 +2373,25 @@
             }
           },
           {
-            "value": "us-east4",
-            "label": "United States (us-east4)",
+            "value": "us",
+            "label": "United States (us)",
             "residency": {
               "processedIn": "US",
               "inRegion": true,
               "text": "Processed in the United States",
               "vendorsOutOfRegion": []
+            }
+          },
+          {
+            "value": "europe-west3",
+            "label": "EU (europe-west3)",
+            "residency": {
+              "processedIn": "EU",
+              "inRegion": false,
+              "text": "Leaves your region: EU",
+              "vendorsOutOfRegion": [
+                "Google Cloud Platform (Google LLC)"
+              ]
             }
           },
           {
@@ -2389,18 +2401,6 @@
               "processedIn": "Canada",
               "inRegion": false,
               "text": "Leaves your region: Canada",
-              "vendorsOutOfRegion": [
-                "Google Cloud Platform (Google LLC)"
-              ]
-            }
-          },
-          {
-            "value": "europe-west4",
-            "label": "EU (europe-west4)",
-            "residency": {
-              "processedIn": "EU",
-              "inRegion": false,
-              "text": "Leaves your region: EU",
               "vendorsOutOfRegion": [
                 "Google Cloud Platform (Google LLC)"
               ]
@@ -2433,15 +2433,23 @@
         ],
         "thinking": [
           {
-            "value": "off",
-            "label": "Off"
+            "value": "minimal",
+            "label": "Minimal (fastest)"
           },
           {
-            "value": "dynamic",
-            "label": "Dynamic (the model decides)"
+            "value": "low",
+            "label": "Low"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "high",
+            "label": "High (slowest, costs the most)"
           }
         ],
-        "defaultThinking": "off",
+        "defaultThinking": "minimal",
         "temperatureMin": 0,
         "temperatureMax": 2,
         "residency": {
@@ -2456,128 +2464,6 @@
           "samples": 300,
           "text": "Median 450 ms over 300 calls"
         }
-      },
-      {
-        "model": "gemini-3.5-flash",
-        "label": "Gemini 3.5 Flash",
-        "channel": "latest",
-        "channelLabel": "Latest",
-        "available": true,
-        "offered": true,
-        "defaultLocation": "northamerica-northeast1",
-        "locations": [
-          {
-            "value": "northamerica-northeast1",
-            "label": "Canada (northamerica-northeast1)",
-            "residency": {
-              "processedIn": "Canada",
-              "inRegion": false,
-              "text": "Leaves your region: Canada",
-              "vendorsOutOfRegion": [
-                "Google Cloud Platform (Google LLC)"
-              ]
-            }
-          },
-          {
-            "value": "asia-southeast1",
-            "label": "Asia-Pacific (asia-southeast1)",
-            "residency": {
-              "processedIn": "APAC",
-              "inRegion": false,
-              "text": "Leaves your region: Asia-Pacific",
-              "vendorsOutOfRegion": [
-                "Google Cloud Platform (Google LLC)"
-              ]
-            }
-          },
-          {
-            "value": "global",
-            "label": "global (Google) (global)",
-            "residency": {
-              "processedIn": "Global (Google)",
-              "inRegion": false,
-              "text": "Leaves your region: global (Google)",
-              "vendorsOutOfRegion": [
-                "Google Cloud Platform (Google LLC)"
-              ]
-            }
-          }
-        ],
-        "thinking": [
-          {
-            "value": "low",
-            "label": "Low"
-          },
-          {
-            "value": "medium",
-            "label": "Medium"
-          },
-          {
-            "value": "high",
-            "label": "High"
-          }
-        ],
-        "defaultThinking": "low",
-        "temperatureMin": 0,
-        "temperatureMax": 2,
-        "residency": {
-          "processedIn": "Canada",
-          "inRegion": false,
-          "text": "Leaves your region: Canada",
-          "vendorsOutOfRegion": [
-            "Google Cloud Platform (Google LLC)"
-          ]
-        },
-        "latency": null
-      },
-      {
-        "model": "gemini-3.6-flash",
-        "label": "Gemini 3.6 Flash",
-        "channel": "legacy",
-        "channelLabel": "Legacy",
-        "available": true,
-        "offered": true,
-        "defaultLocation": "global",
-        "locations": [
-          {
-            "value": "global",
-            "label": "global (Google) (global)",
-            "residency": {
-              "processedIn": "Global (Google)",
-              "inRegion": false,
-              "text": "Leaves your region: global (Google)",
-              "vendorsOutOfRegion": [
-                "Google Cloud Platform (Google LLC)"
-              ]
-            }
-          }
-        ],
-        "thinking": [
-          {
-            "value": "low",
-            "label": "Low"
-          },
-          {
-            "value": "medium",
-            "label": "Medium"
-          },
-          {
-            "value": "high",
-            "label": "High"
-          }
-        ],
-        "defaultThinking": "low",
-        "temperatureMin": 0,
-        "temperatureMax": 2,
-        "residency": {
-          "processedIn": "Global (Google)",
-          "inRegion": false,
-          "text": "Leaves your region: global (Google)",
-          "vendorsOutOfRegion": [
-            "Google Cloud Platform (Google LLC)"
-          ]
-        },
-        "latency": null
       },
       {
         "model": "gemini-3.8-flash",
@@ -2612,7 +2498,7 @@
           },
           {
             "value": "high",
-            "label": "High"
+            "label": "High (slowest, costs the most)"
           }
         ],
         "defaultThinking": "low",
@@ -2631,10 +2517,10 @@
       {
         "model": "claude-haiku-5-5",
         "label": "Claude Haiku 5.5",
-        "channel": "preview",
-        "channelLabel": "Preview",
-        "available": false,
-        "offered": false,
+        "channel": "latest",
+        "channelLabel": "Latest",
+        "available": true,
+        "offered": true,
         "defaultLocation": "auto",
         "locations": [
           {
@@ -2673,7 +2559,7 @@
           },
           {
             "value": "high",
-            "label": "High"
+            "label": "High (slowest, costs the most)"
           }
         ],
         "defaultThinking": "off",
@@ -5570,23 +5456,7 @@
       "honouredBy": [
         {
           "provider": "",
-          "model": "gemini-2.5-flash",
-          "min": 0,
-          "max": 2,
-          "default": null,
-          "useDefaultLabel": null
-        },
-        {
-          "provider": "",
           "model": "gemini-3.5-flash",
-          "min": 0,
-          "max": 2,
-          "default": null,
-          "useDefaultLabel": null
-        },
-        {
-          "provider": "",
-          "model": "gemini-3.6-flash",
           "min": 0,
           "max": 2,
           "default": null,

@@ -1,0 +1,5 @@
+{
+  "success": false,
+  "error": "A Viewer can read conversations but cannot be assigned one. Choose a member with another role.",
+  "code": "assignee_is_viewer"
+}

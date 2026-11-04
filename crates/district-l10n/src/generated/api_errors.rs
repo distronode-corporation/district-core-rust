@@ -23,12 +23,57 @@ pub fn api_error_already_cancelled(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.assignee_is_viewer`
+#[must_use]
+pub fn api_error_assignee_is_viewer(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A Viewer can read conversations but cannot be assigned one. Choose a member with another role.",
+        Locale::FrCa => "Un Lecteur peut consulter les conversations, mais aucune ne peut lui être assignée. Choisissez un membre qui a un autre rôle.",
+    }
+}
+
+/// `api_error.assignee_not_member`
+#[must_use]
+pub fn api_error_assignee_not_member(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That person is not a member of this workspace. Add them to the team first.",
+        Locale::FrCa => "Cette personne n'est pas membre de cet espace de travail. Ajoutez-la d'abord à l'équipe.",
+    }
+}
+
 /// `api_error.attachment_unsupported`
 #[must_use]
 pub fn api_error_attachment_unsupported(l: Locale) -> &'static str {
     match l {
         Locale::En => "That kind of attachment cannot be sent on this channel.",
         Locale::FrCa => "Ce type de pièce jointe ne peut pas être envoyé sur ce canal.",
+    }
+}
+
+/// `api_error.audition_busy`
+#[must_use]
+pub fn api_error_audition_busy(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Two auditions are already running for this workspace. End one and try again.",
+        Locale::FrCa => "Deux auditions sont déjà en cours pour cet espace de travail. Terminez-en une et réessayez.",
+    }
+}
+
+/// `api_error.audition_daily_cap`
+#[must_use]
+pub fn api_error_audition_daily_cap(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace has used today's auditions. You can audition again tomorrow.",
+        Locale::FrCa => "Cet espace de travail a utilisé les auditions d'aujourd'hui. Vous pourrez de nouveau écouter un brouillon demain.",
+    }
+}
+
+/// `api_error.audition_unavailable`
+#[must_use]
+pub fn api_error_audition_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The audition can't start right now. Please try again in a moment.",
+        Locale::FrCa => "L'audition ne peut pas commencer pour le moment. Réessayez dans un instant.",
     }
 }
 
@@ -149,6 +194,51 @@ pub fn api_error_call_predates_feature(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.caller_id_carrier_failed`
+#[must_use]
+pub fn api_error_caller_id_carrier_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The phone carrier could not be reached. Try again in a few minutes.",
+        Locale::FrCa => "Impossible de joindre le fournisseur de téléphonie. Réessayez dans quelques minutes.",
+    }
+}
+
+/// `api_error.caller_id_mobile_unverified`
+#[must_use]
+pub fn api_error_caller_id_mobile_unverified(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Confirm your mobile number first, then register it as caller ID.",
+        Locale::FrCa => "Confirmez d'abord votre numéro de cellulaire, puis enregistrez-le comme afficheur.",
+    }
+}
+
+/// `api_error.caller_id_not_confirmed`
+#[must_use]
+pub fn api_error_caller_id_not_confirmed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The carrier has not confirmed your number yet. Answer the verification call and key in the code, then check again.",
+        Locale::FrCa => "Le fournisseur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau.",
+    }
+}
+
+/// `api_error.caller_id_request_too_soon`
+#[must_use]
+pub fn api_error_caller_id_request_too_soon(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A verification call went out less than 10 minutes ago. Wait before asking for another.",
+        Locale::FrCa => "Un appel de vérification a été fait il y a moins de 10 minutes. Attendez avant d'en demander un autre.",
+    }
+}
+
+/// `api_error.caller_id_unavailable`
+#[must_use]
+pub fn api_error_caller_id_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Using your own mobile as caller ID is not available yet.",
+        Locale::FrCa => "L'utilisation de votre cellulaire comme afficheur n'est pas encore offerte.",
+    }
+}
+
 /// `api_error.carrier_error`
 #[must_use]
 pub fn api_error_carrier_error(l: Locale) -> &'static str {
@@ -221,6 +311,15 @@ pub fn api_error_default_card_in_use(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.demo_daily_limit_reached`
+#[must_use]
+pub fn api_error_demo_daily_limit_reached(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Today's demos have all been used. Please try again tomorrow, or view our plans to get started.",
+        Locale::FrCa => "Toutes les démonstrations d'aujourd'hui ont été utilisées. Réessayez demain ou consultez nos forfaits pour commencer.",
+    }
+}
+
 /// `api_error.demo_lines_busy`
 #[must_use]
 pub fn api_error_demo_lines_busy(l: Locale) -> &'static str {
@@ -266,6 +365,51 @@ pub fn api_error_do_not_call(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.draft_changed`
+#[must_use]
+pub fn api_error_draft_changed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The draft changed since you opened it. Review the latest version and try again.",
+        Locale::FrCa => "Le brouillon a changé depuis son ouverture. Consultez la dernière version et réessayez.",
+    }
+}
+
+/// `api_error.draft_field_invalid`
+#[must_use]
+pub fn api_error_draft_field_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That draft value can't be saved. Check the field and try again.",
+        Locale::FrCa => "Cette valeur du brouillon ne peut pas être enregistrée. Vérifiez le champ et réessayez.",
+    }
+}
+
+/// `api_error.draft_lint_refused`
+#[must_use]
+pub fn api_error_draft_lint_refused(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That text can't be saved: it denies being an AI, claims to be a person, tells the receptionist not to disclose, or contains reserved markers. Callers are always told when they speak with an AI.",
+        Locale::FrCa => "Ce texte ne peut pas être enregistré\u{00A0}: il nie être une IA, prétend être une personne, demande à la réceptionniste de ne pas le dire ou contient des marqueurs réservés. Les personnes qui appellent sont toujours informées qu'elles parlent à une IA.",
+    }
+}
+
+/// `api_error.draft_not_found`
+#[must_use]
+pub fn api_error_draft_not_found(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "There is no receptionist draft to work on. Draft a change first.",
+        Locale::FrCa => "Il n'y a aucun brouillon de la réceptionniste. Rédigez d'abord un changement.",
+    }
+}
+
+/// `api_error.draft_nothing_to_undo`
+#[must_use]
+pub fn api_error_draft_nothing_to_undo(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "There is no earlier version of the draft to go back to.",
+        Locale::FrCa => "Il n'y a pas de version antérieure du brouillon à rétablir.",
+    }
+}
+
 /// `api_error.emergency_acknowledgement_required`
 #[must_use]
 pub fn api_error_emergency_acknowledgement_required(l: Locale) -> &'static str {
@@ -289,7 +433,7 @@ pub fn api_error_emergency_number(l: Locale) -> &'static str {
 pub fn api_error_engine_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "This voice engine is not available for this workspace yet. Choose another engine.",
-        Locale::FrCa => "Ce moteur vocal n'est pas encore offert pour cet espace de travail. Choisissez un autre moteur.",
+        Locale::FrCa => "Ce moteur vocal n'est pas encore offert à cet espace de travail. Choisissez un autre moteur.",
     }
 }
 
@@ -299,6 +443,15 @@ pub fn api_error_eu_vat_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "In the European Union we sell to businesses only. Enter your VAT number and we invoice you under the reverse-charge rule.",
         Locale::FrCa => "Dans l'Union européenne, nous vendons uniquement aux entreprises. Saisissez votre numéro de TVA et nous vous facturons selon le régime de l'autoliquidation.",
+    }
+}
+
+/// `api_error.extra_number_charge_required`
+#[must_use]
+pub fn api_error_extra_number_charge_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This number is beyond the ones the plan includes and has a monthly charge. Confirm the charge to buy it.",
+        Locale::FrCa => "Ce numéro dépasse ceux que le forfait inclut et entraîne des frais mensuels. Confirmez les frais pour l'acheter.",
     }
 }
 
@@ -362,6 +515,24 @@ pub fn api_error_forwarding_check_unavailable(l: Locale) -> &'static str {
     match l {
         Locale::En => "The forwarding check is not available right now. You can still test by calling your business line.",
         Locale::FrCa => "La vérification du renvoi n'est pas offerte en ce moment. Vous pouvez tout de même tester en appelant votre ligne d'affaires.",
+    }
+}
+
+/// `api_error.hq_voice_allowance_reached`
+#[must_use]
+pub fn api_error_hq_voice_allowance_reached(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace has used all of this month's District HQ voice minutes. Voice mode is back on the 1st of next month; the text console still works.",
+        Locale::FrCa => "Cet espace de travail a utilisé toutes les minutes du mode vocal de District HQ prévues ce mois-ci. Le mode vocal revient le 1er du mois prochain; la console texte fonctionne toujours.",
+    }
+}
+
+/// `api_error.hq_voice_busy`
+#[must_use]
+pub fn api_error_hq_voice_busy(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "District HQ voice mode is busy right now. Please try again in a few minutes; the text console still works.",
+        Locale::FrCa => "Le mode vocal de District HQ est occupé en ce moment. Réessayez dans quelques minutes; la console texte fonctionne toujours.",
     }
 }
 
@@ -455,6 +626,69 @@ pub fn api_error_jira_not_connected(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.knowledge_facts_limit`
+#[must_use]
+pub fn api_error_knowledge_facts_limit(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace has reached its limit of 300 facts. Remove some before adding more.",
+        Locale::FrCa => "Cet espace de travail a atteint sa limite de 300 faits. Supprimez-en avant d'en ajouter.",
+    }
+}
+
+/// `api_error.knowledge_file_doc_unsupported`
+#[must_use]
+pub fn api_error_knowledge_file_doc_unsupported(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Word 97-2003 files (.doc) cannot be read. Save the document as .docx or PDF and try again.",
+        Locale::FrCa => "Les fichiers Word 97-2003 (.doc) ne peuvent pas être lus. Enregistrez le document en .docx ou en PDF et réessayez.",
+    }
+}
+
+/// `api_error.knowledge_file_no_text`
+#[must_use]
+pub fn api_error_knowledge_file_no_text(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No text was found in this file.",
+        Locale::FrCa => "Aucun texte n'a été trouvé dans ce fichier.",
+    }
+}
+
+/// `api_error.knowledge_file_too_large`
+#[must_use]
+pub fn api_error_knowledge_file_too_large(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This file is too large to read. The limit is 10 MB.",
+        Locale::FrCa => "Ce fichier est trop volumineux pour être lu. La limite est de 10\u{00A0}Mo.",
+    }
+}
+
+/// `api_error.knowledge_file_too_many_pages`
+#[must_use]
+pub fn api_error_knowledge_file_too_many_pages(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This document has too many pages to read at once. The limit is 30 pages.",
+        Locale::FrCa => "Ce document compte trop de pages pour être lu en une fois. La limite est de 30 pages.",
+    }
+}
+
+/// `api_error.knowledge_file_unreadable`
+#[must_use]
+pub fn api_error_knowledge_file_unreadable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This file could not be opened. It may be damaged or protected by a password.",
+        Locale::FrCa => "Ce fichier n'a pas pu être ouvert. Il est peut-être endommagé ou protégé par un mot de passe.",
+    }
+}
+
+/// `api_error.knowledge_file_unsupported`
+#[must_use]
+pub fn api_error_knowledge_file_unsupported(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This file cannot be read. Use a PDF or an image (PNG, JPEG or WebP).",
+        Locale::FrCa => "Ce fichier ne peut pas être lu. Utilisez un PDF ou une image (PNG, JPEG ou WebP).",
+    }
+}
+
 /// `api_error.knowledge_url_blocked`
 #[must_use]
 pub fn api_error_knowledge_url_blocked(l: Locale) -> &'static str {
@@ -505,7 +739,7 @@ pub fn api_error_knowledge_url_timeout(l: Locale) -> &'static str {
 pub fn api_error_knowledge_url_too_large(l: Locale) -> &'static str {
     match l {
         Locale::En => "That page is larger than 2 MB. Import a smaller page or paste the text instead.",
-        Locale::FrCa => "Cette page dépasse 2 Mo. Importez une page plus petite ou collez plutôt le texte.",
+        Locale::FrCa => "Cette page dépasse 2\u{00A0}Mo. Importez une page plus petite ou collez plutôt le texte.",
     }
 }
 
@@ -523,7 +757,7 @@ pub fn api_error_knowledge_url_unreachable(l: Locale) -> &'static str {
 pub fn api_error_knowledge_url_unsupported_type(l: Locale) -> &'static str {
     match l {
         Locale::En => "Only web pages (HTML) and plain text can be imported. Paste the text instead.",
-        Locale::FrCa => "Seuls les pages Web (HTML) et le texte brut peuvent être importés. Collez plutôt le texte.",
+        Locale::FrCa => "Seuls le texte brut et les pages Web (HTML) peuvent être importés. Collez plutôt le texte.",
     }
 }
 
@@ -542,6 +776,15 @@ pub fn api_error_last_agency_member(l: Locale) -> &'static str {
     match l {
         Locale::En => "This is the last administrator of the workspace, so it cannot be removed or demoted.",
         Locale::FrCa => "Il s'agit de la dernière personne administratrice de l'espace de travail, elle ne peut donc être ni retirée ni rétrogradée.",
+    }
+}
+
+/// `api_error.live_changed`
+#[must_use]
+pub fn api_error_live_changed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish.",
+        Locale::FrCa => "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Réalignez le brouillon sur les paramètres en ligne, relisez-le, puis publiez-le.",
     }
 }
 
@@ -604,7 +847,7 @@ pub fn api_error_member_phone_business_number(l: Locale) -> &'static str {
 pub fn api_error_member_phone_cannot_text(l: Locale) -> &'static str {
     match l {
         Locale::En => "This business cannot send texts yet. Texts start once its number's text messaging is approved. Until then, alerts come by email and in the app.",
-        Locale::FrCa => "Cette entreprise ne peut pas encore envoyer de textos. Les textos commenceront dès que la messagerie texte de son numéro sera approuvée. D'ici là, les alertes vous parviennent par courriel et dans l'application.",
+        Locale::FrCa => "Cette entreprise ne peut pas encore envoyer de textos. L'envoi de textos commencera dès que la messagerie texte de son numéro sera approuvée. D'ici là, les alertes vous parviendront par courriel et dans l'application.",
     }
 }
 
@@ -689,12 +932,39 @@ pub fn api_error_message_too_long(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.messaging_app_sms_refused`
+#[must_use]
+pub fn api_error_messaging_app_sms_refused(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Texting is set up with your phone numbers, not as a messaging app.",
+        Locale::FrCa => "Les textos sont configurés avec vos numéros de téléphone, pas comme une application de messagerie.",
+    }
+}
+
+/// `api_error.messaging_apps_managed`
+#[must_use]
+pub fn api_error_messaging_apps_managed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Messaging apps cannot be connected on the platform's Sinch account. Connect your own Sinch account to add WhatsApp, Messenger or RCS.",
+        Locale::FrCa => "Les applications de messagerie ne peuvent pas être connectées sur le compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS.",
+    }
+}
+
 /// `api_error.messaging_provider_not_configured`
 #[must_use]
 pub fn api_error_messaging_provider_not_configured(l: Locale) -> &'static str {
     match l {
         Locale::En => "No messaging provider is connected to this workspace.",
         Locale::FrCa => "Aucun fournisseur de messagerie n'est connecté à cet espace de travail.",
+    }
+}
+
+/// `api_error.messenger_window_closed`
+#[must_use]
+pub fn api_error_messenger_window_closed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The Messenger or Instagram reply window with this contact is closed. You can reply once they write to you again.",
+        Locale::FrCa => "La fenêtre de réponse Messenger ou Instagram avec ce contact est fermée. Vous pourrez répondre quand il vous écrira de nouveau.",
     }
 }
 
@@ -830,6 +1100,24 @@ pub fn api_error_plan_upgrade_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "That feature is not included in this workspace's plan.",
         Locale::FrCa => "Cette fonction n'est pas incluse dans le forfait de cet espace de travail.",
+    }
+}
+
+/// `api_error.proposal_already_handled`
+#[must_use]
+pub fn api_error_proposal_already_handled(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That proposed change was already handled.",
+        Locale::FrCa => "Ce changement proposé a déjà été traité.",
+    }
+}
+
+/// `api_error.proposal_expired`
+#[must_use]
+pub fn api_error_proposal_expired(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That proposed change can no longer be confirmed, so nothing was applied. Ask again to propose it afresh.",
+        Locale::FrCa => "Ce changement proposé ne peut plus être confirmé, donc rien n'a été appliqué. Redemandez-le pour qu'il soit proposé de nouveau.",
     }
 }
 
@@ -1076,6 +1364,15 @@ pub fn api_error_sip_provider_required(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.sms_reply_not_customer_channel`
+#[must_use]
+pub fn api_error_sms_reply_not_customer_channel(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This customer writes on WhatsApp, Messenger or Instagram and has never texted this number. Reply on their channel from the notification, the web Inbox or an updated app.",
+        Locale::FrCa => "Ce client écrit sur WhatsApp, Messenger ou Instagram et n'a jamais envoyé de texto à ce numéro. Répondez-lui sur son canal à partir de la notification, de la boîte de réception Web ou d'une version à jour de l'application.",
+    }
+}
+
 /// `api_error.status_change_failed`
 #[must_use]
 pub fn api_error_status_change_failed(l: Locale) -> &'static str {
@@ -1225,7 +1522,7 @@ pub fn api_error_transfer_emergency_acknowledgement_required(l: Locale) -> &'sta
 pub fn api_error_transfer_incomplete(l: Locale) -> &'static str {
     match l {
         Locale::En => "Some details or documents for this transfer are still missing. Complete every step, then try again.",
-        Locale::FrCa => "Il manque encore des renseignements ou des documents pour ce transfert. Remplissez chaque étape, puis réessayez.",
+        Locale::FrCa => "Il manque encore des renseignements ou des documents pour ce transfert. Terminez chaque étape, puis réessayez.",
     }
 }
 
@@ -1436,12 +1733,30 @@ pub fn api_error_website_unreadable(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.whatsapp_template_invalid`
+#[must_use]
+pub fn api_error_whatsapp_template_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That WhatsApp template cannot be sent. It is not approved for this number, or its variables do not match it.",
+        Locale::FrCa => "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne lui correspondent pas.",
+    }
+}
+
 /// `api_error.whatsapp_unsupported`
 #[must_use]
 pub fn api_error_whatsapp_unsupported(l: Locale) -> &'static str {
     match l {
         Locale::En => "WhatsApp is not available on this workspace's messaging account.",
         Locale::FrCa => "WhatsApp n'est pas offert sur le compte de messagerie de cet espace de travail.",
+    }
+}
+
+/// `api_error.whatsapp_window_closed`
+#[must_use]
+pub fn api_error_whatsapp_window_closed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The 24-hour WhatsApp window with this contact is closed. Send an approved template to reach them again.",
+        Locale::FrCa => "La fenêtre WhatsApp de 24 heures avec ce contact est fermée. Envoyez un modèle approuvé pour le joindre de nouveau.",
     }
 }
 
@@ -1472,6 +1787,24 @@ pub fn api_error_workflow_conditions_not_allowed(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.workflow_draft_dry_run_stale`
+#[must_use]
+pub fn api_error_workflow_draft_dry_run_stale(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Run a dry run of this version of the automation first, then publish it.",
+        Locale::FrCa => "Faites d'abord un essai à blanc de cette version de l'automatisation, puis publiez-la.",
+    }
+}
+
+/// `api_error.workflow_draft_not_found`
+#[must_use]
+pub fn api_error_workflow_draft_not_found(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That drafted automation was not found. It may have been published or discarded.",
+        Locale::FrCa => "Cette automatisation en brouillon est introuvable. Elle a peut-être été publiée ou supprimée.",
+    }
+}
+
 /// `api_error.workflow_member_push_roles_invalid`
 #[must_use]
 pub fn api_error_workflow_member_push_roles_invalid(l: Locale) -> &'static str {
@@ -1496,6 +1829,15 @@ pub fn api_error_workflow_sms_recipient_not_member(l: Locale) -> &'static str {
     match l {
         Locale::En => "That person is not a member of this workspace, so workflow texts cannot be sent to them.",
         Locale::FrCa => "Cette personne n'est pas membre de cet espace de travail, alors les textos des flux ne peuvent pas lui être envoyés.",
+    }
+}
+
+/// `api_error.workflow_voice_cap`
+#[must_use]
+pub fn api_error_workflow_voice_cap(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace has reached the limit of automations built by voice. Build more in the workflow builder.",
+        Locale::FrCa => "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans le générateur de flux de travail.",
     }
 }
 
@@ -1559,6 +1901,15 @@ pub fn api_error_workspace_owner_only(l: Locale) -> &'static str {
     match l {
         Locale::En => "Only the owner of this workspace can do that.",
         Locale::FrCa => "Seule la personne propriétaire de cet espace de travail peut faire cela.",
+    }
+}
+
+/// `api_error.workspace_owner_protected`
+#[must_use]
+pub fn api_error_workspace_owner_protected(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The workspace owner's access cannot be changed or removed here.",
+        Locale::FrCa => "L'accès du propriétaire de l'espace de travail ne peut pas être modifié ni retiré ici.",
     }
 }
 

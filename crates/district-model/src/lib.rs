@@ -58,6 +58,7 @@ mod phone;
 mod pkce;
 mod profile_settings;
 mod push;
+mod refusal;
 mod rooms;
 mod scheduling;
 mod scheduling_admin;
@@ -68,6 +69,7 @@ mod telemetry;
 mod transcript;
 mod usage;
 mod voice_studio;
+mod whatsapp;
 mod workflows;
 mod workspace;
 mod workspace_config;
@@ -120,11 +122,12 @@ pub use hq_voice::{
     read_packet,
 };
 pub use inbox::{
-    CHANNEL_EMAIL, CHANNEL_SMS, ConversationLastMessage, ConversationSummary,
+    CHANNEL_EMAIL, CHANNEL_SMS, ConversationAssignResponse, ConversationAssignment,
+    ConversationAssignmentsResponse, ConversationLastMessage, ConversationSummary,
     ConversationsResponse, MESSAGE_SEARCH_MIN_QUERY_LENGTH, MessageSearchHit,
     MessageSearchResponse, MessageThreadMessage, MessageThreadResponse, MessageThreadTarget,
-    ReplyTarget, ThreadRef, TimelineCursor, TimelineEvent, TimelinePageInfo, TimelineResponse,
-    UnreadCountResponse,
+    ReplyOption, ReplyTarget, ThreadRef, TimelineCursor, TimelineEvent, TimelinePageInfo,
+    TimelineResponse, UnreadCountResponse,
 };
 pub use knowledge::{
     KnowledgeCreateResponse, KnowledgeDeleteResponse, KnowledgeDocument, KnowledgeDocumentCreated,
@@ -166,6 +169,7 @@ pub use profile_settings::{
     SettingsProfile, SettingsResponse, SettingsSaveResponse, SettingsSubscription,
 };
 pub use push::{PRESENCE_KIND, PresenceRegistration, PushRegistrationResponse};
+pub use refusal::RefusalResponse;
 pub use rooms::{
     GuestInvite, MeetRoomName, MeetingDetail, MeetingSummary, RoomE2ee, RoomTokenResponse,
 };
@@ -200,6 +204,9 @@ pub use voice_studio::{
     StudioRealtimeModel, StudioRecipe, StudioResidency, StudioStage, StudioStageLabels,
     StudioSttModel, StudioTtsModel, StudioTuningKey, StudioTurn, StudioTurnDetector, StudioTurnEar,
     StudioVoice, StudioVoiceGroup, StudioVoiceList, VoiceStudioResponse,
+};
+pub use whatsapp::{
+    WhatsAppTemplate, WhatsAppTemplatesResponse, WhatsAppWindow, WhatsAppWindowResponse,
 };
 pub use workflows::{
     CampaignStatus, CampaignStatusResponse, WorkflowActionResult, WorkflowLatestRun,

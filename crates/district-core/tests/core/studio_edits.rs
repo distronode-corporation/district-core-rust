@@ -76,10 +76,10 @@ fn a_model_not_offered_stays_listed_while_it_is_the_one_held() {
     let mut studio = studio;
     studio.catalog.llm[1].offered = false;
     let brains = brain_models(&saved_mix(), &studio);
-    assert!(!values(&brains).contains(&"gemini-3.5-flash"));
-    mix.llm.model = "gemini-3.5-flash".to_owned();
+    assert!(!values(&brains).contains(&"gemini-3.8-flash"));
+    mix.llm.model = "gemini-3.8-flash".to_owned();
     let brains = brain_models(&mix, &studio);
-    assert!(values(&brains).contains(&"gemini-3.5-flash"));
+    assert!(values(&brains).contains(&"gemini-3.8-flash"));
 }
 
 #[test]
@@ -94,7 +94,7 @@ fn a_model_option_says_its_channel_and_a_preview_one_its_note() {
         Some(studio.labels.preview_note.as_str())
     );
     assert!(brains[1].text().ends_with(&studio.labels.preview_note));
-    assert_eq!(brains[0].text(), "Gemini 2.5 Flash \u{b7} Stable");
+    assert_eq!(brains[0].text(), "Gemini 3.5 Flash \u{b7} Stable");
 }
 
 #[test]
@@ -183,16 +183,20 @@ fn a_new_brain_keeps_its_location_where_offered_and_takes_its_own_default_thinki
     let studio = studio();
     let mut mix = saved_mix();
     mix.llm.temperature = Some(1.5);
-    // `auto` is not offered where 3.5 Flash runs: its own first location.
-    let newer = brain_model(&mix, "gemini-3.5-flash", &studio);
+    // `auto` is not offered where 3.8 Flash runs: its own first location.
+    let newer = brain_model(&mix, "gemini-3.8-flash", &studio);
     assert_eq!(
         (newer.llm.location.as_str(), newer.llm.thinking.as_str()),
-        ("northamerica-northeast1", "low")
+        ("global", "low")
     );
     assert_eq!(newer.llm.temperature, Some(1.5));
-    mix.llm.location = "global".to_owned();
-    let newer = brain_model(&mix, "gemini-3.5-flash", &studio);
-    assert_eq!(newer.llm.location, "global", "kept where offered");
+    // `auto` is offered where Claude Haiku runs, so it is kept.
+    let claude = brain_model(&mix, "claude-haiku-5-5", &studio);
+    assert_eq!(
+        (claude.llm.location.as_str(), claude.llm.thinking.as_str()),
+        ("auto", "off"),
+        "kept where offered"
+    );
     assert_eq!(brain_model(&mix, "retired", &studio), mix);
 }
 
@@ -249,7 +253,7 @@ fn a_location_is_written_on_its_own_leg() {
         location(&mix, EAR, "eu").stt.location.as_deref(),
         Some("eu")
     );
-    assert_eq!(location(&mix, BRAIN, "us-east4").llm.location, "us-east4");
+    assert_eq!(location(&mix, BRAIN, "us").llm.location, "us");
     assert_eq!(
         location(&mix, MOUTH, "eu").tts.location.as_deref(),
         Some("eu")
@@ -307,7 +311,7 @@ fn your_chain_is_the_saved_chain_and_another_recipe_keeps_the_held_voice_where_i
     let saved = chained(saved_mix());
     let custom = &studio.recipes[5];
     let mut held = saved_mix();
-    held.llm.thinking = "dynamic".to_owned();
+    held.llm.thinking = "low".to_owned();
     assert_eq!(applied(custom, &saved, &chained(held), &studio), saved);
     // From a saved realtime engine, your chain is the region's starting one.
     let start = applied(custom, &live(GEMINI_LIVE_25), &saved, &studio);
@@ -485,11 +489,8 @@ fn every_choice_path_reads_and_writes_its_own_field() {
         mix,
         "an empty interruption is no object"
     );
-    assert_eq!(choice(&mix, THINKING).as_deref(), Some("off"));
-    assert_eq!(
-        set_choice(&mix, THINKING, "dynamic").llm.thinking,
-        "dynamic"
-    );
+    assert_eq!(choice(&mix, THINKING).as_deref(), Some("minimal"));
+    assert_eq!(set_choice(&mix, THINKING, "low").llm.thinking, "low");
     assert_eq!(choice(&mix, "voiceStyle"), None);
     assert_eq!(set_choice(&mix, "voiceStyle", "x"), mix);
 }
@@ -671,7 +672,7 @@ fn a_tier_switch_applies_the_recipe_again_and_your_chain_is_no_tiers() {
 fn reset_goes_back_to_the_recipe_and_the_count_says_how_far_an_edit_went() {
     let mut ready = ready();
     ready.select_leg(BRAIN);
-    ready.pick(PickerKind::Model, "gemini-3.5-flash");
+    ready.pick(PickerKind::Model, "gemini-3.8-flash");
     assert_eq!(
         ready.changes(),
         3,
@@ -740,8 +741,8 @@ fn every_pickers_choice_makes_its_own_edit_and_an_unoffered_or_held_one_none() {
     ready.pick(PickerKind::Vendor, "assemblyai");
     assert_eq!(ready.held.engine.mix().unwrap().stt.provider, "assemblyai");
     ready.select_leg(BRAIN);
-    ready.pick(PickerKind::Location, "us-east4");
-    assert_eq!(ready.held.engine.mix().unwrap().llm.location, "us-east4");
+    ready.pick(PickerKind::Location, "us");
+    assert_eq!(ready.held.engine.mix().unwrap().llm.location, "us");
     ready.pick(PickerKind::Model, "gemini-3.8-flash");
     assert_eq!(
         ready.held.engine.mix().unwrap().llm.model,
@@ -835,9 +836,9 @@ fn the_controls_are_the_open_legs_and_each_writes_its_own_key() {
     let TuningControl::Choice { options, .. } = thinking else {
         panic!("{thinking:?}");
     };
-    assert_eq!(options.len(), 2);
-    ready.set_choice(THINKING, "dynamic");
-    assert_eq!(ready.held.engine.mix().unwrap().llm.thinking, "dynamic");
+    assert_eq!(options.len(), 4);
+    ready.set_choice(THINKING, "low");
+    assert_eq!(ready.held.engine.mix().unwrap().llm.thinking, "low");
     if let StudioEngine::Chained(mix) = &mut ready.held.engine {
         mix.llm.model = "retired".to_owned();
     }

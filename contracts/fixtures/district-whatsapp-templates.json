@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "templates": [
+    {
+      "id": "wa_tpl_reminder",
+      "senderId": null,
+      "name": "appointment_reminder",
+      "language": "en_US",
+      "category": "UTILITY",
+      "status": "approved",
+      "body": "Hi {{1}}, this is a reminder of your appointment on {{2}}.",
+      "variableCount": 2
+    },
+    {
+      "id": "wa_tpl_named",
+      "senderId": "wa_sender_contract",
+      "name": "follow_up",
+      "language": "fr_CA",
+      "category": "MARKETING",
+      "status": "pending",
+      "body": "Bonjour {{first_name}}, merci de votre visite.",
+      "variableCount": null
+    }
+  ]
+}

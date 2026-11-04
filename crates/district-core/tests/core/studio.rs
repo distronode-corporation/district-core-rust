@@ -515,7 +515,7 @@ fn a_lab_number_is_shown_on_a_brain_block_wherever_it_runs() {
     let mut studio = studio();
     studio.catalog.llm[1].latency = latency("lab", 600.0);
     let mut mix = saved_mix();
-    mix.llm.model = "gemini-3.5-flash".to_owned();
+    mix.llm.model = "gemini-3.8-flash".to_owned();
     mix.llm.thinking = "low".to_owned();
     let engine = chained(mix);
     assert_eq!(
@@ -575,7 +575,7 @@ fn another_vendors_voice_number_is_the_models_and_a_lab_one_does_not_count() {
 fn a_locations_residency_replaces_the_models() {
     let studio = studio();
     let mut mix = saved_mix();
-    mix.llm.location = "europe-west4".to_owned();
+    mix.llm.location = "europe-west3".to_owned();
     let residency = residency(&chained(mix), &studio);
     assert!(!residency.in_region);
     assert_eq!(residency.text, studio.labels.leaves_region);
