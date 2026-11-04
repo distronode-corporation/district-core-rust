@@ -181,7 +181,17 @@ impl ActiveCall {
     /// Who the call is with: the number dialled, or "Caller".
     pub fn title(&self) -> String {
         match &self.direction {
-            CallDirection::Outbound { number } => crate::dialer::format_dial_entry(number),
+            // The number the dialler sent is E.164, grouped as the line before
+            // Call grouped it (its country's own way, the calling code whole).
+            // Anything it cannot read as a whole number of a known country
+            // keeps the plain grouping.
+            CallDirection::Outbound { number } => {
+                let reading = crate::dialer::read_dial_entry(number, None);
+                match (reading.status, reading.iso) {
+                    (crate::dialer::DialStatus::Ready, Some(_)) => reading.international,
+                    _ => crate::dialer::format_dial_entry(number),
+                }
+            }
             CallDirection::Inbound => s::call_caller(l()).to_owned(),
         }
     }

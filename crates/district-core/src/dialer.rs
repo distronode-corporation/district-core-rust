@@ -778,6 +778,17 @@ mod tests {
         assert_eq!(dialer.suggested(), ["GB", "CA", "US"]);
     }
 
+    /// The call's title groups the number the way the line before Call did:
+    /// its country's own way, the calling code whole.
+    #[test]
+    fn the_call_title_groups_the_number_in_its_country() {
+        let title = |number: String| ActiveCall::outbound("ws".to_owned(), number).title();
+        assert_eq!(title(plus("33639980123")), plus("33 6 39 98 01 23"));
+        assert_eq!(title("+12125550142".to_owned()), "+1 212 555 0142");
+        // A number the plan cannot read as whole keeps the plain grouping.
+        assert_eq!(title(plus("99912345678")), plus("9 991 234 5678"));
+    }
+
     /// A +1 toll-free number says it belongs to no one country, whatever +1
     /// country is on the button, typed locally or with its code; nothing is
     /// said before it is whole, and an ordinary +1 number still names its
