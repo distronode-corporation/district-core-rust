@@ -37,8 +37,9 @@ typed the local way under a country the member can see, and is sent as E.164. Br
   the E.164 number, set only for a whole number. A `+`, `011` (from a +1 country) or `00`
   number names its own country; +1 is read by its area code (Canada, the United States, a
   Caribbean or Pacific member; toll-free names none) and +7 by its first digit (Kazakhstan
-  or Russia), typed key by key as when pasted. Trunk prefixes (`0`, `8` in Russia and
-  Kazakhstan, `80` in Belarus, `06` in Hungary) are dropped from what is sent. Emergency
+  or Russia), typed key by key as when pasted. Trunk prefixes (`0` in the 103 countries whose
+  national prefix libphonenumber-js 1.13.14 gives as `0`, `8` in Russia and Kazakhstan,
+  `80` in Belarus, `06` in Hungary) are dropped from what is sent. Emergency
   codes are refused before any country is asked for.
 - 226 countries (`COUNTRIES`) with their calling code and CLDR name in English and
   Canadian French; `search_countries` (exact ISO code, then name prefix, then calling

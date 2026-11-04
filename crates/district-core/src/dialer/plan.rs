@@ -119,6 +119,7 @@ pub fn read_dial_entry(raw: &str, country: Option<&str>) -> DialReading {
     let mut reading = read_entry(raw, country);
     if reading.status != DialStatus::Emergency
         && !reading.calling_code.is_empty()
+        && !reading.national_number.is_empty()
         && !reading.national.starts_with('+')
     {
         let again = read_entry(&reading.national, reading.iso);
@@ -992,6 +993,38 @@ mod tests {
             assert_eq!(second.e164, first.e164, "{raw} in {country}");
             assert_eq!(second.national, first.national, "{raw} in {country}");
         }
+    }
+
+    /// The read-back check waits for a digit after the calling code: a code
+    /// alone, or a trunk prefix alone, is shown as typed.
+    #[test]
+    fn the_read_back_check_waits_for_a_national_digit() {
+        assert_eq!(read(&plus("44"), "CA").national, plus("44"));
+        assert_eq!(read("0", "FR").national, "0");
+        assert_eq!(read("1", "CA").national, "1");
+        assert_eq!(read("8", "RU").national, "8");
+    }
+
+    /// The countries whose trunk `0` is dropped: libphonenumber-js 1.13.14's
+    /// national prefix `0`, exactly, every one of them listed.
+    #[test]
+    fn the_trunk_zero_countries_are_libphonenumbers() {
+        let expected = "AE AF AL AM AR AT AU AZ BA BD BE BG BO BR CD CH CN CO CU DE DZ EC EG \
+                        ER ET FI FR GB GE GF GH GP HR ID IE IL IN IQ IR JO JP KE KG KH KI KP \
+                        KR LA LB LI LK LR LT LY MA MC MD ME MG MK MM MN MQ MW MY NA NG NL NP \
+                        NZ PE PH PK PM PS PY RE RO RS RW SA SD SE SI SK SL SO SS SY TH TR TW \
+                        TZ UA UG UY VE VN XK YE ZA ZM ZW";
+        let mut listed: Vec<&str> = TRUNK_ZERO.to_vec();
+        listed.sort_unstable();
+        let expected: Vec<&str> = expected.split_whitespace().collect();
+        assert_eq!(listed, expected);
+        assert_eq!(TRUNK_ZERO.len(), 103);
+        for iso in TRUNK_ZERO {
+            assert!(find_country(iso).is_some(), "{iso} is a listed country");
+            assert_eq!(trunk_prefix(iso), Some("0"), "{iso}");
+        }
+        // Venezuela's mobile typed with its trunk 0 sends no 0 after +58.
+        assert_eq!(read("0412 123 4567", "VE").e164, Some(plus("584121234567")));
     }
 
     /// The same for +1, which already re-read its area code: typed key by key

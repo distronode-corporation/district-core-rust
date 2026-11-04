@@ -311,14 +311,20 @@ pub static COUNTRIES: &[DialCountry] = &[
 /// Countries whose national numbers carry a trunk `0` that is dropped after the
 /// calling code: `020 7946 0958` in London is `20 7946 0958` after +44.
 ///
-/// Only the ones this table is sure of. A country missing here keeps a typed
-/// leading `0` in the number, and the international form under the field shows
-/// it, so the member sees the `0` after the code before pressing Call rather
-/// than a silent rewrite.
+/// Exactly the countries whose national prefix is `0` in libphonenumber-js
+/// 1.13.14's metadata (103 of them), the list the iOS, Mac and Android
+/// diallers use too. A country missing here keeps a typed leading `0` in the
+/// number, and the international form under the field shows it, so the
+/// member sees the `0` after the code before pressing Call rather than a
+/// silent rewrite.
 pub(super) const TRUNK_ZERO: &[&str] = &[
-    "AE", "AR", "AT", "AU", "BA", "BD", "BE", "BG", "BR", "CH", "CN", "DE", "EG", "FI", "FR", "GB",
-    "GH", "HR", "ID", "IE", "IL", "IN", "JP", "KE", "KR", "LK", "MA", "MY", "NG", "NL", "NZ", "PH",
-    "PK", "RO", "RS", "SA", "SE", "SI", "SK", "TH", "TR", "TW", "UA", "VN", "ZA",
+    "AE", "AF", "AL", "AM", "AR", "AT", "AU", "AZ", "BA", "BD", "BE", "BG", "BO", "BR", "CD", "CH",
+    "CN", "CO", "CU", "DE", "DZ", "EC", "EG", "ER", "ET", "FI", "FR", "GB", "GE", "GF", "GH", "GP",
+    "HR", "ID", "IE", "IL", "IN", "IQ", "IR", "JO", "JP", "KE", "KG", "KH", "KI", "KP", "KR", "LA",
+    "LB", "LI", "LK", "LR", "LT", "LY", "MA", "MC", "MD", "ME", "MG", "MK", "MM", "MN", "MQ", "MW",
+    "MY", "NA", "NG", "NL", "NP", "NZ", "PE", "PH", "PK", "PM", "PS", "PY", "RE", "RO", "RS", "RW",
+    "SA", "SD", "SE", "SI", "SK", "SL", "SO", "SS", "SY", "TH", "TR", "TW", "TZ", "UA", "UG", "UY",
+    "VE", "VN", "XK", "YE", "ZA", "ZM", "ZW",
 ];
 
 /// Trunk prefixes that are not a single `0`. Without them `8 495 123 4567`
