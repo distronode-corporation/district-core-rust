@@ -370,6 +370,10 @@ fn groups(iso: &str, nsn: &str) -> &'static [usize] {
 fn lengths(iso: &str, code: &str) -> (usize, usize) {
     match (code, iso) {
         ("1", _) => (10, 10),
+        // Russia and Kazakhstan: ten digits after +7, always. Without this an
+        // eleven-digit number typed with its 7 and no `+` read as a Kazakh
+        // number of eleven and was offered for dialling.
+        ("7", _) => (10, 10),
         (_, "GB") => (7, 10),
         (_, "FR" | "CH") => (9, 9),
         (_, "AU") => (6, 10),
@@ -903,6 +907,18 @@ mod tests {
         assert_eq!(read("8", "RU").national, "8", "the trunk alone is shown");
         assert_eq!(read("+7", "KZ").iso, Some("KZ"));
         assert_eq!(read("+7", "CA").iso, Some("RU"));
+    }
+
+    /// Every +7 number has ten digits after the code, so a Russian number
+    /// typed with its country code and no `+` is too long, never dialled as
+    /// something else.
+    #[test]
+    fn a_plus_seven_number_has_exactly_ten_digits() {
+        let typed_with_its_code = read("79161234567", "RU");
+        assert_eq!(typed_with_its_code.status, DialStatus::TooLong);
+        assert_eq!(typed_with_its_code.e164, None);
+        assert_eq!(read("8 916 123 4567", "RU").e164, Some(plus("79161234567")));
+        assert_eq!(read("8 916 123 456", "RU").status, DialStatus::Typing);
     }
 
     /// A calling code with no digit after it yet stays in the field, so the
