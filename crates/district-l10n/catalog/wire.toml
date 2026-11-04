@@ -448,7 +448,7 @@ note = "A label for the stored value `escalated` of disposition. `disposition` o
 
 [wire.disposition.info]
 en = "Information only"
-fr = "Information seulement"
+fr = "Demande de renseignements"
 ctx = "label"
 screen = "wire disposition"
 tier = "T3"
@@ -1495,6 +1495,24 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `skipped` of workflowActionOutcome. `actionResults[].outcome` on a workflow run. The portal shows the value itself (only its colour depends on it); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
 
+[wire.workflow_action_reason.automated_sender]
+en = "Not texted: the message came from an automated sender, such as a verification code"
+fr = "Texto non envoyé\u00A0: le message venait d'un expéditeur automatisé, comme un code de vérification"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `automated-sender` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
+[wire.workflow_action_reason.consent_check_failed]
+en = "Not texted: the texting consent could not be checked"
+fr = "Texto non envoyé\u00A0: le consentement aux textos n'a pas pu être vérifié"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `consent-check-failed` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
 [wire.workflow_action_reason.contact_not_found]
 en = "Contact not found"
 fr = "Contact introuvable"
@@ -1578,7 +1596,7 @@ note = "A label for the stored value `fallback-email-push` of workflowActionReas
 
 [wire.workflow_action_reason.fallback_failed]
 en = "Not texted, and the email and app fallback failed too"
-fr = "Texto non envoyé, et le courriel et l'application de secours ont aussi échoué"
+fr = "Texto non envoyé, et l'envoi par courriel et dans l'application a aussi échoué"
 ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
@@ -1612,6 +1630,24 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `invalid-recipient` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
+[wire.workflow_action_reason.loop_check_failed]
+en = "Not texted: the recent messages with this number could not be checked"
+fr = "Texto non envoyé\u00A0: les messages récents avec ce numéro n'ont pas pu être vérifiés"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `loop-check-failed` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
+[wire.workflow_action_reason.loop_paused]
+en = "Not texted: this number answered automatically several times in a row, so texts to it are paused for an hour"
+fr = "Texto non envoyé\u00A0: ce numéro a répondu automatiquement plusieurs fois de suite, les textos vers lui sont donc suspendus pendant une heure"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `loop-paused` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
 [wire.workflow_action_reason.missing_webhook_url]
 en = "Missing webhook url"
 fr = "URL du webhook manquante"
@@ -1620,6 +1656,15 @@ screen = "wire workflow_action_reason"
 tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `missing-webhook-url` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
+
+[wire.workflow_action_reason.no_consent]
+en = "Not texted: no call or text from them in the last 24 hours, and no consent on record"
+fr = "Texto non envoyé\u00A0: aucun appel ni texto de cette personne depuis 24\u00A0heures, et aucun consentement au dossier"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `no-consent` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
 
 [wire.workflow_action_reason.no_devices]
 en = "No team member has the app on a device that can receive notifications"
@@ -1693,6 +1738,15 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `push-not-delivered` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
 
+[wire.workflow_action_reason.quiet_hours]
+en = "Not texted: it was outside 8am to 9pm where their phone may be"
+fr = "Texto non envoyé\u00A0: il était en dehors de 8\u00A0h à 21\u00A0h là où se trouve peut-être son téléphone"
+ctx = "label"
+screen = "wire workflow_action_reason"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `quiet-hours` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
+
 [wire.workflow_action_reason.recipient_not_member]
 en = "The person to text is no longer a member of this workspace"
 fr = "La personne à qui envoyer le texto n'est plus membre de cet espace de travail"
@@ -1704,7 +1758,7 @@ note = "A label for the stored value `recipient-not-member` of workflowActionRea
 
 [wire.workflow_action_reason.recipient_number_held]
 en = "Not sent: the person's mobile is a business number on District"
-fr = "Non envoyé\u00A0: le cellulaire de cette personne est un numéro d'entreprise sur District"
+fr = "Non envoyé\u00A0: le numéro de cellulaire de cette personne appartient à une entreprise sur District"
 ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"

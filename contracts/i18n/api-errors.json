@@ -279,6 +279,86 @@
       "en": "This workspace already holds every phone number its plan includes. Upgrade the plan to add more.",
       "fr": "Cet espace de travail détient déjà tous les numéros de téléphone inclus dans son forfait. Passez à un forfait supérieur pour en ajouter."
     },
+    "extra_number_charge_required": {
+      "en": "This number is beyond the ones the plan includes and has a monthly charge. Confirm the charge to buy it.",
+      "fr": "Ce numéro dépasse ceux que le forfait inclut et entraîne des frais mensuels. Confirmez les frais pour l'acheter."
+    },
+    "workspace_owner_protected": {
+      "en": "The workspace owner's access cannot be changed or removed here.",
+      "fr": "L'accès du propriétaire de l'espace de travail ne peut pas être modifié ni retiré ici."
+    },
+    "assignee_not_member": {
+      "en": "That person is not a member of this workspace. Add them to the team first.",
+      "fr": "Cette personne n'est pas membre de cet espace de travail. Ajoutez-la d'abord à l'équipe."
+    },
+    "assignee_is_viewer": {
+      "en": "A Viewer can read conversations but cannot be assigned one. Choose a member with another role.",
+      "fr": "Un Lecteur peut consulter les conversations, mais aucune ne peut lui être assignée. Choisissez un membre qui a un autre rôle."
+    },
+    "hq_voice_allowance_reached": {
+      "en": "This workspace has used all of this month's District HQ voice minutes. Voice mode is back on the 1st of next month; the text console still works.",
+      "fr": "Cet espace de travail a utilisé toutes les minutes du mode vocal de District HQ prévues ce mois-ci. Le mode vocal revient le 1er du mois prochain; la console texte fonctionne toujours."
+    },
+    "hq_voice_busy": {
+      "en": "District HQ voice mode is busy right now. Please try again in a few minutes; the text console still works.",
+      "fr": "Le mode vocal de District HQ est occupé en ce moment. Réessayez dans quelques minutes; la console texte fonctionne toujours."
+    },
+    "draft_not_found": {
+      "en": "There is no receptionist draft to work on. Draft a change first.",
+      "fr": "Il n'y a aucun brouillon de la réceptionniste. Rédigez d'abord un changement."
+    },
+    "draft_changed": {
+      "en": "The draft changed since you opened it. Review the latest version and try again.",
+      "fr": "Le brouillon a changé depuis son ouverture. Consultez la dernière version et réessayez."
+    },
+    "draft_field_invalid": {
+      "en": "That draft value can't be saved. Check the field and try again.",
+      "fr": "Cette valeur du brouillon ne peut pas être enregistrée. Vérifiez le champ et réessayez."
+    },
+    "draft_lint_refused": {
+      "en": "That text can't be saved: it denies being an AI, claims to be a person, tells the receptionist not to disclose, or contains reserved markers. Callers are always told when they speak with an AI.",
+      "fr": "Ce texte ne peut pas être enregistré : il nie être une IA, prétend être une personne, demande à la réceptionniste de ne pas le dire ou contient des marqueurs réservés. Les personnes qui appellent sont toujours informées qu'elles parlent à une IA."
+    },
+    "draft_nothing_to_undo": {
+      "en": "There is no earlier version of the draft to go back to.",
+      "fr": "Il n'y a pas de version antérieure du brouillon à rétablir."
+    },
+    "live_changed": {
+      "en": "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish.",
+      "fr": "Quelqu'un a modifié ces réglages depuis la rédaction du brouillon. Réalignez le brouillon sur les réglages en ligne, relisez-le, puis publiez-le."
+    },
+    "audition_busy": {
+      "en": "Two auditions are already running for this workspace. End one and try again.",
+      "fr": "Deux auditions sont déjà en cours pour cet espace de travail. Terminez-en une et réessayez."
+    },
+    "audition_daily_cap": {
+      "en": "This workspace has used today's auditions. You can audition again tomorrow.",
+      "fr": "Cet espace de travail a utilisé les auditions d'aujourd'hui. Vous pourrez de nouveau écouter un brouillon demain."
+    },
+    "audition_unavailable": {
+      "en": "The audition can't start right now. Please try again in a moment.",
+      "fr": "L'audition ne peut pas commencer pour le moment. Réessayez dans un instant."
+    },
+    "workflow_draft_not_found": {
+      "en": "That drafted automation was not found. It may have been published or discarded.",
+      "fr": "Cette automatisation en brouillon est introuvable. Elle a peut-être été publiée ou supprimée."
+    },
+    "workflow_draft_dry_run_stale": {
+      "en": "Run a dry run of this version of the automation first, then publish it.",
+      "fr": "Faites d'abord un essai à blanc de cette version de l'automatisation, puis publiez-la."
+    },
+    "workflow_voice_cap": {
+      "en": "This workspace has reached the limit of automations built by voice. Build more in the workflow builder.",
+      "fr": "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans le générateur de flux de travail."
+    },
+    "proposal_expired": {
+      "en": "That proposed change can no longer be confirmed, so nothing was applied. Ask again to propose it afresh.",
+      "fr": "Ce changement proposé ne peut plus être confirmé, donc rien n'a été appliqué. Redemandez-le pour qu'il soit proposé de nouveau."
+    },
+    "proposal_already_handled": {
+      "en": "That proposed change was already handled.",
+      "fr": "Ce changement proposé a déjà été traité."
+    },
     "dgi_requires_studio": {
       "en": "Lead enrichment is included with Voice Studio. Upgrade to turn it on.",
       "fr": "L'enrichissement des prospects est inclus avec Voice Studio. Passez à ce forfait pour l'activer."
@@ -356,7 +436,7 @@
     },
     "engine_unavailable": {
       "en": "This voice engine is not available for this workspace yet. Choose another engine.",
-      "fr": "Ce moteur vocal n'est pas encore offert pour cet espace de travail. Choisissez un autre moteur."
+      "fr": "Ce moteur vocal n'est pas encore offert à cet espace de travail. Choisissez un autre moteur."
     },
     "language_unavailable": {
       "en": "This language is not available for this workspace yet. Choose another language.",
@@ -440,11 +520,35 @@
     },
     "sending_domain_provider_changed": {
       "en": "This sending domain was set up with a different email provider. Remove it and connect it again to get the new DNS records.",
-      "fr": "Ce domaine d'envoi a été configuré avec un autre fournisseur de courriel. Retirez-le, puis connectez-le de nouveau pour obtenir les nouveaux enregistrements DNS."
+      "fr": "Ce domaine d'envoi a été configuré avec un autre fournisseur de courriel. Retirez-le, puis connectez-le de nouveau pour obtenir les nouvelles entrées DNS."
     },
     "whatsapp_unsupported": {
       "en": "WhatsApp is not available on this workspace's messaging account.",
       "fr": "WhatsApp n'est pas offert sur le compte de messagerie de cet espace de travail."
+    },
+    "whatsapp_window_closed": {
+      "en": "The 24-hour WhatsApp window with this contact is closed. Send an approved template to reach them again.",
+      "fr": "La fenêtre WhatsApp de 24 heures avec ce contact est fermée. Envoyez un modèle approuvé pour le joindre de nouveau."
+    },
+    "whatsapp_template_invalid": {
+      "en": "That WhatsApp template cannot be sent. It is not approved for this number, or its variables do not match it.",
+      "fr": "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne lui correspondent pas."
+    },
+    "messenger_window_closed": {
+      "en": "The Messenger or Instagram reply window with this contact is closed. You can reply once they write to you again.",
+      "fr": "La fenêtre de réponse Messenger ou Instagram avec ce contact est fermée. Vous pourrez répondre quand il vous écrira de nouveau."
+    },
+    "sms_reply_not_customer_channel": {
+      "en": "This customer writes on WhatsApp, Messenger or Instagram and has never texted this number. Reply on their channel from the notification, the web Inbox or an updated app.",
+      "fr": "Ce client écrit sur WhatsApp, Messenger ou Instagram et n'a jamais envoyé de texto à ce numéro. Répondez-lui sur son canal à partir de la notification, de la boîte de réception Web ou d'une version à jour de l'application."
+    },
+    "messaging_apps_managed": {
+      "en": "Messaging apps cannot be connected on the platform's Sinch account. Connect your own Sinch account to add WhatsApp, Messenger or RCS.",
+      "fr": "Les applications de messagerie ne peuvent pas être connectées sur le compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS."
+    },
+    "messaging_app_sms_refused": {
+      "en": "Texting is set up with your phone numbers, not as a messaging app.",
+      "fr": "Les textos sont configurés avec vos numéros de téléphone, pas comme une application de messagerie."
     },
     "verify_not_enabled": {
       "en": "One-time passcodes are not turned on for this workspace.",
@@ -528,7 +632,7 @@
     },
     "transfer_incomplete": {
       "en": "Some details or documents for this transfer are still missing. Complete every step, then try again.",
-      "fr": "Il manque encore des renseignements ou des documents pour ce transfert. Remplissez chaque étape, puis réessayez."
+      "fr": "Il manque encore des renseignements ou des documents pour ce transfert. Terminez chaque étape, puis réessayez."
     },
     "transfer_signature_required": {
       "en": "Type the authorized person's full name and confirm the authorization before sending the transfer.",
@@ -600,7 +704,7 @@
     },
     "member_phone_cannot_text": {
       "en": "This business cannot send texts yet. Texts start once its number's text messaging is approved. Until then, alerts come by email and in the app.",
-      "fr": "Cette entreprise ne peut pas encore envoyer de textos. Les textos commenceront dès que la messagerie texte de son numéro sera approuvée. D'ici là, les alertes vous parviennent par courriel et dans l'application."
+      "fr": "Cette entreprise ne peut pas encore envoyer de textos. L'envoi de textos commencera dès que la messagerie texte de son numéro sera approuvée. D'ici là, les alertes vous parviendront par courriel et dans l'application."
     },
     "member_phone_opted_out": {
       "en": "This number has opted out of texts from this business, so no code can be sent to it.",
@@ -609,6 +713,26 @@
     "member_phone_business_number": {
       "en": "This number belongs to a business on District, so it cannot receive alerts. Enter your own mobile number.",
       "fr": "Ce numéro appartient à une entreprise sur District, alors il ne peut pas recevoir d'alertes. Entrez votre propre numéro de cellulaire."
+    },
+    "caller_id_unavailable": {
+      "en": "Using your own mobile as caller ID is not available yet.",
+      "fr": "L'utilisation de votre cellulaire comme afficheur n'est pas encore offerte."
+    },
+    "caller_id_mobile_unverified": {
+      "en": "Confirm your mobile number first, then register it as caller ID.",
+      "fr": "Confirmez d'abord votre numéro de cellulaire, puis enregistrez-le comme afficheur."
+    },
+    "caller_id_request_too_soon": {
+      "en": "A verification call went out less than 10 minutes ago. Wait before asking for another.",
+      "fr": "Un appel de vérification a été fait il y a moins de 10 minutes. Attendez avant d'en demander un autre."
+    },
+    "caller_id_not_confirmed": {
+      "en": "The carrier has not confirmed your number yet. Answer the verification call and key in the code, then check again.",
+      "fr": "Le fournisseur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau."
+    },
+    "caller_id_carrier_failed": {
+      "en": "The phone carrier could not be reached. Try again in a few minutes.",
+      "fr": "Impossible de joindre le fournisseur de téléphonie. Réessayez dans quelques minutes."
     },
     "call_not_in_progress": {
       "en": "That call is not in progress.",
@@ -633,6 +757,10 @@
     "demo_lines_busy": {
       "en": "Every demo line is busy right now. Please try again in a few minutes.",
       "fr": "Toutes les lignes de démonstration sont occupées en ce moment. Réessayez dans quelques minutes."
+    },
+    "demo_daily_limit_reached": {
+      "en": "Today's demos have all been used. Please try again tomorrow, or view our plans to get started.",
+      "fr": "Toutes les démonstrations d'aujourd'hui ont été utilisées. Réessayez demain ou consultez nos forfaits pour commencer."
     },
     "test_call_limit_reached": {
       "en": "You have used today's three test calls. You can place another one tomorrow, or call your number yourself.",
@@ -748,11 +876,11 @@
     },
     "knowledge_url_too_large": {
       "en": "That page is larger than 2 MB. Import a smaller page or paste the text instead.",
-      "fr": "Cette page dépasse 2 Mo. Importez une page plus petite ou collez plutôt le texte."
+      "fr": "Cette page dépasse 2 Mo. Importez une page plus petite ou collez plutôt le texte."
     },
     "knowledge_url_unsupported_type": {
       "en": "Only web pages (HTML) and plain text can be imported. Paste the text instead.",
-      "fr": "Seuls les pages Web (HTML) et le texte brut peuvent être importés. Collez plutôt le texte."
+      "fr": "Seuls le texte brut et les pages Web (HTML) peuvent être importés. Collez plutôt le texte."
     },
     "knowledge_url_pdf_unsupported": {
       "en": "PDF import is not available yet. Paste the text from the PDF instead.",
@@ -761,6 +889,34 @@
     "knowledge_url_empty": {
       "en": "That page has no readable text to import.",
       "fr": "Cette page ne contient aucun texte lisible à importer."
+    },
+    "knowledge_file_too_large": {
+      "en": "This file is too large to read. The limit is 10 MB.",
+      "fr": "Ce fichier est trop volumineux pour être lu. La limite est de 10 Mo."
+    },
+    "knowledge_file_too_many_pages": {
+      "en": "This document has too many pages to read at once. The limit is 30 pages.",
+      "fr": "Ce document compte trop de pages pour être lu en une fois. La limite est de 30 pages."
+    },
+    "knowledge_file_unsupported": {
+      "en": "This file cannot be read. Use a PDF or an image (PNG, JPEG or WebP).",
+      "fr": "Ce fichier ne peut pas être lu. Utilisez un PDF ou une image (PNG, JPEG ou WebP)."
+    },
+    "knowledge_file_doc_unsupported": {
+      "en": "Word 97-2003 files (.doc) cannot be read. Save the document as .docx or PDF and try again.",
+      "fr": "Les fichiers Word 97-2003 (.doc) ne peuvent pas être lus. Enregistrez le document en .docx ou en PDF et réessayez."
+    },
+    "knowledge_file_no_text": {
+      "en": "No text was found in this file.",
+      "fr": "Aucun texte n'a été trouvé dans ce fichier."
+    },
+    "knowledge_file_unreadable": {
+      "en": "This file could not be opened. It may be damaged or protected by a password.",
+      "fr": "Ce fichier n'a pas pu être ouvert. Il est peut-être endommagé ou protégé par un mot de passe."
+    },
+    "knowledge_facts_limit": {
+      "en": "This workspace has reached its limit of 300 facts. Remove some before adding more.",
+      "fr": "Cet espace de travail a atteint sa limite de 300 faits. Supprimez-en avant d'en ajouter."
     }
   }
 }
