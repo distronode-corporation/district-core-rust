@@ -430,6 +430,18 @@ fn chunks(digits: &str) -> Vec<&str> {
         .collect()
 }
 
+/// The title of a call placed to `number`: the E.164 number the dialler sent,
+/// grouped as the line before Call grouped it, its country's own way with the
+/// calling code whole. Anything the plan cannot read as a whole number of a
+/// known country keeps the plain grouping ([`format_dial_entry`]).
+pub(crate) fn call_title(number: &str) -> String {
+    let reading = read_dial_entry(number, None);
+    if reading.status == DialStatus::Ready && reading.iso.is_some() {
+        return reading.international;
+    }
+    format_dial_entry(number)
+}
+
 /// A call's length as a call timer reads it: `mm:ss` under an hour, then
 /// `h:mm:ss`, the minutes never past 59.
 pub fn format_call_duration(seconds: u64) -> String {
