@@ -17,6 +17,48 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+Dialler design A, after district-ios (#95 and #96) and the web dialler: the number is
+typed the local way under a country the member can see, and is sent as E.164. Breaking:
+`DialerScreen` and `DialerEvent` change shape.
+
+### Added
+
+- `district_core::dialer::plan`: `read_dial_entry` reads what was typed in a country
+  (`DialReading`, `DialStatus`): the local form for the field, the international form, and
+  the E.164 number, set only for a whole number. A `+`, `011` (from a +1 country) or `00`
+  number names its own country; +1 is read by its area code (Canada, the United States, a
+  Caribbean or Pacific member; toll-free names none) and +7 by its first digit (Kazakhstan
+  or Russia), typed key by key as when pasted. Trunk prefixes (`0`, `8` in Russia and
+  Kazakhstan, `80` in Belarus, `06` in Hungary) are dropped from what is sent. Emergency
+  codes are refused before any country is asked for.
+- 226 countries (`COUNTRIES`) with their calling code and CLDR name in English and
+  Canadian French; `search_countries` (exact ISO code, then name prefix, then calling
+  code, then name contains), `sorted_countries`, `suggested_countries`, `flag`,
+  `home_country` (the country of most of a workspace's numbers, toll-free ones not
+  voting) and `national_example` (placeholders in fictional ranges only).
+- `DialerScreen`: `country`, `home` and `length_checked`, and `reading`, `hint`,
+  `placeholder`, `destination` ("Rings Canada · +1 416 555 0199"), `problem` and
+  `country_label`. `DialerEvent::PickCountry` and `DialerEvent::CheckLength`.
+- `edit_dial_input`, `clean_dial_input`, `entry_chars_before` and
+  `caret_after_entry_chars`, for a shell whose field the core writes after every edit.
+- Catalog entries `dialer.countries_all`, `countries_no_match`, `countries_suggested`,
+  `country`, `country_button`, `country_search`, `emergency`, `hint_local`,
+  `needs_country`, `rings`, `unrecognised` and `wrong_length`, their French in state
+  `draft` until it is reviewed.
+
+### Changed
+
+- Call sends the E.164 number the line before Call showed, no longer the text as typed,
+  and works only for a whole number in a known shape. A wrong length keeps Call off, and
+  is said only once the member stops typing (`CheckLength`, or a refused `Dial`).
+- Entering the dialler reads the workspace's numbers (`Effect::LoadOwnedNumbers`) unless
+  they are already read, for its home country. No response field was added.
+
+### Removed
+
+- `DialerScreen::HINT`, `DialerScreen::formatted`, `DialerScreen::has_enough_digits` and
+  the catalog entry `dialer.hint`.
+
 ## [7.0.1] - 2026-10-29
 
 A patch release: the media dependencies move, and nothing an app calls or implements changes.

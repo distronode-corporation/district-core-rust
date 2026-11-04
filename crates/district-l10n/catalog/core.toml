@@ -1080,14 +1080,79 @@ tier = "T3"
 state = "reviewed"
 note = "For a member who is already in a call or a meeting room."
 
-[dialer.hint]
-en = "Enter a number with its country code, for example +1\u00A0212\u00A0555\u00A00142."
-fr = "Indiquez un numéro avec l'indicatif du pays, par exemple +1\u00A0212\u00A0555\u00A00142."
+[dialer.countries_all]
+en = "All countries"
+fr = "Tous les pays"
+ctx = "label"
+screen = "dialler"
+tier = "T3"
+state = "draft"
+note = "Heading of the country list's second group: every country, alphabetical. The iOS app's and the web's words."
+
+[dialer.countries_no_match]
+en = "No country matches."
+fr = "Aucun pays ne correspond."
+ctx = "body"
+screen = "dialler"
+tier = "T3"
+state = "draft"
+note = "In the country list when the search finds nothing. The iOS app's words."
+
+[dialer.countries_suggested]
+en = "Suggested"
+fr = "Suggestions"
+ctx = "label"
+screen = "dialler"
+tier = "T3"
+state = "draft"
+note = "Heading of the country list's first group: the workspace's own country, the one chosen, then Canada and the United States."
+
+[dialer.country]
+en = "Country"
+fr = "Pays"
+ctx = "label"
+screen = "dialler"
+tier = "T3"
+state = "draft"
+note = "The country button in front of the number, before any country is chosen, and the country list's title."
+
+[dialer.country_button]
+en = "{country}, calling code +{code}"
+fr = "{country}, indicatif +{code}"
+ctx = "a11y"
+screen = "dialler"
+tier = "T2"
+args = { country = "str", code = "str" }
+state = "draft"
+note = "Screen reader name of the flag button in front of the number. {country} is a country name, {code} its calling code digits (1, 44). The iOS app's words."
+
+[dialer.country_search]
+en = "Country name or code"
+fr = "Nom du pays ou indicatif"
 ctx = "placeholder"
 screen = "dialler"
 tier = "T3"
-state = "reviewed"
-note = "Above the keypad: enter the number with its country code. +1 212 555 0142 is an example number; keep it as it is, with no-break spaces (U+00A0) between its groups so it never breaks after +1."
+state = "draft"
+note = "Placeholder of the search box above the country list: a name, an ISO code or a calling code finds a country. The iOS app's words."
+
+[dialer.emergency]
+en = "Emergency calls cannot be placed from District AI. Use your phone's own dialer to call for help."
+fr = "District AI ne peut pas passer d'appels d'urgence. Utilisez le clavier de votre propre téléphone pour demander de l'aide."
+ctx = "error"
+screen = "dialler"
+tier = "T0"
+state = "draft"
+note = "Under the number when it is an emergency code (911, 112, 999 ...). It must send the member to their own phone: District AI cannot place an emergency call and must not seem as if it might. The web dialler's words."
+
+[dialer.hint_local]
+en = "Type the number as you would dial it locally ({country}), or start with + and its country code."
+fr = "Saisissez le numéro comme vous le composeriez sur place ({country}), ou commencez par + et l'indicatif du pays."
+ctx = "body"
+screen = "dialler"
+tier = "T2"
+args = { country = "str" }
+state = "draft"
+note = "Under the number with a country chosen: a number without + is read there. {country} is a country name. The web dialler's words."
 
 [dialer.microphone_note]
 en = "Placing a call turns on your microphone."
@@ -1097,6 +1162,43 @@ screen = "dialler"
 tier = "T0"
 state = "reviewed"
 note = "Under the keypad: placing a call turns the microphone on (a privacy notice)."
+
+[dialer.needs_country]
+en = "Choose a country, or start with + and the country code."
+fr = "Choisissez un pays, ou commencez par + et l'indicatif du pays."
+ctx = "body"
+screen = "dialler"
+tier = "T2"
+state = "draft"
+note = "Under the number when no country is chosen: digits alone cannot be read until one is, or the number starts with +. The web dialler's words."
+
+[dialer.rings]
+en = "Rings {country} · {number}"
+fr = "Pays de destination\u00A0: {country} · {number}"
+ctx = "body"
+screen = "dialler"
+tier = "T0"
+args = { country = "str", number = "str" }
+state = "draft"
+note = "Shown before Call: the country the call rings and the whole international number that is sent, +1 416 555 0199 for example. It is the guard against calling the wrong country. The iOS app's and the web's words."
+
+[dialer.unrecognised]
+en = "Unrecognised country code. Check the number before calling."
+fr = "Cet indicatif de pays n'est pas reconnu. Vérifiez le numéro avant d'appeler."
+ctx = "body"
+screen = "dialler"
+tier = "T1"
+state = "draft"
+note = "Shown before Call for a number whose + code no country in the list uses. It stays callable. The iOS app's words."
+
+[dialer.wrong_length]
+en = "That is the wrong number of digits for a number in the country it rings. Check it before you call."
+fr = "Ce numéro n'a pas le bon nombre de chiffres pour le pays de destination. Vérifiez-le avant d'appeler."
+ctx = "error"
+screen = "dialler"
+tier = "T2"
+state = "draft"
+note = "Under the number once the member stops typing (the field loses focus, Enter, or a refused Call), never while digits are still arriving. Call stays off. The web dialler's words."
 
 [directory.add_rejected]
 en = "A name and a phone number are both needed to add someone."
