@@ -228,10 +228,26 @@ pub const DEVICES_THIS_DEVICE: &str = "This device";
 pub const DEVICES_UNNAMED: &str = "Unnamed device";
 /// `dialer.busy_note` in English.
 pub const DIALER_BUSY_NOTE: &str = "Finish the call or meeting you are in first.";
-/// `dialer.hint` in English.
-pub const DIALER_HINT: &str = "Enter a number with its country code, for example +1\u{00A0}212\u{00A0}555\u{00A0}0142.";
+/// `dialer.countries_all` in English.
+pub const DIALER_COUNTRIES_ALL: &str = "All countries";
+/// `dialer.countries_no_match` in English.
+pub const DIALER_COUNTRIES_NO_MATCH: &str = "No country matches.";
+/// `dialer.countries_suggested` in English.
+pub const DIALER_COUNTRIES_SUGGESTED: &str = "Suggested";
+/// `dialer.country` in English.
+pub const DIALER_COUNTRY: &str = "Country";
+/// `dialer.country_search` in English.
+pub const DIALER_COUNTRY_SEARCH: &str = "Country name or code";
+/// `dialer.emergency` in English.
+pub const DIALER_EMERGENCY: &str = "Emergency calls cannot be placed from District AI. Use your phone's own dialer to call for help.";
 /// `dialer.microphone_note` in English.
 pub const DIALER_MICROPHONE_NOTE: &str = "Placing a call turns on your microphone.";
+/// `dialer.needs_country` in English.
+pub const DIALER_NEEDS_COUNTRY: &str = "Choose a country, or start with + and the country code.";
+/// `dialer.unrecognised` in English.
+pub const DIALER_UNRECOGNISED: &str = "Unrecognised country code. Check the number before calling.";
+/// `dialer.wrong_length` in English.
+pub const DIALER_WRONG_LENGTH: &str = "That is the wrong number of digits for a number in the country it rings. Check it before you call.";
 /// `directory.add_rejected` in English.
 pub const DIRECTORY_ADD_REJECTED: &str = "A name and a phone number are both needed to add someone.";
 /// `directory.confirm_clear_action` in English.

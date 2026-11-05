@@ -7,7 +7,7 @@
 
 use district_api::{ApiError, ErrorDetail};
 use district_core::l10n::{self, Locale, api_error_text, strings};
-use district_core::{CoreConfig, FailureText, Model};
+use district_core::{CoreConfig, DialerScreen, FailureText, Model};
 
 fn config(locale: Locale) -> CoreConfig {
     CoreConfig {
@@ -46,6 +46,27 @@ fn a_french_model_writes_in_french_until_told_otherwise() {
         FailureText::from_retry_reason(district_api::RetryReason::Offline).message,
         strings::failure_offline(Locale::FrCa)
     );
+
+    // The dialler names the country, and writes its lines, in French.
+    let dialer = DialerScreen {
+        entry: "(416) 555-0199".to_owned(),
+        country: Some("CA".to_owned()),
+        ..DialerScreen::default()
+    };
+    assert_eq!(
+        dialer.destination().as_deref(),
+        Some("Pays de destination\u{a0}: Canada \u{b7} +1 416 555 0199")
+    );
+    assert_eq!(
+        dialer.hint(),
+        "Saisissez le numéro comme vous le composeriez sur place (Canada), ou commencez par + et \
+         l'indicatif du pays."
+    );
+    let us = DialerScreen {
+        country: Some("US".to_owned()),
+        ..DialerScreen::default()
+    };
+    assert_eq!(us.country_label(), "États-Unis, indicatif +1");
 
     the_parity_refusals_are_read_by_their_codes(&mut model);
 

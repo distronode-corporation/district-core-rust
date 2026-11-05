@@ -23,6 +23,7 @@ use district_model::{
     AvailableNumber, NumberSearch, NumberSearchResponse, OwnedNumber, OwnedNumbersResponse,
 };
 
+use crate::dialer::home_country;
 use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::number_admin::{CarrierStatus, NumberAdmin, NumberAdminEvent, numbers_scope_note};
@@ -373,12 +374,18 @@ impl SignedIn {
     ) -> Next {
         if tickets.accept(Slot::OwnedNumbers, ticket) {
             self.marketplace.owned = match result {
-                Ok(held) => OwnedNumbersList::Ready(OwnedNumbers {
-                    numbers: held.numbers,
-                    partial: held.partial,
-                    failed_providers: held.failed_providers,
-                    refreshing: false,
-                }),
+                Ok(held) => {
+                    // The dialler's home country is the country of most of
+                    // these numbers.
+                    let home = home_country(held.numbers.iter().map(|n| n.phone_number.as_str()));
+                    self.dialer.adopt_home(home);
+                    OwnedNumbersList::Ready(OwnedNumbers {
+                        numbers: held.numbers,
+                        partial: held.partial,
+                        failed_providers: held.failed_providers,
+                        refreshing: false,
+                    })
+                }
                 Err(error) => OwnedNumbersList::Failed(FailureText::from_api_error(&error)),
             };
         }

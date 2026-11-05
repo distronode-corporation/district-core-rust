@@ -1076,12 +1076,75 @@ pub fn dialer_busy_note(l: Locale) -> &'static str {
     }
 }
 
-/// `dialer.hint`
+/// `dialer.countries_all`
 #[must_use]
-pub fn dialer_hint(l: Locale) -> &'static str {
+pub fn dialer_countries_all(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Enter a number with its country code, for example +1\u{00A0}212\u{00A0}555\u{00A0}0142.",
-        Locale::FrCa => "Indiquez un numéro avec l'indicatif du pays, par exemple +1\u{00A0}212\u{00A0}555\u{00A0}0142.",
+        Locale::En => "All countries",
+        Locale::FrCa => "Tous les pays",
+    }
+}
+
+/// `dialer.countries_no_match`
+#[must_use]
+pub fn dialer_countries_no_match(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No country matches.",
+        Locale::FrCa => "Aucun pays ne correspond.",
+    }
+}
+
+/// `dialer.countries_suggested`
+#[must_use]
+pub fn dialer_countries_suggested(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Suggested",
+        Locale::FrCa => "Suggestions",
+    }
+}
+
+/// `dialer.country`
+#[must_use]
+pub fn dialer_country(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Country",
+        Locale::FrCa => "Pays",
+    }
+}
+
+/// `dialer.country_button`
+#[must_use]
+pub fn dialer_country_button(l: Locale, country: &str, code: &str) -> String {
+    match l {
+        Locale::En => format!("{country}, calling code +{code}"),
+        Locale::FrCa => format!("{country}, indicatif +{code}"),
+    }
+}
+
+/// `dialer.country_search`
+#[must_use]
+pub fn dialer_country_search(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Country name or code",
+        Locale::FrCa => "Nom du pays ou indicatif",
+    }
+}
+
+/// `dialer.emergency`
+#[must_use]
+pub fn dialer_emergency(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Emergency calls cannot be placed from District AI. Use your phone's own dialer to call for help.",
+        Locale::FrCa => "District AI ne peut pas passer d'appels d'urgence. Utilisez le composeur de votre propre téléphone pour demander de l'aide.",
+    }
+}
+
+/// `dialer.hint_local`
+#[must_use]
+pub fn dialer_hint_local(l: Locale, country: &str) -> String {
+    match l {
+        Locale::En => format!("Type the number as you would dial it locally ({country}), or start with + and its country code."),
+        Locale::FrCa => format!("Saisissez le numéro comme vous le composeriez sur place ({country}), ou commencez par + et l'indicatif du pays."),
     }
 }
 
@@ -1091,6 +1154,51 @@ pub fn dialer_microphone_note(l: Locale) -> &'static str {
     match l {
         Locale::En => "Placing a call turns on your microphone.",
         Locale::FrCa => "Passer un appel active votre microphone.",
+    }
+}
+
+/// `dialer.needs_country`
+#[must_use]
+pub fn dialer_needs_country(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose a country, or start with + and the country code.",
+        Locale::FrCa => "Choisissez un pays, ou commencez par + et l'indicatif du pays.",
+    }
+}
+
+/// `dialer.rings`
+#[must_use]
+pub fn dialer_rings(l: Locale, country: &str, number: &str) -> String {
+    match l {
+        Locale::En => format!("Rings {country} · {number}"),
+        Locale::FrCa => format!("Pays de destination\u{00A0}: {country} · {number}"),
+    }
+}
+
+/// `dialer.rings_no_country`
+#[must_use]
+pub fn dialer_rings_no_country(l: Locale, number: &str) -> String {
+    match l {
+        Locale::En => format!("Rings {number}. This number does not belong to one country. Check it before you call."),
+        Locale::FrCa => format!("Numéro composé\u{00A0}: {number}. Ce numéro n'appartient à aucun pays en particulier. Vérifiez-le avant d'appeler."),
+    }
+}
+
+/// `dialer.unrecognised`
+#[must_use]
+pub fn dialer_unrecognised(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unrecognised country code. Check the number before calling.",
+        Locale::FrCa => "Cet indicatif de pays n'est pas reconnu. Vérifiez le numéro avant d'appeler.",
+    }
+}
+
+/// `dialer.wrong_length`
+#[must_use]
+pub fn dialer_wrong_length(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That is the wrong number of digits for a number in the country it rings. Check it before you call.",
+        Locale::FrCa => "Ce numéro n'a pas le bon nombre de chiffres pour le pays de destination. Vérifiez-le avant d'appeler.",
     }
 }
 

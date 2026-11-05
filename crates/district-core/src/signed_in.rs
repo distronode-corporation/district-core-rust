@@ -360,11 +360,10 @@ impl SignedIn {
             Route::SupportRequest { key } => self.open_support_request(key, tickets),
             Route::Rooms => self.enter_rooms(tickets),
             Route::Workspace(section) => self.enter_settings(section, tickets),
+            Route::Dialer => self.enter_dialer(tickets),
             // A thread is opened by `navigate`, which reads its key first. The HQ
-            // conversation is held, not read, and the dialler reads nothing.
-            Route::Overview | Route::Account | Route::Thread { .. } | Route::Hq | Route::Dialer => {
-                Vec::new()
-            }
+            // conversation is held, not read.
+            Route::Overview | Route::Account | Route::Thread { .. } | Route::Hq => Vec::new(),
         }
     }
 

@@ -3526,7 +3526,7 @@ async fn a_placed_call_runs_through_the_engine_from_dial_to_hang_up() {
     assert_eq!(
         log.take(),
         [
-            "dial ws-contract-active +1 212 555 0142",
+            "dial ws-contract-active +12125550142",
             "watch transcript Some(TranscriptWatch { workspace_id: \"ws-contract-active\", \
              call_id: \"CAabababababababababababababababab\", resubscribes: 0 })",
             "connect wss://media.example.com microphone true",

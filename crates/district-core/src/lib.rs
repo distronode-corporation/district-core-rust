@@ -186,8 +186,11 @@ pub use desk::{
 };
 pub use devices::{Confirmation, DeviceRow, DevicesEvent, DevicesList, DevicesScreen};
 pub use dialer::{
-    DialerEvent, DialerScreen, MIN_DIAL_DIGITS, format_call_duration, format_dial_entry,
-    format_phone_number,
+    COUNTRIES, DeleteDirection, DialCountry, DialReading, DialStatus, DialerEvent, DialerScreen,
+    MAX_DIAL_DIGITS, MIN_DIAL_DIGITS, calling_code, caret_after_entry_chars, clean_dial_input,
+    country_name, edit_dial_input, entry_chars_before, entry_for_pick, flag, format_call_duration,
+    format_dial_entry, format_phone_number, home_country, national_example, read_dial_entry,
+    search_countries, sorted_countries, suggested_countries,
 };
 /// The words the core writes and their formats, in English and Canadian French.
 pub use district_l10n as l10n;

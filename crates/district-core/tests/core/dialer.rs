@@ -1,13 +1,14 @@
-//! The dialler and a placed call: the number as typed, one dial at a time and
-//! never for a viewer, the service's refusals in its own words, the room joined
+//! The dialler and a placed call: the number read in the country on the button
+//! and sent as E.164, the home country from the workspace's numbers, the length
+//! said once the member stops, one dial at a time and never for a viewer, the service's refusals in its own words, the room joined
 //! while the far end rings, the answer when a person joins, the duration by the
 //! clock, and every way of ending, each of which ends the carrier's leg too.
 
 use district_api::{ApiError, ErrorDetail};
 use district_core::{
-    ActiveCall, CALL_TICK, CallDirection, CallEnd, CallEvent, CallPhase, DialerEvent, DialerScreen,
-    DisconnectReason, Effect, Event, FailureText, MIN_DIAL_DIGITS, MediaConnection, MediaEvent,
-    MediaSession, MicrophoneState, Model, Route, SessionState, Ticket,
+    ActiveCall, CALL_TICK, CallDirection, CallEnd, CallEvent, CallPhase, DialStatus, DialerEvent,
+    DialerScreen, DisconnectReason, Effect, Event, FailureText, MediaConnection, MediaEvent,
+    MediaSession, MicrophoneState, Model, OwnedNumbersList, Route, SessionState, Ticket,
 };
 use district_model::DialResponse;
 
@@ -19,6 +20,8 @@ use crate::support::{
 
 /// A number in the fictional range, as a member might type it.
 const TYPED: &str = "+1 (212) 555-0142";
+/// The same number as the service is sent it.
+const E164: &str = "+12125550142";
 
 fn dialled() -> DialResponse {
     fixture("district-dial.json")
@@ -32,13 +35,47 @@ fn phase(model: &Model) -> &CallPhase {
     &call(model).phase
 }
 
+/// On the dialler of `workspace` as `role`, the workspace's numbers read (two
+/// in Toronto and a toll-free one), with nothing typed.
+fn at_empty_dialler(workspace: &str, role: &str) -> Model {
+    let (mut model, _) = loaded(workspace, role);
+    let effects = model.update(Event::Navigate(Route::Dialer));
+    let [
+        Effect::LoadOwnedNumbers {
+            ticket,
+            workspace_id,
+        },
+    ] = effects.as_slice()
+    else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(workspace_id, workspace);
+    assert_eq!(signed_in(&model).route, Route::Dialer);
+    assert_eq!(
+        signed_in(&model).dialer.country,
+        None,
+        "no country before the read"
+    );
+    model.update(Event::OwnedNumbersLoaded {
+        ticket: *ticket,
+        result: Ok(fixture("district-provider-numbers.json")),
+    });
+    model
+}
+
 /// On the dialler of `workspace` as `role`, with the number typed.
 fn at_dialler(workspace: &str, role: &str) -> Model {
-    let (mut model, _) = loaded(workspace, role);
-    assert!(model.update(Event::Navigate(Route::Dialer)).is_empty());
-    assert_eq!(signed_in(&model).route, Route::Dialer);
+    let mut model = at_empty_dialler(workspace, role);
     model.update(Event::Dialer(DialerEvent::Edit(TYPED.to_owned())));
     model
+}
+
+fn edit(model: &mut Model, text: &str) {
+    assert!(
+        model
+            .update(Event::Dialer(DialerEvent::Edit(text.to_owned())))
+            .is_empty()
+    );
 }
 
 /// Presses Call, and returns the dial's ticket.
@@ -55,7 +92,7 @@ fn place(model: &mut Model) -> Ticket {
         panic!("{effects:?}");
     };
     assert_eq!(workspace_id, AGENCY);
-    assert_eq!(to, TYPED, "sent as typed");
+    assert_eq!(to, E164, "sent as the line before Call showed it");
     *ticket
 }
 
@@ -158,29 +195,138 @@ fn a_viewer_is_not_offered_the_dialler_and_cannot_dial() {
 }
 
 #[test]
-fn the_number_is_kept_as_typed_and_read_grouped() {
+fn the_number_moves_the_flag_reads_locally_and_is_sent_as_e164() {
     let mut model = at_dialler(AGENCY, "agency");
     let dialer = &signed_in(&model).dialer;
-    assert_eq!(dialer.entry, TYPED);
-    assert_eq!(dialer.formatted(), "+1 212 555 0142");
+    assert_eq!(
+        dialer.home.as_deref(),
+        Some("CA"),
+        "two Toronto numbers outvote nothing"
+    );
+    assert_eq!(
+        dialer.country.as_deref(),
+        Some("US"),
+        "the +1 212 area code moved the flag"
+    );
+    assert_eq!(
+        dialer.entry, "(212) 555-0142",
+        "the field keeps the local form"
+    );
+    assert_eq!(
+        dialer.destination().as_deref(),
+        Some("Rings United States \u{b7} +1 212 555 0142")
+    );
+    assert_eq!(dialer.reading().e164.as_deref(), Some(E164));
     assert!(signed_in(&model).can_place_call());
 
-    model.update(Event::Dialer(DialerEvent::Edit("+1 212 55".to_owned())));
-    assert!(!signed_in(&model).can_place_call(), "under eight digits");
+    edit(&mut model, "(212) 555-01");
+    assert!(!signed_in(&model).can_place_call(), "not a whole number");
     assert!(model.update(Event::Dialer(DialerEvent::Dial)).is_empty());
-    assert_eq!(MIN_DIAL_DIGITS, 8);
-    // The example never breaks after "+1": no-break spaces between its
-    // groups, in both languages.
-    assert!(
-        DialerScreen::HINT.contains("+1\u{a0}212\u{a0}555\u{a0}0142."),
-        "{:?}",
-        DialerScreen::HINT
+}
+
+#[test]
+fn the_dialler_opens_on_the_workspaces_own_country() {
+    let mut model = at_empty_dialler(AGENCY, "agency");
+    let dialer = &signed_in(&model).dialer;
+    assert_eq!(dialer.country.as_deref(), Some("CA"));
+    assert_eq!(dialer.placeholder(), "(416) 555-0199");
+    assert_eq!(dialer.suggested(), ["CA", "US"]);
+    edit(&mut model, "4165550199");
+    assert_eq!(signed_in(&model).dialer.entry, "(416) 555-0199");
+    assert!(signed_in(&model).can_place_call());
+
+    // Back and in again: the numbers already read are not read again.
+    model.update(Event::Navigate(Route::Calls));
+    assert!(model.update(Event::Navigate(Route::Dialer)).is_empty());
+    assert_eq!(signed_in(&model).dialer.home.as_deref(), Some("CA"));
+}
+
+#[test]
+fn a_failed_read_leaves_the_member_to_pick_a_country() {
+    let (mut model, _) = loaded(AGENCY, "agency");
+    let effects = model.update(Event::Navigate(Route::Dialer));
+    let ticket = crate::support::ticket(&effects[0]);
+    model.update(Event::OwnedNumbersLoaded {
+        ticket,
+        result: Err(crate::support::server_error()),
+    });
+    assert!(matches!(
+        signed_in(&model).marketplace.owned,
+        OwnedNumbersList::Failed(_)
+    ));
+    let dialer = &signed_in(&model).dialer;
+    assert_eq!(
+        (dialer.home.as_deref(), dialer.country.as_deref()),
+        (None, None)
     );
-    let french = district_l10n::strings::dialer_hint(district_l10n::Locale::FrCa);
-    assert!(
-        french.contains("+1\u{a0}212\u{a0}555\u{a0}0142."),
-        "{french:?}"
+    edit(&mut model, "4165550199");
+    assert_eq!(
+        signed_in(&model).dialer.problem().as_deref(),
+        Some("Choose a country, or start with + and the country code.")
     );
+    assert!(
+        model
+            .update(Event::Dialer(DialerEvent::PickCountry("CA".to_owned())))
+            .is_empty()
+    );
+    assert_eq!(signed_in(&model).dialer.entry, "(416) 555-0199");
+    assert!(signed_in(&model).can_place_call());
+
+    // In again after the failure: read again.
+    model.update(Event::Navigate(Route::Calls));
+    let effects = model.update(Event::Navigate(Route::Dialer));
+    assert!(
+        matches!(effects.as_slice(), [Effect::LoadOwnedNumbers { .. }]),
+        "{effects:?}"
+    );
+}
+
+/// The billed call: a Canadian mobile typed with +41 in front of its area code
+/// is Switzerland's code. The flag moves there, nothing is sent, and the
+/// reason is said once the member stops, never while typing.
+#[test]
+fn the_switzerland_misdial_is_never_placed_and_says_why_once_stopped() {
+    let mut model = at_empty_dialler(AGENCY, "agency");
+    let swiss = format!("+{}{}", "41", "65550123");
+    edit(&mut model, &swiss);
+    let dialer = &signed_in(&model).dialer;
+    assert_eq!(dialer.country.as_deref(), Some("CH"));
+    assert_eq!(dialer.reading().status, DialStatus::Typing);
+    assert_eq!(
+        (dialer.destination(), dialer.problem()),
+        (None, None),
+        "nothing while typing"
+    );
+    assert!(!signed_in(&model).can_place_call());
+
+    let wrong = "That is the wrong number of digits for a number in the country it rings. \
+                 Check it before you call.";
+    // Leaving the field, or Enter, says it.
+    assert!(
+        model
+            .update(Event::Dialer(DialerEvent::CheckLength))
+            .is_empty()
+    );
+    assert_eq!(signed_in(&model).dialer.problem().as_deref(), Some(wrong));
+    // The next keystroke clears it.
+    edit(&mut model, "65 550 12 3");
+    assert_eq!(signed_in(&model).dialer.problem(), None);
+    // A refused Call says it too, and sends nothing.
+    assert!(model.update(Event::Dialer(DialerEvent::Dial)).is_empty());
+    assert_eq!(signed_in(&model).dialer.problem().as_deref(), Some(wrong));
+    assert_eq!(signed_in(&model).active_call, None);
+}
+
+#[test]
+fn an_emergency_number_is_refused_with_the_hand_off() {
+    let mut model = at_empty_dialler(AGENCY, "agency");
+    edit(&mut model, "911");
+    let dialer = &signed_in(&model).dialer;
+    assert_eq!(dialer.entry, "911");
+    assert_eq!(dialer.reading().status, DialStatus::Emergency);
+    assert!(dialer.problem().unwrap().contains("own dialer"));
+    assert!(!signed_in(&model).can_place_call());
+    assert!(model.update(Event::Dialer(DialerEvent::Dial)).is_empty());
 }
 
 #[test]
@@ -191,7 +337,7 @@ fn one_dial_at_a_time_and_the_call_shows_at_once() {
     assert_eq!(
         call.direction,
         CallDirection::Outbound {
-            number: TYPED.to_owned()
+            number: E164.to_owned()
         }
     );
     assert_eq!(call.workspace_id, AGENCY);
