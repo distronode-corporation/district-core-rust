@@ -26,22 +26,28 @@ impl<S: TokenSource> ApiClient<S> {
     /// rooms is refused (`call_predates_feature`), and one the service cannot
     /// find is [`ApiError::NotFound`].
     ///
-    /// It stores nothing and spends nothing (it signs a short-lived
-    /// credential), so a refused access token is refreshed and the request
-    /// sent once more, like a read. The answer prints no secret in `Debug`.
-    pub async fn call_monitor_token(
+    /// Sent once and never repeated, not even after a refused access token,
+    /// although the route's meeting room tokens are (every app supervising a
+    /// call does the same). An answer without `success: true`, or with a
+    /// blank credential or server, is a failure: there is nothing to join.
+    /// The answer prints no secret in `Debug`.
+    pub async fn monitor_call(
         &self,
         call_id: &LiveCallId,
     ) -> Result<CallMonitorTokenResponse, ApiError> {
         let credential: CallMonitorTokenResponse = self
             .request(Endpoint::CallRoomToken)
+            .never_retried()
             .field("roomName", call_id.as_str())
             // Required by the route and ignored: the service makes the
             // participant's identity from the session.
             .field("identity", self.platform().wire())
             .send()
             .await?;
-        confirm(Endpoint::CallRoomToken, credential.success)?;
+        confirm(
+            Endpoint::CallRoomToken,
+            credential.success && joinable(&credential.token, &credential.url),
+        )?;
         Ok(credential)
     }
 
@@ -79,9 +85,10 @@ impl<S: TokenSource> ApiClient<S> {
     /// back; leaving the room hands the call back. A viewer is refused; so is
     /// a call that is not in progress or whose room has gone
     /// (`call_not_in_progress`, a 409), and one the service could not look for
-    /// (`service_unavailable`). Never repeated automatically. The answer
-    /// prints no secret in `Debug`.
-    pub async fn call_takeover(
+    /// (`service_unavailable`). Never repeated automatically. An answer
+    /// without `success: true`, or with a blank credential or server, is a
+    /// failure. The answer prints no secret in `Debug`.
+    pub async fn take_over_call(
         &self,
         workspace_id: &str,
         call_id: &str,
@@ -92,7 +99,15 @@ impl<S: TokenSource> ApiClient<S> {
             .workspace(workspace_id)
             .send()
             .await?;
-        confirm(Endpoint::CallTakeover, grant.success)?;
+        confirm(
+            Endpoint::CallTakeover,
+            grant.success && joinable(&grant.token, &grant.url),
+        )?;
         Ok(grant)
     }
+}
+
+/// Whether a credential and its server are both there to join with.
+fn joinable(token: &str, url: &str) -> bool {
+    !token.trim().is_empty() && !url.trim().is_empty()
 }

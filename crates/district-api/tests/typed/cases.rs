@@ -1479,16 +1479,17 @@ pub fn cases() -> Vec<Case> {
         },
         // Supervising a live call.
         Case {
-            name: "call_monitor_token",
+            name: "monitor_call",
             endpoint: Endpoint::CallRoomToken,
-            // The same route as the room token, read as a call's id.
-            retried: true,
+            // The same route as the room token, read as a call's id, and never
+            // repeated, as every app supervising a call does.
+            retried: false,
             answer: json!({
                 "success": true,
                 "token": "eyJ.listen.only",
                 "url": "wss://livekit.example.com",
             }),
-            call: call!(c => c.call_monitor_token(&LiveCallId::new("call-contract-test-1").unwrap())),
+            call: call!(c => c.monitor_call(&LiveCallId::new("call-contract-test-1").unwrap())),
             method: "POST",
             path: "/api/district/calls/token",
             query: vec![],
@@ -1513,7 +1514,7 @@ pub fn cases() -> Vec<Case> {
             })),
         },
         Case {
-            name: "call_takeover",
+            name: "take_over_call",
             endpoint: Endpoint::CallTakeover,
             retried: false,
             answer: json!({
@@ -1522,7 +1523,7 @@ pub fn cases() -> Vec<Case> {
                 "token": "eyJ.microphone.only",
                 "roomName": "call_contract_room",
             }),
-            call: call!(c => c.call_takeover(WS, "call-contract-test-1")),
+            call: call!(c => c.take_over_call(WS, "call-contract-test-1")),
             method: "POST",
             path: "/api/district/calls/call-contract-test-1/takeover",
             query: vec![],

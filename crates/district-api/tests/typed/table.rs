@@ -180,16 +180,26 @@ async fn every_method_sends_what_android_sends_and_decodes_the_answer() {
     }
 }
 
+/// The methods sent at most once on a route whose other requests may be
+/// repeated (`Request::never_retried`).
+const NEVER_RETRIED_ON_A_RETRIED_ROUTE: &[&str] = &["monitor_call"];
+
 /// A refused token is refreshed and the request sent again only for a read.
-/// Every write is sent once, the refused token dropped all the same.
+/// Every write is sent once, the refused token dropped all the same, and so
+/// is a request its method keeps from being repeated.
 #[tokio::test]
 async fn a_refused_token_is_retried_by_the_reads_and_never_by_a_write() {
     for case in cases() {
         let name = case.name;
+        let narrowed = NEVER_RETRIED_ON_A_RETRIED_ROUTE.contains(&name);
         assert_eq!(
-            case.retried,
+            case.retried || narrowed,
             case.endpoint.spec().retry == RetryPolicy::OnceAfterRefresh,
             "{name}: the endpoint table's retry policy changed"
+        );
+        assert!(
+            !(case.retried && narrowed),
+            "{name}: listed as never retried"
         );
         // The room token is a POST that stores and spends nothing: it signs a
         // short-lived credential, which is why the table lets it repeat.
@@ -279,6 +289,29 @@ async fn an_answer_that_does_not_confirm_success_is_an_error() {
             ),
             "{name}: an empty body read as {outcome:?}"
         );
+    }
+}
+
+/// A supervise credential with no token or no server is nothing to join with,
+/// whatever `success` says.
+#[tokio::test]
+async fn a_supervise_credential_without_a_token_or_a_server_is_an_error() {
+    let cases = cases();
+    for name in ["monitor_call", "take_over_call"] {
+        let case = cases.iter().find(|case| case.name == name).expect(name);
+        for (field, blank) in [("token", ""), ("token", "  "), ("url", ""), ("url", " ")] {
+            let mut answer = case.answer.as_object().expect("an object").clone();
+            answer.insert(field.to_owned(), Value::String(blank.to_owned()));
+            let server = serving(&Value::Object(answer), None).await;
+            let outcome = (case.call)(&client(&server)).await;
+            assert_eq!(
+                outcome,
+                Err(ApiError::Unconfirmed {
+                    endpoint: case.endpoint
+                }),
+                "{name} with {field} {blank:?}"
+            );
+        }
     }
 }
 
