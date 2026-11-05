@@ -850,6 +850,64 @@ pub const SETTINGS_SAVED: &str = "Saved.";
 pub const SETTINGS_SAVED_STALE: &str = "Saved, but the settings could not be read back. Read them again before changing anything else.";
 /// `settings.viewer_note` in English.
 pub const SETTINGS_VIEWER_NOTE: &str = "You have read-only access to this workspace. These are the settings you may read; an agency or client member can change them.";
+/// `supervise.call_ended` in English.
+pub const SUPERVISE_CALL_ENDED: &str = "The call has ended.";
+/// `supervise.hand_back` in English.
+pub const SUPERVISE_HAND_BACK: &str = "Hand back to your receptionist";
+/// `supervise.joining` in English.
+pub const SUPERVISE_JOINING: &str = "Connecting you to the call.";
+/// `supervise.listen_action` in English.
+pub const SUPERVISE_LISTEN_ACTION: &str = "Listen";
+/// `supervise.listen_body` in English.
+pub const SUPERVISE_LISTEN_BODY: &str = "Hear the call as it happens. The caller does not hear you.";
+/// `supervise.listen_failed` in English.
+pub const SUPERVISE_LISTEN_FAILED: &str = "Could not connect you to the call. Try again.";
+/// `supervise.listen_title` in English.
+pub const SUPERVISE_LISTEN_TITLE: &str = "Listen in";
+/// `supervise.listening` in English.
+pub const SUPERVISE_LISTENING: &str = "You are listening";
+/// `supervise.no_receptionist` in English.
+pub const SUPERVISE_NO_RECEPTIONIST: &str = "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over.";
+/// `supervise.on_call_body` in English.
+pub const SUPERVISE_ON_CALL_BODY: &str = "Your receptionist has stepped back and is waiting on the line. Hand the call back and it carries on.";
+/// `supervise.on_call_title` in English.
+pub const SUPERVISE_ON_CALL_TITLE: &str = "You are on the call";
+/// `supervise.stop_listening` in English.
+pub const SUPERVISE_STOP_LISTENING: &str = "Stop listening";
+/// `supervise.take_over` in English.
+pub const SUPERVISE_TAKE_OVER: &str = "Take over the call";
+/// `supervise.take_over_cancel` in English.
+pub const SUPERVISE_TAKE_OVER_CANCEL: &str = "Cancel";
+/// `supervise.take_over_confirm` in English.
+pub const SUPERVISE_TAKE_OVER_CONFIRM: &str = "Take over";
+/// `supervise.take_over_confirm_body` in English.
+pub const SUPERVISE_TAKE_OVER_CONFIRM_BODY: &str = "Your receptionist tells the caller a supervisor is taking over, then steps back. Your microphone is live on the call until you hand it back. Nothing is recorded.";
+/// `supervise.take_over_confirm_title` in English.
+pub const SUPERVISE_TAKE_OVER_CONFIRM_TITLE: &str = "Take over this call?";
+/// `supervise.take_over_failed` in English.
+pub const SUPERVISE_TAKE_OVER_FAILED: &str = "The call could not be taken over. Try again.";
+/// `supervise.take_over_join_failed` in English.
+pub const SUPERVISE_TAKE_OVER_JOIN_FAILED: &str = "Could not join the call with your microphone. Check that a microphone is connected and that District AI may use it, then try again.";
+/// `supervise.taking_over` in English.
+pub const SUPERVISE_TAKING_OVER: &str = "Taking over the call.";
+/// `supervise.transcript_waiting` in English.
+pub const SUPERVISE_TRANSCRIPT_WAITING: &str = "What is said shows up here while you listen.";
+/// `supervise.whisper_applied` in English.
+pub const SUPERVISE_WHISPER_APPLIED: &str = "Your receptionist used your note.";
+/// `supervise.whisper_failed` in English.
+pub const SUPERVISE_WHISPER_FAILED: &str = "The note was not delivered. Try again.";
+/// `supervise.whisper_not_applied` in English.
+pub const SUPERVISE_WHISPER_NOT_APPLIED: &str = "Your receptionist could not use your note.";
+/// `supervise.whisper_on_call` in English.
+pub const SUPERVISE_WHISPER_ON_CALL: &str = "Hand the call back to your receptionist to send a note";
+/// `supervise.whisper_placeholder` in English.
+pub const SUPERVISE_WHISPER_PLACEHOLDER: &str = "For example: Offer a 10% discount to book today.";
+/// `supervise.whisper_send` in English.
+pub const SUPERVISE_WHISPER_SEND: &str = "Send note";
+/// `supervise.whisper_title` in English.
+pub const SUPERVISE_WHISPER_TITLE: &str = "Note to your receptionist";
+/// `supervise.whisper_viewer` in English.
+pub const SUPERVISE_WHISPER_VIEWER: &str = "Viewers cannot send notes";
 /// `support.capped` in English.
 pub const SUPPORT_CAPPED: &str = "Showing the 100 most recent requests.";
 /// `support.close_action` in English.

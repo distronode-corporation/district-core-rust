@@ -1,0 +1,6 @@
+{
+  "success": true,
+  "url": "wss://media.example.com",
+  "token": "contract-livekit-takeover-jwt",
+  "roomName": "call_ws-contract-test-CA0123456789abcdef0123456789abcdef"
+}

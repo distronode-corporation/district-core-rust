@@ -23,10 +23,10 @@
 # `sha256sum -c SHA256SUMS` checks them.
 
 [sets.fixtures]
-commit = "84c34dbd284a9501f698d36f0e84bf74709c4eef"
+commit = "6c0099cdfe779048b3c75a6d7354df2aaad7ba4e"
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
-file_count = 203
+file_count = 208
 
 [sets.desktop]
 commit = "6cd0ff6674360ce56a83bfc1763315db2a056a24"
@@ -35,7 +35,7 @@ source_clean = true
 file_count = 14
 
 [sets.i18n]
-commit = "14cf1a186eb7ee5c7fdc803b6076d291e8a5c53a"
+commit = "6c0099cdfe779048b3c75a6d7354df2aaad7ba4e"
 source = "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests"
 source_clean = true
 file_count = 3
@@ -347,10 +347,12 @@ kind = "host"
 original_sha256 = "32ca8563ef65ed5c4ce3f28255954bfd1b433b329dcc0250dd56138ef0c02981"
 replacement = "media.example.com"
 reason = "the real-time media server's host, in the call and room token fixtures"
-count = 5
+count = 7
 
 [substitution.files]
 "fixtures/district-call-answer.json" = 1
+"fixtures/district-call-monitor-token.json" = 1
+"fixtures/district-call-takeover.json" = 1
 "fixtures/district-dial.json" = 1
 "fixtures/district-persona-preview-token.json" = 1
 "fixtures/district-room-token-viewer.json" = 1

@@ -1,0 +1,5 @@
+{
+  "success": true,
+  "token": "contract-livekit-monitor-jwt",
+  "url": "wss://media.example.com"
+}

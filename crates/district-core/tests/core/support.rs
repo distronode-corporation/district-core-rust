@@ -160,6 +160,30 @@ pub fn voice_credential() -> district_model::HqVoiceTokenResponse {
     .expect("a voice credential")
 }
 
+/// The listen-only credential for a live call's room, as the token route
+/// writes it for a call: no passphrase, because a phone call's room is not
+/// encrypted. No supervise route has a recorded response yet.
+pub fn monitor_credential() -> district_model::CallMonitorTokenResponse {
+    serde_json::from_value(json!({
+        "success": true,
+        "token": "contract-livekit-monitor-jwt",
+        "url": "wss://media-room.example.com",
+    }))
+    .expect("a monitor credential")
+}
+
+/// The credential that takes a live call over, as the takeover route writes
+/// it.
+pub fn takeover_credential() -> district_model::CallTakeoverResponse {
+    serde_json::from_value(json!({
+        "success": true,
+        "url": "wss://media-room.example.com",
+        "token": "contract-livekit-takeover-jwt",
+        "roomName": "call-room-contract-1",
+    }))
+    .expect("a takeover credential")
+}
+
 /// A draft HQ voice packet's bytes, from district-model's drafts.
 pub fn voice_packet(name: &str) -> Vec<u8> {
     let file = PathBuf::from(env!("CARGO_MANIFEST_DIR"))

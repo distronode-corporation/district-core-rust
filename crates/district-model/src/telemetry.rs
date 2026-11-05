@@ -149,6 +149,10 @@ pub enum TelemetryEventType {
     TranscriptRetracted,
     /// `transcript_error`: a transcript op could not be honoured.
     TranscriptError,
+    /// `whisper_applied`: what the voice agent did with a supervisor's note
+    /// on a live call. Read the data with
+    /// [`whisper_applied`](TelemetryEnvelope::whisper_applied).
+    WhisperApplied,
     /// A name this client does not know, kept as it was sent.
     Unknown(String),
 }
@@ -170,6 +174,7 @@ impl TelemetryEventType {
             Self::TranscriptEnded => "transcript_ended",
             Self::TranscriptRetracted => "transcript_retracted",
             Self::TranscriptError => "transcript_error",
+            Self::WhisperApplied => "whisper_applied",
             Self::Unknown(name) => name,
         }
     }
@@ -204,6 +209,7 @@ impl From<String> for TelemetryEventType {
             "transcript_ended" => Self::TranscriptEnded,
             "transcript_retracted" => Self::TranscriptRetracted,
             "transcript_error" => Self::TranscriptError,
+            "whisper_applied" => Self::WhisperApplied,
             _ => Self::Unknown(name),
         }
     }
@@ -274,6 +280,105 @@ impl TelemetryEnvelope {
             )
         })
     }
+
+    /// What the voice agent did with a supervisor's note, for a
+    /// `whisper_applied` event, or `None` for any other event and for one
+    /// whose data is not [`WhisperAppliedData`] (its `applied` missing or not
+    /// a boolean, say). The call is [`call_id`](Self::call_id).
+    pub fn whisper_applied(&self) -> Option<WhisperApplied> {
+        if self.event_type != TelemetryEventType::WhisperApplied {
+            return None;
+        }
+        let data: WhisperAppliedData = serde_json::from_value(self.data.clone()).ok()?;
+        Some(WhisperApplied {
+            applied: data.applied,
+            first_words: data.first_words.unwrap_or_default(),
+            reason: data
+                .reason
+                .map(|reason| WhisperSkipReason::from_wire(&reason)),
+        })
+    }
+}
+
+/// `whisper_applied`'s data, as sent: `{"applied", "firstWords"?,
+/// "reason"?}`. Read it as a [`WhisperApplied`] with
+/// [`TelemetryEnvelope::whisper_applied`].
+///
+/// `Debug` leaves the words out: they are the note's.
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct WhisperAppliedData {
+    /// Whether the agent acted on the note.
+    pub applied: bool,
+    /// The note's first words, when sent: with an applied note.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub first_words: Option<String>,
+    /// Why it was not acted on, as the wire names it, when sent: with a note
+    /// not applied.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+}
+
+impl fmt::Debug for WhisperAppliedData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("WhisperAppliedData")
+            .field("applied", &self.applied)
+            .field(
+                "first_words",
+                &self.first_words.as_ref().map(|_| "<redacted>"),
+            )
+            .field("reason", &self.reason)
+            .finish()
+    }
+}
+
+/// What the voice agent did with a supervisor's note, from a
+/// `whisper_applied` event.
+///
+/// `Debug` leaves the words out: they are the note's.
+#[derive(Clone, PartialEq, Eq)]
+pub struct WhisperApplied {
+    /// Whether the agent acted on the note.
+    pub applied: bool,
+    /// The note's first words, to say which note this is. Empty when the
+    /// event carried none.
+    pub first_words: String,
+    /// Why it was not acted on, when the service says.
+    pub reason: Option<WhisperSkipReason>,
+}
+
+/// Why the voice agent did not act on a supervisor's note.
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum WhisperSkipReason {
+    /// `transfer`: the call was being transferred.
+    Transfer,
+    /// `taken_over`: a supervisor had taken the call over.
+    TakenOver,
+    /// A reason this client does not know, kept as it was sent. A wire
+    /// value, never shown as it is.
+    Other(String),
+}
+
+impl WhisperSkipReason {
+    /// The reason named `name` on the wire.
+    pub fn from_wire(name: &str) -> Self {
+        match name {
+            "transfer" => Self::Transfer,
+            "taken_over" => Self::TakenOver,
+            other => Self::Other(other.to_owned()),
+        }
+    }
+}
+
+impl fmt::Debug for WhisperApplied {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("WhisperApplied")
+            .field("applied", &self.applied)
+            .field("first_words", &"<redacted>")
+            .field("reason", &self.reason)
+            .finish()
+    }
 }
 
 impl From<TelemetryEventType> for String {
@@ -289,7 +394,7 @@ impl From<TelemetryEventType> for String {
 mod tests {
     use super::*;
 
-    const KNOWN: [(&str, TelemetryEventType); 13] = [
+    const KNOWN: [(&str, TelemetryEventType); 14] = [
         ("call_started", TelemetryEventType::CallStarted),
         ("call_updated", TelemetryEventType::CallUpdated),
         ("call_ended", TelemetryEventType::CallEnded),
@@ -303,6 +408,7 @@ mod tests {
             TelemetryEventType::TranscriptSnapshot,
         ),
         ("transcript_segment", TelemetryEventType::TranscriptSegment),
+        ("whisper_applied", TelemetryEventType::WhisperApplied),
         ("transcript_ended", TelemetryEventType::TranscriptEnded),
         (
             "transcript_retracted",
@@ -432,6 +538,71 @@ mod tests {
             serde_json::from_str(r#"{"token":"t","expiresAt":0,"wsUrl":null}"#).unwrap();
         assert!(!local.success);
         assert_eq!(local.ws_url, None);
+    }
+
+    #[test]
+    fn a_whisper_outcome_is_read_only_from_its_own_event() {
+        let event = |event_type: TelemetryEventType, data: Value| TelemetryEnvelope {
+            workspace_id: "ws".to_owned(),
+            call_id: "call-1".to_owned(),
+            event_type,
+            data,
+            timestamp: "2026-11-05T18:00:00.000Z".to_owned(),
+        };
+        let applied = event(
+            TelemetryEventType::WhisperApplied,
+            serde_json::json!({"applied": true, "firstWords": "Offer the morning"}),
+        )
+        .whisper_applied()
+        .unwrap();
+        assert!(applied.applied);
+        assert_eq!(applied.first_words, "Offer the morning");
+        assert_eq!(applied.reason, None);
+        let printed = format!("{applied:?}");
+        assert!(!printed.contains("morning"), "{printed}");
+        let data: WhisperAppliedData = serde_json::from_value(
+            serde_json::json!({"applied": true, "firstWords": "Offer the morning"}),
+        )
+        .unwrap();
+        let printed = format!("{data:?}");
+        assert!(
+            !printed.contains("morning") && printed.contains("<redacted>"),
+            "{printed}"
+        );
+
+        let refused = event(
+            TelemetryEventType::WhisperApplied,
+            serde_json::json!({"applied": false, "reason": "taken_over"}),
+        )
+        .whisper_applied()
+        .unwrap();
+        assert!(!refused.applied);
+        assert_eq!(refused.first_words, "");
+        assert_eq!(refused.reason, Some(WhisperSkipReason::TakenOver));
+        for (wire, reason) in [
+            ("transfer", WhisperSkipReason::Transfer),
+            ("taken_over", WhisperSkipReason::TakenOver),
+            (
+                "agent_busy",
+                WhisperSkipReason::Other("agent_busy".to_owned()),
+            ),
+        ] {
+            assert_eq!(WhisperSkipReason::from_wire(wire), reason);
+        }
+
+        for unread in [
+            event(TelemetryEventType::WhisperApplied, serde_json::json!({})),
+            event(
+                TelemetryEventType::WhisperApplied,
+                serde_json::json!({"applied": "yes"}),
+            ),
+            event(
+                TelemetryEventType::CallUpdated,
+                serde_json::json!({"applied": true}),
+            ),
+        ] {
+            assert_eq!(unread.whisper_applied(), None);
+        }
     }
 
     #[test]

@@ -81,6 +81,18 @@ pub struct CallSummary {
     /// call, the number dialled on an outbound one. `None` when there is no such
     /// number, or it does not parse as one.
     pub phone_intel: Option<PhoneIntel>,
+    /// Whether the AI receptionist is on the call: false for a member's own
+    /// call on their softphone, and for a call that has no room, where there
+    /// is nothing to send a note to or take over. A service older than the
+    /// key sends none, which reads as true: such a service still refuses a
+    /// note or a takeover on a call with no receptionist.
+    #[serde(default = "receptionist_on_call_by_default")]
+    pub receptionist_on_call: bool,
+}
+
+/// What a call row from a service older than `receptionistOnCall` reads as.
+fn receptionist_on_call_by_default() -> bool {
+    true
 }
 
 /// The post-call analysis.
@@ -234,6 +246,7 @@ mod tests {
         assert_eq!(call.transcript, "");
         assert!(!call.has_transcript);
         assert_eq!(call.call_type, "inbound");
+        assert!(call.receptionist_on_call, "no key reads as on the call");
     }
 
     #[test]

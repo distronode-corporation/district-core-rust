@@ -197,6 +197,8 @@ pub(crate) fn sentence(locale: Locale, code: &str, items: Option<&str>) -> Optio
         "call_has_no_room" => s::api_error_call_has_no_room(locale).to_owned(),
         "call_not_direct_dial" => s::api_error_call_not_direct_dial(locale).to_owned(),
         "call_predates_feature" => s::api_error_call_predates_feature(locale).to_owned(),
+        "call_ended" => s::api_error_call_ended(locale).to_owned(),
+        "call_has_no_receptionist" => s::api_error_call_has_no_receptionist(locale).to_owned(),
         "room_inactive" => s::api_error_room_inactive(locale).to_owned(),
         "demo_lines_busy" => s::api_error_demo_lines_busy(locale).to_owned(),
         "demo_daily_limit_reached" => s::api_error_demo_daily_limit_reached(locale).to_owned(),
