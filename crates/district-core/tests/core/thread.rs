@@ -128,6 +128,7 @@ fn opening_a_listed_thread_reads_it_restores_the_draft_and_marks_it_read() {
             ..
         },
         Effect::MarkRead { thread: marked, .. },
+        Effect::LoadMembers { .. },
     ] = effects.as_slice()
     else {
         panic!("{effects:?}");
@@ -182,6 +183,10 @@ fn opening_a_listed_thread_reads_it_restores_the_draft_and_marks_it_read() {
             can_attach: true,
             can_send: false,
             can_draft_reply: true,
+            can_choose_channel: false,
+            // The members are still on their way.
+            can_assign: false,
+            can_send_template: false,
         }
     );
 }

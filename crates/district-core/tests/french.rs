@@ -15,6 +15,7 @@ fn config(locale: Locale) -> CoreConfig {
         app_version: "0.0.0-test".to_owned(),
         calls_available: false,
         in_app_purchases: false,
+        meta_channels: false,
         locale,
     }
 }
@@ -67,6 +68,8 @@ fn a_french_model_writes_in_french_until_told_otherwise() {
     };
     assert_eq!(us.country_label(), "États-Unis, indicatif +1");
 
+    the_parity_refusals_are_read_by_their_codes(&mut model);
+
     model.set_locale(Locale::En);
     assert_eq!(model.config().locale, Locale::En);
     assert_eq!(l10n::current(), Locale::En);
@@ -79,4 +82,48 @@ fn a_french_model_writes_in_french_until_told_otherwise() {
 #[test]
 fn the_default_configuration_is_english() {
     assert_eq!(Locale::default(), Locale::En);
+}
+
+/// The refusals the reply channels, the owner picker and the WhatsApp composer
+/// meet are read from the error table in French, by their codes, and keep the
+/// service's own English otherwise.
+/// Called from the test above, not a test of its own: the language is the
+/// process's, and tests run side by side.
+fn the_parity_refusals_are_read_by_their_codes(model: &mut Model) {
+    for code in [
+        "sms_reply_not_customer_channel",
+        "invalid_request",
+        "invalid_phone_number",
+        "assignee_not_member",
+        "assignee_is_viewer",
+        "whatsapp_window_closed",
+        "whatsapp_template_invalid",
+    ] {
+        let refusal = ApiError::Envelope {
+            status: 400,
+            code: code.to_owned(),
+            detail: ErrorDetail {
+                message: Some(format!("The service's English for {code}.")),
+                code: Some(code.to_owned()),
+                degraded_regions: Vec::new(),
+            },
+        };
+        let french = api_error_text::<&str>(Locale::FrCa, code, &[]);
+        assert!(french.is_some(), "{code} is in the table");
+        assert_eq!(Some(FailureText::from_api_error(&refusal).message), french);
+        model.set_locale(Locale::En);
+        assert_eq!(
+            FailureText::from_api_error(&refusal).message,
+            format!("The service's English for {code}.")
+        );
+        model.set_locale(Locale::FrCa);
+    }
+    assert_eq!(
+        district_core::reply_channel_label("email"),
+        Some("Courriel")
+    );
+    assert_eq!(
+        district_core::WhatsAppComposer::variable_label(1),
+        "Variable {{2}}"
+    );
 }

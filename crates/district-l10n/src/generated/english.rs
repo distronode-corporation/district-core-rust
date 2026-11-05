@@ -872,12 +872,44 @@ pub const SUPPORT_KIND_QUESTION: &str = "A question";
 pub const SUPPORT_KIND_SUGGESTION: &str = "A suggestion";
 /// `support.pending` in English.
 pub const SUPPORT_PENDING: &str = "We have your request. Its reference will appear here shortly.";
+/// `thread.assign_label` in English.
+pub const THREAD_ASSIGN_LABEL: &str = "Assigned to";
+/// `thread.attachments_sms_only` in English.
+pub const THREAD_ATTACHMENTS_SMS_ONLY: &str = "Attachments can only go by text message. Remove them to send on this channel.";
+/// `thread.channel_instagram` in English.
+pub const THREAD_CHANNEL_INSTAGRAM: &str = "Instagram";
+/// `thread.channel_label` in English.
+pub const THREAD_CHANNEL_LABEL: &str = "Reply channel";
+/// `thread.channel_messenger` in English.
+pub const THREAD_CHANNEL_MESSENGER: &str = "Messenger";
+/// `thread.channel_whatsapp` in English.
+pub const THREAD_CHANNEL_WHATSAPP: &str = "WhatsApp";
 /// `thread.no_reply_target` in English.
 pub const THREAD_NO_REPLY_TARGET: &str = "Replies cannot be sent on this conversation from here.";
 /// `thread.read_only_role` in English.
 pub const THREAD_READ_ONLY_ROLE: &str = "You have read-only access to this workspace, so you cannot reply here.";
+/// `thread.template_label` in English.
+pub const THREAD_TEMPLATE_LABEL: &str = "Template";
+/// `thread.template_placeholder` in English.
+pub const THREAD_TEMPLATE_PLACEHOLDER: &str = "Choose an approved template";
+/// `thread.template_preview` in English.
+pub const THREAD_TEMPLATE_PREVIEW: &str = "Preview";
+/// `thread.template_send` in English.
+pub const THREAD_TEMPLATE_SEND: &str = "Send template";
+/// `thread.template_variable_required` in English.
+pub const THREAD_TEMPLATE_VARIABLE_REQUIRED: &str = "Fill in this variable";
+/// `thread.templates_failed` in English.
+pub const THREAD_TEMPLATES_FAILED: &str = "The templates could not be loaded. Try again in a moment.";
+/// `thread.templates_loading` in English.
+pub const THREAD_TEMPLATES_LOADING: &str = "Loading templates";
+/// `thread.templates_none` in English.
+pub const THREAD_TEMPLATES_NONE: &str = "No approved template for this number yet. Refresh the templates in Messaging settings.";
+/// `thread.unassigned` in English.
+pub const THREAD_UNASSIGNED: &str = "Unassigned";
 /// `thread.untitled` in English.
 pub const THREAD_UNTITLED: &str = "Conversation";
+/// `thread.whatsapp_window_closed` in English.
+pub const THREAD_WHATSAPP_WINDOW_CLOSED: &str = "Window closed: WhatsApp only allows a template now";
 /// `tools.book_appointment` in English.
 pub const TOOLS_BOOK_APPOINTMENT: &str = "Book appointments";
 /// `tools.cancel_appointment` in English.
