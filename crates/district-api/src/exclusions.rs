@@ -129,6 +129,16 @@ pub struct Addition {
 /// this table.
 pub const DESKTOP_ONLY: &[Addition] = &[
     Addition {
+        endpoint: Endpoint::CallWhisper,
+        reason: "A private note to the AI on a live call, from live supervise. The desktop apps \
+                 build it with the 8.0.0 core; the snapshot predates the Android app's.",
+    },
+    Addition {
+        endpoint: Endpoint::CallTakeover,
+        reason: "Taking a live call over from the AI by voice, from live supervise, for the same \
+                 reason as the note.",
+    },
+    Addition {
         endpoint: Endpoint::HqVoiceToken,
         reason: "District HQ by voice. The desktop apps build it first; the Android app's voice \
                  mode is being built against the same contract, and the snapshot predates it.",

@@ -73,6 +73,10 @@
 //! - meeting rooms ([`ApiClient::meetings`], [`ApiClient::meeting_detail`], and
 //!   [`ApiClient::room_token`], which takes only a
 //!   [`MeetRoomName`](district_model::MeetRoomName));
+//! - supervising a live call: listening in ([`ApiClient::call_monitor_token`],
+//!   which takes only a [`LiveCallId`](district_model::LiveCallId)), a private
+//!   note to the AI ([`ApiClient::call_whisper`]) and taking the call over
+//!   ([`ApiClient::call_takeover`]);
 //! - the workspace settings: the settings row ([`ApiClient::workspace_config`])
 //!   and the three saves that replace a whole list
 //!   ([`ApiClient::save_tools`], [`ApiClient::save_directory`],
@@ -135,6 +139,7 @@ mod rooms;
 mod scheduling;
 mod scheduling_admin;
 mod settings;
+mod supervise;
 mod support;
 mod telemetry;
 mod token;

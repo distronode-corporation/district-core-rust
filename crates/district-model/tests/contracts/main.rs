@@ -22,6 +22,8 @@
 //!   and the ops a client sends.
 //! - `hq_voice`: HQ voice mode's packets and click answers, from the draft
 //!   fixtures in `tests/hq-voice-drafts/` until the server records them.
+//! - `supervise`: the answers of listening in, whispering and taking a call
+//!   over, written from the server's routes until it records them.
 
 mod checksums;
 mod fixtures;
@@ -30,6 +32,7 @@ mod manifest;
 mod round_trip;
 mod scheduling_admin;
 mod strict;
+mod supervise;
 mod support;
 mod transcript;
 mod voice_studio;

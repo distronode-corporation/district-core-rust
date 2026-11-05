@@ -7,6 +7,7 @@ use std::pin::Pin;
 
 use district_api::{ApiClient, ApiError, Endpoint};
 use district_l10n::Locale;
+use district_model::LiveCallId;
 use district_model::{
     A2pRegistrationDraft, AnalyticsRange, BlockTarget, CHANNEL_SMS, CallHandlingMode,
     CallHandlingPatch, CreateContactRequest, DeskBrandName, DeskSettingsPatch, DeskTicketDraft,
@@ -1475,6 +1476,57 @@ pub fn cases() -> Vec<Case> {
                 "roomName": "meet_ws-contract-test_weekly-review",
                 "identity": "linux",
             })),
+        },
+        // Supervising a live call.
+        Case {
+            name: "call_monitor_token",
+            endpoint: Endpoint::CallRoomToken,
+            // The same route as the room token, read as a call's id.
+            retried: true,
+            answer: json!({
+                "success": true,
+                "token": "eyJ.listen.only",
+                "url": "wss://livekit.example.com",
+            }),
+            call: call!(c => c.call_monitor_token(&LiveCallId::new("call-contract-test-1").unwrap())),
+            method: "POST",
+            path: "/api/district/calls/token",
+            query: vec![],
+            body: Sent::Json(json!({
+                "roomName": "call-contract-test-1",
+                "identity": "linux",
+            })),
+        },
+        Case {
+            name: "call_whisper",
+            endpoint: Endpoint::CallWhisper,
+            retried: false,
+            answer: json!({"success": true}),
+            call: call!(c => c.call_whisper(WS, "call-contract-test-1", "Offer a 10% discount to book today.")),
+            method: "POST",
+            path: "/api/district/calls/whisper",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "callId": "call-contract-test-1",
+                "whisper": "Offer a 10% discount to book today.",
+            })),
+        },
+        Case {
+            name: "call_takeover",
+            endpoint: Endpoint::CallTakeover,
+            retried: false,
+            answer: json!({
+                "success": true,
+                "url": "wss://livekit.example.com",
+                "token": "eyJ.microphone.only",
+                "roomName": "call_contract_room",
+            }),
+            call: call!(c => c.call_takeover(WS, "call-contract-test-1")),
+            method: "POST",
+            path: "/api/district/calls/call-contract-test-1/takeover",
+            query: vec![],
+            body: Sent::Json(json!({"workspaceId": WS})),
         },
         Case {
             name: "meetings",

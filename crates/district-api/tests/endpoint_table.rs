@@ -115,6 +115,8 @@ fn calls_with_side_effects_or_cost_never_repeat() {
         Endpoint::CallAnswer,
         Endpoint::CallHangUp,
         Endpoint::CallDecline,
+        Endpoint::CallWhisper,
+        Endpoint::CallTakeover,
         Endpoint::MessageSend,
         Endpoint::MessageMediaUpload,
         Endpoint::MessageDraftGenerate,

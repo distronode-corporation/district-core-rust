@@ -64,6 +64,7 @@ mod scheduling;
 mod scheduling_admin;
 mod setup;
 mod softphone;
+mod supervise;
 mod support;
 mod telemetry;
 mod transcript;
@@ -182,6 +183,10 @@ pub use setup::{
     SETUP_STEP_DONE, SETUP_STEP_SKIPPED, SETUP_STEP_TODO, SetupProgress, SetupResponse, SetupSteps,
 };
 pub use softphone::{CallAnswerResponse, DIRECT_ROOM_PREFIX, DialResponse};
+pub use supervise::{
+    CallMonitorTokenResponse, CallTakeoverResponse, CallWhisperResponse, LiveCallId,
+    MAX_WHISPER_CHARS, TRANSCRIPT_CHUNK_TYPE, TranscriptChunk,
+};
 pub use support::{
     SUPPORT_STATUS_DONE, SupportCloseResponse, SupportMessage, SupportReplyResponse,
     SupportRequestCreateResponse, SupportRequestDetail, SupportRequestDraft, SupportRequestFiling,

@@ -3,9 +3,11 @@
 //!
 //! The credential is asked of `POST /api/district/calls/token`, which also
 //! serves a supervisor joining a live phone call and a room of another kind.
-//! This client reaches only the meeting room case: the method takes a
-//! [`MeetRoomName`], which cannot name anything else. Joining the room is the
-//! call engine's work, not this crate's.
+//! This method reaches only the meeting room case: it takes a
+//! [`MeetRoomName`], which cannot name anything else. The supervisor's case is
+//! [`ApiClient::call_monitor_token`], which takes a
+//! [`LiveCallId`](district_model::LiveCallId), which cannot name a room.
+//! Joining the room is the call engine's work, not this crate's.
 
 use district_model::{MeetRoomName, MeetingDetail, MeetingSummary, RoomTokenResponse};
 
