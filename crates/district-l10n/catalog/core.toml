@@ -4136,7 +4136,7 @@ fr = "L'appel est terminé."
 ctx = "label"
 screen = "call supervise"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "Status after the call being supervised ended, or its room went."
 
 [supervise.hand_back]
@@ -4154,7 +4154,7 @@ fr = "Connexion à l'appel en cours."
 ctx = "label"
 screen = "call supervise"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "Status while the listen credential is asked for and the call's room joined. The web shows a disabled button instead."
 
 [supervise.listen_action]
@@ -4302,7 +4302,7 @@ fr = "Impossible de rejoindre l'appel avec votre micro. Vérifiez qu'un micro es
 ctx = "error"
 screen = "call supervise"
 tier = "T2"
-state = "draft"
+state = "reviewed"
 note = "The takeover credential arrived but the room could not be joined. The web's sentence names the browser's microphone permission; this one names the desktop's."
 
 [supervise.taking_over]
@@ -4311,7 +4311,7 @@ fr = "Prise de l'appel en cours."
 ctx = "label"
 screen = "call supervise"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "Status while the takeover credential is asked for and the room joined again with the microphone."
 
 [supervise.transcript_waiting]
@@ -4329,7 +4329,7 @@ fr = "Votre réceptionniste a utilisé votre consigne."
 ctx = "label"
 screen = "call supervise"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "The service said the AI receptionist acted on the last note. The note's first words are shown beside it."
 
 [supervise.whisper_failed]
@@ -4348,7 +4348,7 @@ fr = "Votre réceptionniste n'a pas pu utiliser votre consigne."
 ctx = "label"
 screen = "call supervise"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "The service said the AI receptionist did not act on the last note. The note's first words are shown beside it."
 
 [supervise.whisper_on_call]
@@ -4396,7 +4396,7 @@ ctx = "error"
 screen = "call supervise"
 tier = "T3"
 args = { max = "int" }
-state = "draft"
+state = "reviewed"
 note = "The note is longer than the service accepts, so it was not sent. {max} is the limit, 2,000 today. The draft is kept."
 
 [supervise.whisper_viewer]
