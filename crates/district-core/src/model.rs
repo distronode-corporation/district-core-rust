@@ -29,7 +29,7 @@
 
 use std::time::Duration;
 
-use district_api::{ApiError, ReauthReason, RetryReason, TokenError};
+use district_api::{ApiError, ConversationsQuery, ReauthReason, RetryReason, TokenError};
 use district_auth::{
     AccessClaims, HAND_OFF_HOST, HandOffNonce, LoginError, REDIRECT_SCHEME, SignOutReport,
 };
@@ -40,25 +40,26 @@ use district_model::{
     AvailabilityResponse, BillingHandOffResponse, BlockedContactsResponse, CallAnswerResponse,
     CallDetailResponse, CallHandlingPatch, CallHandlingResponse, CallSummary,
     CallTranscriptResponse, CampaignStatusResponse, ContactDetailResponse, ContactListResponse,
-    ContactMutationResponse, ConversationsResponse, CreateContactRequest, DeskLogoRemovalResponse,
-    DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse, DeskTicketCreateResponse,
-    DeskTicketDraft, DeskTicketResponse, DeskTicketStatus, DeskTicketStatusResponse,
-    DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DialResponse, DirectoryEntry,
-    DraftListResponse, DraftResponse, DraftSaveRequest, HqConfirmResponse, HqPendingWrite,
-    HqPromptResponse, HqProposalCancelResponse, HqTurn, HqVoiceProposal, HqVoiceScreen,
-    HqVoiceTokenResponse, KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode,
-    KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail,
-    MeetingSummary, MemberListResponse, MessageSearchResponse, MessageThreadResponse,
-    MessagingCredentials, MessagingResponse, MessagingTestResponse, NumberSearch,
-    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, PersonaOptionsResponse,
-    PersonaPatch, PersonaPreviewForm, PersonaPreviewTokenResponse, RenameResponse,
-    RoomTokenResponse, RoutingRule, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SupportCloseResponse,
-    SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
-    SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
-    UnreadCountResponse, UsageHistoryResponse, UsageResponse, VoiceStudioResponse,
-    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
-    WorkspaceConfigResponse, WorkspaceListResponse,
+    ContactMutationResponse, ConversationAssignResponse, ConversationsResponse,
+    CreateContactRequest, DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch,
+    DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse,
+    DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse,
+    DeviceRevokeResponse, DialResponse, DirectoryEntry, DraftListResponse, DraftResponse,
+    DraftSaveRequest, HqConfirmResponse, HqPendingWrite, HqPromptResponse,
+    HqProposalCancelResponse, HqTurn, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse,
+    KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode, KnowledgeModeResponse,
+    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    MemberListResponse, MessageSearchResponse, MessageThreadResponse, MessagingCredentials,
+    MessagingResponse, MessagingTestResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
+    OwnedNumbersResponse, PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm,
+    PersonaPreviewTokenResponse, RenameResponse, RoomTokenResponse, RoutingRule,
+    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
+    SendMessageRequest, SendMessageResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UsageHistoryResponse, UsageResponse, VoiceStudioResponse, WhatsAppTemplatesResponse,
+    WhatsAppWindowResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
+    WorkspaceBillingResponse, WorkspaceConfigResponse, WorkspaceListResponse,
 };
 use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
 use url::Url;
@@ -134,6 +135,17 @@ pub struct CoreConfig {
     /// billing is read only, the purchases setting is never read, and the
     /// purchase events change nothing.
     pub in_app_purchases: bool,
+    /// Whether this app lists and answers Messenger and Instagram threads.
+    ///
+    /// With it, every inbox read asks for them (`metaChannels=1`), a thread's
+    /// composer offers the channels the service names for it
+    /// ([`ThreadScreen::reply_choices`](crate::ThreadScreen::reply_choices)),
+    /// and the app declares the capability when it registers this desktop
+    /// (pass the same value to [`DesktopPresence::new`](crate::DesktopPresence::new)),
+    /// so the service also pushes those messages to it. Without it, the inbox
+    /// is exactly that of an app built before this existed: the service leaves
+    /// those messages out, and a reply goes by text or email.
+    pub meta_channels: bool,
     /// The language every sentence and label the core writes is in. The app
     /// chooses it, for example with [`Locale::from_tags`] over the user's
     /// preferred languages; the core never reads the system's. English
@@ -467,6 +479,28 @@ pub enum Event {
         ticket: Ticket,
         /// The service's answer.
         result: Result<MarkReadResponse, ApiError>,
+    },
+    /// The open thread was given to a member, or taken back, or the service
+    /// refused.
+    ConversationAssigned {
+        /// The ticket of [`Effect::AssignConversation`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<ConversationAssignResponse, ApiError>,
+    },
+    /// The open thread's WhatsApp window was read.
+    WhatsAppWindowLoaded {
+        /// The ticket of [`Effect::LoadWhatsAppWindow`].
+        ticket: Ticket,
+        /// The window, and the sender it is for.
+        result: Result<WhatsAppWindowResponse, ApiError>,
+    },
+    /// A WhatsApp sender's templates were read.
+    WhatsAppTemplatesLoaded {
+        /// The ticket of [`Effect::LoadWhatsAppTemplates`].
+        ticket: Ticket,
+        /// The templates, pending ones included.
+        result: Result<WhatsAppTemplatesResponse, ApiError>,
     },
     /// The thread a message belongs to was looked up.
     MessageThreadFound {
@@ -1053,6 +1087,18 @@ impl Event {
                 ticket,
                 result: Err(error),
             }
+            | Event::ConversationAssigned {
+                ticket,
+                result: Err(error),
+            }
+            | Event::WhatsAppWindowLoaded {
+                ticket,
+                result: Err(error),
+            }
+            | Event::WhatsAppTemplatesLoaded {
+                ticket,
+                result: Err(error),
+            }
             | Event::CallsLoaded {
                 ticket,
                 result: Err(error),
@@ -1465,6 +1511,10 @@ pub enum Effect {
         ticket: Ticket,
         /// The workspace.
         workspace_id: String,
+        /// What each row carries: its owner always, and its reply options and
+        /// the Messenger and Instagram threads with
+        /// [`CoreConfig::meta_channels`].
+        query: ConversationsQuery,
     },
     /// Read how many messages nobody has read, for the badge.
     LoadUnreadCount {
@@ -1472,6 +1522,9 @@ pub enum Effect {
         ticket: Ticket,
         /// The workspace.
         workspace_id: String,
+        /// Count Messenger and Instagram messages too
+        /// ([`CoreConfig::meta_channels`]).
+        meta_channels: bool,
     },
     /// Read the member's saved replies, for the draft badges. Keys only are kept.
     LoadDraftKeys {
@@ -1499,6 +1552,9 @@ pub enum Effect {
         thread: ThreadRef,
         /// Where to continue backwards from, or `None` for the newest page.
         older_than: Option<TimelineCursor>,
+        /// Read Messenger and Instagram messages as themselves
+        /// ([`CoreConfig::meta_channels`]).
+        meta_channels: bool,
     },
     /// Read the member's saved reply on a thread.
     LoadDraft {
@@ -1571,6 +1627,39 @@ pub enum Effect {
         workspace_id: String,
         /// The message.
         message_id: String,
+        /// Find a Messenger or Instagram message too
+        /// ([`CoreConfig::meta_channels`]).
+        meta_channels: bool,
+    },
+    /// Give a thread to a member, or take it back. Sent once: the member is
+    /// notified.
+    AssignConversation {
+        /// Returned in [`Event::ConversationAssigned`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The thread's key.
+        thread_key: String,
+        /// The member, or `None` to unassign.
+        assignee_email: Option<String>,
+    },
+    /// Read whether free-form WhatsApp text may go to an address now.
+    LoadWhatsAppWindow {
+        /// Returned in [`Event::WhatsAppWindowLoaded`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The customer's number.
+        to: String,
+    },
+    /// Read a WhatsApp sender's templates.
+    LoadWhatsAppTemplates {
+        /// Returned in [`Event::WhatsAppTemplatesLoaded`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The sender.
+        sender_id: String,
     },
     /// Read a page of the call log.
     LoadCalls {
@@ -2399,6 +2488,9 @@ impl Effect {
             | Self::GenerateAiDraft { ticket, .. }
             | Self::MarkRead { ticket, .. }
             | Self::FindMessageThread { ticket, .. }
+            | Self::AssignConversation { ticket, .. }
+            | Self::LoadWhatsAppWindow { ticket, .. }
+            | Self::LoadWhatsAppTemplates { ticket, .. }
             | Self::LoadCalls { ticket, .. }
             | Self::LoadCall { ticket, .. }
             | Self::LoadTranscript { ticket, .. }
@@ -2531,6 +2623,11 @@ pub(crate) enum Slot {
     Upload,
     AiDraft,
     MarkRead,
+    /// The open thread's assignee picker's members.
+    ThreadMembers,
+    Assign,
+    WhatsAppWindow,
+    WhatsAppTemplates,
     OpenLookup,
     /// Keyed by message id.
     MessageLookup,
@@ -2654,7 +2751,7 @@ const SLOTS: usize = Slot::RingDeadline as usize + 1;
 /// forgotten with the sections. The draft write is not among them: a reply
 /// saved as the workspace closes still lands, and the writes waiting behind it
 /// go after it.
-pub(crate) const WORKSPACE_SLOTS: [Slot; 68] = [
+pub(crate) const WORKSPACE_SLOTS: [Slot; 72] = [
     Slot::Unread,
     Slot::Conversations,
     Slot::DraftKeys,
@@ -2668,6 +2765,10 @@ pub(crate) const WORKSPACE_SLOTS: [Slot; 68] = [
     Slot::Upload,
     Slot::AiDraft,
     Slot::MarkRead,
+    Slot::ThreadMembers,
+    Slot::Assign,
+    Slot::WhatsAppWindow,
+    Slot::WhatsAppTemplates,
     Slot::OpenLookup,
     Slot::MessageLookup,
     Slot::CallLog,
@@ -2807,6 +2908,11 @@ impl Tickets {
         let ticket = self.next();
         self.keyed.push((slot, ticket, key.to_owned()));
         ticket
+    }
+
+    /// Whether a result is awaited in the keyed `slot` for `key`.
+    pub(crate) fn awaiting_keyed(&self, slot: Slot, key: &str) -> bool {
+        self.keyed.iter().any(|(s, _, k)| *s == slot && k == key)
     }
 
     /// The key `ticket` was issued for in `slot`, if it is still awaited. It is
@@ -3140,6 +3246,15 @@ impl Model {
             }
             Event::AiDraftWritten { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.ai_draft_written(ticket, result, tickets))
+            }
+            Event::ConversationAssigned { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.conversation_assigned(ticket, result, tickets))
+            }
+            Event::WhatsAppWindowLoaded { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.whatsapp_window_loaded(ticket, result, tickets))
+            }
+            Event::WhatsAppTemplatesLoaded { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.whatsapp_templates_loaded(ticket, result, tickets))
             }
             Event::MarkedRead { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.marked_read(ticket, result, tickets))
@@ -3612,6 +3727,7 @@ impl Model {
         let ticket = self.tickets.issue(Slot::Workspaces);
         effects.push(Effect::LoadWorkspaces { ticket });
         let mut signed_in = SignedIn::new(identity, notice, self.window_visible, calls_available);
+        signed_in.meta_channels = self.config.meta_channels;
         // Only a restore can have one: nothing is kept outside restoring.
         signed_in.pending_open = self.pending_open.take();
         self.session = SessionState::SignedIn(Box::new(signed_in));

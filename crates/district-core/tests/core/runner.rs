@@ -4,7 +4,7 @@
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
-use district_api::{ApiError, ErrorDetail};
+use district_api::{ApiError, ConversationsQuery, ErrorDetail};
 use district_auth::{
     AccessClaims, DrainReport, HandOffNonce, HandOffState, RevokeStatus, SignOutReport,
 };
@@ -62,6 +62,9 @@ use district_model::{
 use district_model::{
     CallHandlingMode, MessagingChannel, MessagingCredentialSource, TwilioCredentials,
 };
+use district_model::{
+    ConversationAssignResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse,
+};
 
 use crate::support::{
     AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, overview,
@@ -83,6 +86,11 @@ impl Log {
 }
 
 struct FakeApi(Log);
+
+/// How the fake's log marks a read asked for Messenger and Instagram.
+fn meta(on: bool) -> &'static str {
+    if on { " meta" } else { "" }
+}
 
 impl DistrictApi for FakeApi {
     async fn workspace_list(&self) -> Result<WorkspaceListResponse, ApiError> {
@@ -115,8 +123,16 @@ impl DistrictApi for FakeApi {
         Err(server_error())
     }
 
-    async fn conversations(&self, workspace_id: &str) -> Result<ConversationsResponse, ApiError> {
-        self.0.push(format!("conversations {workspace_id}"));
+    async fn conversations(
+        &self,
+        workspace_id: &str,
+        query: ConversationsQuery,
+    ) -> Result<ConversationsResponse, ApiError> {
+        self.0.push(format!(
+            "conversations {workspace_id}{}{}",
+            meta(query.meta_channels),
+            if query.assignments { " owners" } else { "" }
+        ));
         Ok(fixture("district-conversations.json"))
     }
 
@@ -125,16 +141,24 @@ impl DistrictApi for FakeApi {
         workspace_id: &str,
         thread: &ThreadRef,
         older_than: Option<&TimelineCursor>,
+        meta_channels: bool,
     ) -> Result<TimelineResponse, ApiError> {
         let before =
             older_than.map(|cursor| (cursor.before().to_owned(), cursor.before_id().to_owned()));
-        self.0
-            .push(format!("timeline {workspace_id} {thread:?} {before:?}"));
+        self.0.push(format!(
+            "timeline {workspace_id} {thread:?} {before:?}{}",
+            meta(meta_channels)
+        ));
         Ok(fixture("district-timeline.json"))
     }
 
-    async fn unread_count(&self, workspace_id: &str) -> Result<UnreadCountResponse, ApiError> {
-        self.0.push(format!("unread {workspace_id}"));
+    async fn unread_count(
+        &self,
+        workspace_id: &str,
+        meta_channels: bool,
+    ) -> Result<UnreadCountResponse, ApiError> {
+        self.0
+            .push(format!("unread {workspace_id}{}", meta(meta_channels)));
         Ok(fixture("district-messages-unread-count.json"))
     }
 
@@ -155,10 +179,44 @@ impl DistrictApi for FakeApi {
         &self,
         workspace_id: &str,
         message_id: &str,
+        meta_channels: bool,
     ) -> Result<MessageThreadResponse, ApiError> {
-        self.0
-            .push(format!("message thread {workspace_id} {message_id}"));
+        self.0.push(format!(
+            "message thread {workspace_id} {message_id}{}",
+            meta(meta_channels)
+        ));
         Ok(fixture("district-message-thread.json"))
+    }
+
+    async fn assign_conversation(
+        &self,
+        workspace_id: &str,
+        thread_key: &str,
+        assignee_email: Option<&str>,
+    ) -> Result<ConversationAssignResponse, ApiError> {
+        self.0.push(format!(
+            "assign {workspace_id} {thread_key} {assignee_email:?}"
+        ));
+        Ok(fixture("district-conversation-assign.json"))
+    }
+
+    async fn whatsapp_window(
+        &self,
+        workspace_id: &str,
+        to: &str,
+    ) -> Result<WhatsAppWindowResponse, ApiError> {
+        self.0.push(format!("whatsapp window {workspace_id} {to}"));
+        Ok(fixture("district-whatsapp-window-closed.json"))
+    }
+
+    async fn whatsapp_templates(
+        &self,
+        workspace_id: &str,
+        sender_id: &str,
+    ) -> Result<WhatsAppTemplatesResponse, ApiError> {
+        self.0
+            .push(format!("whatsapp templates {workspace_id} {sender_id}"));
+        Ok(fixture("district-whatsapp-templates.json"))
     }
 
     async fn send_message(
@@ -1616,6 +1674,10 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
             Effect::LoadConversations {
                 ticket,
                 workspace_id: ws(),
+                query: ConversationsQuery {
+                    meta_channels: true,
+                    assignments: true,
+                },
             },
             Event::ConversationsLoaded {
                 ticket,
@@ -1626,6 +1688,7 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
             Effect::LoadUnreadCount {
                 ticket,
                 workspace_id: ws(),
+                meta_channels: true,
             },
             Event::UnreadCountLoaded {
                 ticket,
@@ -1663,6 +1726,7 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
                 workspace_id: ws(),
                 thread: thread.clone(),
                 older_than: cursor,
+                meta_channels: false,
             },
             Event::TimelineLoaded {
                 ticket,
@@ -1715,8 +1779,7 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
                     to: "+12125550142".to_owned(),
                     body: "On our way".to_owned(),
                     channel: "sms".to_owned(),
-                    subject: None,
-                    media_urls: Vec::new(),
+                    ..SendMessageRequest::default()
                 },
             },
             Event::MessageSent {
@@ -1766,10 +1829,45 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
                 ticket,
                 workspace_id: ws(),
                 message_id: "msg_contract_inbound".to_owned(),
+                meta_channels: true,
             },
             Event::MessageThreadFound {
                 ticket,
                 result: Ok(fixture("district-message-thread.json")),
+            },
+        ),
+        (
+            Effect::AssignConversation {
+                ticket,
+                workspace_id: ws(),
+                thread_key: "contact:contact_contract_1".to_owned(),
+                assignee_email: Some("contract@example.com".to_owned()),
+            },
+            Event::ConversationAssigned {
+                ticket,
+                result: Ok(fixture("district-conversation-assign.json")),
+            },
+        ),
+        (
+            Effect::LoadWhatsAppWindow {
+                ticket,
+                workspace_id: ws(),
+                to: "+14165550177".to_owned(),
+            },
+            Event::WhatsAppWindowLoaded {
+                ticket,
+                result: Ok(fixture("district-whatsapp-window-closed.json")),
+            },
+        ),
+        (
+            Effect::LoadWhatsAppTemplates {
+                ticket,
+                workspace_id: ws(),
+                sender_id: "wa_sender_contract".to_owned(),
+            },
+            Event::WhatsAppTemplatesLoaded {
+                ticket,
+                result: Ok(fixture("district-whatsapp-templates.json")),
             },
         ),
         (
@@ -1905,8 +2003,8 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
     assert_eq!(
         log.take(),
         [
-            "conversations ws-contract-active",
-            "unread ws-contract-active",
+            "conversations ws-contract-active meta owners",
+            "unread ws-contract-active meta",
             "drafts ws-contract-active",
             "search ws-contract-active roof",
             "timeline ws-contract-active Contact(\"contact_contract_1\") \
@@ -1918,7 +2016,10 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
             "upload ws-contract-active roof.png image/png 3",
             "ai draft ws-contract-active Contact(\"contact_contract_1\")",
             "mark read ws-contract-active Contact(\"contact_contract_1\")",
-            "message thread ws-contract-active msg_contract_inbound",
+            "message thread ws-contract-active msg_contract_inbound meta",
+            "assign ws-contract-active contact:contact_contract_1 Some(\"contract@example.com\")",
+            "whatsapp window ws-contract-active +14165550177",
+            "whatsapp templates ws-contract-active wa_sender_contract",
             "calls ws-contract-active 25 50",
             "call ws-contract-active call_contract_answered",
             "transcript ws-contract-active call_contract_answered",
