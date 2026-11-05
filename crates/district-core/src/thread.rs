@@ -870,6 +870,10 @@ impl SignedIn {
                     assignment.saving = false;
                     assignment.assignee.clone_from(&assignee);
                 }
+                // A list read already on its way was issued before this answer,
+                // so it cannot know of it: stamped now, its row keeps this owner.
+                self.owners_answered
+                    .insert(thread_key.clone(), (tickets.revision(), assignee.clone()));
                 self.inbox.set_assignee_locally(&thread_key, assignee);
                 // Read again for "assigned to me", which the service decides.
                 Next::Stay(self.reload_conversations(tickets))

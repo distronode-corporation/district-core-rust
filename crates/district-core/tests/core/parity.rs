@@ -5,8 +5,8 @@
 use district_api::{ApiError, ConversationsQuery, ErrorDetail};
 use district_core::{
     AssigneeList, Effect, Event, FailureText, InboxScreen, Model, PickedAttachment, Route,
-    TemplateList, ThreadAssignment, ThreadControls, ThreadEvent, ThreadScreen, WhatsAppComposer,
-    WhatsAppWindowState, reply_channel_label,
+    TemplateList, ThreadAssignment, ThreadControls, ThreadEvent, ThreadScreen, Ticket,
+    WhatsAppComposer, WhatsAppWindowState, reply_channel_label,
 };
 use district_model::{
     CHANNEL_EMAIL, CHANNEL_INSTAGRAM, CHANNEL_MESSENGER, CHANNEL_SMS, CHANNEL_WHATSAPP,
@@ -692,8 +692,9 @@ fn an_assignment_lands_on_the_thread_it_was_asked_for_not_the_one_open() {
     assert_eq!(screen(&model).assignment, before);
 }
 
-/// The list read again, by the live update for a message, as `list`.
-fn list_read_again(model: &mut Model, list: ConversationsResponse) {
+/// The list read again, by the live update for a message: its ticket, not yet
+/// answered.
+fn list_read_issued(model: &mut Model) -> Ticket {
     let effects = model.update(live_event(TelemetryEnvelope {
         workspace_id: AGENCY.to_owned(),
         call_id: "m1".to_owned(),
@@ -701,8 +702,14 @@ fn list_read_again(model: &mut Model, list: ConversationsResponse) {
         data: json!({}),
         timestamp: "2026-11-05T18:40:00.000Z".to_owned(),
     }));
+    pick(&effects, |e| matches!(e, Effect::LoadConversations { .. }))
+}
+
+/// The list read again, by the live update for a message, as `list`.
+fn list_read_again(model: &mut Model, list: ConversationsResponse) {
+    let ticket = list_read_issued(model);
     model.update(Event::ConversationsLoaded {
-        ticket: pick(&effects, |e| matches!(e, Effect::LoadConversations { .. })),
+        ticket,
         result: Ok(list),
     });
 }
@@ -754,6 +761,74 @@ fn a_thread_given_away_while_open_can_be_taken_back() {
         screen(&model).assignment.assignee.as_deref(),
         Some("founder@example.com")
     );
+}
+
+#[test]
+fn a_list_read_issued_before_an_assignment_answer_keeps_the_answers_owner() {
+    let (mut model, _) = inbox_with(AGENCY, "agency", owners());
+    let effects = opened(&mut model, WALK_IN);
+    model.update(Event::MembersLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadMembers { .. })),
+        result: Ok(members()),
+    });
+    // List read A is issued, then the thread is given, and the answer lands.
+    let read_a = list_read_issued(&mut model);
+    let given = thread_event(
+        &mut model,
+        ThreadEvent::Assign(Some("founder@example.com".to_owned())),
+    );
+    let effects = model.update(Event::ConversationAssigned {
+        ticket: last_ticket(&given),
+        result: Ok(fixture("district-conversation-assign.json")),
+    });
+    assert!(
+        !has(&effects, |e| matches!(e, Effect::LoadConversations { .. })),
+        "A is still on its way, so the read again waits for it"
+    );
+
+    // A lands saying nobody owns the thread, as it did when A was issued.
+    let effects = model.update(Event::ConversationsLoaded {
+        ticket: read_a,
+        result: Ok(owners()),
+    });
+    let read_b = pick(&effects, |e| matches!(e, Effect::LoadConversations { .. }));
+    assert_eq!(
+        screen(&model).assignment.assignee.as_deref(),
+        Some("teammate@example.com"),
+        "the answer's owner, not A's"
+    );
+    assert_eq!(
+        signed_in(&model)
+            .inbox
+            .conversation(WALK_IN)
+            .unwrap()
+            .assignee(),
+        Some("teammate@example.com")
+    );
+    // The answer's owner is who owns it, so picking them sends nothing.
+    assert!(
+        thread_event(
+            &mut model,
+            ThreadEvent::Assign(Some("teammate@example.com".to_owned()))
+        )
+        .is_empty()
+    );
+    assert!(controls(&model).can_assign);
+
+    // Read B, issued after the answer, is the service's word again.
+    model.update(Event::ConversationsLoaded {
+        ticket: read_b,
+        result: Ok(walk_in_given_to(Some("operator@example.com"))),
+    });
+    assert_eq!(
+        screen(&model).assignment.assignee.as_deref(),
+        Some("operator@example.com")
+    );
+    let effects = thread_event(&mut model, ThreadEvent::Assign(None));
+    assert!(has(&effects, |e| matches!(
+        e,
+        Effect::AssignConversation { .. }
+    )));
 }
 
 #[test]

@@ -309,7 +309,18 @@ impl SignedIn {
         }
         match (result, &mut self.inbox.list) {
             (Ok(response), list) => {
-                *list = ConversationList::Ready(Conversations::new(response));
+                let mut conversations = Conversations::new(response);
+                // An answer applied after this read was issued is newer than
+                // its rows: they keep that answer's owner. An answer applied
+                // before it is in the service's list already, and is let go.
+                self.owners_answered
+                    .retain(|_, (answered, _)| ticket < *answered);
+                for thread in &mut conversations.threads {
+                    if let Some((_, owner)) = self.owners_answered.get(&thread.thread_key) {
+                        thread.assignee_email = Some(owner.clone());
+                    }
+                }
+                *list = ConversationList::Ready(conversations);
                 self.owner_from_list();
             }
             (Err(error), ConversationList::Ready(list)) => {
