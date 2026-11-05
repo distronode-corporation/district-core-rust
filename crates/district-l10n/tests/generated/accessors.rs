@@ -1186,6 +1186,10 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_business_extraction_failed(Locale::FrCa), "Nous n'avons pas pu préparer vos renseignements à partir de ce site Web. Veuillez réessayer, ou les saisir vous-même.");
     assert_eq!(api_error_strings::api_error_calendar_unreachable(Locale::En), "The calendar could not be reached just now. Please try again in a few minutes.");
     assert_eq!(api_error_strings::api_error_calendar_unreachable(Locale::FrCa), "Le calendrier n'a pas pu être joint à l'instant. Veuillez réessayer dans quelques minutes.");
+    assert_eq!(api_error_strings::api_error_call_ended(Locale::En), "That call has ended.");
+    assert_eq!(api_error_strings::api_error_call_ended(Locale::FrCa), "Cet appel est terminé.");
+    assert_eq!(api_error_strings::api_error_call_has_no_receptionist(Locale::En), "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over.");
+    assert_eq!(api_error_strings::api_error_call_has_no_receptionist(Locale::FrCa), "Il s'agit de l'appel d'un membre de l'équipe. Votre réceptionniste n'y participe pas, alors vous ne pouvez pas lui souffler de consigne ni prendre l'appel.");
     assert_eq!(api_error_strings::api_error_call_has_no_room(Locale::En), "That call has no room to join.");
     assert_eq!(api_error_strings::api_error_call_has_no_room(Locale::FrCa), "Cet appel n'a aucune salle à joindre.");
     assert_eq!(api_error_strings::api_error_call_not_direct_dial(Locale::En), "That call is not a direct call from this app and cannot be hung up here.");

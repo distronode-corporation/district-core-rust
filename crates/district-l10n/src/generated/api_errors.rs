@@ -149,6 +149,24 @@ pub fn api_error_calendar_unreachable(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.call_ended`
+#[must_use]
+pub fn api_error_call_ended(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That call has ended.",
+        Locale::FrCa => "Cet appel est terminé.",
+    }
+}
+
+/// `api_error.call_has_no_receptionist`
+#[must_use]
+pub fn api_error_call_has_no_receptionist(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over.",
+        Locale::FrCa => "Il s'agit de l'appel d'un membre de l'équipe. Votre réceptionniste n'y participe pas, alors vous ne pouvez pas lui souffler de consigne ni prendre l'appel.",
+    }
+}
+
 /// `api_error.call_has_no_room`
 #[must_use]
 pub fn api_error_call_has_no_room(l: Locale) -> &'static str {

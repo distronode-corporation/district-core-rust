@@ -1,0 +1,10 @@
+{
+  "workspaceId": "ws_1",
+  "callId": "call_1",
+  "eventType": "whisper_applied",
+  "data": {
+    "applied": true,
+    "firstWords": "Good afternoon, Northside Dental. How can I help?"
+  },
+  "timestamp": "2026-10-06T14:30:07.050Z"
+}

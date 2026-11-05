@@ -750,6 +750,14 @@
       "en": "That call started before this feature existed, so it is not available on it.",
       "fr": "Cet appel a commencé avant l'existence de cette fonction, elle n'est donc pas offerte pour lui."
     },
+    "call_ended": {
+      "en": "That call has ended.",
+      "fr": "Cet appel est terminé."
+    },
+    "call_has_no_receptionist": {
+      "en": "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over.",
+      "fr": "Il s'agit de l'appel d'un membre de l'équipe. Votre réceptionniste n'y participe pas, alors vous ne pouvez pas lui souffler de consigne ni prendre l'appel."
+    },
     "room_inactive": {
       "en": "That meeting room is not active.",
       "fr": "Cette salle de réunion n'est pas active."

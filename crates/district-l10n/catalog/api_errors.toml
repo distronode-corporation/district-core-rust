@@ -147,6 +147,24 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `calendar_unreachable`, in place of the service's own English."
 
+[api_error.call_ended]
+en = "That call has ended."
+fr = "Cet appel est terminé."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `call_ended`, in place of the service's own English."
+
+[api_error.call_has_no_receptionist]
+en = "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over."
+fr = "Il s'agit de l'appel d'un membre de l'équipe. Votre réceptionniste n'y participe pas, alors vous ne pouvez pas lui souffler de consigne ni prendre l'appel."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `call_has_no_receptionist`, in place of the service's own English."
+
 [api_error.call_has_no_room]
 en = "That call has no room to join."
 fr = "Cet appel n'a aucune salle à joindre."

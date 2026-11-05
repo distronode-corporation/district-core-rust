@@ -116,7 +116,7 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 203;
+pub const EXPECTED_FIXTURE_COUNT: usize = 208;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
