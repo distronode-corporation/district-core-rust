@@ -294,7 +294,11 @@ impl ThreadScreen {
             can_assign: capabilities.can_change
                 && !self.assignment.saving
                 && matches!(self.assignment.members, AssigneeList::Ready(_)),
+            // Not while free text is on its way either: a template would take
+            // its place in the one send slot, and the text's answer, no longer
+            // awaited, would never settle the composer.
             can_send_template: can_reply
+                && !busy
                 && window_closed
                 && self
                     .whatsapp
@@ -762,6 +766,28 @@ impl SignedIn {
         effects.extend(self.refresh_thread(tickets));
         effects.extend(self.mark_open_thread_read(tickets));
         effects
+    }
+
+    /// The list was read again: the open thread's owner is its row's, since
+    /// another member may have given the thread away meanwhile, and the picker
+    /// compares a choice with whoever owns it now. Not while this member's own
+    /// change is on its way, whose answer says who owns it; nor when the list
+    /// does not hold the thread or was read without owners.
+    pub(crate) fn owner_from_list(&mut self) {
+        let Some(screen) = self
+            .thread
+            .as_mut()
+            .filter(|screen| !screen.assignment.saving)
+        else {
+            return;
+        };
+        if let Some(owner) = self
+            .inbox
+            .conversation(&screen.thread_key)
+            .and_then(|row| row.assignee_email.as_ref())
+        {
+            screen.assignment.assignee.clone_from(owner);
+        }
     }
 
     /// Reads the members the open thread can be given to, for a member who may

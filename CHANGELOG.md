@@ -52,8 +52,10 @@ fields, and `SendMessageRequest` gains three fields.
   `POST /api/district/conversations/assign` once (`Effect::AssignConversation`,
   `Event::ConversationAssigned`); a refusal (`assignee_is_viewer`, `assignee_not_member`) is
   shown beside the picker. The answer is the thread's it was asked for, so one landing after
-  the member has opened another thread changes that thread's row, never the open one. A
-  Viewer sees the owner and cannot change it.
+  the member has opened another thread changes that thread's row, never the open one. Each
+  read of the list sets the open thread's owner from its row, unless a change is on its way,
+  so a thread another member gave away meanwhile can be given back. A Viewer sees the owner
+  and cannot change it.
 - WhatsApp: choosing the channel reads the customer-service window
   (`Effect::LoadWhatsAppWindow`, `GET /api/district/workspace/whatsapp/window`). Open or
   unreadable, free text goes, from the sender the window was read for (`whatsappSenderId`).
@@ -64,7 +66,8 @@ fields, and `SendMessageRequest` gains three fields.
   `TemplateVariable` and `SendTemplate` fill and send one; the preview and the body sent are
   `fill_whatsapp_template`, the service's own fill. Free text the service refuses with
   `whatsapp_window_closed` turns the composer to templates; when the window had not been read,
-  or named no sender, it is read again first, for the sender whose templates to offer.
+  or named no sender, it is read again first, for the sender whose templates to offer. A
+  template cannot be sent while free text is still on its way.
 - `ApiClient::assign_conversation`, `ApiClient::whatsapp_window`,
   `ApiClient::whatsapp_templates` and `ConversationsQuery`; the three endpoints are
   desktop-only additions to the table. `SendMessageRequest` gains `whatsapp_sender_id`,

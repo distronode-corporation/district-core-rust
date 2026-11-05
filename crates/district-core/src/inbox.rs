@@ -308,7 +308,10 @@ impl SignedIn {
             return stay();
         }
         match (result, &mut self.inbox.list) {
-            (Ok(response), list) => *list = ConversationList::Ready(Conversations::new(response)),
+            (Ok(response), list) => {
+                *list = ConversationList::Ready(Conversations::new(response));
+                self.owner_from_list();
+            }
             (Err(error), ConversationList::Ready(list)) => {
                 list.refreshing = false;
                 list.refresh_failure = Some(FailureText::from_api_error(&error));

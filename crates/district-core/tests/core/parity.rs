@@ -11,13 +11,14 @@ use district_core::{
 use district_model::{
     CHANNEL_EMAIL, CHANNEL_INSTAGRAM, CHANNEL_MESSENGER, CHANNEL_SMS, CHANNEL_WHATSAPP,
     ConversationAssignResponse, ConversationsResponse, MemberListResponse, ReplyOption,
-    ReplyTarget, SendMessageRequest, TimelineResponse, WhatsAppTemplatesResponse,
-    WhatsAppWindowResponse,
+    ReplyTarget, SendMessageRequest, TelemetryEnvelope, TelemetryEventType, TimelineResponse,
+    WhatsAppTemplatesResponse, WhatsAppWindowResponse,
 };
+use serde_json::json;
 
 use crate::inbox::{ADA, WALK_IN, unread};
 use crate::support::{
-    AGENCY, VIEWER, fixture, has, last_ticket, loaded, pick, server_error, signed_in,
+    AGENCY, VIEWER, fixture, has, last_ticket, live_event, loaded, pick, server_error, signed_in,
     with_meta_channels,
 };
 
@@ -691,6 +692,70 @@ fn an_assignment_lands_on_the_thread_it_was_asked_for_not_the_one_open() {
     assert_eq!(screen(&model).assignment, before);
 }
 
+/// The list read again, by the live update for a message, as `list`.
+fn list_read_again(model: &mut Model, list: ConversationsResponse) {
+    let effects = model.update(live_event(TelemetryEnvelope {
+        workspace_id: AGENCY.to_owned(),
+        call_id: "m1".to_owned(),
+        event_type: TelemetryEventType::MessageReceived,
+        data: json!({}),
+        timestamp: "2026-11-05T18:40:00.000Z".to_owned(),
+    }));
+    model.update(Event::ConversationsLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadConversations { .. })),
+        result: Ok(list),
+    });
+}
+
+/// `owners()` with the walk-in thread given to `assignee`.
+fn walk_in_given_to(assignee: Option<&str>) -> ConversationsResponse {
+    let mut list = owners();
+    for thread in &mut list.conversations {
+        if thread.thread_key == WALK_IN {
+            thread.assignee_email = Some(assignee.map(str::to_owned));
+        }
+    }
+    list
+}
+
+#[test]
+fn a_thread_given_away_while_open_can_be_taken_back() {
+    let (mut model, _) = inbox_with(AGENCY, "agency", owners());
+    let effects = opened(&mut model, WALK_IN);
+    model.update(Event::MembersLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadMembers { .. })),
+        result: Ok(members()),
+    });
+    assert_eq!(screen(&model).assignment.assignee, None);
+
+    // Another member gives the open thread to the founder, and the list says so.
+    list_read_again(&mut model, walk_in_given_to(Some("founder@example.com")));
+    assert_eq!(
+        screen(&model).assignment.assignee.as_deref(),
+        Some("founder@example.com")
+    );
+    // Taking it back to nobody, its owner before, is sent.
+    let effects = thread_event(&mut model, ThreadEvent::Assign(None));
+    let [
+        Effect::AssignConversation {
+            thread_key,
+            assignee_email: None,
+            ..
+        },
+    ] = effects.as_slice()
+    else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(thread_key, WALK_IN);
+
+    // While that is on its way the list is not who owns it: the answer is.
+    list_read_again(&mut model, walk_in_given_to(Some("operator@example.com")));
+    assert_eq!(
+        screen(&model).assignment.assignee.as_deref(),
+        Some("founder@example.com")
+    );
+}
+
 // WhatsApp.
 
 /// On WhatsApp in the WhatsApp-only thread, with the window read as `window`.
@@ -1096,6 +1161,54 @@ fn a_window_read_again_that_is_open_takes_free_text_again() {
         assert!(!screen(&model).whatsapp_window_closed());
         assert_eq!(whatsapp(&model).templates, TemplateList::NotLoaded);
         assert!(controls(&model).can_send);
+    });
+}
+
+#[test]
+fn a_template_waits_for_free_text_on_its_way() {
+    with_meta_channels(|| {
+        // Free text goes while the window is still being read.
+        let (mut model, _) = inbox_with(AGENCY, "agency", reply_options());
+        let opening = opened(&mut model, WHATSAPP_ONLY);
+        thread_event(&mut model, ThreadEvent::Compose("On my way".to_owned()));
+        let text = pick(&thread_event(&mut model, ThreadEvent::Send), |e| {
+            matches!(e, Effect::SendMessage { .. })
+        });
+        // The window is read closed meanwhile, and a template is filled in.
+        let effects = model.update(Event::WhatsAppWindowLoaded {
+            ticket: pick(&opening, |e| matches!(e, Effect::LoadWhatsAppWindow { .. })),
+            result: Ok(closed()),
+        });
+        model.update(Event::WhatsAppTemplatesLoaded {
+            ticket: last_ticket(&effects),
+            result: Ok(fixture("district-whatsapp-templates.json")),
+        });
+        thread_event(
+            &mut model,
+            ThreadEvent::ChooseTemplate("wa_tpl_reminder".to_owned()),
+        );
+        for (index, value) in ["Ada", "Thursday"].into_iter().enumerate() {
+            thread_event(
+                &mut model,
+                ThreadEvent::TemplateVariable(index, value.to_owned()),
+            );
+        }
+        assert!(whatsapp(&model).template_complete());
+        assert!(
+            !controls(&model).can_send_template,
+            "the text is still on its way"
+        );
+        assert!(thread_event(&mut model, ThreadEvent::SendTemplate).is_empty());
+
+        // Once the text settles, the template can go.
+        model.update(Event::MessageSent {
+            ticket: text,
+            result: Err(server_error()),
+        });
+        assert!(!screen(&model).composer.sending);
+        assert!(controls(&model).can_send_template);
+        let message = the_send(&thread_event(&mut model, ThreadEvent::SendTemplate));
+        assert_eq!(message.template_id.as_deref(), Some("wa_tpl_reminder"));
     });
 }
 
