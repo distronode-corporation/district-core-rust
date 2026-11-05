@@ -28,6 +28,30 @@
 //!   the service's own rules so a refused file costs no upload.
 //! - A reply written by a model is asked for only by an explicit
 //!   [`ThreadEvent::DraftReply`]: every one is a billed model run.
+//!
+//! # The reply channel
+//!
+//! In an app that answers Messenger and Instagram
+//! ([`CoreConfig::meta_channels`](crate::CoreConfig::meta_channels)), the
+//! channels offered are the ones the service lists for the thread, in its
+//! order, the first chosen when the thread opens; a channel this build does
+//! not know is skipped, and a thread the service lists none for opens read
+//! only. Otherwise the one reply target is the thread's text or email
+//! address, as before.
+//!
+//! On WhatsApp, the customer-service window is read when the channel is
+//! chosen. Closed, free text is not offered (the service would refuse it), and
+//! the sender's approved templates are, one field per `{{n}}`, with the filled
+//! text shown before it goes, filled exactly as the service fills it. Not yet
+//! known or unreadable, the window blocks nothing: the service is the
+//! authority, and a guess either way would mislead.
+//!
+//! # The owner
+//!
+//! A member who may write gives the thread to a member, or takes it back, from
+//! the workspace's Agency and Client members; a Viewer can be neither, but a
+//! thread already given to one keeps showing them until it is changed. One
+//! change is on its way at a time.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
@@ -35,15 +59,17 @@ use std::time::Duration;
 
 use district_api::ApiError;
 use district_model::{
-    AiDraftResponse, CHANNEL_SMS, DraftResponse, DraftSaveRequest, MarkReadResponse,
-    MediaUploadResponse, ReplyTarget, SendMessageRequest, SendMessageResponse, ThreadRef,
-    TimelineCursor, TimelineEvent, TimelineResponse,
+    AiDraftResponse, CHANNEL_EMAIL, CHANNEL_INSTAGRAM, CHANNEL_MESSENGER, CHANNEL_SMS,
+    CHANNEL_WHATSAPP, ConversationAssignResponse, DraftResponse, DraftSaveRequest,
+    MarkReadResponse, MediaUploadResponse, MemberListResponse, ReplyTarget, SendMessageRequest,
+    SendMessageResponse, ThreadRef, TimelineCursor, TimelineEvent, TimelineResponse,
+    WhatsAppTemplatesResponse, WhatsAppWindowResponse, fill_whatsapp_template,
 };
 
 use crate::failure::FailureText;
 use crate::inbox::InboxScreen;
 use crate::model::{Effect, Slot, Ticket, Tickets};
-use crate::role::Capabilities;
+use crate::role::{Capabilities, WorkspaceRole};
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::{l, s};
 
@@ -60,8 +86,9 @@ pub const MAX_ATTACHMENT_BYTES: usize = 5 * 1024 * 1024;
 pub const ATTACHMENT_TYPES: [&str; 4] = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
 /// The slots of an open thread, forgotten when it closes. The draft write is
-/// not among them: a save sent as the thread closes still lands.
-const THREAD_SLOTS: [Slot; 7] = [
+/// not among them: a save sent as the thread closes still lands. Nor is an
+/// assignment: the inbox list shows its outcome.
+const THREAD_SLOTS: [Slot; 10] = [
     Slot::Timeline,
     Slot::TimelineOlder,
     Slot::DraftLoad,
@@ -69,7 +96,27 @@ const THREAD_SLOTS: [Slot; 7] = [
     Slot::Send,
     Slot::Upload,
     Slot::AiDraft,
+    Slot::ThreadMembers,
+    Slot::WhatsAppWindow,
+    Slot::WhatsAppTemplates,
 ];
+
+/// The error code of the service's refusal of free WhatsApp text once the
+/// window has closed.
+const WHATSAPP_WINDOW_CLOSED: &str = "whatsapp_window_closed";
+
+/// What a reply channel is called, in the app's language: on the channel
+/// chooser and on an inbox row. `None` for a channel this build does not know.
+pub fn reply_channel_label(channel: &str) -> Option<&'static str> {
+    match channel {
+        CHANNEL_SMS => Some(s::inbox_compose_channel_sms(l())),
+        CHANNEL_EMAIL => Some(s::inbox_compose_channel_email(l())),
+        CHANNEL_WHATSAPP => Some(s::thread_channel_whatsapp(l())),
+        CHANNEL_MESSENGER => Some(s::thread_channel_messenger(l())),
+        CHANNEL_INSTAGRAM => Some(s::thread_channel_instagram(l())),
+        _ => None,
+    }
+}
 
 /// The member's saved replies being written: one write on its way at a time,
 /// and the next ones waiting until it lands, the last one wanted for each
@@ -168,18 +215,27 @@ pub struct ThreadScreen {
     pub thread_key: String,
     /// The title: the contact's name, else the other party's address.
     pub title: String,
-    /// Where a reply goes and on which channel, from the inbox list, which is
-    /// the only place the service publishes it. `None` when the thread is not
-    /// in the list (opened from a search result for an older thread) or has
-    /// nothing to reply on: the thread opens read-only then, rather than offer a
-    /// reply that could only be refused.
+    /// Where a reply goes and on which channel: the one of
+    /// [`reply_choices`](Self::reply_choices) chosen, the first until another
+    /// is. `None` when the thread is not in the list (opened from a search
+    /// result for an older thread) or has nothing to reply on: the thread opens
+    /// read-only then, rather than offer a reply that could only be refused.
     pub reply_target: Option<ReplyTarget>,
+    /// Every way to answer the thread, from the inbox list, which is the only
+    /// place the service publishes them. Offer a choice when there is more
+    /// than one ([`ThreadEvent::ChooseChannel`]).
+    pub reply_choices: Vec<ReplyTarget>,
     /// The history.
     pub history: ThreadHistory,
     /// The reply being written.
     pub composer: Composer,
+    /// Who owns the thread, and the picker that changes it.
+    pub assignment: ThreadAssignment,
+    /// The WhatsApp window and its templates, while the reply goes by WhatsApp.
+    pub whatsapp: Option<WhatsAppComposer>,
     pub(crate) thread: ThreadRef,
     pub(crate) workspace_id: String,
+    pub(crate) meta_channels: bool,
 }
 
 impl ThreadScreen {
@@ -189,6 +245,11 @@ impl ThreadScreen {
     /// one opened from a search result for a thread the inbox list does not
     /// hold, whose reply address the service has not published.
     pub const NO_REPLY_TARGET: &'static str = district_l10n::english::THREAD_NO_REPLY_TARGET;
+    /// The channel chooser's label.
+    pub const CHANNEL_LABEL: &'static str = district_l10n::english::THREAD_CHANNEL_LABEL;
+    /// Said beside the attachments when they cannot go on the chosen channel.
+    pub const ATTACHMENTS_SMS_ONLY: &'static str =
+        district_l10n::english::THREAD_ATTACHMENTS_SMS_ONLY;
 
     /// Why there is no composer, for a member with `capabilities`, or `None`
     /// when there is one.
@@ -207,27 +268,268 @@ impl ThreadScreen {
         let ready = matches!(self.history, ThreadHistory::Ready(_));
         let can_reply = capabilities.can_change && self.reply_target.is_some();
         let composer = &self.composer;
+        let on_sms = self.on_channel(CHANNEL_SMS);
+        let window_closed = self.whatsapp_window_closed();
+        let busy = composer.sending || self.whatsapp.as_ref().is_some_and(|w| w.sending);
         ThreadControls {
             can_reply,
             // Text messages only. The email branch of the send route ignores
             // attachments altogether, so one on an email thread would upload and
-            // silently not be delivered.
-            can_attach: can_reply
-                && ready
-                && !composer.attaching
-                && self
-                    .reply_target
-                    .as_ref()
-                    .is_some_and(|target| target.channel == CHANNEL_SMS),
+            // silently not be delivered, and WhatsApp, Messenger and Instagram
+            // refuse them.
+            can_attach: can_reply && ready && !composer.attaching && on_sms,
             // Not while an upload is on its way: the message would go without
-            // the image the user is waiting for.
+            // the image the user is waiting for. Not with attachments on a
+            // channel that cannot carry them, nor as free text once the
+            // WhatsApp window has closed: the service would refuse both.
             can_send: can_reply
                 && ready
-                && !composer.sending
+                && !busy
                 && !composer.attaching
-                && !composer.text.trim().is_empty(),
-            can_draft_reply: can_reply && ready && !composer.generating,
+                && !composer.text.trim().is_empty()
+                && (on_sms || composer.attachments.is_empty())
+                && !window_closed,
+            can_draft_reply: can_reply && ready && !composer.generating && !window_closed,
+            can_choose_channel: can_reply && !busy && self.reply_choices.len() > 1,
+            can_assign: capabilities.can_change
+                && !self.assignment.saving
+                && matches!(self.assignment.members, AssigneeList::Ready(_)),
+            // Not while free text is on its way either: a template would take
+            // its place in the one send slot, and the text's answer, no longer
+            // awaited, would never settle the composer.
+            can_send_template: can_reply
+                && !busy
+                && window_closed
+                && self
+                    .whatsapp
+                    .as_ref()
+                    .is_some_and(WhatsAppComposer::template_complete),
         }
+    }
+
+    /// Whether the reply goes on `channel`.
+    fn on_channel(&self, channel: &str) -> bool {
+        self.reply_target
+            .as_ref()
+            .is_some_and(|target| target.channel == channel)
+    }
+
+    /// Whether the reply goes by WhatsApp and the service said the window is
+    /// closed.
+    pub fn whatsapp_window_closed(&self) -> bool {
+        self.whatsapp
+            .as_ref()
+            .is_some_and(|whatsapp| whatsapp.window == WhatsAppWindowState::Closed)
+    }
+
+    /// Whether to say [`ATTACHMENTS_SMS_ONLY`](Self::ATTACHMENTS_SMS_ONLY):
+    /// attachments are held and the reply goes on a channel that cannot carry
+    /// them.
+    pub fn attachments_blocked(&self) -> bool {
+        !self.composer.attachments.is_empty()
+            && self.reply_target.is_some()
+            && !self.on_channel(CHANNEL_SMS)
+    }
+}
+
+/// Who owns a thread, and the picker that changes it.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct ThreadAssignment {
+    /// The member who owns the thread, or `None` when nobody does (or the
+    /// thread is not in the list, whose rows are the only place the service
+    /// publishes it).
+    pub assignee: Option<String>,
+    /// The members the picker offers, read when the thread opens, for a member
+    /// who may assign.
+    pub members: AssigneeList,
+    /// Whether a change is on its way. One at a time: the member given the
+    /// thread is notified.
+    pub saving: bool,
+    /// Why the last change failed, shown beside the picker.
+    pub failure: Option<FailureText>,
+}
+
+impl ThreadAssignment {
+    /// The picker's label.
+    pub const LABEL: &'static str = district_l10n::english::THREAD_ASSIGN_LABEL;
+    /// The picker's choice for nobody.
+    pub const UNASSIGNED: &'static str = district_l10n::english::THREAD_UNASSIGNED;
+
+    /// Who the picker offers, besides [`UNASSIGNED`](Self::UNASSIGNED): the
+    /// Agency and Client members, in the service's order, and the owner when
+    /// they are not among them (a Viewer given the thread before Viewers could
+    /// not be, or a member since removed), so the picker always shows who owns
+    /// the thread. Empty until the members are read.
+    pub fn options(&self) -> Vec<String> {
+        let mut options = match &self.members {
+            AssigneeList::Ready(members) => members.clone(),
+            _ => Vec::new(),
+        };
+        if let Some(assignee) = &self.assignee
+            && !options.contains(assignee)
+        {
+            options.push(assignee.clone());
+        }
+        options
+    }
+}
+
+/// The members a thread can be given to.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum AssigneeList {
+    /// Not read: the member may not assign.
+    #[default]
+    NotLoaded,
+    /// Being read.
+    Loading,
+    /// The Agency and Client members' addresses. A Viewer is never among them:
+    /// the service refuses to give one a thread.
+    Ready(Vec<String>),
+    /// The read failed. The owner still shows; the picker cannot change it.
+    Failed(FailureText),
+}
+
+/// The WhatsApp side of the composer.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct WhatsAppComposer {
+    /// The customer-service window.
+    pub window: WhatsAppWindowState,
+    /// The sender the window is for, which a reply goes from, once the service
+    /// has named one.
+    pub sender_id: Option<String>,
+    /// The sender's templates that may be sent, read once the window is known
+    /// to be closed.
+    pub templates: TemplateList,
+    /// The id of the template chosen.
+    pub chosen: Option<String>,
+    /// What is typed for each `{{n}}`, in order.
+    pub variables: Vec<String>,
+    /// Whether a template is on its way.
+    pub sending: bool,
+}
+
+impl WhatsAppComposer {
+    /// Said when the window is closed.
+    pub const WINDOW_CLOSED: &'static str = district_l10n::english::THREAD_WHATSAPP_WINDOW_CLOSED;
+    /// The template picker's label.
+    pub const TEMPLATE_LABEL: &'static str = district_l10n::english::THREAD_TEMPLATE_LABEL;
+    /// The template picker's placeholder.
+    pub const TEMPLATE_PLACEHOLDER: &'static str =
+        district_l10n::english::THREAD_TEMPLATE_PLACEHOLDER;
+    /// Under a variable left empty.
+    pub const VARIABLE_REQUIRED: &'static str =
+        district_l10n::english::THREAD_TEMPLATE_VARIABLE_REQUIRED;
+    /// The filled template's label.
+    pub const PREVIEW: &'static str = district_l10n::english::THREAD_TEMPLATE_PREVIEW;
+    /// The template's send button.
+    pub const SEND_TEMPLATE: &'static str = district_l10n::english::THREAD_TEMPLATE_SEND;
+    /// While the templates are read.
+    pub const TEMPLATES_LOADING: &'static str = district_l10n::english::THREAD_TEMPLATES_LOADING;
+    /// When the sender has no template that may be sent.
+    pub const TEMPLATES_NONE: &'static str = district_l10n::english::THREAD_TEMPLATES_NONE;
+    /// When the templates could not be read.
+    pub const TEMPLATES_FAILED: &'static str = district_l10n::english::THREAD_TEMPLATES_FAILED;
+
+    /// The template chosen, if it is still offered.
+    pub fn template(&self) -> Option<&SendableTemplate> {
+        let TemplateList::Ready(templates) = &self.templates else {
+            return None;
+        };
+        let chosen = self.chosen.as_deref()?;
+        templates.iter().find(|template| template.id == chosen)
+    }
+
+    /// The chosen template's variables as they will be sent: exactly as many
+    /// as it has, each trimmed.
+    pub fn filled_variables(&self) -> Vec<String> {
+        let count = self
+            .template()
+            .map_or(0, |template| template.variable_count);
+        (0..count)
+            .map(|index| {
+                self.variables
+                    .get(index)
+                    .map(|value| value.trim().to_owned())
+                    .unwrap_or_default()
+            })
+            .collect()
+    }
+
+    /// The chosen template's text with what is typed so far, filled exactly as
+    /// the service fills it; an empty variable shows as its `{{n}}`.
+    pub fn preview(&self) -> Option<String> {
+        self.template()
+            .map(|template| fill_whatsapp_template(&template.body, &self.filled_variables()))
+    }
+
+    /// Whether a template is chosen and every variable has something in it.
+    pub fn template_complete(&self) -> bool {
+        !self.sending
+            && self.template().is_some()
+            && self
+                .filled_variables()
+                .iter()
+                .all(|value| !value.is_empty())
+    }
+
+    /// The label for the `index`th variable (from zero): `Variable {{1}}`.
+    pub fn variable_label(index: usize) -> String {
+        s::thread_template_variable(l(), &format!("{{{{{}}}}}", index + 1))
+    }
+}
+
+/// The customer-service window, as the service last said.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum WhatsAppWindowState {
+    /// Being read. Free text is offered meanwhile: the service decides.
+    #[default]
+    Loading,
+    /// Free text may be sent, until the instant given, when known.
+    Open {
+        /// When it closes, as an ISO 8601 instant.
+        expires_at: Option<String>,
+    },
+    /// Only a template may be sent.
+    Closed,
+    /// The read failed. Nothing is blocked: the service is the authority.
+    Unknown(FailureText),
+}
+
+/// The templates of the sender whose window is closed.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum TemplateList {
+    /// Not asked for: the window is not known to be closed, or the service
+    /// named no sender.
+    #[default]
+    NotLoaded,
+    /// Being read.
+    Loading,
+    /// The ones that may be sent from this sender. May be empty.
+    Ready(Vec<SendableTemplate>),
+    /// The read failed.
+    Failed(FailureText),
+}
+
+/// A template that may be sent from the sender: approved, and with numbered
+/// variables only.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SendableTemplate {
+    /// Its id, which the send route takes.
+    pub id: String,
+    /// Its name at the provider.
+    pub name: String,
+    /// Its language code, for example `en_US`.
+    pub language: String,
+    /// Its text, with its `{{n}}` variables.
+    pub body: String,
+    /// How many variables it has.
+    pub variable_count: usize,
+}
+
+impl SendableTemplate {
+    /// The template's line in the picker: its name and language code.
+    pub fn label(&self) -> String {
+        s::thread_template_option(l(), &self.name, &self.language)
     }
 }
 
@@ -244,8 +546,18 @@ pub struct ThreadControls {
     /// which is what makes a second click harmless.
     pub can_send: bool,
     /// Whether the "Draft reply" button works now. False while one is being
-    /// written.
+    /// written, and while the WhatsApp window is closed.
     pub can_draft_reply: bool,
+    /// Whether to offer the channel chooser: there is more than one way to
+    /// reply, and nothing is on its way.
+    pub can_choose_channel: bool,
+    /// Whether the owner picker works now: the role may change things, the
+    /// members are read and no change is on its way. When false, show the
+    /// owner without the picker.
+    pub can_assign: bool,
+    /// Whether the template's send button works now: the WhatsApp window is
+    /// closed, a template is chosen and every variable is filled.
+    pub can_send_template: bool,
 }
 
 /// The thread's history.
@@ -390,6 +702,19 @@ pub enum ThreadEvent {
     DraftReply,
     /// Dismiss the composer's failure.
     DismissFailure,
+    /// Reply on this channel, one of the thread's
+    /// [`reply_choices`](ThreadScreen::reply_choices).
+    ChooseChannel(String),
+    /// Give the thread to this member, or take it back with `None`.
+    Assign(Option<String>),
+    /// Dismiss the owner picker's failure.
+    DismissAssignFailure,
+    /// Choose the WhatsApp template with this id.
+    ChooseTemplate(String),
+    /// The `index`th template variable (from zero) changed.
+    TemplateVariable(usize, String),
+    /// Send the chosen template, filled. Billed.
+    SendTemplate,
 }
 
 impl SignedIn {
@@ -403,23 +728,259 @@ impl SignedIn {
     ) -> Vec<Effect> {
         let mut effects = Vec::new();
         if self.thread.is_none() {
+            let conversation = self.inbox.conversation(&thread_key);
+            let reply_choices: Vec<ReplyTarget> = match conversation {
+                Some(conversation) if self.meta_channels => conversation.reply_choices(),
+                Some(conversation) => conversation.reply_target().into_iter().collect(),
+                None => Vec::new(),
+            };
+            let assignee = conversation.and_then(|c| c.assignee()).map(str::to_owned);
+            // A change asked for before the thread was closed is still on its
+            // way: its answer lands here, and until it does no other is sent.
+            let saving = tickets.awaiting_keyed(Slot::Assign, &thread_key);
             self.thread = Some(ThreadScreen {
                 title: title(&self.inbox, &thread_key, &thread),
-                reply_target: self
-                    .inbox
-                    .conversation(&thread_key)
-                    .and_then(|conversation| conversation.reply_target()),
+                reply_target: reply_choices.first().cloned(),
+                reply_choices,
                 history: ThreadHistory::Loading,
                 composer: Composer::default(),
+                assignment: ThreadAssignment {
+                    assignee,
+                    saving,
+                    ..ThreadAssignment::default()
+                },
+                whatsapp: None,
                 thread_key,
                 thread,
                 workspace_id: self.workspace_id(),
+                meta_channels: self.meta_channels,
             });
             effects.extend(self.load_draft(tickets));
+            effects.extend(self.refresh_thread(tickets));
+            effects.extend(self.mark_open_thread_read(tickets));
+            effects.extend(self.load_assignees(tickets));
+            // The window matters only to a member who can reply.
+            if self.capabilities().can_change
+                && let Some(screen) = self.thread.as_mut()
+            {
+                effects.extend(enter_channel(screen, tickets));
+            }
+            return effects;
         }
         effects.extend(self.refresh_thread(tickets));
         effects.extend(self.mark_open_thread_read(tickets));
         effects
+    }
+
+    /// The list was read again: the open thread's owner is its row's, since
+    /// another member may have given the thread away meanwhile, and the picker
+    /// compares a choice with whoever owns it now. Not while this member's own
+    /// change is on its way, whose answer says who owns it; nor when the list
+    /// does not hold the thread or was read without owners.
+    pub(crate) fn owner_from_list(&mut self) {
+        let Some(screen) = self
+            .thread
+            .as_mut()
+            .filter(|screen| !screen.assignment.saving)
+        else {
+            return;
+        };
+        if let Some(owner) = self
+            .inbox
+            .conversation(&screen.thread_key)
+            .and_then(|row| row.assignee_email.as_ref())
+        {
+            screen.assignment.assignee.clone_from(owner);
+        }
+    }
+
+    /// Reads the members the open thread can be given to, for a member who may
+    /// give it.
+    fn load_assignees(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        if !self.capabilities().can_change {
+            return Vec::new();
+        }
+        self.thread
+            .as_mut()
+            .map(|screen| {
+                screen.assignment.members = AssigneeList::Loading;
+                Effect::LoadMembers {
+                    ticket: tickets.issue(Slot::ThreadMembers),
+                    workspace_id: screen.workspace_id.clone(),
+                }
+            })
+            .into_iter()
+            .collect()
+    }
+
+    /// The members were read: the open thread's picker takes them, or else
+    /// `result` is someone else's to read.
+    pub(crate) fn thread_members_loaded(
+        &mut self,
+        ticket: Ticket,
+        result: Result<MemberListResponse, ApiError>,
+        tickets: &mut Tickets,
+    ) -> Option<Result<MemberListResponse, ApiError>> {
+        // The slot is the open thread's, forgotten when it closes.
+        if tickets.accept(Slot::ThreadMembers, ticket)
+            && let Some(screen) = self.thread.as_mut()
+        {
+            screen.assignment.members = match result {
+                Ok(answer) => AssigneeList::Ready(
+                    answer
+                        .members
+                        .into_iter()
+                        .filter(|member| {
+                            matches!(
+                                WorkspaceRole::from_wire(&member.role),
+                                Some(WorkspaceRole::Agency | WorkspaceRole::Client)
+                            )
+                        })
+                        .map(|member| member.email)
+                        .collect(),
+                ),
+                Err(error) => AssigneeList::Failed(FailureText::from_api_error(&error)),
+            };
+            return None;
+        }
+        Some(result)
+    }
+
+    /// The thread was given to someone, or taken back, or the service refused.
+    pub(crate) fn conversation_assigned(
+        &mut self,
+        ticket: Ticket,
+        result: Result<ConversationAssignResponse, ApiError>,
+        tickets: &mut Tickets,
+    ) -> Next {
+        // The answer is the thread's it was asked for, which need not be the
+        // one open now: the member may have gone on to another.
+        let Some(thread_key) = tickets.accept_keyed(Slot::Assign, ticket) else {
+            return stay();
+        };
+        let assignment = self
+            .thread
+            .as_mut()
+            .filter(|screen| screen.thread_key == thread_key)
+            .map(|screen| &mut screen.assignment);
+        match result {
+            Ok(answer) => {
+                let assignee = answer.assignment.map(|given| given.assignee_email);
+                if let Some(assignment) = assignment {
+                    assignment.saving = false;
+                    assignment.assignee.clone_from(&assignee);
+                }
+                // A list read already on its way was issued before this answer,
+                // so it cannot know of it: stamped now, its row keeps this owner.
+                self.owners_answered
+                    .insert(thread_key.clone(), (tickets.revision(), assignee.clone()));
+                self.inbox.set_assignee_locally(&thread_key, assignee);
+                // Read again for "assigned to me", which the service decides.
+                Next::Stay(self.reload_conversations(tickets))
+            }
+            Err(error) => {
+                // A refusal is said beside the picker it came from, or not at
+                // all once that thread is closed.
+                if let Some(assignment) = assignment {
+                    assignment.saving = false;
+                    assignment.failure = Some(FailureText::from_api_error(&error));
+                }
+                stay()
+            }
+        }
+    }
+
+    /// The open thread's WhatsApp window was read. Closed, the sender's
+    /// templates are read next.
+    pub(crate) fn whatsapp_window_loaded(
+        &mut self,
+        ticket: Ticket,
+        result: Result<WhatsAppWindowResponse, ApiError>,
+        tickets: &mut Tickets,
+    ) -> Next {
+        // The slot is forgotten when the thread closes and whenever the channel
+        // changes, so an accepted answer is always the WhatsApp composer's.
+        let Some((workspace_id, whatsapp)) = self
+            .thread
+            .as_mut()
+            .filter(|_| tickets.accept(Slot::WhatsAppWindow, ticket))
+            .and_then(|screen| {
+                let whatsapp = screen.whatsapp.as_mut()?;
+                Some((screen.workspace_id.clone(), whatsapp))
+            })
+        else {
+            return stay();
+        };
+        match result {
+            Ok(answer) => {
+                whatsapp.sender_id = answer.sender_id.filter(|id| !id.is_empty());
+                if answer.window.open {
+                    whatsapp.window = WhatsAppWindowState::Open {
+                        expires_at: answer.window.expires_at,
+                    };
+                    // No templates while it is open, even when a refusal had
+                    // said it was closed and the window was read again.
+                    whatsapp.templates = TemplateList::NotLoaded;
+                    stay()
+                } else {
+                    whatsapp.window = WhatsAppWindowState::Closed;
+                    Next::Stay(load_templates(whatsapp, workspace_id, tickets))
+                }
+            }
+            // Read again after the service refused text because the window had
+            // closed: it stays closed, and it is the templates that could not
+            // be read.
+            Err(error) if whatsapp.window == WhatsAppWindowState::Closed => {
+                whatsapp.templates = TemplateList::Failed(FailureText::from_api_error(&error));
+                stay()
+            }
+            Err(error) => {
+                whatsapp.window = WhatsAppWindowState::Unknown(FailureText::from_api_error(&error));
+                stay()
+            }
+        }
+    }
+
+    /// A WhatsApp sender's templates were read: the ones that may be sent are
+    /// kept.
+    pub(crate) fn whatsapp_templates_loaded(
+        &mut self,
+        ticket: Ticket,
+        result: Result<WhatsAppTemplatesResponse, ApiError>,
+        tickets: &mut Tickets,
+    ) -> Next {
+        // Forgotten with the thread and the channel, like the window's.
+        let Some(whatsapp) = self
+            .thread
+            .as_mut()
+            .filter(|_| tickets.accept(Slot::WhatsAppTemplates, ticket))
+            .and_then(|screen| screen.whatsapp.as_mut())
+        else {
+            return stay();
+        };
+        // The ticket is accepted only while a sender is named: it was issued
+        // for one, and a change of channel cancels it.
+        let sender_id = whatsapp.sender_id.clone().unwrap_or_default();
+        whatsapp.templates = match result {
+            Ok(answer) => TemplateList::Ready(
+                answer
+                    .templates
+                    .into_iter()
+                    .filter_map(|template| {
+                        let variable_count = template.sendable_variables(&sender_id)?;
+                        Some(SendableTemplate {
+                            id: template.id,
+                            name: template.name,
+                            language: template.language,
+                            body: template.body,
+                            variable_count,
+                        })
+                    })
+                    .collect(),
+            ),
+            Err(error) => TemplateList::Failed(FailureText::from_api_error(&error)),
+        };
+        stay()
     }
 
     /// Reads the saved reply, for a member who can have one.
@@ -580,6 +1141,33 @@ impl SignedIn {
                 screen.composer.failure = None;
                 Vec::new()
             }
+            ThreadEvent::ChooseChannel(channel) => {
+                choose_channel(screen, &capabilities, &channel, tickets)
+            }
+            ThreadEvent::Assign(assignee) => assign(screen, &capabilities, assignee, tickets),
+            ThreadEvent::DismissAssignFailure => {
+                screen.assignment.failure = None;
+                Vec::new()
+            }
+            ThreadEvent::ChooseTemplate(id) => {
+                if let Some(whatsapp) = screen.whatsapp.as_mut().filter(|w| !w.sending) {
+                    whatsapp.chosen = Some(id);
+                    whatsapp.variables.clear();
+                }
+                Vec::new()
+            }
+            ThreadEvent::TemplateVariable(index, value) => {
+                if let Some(whatsapp) = screen.whatsapp.as_mut().filter(|w| !w.sending)
+                    && index < whatsapp.template().map_or(0, |t| t.variable_count)
+                {
+                    if whatsapp.variables.len() <= index {
+                        whatsapp.variables.resize(index + 1, String::new());
+                    }
+                    whatsapp.variables[index] = value;
+                }
+                Vec::new()
+            }
+            ThreadEvent::SendTemplate => send_template(screen, &capabilities, tickets),
             ThreadEvent::Compose(_) | ThreadEvent::AttachFailed => Vec::new(),
         };
         Next::Stay(effects)
@@ -708,7 +1296,44 @@ fn sent(
     result: Result<SendMessageResponse, ApiError>,
     tickets: &mut Tickets,
 ) -> Vec<Effect> {
+    if let Some(whatsapp) = screen.whatsapp.as_mut().filter(|w| w.sending) {
+        whatsapp.sending = false;
+        return match result {
+            Ok(_) => {
+                whatsapp.chosen = None;
+                whatsapp.variables.clear();
+                vec![newest(screen, tickets.issue(Slot::Timeline))]
+            }
+            Err(error) => {
+                screen.composer.failure = Some(FailureText::from_api_error(&error));
+                Vec::new()
+            }
+        };
+    }
     let mut effects = Vec::new();
+    // The window closed while the reply was written: the service refused the
+    // text, so the composer now offers the templates instead.
+    if let (Err(error), Some(whatsapp)) = (&result, screen.whatsapp.as_mut())
+        && error.code() == Some(WHATSAPP_WINDOW_CLOSED)
+        && whatsapp.window != WhatsAppWindowState::Closed
+    {
+        whatsapp.window = WhatsAppWindowState::Closed;
+        let workspace_id = screen.workspace_id.clone();
+        match (&whatsapp.sender_id, &screen.reply_target) {
+            // The window was not read, or named no sender: the templates are
+            // a sender's, so the window is read again for the one the service
+            // now names. That read stands in for any still on its way.
+            (None, Some(target)) => {
+                whatsapp.templates = TemplateList::Loading;
+                effects.push(Effect::LoadWhatsAppWindow {
+                    ticket: tickets.issue(Slot::WhatsAppWindow),
+                    workspace_id,
+                    to: target.to.clone(),
+                });
+            }
+            _ => effects.extend(load_templates(whatsapp, workspace_id, tickets)),
+        }
+    }
     let composer = &mut screen.composer;
     composer.sending = false;
     let (body, media) = composer.sent.take().unwrap_or_default();
@@ -781,7 +1406,133 @@ fn newest(screen: &ThreadScreen, ticket: Ticket) -> Effect {
         workspace_id: screen.workspace_id.clone(),
         thread: screen.thread.clone(),
         older_than: None,
+        meta_channels: screen.meta_channels,
     }
+}
+
+/// The reply now goes on the channel chosen: on WhatsApp, its window is read;
+/// on any other, whatever WhatsApp held is forgotten.
+fn enter_channel(screen: &mut ThreadScreen, tickets: &mut Tickets) -> Vec<Effect> {
+    tickets.cancel(Slot::WhatsAppWindow);
+    tickets.cancel(Slot::WhatsAppTemplates);
+    let Some(target) = screen
+        .reply_target
+        .as_ref()
+        .filter(|target| target.channel == CHANNEL_WHATSAPP)
+    else {
+        screen.whatsapp = None;
+        return Vec::new();
+    };
+    let effect = Effect::LoadWhatsAppWindow {
+        ticket: tickets.issue(Slot::WhatsAppWindow),
+        workspace_id: screen.workspace_id.clone(),
+        to: target.to.clone(),
+    };
+    screen.whatsapp = Some(WhatsAppComposer::default());
+    vec![effect]
+}
+
+/// Reads the templates of the sender whose window is closed, when the service
+/// named one. With none named there is nothing to read them by, and the
+/// composer says there is no template.
+fn load_templates(
+    whatsapp: &mut WhatsAppComposer,
+    workspace_id: String,
+    tickets: &mut Tickets,
+) -> Vec<Effect> {
+    let Some(sender_id) = whatsapp.sender_id.clone() else {
+        whatsapp.templates = TemplateList::Ready(Vec::new());
+        return Vec::new();
+    };
+    whatsapp.templates = TemplateList::Loading;
+    vec![Effect::LoadWhatsAppTemplates {
+        ticket: tickets.issue(Slot::WhatsAppTemplates),
+        workspace_id,
+        sender_id,
+    }]
+}
+
+fn choose_channel(
+    screen: &mut ThreadScreen,
+    capabilities: &Capabilities,
+    channel: &str,
+    tickets: &mut Tickets,
+) -> Vec<Effect> {
+    if !screen.controls(capabilities).can_choose_channel || screen.on_channel(channel) {
+        return Vec::new();
+    }
+    let Some(choice) = screen
+        .reply_choices
+        .iter()
+        .find(|choice| choice.channel == channel)
+        .cloned()
+    else {
+        return Vec::new();
+    };
+    screen.reply_target = Some(choice);
+    screen.composer.failure = None;
+    enter_channel(screen, tickets)
+}
+
+fn assign(
+    screen: &mut ThreadScreen,
+    capabilities: &Capabilities,
+    assignee: Option<String>,
+    tickets: &mut Tickets,
+) -> Vec<Effect> {
+    let assignment = &screen.assignment;
+    let offered = assignee
+        .as_ref()
+        .is_none_or(|email| assignment.options().contains(email));
+    if !screen.controls(capabilities).can_assign || !offered || assignee == assignment.assignee {
+        return Vec::new();
+    }
+    let assignment = &mut screen.assignment;
+    assignment.saving = true;
+    assignment.failure = None;
+    vec![Effect::AssignConversation {
+        // Keyed by the thread, so its answer lands on it however far the
+        // member has moved on.
+        ticket: tickets.issue_keyed(Slot::Assign, &screen.thread_key),
+        workspace_id: screen.workspace_id.clone(),
+        thread_key: screen.thread_key.clone(),
+        assignee_email: assignee,
+    }]
+}
+
+fn send_template(
+    screen: &mut ThreadScreen,
+    capabilities: &Capabilities,
+    tickets: &mut Tickets,
+) -> Vec<Effect> {
+    // A template can be sent only when one is chosen on WhatsApp.
+    let can_send = screen.controls(capabilities).can_send_template;
+    let chosen = screen.whatsapp.as_mut().and_then(|whatsapp| {
+        let template = whatsapp.template()?.clone();
+        Some((whatsapp, template))
+    });
+    let (true, Some(target), Some((whatsapp, template))) =
+        (can_send, screen.reply_target.clone(), chosen)
+    else {
+        return Vec::new();
+    };
+    let variables = whatsapp.filled_variables();
+    let message = SendMessageRequest {
+        to: target.to,
+        body: fill_whatsapp_template(&template.body, &variables),
+        channel: CHANNEL_WHATSAPP.to_owned(),
+        whatsapp_sender_id: whatsapp.sender_id.clone(),
+        template_id: Some(template.id),
+        template_variables: Some(variables),
+        ..SendMessageRequest::default()
+    };
+    whatsapp.sending = true;
+    screen.composer.failure = None;
+    vec![Effect::SendMessage {
+        ticket: tickets.issue(Slot::Send),
+        workspace_id: screen.workspace_id.clone(),
+        message,
+    }]
 }
 
 /// The newest page arrived.
@@ -872,6 +1623,7 @@ fn load_older(screen: &mut ThreadScreen, tickets: &mut Tickets) -> Vec<Effect> {
         workspace_id: screen.workspace_id.clone(),
         thread: screen.thread.clone(),
         older_than: held.older.clone(),
+        meta_channels: screen.meta_channels,
     }]
 }
 
@@ -952,12 +1704,18 @@ fn start_send(
     composer.failure = None;
     composer.save_pending = false;
     tickets.cancel(Slot::DraftTimer);
+    // The sender whose window was shown, so the reply goes from it.
+    let whatsapp_sender_id = screen
+        .whatsapp
+        .as_ref()
+        .and_then(|whatsapp| whatsapp.sender_id.clone());
     let message = SendMessageRequest {
         to: target.to,
         body: composer.text.clone(),
         channel: target.channel.to_owned(),
-        subject: None,
         media_urls: composer.attachments.clone(),
+        whatsapp_sender_id,
+        ..SendMessageRequest::default()
     };
     composer.sent = Some((message.body.clone(), message.media_urls.clone()));
     draft_keys.remove(&screen.thread_key);

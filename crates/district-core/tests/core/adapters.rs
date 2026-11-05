@@ -6,7 +6,7 @@ use std::sync::{Arc, Mutex};
 use base64::Engine;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use district_api::{AccessToken, ApiClient, ApiConfig, ReauthReason, TokenError, TokenSource};
-use district_api::{ApiError, ErrorDetail};
+use district_api::{ApiError, ConversationsQuery, ErrorDetail};
 use district_auth::{
     AuthorizationGrant, ExchangeOutcome, LoginError, MemorySessionStore, NativeAuthApi,
     NativeTokens, Persistence, RefreshApi, RefreshOutcome, RefreshToken, RevokeApi, RevokeOutcome,
@@ -187,7 +187,7 @@ async fn the_api_client_is_the_runners_api() {
 #[tokio::test]
 async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
     let server = MockServer::start().await;
-    let routes: [(&str, &str, serde_json::Value); 25] = [
+    let routes: [(&str, &str, serde_json::Value); 28] = [
         (
             "GET",
             "/api/district/conversations",
@@ -310,6 +310,21 @@ async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
             json!({"success": true, "contactId": "contact_contract_1", "name": "Ada",
                    "phoneNumber": null, "blockedAt": "2026-09-26T12:00:00.000Z"}),
         ),
+        (
+            "POST",
+            "/api/district/conversations/assign",
+            fixture("district-conversation-assign.json"),
+        ),
+        (
+            "GET",
+            "/api/district/workspace/whatsapp/window",
+            fixture("district-whatsapp-window-closed.json"),
+        ),
+        (
+            "GET",
+            "/api/district/workspace/whatsapp/templates",
+            fixture("district-whatsapp-templates.json"),
+        ),
     ];
     for (index, (verb, route, body)) in routes.into_iter().enumerate() {
         // The single draft is the read that names a thread; the list is the one
@@ -331,7 +346,7 @@ async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
     let key = "contact:contact_contract_1";
 
     assert_eq!(
-        DistrictApi::conversations(&client, ws)
+        DistrictApi::conversations(&client, ws, ConversationsQuery::default())
             .await
             .unwrap()
             .conversations
@@ -339,7 +354,7 @@ async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
         2
     );
     assert_eq!(
-        DistrictApi::timeline(&client, ws, &thread, None)
+        DistrictApi::timeline(&client, ws, &thread, None, false)
             .await
             .unwrap()
             .timeline
@@ -347,7 +362,10 @@ async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
         5
     );
     assert_eq!(
-        DistrictApi::unread_count(&client, ws).await.unwrap().count,
+        DistrictApi::unread_count(&client, ws, false)
+            .await
+            .unwrap()
+            .count,
         3
     );
     assert_eq!(
@@ -358,19 +376,42 @@ async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
         Some(50)
     );
     assert_eq!(
-        DistrictApi::message_thread(&client, ws, "msg_contract_inbound")
+        DistrictApi::message_thread(&client, ws, "msg_contract_inbound", false)
             .await
             .unwrap()
             .thread
             .thread_key,
         key
     );
+    assert_eq!(
+        DistrictApi::assign_conversation(&client, ws, key, Some("contract@example.com"))
+            .await
+            .unwrap()
+            .assignment
+            .unwrap()
+            .assignee_email,
+        "teammate@example.com"
+    );
+    assert!(
+        !DistrictApi::whatsapp_window(&client, ws, "+14165550177")
+            .await
+            .unwrap()
+            .window
+            .open
+    );
+    assert_eq!(
+        DistrictApi::whatsapp_templates(&client, ws, "wa_sender_contract")
+            .await
+            .unwrap()
+            .templates
+            .len(),
+        2
+    );
     let message = SendMessageRequest {
         to: "+14165550142".to_owned(),
         body: "Confirmed for Thursday at 2pm.".to_owned(),
         channel: "sms".to_owned(),
-        subject: None,
-        media_urls: Vec::new(),
+        ..SendMessageRequest::default()
     };
     assert!(
         DistrictApi::send_message(&client, ws, &message)
@@ -1960,7 +2001,7 @@ async fn the_api_client_places_answers_and_ends_calls_and_sets_presence() {
             .success
     );
 
-    let presence = DesktopPresence::new(Arc::clone(&client), Platform::Linux);
+    let presence = DesktopPresence::new(Arc::clone(&client), Platform::Linux, false);
     let [first, second, _] = revisions();
     presence.set(first, true).await.unwrap();
     presence.set(second, false).await.unwrap();
@@ -1981,12 +2022,14 @@ async fn the_api_client_places_answers_and_ends_calls_and_sets_presence() {
 
     // Each presence makes its own value, and registers as the platform it was
     // given.
-    let other = DesktopPresence::new(Arc::clone(&client), Platform::Windows);
+    // An app that answers Messenger and Instagram declares it.
+    let other = DesktopPresence::new(Arc::clone(&client), Platform::Windows, true);
     other.set(first, true).await.unwrap();
     let requests = server.received_requests().await.unwrap();
     let again: serde_json::Value = serde_json::from_slice(&requests[6].body).unwrap();
     assert_ne!(again["token"], body["token"]);
     assert_eq!(again["platform"], "windows");
+    assert_eq!(again["capabilities"], json!(["metaChannels"]));
 
     // Signing out removes every kind, with no body at all.
     let [.., last] = revisions();
@@ -2057,7 +2100,7 @@ impl PresenceApi for ScriptedPresenceApi {
 async fn presence_changes_go_one_at_a_time_and_a_late_older_one_is_dropped() {
     let [older, newer, newest] = revisions();
     let api = ScriptedPresenceApi::new(false, false);
-    let presence = DesktopPresence::new(Arc::clone(&api), Platform::Linux);
+    let presence = DesktopPresence::new(Arc::clone(&api), Platform::Linux, false);
     presence.set(newer, false).await.unwrap();
     presence.set(older, true).await.unwrap();
     presence.set(newer, true).await.unwrap();
@@ -2066,7 +2109,7 @@ async fn presence_changes_go_one_at_a_time_and_a_late_older_one_is_dropped() {
     // A register held on its way: the unregistration asked for meanwhile
     // waits for it, and goes after it.
     let api = ScriptedPresenceApi::new(true, false);
-    let presence = DesktopPresence::new(Arc::clone(&api), Platform::Linux);
+    let presence = DesktopPresence::new(Arc::clone(&api), Platform::Linux, false);
     let registering = {
         let presence = presence.clone();
         tokio::spawn(async move { presence.set(older, true).await })
@@ -2090,7 +2133,7 @@ async fn presence_changes_go_one_at_a_time_and_a_late_older_one_is_dropped() {
 
     // A refusal comes back as the error it is.
     let api = ScriptedPresenceApi::new(false, true);
-    let presence = DesktopPresence::new(Arc::clone(&api), Platform::Linux);
+    let presence = DesktopPresence::new(Arc::clone(&api), Platform::Linux, false);
     assert!(matches!(
         presence.set(older, true).await,
         Err(ApiError::Forbidden(_))

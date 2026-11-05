@@ -267,7 +267,7 @@ impl ComposeScreen {
             to: target.to,
             body: self.body.clone(),
             channel: target.channel.to_owned(),
-            media_urls: Vec::new(),
+            ..SendMessageRequest::default()
         })
     }
 
@@ -403,6 +403,7 @@ impl SignedIn {
                         ticket: tickets.issue(Slot::ComposeLookup),
                         workspace_id: self.workspace_id(),
                         message_id: message.id,
+                        meta_channels: self.meta_channels,
                     });
                 }
                 Next::Stay(effects)

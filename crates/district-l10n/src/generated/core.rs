@@ -1958,6 +1958,15 @@ pub fn hq_voice_unencrypted(l: Locale) -> &'static str {
     }
 }
 
+/// `inbox.assigned_to`
+#[must_use]
+pub fn inbox_assigned_to(l: Locale, email: &str) -> String {
+    match l {
+        Locale::En => format!("Assigned to {email}"),
+        Locale::FrCa => format!("Assignée à {email}"),
+    }
+}
+
 /// `inbox.compose_action`
 #[must_use]
 pub fn inbox_compose_action(l: Locale) -> &'static str {
@@ -4199,12 +4208,66 @@ pub fn support_pending(l: Locale) -> &'static str {
     }
 }
 
+/// `thread.assign_label`
+#[must_use]
+pub fn thread_assign_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Assigned to",
+        Locale::FrCa => "Assignée à",
+    }
+}
+
 /// `thread.attachment_size`
 #[must_use]
 pub fn thread_attachment_size(l: Locale, megabytes: i64) -> String {
     match l {
         Locale::En => format!("Attachments must be between 1 byte and {} MB.", crate::format::integer(l, megabytes)),
         Locale::FrCa => format!("Les pièces jointes doivent faire entre 1 octet et {} Mo.", crate::format::integer(l, megabytes)),
+    }
+}
+
+/// `thread.attachments_sms_only`
+#[must_use]
+pub fn thread_attachments_sms_only(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Attachments can only go by text message. Remove them to send on this channel.",
+        Locale::FrCa => "Les pièces jointes ne peuvent partir que par texto. Retirez-les pour envoyer sur ce canal.",
+    }
+}
+
+/// `thread.channel_instagram`
+#[must_use]
+pub fn thread_channel_instagram(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Instagram",
+        Locale::FrCa => "Instagram",
+    }
+}
+
+/// `thread.channel_label`
+#[must_use]
+pub fn thread_channel_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Reply channel",
+        Locale::FrCa => "Canal de réponse",
+    }
+}
+
+/// `thread.channel_messenger`
+#[must_use]
+pub fn thread_channel_messenger(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Messenger",
+        Locale::FrCa => "Messenger",
+    }
+}
+
+/// `thread.channel_whatsapp`
+#[must_use]
+pub fn thread_channel_whatsapp(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "WhatsApp",
+        Locale::FrCa => "WhatsApp",
     }
 }
 
@@ -4226,6 +4289,96 @@ pub fn thread_read_only_role(l: Locale) -> &'static str {
     }
 }
 
+/// `thread.template_label`
+#[must_use]
+pub fn thread_template_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Template",
+        Locale::FrCa => "Modèle de message",
+    }
+}
+
+/// `thread.template_option`
+#[must_use]
+pub fn thread_template_option(l: Locale, name: &str, language: &str) -> String {
+    match l {
+        Locale::En => format!("{name} ({language})"),
+        Locale::FrCa => format!("{name} ({language})"),
+    }
+}
+
+/// `thread.template_placeholder`
+#[must_use]
+pub fn thread_template_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose an approved template",
+        Locale::FrCa => "Choisir un modèle approuvé",
+    }
+}
+
+/// `thread.template_preview`
+#[must_use]
+pub fn thread_template_preview(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Preview",
+        Locale::FrCa => "Aperçu",
+    }
+}
+
+/// `thread.template_send`
+#[must_use]
+pub fn thread_template_send(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Send template",
+        Locale::FrCa => "Envoyer le modèle",
+    }
+}
+
+/// `thread.template_variable`
+#[must_use]
+pub fn thread_template_variable(l: Locale, placeholder: &str) -> String {
+    match l {
+        Locale::En => format!("Variable {placeholder}"),
+        Locale::FrCa => format!("Variable {placeholder}"),
+    }
+}
+
+/// `thread.template_variable_required`
+#[must_use]
+pub fn thread_template_variable_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Fill in this variable",
+        Locale::FrCa => "Remplissez cette variable",
+    }
+}
+
+/// `thread.templates_failed`
+#[must_use]
+pub fn thread_templates_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The templates could not be loaded. Try again in a moment.",
+        Locale::FrCa => "Les modèles n'ont pas pu être chargés. Réessayez dans un instant.",
+    }
+}
+
+/// `thread.templates_loading`
+#[must_use]
+pub fn thread_templates_loading(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Loading templates",
+        Locale::FrCa => "Chargement des modèles",
+    }
+}
+
+/// `thread.templates_none`
+#[must_use]
+pub fn thread_templates_none(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No approved template for this number yet. Refresh the templates in Messaging settings.",
+        Locale::FrCa => "Aucun modèle approuvé pour ce numéro pour l'instant. Actualisez les modèles dans les paramètres de messagerie.",
+    }
+}
+
 /// `thread.too_many_attachments`
 #[must_use]
 pub fn thread_too_many_attachments(l: Locale, count: i64) -> String {
@@ -4235,12 +4388,30 @@ pub fn thread_too_many_attachments(l: Locale, count: i64) -> String {
     }
 }
 
+/// `thread.unassigned`
+#[must_use]
+pub fn thread_unassigned(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unassigned",
+        Locale::FrCa => "Non assignée",
+    }
+}
+
 /// `thread.untitled`
 #[must_use]
 pub fn thread_untitled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Conversation",
         Locale::FrCa => "Conversation",
+    }
+}
+
+/// `thread.whatsapp_window_closed`
+#[must_use]
+pub fn thread_whatsapp_window_closed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Window closed: WhatsApp only allows a template now",
+        Locale::FrCa => "Fenêtre fermée\u{00A0}: WhatsApp n'accepte maintenant qu'un modèle de message",
     }
 }
 

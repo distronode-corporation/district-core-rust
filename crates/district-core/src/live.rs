@@ -610,6 +610,7 @@ impl SignedIn {
                 ticket: tickets.issue_keyed(Slot::MessageLookup, &message_id),
                 workspace_id,
                 message_id,
+                meta_channels: self.meta_channels,
             }];
         }
         vec![Effect::Notify(Notification::message(
@@ -708,6 +709,7 @@ impl SignedIn {
                 ticket: tickets.issue(Slot::OpenLookup),
                 workspace_id,
                 message_id,
+                meta_channels: self.meta_channels,
             });
         }
         effects

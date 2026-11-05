@@ -44,7 +44,8 @@
 //!   ([`DevicesScreen`]).
 //! - The screens of the second: the inbox with its search and badges
 //!   ([`InboxScreen`]) and the form that starts a conversation
-//!   ([`ComposeScreen`]), a thread with its composer ([`ThreadScreen`]), the call
+//!   ([`ComposeScreen`]), a thread with its composer, its reply channels, its
+//!   owner and the WhatsApp templates a closed window offers ([`ThreadScreen`]), the call
 //!   log and a call ([`CallLog`], [`CallDetailScreen`]), contacts, one contact
 //!   and the blocked callers ([`ContactsScreen`], [`ContactDetailScreen`],
 //!   [`BlockedScreen`]), and live updates with the notification for a new
@@ -280,8 +281,10 @@ pub use support::{
     SupportRequestView, SupportRequests, SupportScreen, support_request_key,
 };
 pub use thread::{
-    ATTACHMENT_TYPES, Composer, DRAFT_SAVE_DEBOUNCE, MAX_ATTACHMENT_BYTES, MAX_ATTACHMENTS,
-    PickedAttachment, ThreadControls, ThreadEvent, ThreadEvents, ThreadHistory, ThreadScreen,
+    ATTACHMENT_TYPES, AssigneeList, Composer, DRAFT_SAVE_DEBOUNCE, MAX_ATTACHMENT_BYTES,
+    MAX_ATTACHMENTS, PickedAttachment, SendableTemplate, TemplateList, ThreadAssignment,
+    ThreadControls, ThreadEvent, ThreadEvents, ThreadHistory, ThreadScreen, WhatsAppComposer,
+    WhatsAppWindowState, reply_channel_label,
 };
 pub use transcript::{
     FINAL_FETCH_ATTEMPTS, FinalTranscript, GAP_HEAL, LiveTranscript, LiveTranscriptPhase,

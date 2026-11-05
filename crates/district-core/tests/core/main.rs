@@ -29,6 +29,7 @@ mod no_calls;
 mod number_admin;
 mod overview;
 mod palette;
+mod parity;
 mod persona;
 mod presence;
 mod purchase;

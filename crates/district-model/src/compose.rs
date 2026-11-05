@@ -21,16 +21,20 @@ use serde::{Deserialize, Serialize};
 /// [`channel`](Self::channel) has no default on purpose: leaving it to the
 /// service would let a change of the service's own default redirect every reply.
 /// Take the address and the channel together from
-/// [`ConversationSummary::reply_target`](crate::ConversationSummary::reply_target).
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+/// [`ConversationSummary::reply_target`](crate::ConversationSummary::reply_target)
+/// or one of [`ConversationSummary::reply_choices`](crate::ConversationSummary::reply_choices).
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SendMessageRequest {
-    /// The phone number or email address to send to. Never a thread key.
+    /// The phone number, email address or Messenger or Instagram id to send to.
+    /// Never a thread key.
     pub to: String,
     /// The text. Required even with attachments: the service refuses an empty
-    /// body whatever else is attached.
+    /// body whatever else is attached. For a WhatsApp template, the template
+    /// with its variables filled in ([`fill_whatsapp_template`](crate::fill_whatsapp_template)),
+    /// which is what the thread shows.
     pub body: String,
-    /// [`CHANNEL_SMS`](crate::CHANNEL_SMS) or [`CHANNEL_EMAIL`](crate::CHANNEL_EMAIL).
+    /// One of [`REPLY_CHANNELS`](crate::REPLY_CHANNELS).
     pub channel: String,
     /// An email's subject. Left out when `None`; ignored for a text message.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -40,6 +44,23 @@ pub struct SendMessageRequest {
     /// workspace whose messaging account cannot send them; its refusal says which.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub media_urls: Vec<String>,
+    /// The WhatsApp sender to send from, as
+    /// [`WhatsAppWindowResponse::sender_id`](crate::WhatsAppWindowResponse::sender_id)
+    /// names it, so the message goes from the sender whose window was shown.
+    /// Left out when `None`, and the service then chooses by the same rule.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub whatsapp_sender_id: Option<String>,
+    /// The approved WhatsApp template to send, by its
+    /// [`WhatsAppTemplate::id`](crate::WhatsAppTemplate::id). Left out when
+    /// `None`; with it, [`template_variables`](Self::template_variables) is sent
+    /// too.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_id: Option<String>,
+    /// The template's `{{1}}`, `{{2}}` and on, in order, exactly as many as it
+    /// has. Sent, even empty, with a [`template_id`](Self::template_id), which
+    /// the service refuses without it; left out otherwise.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_variables: Option<Vec<String>>,
 }
 
 /// `POST /api/district/messages/send`: the message as the service stored it.
@@ -300,8 +321,7 @@ mod tests {
             to: "+12125550142".to_owned(),
             body: "On our way".to_owned(),
             channel: crate::CHANNEL_SMS.to_owned(),
-            subject: None,
-            media_urls: Vec::new(),
+            ..SendMessageRequest::default()
         };
         assert_eq!(
             serde_json::to_value(&request).unwrap(),
@@ -315,6 +335,30 @@ mod tests {
         assert_eq!(
             serde_json::to_value(&with_all).unwrap()["mediaUrls"],
             json!(["https://media.example.com/1"])
+        );
+    }
+
+    #[test]
+    fn a_whatsapp_template_sends_its_variables_even_when_it_has_none() {
+        let request = SendMessageRequest {
+            to: "+14165550177".to_owned(),
+            body: "Your order shipped.".to_owned(),
+            channel: crate::CHANNEL_WHATSAPP.to_owned(),
+            whatsapp_sender_id: Some("wa_sender_contract".to_owned()),
+            template_id: Some("wa_tpl_shipped".to_owned()),
+            template_variables: Some(Vec::new()),
+            ..SendMessageRequest::default()
+        };
+        assert_eq!(
+            serde_json::to_value(&request).unwrap(),
+            json!({
+                "to": "+14165550177",
+                "body": "Your order shipped.",
+                "channel": "whatsapp",
+                "whatsappSenderId": "wa_sender_contract",
+                "templateId": "wa_tpl_shipped",
+                "templateVariables": []
+            })
         );
     }
 

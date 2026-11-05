@@ -296,13 +296,20 @@ impl<A> fmt::Debug for DesktopPresence<A> {
 
 impl<A: PresenceApi> DesktopPresence<A> {
     /// Presence set through `api`, the API client, registered as an app on
-    /// `platform`.
-    pub fn new(api: Arc<A>, platform: Platform) -> Self {
+    /// `platform`, declaring that it lists and answers Messenger and Instagram
+    /// threads when `meta_channels` is true: pass the app's
+    /// [`CoreConfig::meta_channels`](crate::CoreConfig::meta_channels).
+    pub fn new(api: Arc<A>, platform: Platform, meta_channels: bool) -> Self {
         let token = uuid::Uuid::new_v4().to_string();
+        let registration = PresenceRegistration::desktop(token, platform);
         Self {
             shared: Arc::new(Shared {
                 api,
-                registration: PresenceRegistration::desktop(token, platform),
+                registration: if meta_channels {
+                    registration.with_meta_channels()
+                } else {
+                    registration
+                },
                 applied: tokio::sync::Mutex::new(None),
             }),
         }
