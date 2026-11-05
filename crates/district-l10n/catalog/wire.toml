@@ -448,7 +448,7 @@ note = "A label for the stored value `escalated` of disposition. `disposition` o
 
 [wire.disposition.info]
 en = "Information only"
-fr = "Demande de renseignements"
+fr = "Renseignements"
 ctx = "label"
 screen = "wire disposition"
 tier = "T3"
@@ -652,7 +652,7 @@ ctx = "label"
 screen = "wire message_delivery_status"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `delivered` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here."
+note = "A label for the stored value `delivered` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. `handled` is a message taken during a call that someone on the team marked dealt with (the mobile timeline reads it as an inbound sms); the portal labels it with `messageTakenHandled`. `read` is never stored: every provider's read receipt is recorded as `delivered`; it is labelled so an app that meets the word shows it in the viewer's language."
 
 [wire.message_delivery_status.failed]
 en = "Failed"
@@ -661,7 +661,16 @@ ctx = "label"
 screen = "wire message_delivery_status"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `failed` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `failed` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. `handled` is a message taken during a call that someone on the team marked dealt with (the mobile timeline reads it as an inbound sms); the portal labels it with `messageTakenHandled`. `read` is never stored: every provider's read receipt is recorded as `delivered`; it is labelled so an app that meets the word shows it in the viewer's language. The service has no label for it; the English is the value as the apps show it."
+
+[wire.message_delivery_status.handled]
+en = "Handled"
+fr = "Traité"
+ctx = "label"
+screen = "wire message_delivery_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `handled` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. `handled` is a message taken during a call that someone on the team marked dealt with (the mobile timeline reads it as an inbound sms); the portal labels it with `messageTakenHandled`. `read` is never stored: every provider's read receipt is recorded as `delivered`; it is labelled so an app that meets the word shows it in the viewer's language."
 
 [wire.message_delivery_status.queued]
 en = "Sent"
@@ -670,7 +679,16 @@ ctx = "label"
 screen = "wire message_delivery_status"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `queued` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here."
+note = "A label for the stored value `queued` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. `handled` is a message taken during a call that someone on the team marked dealt with (the mobile timeline reads it as an inbound sms); the portal labels it with `messageTakenHandled`. `read` is never stored: every provider's read receipt is recorded as `delivered`; it is labelled so an app that meets the word shows it in the viewer's language."
+
+[wire.message_delivery_status.read]
+en = "Read"
+fr = "Lu"
+ctx = "label"
+screen = "wire message_delivery_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `read` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. `handled` is a message taken during a call that someone on the team marked dealt with (the mobile timeline reads it as an inbound sms); the portal labels it with `messageTakenHandled`. `read` is never stored: every provider's read receipt is recorded as `delivered`; it is labelled so an app that meets the word shows it in the viewer's language."
 
 [wire.message_delivery_status.received]
 en = "Received"
@@ -679,7 +697,7 @@ ctx = "label"
 screen = "wire message_delivery_status"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `received` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. The service has no label for it; the English is the value as the apps show it."
+note = "A label for the stored value `received` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. `handled` is a message taken during a call that someone on the team marked dealt with (the mobile timeline reads it as an inbound sms); the portal labels it with `messageTakenHandled`. `read` is never stored: every provider's read receipt is recorded as `delivered`; it is labelled so an app that meets the word shows it in the viewer's language. The service has no label for it; the English is the value as the apps show it."
 
 [wire.message_delivery_status.sent]
 en = "Sent"
@@ -688,7 +706,7 @@ ctx = "label"
 screen = "wire message_delivery_status"
 tier = "T3"
 state = "reviewed"
-note = "A label for the stored value `sent` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here."
+note = "A label for the stored value `sent` of messageDeliveryStatus. `status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. `handled` is a message taken during a call that someone on the team marked dealt with (the mobile timeline reads it as an inbound sms); the portal labels it with `messageTakenHandled`. `read` is never stored: every provider's read receipt is recorded as `delivered`; it is labelled so an app that meets the word shows it in the viewer's language."
 
 [wire.messaging_carrier.sinch]
 en = "Sinch"
@@ -1497,7 +1515,7 @@ note = "A label for the stored value `skipped` of workflowActionOutcome. `action
 
 [wire.workflow_action_reason.automated_sender]
 en = "Not texted: the message came from an automated sender, such as a verification code"
-fr = "Texto non envoyé\u00A0: le message venait d'un expéditeur automatisé, comme un code de vérification"
+fr = "Texto non envoyé\u00A0: le message venait d'un expéditeur automatisé (un code de vérification, par exemple)"
 ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"
@@ -1641,7 +1659,7 @@ note = "A label for the stored value `loop-check-failed` of workflowActionReason
 
 [wire.workflow_action_reason.loop_paused]
 en = "Not texted: this number answered automatically several times in a row, so texts to it are paused for an hour"
-fr = "Texto non envoyé\u00A0: ce numéro a répondu automatiquement plusieurs fois de suite, les textos vers lui sont donc suspendus pendant une heure"
+fr = "Texto non envoyé\u00A0: ce numéro a répondu automatiquement plusieurs fois de suite, les textos à ce numéro sont donc suspendus pendant une heure"
 ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"

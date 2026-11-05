@@ -64,7 +64,7 @@ pub fn api_error_audition_busy(l: Locale) -> &'static str {
 pub fn api_error_audition_daily_cap(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has used today's auditions. You can audition again tomorrow.",
-        Locale::FrCa => "Cet espace de travail a utilisé les auditions d'aujourd'hui. Vous pourrez de nouveau écouter un brouillon demain.",
+        Locale::FrCa => "Cet espace de travail a utilisé toutes ses auditions pour aujourd'hui. Vous pourrez faire de nouvelles auditions demain.",
     }
 }
 
@@ -451,7 +451,7 @@ pub fn api_error_eu_vat_required(l: Locale) -> &'static str {
 pub fn api_error_extra_number_charge_required(l: Locale) -> &'static str {
     match l {
         Locale::En => "This number is beyond the ones the plan includes and has a monthly charge. Confirm the charge to buy it.",
-        Locale::FrCa => "Ce numéro dépasse ceux que le forfait inclut et entraîne des frais mensuels. Confirmez les frais pour l'acheter.",
+        Locale::FrCa => "Ce numéro s'ajoute à ceux qu'inclut le forfait et entraîne des frais mensuels. Confirmez les frais pour l'acheter.",
     }
 }
 
@@ -946,7 +946,7 @@ pub fn api_error_messaging_app_sms_refused(l: Locale) -> &'static str {
 pub fn api_error_messaging_apps_managed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Messaging apps cannot be connected on the platform's Sinch account. Connect your own Sinch account to add WhatsApp, Messenger or RCS.",
-        Locale::FrCa => "Les applications de messagerie ne peuvent pas être connectées sur le compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS.",
+        Locale::FrCa => "Les applications de messagerie ne peuvent pas être connectées au moyen du compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS.",
     }
 }
 
@@ -1738,7 +1738,7 @@ pub fn api_error_website_unreadable(l: Locale) -> &'static str {
 pub fn api_error_whatsapp_template_invalid(l: Locale) -> &'static str {
     match l {
         Locale::En => "That WhatsApp template cannot be sent. It is not approved for this number, or its variables do not match it.",
-        Locale::FrCa => "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne lui correspondent pas.",
+        Locale::FrCa => "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne correspondent pas à celles du modèle.",
     }
 }
 
@@ -1792,7 +1792,7 @@ pub fn api_error_workflow_conditions_not_allowed(l: Locale) -> &'static str {
 pub fn api_error_workflow_draft_dry_run_stale(l: Locale) -> &'static str {
     match l {
         Locale::En => "Run a dry run of this version of the automation first, then publish it.",
-        Locale::FrCa => "Faites d'abord un essai à blanc de cette version de l'automatisation, puis publiez-la.",
+        Locale::FrCa => "Testez d'abord cette version de l'automatisation, puis publiez-la.",
     }
 }
 
@@ -1837,7 +1837,7 @@ pub fn api_error_workflow_sms_recipient_not_member(l: Locale) -> &'static str {
 pub fn api_error_workflow_voice_cap(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace has reached the limit of automations built by voice. Build more in the workflow builder.",
-        Locale::FrCa => "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans le générateur de flux de travail.",
+        Locale::FrCa => "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans l'éditeur de flux de travail.",
     }
 }
 

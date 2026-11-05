@@ -93,6 +93,12 @@ typed the local way under a country the member can see, and is sent as E.164. Br
   vigueur »), `caller_id_not_confirmed` and `caller_id_carrier_failed` (« transporteur »),
   `caller_id_mobile_unverified` (« inscrivez-le ») and the workflow outcome
   `quiet_hours` (« il n'était pas entre 8 h et 21 h »).
+- `contracts/i18n/` from the server's 14cf1a186: the reviewed French of six error
+  sentences (`extra_number_charge_required`, `audition_daily_cap`,
+  `workflow_draft_dry_run_stale`, `workflow_voice_cap`, `whatsapp_template_invalid`,
+  `messaging_apps_managed`) and two workflow reasons (`automated_sender`, `loop_paused`),
+  the disposition `info` as « Renseignements », and message delivery labels for `handled`
+  (« Traité ») and `read` (« Lu »).
 - Call sends the E.164 number the line before Call showed, no longer the text as typed,
   and works only for a whole number in a known shape. A wrong length keeps Call off, and
   is said only once the member stops typing (`CheckLength`, or a refused `Dial`).

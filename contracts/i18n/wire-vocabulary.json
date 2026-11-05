@@ -216,7 +216,7 @@
             "distronode-website/prisma/schema.prisma"
           ],
           "en": "Information only",
-          "fr": "Demande de renseignements"
+          "fr": "Renseignements"
         },
         {
           "value": "voicemail",
@@ -885,7 +885,7 @@
             "distronode-website/src/lib/district/workflows.ts"
           ],
           "en": "Not texted: the message came from an automated sender, such as a verification code",
-          "fr": "Texto non envoyé : le message venait d'un expéditeur automatisé, comme un code de vérification"
+          "fr": "Texto non envoyé : le message venait d'un expéditeur automatisé (un code de vérification, par exemple)"
         },
         {
           "value": "consent-check-failed",
@@ -1013,7 +1013,7 @@
             "distronode-website/src/lib/district/workflows.ts"
           ],
           "en": "Not texted: this number answered automatically several times in a row, so texts to it are paused for an hour",
-          "fr": "Texto non envoyé : ce numéro a répondu automatiquement plusieurs fois de suite, les textos vers lui sont donc suspendus pendant une heure"
+          "fr": "Texto non envoyé : ce numéro a répondu automatiquement plusieurs fois de suite, les textos à ce numéro sont donc suspendus pendant une heure"
         },
         {
           "value": "missing-webhook-url",
@@ -1315,8 +1315,8 @@
       ]
     },
     "messageDeliveryStatus": {
-      "description": "`status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here.",
-      "labelSource": "distronode-website/src/components/district/inbox/inboxI18n.ts emailStatus*",
+      "description": "`status` on a message (timeline `events[].status`, inbox `lastMessage.status`): the delivery receipt states, plus `received` on an inbound message. The portal labels them on email rows (`queued` reads as sent) and shows `failed` as the word itself in both languages; \"Email received\" is email-only, so `received` has no label here. `handled` is a message taken during a call that someone on the team marked dealt with (the mobile timeline reads it as an inbound sms); the portal labels it with `messageTakenHandled`. `read` is never stored: every provider's read receipt is recorded as `delivered`; it is labelled so an app that meets the word shows it in the viewer's language.",
+      "labelSource": "distronode-website/src/components/district/inbox/inboxI18n.ts emailStatus*, messageTakenHandled",
       "values": [
         {
           "value": "queued",
@@ -1357,6 +1357,23 @@
           ],
           "en": null,
           "fr": null
+        },
+        {
+          "value": "handled",
+          "definedIn": [
+            "distronode-website/src/lib/district/timeline.ts"
+          ],
+          "en": "Handled",
+          "fr": "Traité"
+        },
+        {
+          "value": "read",
+          "definedIn": [
+            "distronode-website/src/lib/whatsapp/status.ts",
+            "distronode-website/src/app/api/webhooks/twilio/message-status/route.ts"
+          ],
+          "en": "Read",
+          "fr": "Lu"
         }
       ]
     },

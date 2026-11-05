@@ -281,7 +281,7 @@
     },
     "extra_number_charge_required": {
       "en": "This number is beyond the ones the plan includes and has a monthly charge. Confirm the charge to buy it.",
-      "fr": "Ce numéro dépasse ceux que le forfait inclut et entraîne des frais mensuels. Confirmez les frais pour l'acheter."
+      "fr": "Ce numéro s'ajoute à ceux qu'inclut le forfait et entraîne des frais mensuels. Confirmez les frais pour l'acheter."
     },
     "workspace_owner_protected": {
       "en": "The workspace owner's access cannot be changed or removed here.",
@@ -333,7 +333,7 @@
     },
     "audition_daily_cap": {
       "en": "This workspace has used today's auditions. You can audition again tomorrow.",
-      "fr": "Cet espace de travail a utilisé les auditions d'aujourd'hui. Vous pourrez de nouveau écouter un brouillon demain."
+      "fr": "Cet espace de travail a utilisé toutes ses auditions pour aujourd'hui. Vous pourrez faire de nouvelles auditions demain."
     },
     "audition_unavailable": {
       "en": "The audition can't start right now. Please try again in a moment.",
@@ -345,11 +345,11 @@
     },
     "workflow_draft_dry_run_stale": {
       "en": "Run a dry run of this version of the automation first, then publish it.",
-      "fr": "Faites d'abord un essai à blanc de cette version de l'automatisation, puis publiez-la."
+      "fr": "Testez d'abord cette version de l'automatisation, puis publiez-la."
     },
     "workflow_voice_cap": {
       "en": "This workspace has reached the limit of automations built by voice. Build more in the workflow builder.",
-      "fr": "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans le générateur de flux de travail."
+      "fr": "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans l'éditeur de flux de travail."
     },
     "proposal_expired": {
       "en": "That proposed change can no longer be confirmed, so nothing was applied. Ask again to propose it afresh.",
@@ -532,7 +532,7 @@
     },
     "whatsapp_template_invalid": {
       "en": "That WhatsApp template cannot be sent. It is not approved for this number, or its variables do not match it.",
-      "fr": "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne lui correspondent pas."
+      "fr": "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne correspondent pas à celles du modèle."
     },
     "messenger_window_closed": {
       "en": "The Messenger or Instagram reply window with this contact is closed. You can reply once they write to you again.",
@@ -544,7 +544,7 @@
     },
     "messaging_apps_managed": {
       "en": "Messaging apps cannot be connected on the platform's Sinch account. Connect your own Sinch account to add WhatsApp, Messenger or RCS.",
-      "fr": "Les applications de messagerie ne peuvent pas être connectées sur le compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS."
+      "fr": "Les applications de messagerie ne peuvent pas être connectées au moyen du compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS."
     },
     "messaging_app_sms_refused": {
       "en": "Texting is set up with your phone numbers, not as a messaging app.",

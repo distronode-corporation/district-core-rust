@@ -151,6 +151,8 @@ pub(crate) fn label(locale: Locale, category: WireCategory, value: &str) -> Opti
         (WireCategory::MessageDeliveryStatus, "delivered") => s::wire_message_delivery_status_delivered(locale),
         (WireCategory::MessageDeliveryStatus, "failed") => s::wire_message_delivery_status_failed(locale),
         (WireCategory::MessageDeliveryStatus, "received") => s::wire_message_delivery_status_received(locale),
+        (WireCategory::MessageDeliveryStatus, "handled") => s::wire_message_delivery_status_handled(locale),
+        (WireCategory::MessageDeliveryStatus, "read") => s::wire_message_delivery_status_read(locale),
         (WireCategory::ResearchStatus, "pending") => s::wire_research_status_pending(locale),
         (WireCategory::ResearchStatus, "crawling") => s::wire_research_status_crawling(locale),
         (WireCategory::ResearchStatus, "complete") => s::wire_research_status_complete(locale),

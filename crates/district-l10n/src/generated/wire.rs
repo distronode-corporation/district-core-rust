@@ -451,7 +451,7 @@ pub fn wire_disposition_escalated(l: Locale) -> &'static str {
 pub fn wire_disposition_info(l: Locale) -> &'static str {
     match l {
         Locale::En => "Information only",
-        Locale::FrCa => "Demande de renseignements",
+        Locale::FrCa => "Renseignements",
     }
 }
 
@@ -662,12 +662,30 @@ pub fn wire_message_delivery_status_failed(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.message_delivery_status.handled`
+#[must_use]
+pub fn wire_message_delivery_status_handled(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Handled",
+        Locale::FrCa => "Traité",
+    }
+}
+
 /// `wire.message_delivery_status.queued`
 #[must_use]
 pub fn wire_message_delivery_status_queued(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sent",
         Locale::FrCa => "Envoyé",
+    }
+}
+
+/// `wire.message_delivery_status.read`
+#[must_use]
+pub fn wire_message_delivery_status_read(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Read",
+        Locale::FrCa => "Lu",
     }
 }
 
@@ -1486,7 +1504,7 @@ pub fn wire_workflow_action_outcome_skipped(l: Locale) -> &'static str {
 pub fn wire_workflow_action_reason_automated_sender(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not texted: the message came from an automated sender, such as a verification code",
-        Locale::FrCa => "Texto non envoyé\u{00A0}: le message venait d'un expéditeur automatisé, comme un code de vérification",
+        Locale::FrCa => "Texto non envoyé\u{00A0}: le message venait d'un expéditeur automatisé (un code de vérification, par exemple)",
     }
 }
 
@@ -1630,7 +1648,7 @@ pub fn wire_workflow_action_reason_loop_check_failed(l: Locale) -> &'static str 
 pub fn wire_workflow_action_reason_loop_paused(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not texted: this number answered automatically several times in a row, so texts to it are paused for an hour",
-        Locale::FrCa => "Texto non envoyé\u{00A0}: ce numéro a répondu automatiquement plusieurs fois de suite, les textos vers lui sont donc suspendus pendant une heure",
+        Locale::FrCa => "Texto non envoyé\u{00A0}: ce numéro a répondu automatiquement plusieurs fois de suite, les textos à ce numéro sont donc suspendus pendant une heure",
     }
 }
 
