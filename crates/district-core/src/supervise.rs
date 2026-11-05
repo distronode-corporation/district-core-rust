@@ -703,6 +703,7 @@ impl SignedIn {
             return stay();
         }
         let no_receptionist = result.as_ref().is_err_and(says_no_receptionist);
+        let call_over = result.as_ref().is_err_and(says_call_over);
         let failure = result.err().map(|error| {
             if no_receptionist {
                 FailureText::final_(s::supervise_no_receptionist(l()))
@@ -719,7 +720,15 @@ impl SignedIn {
             }
             whisper.failure = failure;
         });
-        stay()
+        // A note refused because the call is over ends the session as a
+        // refused listen or takeover does (Seer, PR #70); the draft stays.
+        if call_over {
+            Next::Stay(
+                self.end_supervision(SupervisePhase::Ended(SuperviseEnd::CallEnded), tickets),
+            )
+        } else {
+            stay()
+        }
     }
 
     /// The supervise session is in its room.

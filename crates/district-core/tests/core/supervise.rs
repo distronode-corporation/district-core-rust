@@ -779,6 +779,10 @@ fn a_note_that_was_not_delivered_keeps_its_draft_and_says_why() {
         whisper.failure.as_ref().unwrap().message,
         "This call has ended. The whisper was not delivered."
     );
+    assert_eq!(
+        phase(&model),
+        SupervisePhase::Ended(SuperviseEnd::CallEnded)
+    );
     supervise(&mut model, SuperviseEvent::Dismiss);
     assert_eq!(supervision(&model).whisper.failure, None);
 }
@@ -1251,4 +1255,28 @@ fn a_call_row_without_its_receptionist_offers_no_note_or_takeover_up_front() {
     assert!(signed_in(&model).supervised_call_has_receptionist());
     let (model, _) = loaded(AGENCY, "agency");
     assert!(!signed_in(&model).supervised_call_has_receptionist());
+}
+
+/// Seer, PR #70: a note refused because the call is over ends a listening
+/// session and leaves its room, as a refused listen or takeover does.
+#[test]
+fn a_note_refused_because_the_call_ended_ends_the_session() {
+    let (mut model, session) = listening("agency");
+    supervise(&mut model, SuperviseEvent::EditWhisper("Offer".to_owned()));
+    let effects = supervise(&mut model, SuperviseEvent::SendWhisper);
+    let ticket = pick(&effects, |effect| {
+        matches!(effect, Effect::SendCallWhisper { .. })
+    });
+    let effects = model.update(Event::CallWhispered {
+        ticket,
+        result: Err(refusal("call_not_in_progress", "Call is not in progress")),
+    });
+    assert_eq!(effects, [Effect::DisconnectMedia { session }]);
+    assert_eq!(
+        phase(&model),
+        SupervisePhase::Ended(SuperviseEnd::CallEnded)
+    );
+    assert!(signed_in(&model).supervise_session().is_none());
+    assert_eq!(supervision(&model).whisper.draft, "Offer");
+    assert!(supervision(&model).whisper.failure.is_some());
 }
