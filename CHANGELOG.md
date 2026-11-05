@@ -163,6 +163,11 @@ fields, and `SendMessageRequest` gains three fields.
   is said only once the member stops typing (`CheckLength`, or a refused `Dial`).
 - Entering the dialler reads the workspace's numbers (`Effect::LoadOwnedNumbers`) unless
   they are already read, for its home country. No response field was added.
+- `livekit` 0.10.1 (was 0.9.7), with `livekit-signaling` 0.1.9 and the `libwebrtc` crate
+  0.4.0. The native libwebrtc is unchanged: `webrtc-sys-build` stays 0.3.21, whose
+  `WEBRTC_TAG` is `webrtc-a545de4`, so `scripts/fetch-libwebrtc.sh`, NOTICE and the
+  `libwebrtc-a545de4-audio-1` release stand. Nothing an app calls changes; the engine tests
+  send text with `SendTextOptions`, which `send_text` takes since 0.10.
 
 ### Removed
 
