@@ -2910,6 +2910,11 @@ impl Tickets {
         ticket
     }
 
+    /// Whether a result is awaited in the keyed `slot` for `key`.
+    pub(crate) fn awaiting_keyed(&self, slot: Slot, key: &str) -> bool {
+        self.keyed.iter().any(|(s, _, k)| *s == slot && k == key)
+    }
+
     /// The key `ticket` was issued for in `slot`, if it is still awaited. It is
     /// not awaited any more.
     pub(crate) fn accept_keyed(&mut self, slot: Slot, ticket: Ticket) -> Option<String> {

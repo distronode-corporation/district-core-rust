@@ -735,6 +735,9 @@ impl SignedIn {
                 None => Vec::new(),
             };
             let assignee = conversation.and_then(|c| c.assignee()).map(str::to_owned);
+            // A change asked for before the thread was closed is still on its
+            // way: its answer lands here, and until it does no other is sent.
+            let saving = tickets.awaiting_keyed(Slot::Assign, &thread_key);
             self.thread = Some(ThreadScreen {
                 title: title(&self.inbox, &thread_key, &thread),
                 reply_target: reply_choices.first().cloned(),
@@ -743,6 +746,7 @@ impl SignedIn {
                 composer: Composer::default(),
                 assignment: ThreadAssignment {
                     assignee,
+                    saving,
                     ..ThreadAssignment::default()
                 },
                 whatsapp: None,

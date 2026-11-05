@@ -756,6 +756,54 @@ fn a_thread_given_away_while_open_can_be_taken_back() {
     );
 }
 
+#[test]
+fn a_thread_reopened_while_its_assignment_is_on_its_way_sends_no_other() {
+    let (mut model, _) = inbox_with(AGENCY, "agency", owners());
+    let effects = opened(&mut model, WALK_IN);
+    model.update(Event::MembersLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadMembers { .. })),
+        result: Ok(members()),
+    });
+    let given = thread_event(
+        &mut model,
+        ThreadEvent::Assign(Some("founder@example.com".to_owned())),
+    );
+
+    // Closed and opened again before the answer lands.
+    model.update(Event::Navigate(Route::Inbox));
+    let effects = opened(&mut model, WALK_IN);
+    model.update(Event::MembersLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadMembers { .. })),
+        result: Ok(members()),
+    });
+    assert!(screen(&model).assignment.saving && !controls(&model).can_assign);
+    assert!(
+        thread_event(
+            &mut model,
+            ThreadEvent::Assign(Some("operator@example.com".to_owned()))
+        )
+        .is_empty(),
+        "the first is still on its way"
+    );
+
+    // Its answer lands on the reopened thread, and then a change can go.
+    model.update(Event::ConversationAssigned {
+        ticket: last_ticket(&given),
+        result: Ok(fixture("district-conversation-assign.json")),
+    });
+    let assignment = &screen(&model).assignment;
+    assert!(!assignment.saving);
+    assert_eq!(assignment.assignee.as_deref(), Some("teammate@example.com"));
+    let effects = thread_event(
+        &mut model,
+        ThreadEvent::Assign(Some("operator@example.com".to_owned())),
+    );
+    assert!(has(&effects, |e| matches!(
+        e,
+        Effect::AssignConversation { .. }
+    )));
+}
+
 // WhatsApp.
 
 /// On WhatsApp in the WhatsApp-only thread, with the window read as `window`.

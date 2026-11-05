@@ -54,8 +54,9 @@ fields, and `SendMessageRequest` gains three fields.
   shown beside the picker. The answer is the thread's it was asked for, so one landing after
   the member has opened another thread changes that thread's row, never the open one. Each
   read of the list sets the open thread's owner from its row, unless a change is on its way,
-  so a thread another member gave away meanwhile can be given back. A Viewer sees the owner
-  and cannot change it.
+  so a thread another member gave away meanwhile can be given back. A thread closed and
+  opened again while its change is on its way still waits for that answer before sending
+  another. A Viewer sees the owner and cannot change it.
 - WhatsApp: choosing the channel reads the customer-service window
   (`Effect::LoadWhatsAppWindow`, `GET /api/district/workspace/whatsapp/window`). Open or
   unreadable, free text goes, from the sender the window was read for (`whatsappSenderId`).
