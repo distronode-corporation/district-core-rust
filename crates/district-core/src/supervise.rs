@@ -13,13 +13,14 @@
 //! itself, and needs neither. All three need the call in progress
 //! (`in-progress`), as the service does for a whisper and a takeover.
 //!
-//! A member's own call, placed or answered on their softphone, has no AI on
-//! it, and the service refuses a note or a takeover on it with its own code.
-//! Nothing in the call as the service reads it says so beforehand, so the
-//! first such refusal marks the call ([`Supervision::ai_absent`]), and
-//! neither is offered on it again. Listening to a call that has ended is
-//! refused too, and ends the session as the call's end does. Both codes'
-//! names here are provisional until the service's are final.
+//! A member's own call, placed or answered on their softphone, has no
+//! receptionist on it, and the service refuses a note or a takeover on it
+//! (`call_has_no_receptionist`). Nothing in the call as the service reads it
+//! says so beforehand, so the first such refusal marks the call
+//! ([`Supervision::no_receptionist`]), and neither is offered on it again.
+//! Listening to a call that has ended is refused (`call_ended`), and so are a
+//! note and a takeover (`call_not_in_progress`); each ends the session as the
+//! call's end does.
 //!
 //! # Listening
 //!
@@ -85,14 +86,13 @@ const IN_PROGRESS: &str = "in-progress";
 /// room has gone.
 const CODE_CALL_NOT_IN_PROGRESS: &str = "call_not_in_progress";
 
-/// PROVISIONAL name, until the service's code is final (GitLab #2,
-/// 2026-11-05): the refusal of listening to a call that has ended.
+/// The refusal of listening to a call that is not in progress or ringing.
+/// A note or a takeover on an ended call is `call_not_in_progress`.
 const CODE_LISTEN_CALL_ENDED: &str = "call_ended";
 
-/// PROVISIONAL name, until the service's code is final (GitLab #2,
-/// 2026-11-05): the refusal of a note or a takeover on a member's own call,
-/// placed or answered on their softphone, which has no AI on it.
-const CODE_NO_AI_ON_CALL: &str = "call_has_no_ai";
+/// The refusal of a note or a takeover on a member's own call, placed or
+/// answered on their softphone, which has no receptionist on it.
+const CODE_NO_RECEPTIONIST: &str = "call_has_no_receptionist";
 
 /// Whether `error` says the call is over.
 fn says_call_over(error: &ApiError) -> bool {
@@ -102,9 +102,9 @@ fn says_call_over(error: &ApiError) -> bool {
     )
 }
 
-/// Whether `error` says the call has no AI on it.
-fn says_no_ai(error: &ApiError) -> bool {
-    error.code() == Some(CODE_NO_AI_ON_CALL)
+/// Whether `error` says the call has no receptionist on it.
+fn says_no_receptionist(error: &ApiError) -> bool {
+    error.code() == Some(CODE_NO_RECEPTIONIST)
 }
 
 /// Supervising the open call.
@@ -119,16 +119,18 @@ pub struct Supervision {
     pub confirming_takeover: bool,
     /// The note to the receptionist.
     pub whisper: Whisper,
-    /// Whether the service said this is a member's own call, with no AI on
-    /// it: nothing to send a note to or take over. It may still be listened
-    /// to. Nothing in a call as the service reads it says so beforehand, so
-    /// it is learned from the first refusal.
-    pub ai_absent: bool,
+    /// Whether the service said this is a member's own call, with no
+    /// receptionist on it: nothing to send a note to or take over. It may
+    /// still be listened to. Nothing in a call as the service reads it says
+    /// so beforehand, so it is learned from the first refusal.
+    pub no_receptionist: bool,
     /// The call's lines heard so far, oldest first.
     lines: Vec<TranscriptChunk>,
     /// Whether a takeover was asked for while listening, so a refusal goes
     /// back to listening.
     listening_before_takeover: bool,
+    /// Whether the room held was joined with the microphone, for a takeover.
+    joined_with_microphone: bool,
 }
 
 impl Supervision {
@@ -183,7 +185,7 @@ impl Supervision {
     /// The session's room ended under it. A room that could not be joined
     /// says so; one that ended is the call's end.
     fn media_ended(&mut self, reason: DisconnectReason) {
-        let taking_over = self.phase == SupervisePhase::TakingOver;
+        let taking_over = self.joined_with_microphone;
         self.confirming_takeover = false;
         self.phase = match reason {
             DisconnectReason::ConnectFailed => {
@@ -355,9 +357,9 @@ impl SignedIn {
             s::supervise_whisper_viewer(l())
         } else if self
             .supervision()
-            .is_some_and(|supervision| supervision.ai_absent)
+            .is_some_and(|supervision| supervision.no_receptionist)
         {
-            s::supervise_no_ai(l())
+            s::supervise_no_receptionist(l())
         } else if self
             .supervision()
             .is_some_and(|supervision| supervision.phase == SupervisePhase::OnCall)
@@ -391,11 +393,11 @@ impl SignedIn {
             ),
             can_supervise,
             can_whisper: can_supervise
-                && !supervision.ai_absent
+                && !supervision.no_receptionist
                 && phase != SupervisePhase::OnCall
                 && !supervision.whisper.is_sending(),
             can_take_over: can_supervise
-                && !supervision.ai_absent
+                && !supervision.no_receptionist
                 && engine
                 && !matches!(phase, SupervisePhase::TakingOver | SupervisePhase::OnCall),
             can_hand_back: phase == SupervisePhase::OnCall
@@ -642,7 +644,10 @@ impl SignedIn {
         microphone: bool,
         tickets: &mut Tickets,
     ) -> Vec<Effect> {
-        self.with_supervision(|supervision| supervision.lines.clear());
+        self.with_supervision(|supervision| {
+            supervision.lines.clear();
+            supervision.joined_with_microphone = microphone;
+        });
         self.start_media(MediaOwner::Supervise, media, microphone, tickets)
     }
 
@@ -657,14 +662,14 @@ impl SignedIn {
             return self.leave_media_of(MediaOwner::Supervise);
         }
         let listening = self.supervise_session().is_some();
-        let no_ai = says_no_ai(error);
-        let failure = if no_ai {
-            FailureText::final_(s::supervise_no_ai(l()))
+        let no_receptionist = says_no_receptionist(error);
+        let failure = if no_receptionist {
+            FailureText::final_(s::supervise_no_receptionist(l()))
         } else {
             described(error, fallback)
         };
         self.with_supervision(|supervision| {
-            supervision.ai_absent |= no_ai;
+            supervision.no_receptionist |= no_receptionist;
             supervision.failure = Some(failure);
             supervision.phase = if supervision.phase == SupervisePhase::TakingOver
                 && supervision.listening_before_takeover
@@ -687,16 +692,16 @@ impl SignedIn {
         if !tickets.accept(Slot::SuperviseWhisper, ticket) {
             return stay();
         }
-        let no_ai = result.as_ref().is_err_and(says_no_ai);
+        let no_receptionist = result.as_ref().is_err_and(says_no_receptionist);
         let failure = result.err().map(|error| {
-            if no_ai {
-                FailureText::final_(s::supervise_no_ai(l()))
+            if no_receptionist {
+                FailureText::final_(s::supervise_no_receptionist(l()))
             } else {
                 described(&error, s::supervise_whisper_failed(l()))
             }
         });
         self.with_supervision(|supervision| {
-            supervision.ai_absent |= no_ai;
+            supervision.no_receptionist |= no_receptionist;
             let whisper = &mut supervision.whisper;
             let sent = whisper.sending.take();
             if failure.is_none() && sent.as_deref() == Some(whisper.draft.as_str()) {
@@ -731,7 +736,16 @@ impl SignedIn {
 
     /// The supervise session's room ended under it. A room that could not be
     /// joined says so; one that ended is the call's end.
-    pub(crate) fn supervise_media_ended(&mut self, reason: DisconnectReason) {
+    ///
+    /// A credential still being asked for goes with it: a takeover answered
+    /// after the listening room ended would otherwise join the call with the
+    /// microphone on, under a screen that no longer offers the controls.
+    pub(crate) fn supervise_media_ended(
+        &mut self,
+        reason: DisconnectReason,
+        tickets: &mut Tickets,
+    ) {
+        tickets.cancel_each(&[Slot::SuperviseListen, Slot::SuperviseTakeover]);
         self.with_supervision(|supervision| supervision.media_ended(reason));
     }
 

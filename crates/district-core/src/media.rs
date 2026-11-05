@@ -800,7 +800,7 @@ impl SignedIn {
                 Vec::new()
             }
             MediaOwner::Supervise => {
-                self.supervise_media_ended(reason);
+                self.supervise_media_ended(reason, tickets);
                 Vec::new()
             }
         }

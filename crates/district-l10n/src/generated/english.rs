@@ -866,8 +866,8 @@ pub const SUPERVISE_LISTEN_FAILED: &str = "Could not connect you to the call. Tr
 pub const SUPERVISE_LISTEN_TITLE: &str = "Listen in";
 /// `supervise.listening` in English.
 pub const SUPERVISE_LISTENING: &str = "You are listening";
-/// `supervise.no_ai` in English.
-pub const SUPERVISE_NO_AI: &str = "This is a colleague's own call, with no receptionist on it, so there is no note to send and nothing to take over.";
+/// `supervise.no_receptionist` in English.
+pub const SUPERVISE_NO_RECEPTIONIST: &str = "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over.";
 /// `supervise.on_call_body` in English.
 pub const SUPERVISE_ON_CALL_BODY: &str = "Your receptionist has stepped back and is waiting on the line. Hand the call back and it carries on.";
 /// `supervise.on_call_title` in English.

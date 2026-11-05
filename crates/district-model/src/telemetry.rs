@@ -298,7 +298,7 @@ impl TelemetryEnvelope {
         Some(WhisperApplied {
             applied: self.data.get("applied")?.as_bool()?,
             first_words: text("firstWords").unwrap_or_default(),
-            reason: text("reason"),
+            reason: text("reason").map(|reason| WhisperSkipReason::from_wire(&reason)),
         })
     }
 }
@@ -314,9 +314,31 @@ pub struct WhisperApplied {
     /// The note's first words, to say which note this is. Empty when the
     /// event carried none.
     pub first_words: String,
-    /// Why it was not acted on, as the service names it, when it says. A
-    /// wire value, never shown as it is.
-    pub reason: Option<String>,
+    /// Why it was not acted on, when the service says.
+    pub reason: Option<WhisperSkipReason>,
+}
+
+/// Why the voice agent did not act on a supervisor's note.
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum WhisperSkipReason {
+    /// `transfer`: the call was being transferred.
+    Transfer,
+    /// `taken_over`: a supervisor had taken the call over.
+    TakenOver,
+    /// A reason this client does not know, kept as it was sent. A wire
+    /// value, never shown as it is.
+    Other(String),
+}
+
+impl WhisperSkipReason {
+    /// The reason named `name` on the wire.
+    pub fn from_wire(name: &str) -> Self {
+        match name {
+            "transfer" => Self::Transfer,
+            "taken_over" => Self::TakenOver,
+            other => Self::Other(other.to_owned()),
+        }
+    }
 }
 
 impl fmt::Debug for WhisperApplied {
@@ -511,13 +533,23 @@ mod tests {
 
         let refused = event(
             TelemetryEventType::WhisperApplied,
-            serde_json::json!({"applied": false, "reason": "agent_busy"}),
+            serde_json::json!({"applied": false, "reason": "taken_over"}),
         )
         .whisper_applied()
         .unwrap();
         assert!(!refused.applied);
         assert_eq!(refused.first_words, "");
-        assert_eq!(refused.reason.as_deref(), Some("agent_busy"));
+        assert_eq!(refused.reason, Some(WhisperSkipReason::TakenOver));
+        for (wire, reason) in [
+            ("transfer", WhisperSkipReason::Transfer),
+            ("taken_over", WhisperSkipReason::TakenOver),
+            (
+                "agent_busy",
+                WhisperSkipReason::Other("agent_busy".to_owned()),
+            ),
+        ] {
+            assert_eq!(WhisperSkipReason::from_wire(wire), reason);
+        }
 
         for unread in [
             event(TelemetryEventType::WhisperApplied, serde_json::json!({})),

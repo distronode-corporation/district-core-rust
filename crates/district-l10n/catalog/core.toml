@@ -4193,14 +4193,15 @@ tier = "T2"
 state = "reviewed"
 note = "Status while listening to a call in progress. The web dashboard's Live calls page, verbatim."
 
-[supervise.no_ai]
-en = "This is a colleague's own call, with no receptionist on it, so there is no note to send and nothing to take over."
-fr = "C'est l'appel personnel d'un collègue, sans réceptionniste\u00A0: impossible de souffler une consigne ou de prendre l'appel."
+[supervise.no_receptionist]
+en = "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over."
+fr = "Il s'agit de l'appel d'un membre de l'équipe. Votre réceptionniste n'y participe pas, alors vous ne pouvez pas lui souffler de consigne ni prendre l'appel."
 ctx = "body"
 screen = "call supervise"
 tier = "T2"
-state = "draft"
-note = "The service refused a note or a takeover because the call is a member's own softphone call, with no AI on it. Listening still works."
+state = "reviewed"
+waive = { LEN = "the service's words" }
+note = "The service refused a note or a takeover (call_has_no_receptionist) because the call is a member's own softphone call, with no AI on it. Listening still works. The service's own sentence for the code, verbatim."
 
 [supervise.on_call_body]
 en = "Your receptionist has stepped back and is waiting on the line. Hand the call back and it carries on."

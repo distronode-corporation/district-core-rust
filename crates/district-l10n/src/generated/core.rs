@@ -4154,12 +4154,12 @@ pub fn supervise_listening(l: Locale) -> &'static str {
     }
 }
 
-/// `supervise.no_ai`
+/// `supervise.no_receptionist`
 #[must_use]
-pub fn supervise_no_ai(l: Locale) -> &'static str {
+pub fn supervise_no_receptionist(l: Locale) -> &'static str {
     match l {
-        Locale::En => "This is a colleague's own call, with no receptionist on it, so there is no note to send and nothing to take over.",
-        Locale::FrCa => "C'est l'appel personnel d'un collègue, sans réceptionniste\u{00A0}: impossible de souffler une consigne ou de prendre l'appel.",
+        Locale::En => "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over.",
+        Locale::FrCa => "Il s'agit de l'appel d'un membre de l'équipe. Votre réceptionniste n'y participe pas, alors vous ne pouvez pas lui souffler de consigne ni prendre l'appel.",
     }
 }
 

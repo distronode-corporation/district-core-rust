@@ -194,6 +194,7 @@ pub use support::{
 };
 pub use telemetry::{
     RingCancelReason, TelemetryEnvelope, TelemetryEventType, TelemetryToken, WhisperApplied,
+    WhisperSkipReason,
 };
 pub use transcript::{
     TRANSCRIPT_CALL_ID_MAX, TRANSCRIPT_SUBSCRIBE_OP, TRANSCRIPT_TEXT_MAX_UTF16, TRANSCRIPT_VERSION,

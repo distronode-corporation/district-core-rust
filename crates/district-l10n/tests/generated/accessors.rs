@@ -926,8 +926,8 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::supervise_listen_title(Locale::FrCa), "Écouter l'appel");
     assert_eq!(strings::supervise_listening(Locale::En), "You are listening");
     assert_eq!(strings::supervise_listening(Locale::FrCa), "Vous écoutez l'appel");
-    assert_eq!(strings::supervise_no_ai(Locale::En), "This is a colleague's own call, with no receptionist on it, so there is no note to send and nothing to take over.");
-    assert_eq!(strings::supervise_no_ai(Locale::FrCa), "C'est l'appel personnel d'un collègue, sans réceptionniste\u{00A0}: impossible de souffler une consigne ou de prendre l'appel.");
+    assert_eq!(strings::supervise_no_receptionist(Locale::En), "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over.");
+    assert_eq!(strings::supervise_no_receptionist(Locale::FrCa), "Il s'agit de l'appel d'un membre de l'équipe. Votre réceptionniste n'y participe pas, alors vous ne pouvez pas lui souffler de consigne ni prendre l'appel.");
     assert_eq!(strings::supervise_on_call_body(Locale::En), "Your receptionist has stepped back and is waiting on the line. Hand the call back and it carries on.");
     assert_eq!(strings::supervise_on_call_body(Locale::FrCa), "Votre réceptionniste s'est mise en retrait et attend en ligne. Redonnez-lui l'appel et elle reprend la conversation.");
     assert_eq!(strings::supervise_on_call_title(Locale::En), "You are on the call");

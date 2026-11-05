@@ -993,9 +993,9 @@ fn a_refused_access_token_says_so_rather_than_try_again() {
     assert_eq!(failure(&model), Some(expected.as_str()));
 }
 
-/// PROVISIONAL codes, as `district-core` names them until the service's are
-/// final.
-const NO_AI: &str = "call_has_no_ai";
+/// The service's codes for a call with no receptionist on it, and for
+/// listening to one that has ended.
+const NO_AI: &str = "call_has_no_receptionist";
 const LISTEN_ENDED: &str = "call_ended";
 
 #[test]
@@ -1010,9 +1010,9 @@ fn a_call_with_no_ai_on_it_offers_no_note_or_takeover_after_the_first_refusal() 
         ticket,
         result: Err(refusal(NO_AI, "This call has no AI on it.")),
     });
-    let no_ai = "This is a colleague's own call, with no receptionist on it, so there is no note \
-                 to send and nothing to take over.";
-    assert!(supervision(&model).ai_absent);
+    let no_ai = "That is a team member's own call. Your receptionist is not on it, so you cannot \
+                 send a note or take the call over.";
+    assert!(supervision(&model).no_receptionist);
     assert_eq!(
         supervision(&model)
             .whisper
@@ -1038,7 +1038,7 @@ fn a_call_with_no_ai_on_it_offers_no_note_or_takeover_after_the_first_refusal() 
         ticket,
         result: Err(refusal(NO_AI, "This call has no AI on it.")),
     });
-    assert!(supervision(&model).ai_absent);
+    assert!(supervision(&model).no_receptionist);
     assert_eq!(phase(&model), SupervisePhase::Listening);
     assert_eq!(failure(&model), Some(no_ai));
     assert!(!controls(&model).can_take_over);
@@ -1093,7 +1093,7 @@ fn what_the_receptionist_did_with_a_note_is_shown_until_the_next_one() {
 
     model.update(whisper_applied(
         CALL,
-        json!({"applied": false, "firstWords": "Offer", "reason": "agent_busy"}),
+        json!({"applied": false, "firstWords": "Offer", "reason": "transfer"}),
     ));
     assert_eq!(
         supervision(&model).whisper.outcome_line(),
@@ -1130,4 +1130,40 @@ fn what_the_receptionist_did_with_a_note_is_shown_until_the_next_one() {
             .update(whisper_applied(CALL, json!({"applied": true})))
             .is_empty()
     );
+}
+
+/// Seer, PR #70: a takeover answered after the listening room ended must not
+/// join with the microphone under a screen that offers no controls.
+#[test]
+fn a_takeover_answered_after_the_room_ended_joins_nothing() {
+    for reason in [
+        DisconnectReason::RoomEnded,
+        DisconnectReason::ConnectionLost,
+        DisconnectReason::ConnectFailed,
+    ] {
+        let (mut model, session) = listening("agency");
+        let ticket = confirm_takeover(&mut model);
+        model.update(media(session, MediaEvent::Disconnected(reason)));
+        assert!(
+            model
+                .update(Event::CallTakeoverIssued {
+                    ticket,
+                    result: Ok(takeover_credential()),
+                })
+                .is_empty(),
+            "{reason:?}"
+        );
+        assert!(
+            signed_in(&model).supervise_session().is_none(),
+            "{reason:?}"
+        );
+        assert!(!signed_in(&model).media_busy(), "{reason:?}");
+        if reason == DisconnectReason::ConnectFailed {
+            // The listening room failed, not the microphone's.
+            assert_eq!(
+                failure(&model),
+                Some("Could not connect you to the call. Try again.")
+            );
+        }
+    }
 }
