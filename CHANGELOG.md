@@ -19,9 +19,10 @@ variant, or a field of one. Those take a new major version.
 
 ## [8.0.0] - 2026-11-05
 
-The country-aware dialler (#63) and the app parity fixtures (#64). Breaking for the apps:
-`DialerScreen` and `DialerEvent` change shape, and `ConversationSummary` gains public
-fields.
+The country-aware dialler (#63), the app parity fixtures (#64) and app parity on the
+desktop (#65). Breaking for the apps: `DialerScreen` and `DialerEvent` change shape,
+`ConversationSummary` gains public fields, and `CoreConfig`, `DistrictApi` and the thread
+screens change (below).
 
 Dialler design A, after district-ios (#95 and #96) and the web dialler: the number is
 typed the local way under a country the member can see, and is sent as E.164. Breaking:
@@ -29,7 +30,7 @@ typed the local way under a country the member can see, and is sent as E.164. Br
 
 App parity (1), (2), (3) and (5) on the desktop: the reply channels the service lists for a
 thread, Messenger and Instagram threads, who owns a thread, and the WhatsApp templates a closed
-window offers. Breaking for the apps (8.0.0 when released): `CoreConfig` gains `meta_channels`,
+window offers. Breaking for the apps: `CoreConfig` gains `meta_channels`,
 `DesktopPresence::new` takes it, `DistrictApi` has three new methods and four changed ones,
 `Effect`, `Event`, `ThreadEvent`, `ThreadScreen` and `ThreadControls` gain variants and
 fields, and `SendMessageRequest` gains three fields.
