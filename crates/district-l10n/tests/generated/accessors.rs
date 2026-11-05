@@ -1137,11 +1137,11 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_call_predates_feature(Locale::En), "That call started before this feature existed, so it is not available on it.");
     assert_eq!(api_error_strings::api_error_call_predates_feature(Locale::FrCa), "Cet appel a commencé avant l'existence de cette fonction, elle n'est donc pas offerte pour lui.");
     assert_eq!(api_error_strings::api_error_caller_id_carrier_failed(Locale::En), "The phone carrier could not be reached. Try again in a few minutes.");
-    assert_eq!(api_error_strings::api_error_caller_id_carrier_failed(Locale::FrCa), "Impossible de joindre le fournisseur de téléphonie. Réessayez dans quelques minutes.");
+    assert_eq!(api_error_strings::api_error_caller_id_carrier_failed(Locale::FrCa), "Impossible de joindre le transporteur de téléphonie. Réessayez dans quelques minutes.");
     assert_eq!(api_error_strings::api_error_caller_id_mobile_unverified(Locale::En), "Confirm your mobile number first, then register it as caller ID.");
-    assert_eq!(api_error_strings::api_error_caller_id_mobile_unverified(Locale::FrCa), "Confirmez d'abord votre numéro de cellulaire, puis enregistrez-le comme afficheur.");
+    assert_eq!(api_error_strings::api_error_caller_id_mobile_unverified(Locale::FrCa), "Confirmez d'abord votre numéro de cellulaire, puis inscrivez-le comme afficheur.");
     assert_eq!(api_error_strings::api_error_caller_id_not_confirmed(Locale::En), "The carrier has not confirmed your number yet. Answer the verification call and key in the code, then check again.");
-    assert_eq!(api_error_strings::api_error_caller_id_not_confirmed(Locale::FrCa), "Le fournisseur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau.");
+    assert_eq!(api_error_strings::api_error_caller_id_not_confirmed(Locale::FrCa), "Le transporteur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau.");
     assert_eq!(api_error_strings::api_error_caller_id_request_too_soon(Locale::En), "A verification call went out less than 10 minutes ago. Wait before asking for another.");
     assert_eq!(api_error_strings::api_error_caller_id_request_too_soon(Locale::FrCa), "Un appel de vérification a été fait il y a moins de 10 minutes. Attendez avant d'en demander un autre.");
     assert_eq!(api_error_strings::api_error_caller_id_unavailable(Locale::En), "Using your own mobile as caller ID is not available yet.");
@@ -1267,7 +1267,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_last_agency_member(Locale::En), "This is the last administrator of the workspace, so it cannot be removed or demoted.");
     assert_eq!(api_error_strings::api_error_last_agency_member(Locale::FrCa), "Il s'agit de la dernière personne administratrice de l'espace de travail, elle ne peut donc être ni retirée ni rétrogradée.");
     assert_eq!(api_error_strings::api_error_live_changed(Locale::En), "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish.");
-    assert_eq!(api_error_strings::api_error_live_changed(Locale::FrCa), "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Réalignez le brouillon sur les paramètres en ligne, relisez-le, puis publiez-le.");
+    assert_eq!(api_error_strings::api_error_live_changed(Locale::FrCa), "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Mettez le brouillon à jour avec les paramètres en vigueur, relisez-le, puis publiez-le.");
     assert_eq!(api_error_strings::api_error_mailbox_not_found(Locale::En), "No mailbox is connected to this workspace.");
     assert_eq!(api_error_strings::api_error_mailbox_not_found(Locale::FrCa), "Aucune boîte de réception n'est connectée à cet espace de travail.");
     assert_eq!(api_error_strings::api_error_managed_billing_required(Locale::En), "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan.");
@@ -1937,7 +1937,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_push_not_delivered(Locale::En), "No device accepted the notification");
     assert_eq!(wire_strings::wire_workflow_action_reason_push_not_delivered(Locale::FrCa), "Aucun appareil n'a accepté la notification");
     assert_eq!(wire_strings::wire_workflow_action_reason_quiet_hours(Locale::En), "Not texted: it was outside 8am to 9pm where their phone may be");
-    assert_eq!(wire_strings::wire_workflow_action_reason_quiet_hours(Locale::FrCa), "Texto non envoyé\u{00A0}: il était en dehors de 8\u{00A0}h à 21\u{00A0}h là où se trouve peut-être son téléphone");
+    assert_eq!(wire_strings::wire_workflow_action_reason_quiet_hours(Locale::FrCa), "Texto non envoyé\u{00A0}: il n'était pas entre 8\u{00A0}h et 21\u{00A0}h là où se trouve peut-être son téléphone");
     assert_eq!(wire_strings::wire_workflow_action_reason_recipient_not_member(Locale::En), "The person to text is no longer a member of this workspace");
     assert_eq!(wire_strings::wire_workflow_action_reason_recipient_not_member(Locale::FrCa), "La personne à qui envoyer le texto n'est plus membre de cet espace de travail");
     assert_eq!(wire_strings::wire_workflow_action_reason_recipient_number_held(Locale::En), "Not sent: the person's mobile is a business number on District");

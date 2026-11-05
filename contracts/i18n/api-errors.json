@@ -325,7 +325,7 @@
     },
     "live_changed": {
       "en": "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish.",
-      "fr": "Quelqu'un a modifié ces réglages depuis la rédaction du brouillon. Réalignez le brouillon sur les réglages en ligne, relisez-le, puis publiez-le."
+      "fr": "Quelqu'un a modifié ces réglages depuis la rédaction du brouillon. Mettez le brouillon à jour avec les réglages en vigueur, relisez-le, puis publiez-le."
     },
     "audition_busy": {
       "en": "Two auditions are already running for this workspace. End one and try again.",
@@ -720,7 +720,7 @@
     },
     "caller_id_mobile_unverified": {
       "en": "Confirm your mobile number first, then register it as caller ID.",
-      "fr": "Confirmez d'abord votre numéro de cellulaire, puis enregistrez-le comme afficheur."
+      "fr": "Confirmez d'abord votre numéro de cellulaire, puis inscrivez-le comme afficheur."
     },
     "caller_id_request_too_soon": {
       "en": "A verification call went out less than 10 minutes ago. Wait before asking for another.",
@@ -728,11 +728,11 @@
     },
     "caller_id_not_confirmed": {
       "en": "The carrier has not confirmed your number yet. Answer the verification call and key in the code, then check again.",
-      "fr": "Le fournisseur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau."
+      "fr": "Le transporteur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau."
     },
     "caller_id_carrier_failed": {
       "en": "The phone carrier could not be reached. Try again in a few minutes.",
-      "fr": "Impossible de joindre le fournisseur de téléphonie. Réessayez dans quelques minutes."
+      "fr": "Impossible de joindre le transporteur de téléphonie. Réessayez dans quelques minutes."
     },
     "call_not_in_progress": {
       "en": "That call is not in progress.",

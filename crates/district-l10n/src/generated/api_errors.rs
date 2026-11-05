@@ -199,7 +199,7 @@ pub fn api_error_call_predates_feature(l: Locale) -> &'static str {
 pub fn api_error_caller_id_carrier_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "The phone carrier could not be reached. Try again in a few minutes.",
-        Locale::FrCa => "Impossible de joindre le fournisseur de téléphonie. Réessayez dans quelques minutes.",
+        Locale::FrCa => "Impossible de joindre le transporteur de téléphonie. Réessayez dans quelques minutes.",
     }
 }
 
@@ -208,7 +208,7 @@ pub fn api_error_caller_id_carrier_failed(l: Locale) -> &'static str {
 pub fn api_error_caller_id_mobile_unverified(l: Locale) -> &'static str {
     match l {
         Locale::En => "Confirm your mobile number first, then register it as caller ID.",
-        Locale::FrCa => "Confirmez d'abord votre numéro de cellulaire, puis enregistrez-le comme afficheur.",
+        Locale::FrCa => "Confirmez d'abord votre numéro de cellulaire, puis inscrivez-le comme afficheur.",
     }
 }
 
@@ -217,7 +217,7 @@ pub fn api_error_caller_id_mobile_unverified(l: Locale) -> &'static str {
 pub fn api_error_caller_id_not_confirmed(l: Locale) -> &'static str {
     match l {
         Locale::En => "The carrier has not confirmed your number yet. Answer the verification call and key in the code, then check again.",
-        Locale::FrCa => "Le fournisseur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau.",
+        Locale::FrCa => "Le transporteur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau.",
     }
 }
 
@@ -784,7 +784,7 @@ pub fn api_error_last_agency_member(l: Locale) -> &'static str {
 pub fn api_error_live_changed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish.",
-        Locale::FrCa => "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Réalignez le brouillon sur les paramètres en ligne, relisez-le, puis publiez-le.",
+        Locale::FrCa => "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Mettez le brouillon à jour avec les paramètres en vigueur, relisez-le, puis publiez-le.",
     }
 }
 

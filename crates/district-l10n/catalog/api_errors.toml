@@ -194,7 +194,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.caller_id_carrier_failed]
 en = "The phone carrier could not be reached. Try again in a few minutes."
-fr = "Impossible de joindre le fournisseur de téléphonie. Réessayez dans quelques minutes."
+fr = "Impossible de joindre le transporteur de téléphonie. Réessayez dans quelques minutes."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -203,7 +203,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.caller_id_mobile_unverified]
 en = "Confirm your mobile number first, then register it as caller ID."
-fr = "Confirmez d'abord votre numéro de cellulaire, puis enregistrez-le comme afficheur."
+fr = "Confirmez d'abord votre numéro de cellulaire, puis inscrivez-le comme afficheur."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -212,7 +212,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.caller_id_not_confirmed]
 en = "The carrier has not confirmed your number yet. Answer the verification call and key in the code, then check again."
-fr = "Le fournisseur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau."
+fr = "Le transporteur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -780,7 +780,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.live_changed]
 en = "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish."
-fr = "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Réalignez le brouillon sur les paramètres en ligne, relisez-le, puis publiez-le."
+fr = "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Mettez le brouillon à jour avec les paramètres en vigueur, relisez-le, puis publiez-le."
 ctx = "error"
 screen = "api_error"
 tier = "T2"

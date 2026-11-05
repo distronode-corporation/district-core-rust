@@ -1729,7 +1729,7 @@ pub fn wire_workflow_action_reason_push_not_delivered(l: Locale) -> &'static str
 pub fn wire_workflow_action_reason_quiet_hours(l: Locale) -> &'static str {
     match l {
         Locale::En => "Not texted: it was outside 8am to 9pm where their phone may be",
-        Locale::FrCa => "Texto non envoyé\u{00A0}: il était en dehors de 8\u{00A0}h à 21\u{00A0}h là où se trouve peut-être son téléphone",
+        Locale::FrCa => "Texto non envoyé\u{00A0}: il n'était pas entre 8\u{00A0}h et 21\u{00A0}h là où se trouve peut-être son téléphone",
     }
 }
 

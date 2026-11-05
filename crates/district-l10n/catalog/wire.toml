@@ -1740,7 +1740,7 @@ note = "A label for the stored value `push-not-delivered` of workflowActionReaso
 
 [wire.workflow_action_reason.quiet_hours]
 en = "Not texted: it was outside 8am to 9pm where their phone may be"
-fr = "Texto non envoyé\u00A0: il était en dehors de 8\u00A0h à 21\u00A0h là où se trouve peut-être son téléphone"
+fr = "Texto non envoyé\u00A0: il n'était pas entre 8\u00A0h et 21\u00A0h là où se trouve peut-être son téléphone"
 ctx = "label"
 screen = "wire workflow_action_reason"
 tier = "T3"

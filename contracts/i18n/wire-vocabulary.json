@@ -1102,7 +1102,7 @@
             "distronode-website/src/lib/district/sms-consent.ts"
           ],
           "en": "Not texted: it was outside 8am to 9pm where their phone may be",
-          "fr": "Texto non envoyé : il était en dehors de 8 h à 21 h là où se trouve peut-être son téléphone"
+          "fr": "Texto non envoyé : il n'était pas entre 8 h et 21 h là où se trouve peut-être son téléphone"
         },
         {
           "value": "recipient-not-member",
