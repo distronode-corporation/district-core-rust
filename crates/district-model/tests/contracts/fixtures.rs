@@ -1303,9 +1303,10 @@ fn base64url_matches_the_rfc_4648_examples() {
 /// to the active call's transcript.
 #[test]
 fn the_live_transcript_frames_are_read_as_transcript_events() {
+    // The whisper frames are the supervise ones, read below.
     let frames: Vec<(String, TelemetryEnvelope)> = names_in(Set::Android)
         .into_iter()
-        .filter(|name| name.starts_with("telemetry-event-"))
+        .filter(|name| name.starts_with("telemetry-event-transcript-"))
         .map(|name| {
             let envelope = decode(&name);
             (name, envelope)
@@ -1362,6 +1363,40 @@ fn the_telemetry_credential_names_a_socket_and_an_expiry() {
             .as_deref()
             .is_some_and(|url| url.starts_with("wss://")),
         "a TLS socket address"
+    );
+}
+
+/// What the voice agent did with a supervisor's note, as the Android set
+/// records it: applied, with the note's first words, and not applied, with
+/// why. These and the transcript frames are every frame the set records.
+#[test]
+fn the_whisper_frames_say_what_was_done_with_the_note() {
+    let frames: BTreeSet<String> = names_in(Set::Android)
+        .into_iter()
+        .filter(|name| name.starts_with("telemetry-event-"))
+        .filter(|name| !name.starts_with("telemetry-event-transcript-"))
+        .collect();
+    assert_eq!(
+        frames,
+        BTreeSet::from([
+            "telemetry-event-whisper-applied.json".to_owned(),
+            "telemetry-event-whisper-not-applied.json".to_owned(),
+        ])
+    );
+    let applied = decode::<TelemetryEnvelope>("telemetry-event-whisper-applied.json");
+    assert!(!applied.event_type.is_transcript());
+    let outcome = applied.whisper_applied().expect("read");
+    assert!(outcome.applied);
+    assert!(!outcome.first_words.is_empty());
+    assert_eq!(outcome.reason, None);
+
+    let skipped = decode::<TelemetryEnvelope>("telemetry-event-whisper-not-applied.json")
+        .whisper_applied()
+        .expect("read");
+    assert!(!skipped.applied);
+    assert_eq!(
+        skipped.reason,
+        Some(district_model::WhisperSkipReason::TakenOver)
     );
 }
 

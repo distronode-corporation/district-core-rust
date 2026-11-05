@@ -283,28 +283,58 @@ impl TelemetryEnvelope {
 
     /// What the voice agent did with a supervisor's note, for a
     /// `whisper_applied` event, or `None` for any other event and for one
-    /// whose `applied` is missing or not a boolean. The call is
-    /// [`call_id`](Self::call_id).
+    /// whose data is not [`WhisperAppliedData`] (its `applied` missing or not
+    /// a boolean, say). The call is [`call_id`](Self::call_id).
     pub fn whisper_applied(&self) -> Option<WhisperApplied> {
         if self.event_type != TelemetryEventType::WhisperApplied {
             return None;
         }
-        let text = |key: &str| {
-            self.data
-                .get(key)
-                .and_then(Value::as_str)
-                .map(str::to_owned)
-        };
+        let data: WhisperAppliedData = serde_json::from_value(self.data.clone()).ok()?;
         Some(WhisperApplied {
-            applied: self.data.get("applied")?.as_bool()?,
-            first_words: text("firstWords").unwrap_or_default(),
-            reason: text("reason").map(|reason| WhisperSkipReason::from_wire(&reason)),
+            applied: data.applied,
+            first_words: data.first_words.unwrap_or_default(),
+            reason: data
+                .reason
+                .map(|reason| WhisperSkipReason::from_wire(&reason)),
         })
     }
 }
 
+/// `whisper_applied`'s data, as sent: `{"applied", "firstWords"?,
+/// "reason"?}`. Read it as a [`WhisperApplied`] with
+/// [`TelemetryEnvelope::whisper_applied`].
+///
+/// `Debug` leaves the words out: they are the note's.
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct WhisperAppliedData {
+    /// Whether the agent acted on the note.
+    pub applied: bool,
+    /// The note's first words, when sent: with an applied note.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub first_words: Option<String>,
+    /// Why it was not acted on, as the wire names it, when sent: with a note
+    /// not applied.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+}
+
+impl fmt::Debug for WhisperAppliedData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("WhisperAppliedData")
+            .field("applied", &self.applied)
+            .field(
+                "first_words",
+                &self.first_words.as_ref().map(|_| "<redacted>"),
+            )
+            .field("reason", &self.reason)
+            .finish()
+    }
+}
+
 /// What the voice agent did with a supervisor's note, from a
-/// `whisper_applied` event: `{"applied", "firstWords", "reason"?}`.
+/// `whisper_applied` event.
 ///
 /// `Debug` leaves the words out: they are the note's.
 #[derive(Clone, PartialEq, Eq)]
@@ -530,6 +560,15 @@ mod tests {
         assert_eq!(applied.reason, None);
         let printed = format!("{applied:?}");
         assert!(!printed.contains("morning"), "{printed}");
+        let data: WhisperAppliedData = serde_json::from_value(
+            serde_json::json!({"applied": true, "firstWords": "Offer the morning"}),
+        )
+        .unwrap();
+        let printed = format!("{data:?}");
+        assert!(
+            !printed.contains("morning") && printed.contains("<redacted>"),
+            "{printed}"
+        );
 
         let refused = event(
             TelemetryEventType::WhisperApplied,
