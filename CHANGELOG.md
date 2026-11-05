@@ -88,6 +88,11 @@ typed the local way under a country the member can see, and is sent as E.164. Br
 - The error table and wire labels have the service's new codes and values with its French,
   and take the service's newer French for six sentences and labels. `live_changed` keeps
   « paramètres » where the service says « réglages » (the Apple word).
+- `contracts/i18n/` from the server's 35edbd30c, with its five French wordings in the
+  catalogs: `live_changed` (« Mettez le brouillon à jour avec les paramètres en
+  vigueur »), `caller_id_not_confirmed` and `caller_id_carrier_failed` (« transporteur »),
+  `caller_id_mobile_unverified` (« inscrivez-le ») and the workflow outcome
+  `quiet_hours` (« il n'était pas entre 8 h et 21 h »).
 - Call sends the E.164 number the line before Call showed, no longer the text as typed,
   and works only for a whole number in a known shape. A wrong length keeps Call off, and
   is said only once the member stops typing (`CheckLength`, or a refused `Dial`).
