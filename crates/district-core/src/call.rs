@@ -181,7 +181,7 @@ impl ActiveCall {
     /// Who the call is with: the number dialled, or "Caller".
     pub fn title(&self) -> String {
         match &self.direction {
-            CallDirection::Outbound { number } => crate::dialer::format_dial_entry(number),
+            CallDirection::Outbound { number } => crate::dialer::call_title(number),
             CallDirection::Inbound => s::call_caller(l()).to_owned(),
         }
     }

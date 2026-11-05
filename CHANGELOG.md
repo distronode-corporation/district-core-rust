@@ -17,6 +17,10 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+Dialler design A, after district-ios (#95 and #96) and the web dialler: the number is
+typed the local way under a country the member can see, and is sent as E.164. Breaking:
+`DialerScreen` and `DialerEvent` change shape.
+
 ### Added
 
 - `district_model` types for the app parity fixtures, decoded strictly and round-tripped by
@@ -28,6 +32,43 @@ variant, or a field of one. Those take a new major version.
 - `ConversationSummary` gains `reply_options`, `assignee_email` and `assigned_to_me`, sent
   only when the list is asked for with `metaChannels=1` or `assignments=1`. Breaking for an
   app that builds a `ConversationSummary` with a struct literal.
+- `district_core::dialer::plan`: `read_dial_entry` reads what was typed in a country
+  (`DialReading`, `DialStatus`): the local form for the field, the international form, and
+  the E.164 number, set only for a whole number. A `+`, `011` (from a +1 country) or `00`
+  number names its own country; +1 is read by its area code (Canada, the United States, a
+  Caribbean or Pacific member; toll-free names none) and +7 by its first digit (Kazakhstan
+  or Russia), typed key by key as when pasted. Trunk prefixes (`0` in the 103 countries whose
+  national prefix libphonenumber-js 1.13.14 gives as `0`, `8` in Russia, Kazakhstan, Belarus
+  and Turkmenistan, `06` in Hungary, `1` in the Marshall Islands) are dropped from what is
+  sent, and so are the prefixes libphonenumber also strips when reading (Belarus `80` and
+  `0`, Lithuania's old `8`, the UK's `180020`). For those three a prefix is read off only
+  where libphonenumber would (a whole number such as Lithuania's `800 12345` keeps its 8),
+  and the field shows the prefix that was typed, or none. Carrier and area-code rewrites
+  (AR, AU, BO, BR, CN, CO, JP, KR, LI, MG) are not modelled, as in the apps. Known limit:
+  in the other trunk-prefix countries, a whole number typed without its trunk prefix may
+  lose a leading digit equal to that prefix. Emergency
+  codes are refused before any country is asked for.
+- 226 countries (`COUNTRIES`) with their calling code and CLDR name in English and
+  Canadian French; `search_countries` (exact ISO code, then name prefix, then calling
+  code, then name contains), `sorted_countries`, `suggested_countries`, `flag`,
+  `home_country` (the country of most of a workspace's numbers, toll-free ones not
+  voting) and `national_example` (placeholders in fictional ranges only).
+- `DialerScreen`: `country`, `home` and `length_checked`, and `reading`, `hint`,
+  `placeholder`, `destination` ("Rings Canada · +1 416 555 0199"), `problem` and
+  `country_label`. `DialerEvent::PickCountry` and `DialerEvent::CheckLength`.
+- `edit_dial_input`, `clean_dial_input`, `entry_chars_before`, `caret_after_entry_chars`
+  and `entry_for_pick`, for a shell whose field the core writes after every edit.
+- Catalog entries `dialer.countries_all`, `countries_no_match`, `countries_suggested`,
+  `country`, `country_button`, `country_search`, `emergency`, `hint_local`,
+  `needs_country`, `rings`, `rings_no_country`, `unrecognised` and `wrong_length`, with
+  reviewed French.
+- A +1 toll-free number (800, 833, 844, 855, 866, 877, 888), or one of the web's
+  non-geographic 500, 600, 700, 710 and 900, is said to belong to no one country,
+  keeps the +1 country on the button and does not vote for the home country ("Rings +1 800 555 0100. This number does not belong to one country. Check it
+  before you call."), as the web dialler says it, never "Rings Canada" or "Rings United
+  States". As on the web it is said from eight digits (the 1 counted) to fifteen, with the
+  bare digits until the number is whole; Call stays off and the wrong length is still
+  said only once the member stops.
 
 ### Changed
 
@@ -41,6 +82,16 @@ variant, or a field of one. Those take a new major version.
 - The error table and wire labels have the service's new codes and values with its French,
   and take the service's newer French for six sentences and labels. `live_changed` keeps
   « paramètres » where the service says « réglages » (the Apple word).
+- Call sends the E.164 number the line before Call showed, no longer the text as typed,
+  and works only for a whole number in a known shape. A wrong length keeps Call off, and
+  is said only once the member stops typing (`CheckLength`, or a refused `Dial`).
+- Entering the dialler reads the workspace's numbers (`Effect::LoadOwnedNumbers`) unless
+  they are already read, for its home country. No response field was added.
+
+### Removed
+
+- `DialerScreen::HINT`, `DialerScreen::formatted`, `DialerScreen::has_enough_digits` and
+  the catalog entry `dialer.hint`.
 
 ## [7.0.1] - 2026-10-29
 
