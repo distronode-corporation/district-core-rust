@@ -81,8 +81,11 @@
 //!   and its answer ([`RingController`]), the call itself, placed or answered
 //!   ([`ActiveCall`]), meeting rooms and persona auditions joined through the
 //!   engine, and the one media session all of them share ([`MediaSession`],
-//!   through [`CallEngine`]); and this desktop's presence, which is what lets a
-//!   call ring it ([`PresenceState`], [`DesktopPresence`]).
+//!   through [`CallEngine`]); supervising a live AI call from its call screen,
+//!   by listening in, a note to the receptionist and a takeover by voice
+//!   ([`Supervision`], [`SuperviseControls`]); and this desktop's presence,
+//!   which is what lets a call ring it ([`PresenceState`],
+//!   [`DesktopPresence`]).
 //! - [`FailureText`]: the words for every failure, in one place.
 //! - [`palette`]: the brand's accent and semantic colours, light and dark, for
 //!   the app's stylesheet.
@@ -143,6 +146,7 @@ mod session;
 mod settings;
 mod signed_in;
 pub mod studio;
+mod supervise;
 mod support;
 mod text;
 mod thread;
@@ -274,6 +278,10 @@ pub use settings::{
     member_role_label, provider_label, settings_note, settings_rows,
 };
 pub use signed_in::SignedIn;
+pub use supervise::{
+    SUPERVISE_LINES, SuperviseControls, SuperviseEnd, SuperviseEvent, SupervisePhase, Supervision,
+    Whisper,
+};
 pub use support::{
     SUPPORT_LIST_CAP, SUPPORT_MESSAGE_MAX, SUPPORT_SUBJECT_MAX, SUPPORT_SUBJECT_MIN,
     SupportCompose, SupportEvent, SupportForm, SupportList, SupportRequestScreen,

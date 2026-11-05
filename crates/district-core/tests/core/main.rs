@@ -46,6 +46,7 @@ mod settings_lists;
 mod stale;
 mod studio;
 mod studio_edits;
+mod supervise;
 mod support;
 mod support_requests;
 mod thread;

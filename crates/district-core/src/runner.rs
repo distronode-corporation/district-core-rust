@@ -20,8 +20,9 @@ use district_auth::{AccessClaims, DrainReport, SignOutReport};
 use district_l10n::Locale;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
-    BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse, CallSummary,
-    CallTranscriptResponse, CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse,
+    BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse,
+    CallMonitorTokenResponse, CallSummary, CallTakeoverResponse, CallTranscriptResponse,
+    CallWhisperResponse, CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse,
     ContactDetailResponse, ContactListResponse, ContactMutationResponse, ConversationsResponse,
     CreateContactRequest, DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch,
     DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse,
@@ -29,7 +30,7 @@ use district_model::{
     DeviceRevokeResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest,
     EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse,
     HqTurn, HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse,
-    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    LiveCallId, MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
     MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
     OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SETTINGS_LANGUAGE_ENGLISH,
     SETTINGS_LANGUAGE_FRENCH, SchedulingEnableResponse, SchedulingHandOffResponse,
@@ -191,6 +192,27 @@ pub trait DistrictApi: Send + Sync {
         workspace_id: &str,
         call_id: &str,
     ) -> impl Future<Output = Result<CallTranscriptResponse, ApiError>> + Send;
+    /// A listen-only credential for the live call `call_id`'s room, and the
+    /// media server that holds it.
+    fn monitor_call(
+        &self,
+        call_id: &LiveCallId,
+    ) -> impl Future<Output = Result<CallMonitorTokenResponse, ApiError>> + Send;
+    /// The credential that takes the live call `call_id` over from the AI.
+    /// Sent once.
+    fn take_over_call(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+    ) -> impl Future<Output = Result<CallTakeoverResponse, ApiError>> + Send;
+    /// Sends `whisper`, one note, to the AI on the live call `call_id`. Sent
+    /// once: the AI would act on a repeat.
+    fn call_whisper(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+        whisper: &str,
+    ) -> impl Future<Output = Result<CallWhisperResponse, ApiError>> + Send;
     /// One page of contacts.
     fn contacts(
         &self,
@@ -1170,6 +1192,27 @@ where
             } => Event::TranscriptLoaded {
                 ticket,
                 result: self.api.call_transcript(&workspace_id, &call_id).await,
+            },
+            Effect::RequestCallMonitor { ticket, call_id } => Event::CallMonitorIssued {
+                ticket,
+                result: self.api.monitor_call(&call_id).await,
+            },
+            Effect::RequestCallTakeover {
+                ticket,
+                workspace_id,
+                call_id,
+            } => Event::CallTakeoverIssued {
+                ticket,
+                result: self.api.take_over_call(&workspace_id, &call_id).await,
+            },
+            Effect::SendCallWhisper {
+                ticket,
+                workspace_id,
+                call_id,
+                text,
+            } => Event::CallWhispered {
+                ticket,
+                result: self.api.call_whisper(&workspace_id, &call_id, &text).await,
             },
             Effect::LoadContacts {
                 ticket,

@@ -30,8 +30,8 @@ use std::fmt;
 use std::future::Future;
 
 use district_model::{
-    CallAnswerResponse, DialResponse, HqVoiceTokenResponse, PersonaPreviewTokenResponse, RoomE2ee,
-    RoomTokenResponse,
+    CallAnswerResponse, CallMonitorTokenResponse, CallTakeoverResponse, DialResponse,
+    HqVoiceTokenResponse, PersonaPreviewTokenResponse, RoomE2ee, RoomTokenResponse,
 };
 
 use crate::model::{Effect, Ticket, Tickets};
@@ -80,6 +80,18 @@ impl MediaCredential {
     /// An answered call's credential. A phone call has no passphrase.
     pub(crate) fn from_answer(answer: &CallAnswerResponse) -> Self {
         Self::new(&answer.url, &answer.token, None)
+    }
+
+    /// A listen-only credential for a live call's room, with the room's
+    /// passphrase when the service sends one.
+    pub(crate) fn from_monitor(credential: &CallMonitorTokenResponse) -> Self {
+        Self::new(&credential.url, &credential.token, credential.e2ee.as_ref())
+    }
+
+    /// The credential that takes a live call over. The route sends no
+    /// passphrase: a phone call's room is not encrypted.
+    pub(crate) fn from_takeover(credential: &CallTakeoverResponse) -> Self {
+        Self::new(&credential.url, &credential.token, None)
     }
 
     fn new(url: &str, token: &str, e2ee: Option<&RoomE2ee>) -> Self {
@@ -448,6 +460,9 @@ pub enum MediaOwner {
     Audition,
     /// District HQ by voice, [`HqScreen::voice`](crate::HqScreen::voice).
     HqVoice,
+    /// Supervising a live call, listening or on the call,
+    /// [`CallDetailScreen::supervise`](crate::CallDetailScreen::supervise).
+    Supervise,
 }
 
 /// Where a session's connection stands. Its end is not a state here: the
@@ -607,16 +622,25 @@ impl MediaSession {
 
 impl SignedIn {
     /// Whether a way into a room must wait: a session is held, a phone call is
-    /// under way (a dial on its way included), or a room, an audition or an
-    /// answer is asking for its credential. Starting a room or an audition, and
-    /// placing or answering a call, are refused while it is true, so a second
-    /// session can never be asked for.
+    /// under way (a dial on its way included), or a room, an audition, an
+    /// answer, an HQ voice session or a supervise session is asking for its
+    /// credential. Starting a room or an audition, and placing or answering a
+    /// call, are refused while it is true, so a second session can never be
+    /// asked for.
     pub fn media_busy(&self) -> bool {
         self.media.is_some()
+            || self.engine_wanted_elsewhere()
             || self
-                .active_call
-                .as_ref()
-                .is_some_and(|call| !call.is_over())
+                .supervision()
+                .is_some_and(crate::supervise::Supervision::minting)
+    }
+
+    /// Whether anything but a held session or supervising wants the engine:
+    /// a phone call under way, or a credential being asked for.
+    pub(crate) fn engine_wanted_elsewhere(&self) -> bool {
+        self.active_call
+            .as_ref()
+            .is_some_and(|call| !call.is_over())
             || self.ring.is_answering()
             || self.rooms.joining.is_some()
             || self
@@ -672,12 +696,18 @@ impl SignedIn {
     }
 
     /// The member turned the microphone on or off, in whatever session is held.
-    /// A viewer in a meeting room cannot publish, so nothing is asked for them.
+    /// A viewer in a meeting room cannot publish, so nothing is asked for them,
+    /// and neither is anything for a supervise session that is only listening:
+    /// its credential publishes nothing.
     pub(crate) fn set_microphone(&mut self, enabled: bool) -> Vec<Effect> {
         let can_publish = self.capabilities().can_publish_in_rooms;
+        let on_call = self.supervision().is_some_and(|supervision| {
+            supervision.phase == crate::supervise::SupervisePhase::OnCall
+        });
         self.media
             .as_ref()
             .filter(|media| media.owner != MediaOwner::Room || can_publish)
+            .filter(|media| media.owner != MediaOwner::Supervise || on_call)
             .map(|media| {
                 vec![Effect::SetMicrophone {
                     session: media.id,
@@ -718,17 +748,26 @@ impl SignedIn {
     fn media_connected(&mut self, owner: MediaOwner, tickets: &mut Tickets) -> Vec<Effect> {
         match owner {
             MediaOwner::Call => self.call_media_connected(tickets),
+            MediaOwner::Supervise => {
+                self.supervise_media_connected();
+                Vec::new()
+            }
             MediaOwner::Room | MediaOwner::Audition | MediaOwner::HqVoice => Vec::new(),
         }
     }
 
-    /// Only an HQ voice session reads what an agent says or sends: the
-    /// receptionist on a call and the Companion in a room send nothing a screen
-    /// shows.
+    /// Only an HQ voice session and a supervise session read what an agent
+    /// says or sends: the receptionist on the member's own call and the
+    /// Companion in a room send nothing a screen shows. Supervising, the
+    /// receptionist's packets are the call's lines.
     fn media_agent(&mut self, owner: MediaOwner, event: MediaEvent) -> Vec<Effect> {
         match owner {
             MediaOwner::HqVoice => {
                 self.hq_voice_agent(event);
+                Vec::new()
+            }
+            MediaOwner::Supervise => {
+                self.supervise_agent(event);
                 Vec::new()
             }
             MediaOwner::Call | MediaOwner::Room | MediaOwner::Audition => Vec::new(),
@@ -739,7 +778,7 @@ impl SignedIn {
         match owner {
             MediaOwner::Call => self.call_people_changed(tickets),
             MediaOwner::HqVoice => self.hq_voice_people_changed(tickets),
-            MediaOwner::Room | MediaOwner::Audition => Vec::new(),
+            MediaOwner::Room | MediaOwner::Audition | MediaOwner::Supervise => Vec::new(),
         }
     }
 
@@ -758,6 +797,10 @@ impl SignedIn {
             MediaOwner::Audition => self.audition_media_ended(reason, tickets),
             MediaOwner::HqVoice => {
                 self.hq_voice_media_ended(reason, tickets);
+                Vec::new()
+            }
+            MediaOwner::Supervise => {
+                self.supervise_media_ended(reason);
                 Vec::new()
             }
         }

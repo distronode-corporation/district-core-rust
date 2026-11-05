@@ -4120,6 +4120,284 @@ args = { leg = "str", place = "str" }
 state = "reviewed"
 note = "One part of the voice chain that runs outside the workspace's data region. {leg} is the part's name and {place} where it runs, both already in the reader's language. French puts a no-break space before the colon."
 
+[supervise.call_ended]
+en = "The call has ended."
+fr = "L'appel est terminé."
+ctx = "label"
+screen = "call supervise"
+tier = "T2"
+state = "draft"
+note = "Status after the call being supervised ended, or its room went."
+
+[supervise.hand_back]
+en = "Hand back to your receptionist"
+fr = "Redonner l'appel à votre réceptionniste"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that leaves the call's room, which hands the call back to the AI receptionist. The web dashboard's Live calls page, verbatim."
+
+[supervise.joining]
+en = "Connecting you to the call."
+fr = "Connexion à l'appel en cours."
+ctx = "label"
+screen = "call supervise"
+tier = "T3"
+state = "draft"
+note = "Status while the listen credential is asked for and the call's room joined. The web shows a disabled button instead."
+
+[supervise.listen_action]
+en = "Listen"
+fr = "Écouter"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that joins a call in progress to listen. The web dashboard's Live calls page, verbatim."
+
+[supervise.listen_body]
+en = "Hear the call as it happens. The caller does not hear you."
+fr = "Entendez l'appel en direct. L'appelant ne vous entend pas."
+ctx = "body"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Under the listen heading: listening joins the call's room with the microphone off, and the listen-only credential cannot publish. The web dashboard's Live calls page, verbatim."
+
+[supervise.listen_failed]
+en = "Could not connect you to the call. Try again."
+fr = "Impossible de vous connecter à l'appel. Réessayez."
+ctx = "error"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "The listen credential was refused with no reason the service named, or the room could not be joined. The web dashboard's Live calls page, verbatim."
+
+[supervise.listen_title]
+en = "Listen in"
+fr = "Écouter l'appel"
+ctx = "title"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Heading of the listen control on a call in progress. The web dashboard's Live calls page, verbatim."
+
+[supervise.listening]
+en = "You are listening"
+fr = "Vous écoutez l'appel"
+ctx = "label"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Status while listening to a call in progress. The web dashboard's Live calls page, verbatim."
+
+[supervise.no_ai]
+en = "This is a colleague's own call, with no receptionist on it, so there is no note to send and nothing to take over."
+fr = "C'est l'appel personnel d'un collègue, sans réceptionniste\u00A0: impossible de souffler une consigne ou de prendre l'appel."
+ctx = "body"
+screen = "call supervise"
+tier = "T2"
+state = "draft"
+note = "The service refused a note or a takeover because the call is a member's own softphone call, with no AI on it. Listening still works."
+
+[supervise.on_call_body]
+en = "Your receptionist has stepped back and is waiting on the line. Hand the call back and it carries on."
+fr = "Votre réceptionniste s'est mise en retrait et attend en ligne. Redonnez-lui l'appel et elle reprend la conversation."
+ctx = "body"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Under the heading while the member has taken the call over. The web dashboard's Live calls page, verbatim."
+
+[supervise.on_call_title]
+en = "You are on the call"
+fr = "Vous êtes en ligne avec l'appelant"
+ctx = "title"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Heading, and the status line, while the member has taken the call over. The web dashboard's Live calls page, verbatim."
+
+[supervise.stop_listening]
+en = "Stop listening"
+fr = "Arrêter d'écouter"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that leaves the call's room while listening. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over]
+en = "Take over the call"
+fr = "Prendre l'appel"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that opens the takeover confirmation. Nothing is asked for until it is confirmed. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_cancel]
+en = "Cancel"
+fr = "Annuler"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that closes the takeover confirmation. Nothing is asked for."
+
+[supervise.take_over_confirm]
+en = "Take over"
+fr = "Prendre l'appel"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Button that confirms the takeover. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_confirm_body]
+en = "Your receptionist tells the caller a supervisor is taking over, then steps back. Your microphone is live on the call until you hand it back. Nothing is recorded."
+fr = "Votre réceptionniste annonce à l'appelant qu'un superviseur prend le relais, puis se met en retrait. Votre micro reste ouvert dans l'appel jusqu'à ce que vous lui redonniez l'appel. Rien n'est enregistré."
+ctx = "body"
+screen = "call supervise"
+tier = "T1"
+state = "reviewed"
+note = "Body of the takeover confirmation: what happens on the call, and that the microphone is live. No call is recorded. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_confirm_title]
+en = "Take over this call?"
+fr = "Prendre cet appel?"
+ctx = "title"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Heading of the takeover confirmation. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_failed]
+en = "The call could not be taken over. Try again."
+fr = "Impossible de prendre l'appel. Réessayez."
+ctx = "error"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "The takeover was refused with no reason the service named. A member who was listening still is. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_join_failed]
+en = "Could not join the call with your microphone. Check that a microphone is connected and that District AI may use it, then try again."
+fr = "Impossible de rejoindre l'appel avec votre micro. Vérifiez qu'un micro est branché et que District AI peut l'utiliser, puis réessayez."
+ctx = "error"
+screen = "call supervise"
+tier = "T2"
+state = "draft"
+note = "The takeover credential arrived but the room could not be joined. The web's sentence names the browser's microphone permission; this one names the desktop's."
+
+[supervise.taking_over]
+en = "Taking over the call."
+fr = "Prise de l'appel en cours."
+ctx = "label"
+screen = "call supervise"
+tier = "T3"
+state = "draft"
+note = "Status while the takeover credential is asked for and the room joined again with the microphone."
+
+[supervise.transcript_waiting]
+en = "What is said shows up here while you listen."
+fr = "Ce qui se dit s'affiche ici pendant que vous écoutez."
+ctx = "body"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+note = "In place of the call's lines while listening, before anyone has spoken. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_applied]
+en = "Your receptionist used your note."
+fr = "Votre réceptionniste a utilisé votre consigne."
+ctx = "label"
+screen = "call supervise"
+tier = "T3"
+state = "draft"
+note = "The service said the AI receptionist acted on the last note. The note's first words are shown beside it."
+
+[supervise.whisper_failed]
+en = "The note was not delivered. Try again."
+fr = "La consigne soufflée n'a pas été transmise. Réessayez."
+ctx = "error"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "The note failed with no reason the service named. The draft is kept. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_not_applied]
+en = "Your receptionist could not use your note."
+fr = "Votre réceptionniste n'a pas pu utiliser votre consigne."
+ctx = "label"
+screen = "call supervise"
+tier = "T3"
+state = "draft"
+note = "The service said the AI receptionist did not act on the last note. The note's first words are shown beside it."
+
+[supervise.whisper_on_call]
+en = "Hand the call back to your receptionist to send a note"
+fr = "Redonnez l'appel à votre réceptionniste pour souffler une consigne"
+ctx = "placeholder"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+note = "Placeholder of the note field while the member has taken the call over: the receptionist is not speaking. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_placeholder]
+en = "For example: Offer a 10% discount to book today."
+fr = "Par exemple\u00A0: offrez un rabais de 10\u00A0% pour réserver aujourd'hui."
+ctx = "placeholder"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Placeholder of the note field. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_send]
+en = "Send note"
+fr = "Souffler la consigne"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Button that sends the note to the AI receptionist. The web dashboard's Live calls page, verbatim (its accessible name there)."
+
+[supervise.whisper_title]
+en = "Note to your receptionist"
+fr = "Consigne à votre réceptionniste"
+ctx = "title"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Heading of the field that sends the AI receptionist a private note on a call in progress. The caller never hears it. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_too_long]
+en = "Keep the note to {max} characters or fewer."
+fr = "La consigne doit compter au plus {max} caractères."
+ctx = "error"
+screen = "call supervise"
+tier = "T3"
+args = { max = "int" }
+state = "draft"
+note = "The note is longer than the service accepts, so it was not sent. {max} is the limit, 2,000 today. The draft is kept."
+
+[supervise.whisper_viewer]
+en = "Viewers cannot send notes"
+fr = "Les observateurs ne peuvent pas souffler de consigne"
+ctx = "placeholder"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Placeholder of the note field for a viewer, who may listen but not send a note. The web dashboard's Live calls page, verbatim."
+
 [support.capped]
 en = "Showing the 100 most recent requests."
 fr = "Affichage des 100 demandes les plus récentes."

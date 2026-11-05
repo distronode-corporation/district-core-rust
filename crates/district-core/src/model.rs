@@ -38,26 +38,27 @@ use district_live::WorkspaceUpdate;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
     AvailabilityResponse, BillingHandOffResponse, BlockedContactsResponse, CallAnswerResponse,
-    CallDetailResponse, CallHandlingPatch, CallHandlingResponse, CallSummary,
-    CallTranscriptResponse, CampaignStatusResponse, ContactDetailResponse, ContactListResponse,
-    ContactMutationResponse, ConversationsResponse, CreateContactRequest, DeskLogoRemovalResponse,
-    DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse, DeskTicketCreateResponse,
-    DeskTicketDraft, DeskTicketResponse, DeskTicketStatus, DeskTicketStatusResponse,
-    DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DialResponse, DirectoryEntry,
-    DraftListResponse, DraftResponse, DraftSaveRequest, HqConfirmResponse, HqPendingWrite,
-    HqPromptResponse, HqProposalCancelResponse, HqTurn, HqVoiceProposal, HqVoiceScreen,
-    HqVoiceTokenResponse, KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode,
-    KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail,
-    MeetingSummary, MemberListResponse, MessageSearchResponse, MessageThreadResponse,
-    MessagingCredentials, MessagingResponse, MessagingTestResponse, NumberSearch,
-    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, PersonaOptionsResponse,
-    PersonaPatch, PersonaPreviewForm, PersonaPreviewTokenResponse, RenameResponse,
-    RoomTokenResponse, RoutingRule, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SupportCloseResponse,
-    SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
-    SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
-    UnreadCountResponse, UsageHistoryResponse, UsageResponse, VoiceStudioResponse,
-    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
+    CallDetailResponse, CallHandlingPatch, CallHandlingResponse, CallMonitorTokenResponse,
+    CallSummary, CallTakeoverResponse, CallTranscriptResponse, CallWhisperResponse,
+    CampaignStatusResponse, ContactDetailResponse, ContactListResponse, ContactMutationResponse,
+    ConversationsResponse, CreateContactRequest, DeskLogoRemovalResponse, DeskReplyResponse,
+    DeskSettingsPatch, DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft,
+    DeskTicketResponse, DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse,
+    DeviceListResponse, DeviceRevokeResponse, DialResponse, DirectoryEntry, DraftListResponse,
+    DraftResponse, DraftSaveRequest, HqConfirmResponse, HqPendingWrite, HqPromptResponse,
+    HqProposalCancelResponse, HqTurn, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse,
+    KnowledgeDocumentDraft, KnowledgeListResponse, KnowledgeMode, KnowledgeModeResponse,
+    LiveCallId, MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    MemberListResponse, MessageSearchResponse, MessageThreadResponse, MessagingCredentials,
+    MessagingResponse, MessagingTestResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
+    OwnedNumbersResponse, PersonaOptionsResponse, PersonaPatch, PersonaPreviewForm,
+    PersonaPreviewTokenResponse, RenameResponse, RoomTokenResponse, RoutingRule,
+    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
+    SendMessageRequest, SendMessageResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UsageHistoryResponse, UsageResponse, VoiceStudioResponse, WorkflowListResponse,
+    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
     WorkspaceConfigResponse, WorkspaceListResponse,
 };
 use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
@@ -94,6 +95,7 @@ use crate::settings::{
     MessagingWrite, PersonaEvent, RoutingRulesEvent, ToolsEvent, VoiceStudioEvent,
 };
 use crate::signed_in::{Next, SignedIn};
+use crate::supervise::SuperviseEvent;
 use crate::support::SupportEvent;
 use crate::thread::{PickedAttachment, ThreadEvent};
 use crate::transcript::TranscriptWatch;
@@ -222,6 +224,8 @@ pub enum Event {
     Thread(ThreadEvent),
     /// Something on the call log or a call.
     Calls(CallsEvent),
+    /// Supervising the open call: listening, a note, a takeover.
+    Supervise(SuperviseEvent),
     /// Something on the contacts screens.
     Contacts(ContactsEvent),
     /// Something on the District HQ screen.
@@ -495,6 +499,27 @@ pub enum Event {
         ticket: Ticket,
         /// The transcript.
         result: Result<CallTranscriptResponse, ApiError>,
+    },
+    /// The listen-only credential for the open call's room landed.
+    CallMonitorIssued {
+        /// The ticket of [`Effect::RequestCallMonitor`].
+        ticket: Ticket,
+        /// The service's answer. Its `Debug` output leaves the credential out.
+        result: Result<CallMonitorTokenResponse, ApiError>,
+    },
+    /// The credential that takes the open call over landed.
+    CallTakeoverIssued {
+        /// The ticket of [`Effect::RequestCallTakeover`].
+        ticket: Ticket,
+        /// The service's answer. Its `Debug` output leaves the credential out.
+        result: Result<CallTakeoverResponse, ApiError>,
+    },
+    /// A note to the receptionist on the open call was delivered, or not.
+    CallWhispered {
+        /// The ticket of [`Effect::SendCallWhisper`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<CallWhisperResponse, ApiError>,
     },
     /// A page of contacts was read.
     ContactsLoaded {
@@ -1065,6 +1090,18 @@ impl Event {
                 ticket,
                 result: Err(error),
             }
+            | Event::CallMonitorIssued {
+                ticket,
+                result: Err(error),
+            }
+            | Event::CallTakeoverIssued {
+                ticket,
+                result: Err(error),
+            }
+            | Event::CallWhispered {
+                ticket,
+                result: Err(error),
+            }
             | Event::ContactsLoaded {
                 ticket,
                 result: Err(error),
@@ -1600,6 +1637,36 @@ pub enum Effect {
         workspace_id: String,
         /// The call.
         call_id: String,
+    },
+    /// Ask for a listen-only credential for a live call's room. The service
+    /// works out the workspace from the call.
+    RequestCallMonitor {
+        /// Returned in [`Event::CallMonitorIssued`].
+        ticket: Ticket,
+        /// The call.
+        call_id: LiveCallId,
+    },
+    /// Ask for the credential that takes a live call over from the AI. Sent
+    /// once.
+    RequestCallTakeover {
+        /// Returned in [`Event::CallTakeoverIssued`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The call.
+        call_id: LiveCallId,
+    },
+    /// Send a note to the AI on a live call. Sent once: the AI would act on
+    /// a repeat.
+    SendCallWhisper {
+        /// Returned in [`Event::CallWhispered`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The call.
+        call_id: LiveCallId,
+        /// The note, trimmed.
+        text: String,
     },
     /// Read a page of contacts.
     LoadContacts {
@@ -2402,6 +2469,9 @@ impl Effect {
             | Self::LoadCalls { ticket, .. }
             | Self::LoadCall { ticket, .. }
             | Self::LoadTranscript { ticket, .. }
+            | Self::RequestCallMonitor { ticket, .. }
+            | Self::RequestCallTakeover { ticket, .. }
+            | Self::SendCallWhisper { ticket, .. }
             | Self::LoadContacts { ticket, .. }
             | Self::LoadContact { ticket, .. }
             | Self::CreateContact { ticket, .. }
@@ -2541,6 +2611,9 @@ pub(crate) enum Slot {
     CallLogMore,
     CallDetail,
     Transcript,
+    SuperviseListen,
+    SuperviseTakeover,
+    SuperviseWhisper,
     Contacts,
     ContactsMore,
     ContactCreate,
@@ -2654,7 +2727,7 @@ const SLOTS: usize = Slot::RingDeadline as usize + 1;
 /// forgotten with the sections. The draft write is not among them: a reply
 /// saved as the workspace closes still lands, and the writes waiting behind it
 /// go after it.
-pub(crate) const WORKSPACE_SLOTS: [Slot; 68] = [
+pub(crate) const WORKSPACE_SLOTS: [Slot; 71] = [
     Slot::Unread,
     Slot::Conversations,
     Slot::DraftKeys,
@@ -2674,6 +2747,9 @@ pub(crate) const WORKSPACE_SLOTS: [Slot; 68] = [
     Slot::CallLogMore,
     Slot::CallDetail,
     Slot::Transcript,
+    Slot::SuperviseListen,
+    Slot::SuperviseTakeover,
+    Slot::SuperviseWhisper,
     Slot::Contacts,
     Slot::ContactsMore,
     Slot::ContactCreate,
@@ -2985,6 +3061,9 @@ impl Model {
             Event::Inbox(event) => self.signed_in(|s, tickets, _| s.inbox_event(event, tickets)),
             Event::Thread(event) => self.signed_in(|s, tickets, _| s.thread_event(event, tickets)),
             Event::Calls(event) => self.signed_in(|s, tickets, _| s.calls_event(event, tickets)),
+            Event::Supervise(event) => {
+                self.signed_in(|s, tickets, _| s.supervise_event(event, tickets))
+            }
             Event::Contacts(event) => {
                 self.signed_in(|s, tickets, _| s.contacts_event(event, tickets))
             }
@@ -3155,6 +3234,15 @@ impl Model {
             }
             Event::TranscriptLoaded { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.transcript_loaded(ticket, result, tickets))
+            }
+            Event::CallMonitorIssued { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.call_monitor_issued(ticket, result, tickets))
+            }
+            Event::CallTakeoverIssued { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.call_takeover_issued(ticket, result, tickets))
+            }
+            Event::CallWhispered { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.call_whispered(ticket, result, tickets))
             }
             Event::ContactsLoaded { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.contacts_loaded(ticket, result, tickets))

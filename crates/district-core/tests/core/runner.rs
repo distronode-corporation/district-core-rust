@@ -27,24 +27,25 @@ use district_core::{NumberAnswer, NumberCall};
 use district_model::BillingHandOffResponse;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse, BlockTarget,
-    BlockedContactsResponse, CallDetailResponse, CallSummary, CallTranscriptResponse,
-    CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse, ContactDetailResponse,
-    ContactListResponse, ContactMutationResponse, ConversationsResponse, CreateContactRequest,
-    DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse,
-    DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse, DeskTicketStatus,
-    DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
-    DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
-    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqRole, HqTurn,
-    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, MarkReadResponse,
-    MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
-    MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
-    OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
-    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
-    SupportRequestDraft, SupportRequestKind, SupportRequestResponse, SupportRequestsResponse,
-    ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
-    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
-    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
+    BlockedContactsResponse, CallDetailResponse, CallMonitorTokenResponse, CallSummary,
+    CallTakeoverResponse, CallTranscriptResponse, CallWhisperResponse, CampaignStatusResponse,
+    ClearIntelResponse, ContactBlockResponse, ContactDetailResponse, ContactListResponse,
+    ContactMutationResponse, ConversationsResponse, CreateContactRequest, DeskLogoRemovalResponse,
+    DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse, DeskTicketCreateResponse,
+    DeskTicketDraft, DeskTicketResponse, DeskTicketStatus, DeskTicketStatusResponse,
+    DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DraftDeleteResponse,
+    DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse, HqConfirmResponse,
+    HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqRole, HqTurn,
+    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, LiveCallId,
+    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
+    OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse,
+    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
+    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestKind, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WorkflowListResponse,
+    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -64,8 +65,8 @@ use district_model::{
 };
 
 use crate::support::{
-    AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, overview,
-    voice_credential, voice_proposal, workspace_list,
+    AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, monitor_credential,
+    overview, takeover_credential, voice_credential, voice_proposal, workspace_list,
 };
 
 /// What every fake did, in order.
@@ -264,6 +265,34 @@ impl DistrictApi for FakeApi {
     ) -> Result<CallTranscriptResponse, ApiError> {
         self.0.push(format!("transcript {workspace_id} {call_id}"));
         Ok(fixture("district-call-transcript.json"))
+    }
+
+    async fn monitor_call(
+        &self,
+        call_id: &LiveCallId,
+    ) -> Result<CallMonitorTokenResponse, ApiError> {
+        self.0.push(format!("monitor {call_id}"));
+        Ok(monitor_credential())
+    }
+
+    async fn take_over_call(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+    ) -> Result<CallTakeoverResponse, ApiError> {
+        self.0.push(format!("takeover {workspace_id} {call_id}"));
+        Ok(takeover_credential())
+    }
+
+    async fn call_whisper(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+        whisper: &str,
+    ) -> Result<CallWhisperResponse, ApiError> {
+        self.0
+            .push(format!("whisper {workspace_id} {call_id} {whisper}"));
+        Ok(CallWhisperResponse { success: true })
     }
 
     async fn contacts(
@@ -2551,6 +2580,39 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
                 result: Ok(fixture("district-room-token.json")),
             },
         ),
+        (
+            Effect::RequestCallMonitor {
+                ticket,
+                call_id: live_call(),
+            },
+            Event::CallMonitorIssued {
+                ticket,
+                result: Ok(monitor_credential()),
+            },
+        ),
+        (
+            Effect::RequestCallTakeover {
+                ticket,
+                workspace_id: ws(),
+                call_id: live_call(),
+            },
+            Event::CallTakeoverIssued {
+                ticket,
+                result: Ok(takeover_credential()),
+            },
+        ),
+        (
+            Effect::SendCallWhisper {
+                ticket,
+                workspace_id: ws(),
+                call_id: live_call(),
+                text: "Offer the morning slot".to_owned(),
+            },
+            Event::CallWhispered {
+                ticket,
+                result: Ok(CallWhisperResponse { success: true }),
+            },
+        ),
     ];
     for (effect, event) in cases {
         // The ticket an effect names is the one its event comes back with.
@@ -2603,8 +2665,15 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             "meetings ws-contract-active",
             "meeting ws-contract-active meeting_contract_completed",
             "room token meet_ws-contract-active_standup",
+            "monitor 5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a",
+            "takeover ws-contract-active 5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a",
+            "whisper ws-contract-active 5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a Offer the morning slot",
         ]
     );
+}
+
+fn live_call() -> LiveCallId {
+    LiveCallId::new("5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a").unwrap()
 }
 
 /// A hand-off the browser answered is asked for with the answer's nonce, and

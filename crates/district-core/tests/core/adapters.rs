@@ -538,7 +538,7 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
         )
         .mount(&server)
         .await;
-    let routes: [(&str, &str, serde_json::Value); 38] = [
+    let routes: [(&str, &str, serde_json::Value); 40] = [
         (
             "POST",
             "/api/district/hq/voice-token",
@@ -724,6 +724,21 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
             "POST",
             "/api/district/calls/token",
             fixture("district-room-token.json"),
+        ),
+        (
+            "POST",
+            "/api/district/calls/whisper",
+            json!({"success": true}),
+        ),
+        (
+            "POST",
+            "/api/district/calls/5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a/takeover",
+            json!({
+                "success": true,
+                "url": "wss://media-room.example.com",
+                "token": "contract-livekit-takeover-jwt",
+                "roomName": "call-room-contract-1",
+            }),
         ),
     ];
     for (verb, route, body) in routes {
@@ -1065,6 +1080,40 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
     assert_eq!(
         DistrictApi::room_token(&client, &room).await.unwrap().url,
         "wss://media.example.com"
+    );
+
+    // Supervising a live call: the token route answers a call's id with the
+    // call room's server.
+    Mock::given(method("POST"))
+        .and(path("/api/district/calls/token"))
+        .and(body_string_contains("5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "success": true,
+            "token": "contract-livekit-monitor-jwt",
+            "url": "wss://media-room.example.com",
+        })))
+        .with_priority(1)
+        .mount(&server)
+        .await;
+    let call = district_model::LiveCallId::new("5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a").unwrap();
+    assert!(
+        DistrictApi::monitor_call(&client, &call)
+            .await
+            .unwrap()
+            .success
+    );
+    assert_eq!(
+        DistrictApi::take_over_call(&client, ws, &call)
+            .await
+            .unwrap()
+            .room_name,
+        "call-room-contract-1"
+    );
+    assert!(
+        DistrictApi::call_whisper(&client, ws, &call, "Offer the morning slot")
+            .await
+            .unwrap()
+            .success
     );
 }
 
