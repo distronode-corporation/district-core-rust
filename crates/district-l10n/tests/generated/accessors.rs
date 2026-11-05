@@ -1369,7 +1369,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_last_agency_member(Locale::En), "This is the last administrator of the workspace, so it cannot be removed or demoted.");
     assert_eq!(api_error_strings::api_error_last_agency_member(Locale::FrCa), "Il s'agit de la dernière personne administratrice de l'espace de travail, elle ne peut donc être ni retirée ni rétrogradée.");
     assert_eq!(api_error_strings::api_error_live_changed(Locale::En), "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish.");
-    assert_eq!(api_error_strings::api_error_live_changed(Locale::FrCa), "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Mettez le brouillon à jour avec les paramètres en vigueur, relisez-le, puis publiez-le.");
+    assert_eq!(api_error_strings::api_error_live_changed(Locale::FrCa), "Quelqu'un a modifié ces réglages depuis la rédaction du brouillon. Mettez le brouillon à jour avec les réglages en vigueur, relisez-le, puis publiez-le.");
     assert_eq!(api_error_strings::api_error_mailbox_not_found(Locale::En), "No mailbox is connected to this workspace.");
     assert_eq!(api_error_strings::api_error_mailbox_not_found(Locale::FrCa), "Aucune boîte de réception n'est connectée à cet espace de travail.");
     assert_eq!(api_error_strings::api_error_managed_billing_required(Locale::En), "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan.");

@@ -85,12 +85,21 @@ KEPT = ("fr", "state", "same_ok", "fr_variant", "waive", "max", "id")
 CONTRACT_STATE = "reviewed"
 
 # French this crate words differently from the service: (error code, the
-# contract's words, the catalog's words). The service's « réglages » is the
-# Apple word for settings; a non-Apple catalog says « paramètres » (frcheck's
-# OS-WORD rule), as district-android does. A row whose words the contract no
-# longer holds fails the generation, and tests/errors.rs reads this list from
+# contract's words, the catalog's words). Empty since Sean's French sign-off of
+# 2026-11-05 (GitLab #2 note 4173250442) took the service's « réglages » for
+# live_changed (OS_WORD_OK below). A row whose words the contract no longer holds
+# fails the generation, and tests/errors.rs reads this list from
 # tests/generated/french_ahead.rs.
-FRENCH_AHEAD = (("live_changed", "réglages", "paramètres"),)
+FRENCH_AHEAD: tuple[tuple[str, str, str], ...] = ()
+
+# Error sentences whose French says « réglages » for something other than the
+# OS Settings app, which frcheck's OS-WORD forbids in a non-Apple catalog unless
+# the entry records why: error code -> that reason, written as `os_word_ok`.
+# A code the contract no longer has fails the generation, and frcheck fails an
+# os_word_ok whose French no longer says the word.
+OS_WORD_OK = {
+    "live_changed": "the workspace's settings, not the OS Settings app; Sean 2026-11-05, GitLab #2 note 4173250442",
+}
 
 # Where a contract's French goes in an entry while the catalog is built; never
 # written to a catalog.
@@ -219,6 +228,10 @@ def api_error_entries(doc: dict) -> tuple[dict, list[tuple[str, str, str | None]
     for ahead, _, _ in FRENCH_AHEAD:
         if ahead not in doc["codes"]:
             raise L10N.L10nError([f"FRENCH_AHEAD: {ahead} is not a code the contract has; remove its row"])
+    for code, reason in OS_WORD_OK.items():
+        if code not in doc["codes"]:
+            raise L10N.L10nError([f"OS_WORD_OK: {code} is not a code the contract has; remove its row"])
+        entries[api_error_key(code)]["os_word_ok"] = reason
     return entries, table
 
 

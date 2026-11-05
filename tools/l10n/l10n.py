@@ -41,7 +41,7 @@ PLATFORMS = frozenset("rust swift android csharp gtk neutral".split())
 
 META_ORDER = ("catalog", "platform", "apple")
 FIELD_ORDER = (
-    "en", "fr", "ctx", "screen", "tier", "fixed", "args", "max", "state", "same_ok", "fr_variant", "waive", "id", "note",
+    "en", "fr", "ctx", "screen", "tier", "fixed", "args", "max", "state", "same_ok", "fr_variant", "os_word_ok", "waive", "id", "note",
 )
 PLURAL_ORDER = ("one", "many", "other")
 EN_FORMS = ("one", "other")
@@ -455,11 +455,13 @@ def validate_entry(e: Entry, add) -> None:
         add("same_ok must be true or false")
     if "fr_variant" in f and (not isinstance(f["fr_variant"], str) or not f["fr_variant"].strip()):
         add("fr_variant must be a non-empty string")
+    if "os_word_ok" in f and (not isinstance(f["os_word_ok"], str) or not f["os_word_ok"].strip()):
+        add("os_word_ok must be a non-empty reason string")
     if "fixed" in f:
         if not isinstance(f["fixed"], bool):
             add("fixed must be true or false")
         elif f["fixed"]:
-            for name in ("fr", "state", "max", "fr_variant", "same_ok"):
+            for name in ("fr", "state", "max", "fr_variant", "os_word_ok", "same_ok"):
                 if name in f:
                     add(f"a fixed entry is never translated, so it must not have {name}")
     if "waive" in f:

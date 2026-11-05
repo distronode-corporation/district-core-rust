@@ -802,7 +802,7 @@ pub fn api_error_last_agency_member(l: Locale) -> &'static str {
 pub fn api_error_live_changed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish.",
-        Locale::FrCa => "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Mettez le brouillon à jour avec les paramètres en vigueur, relisez-le, puis publiez-le.",
+        Locale::FrCa => "Quelqu'un a modifié ces réglages depuis la rédaction du brouillon. Mettez le brouillon à jour avec les réglages en vigueur, relisez-le, puis publiez-le.",
     }
 }
 

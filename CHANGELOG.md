@@ -145,10 +145,9 @@ fields, and `SendMessageRequest` gains three fields.
   3.5 Flash as the stable brain (was 2.5), with `minimal` to `high` thinking, and the
   studio tests read the new catalogue. `contracts/desktop/` is unchanged.
 - The error table and wire labels have the service's new codes and values with its French,
-  and take the service's newer French for six sentences and labels. `live_changed` keeps
-  « paramètres » where the service says « réglages » (the Apple word).
+  and take the service's newer French for six sentences and labels.
 - `contracts/i18n/` from the server's 35edbd30c, with its five French wordings in the
-  catalogs: `live_changed` (« Mettez le brouillon à jour avec les paramètres en
+  catalogs: `live_changed` (« Mettez le brouillon à jour avec les réglages en
   vigueur »), `caller_id_not_confirmed` and `caller_id_carrier_failed` (« transporteur »),
   `caller_id_mobile_unverified` (« inscrivez-le ») and the workflow outcome
   `quiet_hours` (« il n'était pas entre 8 h et 21 h »).
@@ -158,6 +157,10 @@ fields, and `SendMessageRequest` gains three fields.
   `messaging_apps_managed`) and two workflow reasons (`automated_sender`, `loop_paused`),
   the disposition `info` as « Renseignements », and message delivery labels for `handled`
   (« Traité ») and `read` (« Lu »).
+- `live_changed` says « réglages » as the service, the website and core-swift do (Sean's
+  French sign-off): the workspace's settings, not the OS Settings app. The entry records that
+  reason as `os_word_ok`, which frcheck's OS-WORD now honours (`tools/l10n/` vendored from the
+  server's 2980456), and the catalog is signed off for 8.0.0 (`i18n/fr-CA/signoff.json`).
 - Call sends the E.164 number the line before Call showed, no longer the text as typed,
   and works only for a whole number in a known shape. A wrong length keeps Call off, and
   is said only once the member stops typing (`CheckLength`, or a refused `Dial`).

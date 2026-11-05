@@ -1451,6 +1451,15 @@ def _lint_entry(ctx: Ctx, e: dict) -> None:
             ctx.add(key + form, "PH-PARITY", f"unbalanced brace in {show(value)} (literal braces are {{{{ and }}}})")
     # Per French form
     is_apple = ctx.platform == "apple"
+    # `os_word_ok` (README Fields): the recorded reason this entry's French says the other
+    # platform's settings word (« réglages » outside Apple, « paramètres » on Apple) on purpose,
+    # because it names something other than the OS Settings app. It lifts only that check, and
+    # only with a reason; an allow with nothing left to allow is stale and fails too.
+    os_word_ok = e.get("os_word_ok")
+    os_word_allowed = isinstance(os_word_ok, str) and bool(os_word_ok.strip())
+    if "os_word_ok" in e and not os_word_allowed:
+        ctx.add(key, "OS-WORD", "os_word_ok needs a recorded reason (why this French says the other platform's word)")
+    os_word_used = False
     names = ctx.tb.never
     os_rows = [r for r in ctx.tb.os if r.get("platform") in ("all", ctx.platform)]
     siblings = os_siblings(os_rows)
@@ -1468,10 +1477,12 @@ def _lint_entry(ctx: Ctx, e: dict) -> None:
             ctx.add(k, "REG-TU", f"tutoiement {w!r}: vouvoiement only")
         for sev, msg in ban_issues(value, names, ctx.tb):
             ctx.add(k, "BAN", msg, sev)
-        if is_apple and re.search(r"\bparamètres\b", value, re.I):
-            ctx.add(k, "OS-WORD", "apple catalog: the OS word is 'Réglages', not 'Paramètres'")
-        if not is_apple and re.search(r"\bréglages\b", value, re.I):
-            ctx.add(k, "OS-WORD", "non-apple catalog: the OS word is 'Paramètres', not 'Réglages'")
+        other_word = r"\bparamètres\b" if is_apple else r"\bréglages\b"
+        if re.search(other_word, value, re.I):
+            os_word_used = True
+            if not os_word_allowed:
+                ctx.add(k, "OS-WORD", "apple catalog: the OS word is 'Réglages', not 'Paramètres'" if is_apple
+                        else "non-apple catalog: the OS word is 'Paramètres', not 'Réglages'")
         if is_apple and e.get("screen") not in ctx.allow_screens:
             for rx, what in STORE_PATTERNS:
                 if rx.search(value):
@@ -1513,6 +1524,8 @@ def _lint_entry(ctx: Ctx, e: dict) -> None:
         offer = offer_in(value) if is_apple else None
         if offer and not RE_OFFER_EN.search(en_text):
             ctx.add(k, "STORE-APPLE", f"fr adds an offer en lacks: {offer!r}")
+    if os_word_allowed and not os_word_used:
+        ctx.add(key, "OS-WORD", "os_word_ok is set but the French does not say the other platform's word; remove it")
     # Memory
     if en is not None and not e.get("fr_variant"):
         for c, sev in ((e.get("ctx"), "error"), ("*", "warn")):
