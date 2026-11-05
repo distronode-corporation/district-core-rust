@@ -4274,7 +4274,7 @@ fr = "Les pièces jointes ne peuvent partir que par texto. Retirez-les pour envo
 ctx = "body"
 screen = "conversation"
 tier = "T3"
-state = "draft"
+state = "reviewed"
 note = "Beside the attached images when the reply channel chosen is not text messages (email, WhatsApp, Messenger and Instagram carry no attachments from here). Send is off until they are removed. New French, not on the web."
 
 [thread.channel_instagram]
