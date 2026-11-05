@@ -297,6 +297,14 @@ fn the_call_log_is_a_bare_array_covering_every_kind_of_row() {
     );
     covers("a transcript", calls.iter().any(|c| c.has_transcript));
     covers("no transcript", calls.iter().any(|c| !c.has_transcript));
+    covers(
+        "the receptionist on the call",
+        calls.iter().any(|c| c.receptionist_on_call),
+    );
+    covers(
+        "no receptionist on the call",
+        calls.iter().any(|c| !c.receptionist_on_call),
+    );
     assert!(
         calls.iter().all(|c| c.transcript.is_empty()),
         "the transcript text never rides on the log"

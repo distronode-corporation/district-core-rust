@@ -27,12 +27,17 @@ fn workspace_of(role: &str) -> &'static str {
     }
 }
 
-/// The call `id` as the service reads it, with `status`.
+/// The call `id` as the service reads it, with `status`, the receptionist on
+/// it.
 fn call_read(id: &str, status: &str) -> CallDetailResponse {
     let mut detail: CallDetailResponse = fixture("district-call-detail.json");
     let call = detail.call.as_mut().expect("a call in the fixture");
     call.id = id.to_owned();
     call.status = status.to_owned();
+    assert!(
+        call.receptionist_on_call,
+        "the fixture's call has its receptionist"
+    );
     detail
 }
 
@@ -1202,4 +1207,48 @@ fn a_listening_session_joining_mid_takeover_leaves_the_takeover_asked_for() {
     assert_eq!(phase(&model), SupervisePhase::TakingOver);
     model.update(media(session, MediaEvent::Connected));
     assert_eq!(phase(&model), SupervisePhase::OnCall);
+}
+
+/// A member's own softphone call, or one with no room: the call row says no
+/// receptionist is on it, so neither a note nor a takeover is offered, before
+/// anything is asked for. It may still be listened to.
+#[test]
+fn a_call_row_without_its_receptionist_offers_no_note_or_takeover_up_front() {
+    let (mut model, _) = loaded(AGENCY, "agency");
+    let effects = model.update(Event::Navigate(Route::CallDetail {
+        call_id: CALL.to_owned(),
+    }));
+    let ticket = pick(&effects, |effect| matches!(effect, Effect::LoadCall { .. }));
+    let mut detail = call_read(CALL, "in-progress");
+    detail.call.as_mut().unwrap().receptionist_on_call = false;
+    model.update(Event::CallLoaded {
+        ticket,
+        result: Ok(detail),
+    });
+    assert!(!signed_in(&model).supervised_call_has_receptionist());
+    let shown = controls(&model);
+    assert!(shown.live && shown.can_supervise && shown.can_listen);
+    assert!(!shown.can_whisper);
+    assert!(!shown.can_take_over);
+    assert!(!supervision(&model).no_receptionist, "nothing was refused");
+    assert_eq!(
+        signed_in(&model).whisper_placeholder(),
+        "That is a team member's own call. Your receptionist is not on it, so you cannot \
+         send a note or take the call over."
+    );
+    supervise(&mut model, SuperviseEvent::EditWhisper("Offer".to_owned()));
+    assert!(supervise(&mut model, SuperviseEvent::SendWhisper).is_empty());
+    assert!(supervise(&mut model, SuperviseEvent::TakeOver).is_empty());
+    assert!(!supervision(&model).confirming_takeover);
+    assert!(matches!(
+        supervise(&mut model, SuperviseEvent::Listen).as_slice(),
+        [Effect::RequestCallMonitor { .. }]
+    ));
+
+    // A call with its receptionist offers both, and a call not read yet
+    // has none to offer.
+    let model = on_live_call("agency");
+    assert!(signed_in(&model).supervised_call_has_receptionist());
+    let (model, _) = loaded(AGENCY, "agency");
+    assert!(!signed_in(&model).supervised_call_has_receptionist());
 }

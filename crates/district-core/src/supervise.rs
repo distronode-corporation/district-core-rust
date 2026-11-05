@@ -14,10 +14,11 @@
 //! (`in-progress`), as the service does for a whisper and a takeover.
 //!
 //! A member's own call, placed or answered on their softphone, has no
-//! receptionist on it, and the service refuses a note or a takeover on it
-//! (`call_has_no_receptionist`). Nothing in the call as the service reads it
-//! says so beforehand, so the first such refusal marks the call
-//! ([`Supervision::no_receptionist`]), and neither is offered on it again.
+//! receptionist on it, and neither does a call with no room: the call row
+//! says so (`receptionistOnCall`), and neither a note nor a takeover is
+//! offered on it. A service older than that key still refuses both
+//! (`call_has_no_receptionist`), so the first such refusal marks the call
+//! ([`Supervision::no_receptionist`]) and neither is offered on it again.
 //! Listening to a call that has ended is refused (`call_ended`), and so are a
 //! note and a takeover (`call_not_in_progress`); each ends the session as the
 //! call's end does.
@@ -119,10 +120,11 @@ pub struct Supervision {
     pub confirming_takeover: bool,
     /// The note to the receptionist.
     pub whisper: Whisper,
-    /// Whether the service said this is a member's own call, with no
+    /// Whether a refusal said this is a member's own call, with no
     /// receptionist on it: nothing to send a note to or take over. It may
-    /// still be listened to. Nothing in a call as the service reads it says
-    /// so beforehand, so it is learned from the first refusal.
+    /// still be listened to. The call row says so beforehand
+    /// (`receptionist_on_call`); this is for a service older than that key.
+    /// See [`SignedIn::supervised_call_has_receptionist`].
     pub no_receptionist: bool,
     /// The call's lines heard so far, oldest first.
     lines: Vec<TranscriptChunk>,
@@ -355,10 +357,7 @@ impl SignedIn {
         let controls = self.supervise_controls();
         if !controls.can_supervise {
             s::supervise_whisper_viewer(l())
-        } else if self
-            .supervision()
-            .is_some_and(|supervision| supervision.no_receptionist)
-        {
+        } else if !self.supervised_call_has_receptionist() {
             s::supervise_no_receptionist(l())
         } else if self
             .supervision()
@@ -382,6 +381,7 @@ impl SignedIn {
         let capabilities = self.capabilities();
         let can_supervise = capabilities.can_change;
         let engine = self.calls_available && self.engine_free_for_supervise();
+        let receptionist = self.supervised_call_has_receptionist();
         let phase = supervision.phase;
         let out_of_room = matches!(phase, SupervisePhase::Idle | SupervisePhase::Ended(_));
         SuperviseControls {
@@ -393,16 +393,26 @@ impl SignedIn {
             ),
             can_supervise,
             can_whisper: can_supervise
-                && !supervision.no_receptionist
+                && receptionist
                 && phase != SupervisePhase::OnCall
                 && !supervision.whisper.is_sending(),
             can_take_over: can_supervise
-                && !supervision.no_receptionist
+                && receptionist
                 && engine
                 && !matches!(phase, SupervisePhase::TakingOver | SupervisePhase::OnCall),
             can_hand_back: phase == SupervisePhase::OnCall
                 || (phase == SupervisePhase::TakingOver && self.supervise_session().is_some()),
         }
+    }
+
+    /// Whether the receptionist is on the open call, so there is something to
+    /// send a note to or take over: the call row says so, and no refusal has
+    /// said otherwise.
+    pub fn supervised_call_has_receptionist(&self) -> bool {
+        self.call.as_ref().is_some_and(|screen| {
+            !screen.supervise.no_receptionist
+                && matches!(&screen.call, CallView::Ready(call) if call.receptionist_on_call)
+        })
     }
 
     /// Whether the open call is in progress, as last read, with an id the
