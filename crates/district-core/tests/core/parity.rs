@@ -625,6 +625,72 @@ fn an_assignment_landing_after_the_thread_closed_reads_the_list_again() {
     )));
 }
 
+#[test]
+fn an_assignment_lands_on_the_thread_it_was_asked_for_not_the_one_open() {
+    let (mut model, _) = inbox_with(AGENCY, "agency", owners());
+    let effects = opened(&mut model, WALK_IN);
+    model.update(Event::MembersLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadMembers { .. })),
+        result: Ok(members()),
+    });
+    let given = thread_event(
+        &mut model,
+        ThreadEvent::Assign(Some("founder@example.com".to_owned())),
+    );
+
+    // The member goes on to another thread before the answer lands.
+    model.update(Event::Navigate(Route::Inbox));
+    let effects = opened(&mut model, ADA);
+    model.update(Event::MembersLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadMembers { .. })),
+        result: Ok(members()),
+    });
+    let before = screen(&model).assignment.clone();
+    assert_eq!(before.assignee.as_deref(), Some("contract@example.com"));
+
+    model.update(Event::ConversationAssigned {
+        ticket: last_ticket(&given),
+        result: Ok(fixture("district-conversation-assign.json")),
+    });
+    assert_eq!(
+        screen(&model).assignment,
+        before,
+        "the open thread is not touched"
+    );
+    let inbox = &signed_in(&model).inbox;
+    assert_eq!(
+        inbox.conversation(ADA).unwrap().assignee(),
+        Some("contract@example.com")
+    );
+    assert_eq!(
+        inbox.conversation(WALK_IN).unwrap().assignee(),
+        Some("teammate@example.com"),
+        "the thread it was asked for takes the answer"
+    );
+
+    // A refusal for the thread left behind is not said on this one either.
+    let effects = thread_event(
+        &mut model,
+        ThreadEvent::Assign(Some("operator@example.com".to_owned())),
+    );
+    model.update(Event::Navigate(Route::Inbox));
+    let reopened = opened(&mut model, WALK_IN);
+    model.update(Event::MembersLoaded {
+        ticket: pick(&reopened, |e| matches!(e, Effect::LoadMembers { .. })),
+        result: Ok(members()),
+    });
+    let before = screen(&model).assignment.clone();
+    model.update(Event::ConversationAssigned {
+        ticket: last_ticket(&effects),
+        result: Err(coded(
+            400,
+            "assignee_not_member",
+            "That person is not a member of this workspace.",
+        )),
+    });
+    assert_eq!(screen(&model).assignment, before);
+}
+
 // WhatsApp.
 
 /// On WhatsApp in the WhatsApp-only thread, with the window read as `window`.
@@ -926,6 +992,110 @@ fn text_refused_because_the_window_closed_turns_to_templates() {
         )));
         assert!(screen(&model).whatsapp_window_closed());
         assert_eq!(screen(&model).composer.text, "Late reply", "kept");
+    });
+}
+
+/// Free text sent on WhatsApp before the window was read, refused because the
+/// window has closed: the effects of the refusal, and the window read again.
+fn refused_before_the_window_was_read() -> (Model, Vec<Effect>) {
+    let (mut model, _) = inbox_with(AGENCY, "agency", reply_options());
+    let opening = opened(&mut model, WHATSAPP_ONLY);
+    let first_read = pick(&opening, |e| matches!(e, Effect::LoadWhatsAppWindow { .. }));
+    assert_eq!(whatsapp(&model).sender_id, None);
+    thread_event(&mut model, ThreadEvent::Compose("Late reply".to_owned()));
+    let effects = thread_event(&mut model, ThreadEvent::Send);
+    let effects = model.update(Event::MessageSent {
+        ticket: pick(&effects, |e| matches!(e, Effect::SendMessage { .. })),
+        result: Err(coded(
+            409,
+            "whatsapp_window_closed",
+            "The 24-hour WhatsApp window with this contact is closed.",
+        )),
+    });
+    assert!(screen(&model).whatsapp_window_closed());
+    assert_eq!(
+        whatsapp(&model).templates,
+        TemplateList::Loading,
+        "not an empty list: the sender is not known yet"
+    );
+    // The first read, still on its way, is no longer awaited.
+    assert!(
+        model
+            .update(Event::WhatsAppWindowLoaded {
+                ticket: first_read,
+                result: Ok(fixture("district-whatsapp-window.json")),
+            })
+            .is_empty()
+    );
+    assert!(screen(&model).whatsapp_window_closed());
+    (model, effects)
+}
+
+#[test]
+fn text_refused_before_the_window_was_read_reads_it_again_for_the_sender() {
+    with_meta_channels(|| {
+        let (mut model, effects) = refused_before_the_window_was_read();
+        let (ticket, to) = effects
+            .iter()
+            .find_map(|effect| match effect {
+                Effect::LoadWhatsAppWindow { ticket, to, .. } => Some((*ticket, to.clone())),
+                _ => None,
+            })
+            .expect("the window read again");
+        assert_eq!(to, "+14165550177");
+        let effects = model.update(Event::WhatsAppWindowLoaded {
+            ticket,
+            result: Ok(closed()),
+        });
+        let [
+            Effect::LoadWhatsAppTemplates {
+                ticket, sender_id, ..
+            },
+        ] = effects.as_slice()
+        else {
+            panic!("{effects:?}");
+        };
+        assert_eq!(sender_id, "wa_sender_contract");
+        model.update(Event::WhatsAppTemplatesLoaded {
+            ticket: *ticket,
+            result: Ok(fixture("district-whatsapp-templates.json")),
+        });
+        let TemplateList::Ready(templates) = &whatsapp(&model).templates else {
+            panic!("{:?}", whatsapp(&model).templates);
+        };
+        assert_eq!(templates.len(), 1);
+        assert_eq!(screen(&model).composer.text, "Late reply", "kept");
+    });
+}
+
+#[test]
+fn a_window_read_again_that_fails_keeps_it_closed_and_says_the_templates_failed() {
+    with_meta_channels(|| {
+        let (mut model, effects) = refused_before_the_window_was_read();
+        model.update(Event::WhatsAppWindowLoaded {
+            ticket: pick(&effects, |e| matches!(e, Effect::LoadWhatsAppWindow { .. })),
+            result: Err(server_error()),
+        });
+        assert!(screen(&model).whatsapp_window_closed());
+        assert!(matches!(
+            whatsapp(&model).templates,
+            TemplateList::Failed(_)
+        ));
+        assert!(!controls(&model).can_send);
+    });
+}
+
+#[test]
+fn a_window_read_again_that_is_open_takes_free_text_again() {
+    with_meta_channels(|| {
+        let (mut model, effects) = refused_before_the_window_was_read();
+        model.update(Event::WhatsAppWindowLoaded {
+            ticket: pick(&effects, |e| matches!(e, Effect::LoadWhatsAppWindow { .. })),
+            result: Ok(fixture("district-whatsapp-window.json")),
+        });
+        assert!(!screen(&model).whatsapp_window_closed());
+        assert_eq!(whatsapp(&model).templates, TemplateList::NotLoaded);
+        assert!(controls(&model).can_send);
     });
 }
 

@@ -823,25 +823,34 @@ impl SignedIn {
         result: Result<ConversationAssignResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
-        if !tickets.accept(Slot::Assign, ticket) {
+        // The answer is the thread's it was asked for, which need not be the
+        // one open now: the member may have gone on to another.
+        let Some(thread_key) = tickets.accept_keyed(Slot::Assign, ticket) else {
             return stay();
-        }
-        let Some(screen) = self.thread.as_mut() else {
-            return Next::Stay(self.reload_conversations(tickets));
         };
-        let assignment = &mut screen.assignment;
-        assignment.saving = false;
+        let assignment = self
+            .thread
+            .as_mut()
+            .filter(|screen| screen.thread_key == thread_key)
+            .map(|screen| &mut screen.assignment);
         match result {
             Ok(answer) => {
-                assignment.assignee = answer.assignment.map(|given| given.assignee_email);
-                let assignee = assignment.assignee.clone();
-                let thread_key = screen.thread_key.clone();
+                let assignee = answer.assignment.map(|given| given.assignee_email);
+                if let Some(assignment) = assignment {
+                    assignment.saving = false;
+                    assignment.assignee.clone_from(&assignee);
+                }
                 self.inbox.set_assignee_locally(&thread_key, assignee);
                 // Read again for "assigned to me", which the service decides.
                 Next::Stay(self.reload_conversations(tickets))
             }
             Err(error) => {
-                assignment.failure = Some(FailureText::from_api_error(&error));
+                // A refusal is said beside the picker it came from, or not at
+                // all once that thread is closed.
+                if let Some(assignment) = assignment {
+                    assignment.saving = false;
+                    assignment.failure = Some(FailureText::from_api_error(&error));
+                }
                 stay()
             }
         }
@@ -875,11 +884,21 @@ impl SignedIn {
                     whatsapp.window = WhatsAppWindowState::Open {
                         expires_at: answer.window.expires_at,
                     };
+                    // No templates while it is open, even when a refusal had
+                    // said it was closed and the window was read again.
+                    whatsapp.templates = TemplateList::NotLoaded;
                     stay()
                 } else {
                     whatsapp.window = WhatsAppWindowState::Closed;
                     Next::Stay(load_templates(whatsapp, workspace_id, tickets))
                 }
+            }
+            // Read again after the service refused text because the window had
+            // closed: it stays closed, and it is the templates that could not
+            // be read.
+            Err(error) if whatsapp.window == WhatsAppWindowState::Closed => {
+                whatsapp.templates = TemplateList::Failed(FailureText::from_api_error(&error));
+                stay()
             }
             Err(error) => {
                 whatsapp.window = WhatsAppWindowState::Unknown(FailureText::from_api_error(&error));
@@ -1265,11 +1284,21 @@ fn sent(
         && whatsapp.window != WhatsAppWindowState::Closed
     {
         whatsapp.window = WhatsAppWindowState::Closed;
-        effects.extend(load_templates(
-            whatsapp,
-            screen.workspace_id.clone(),
-            tickets,
-        ));
+        let workspace_id = screen.workspace_id.clone();
+        match (&whatsapp.sender_id, &screen.reply_target) {
+            // The window was not read, or named no sender: the templates are
+            // a sender's, so the window is read again for the one the service
+            // now names. That read stands in for any still on its way.
+            (None, Some(target)) => {
+                whatsapp.templates = TemplateList::Loading;
+                effects.push(Effect::LoadWhatsAppWindow {
+                    ticket: tickets.issue(Slot::WhatsAppWindow),
+                    workspace_id,
+                    to: target.to.clone(),
+                });
+            }
+            _ => effects.extend(load_templates(whatsapp, workspace_id, tickets)),
+        }
     }
     let composer = &mut screen.composer;
     composer.sending = false;
@@ -1428,7 +1457,9 @@ fn assign(
     assignment.saving = true;
     assignment.failure = None;
     vec![Effect::AssignConversation {
-        ticket: tickets.issue(Slot::Assign),
+        // Keyed by the thread, so its answer lands on it however far the
+        // member has moved on.
+        ticket: tickets.issue_keyed(Slot::Assign, &screen.thread_key),
         workspace_id: screen.workspace_id.clone(),
         thread_key: screen.thread_key.clone(),
         assignee_email: assignee,
