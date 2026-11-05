@@ -131,6 +131,19 @@ fields, and `SendMessageRequest` gains three fields.
   States". As on the web it is said from eight digits (the 1 counted) to fifteen, with the
   bare digits until the number is whole; Call stays off and the wrong length is still
   said only once the member stops.
+- Live supervise (#70), from the call's own screen (`CallDetailScreen::supervise`,
+  `SupervisePhase`, `Event::Supervise`): listen in to a live AI call, send the receptionist
+  a private note (a whisper), and take the call over by voice. Every role may listen;
+  Agency and Client members may also whisper and take over, on a call that is in progress.
+  Listening joins with the microphone off; a takeover is confirmed first, and handing back
+  leaves the room. `DistrictApi` gains `monitor_call`, `call_whisper` and `take_over_call`,
+  none of them ever repeated. A member's own softphone call has no receptionist on it: every
+  call row says so (`CallSummary::receptionist_on_call`, from `receptionistOnCall`, true when
+  an older service sends none), so neither a note nor a takeover is offered there, and the
+  service's refusal (`call_has_no_receptionist`) still marks the call for an older service;
+  listening still works. Listening to an ended call is refused (`call_ended`).
+  `whisper_applied` live updates say what the receptionist did with the last note
+  (`Whisper::outcome`). Thirty `supervise.*` catalog entries, with reviewed French.
 
 ### Changed
 
