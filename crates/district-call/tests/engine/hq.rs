@@ -12,7 +12,7 @@ use std::collections::HashMap;
 use std::time::Duration;
 
 use district_core::{CallEngine, MediaEvent, MicrophoneState, Speaker, SpeechSegment};
-use livekit::StreamTextOptions;
+use livekit::SendTextOptions;
 use livekit::e2ee::key_provider::{KeyProvider, KeyProviderOptions};
 use livekit::e2ee::{E2eeOptions, EncryptionType};
 use livekit::prelude::{DataPacket, Room, RoomOptions};
@@ -126,7 +126,7 @@ fn what_the_voice_agent_sends_in_an_encrypted_room_is_reported() {
             .local_participant()
             .send_text(
                 "How many calls today?",
-                StreamTextOptions::new_with_topic("lk.transcription")
+                SendTextOptions::new_with_topic("lk.transcription")
                     .with_attribute("lk.segment_id", "member-1")
                     .with_attribute("lk.transcribed_track_id", microphone.as_str())
                     .with_attribute("lk.transcription_final", "true"),
@@ -152,7 +152,7 @@ fn what_the_voice_agent_sends_in_an_encrypted_room_is_reported() {
             .local_participant()
             .send_text(
                 "Seven so far.",
-                StreamTextOptions::new_with_topic("lk.transcription")
+                SendTextOptions::new_with_topic("lk.transcription")
                     .with_attribute("lk.segment_id", "agent-1"),
             )
             .await
@@ -174,7 +174,7 @@ fn what_the_voice_agent_sends_in_an_encrypted_room_is_reported() {
         // A text stream on another topic is not a transcription.
         agent
             .local_participant()
-            .send_text("hello", StreamTextOptions::new_with_topic("lk.chat"))
+            .send_text("hello", SendTextOptions::new_with_topic("lk.chat"))
             .await
             .expect("the agent chats");
         // What follows is at most the end of the agent's stream, reported once
