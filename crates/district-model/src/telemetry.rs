@@ -149,6 +149,10 @@ pub enum TelemetryEventType {
     TranscriptRetracted,
     /// `transcript_error`: a transcript op could not be honoured.
     TranscriptError,
+    /// `whisper_applied`: what the voice agent did with a supervisor's note
+    /// on a live call. Read the data with
+    /// [`whisper_applied`](TelemetryEnvelope::whisper_applied).
+    WhisperApplied,
     /// A name this client does not know, kept as it was sent.
     Unknown(String),
 }
@@ -170,6 +174,7 @@ impl TelemetryEventType {
             Self::TranscriptEnded => "transcript_ended",
             Self::TranscriptRetracted => "transcript_retracted",
             Self::TranscriptError => "transcript_error",
+            Self::WhisperApplied => "whisper_applied",
             Self::Unknown(name) => name,
         }
     }
@@ -204,6 +209,7 @@ impl From<String> for TelemetryEventType {
             "transcript_ended" => Self::TranscriptEnded,
             "transcript_retracted" => Self::TranscriptRetracted,
             "transcript_error" => Self::TranscriptError,
+            "whisper_applied" => Self::WhisperApplied,
             _ => Self::Unknown(name),
         }
     }
@@ -274,6 +280,53 @@ impl TelemetryEnvelope {
             )
         })
     }
+
+    /// What the voice agent did with a supervisor's note, for a
+    /// `whisper_applied` event, or `None` for any other event and for one
+    /// whose `applied` is missing or not a boolean. The call is
+    /// [`call_id`](Self::call_id).
+    pub fn whisper_applied(&self) -> Option<WhisperApplied> {
+        if self.event_type != TelemetryEventType::WhisperApplied {
+            return None;
+        }
+        let text = |key: &str| {
+            self.data
+                .get(key)
+                .and_then(Value::as_str)
+                .map(str::to_owned)
+        };
+        Some(WhisperApplied {
+            applied: self.data.get("applied")?.as_bool()?,
+            first_words: text("firstWords").unwrap_or_default(),
+            reason: text("reason"),
+        })
+    }
+}
+
+/// What the voice agent did with a supervisor's note, from a
+/// `whisper_applied` event: `{"applied", "firstWords", "reason"?}`.
+///
+/// `Debug` leaves the words out: they are the note's.
+#[derive(Clone, PartialEq, Eq)]
+pub struct WhisperApplied {
+    /// Whether the agent acted on the note.
+    pub applied: bool,
+    /// The note's first words, to say which note this is. Empty when the
+    /// event carried none.
+    pub first_words: String,
+    /// Why it was not acted on, as the service names it, when it says. A
+    /// wire value, never shown as it is.
+    pub reason: Option<String>,
+}
+
+impl fmt::Debug for WhisperApplied {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("WhisperApplied")
+            .field("applied", &self.applied)
+            .field("first_words", &"<redacted>")
+            .field("reason", &self.reason)
+            .finish()
+    }
 }
 
 impl From<TelemetryEventType> for String {
@@ -289,7 +342,7 @@ impl From<TelemetryEventType> for String {
 mod tests {
     use super::*;
 
-    const KNOWN: [(&str, TelemetryEventType); 13] = [
+    const KNOWN: [(&str, TelemetryEventType); 14] = [
         ("call_started", TelemetryEventType::CallStarted),
         ("call_updated", TelemetryEventType::CallUpdated),
         ("call_ended", TelemetryEventType::CallEnded),
@@ -303,6 +356,7 @@ mod tests {
             TelemetryEventType::TranscriptSnapshot,
         ),
         ("transcript_segment", TelemetryEventType::TranscriptSegment),
+        ("whisper_applied", TelemetryEventType::WhisperApplied),
         ("transcript_ended", TelemetryEventType::TranscriptEnded),
         (
             "transcript_retracted",
@@ -432,6 +486,52 @@ mod tests {
             serde_json::from_str(r#"{"token":"t","expiresAt":0,"wsUrl":null}"#).unwrap();
         assert!(!local.success);
         assert_eq!(local.ws_url, None);
+    }
+
+    #[test]
+    fn a_whisper_outcome_is_read_only_from_its_own_event() {
+        let event = |event_type: TelemetryEventType, data: Value| TelemetryEnvelope {
+            workspace_id: "ws".to_owned(),
+            call_id: "call-1".to_owned(),
+            event_type,
+            data,
+            timestamp: "2026-11-05T18:00:00.000Z".to_owned(),
+        };
+        let applied = event(
+            TelemetryEventType::WhisperApplied,
+            serde_json::json!({"applied": true, "firstWords": "Offer the morning"}),
+        )
+        .whisper_applied()
+        .unwrap();
+        assert!(applied.applied);
+        assert_eq!(applied.first_words, "Offer the morning");
+        assert_eq!(applied.reason, None);
+        let printed = format!("{applied:?}");
+        assert!(!printed.contains("morning"), "{printed}");
+
+        let refused = event(
+            TelemetryEventType::WhisperApplied,
+            serde_json::json!({"applied": false, "reason": "agent_busy"}),
+        )
+        .whisper_applied()
+        .unwrap();
+        assert!(!refused.applied);
+        assert_eq!(refused.first_words, "");
+        assert_eq!(refused.reason.as_deref(), Some("agent_busy"));
+
+        for unread in [
+            event(TelemetryEventType::WhisperApplied, serde_json::json!({})),
+            event(
+                TelemetryEventType::WhisperApplied,
+                serde_json::json!({"applied": "yes"}),
+            ),
+            event(
+                TelemetryEventType::CallUpdated,
+                serde_json::json!({"applied": true}),
+            ),
+        ] {
+            assert_eq!(unread.whisper_applied(), None);
+        }
     }
 
     #[test]
