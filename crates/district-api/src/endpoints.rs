@@ -366,6 +366,17 @@ endpoint_table! {
     /// from the saved-reply endpoints above, which cost nothing.
     MessageDraftGenerate => Post "/api/district/messages/draft",
         workspace: Body, body: Json, retry: Never;
+    /// Gives a thread to a member, or takes it back (`assigneeEmail: null`).
+    /// The assignee is notified, so it is never repeated.
+    ConversationAssign => Post "/api/district/conversations/assign",
+        workspace: Body, body: Json, retry: Never;
+    /// Whether free-form WhatsApp text may go to `to` now, and from which
+    /// sender.
+    WhatsAppWindow => Get "/api/district/workspace/whatsapp/window",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// A WhatsApp sender's message templates, named by `senderId`.
+    WhatsAppTemplates => Get "/api/district/workspace/whatsapp/templates",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
 
     // District HQ.
 

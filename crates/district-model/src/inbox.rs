@@ -10,6 +10,28 @@ pub const CHANNEL_SMS: &str = "sms";
 /// The email channel.
 pub const CHANNEL_EMAIL: &str = "email";
 
+/// The WhatsApp channel.
+pub const CHANNEL_WHATSAPP: &str = "whatsapp";
+
+/// The Messenger channel. A thread on it is listed only when the list is asked
+/// for with `metaChannels=1`; its address is the customer's `fb:` id.
+pub const CHANNEL_MESSENGER: &str = "messenger";
+
+/// The Instagram channel, listed like Messenger; its address is the customer's
+/// `ig:` id.
+pub const CHANNEL_INSTAGRAM: &str = "instagram";
+
+/// Every channel a reply can go on, as the send route names them. A reply
+/// option on any other channel is one this client cannot send on, and is
+/// skipped.
+pub const REPLY_CHANNELS: [&str; 5] = [
+    CHANNEL_SMS,
+    CHANNEL_EMAIL,
+    CHANNEL_WHATSAPP,
+    CHANNEL_MESSENGER,
+    CHANNEL_INSTAGRAM,
+];
+
 /// The fewest characters a message search needs, counted after trimming. The
 /// service trims the query, then answers a shorter one with no results rather
 /// than an error.
@@ -255,6 +277,31 @@ impl ConversationSummary {
             (None, None) => None,
         }
     }
+
+    /// The ways to answer the thread, in the service's order, the first being
+    /// the one to open the composer on: [`reply_options`](Self::reply_options)
+    /// less any on a channel this client does not know (see
+    /// [`REPLY_CHANNELS`]) or with no address. Empty for a thread with nothing
+    /// to reply on, and for a list not asked for with `metaChannels=1`, which
+    /// has no reply options at all (use [`reply_target`](Self::reply_target)
+    /// then).
+    ///
+    /// The service decides these from the customer's record and the channels
+    /// they wrote on; [`can_sms`](Self::can_sms) plays no part in the choice.
+    pub fn reply_choices(&self) -> Vec<ReplyTarget> {
+        self.reply_options
+            .iter()
+            .filter_map(ReplyTarget::from_option)
+            .collect()
+    }
+
+    /// The member who owns the thread, or `None` when nobody does or the list
+    /// was not asked for with `assignments=1`.
+    pub fn assignee(&self) -> Option<&str> {
+        self.assignee_email
+            .as_ref()
+            .and_then(|email| email.as_deref())
+    }
 }
 
 /// `value` when it holds more than white space.
@@ -267,9 +314,9 @@ fn non_blank(value: Option<&str>) -> Option<&str> {
 /// carrier, which does not check what it was given.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct ReplyTarget {
-    /// The phone number or email address.
+    /// The phone number, email address or Messenger or Instagram id.
     pub to: String,
-    /// [`CHANNEL_SMS`] or [`CHANNEL_EMAIL`].
+    /// One of [`REPLY_CHANNELS`].
     pub channel: &'static str,
 }
 
@@ -279,6 +326,15 @@ impl ReplyTarget {
             to: to.to_owned(),
             channel,
         }
+    }
+
+    /// `option` as a target, or `None` when its channel is not one of
+    /// [`REPLY_CHANNELS`] (a newer service's) or it names no address.
+    pub fn from_option(option: &ReplyOption) -> Option<Self> {
+        let channel = REPLY_CHANNELS
+            .into_iter()
+            .find(|known| *known == option.channel)?;
+        non_blank(Some(&option.to)).map(|to| Self::new(to, channel))
     }
 }
 

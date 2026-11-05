@@ -358,6 +358,9 @@ impl SignedIn {
         let Some(result) = self.scheduling_members_loaded(ticket, result, tickets) else {
             return stay();
         };
+        let Some(result) = self.thread_members_loaded(ticket, result, tickets) else {
+            return stay();
+        };
         if tickets.accept(Slot::Members, ticket)
             && let Some(section) = self.members.as_mut()
         {

@@ -15,16 +15,19 @@
 use std::collections::BTreeSet;
 use std::time::Duration;
 
-use district_api::ApiError;
+use district_api::{ApiError, ConversationsQuery};
 use district_model::{
-    ConversationSummary, ConversationsResponse, DraftListResponse, MESSAGE_SEARCH_MIN_QUERY_LENGTH,
-    MessageSearchHit, MessageSearchResponse, UnreadCountResponse,
+    CHANNEL_INSTAGRAM, CHANNEL_MESSENGER, ConversationSummary, ConversationsResponse,
+    DraftListResponse, MESSAGE_SEARCH_MIN_QUERY_LENGTH, MessageSearchHit, MessageSearchResponse,
+    UnreadCountResponse,
 };
 
 use crate::compose::{ComposeEvent, ComposeScreen};
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::text::{l, s};
+use crate::thread::reply_channel_label;
 
 /// How long the search waits after the last keystroke before it asks. Long
 /// enough that typing a word is one request, short enough not to feel stalled.
@@ -48,6 +51,24 @@ pub struct InboxScreen {
 }
 
 impl InboxScreen {
+    /// The line under a thread that someone owns: who. `None` for a thread
+    /// nobody owns.
+    pub fn assignee_line(conversation: &ConversationSummary) -> Option<String> {
+        conversation
+            .assignee()
+            .map(|email| s::inbox_assigned_to(l(), email))
+    }
+
+    /// The channel a Messenger or Instagram thread is on, for its row: those
+    /// threads have no phone number or email address to tell them apart by.
+    /// `None` for any other thread.
+    pub fn meta_channel_label(conversation: &ConversationSummary) -> Option<&'static str> {
+        match conversation.kind.as_str() {
+            CHANNEL_MESSENGER | CHANNEL_INSTAGRAM => reply_channel_label(&conversation.kind),
+            _ => None,
+        }
+    }
+
     /// Whether this member has a reply saved on the thread `thread_key`.
     pub fn has_draft(&self, thread_key: &str) -> bool {
         self.draft_keys.contains(thread_key)
@@ -61,6 +82,22 @@ impl InboxScreen {
                 .iter()
                 .find(|thread| thread.thread_key == thread_key),
             _ => None,
+        }
+    }
+
+    /// Shows the thread `thread_key` as `assignee`'s on screen, before the list
+    /// is read again. Whether it is the signed-in member's is the service's to
+    /// say, so that waits for the read.
+    pub(crate) fn set_assignee_locally(&mut self, thread_key: &str, assignee: Option<String>) {
+        let ConversationList::Ready(list) = &mut self.list else {
+            return;
+        };
+        for thread in list
+            .threads
+            .iter_mut()
+            .filter(|thread| thread.thread_key == thread_key)
+        {
+            thread.assignee_email = Some(assignee.clone());
         }
     }
 
@@ -177,6 +214,16 @@ pub enum InboxEvent {
 }
 
 impl SignedIn {
+    /// What the thread list is asked for: each thread's owner always, and the
+    /// Messenger and Instagram threads with every row's reply options in an app
+    /// that answers them.
+    fn conversations_query(&self) -> ConversationsQuery {
+        ConversationsQuery {
+            meta_channels: self.meta_channels,
+            assignments: true,
+        }
+    }
+
     /// Opens the inbox: reads the list, and the draft badges beside it.
     pub(crate) fn enter_inbox(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         match &mut self.inbox.list {
@@ -187,6 +234,7 @@ impl SignedIn {
         let mut effects = vec![Effect::LoadConversations {
             ticket,
             workspace_id: self.workspace_id(),
+            query: self.conversations_query(),
         }];
         // The drafts route refuses a viewer, who cannot compose and so has none.
         if self.capabilities().can_change {
@@ -212,17 +260,20 @@ impl SignedIn {
         vec![Effect::LoadUnreadCount {
             ticket,
             workspace_id: self.workspace_id(),
+            meta_channels: self.meta_channels,
         }]
     }
 
     /// Reads the unread count again because it may have changed.
     pub(crate) fn reload_unread(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         let workspace_id = self.workspace_id();
+        let meta_channels = self.meta_channels;
         tickets
             .refresh(Slot::Unread)
             .map(|ticket| Effect::LoadUnreadCount {
                 ticket,
                 workspace_id,
+                meta_channels,
             })
             .into_iter()
             .collect()
@@ -235,11 +286,13 @@ impl SignedIn {
             return Vec::new();
         }
         let workspace_id = self.workspace_id();
+        let query = self.conversations_query();
         tickets
             .refresh(Slot::Conversations)
             .map(|ticket| Effect::LoadConversations {
                 ticket,
                 workspace_id,
+                query,
             })
             .into_iter()
             .collect()
@@ -255,7 +308,21 @@ impl SignedIn {
             return stay();
         }
         match (result, &mut self.inbox.list) {
-            (Ok(response), list) => *list = ConversationList::Ready(Conversations::new(response)),
+            (Ok(response), list) => {
+                let mut conversations = Conversations::new(response);
+                // An answer applied after this read was issued is newer than
+                // its rows: they keep that answer's owner. An answer applied
+                // before it is in the service's list already, and is let go.
+                self.owners_answered
+                    .retain(|_, (answered, _)| ticket < *answered);
+                for thread in &mut conversations.threads {
+                    if let Some((_, owner)) = self.owners_answered.get(&thread.thread_key) {
+                        thread.assignee_email = Some(owner.clone());
+                    }
+                }
+                *list = ConversationList::Ready(conversations);
+                self.owner_from_list();
+            }
             (Err(error), ConversationList::Ready(list)) => {
                 list.refreshing = false;
                 list.refresh_failure = Some(FailureText::from_api_error(&error));

@@ -4,7 +4,7 @@
 use std::future::Future;
 use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 
-use district_api::{ApiClient, ApiConfig, ApiError, TokenSource};
+use district_api::{ApiClient, ApiConfig, ApiError, ConversationsQuery, TokenSource};
 use district_auth::{
     AccessClaims, AuthorizationGrant, DrainReport, ExchangeOutcome, LoginError, LoginFlow,
     NativeAuthApi, RefreshApi, RevokeApi, SessionStore, SignOut, SignOutReport,
@@ -17,22 +17,24 @@ use district_model::{
     BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse,
     CallMonitorTokenResponse, CallSummary, CallTakeoverResponse, CallTranscriptResponse,
     CallWhisperResponse, CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse,
-    ContactDetailResponse, ContactListResponse, ContactMutationResponse, ConversationsResponse,
-    CreateContactRequest, DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch,
-    DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse,
-    DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse,
-    DeviceRevokeResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest,
-    EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse,
-    HqTurn, HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse,
-    LiveCallId, MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    ContactDetailResponse, ContactListResponse, ContactMutationResponse,
+    ConversationAssignResponse, ConversationsResponse, CreateContactRequest,
+    DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse,
+    DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse, DeskTicketStatus,
+    DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
+    DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
+    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqTurn,
+    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, LiveCallId,
+    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
     MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
     OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse,
     SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
     SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
     SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
     SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
-    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WorkflowListResponse,
-    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
+    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WhatsAppTemplatesResponse,
+    WhatsAppWindowResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
+    WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -99,8 +101,9 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
     fn conversations(
         &self,
         workspace_id: &str,
+        query: ConversationsQuery,
     ) -> impl Future<Output = Result<ConversationsResponse, ApiError>> + Send {
-        ApiClient::conversations(self, workspace_id)
+        ApiClient::conversations(self, workspace_id, query)
     }
 
     fn timeline(
@@ -108,15 +111,17 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         workspace_id: &str,
         thread: &ThreadRef,
         older_than: Option<&TimelineCursor>,
+        meta_channels: bool,
     ) -> impl Future<Output = Result<TimelineResponse, ApiError>> + Send {
-        ApiClient::timeline(self, workspace_id, thread, older_than)
+        ApiClient::timeline(self, workspace_id, thread, older_than, meta_channels)
     }
 
     fn unread_count(
         &self,
         workspace_id: &str,
+        meta_channels: bool,
     ) -> impl Future<Output = Result<UnreadCountResponse, ApiError>> + Send {
-        ApiClient::unread_count(self, workspace_id)
+        ApiClient::unread_count(self, workspace_id, meta_channels)
     }
 
     fn search_messages(
@@ -131,8 +136,34 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         &self,
         workspace_id: &str,
         message_id: &str,
+        meta_channels: bool,
     ) -> impl Future<Output = Result<MessageThreadResponse, ApiError>> + Send {
-        ApiClient::message_thread(self, workspace_id, message_id)
+        ApiClient::message_thread(self, workspace_id, message_id, meta_channels)
+    }
+
+    fn assign_conversation(
+        &self,
+        workspace_id: &str,
+        thread_key: &str,
+        assignee_email: Option<&str>,
+    ) -> impl Future<Output = Result<ConversationAssignResponse, ApiError>> + Send {
+        ApiClient::assign_conversation(self, workspace_id, thread_key, assignee_email)
+    }
+
+    fn whatsapp_window(
+        &self,
+        workspace_id: &str,
+        to: &str,
+    ) -> impl Future<Output = Result<WhatsAppWindowResponse, ApiError>> + Send {
+        ApiClient::whatsapp_window(self, workspace_id, to)
+    }
+
+    fn whatsapp_templates(
+        &self,
+        workspace_id: &str,
+        sender_id: &str,
+    ) -> impl Future<Output = Result<WhatsAppTemplatesResponse, ApiError>> + Send {
+        ApiClient::whatsapp_templates(self, workspace_id, sender_id)
     }
 
     fn send_message(

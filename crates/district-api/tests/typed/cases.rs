@@ -5,17 +5,17 @@ use std::future::Future;
 use std::path::PathBuf;
 use std::pin::Pin;
 
-use district_api::{ApiClient, ApiError, Endpoint};
+use district_api::{ApiClient, ApiError, ConversationsQuery, Endpoint};
 use district_l10n::Locale;
 use district_model::LiveCallId;
 use district_model::{
-    A2pRegistrationDraft, AnalyticsRange, BlockTarget, CHANNEL_SMS, CallHandlingMode,
-    CallHandlingPatch, CreateContactRequest, DeskBrandName, DeskSettingsPatch, DeskTicketDraft,
-    DeskTicketStatus, DirectoryEntry, DraftSaveRequest, HqPendingWrite, HqRole, HqTurn,
-    HqVoiceProposal, HqVoiceRecordKind, HqVoiceScreen, HqVoiceSelection, KnowledgeDocumentDraft,
-    KnowledgeMode, MeetRoomName, MemberRole, MessagingAccountSave, MessagingChannel,
-    MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials, MessagingDelete,
-    MessagingSetChannelDefault, MessagingSetDefault, NumberSearch, PRESENCE_KIND,
+    A2pRegistrationDraft, AnalyticsRange, BlockTarget, CHANNEL_SMS, CHANNEL_WHATSAPP,
+    CallHandlingMode, CallHandlingPatch, CreateContactRequest, DeskBrandName, DeskSettingsPatch,
+    DeskTicketDraft, DeskTicketStatus, DirectoryEntry, DraftSaveRequest, HqPendingWrite, HqRole,
+    HqTurn, HqVoiceProposal, HqVoiceRecordKind, HqVoiceScreen, HqVoiceSelection,
+    KnowledgeDocumentDraft, KnowledgeMode, MeetRoomName, MemberRole, MessagingAccountSave,
+    MessagingChannel, MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials,
+    MessagingDelete, MessagingSetChannelDefault, MessagingSetDefault, NumberSearch, PRESENCE_KIND,
     PersonaEngineChoice, PersonaPatch, PersonaPreviewForm, Platform, PresenceRegistration,
     RoutingRule, RoutingRuleField, SETTINGS_LANGUAGE_FRENCH, SendMessageRequest, SipTrunkDraft,
     SupportRequestDraft, SupportRequestKind, ThreadRef, TollFreeVerificationDraft,
@@ -143,10 +143,28 @@ fn reply() -> SendMessageRequest {
         to: "+14165550142".to_owned(),
         body: "Confirmed for Thursday at 2pm.".to_owned(),
         channel: CHANNEL_SMS.to_owned(),
-        subject: None,
-        media_urls: Vec::new(),
+        ..SendMessageRequest::default()
     }
 }
+
+/// The closed window's template, filled, as the composer sends it.
+fn whatsapp_template() -> SendMessageRequest {
+    SendMessageRequest {
+        to: "+14165550177".to_owned(),
+        body: "Hi Ada, this is a reminder of your appointment on Thursday.".to_owned(),
+        channel: CHANNEL_WHATSAPP.to_owned(),
+        whatsapp_sender_id: Some("wa_sender_contract".to_owned()),
+        template_id: Some("wa_tpl_reminder".to_owned()),
+        template_variables: Some(vec!["Ada".to_owned(), "Thursday".to_owned()]),
+        ..SendMessageRequest::default()
+    }
+}
+
+/// Both of the thread list's extras.
+const EVERYTHING: ConversationsQuery = ConversationsQuery {
+    meta_channels: true,
+    assignments: true,
+};
 
 fn draft_save() -> DraftSaveRequest {
     DraftSaveRequest {
@@ -362,10 +380,98 @@ pub fn cases() -> Vec<Case> {
             endpoint: Endpoint::Conversations,
             retried: true,
             answer: fixture("district-conversations.json"),
-            call: call!(c => c.conversations(WS)),
+            call: call!(c => c.conversations(WS, ConversationsQuery::default())),
             method: "GET",
             path: "/api/district/conversations",
             query: vec![("workspaceId", WS)],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "conversations_with_reply_options_and_owners",
+            endpoint: Endpoint::Conversations,
+            retried: true,
+            answer: fixture("district-conversations-reply-options.json"),
+            call: call!(c => c.conversations(WS, EVERYTHING)),
+            method: "GET",
+            path: "/api/district/conversations",
+            query: vec![
+                ("workspaceId", WS),
+                ("metaChannels", "1"),
+                ("assignments", "1"),
+            ],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "conversations_with_owners",
+            endpoint: Endpoint::Conversations,
+            retried: true,
+            answer: fixture("district-conversations-assignee.json"),
+            call: call!(c => c.conversations(
+                WS,
+                ConversationsQuery {
+                    assignments: true,
+                    ..ConversationsQuery::default()
+                }
+            )),
+            method: "GET",
+            path: "/api/district/conversations",
+            query: vec![("workspaceId", WS), ("assignments", "1")],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "assign_conversation",
+            endpoint: Endpoint::ConversationAssign,
+            retried: false,
+            answer: fixture("district-conversation-assign.json"),
+            call: call!(c => c.assign_conversation(
+                WS,
+                "contact:contact_contract_1",
+                Some("contract@example.com")
+            )),
+            method: "POST",
+            path: "/api/district/conversations/assign",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "threadKey": "contact:contact_contract_1",
+                "assigneeEmail": "contract@example.com",
+            })),
+        },
+        Case {
+            name: "unassign_conversation",
+            endpoint: Endpoint::ConversationAssign,
+            retried: false,
+            answer: fixture("district-conversation-unassign.json"),
+            call: call!(c => c.assign_conversation(WS, "contact:contact_contract_1", None)),
+            method: "POST",
+            path: "/api/district/conversations/assign",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "threadKey": "contact:contact_contract_1",
+                "assigneeEmail": null,
+            })),
+        },
+        Case {
+            name: "whatsapp_window",
+            endpoint: Endpoint::WhatsAppWindow,
+            retried: true,
+            answer: fixture("district-whatsapp-window-closed.json"),
+            call: call!(c => c.whatsapp_window(WS, "+14165550177")),
+            method: "GET",
+            path: "/api/district/workspace/whatsapp/window",
+            query: vec![("workspaceId", WS), ("to", "+14165550177")],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "whatsapp_templates",
+            endpoint: Endpoint::WhatsAppTemplates,
+            retried: true,
+            answer: fixture("district-whatsapp-templates.json"),
+            call: call!(c => c.whatsapp_templates(WS, "wa_sender_contract")),
+            method: "GET",
+            path: "/api/district/workspace/whatsapp/templates",
+            query: vec![("workspaceId", WS), ("senderId", "wa_sender_contract")],
             body: Sent::Nothing,
         },
         Case {
@@ -373,10 +479,25 @@ pub fn cases() -> Vec<Case> {
             endpoint: Endpoint::Timeline,
             retried: true,
             answer: fixture("district-timeline.json"),
-            call: call!(c => c.timeline(WS, &contact_thread(), None)),
+            call: call!(c => c.timeline(WS, &contact_thread(), None, false)),
             method: "GET",
             path: "/api/district/timeline",
             query: vec![("workspaceId", WS), ("contactId", "contact_contract_1")],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "timeline_with_meta_channels",
+            endpoint: Endpoint::Timeline,
+            retried: true,
+            answer: fixture("district-timeline-meta.json"),
+            call: call!(c => c.timeline(WS, &contact_thread(), None, true)),
+            method: "GET",
+            path: "/api/district/timeline",
+            query: vec![
+                ("workspaceId", WS),
+                ("contactId", "contact_contract_1"),
+                ("metaChannels", "1"),
+            ],
             body: Sent::Nothing,
         },
         Case {
@@ -384,10 +505,21 @@ pub fn cases() -> Vec<Case> {
             endpoint: Endpoint::MessagesUnreadCount,
             retried: true,
             answer: fixture("district-messages-unread-count.json"),
-            call: call!(c => c.unread_count(WS)),
+            call: call!(c => c.unread_count(WS, false)),
             method: "GET",
             path: "/api/district/messages/unread-count",
             query: vec![("workspaceId", WS)],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "unread_count_with_meta_channels",
+            endpoint: Endpoint::MessagesUnreadCount,
+            retried: true,
+            answer: fixture("district-messages-unread-count.json"),
+            call: call!(c => c.unread_count(WS, true)),
+            method: "GET",
+            path: "/api/district/messages/unread-count",
+            query: vec![("workspaceId", WS), ("metaChannels", "1")],
             body: Sent::Nothing,
         },
         Case {
@@ -425,10 +557,21 @@ pub fn cases() -> Vec<Case> {
             endpoint: Endpoint::MessageThread,
             retried: true,
             answer: fixture("district-message-thread.json"),
-            call: call!(c => c.message_thread(WS, "msg_contract_inbound")),
+            call: call!(c => c.message_thread(WS, "msg_contract_inbound", false)),
             method: "GET",
             path: "/api/district/messages/msg_contract_inbound",
             query: vec![("workspaceId", WS)],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "message_thread_with_meta_channels",
+            endpoint: Endpoint::MessageThread,
+            retried: true,
+            answer: fixture("district-message-thread.json"),
+            call: call!(c => c.message_thread(WS, "msg_contract_inbound", true)),
+            method: "GET",
+            path: "/api/district/messages/msg_contract_inbound",
+            query: vec![("workspaceId", WS), ("metaChannels", "1")],
             body: Sent::Nothing,
         },
         Case {
@@ -445,6 +588,25 @@ pub fn cases() -> Vec<Case> {
                 "to": "+14165550142",
                 "body": "Confirmed for Thursday at 2pm.",
                 "channel": "sms",
+            })),
+        },
+        Case {
+            name: "send_whatsapp_template",
+            endpoint: Endpoint::MessageSend,
+            retried: false,
+            answer: fixture("district-message-send-whatsapp-template.json"),
+            call: call!(c => c.send_message(WS, &whatsapp_template())),
+            method: "POST",
+            path: "/api/district/messages/send",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "to": "+14165550177",
+                "body": "Hi Ada, this is a reminder of your appointment on Thursday.",
+                "channel": "whatsapp",
+                "whatsappSenderId": "wa_sender_contract",
+                "templateId": "wa_tpl_reminder",
+                "templateVariables": ["Ada", "Thursday"],
             })),
         },
         Case {
