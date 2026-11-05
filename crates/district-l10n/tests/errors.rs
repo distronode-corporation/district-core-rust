@@ -14,13 +14,12 @@ fn contract() -> Value {
 }
 
 /// French this catalog words differently from the service: (code, the
-/// contract's words, the catalog's words). The service's « réglages » is the
-/// Apple word for settings; a non-Apple catalog says « paramètres » (frcheck's
-/// OS-WORD rule), as district-android does. Once the contract no longer holds
-/// the service's words, `the_french_ahead_of_the_contract_still_is` says to
-/// remove the row.
-const FRENCH_AHEAD_OF_THE_CONTRACT: &[(&str, &str, &str)] =
-    &[("live_changed", "réglages", "paramètres")];
+/// contract's words, the catalog's words). The list is `FRENCH_AHEAD` in
+/// scripts/gen-l10n.py, which writes these words into the catalog in place of
+/// the contract's; it explains each row. Once the contract no longer holds the
+/// service's words, the generator and `the_french_ahead_of_the_contract_still_is`
+/// both say to remove the row.
+const FRENCH_AHEAD_OF_THE_CONTRACT: &[(&str, &str, &str)] = include!("generated/french_ahead.rs");
 
 fn french_as_the_catalog_words_it(code: &str, text: &str) -> String {
     FRENCH_AHEAD_OF_THE_CONTRACT

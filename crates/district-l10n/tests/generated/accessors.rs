@@ -1167,7 +1167,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_audition_busy(Locale::En), "Two auditions are already running for this workspace. End one and try again.");
     assert_eq!(api_error_strings::api_error_audition_busy(Locale::FrCa), "Deux auditions sont déjà en cours pour cet espace de travail. Terminez-en une et réessayez.");
     assert_eq!(api_error_strings::api_error_audition_daily_cap(Locale::En), "This workspace has used today's auditions. You can audition again tomorrow.");
-    assert_eq!(api_error_strings::api_error_audition_daily_cap(Locale::FrCa), "Cet espace de travail a utilisé les auditions d'aujourd'hui. Vous pourrez de nouveau écouter un brouillon demain.");
+    assert_eq!(api_error_strings::api_error_audition_daily_cap(Locale::FrCa), "Cet espace de travail a utilisé toutes ses auditions pour aujourd'hui. Vous pourrez faire de nouvelles auditions demain.");
     assert_eq!(api_error_strings::api_error_audition_unavailable(Locale::En), "The audition can't start right now. Please try again in a moment.");
     assert_eq!(api_error_strings::api_error_audition_unavailable(Locale::FrCa), "L'audition ne peut pas commencer pour le moment. Réessayez dans un instant.");
     assert_eq!(api_error_strings::api_error_auto_dial_contact_opted_out(Locale::En), "This contact has opted out of calls from this workspace (DNC).");
@@ -1197,11 +1197,11 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_call_predates_feature(Locale::En), "That call started before this feature existed, so it is not available on it.");
     assert_eq!(api_error_strings::api_error_call_predates_feature(Locale::FrCa), "Cet appel a commencé avant l'existence de cette fonction, elle n'est donc pas offerte pour lui.");
     assert_eq!(api_error_strings::api_error_caller_id_carrier_failed(Locale::En), "The phone carrier could not be reached. Try again in a few minutes.");
-    assert_eq!(api_error_strings::api_error_caller_id_carrier_failed(Locale::FrCa), "Impossible de joindre le fournisseur de téléphonie. Réessayez dans quelques minutes.");
+    assert_eq!(api_error_strings::api_error_caller_id_carrier_failed(Locale::FrCa), "Impossible de joindre le transporteur de téléphonie. Réessayez dans quelques minutes.");
     assert_eq!(api_error_strings::api_error_caller_id_mobile_unverified(Locale::En), "Confirm your mobile number first, then register it as caller ID.");
-    assert_eq!(api_error_strings::api_error_caller_id_mobile_unverified(Locale::FrCa), "Confirmez d'abord votre numéro de cellulaire, puis enregistrez-le comme afficheur.");
+    assert_eq!(api_error_strings::api_error_caller_id_mobile_unverified(Locale::FrCa), "Confirmez d'abord votre numéro de cellulaire, puis inscrivez-le comme afficheur.");
     assert_eq!(api_error_strings::api_error_caller_id_not_confirmed(Locale::En), "The carrier has not confirmed your number yet. Answer the verification call and key in the code, then check again.");
-    assert_eq!(api_error_strings::api_error_caller_id_not_confirmed(Locale::FrCa), "Le fournisseur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau.");
+    assert_eq!(api_error_strings::api_error_caller_id_not_confirmed(Locale::FrCa), "Le transporteur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau.");
     assert_eq!(api_error_strings::api_error_caller_id_request_too_soon(Locale::En), "A verification call went out less than 10 minutes ago. Wait before asking for another.");
     assert_eq!(api_error_strings::api_error_caller_id_request_too_soon(Locale::FrCa), "Un appel de vérification a été fait il y a moins de 10 minutes. Attendez avant d'en demander un autre.");
     assert_eq!(api_error_strings::api_error_caller_id_unavailable(Locale::En), "Using your own mobile as caller ID is not available yet.");
@@ -1253,7 +1253,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_eu_vat_required(Locale::En), "In the European Union we sell to businesses only. Enter your VAT number and we invoice you under the reverse-charge rule.");
     assert_eq!(api_error_strings::api_error_eu_vat_required(Locale::FrCa), "Dans l'Union européenne, nous vendons uniquement aux entreprises. Saisissez votre numéro de TVA et nous vous facturons selon le régime de l'autoliquidation.");
     assert_eq!(api_error_strings::api_error_extra_number_charge_required(Locale::En), "This number is beyond the ones the plan includes and has a monthly charge. Confirm the charge to buy it.");
-    assert_eq!(api_error_strings::api_error_extra_number_charge_required(Locale::FrCa), "Ce numéro dépasse ceux que le forfait inclut et entraîne des frais mensuels. Confirmez les frais pour l'acheter.");
+    assert_eq!(api_error_strings::api_error_extra_number_charge_required(Locale::FrCa), "Ce numéro s'ajoute à ceux qu'inclut le forfait et entraîne des frais mensuels. Confirmez les frais pour l'acheter.");
     assert_eq!(api_error_strings::api_error_file_required(Locale::En), "Choose a file to upload.");
     assert_eq!(api_error_strings::api_error_file_required(Locale::FrCa), "Choisissez un fichier à téléverser.");
     assert_eq!(api_error_strings::api_error_file_too_large(Locale::En), "That file is too large.");
@@ -1327,7 +1327,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_last_agency_member(Locale::En), "This is the last administrator of the workspace, so it cannot be removed or demoted.");
     assert_eq!(api_error_strings::api_error_last_agency_member(Locale::FrCa), "Il s'agit de la dernière personne administratrice de l'espace de travail, elle ne peut donc être ni retirée ni rétrogradée.");
     assert_eq!(api_error_strings::api_error_live_changed(Locale::En), "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish.");
-    assert_eq!(api_error_strings::api_error_live_changed(Locale::FrCa), "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Réalignez le brouillon sur les paramètres en ligne, relisez-le, puis publiez-le.");
+    assert_eq!(api_error_strings::api_error_live_changed(Locale::FrCa), "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Mettez le brouillon à jour avec les paramètres en vigueur, relisez-le, puis publiez-le.");
     assert_eq!(api_error_strings::api_error_mailbox_not_found(Locale::En), "No mailbox is connected to this workspace.");
     assert_eq!(api_error_strings::api_error_mailbox_not_found(Locale::FrCa), "Aucune boîte de réception n'est connectée à cet espace de travail.");
     assert_eq!(api_error_strings::api_error_managed_billing_required(Locale::En), "Managed carrier billing is not enabled for this workspace. Contact support to switch to a managed plan.");
@@ -1363,7 +1363,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_messaging_app_sms_refused(Locale::En), "Texting is set up with your phone numbers, not as a messaging app.");
     assert_eq!(api_error_strings::api_error_messaging_app_sms_refused(Locale::FrCa), "Les textos sont configurés avec vos numéros de téléphone, pas comme une application de messagerie.");
     assert_eq!(api_error_strings::api_error_messaging_apps_managed(Locale::En), "Messaging apps cannot be connected on the platform's Sinch account. Connect your own Sinch account to add WhatsApp, Messenger or RCS.");
-    assert_eq!(api_error_strings::api_error_messaging_apps_managed(Locale::FrCa), "Les applications de messagerie ne peuvent pas être connectées sur le compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS.");
+    assert_eq!(api_error_strings::api_error_messaging_apps_managed(Locale::FrCa), "Les applications de messagerie ne peuvent pas être connectées au moyen du compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS.");
     assert_eq!(api_error_strings::api_error_messaging_provider_not_configured(Locale::En), "No messaging provider is connected to this workspace.");
     assert_eq!(api_error_strings::api_error_messaging_provider_not_configured(Locale::FrCa), "Aucun fournisseur de messagerie n'est connecté à cet espace de travail.");
     assert_eq!(api_error_strings::api_error_messenger_window_closed(Locale::En), "The Messenger or Instagram reply window with this contact is closed. You can reply once they write to you again.");
@@ -1539,7 +1539,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_website_unreadable(Locale::En), "We could not read that website. Check the address, or enter your details yourself.");
     assert_eq!(api_error_strings::api_error_website_unreadable(Locale::FrCa), "Nous n'avons pas pu lire ce site Web. Vérifiez l'adresse, ou saisissez vos renseignements vous-même.");
     assert_eq!(api_error_strings::api_error_whatsapp_template_invalid(Locale::En), "That WhatsApp template cannot be sent. It is not approved for this number, or its variables do not match it.");
-    assert_eq!(api_error_strings::api_error_whatsapp_template_invalid(Locale::FrCa), "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne lui correspondent pas.");
+    assert_eq!(api_error_strings::api_error_whatsapp_template_invalid(Locale::FrCa), "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne correspondent pas à celles du modèle.");
     assert_eq!(api_error_strings::api_error_whatsapp_unsupported(Locale::En), "WhatsApp is not available on this workspace's messaging account.");
     assert_eq!(api_error_strings::api_error_whatsapp_unsupported(Locale::FrCa), "WhatsApp n'est pas offert sur le compte de messagerie de cet espace de travail.");
     assert_eq!(api_error_strings::api_error_whatsapp_window_closed(Locale::En), "The 24-hour WhatsApp window with this contact is closed. Send an approved template to reach them again.");
@@ -1551,7 +1551,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_workflow_conditions_not_allowed(Locale::En), "Conditions can only be added to a workflow that runs after a call.");
     assert_eq!(api_error_strings::api_error_workflow_conditions_not_allowed(Locale::FrCa), "Les conditions ne peuvent s'ajouter qu'à un flux qui s'exécute après un appel.");
     assert_eq!(api_error_strings::api_error_workflow_draft_dry_run_stale(Locale::En), "Run a dry run of this version of the automation first, then publish it.");
-    assert_eq!(api_error_strings::api_error_workflow_draft_dry_run_stale(Locale::FrCa), "Faites d'abord un essai à blanc de cette version de l'automatisation, puis publiez-la.");
+    assert_eq!(api_error_strings::api_error_workflow_draft_dry_run_stale(Locale::FrCa), "Testez d'abord cette version de l'automatisation, puis publiez-la.");
     assert_eq!(api_error_strings::api_error_workflow_draft_not_found(Locale::En), "That drafted automation was not found. It may have been published or discarded.");
     assert_eq!(api_error_strings::api_error_workflow_draft_not_found(Locale::FrCa), "Cette automatisation en brouillon est introuvable. Elle a peut-être été publiée ou supprimée.");
     assert_eq!(api_error_strings::api_error_workflow_member_push_roles_invalid(Locale::En), "Choose who gets the notification: administrators, members, or both.");
@@ -1561,7 +1561,7 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_workflow_sms_recipient_not_member(Locale::En), "That person is not a member of this workspace, so workflow texts cannot be sent to them.");
     assert_eq!(api_error_strings::api_error_workflow_sms_recipient_not_member(Locale::FrCa), "Cette personne n'est pas membre de cet espace de travail, alors les textos des flux ne peuvent pas lui être envoyés.");
     assert_eq!(api_error_strings::api_error_workflow_voice_cap(Locale::En), "This workspace has reached the limit of automations built by voice. Build more in the workflow builder.");
-    assert_eq!(api_error_strings::api_error_workflow_voice_cap(Locale::FrCa), "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans le générateur de flux de travail.");
+    assert_eq!(api_error_strings::api_error_workflow_voice_cap(Locale::FrCa), "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans l'éditeur de flux de travail.");
     assert_eq!(api_error_strings::api_error_workspace_access_denied(Locale::En), "You are not a member of that workspace.");
     assert_eq!(api_error_strings::api_error_workspace_access_denied(Locale::FrCa), "Vous n'êtes pas membre de cet espace de travail.");
     assert_eq!(api_error_strings::api_error_workspace_already_in_region(Locale::En), "That workspace is already in this region.");
@@ -1713,7 +1713,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_disposition_escalated(Locale::En), "Passed to a person");
     assert_eq!(wire_strings::wire_disposition_escalated(Locale::FrCa), "Transmis à une personne");
     assert_eq!(wire_strings::wire_disposition_info(Locale::En), "Information only");
-    assert_eq!(wire_strings::wire_disposition_info(Locale::FrCa), "Demande de renseignements");
+    assert_eq!(wire_strings::wire_disposition_info(Locale::FrCa), "Renseignements");
     assert_eq!(wire_strings::wire_disposition_interested(Locale::En), "Interested");
     assert_eq!(wire_strings::wire_disposition_interested(Locale::FrCa), "Intéressé");
     assert_eq!(wire_strings::wire_disposition_not_interested(Locale::En), "Not interested");
@@ -1760,8 +1760,12 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_message_delivery_status_delivered(Locale::FrCa), "Livré");
     assert_eq!(wire_strings::wire_message_delivery_status_failed(Locale::En), "Failed");
     assert_eq!(wire_strings::wire_message_delivery_status_failed(Locale::FrCa), "Échec");
+    assert_eq!(wire_strings::wire_message_delivery_status_handled(Locale::En), "Handled");
+    assert_eq!(wire_strings::wire_message_delivery_status_handled(Locale::FrCa), "Traité");
     assert_eq!(wire_strings::wire_message_delivery_status_queued(Locale::En), "Sent");
     assert_eq!(wire_strings::wire_message_delivery_status_queued(Locale::FrCa), "Envoyé");
+    assert_eq!(wire_strings::wire_message_delivery_status_read(Locale::En), "Read");
+    assert_eq!(wire_strings::wire_message_delivery_status_read(Locale::FrCa), "Lu");
     assert_eq!(wire_strings::wire_message_delivery_status_received(Locale::En), "Received");
     assert_eq!(wire_strings::wire_message_delivery_status_received(Locale::FrCa), "Reçu");
     assert_eq!(wire_strings::wire_message_delivery_status_sent(Locale::En), "Sent");
@@ -1943,7 +1947,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_outcome_skipped(Locale::En), "Skipped");
     assert_eq!(wire_strings::wire_workflow_action_outcome_skipped(Locale::FrCa), "Ignoré");
     assert_eq!(wire_strings::wire_workflow_action_reason_automated_sender(Locale::En), "Not texted: the message came from an automated sender, such as a verification code");
-    assert_eq!(wire_strings::wire_workflow_action_reason_automated_sender(Locale::FrCa), "Texto non envoyé\u{00A0}: le message venait d'un expéditeur automatisé, comme un code de vérification");
+    assert_eq!(wire_strings::wire_workflow_action_reason_automated_sender(Locale::FrCa), "Texto non envoyé\u{00A0}: le message venait d'un expéditeur automatisé (un code de vérification, par exemple)");
     assert_eq!(wire_strings::wire_workflow_action_reason_consent_check_failed(Locale::En), "Not texted: the texting consent could not be checked");
     assert_eq!(wire_strings::wire_workflow_action_reason_consent_check_failed(Locale::FrCa), "Texto non envoyé\u{00A0}: le consentement aux textos n'a pas pu être vérifié");
     assert_eq!(wire_strings::wire_workflow_action_reason_contact_not_found(Locale::En), "Contact not found");
@@ -1975,7 +1979,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_loop_check_failed(Locale::En), "Not texted: the recent messages with this number could not be checked");
     assert_eq!(wire_strings::wire_workflow_action_reason_loop_check_failed(Locale::FrCa), "Texto non envoyé\u{00A0}: les messages récents avec ce numéro n'ont pas pu être vérifiés");
     assert_eq!(wire_strings::wire_workflow_action_reason_loop_paused(Locale::En), "Not texted: this number answered automatically several times in a row, so texts to it are paused for an hour");
-    assert_eq!(wire_strings::wire_workflow_action_reason_loop_paused(Locale::FrCa), "Texto non envoyé\u{00A0}: ce numéro a répondu automatiquement plusieurs fois de suite, les textos vers lui sont donc suspendus pendant une heure");
+    assert_eq!(wire_strings::wire_workflow_action_reason_loop_paused(Locale::FrCa), "Texto non envoyé\u{00A0}: ce numéro a répondu automatiquement plusieurs fois de suite, les textos à ce numéro sont donc suspendus pendant une heure");
     assert_eq!(wire_strings::wire_workflow_action_reason_missing_webhook_url(Locale::En), "Missing webhook url");
     assert_eq!(wire_strings::wire_workflow_action_reason_missing_webhook_url(Locale::FrCa), "URL du webhook manquante");
     assert_eq!(wire_strings::wire_workflow_action_reason_no_consent(Locale::En), "Not texted: no call or text from them in the last 24 hours, and no consent on record");
@@ -1997,7 +2001,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_push_not_delivered(Locale::En), "No device accepted the notification");
     assert_eq!(wire_strings::wire_workflow_action_reason_push_not_delivered(Locale::FrCa), "Aucun appareil n'a accepté la notification");
     assert_eq!(wire_strings::wire_workflow_action_reason_quiet_hours(Locale::En), "Not texted: it was outside 8am to 9pm where their phone may be");
-    assert_eq!(wire_strings::wire_workflow_action_reason_quiet_hours(Locale::FrCa), "Texto non envoyé\u{00A0}: il était en dehors de 8\u{00A0}h à 21\u{00A0}h là où se trouve peut-être son téléphone");
+    assert_eq!(wire_strings::wire_workflow_action_reason_quiet_hours(Locale::FrCa), "Texto non envoyé\u{00A0}: il n'était pas entre 8\u{00A0}h et 21\u{00A0}h là où se trouve peut-être son téléphone");
     assert_eq!(wire_strings::wire_workflow_action_reason_recipient_not_member(Locale::En), "The person to text is no longer a member of this workspace");
     assert_eq!(wire_strings::wire_workflow_action_reason_recipient_not_member(Locale::FrCa), "La personne à qui envoyer le texto n'est plus membre de cet espace de travail");
     assert_eq!(wire_strings::wire_workflow_action_reason_recipient_number_held(Locale::En), "Not sent: the person's mobile is a business number on District");

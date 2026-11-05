@@ -59,7 +59,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.audition_daily_cap]
 en = "This workspace has used today's auditions. You can audition again tomorrow."
-fr = "Cet espace de travail a utilisé les auditions d'aujourd'hui. Vous pourrez de nouveau écouter un brouillon demain."
+fr = "Cet espace de travail a utilisé toutes ses auditions pour aujourd'hui. Vous pourrez faire de nouvelles auditions demain."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -194,7 +194,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.caller_id_carrier_failed]
 en = "The phone carrier could not be reached. Try again in a few minutes."
-fr = "Impossible de joindre le fournisseur de téléphonie. Réessayez dans quelques minutes."
+fr = "Impossible de joindre le transporteur de téléphonie. Réessayez dans quelques minutes."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -203,7 +203,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.caller_id_mobile_unverified]
 en = "Confirm your mobile number first, then register it as caller ID."
-fr = "Confirmez d'abord votre numéro de cellulaire, puis enregistrez-le comme afficheur."
+fr = "Confirmez d'abord votre numéro de cellulaire, puis inscrivez-le comme afficheur."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -212,7 +212,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.caller_id_not_confirmed]
 en = "The carrier has not confirmed your number yet. Answer the verification call and key in the code, then check again."
-fr = "Le fournisseur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau."
+fr = "Le transporteur n'a pas encore confirmé votre numéro. Répondez à l'appel de vérification, entrez le code, puis vérifiez de nouveau."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -446,7 +446,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.extra_number_charge_required]
 en = "This number is beyond the ones the plan includes and has a monthly charge. Confirm the charge to buy it."
-fr = "Ce numéro dépasse ceux que le forfait inclut et entraîne des frais mensuels. Confirmez les frais pour l'acheter."
+fr = "Ce numéro s'ajoute à ceux qu'inclut le forfait et entraîne des frais mensuels. Confirmez les frais pour l'acheter."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -780,7 +780,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.live_changed]
 en = "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish."
-fr = "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Réalignez le brouillon sur les paramètres en ligne, relisez-le, puis publiez-le."
+fr = "Quelqu'un a modifié ces paramètres depuis la rédaction du brouillon. Mettez le brouillon à jour avec les paramètres en vigueur, relisez-le, puis publiez-le."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -942,7 +942,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.messaging_apps_managed]
 en = "Messaging apps cannot be connected on the platform's Sinch account. Connect your own Sinch account to add WhatsApp, Messenger or RCS."
-fr = "Les applications de messagerie ne peuvent pas être connectées sur le compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS."
+fr = "Les applications de messagerie ne peuvent pas être connectées au moyen du compte Sinch de la plateforme. Connectez votre propre compte Sinch pour ajouter WhatsApp, Messenger ou RCS."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -1735,7 +1735,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.whatsapp_template_invalid]
 en = "That WhatsApp template cannot be sent. It is not approved for this number, or its variables do not match it."
-fr = "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne lui correspondent pas."
+fr = "Ce modèle WhatsApp ne peut pas être envoyé. Il n'est pas approuvé pour ce numéro, ou ses variables ne correspondent pas à celles du modèle."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -1789,7 +1789,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.workflow_draft_dry_run_stale]
 en = "Run a dry run of this version of the automation first, then publish it."
-fr = "Faites d'abord un essai à blanc de cette version de l'automatisation, puis publiez-la."
+fr = "Testez d'abord cette version de l'automatisation, puis publiez-la."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -1834,7 +1834,7 @@ note = "Shown on any screen when the service refuses a request with the error co
 
 [api_error.workflow_voice_cap]
 en = "This workspace has reached the limit of automations built by voice. Build more in the workflow builder."
-fr = "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans le générateur de flux de travail."
+fr = "Cet espace de travail a atteint la limite d'automatisations créées à la voix. Créez-en d'autres dans l'éditeur de flux de travail."
 ctx = "error"
 screen = "api_error"
 tier = "T2"

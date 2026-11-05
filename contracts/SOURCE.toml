@@ -35,13 +35,13 @@ source_clean = true
 file_count = 14
 
 [sets.i18n]
-commit = "84c34dbd284a9501f698d36f0e84bf74709c4eef"
+commit = "14cf1a186eb7ee5c7fdc803b6076d291e8a5c53a"
 source = "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests"
 source_clean = true
 file_count = 3
 
 [sync]
-date = "2026-11-04"
+date = "2026-11-05"
 checksums = "SHA256SUMS"
 
 [[substitution]]
