@@ -316,8 +316,9 @@ impl SignedIn {
     /// Closes the detail screen showing, unless `next` is the same screen. The
     /// rooms lobby drops the credential it held, a settings section its
     /// edits, typed credentials and audition, and District HQ the residency
-    /// statement it showed. An HQ voice session goes on: the app's voice dock
-    /// holds its controls on every other screen.
+    /// statement it showed, and a call screen the room of the call it was
+    /// supervising. An HQ voice session goes on: the app's voice dock holds
+    /// its controls on every other screen.
     fn leave(&mut self, next: &Route, tickets: &mut Tickets) -> Vec<Effect> {
         if self.route == *next {
             return Vec::new();
@@ -326,7 +327,7 @@ impl SignedIn {
         if self.route == Route::Hq {
             self.decline_hq_voice_disclosure();
         }
-        self.close_call(tickets);
+        effects.extend(self.close_call(tickets));
         self.close_contact(tickets);
         self.close_desk_ticket(tickets);
         self.close_desk_settings(tickets);
@@ -495,6 +496,7 @@ impl SignedIn {
     fn close_screens(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         let mut effects = self.close_thread(tickets);
         effects.extend(self.stop_hq_voice(tickets));
+        effects.extend(self.close_call(tickets));
         effects.extend(self.close_rooms(tickets));
         effects.extend(self.close_settings(tickets));
         tickets.cancel_each(&WORKSPACE_SLOTS);
@@ -535,6 +537,7 @@ impl SignedIn {
         effects.extend(self.leave_room());
         effects.extend(self.stop_audition(tickets));
         effects.extend(self.stop_hq_voice(tickets));
+        effects.extend(self.stop_supervising(tickets));
         effects
     }
 

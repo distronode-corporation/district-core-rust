@@ -191,6 +191,14 @@ impl<S: TokenSource> Request<'_, S> {
         self
     }
 
+    /// Never sends this request again after a refused token, whatever its
+    /// endpoint allows: for a request on a shared route that must go at most
+    /// once. It can only narrow the endpoint's policy, never widen it.
+    pub fn never_retried(mut self) -> Self {
+        self.parts.retry = RetryPolicy::Never;
+        self
+    }
+
     /// The workspace this request acts on. Required for a workspace-scoped
     /// endpoint and refused for any other; where it goes (query, body or form
     /// field) is the endpoint's, not the caller's, decision.
@@ -308,11 +316,15 @@ struct Parts {
     form: Vec<(String, String)>,
     file: Option<FilePart>,
     error: Option<String>,
+    /// The endpoint's retry policy, or [`RetryPolicy::Never`] for a request
+    /// that must not be repeated where its endpoint's others may.
+    retry: RetryPolicy,
 }
 
 impl Parts {
     fn new(spec: &'static EndpointSpec) -> Self {
         Self {
+            retry: spec.retry,
             spec,
             path_params: Vec::new(),
             workspace: None,
@@ -457,7 +469,7 @@ impl Parts {
         Ok(Prepared {
             name,
             method: spec.method,
-            retry: spec.retry,
+            retry: self.retry,
             url,
             body,
         })

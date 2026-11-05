@@ -31,20 +31,21 @@ use district_model::{
 };
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CallAnswerResponse,
-    CallDeclineResponse, CallDetailResponse, CallHangUpResponse, CallSummary,
-    CallTranscriptResponse, CampaignStatusResponse, ClearIntelResponse, ContactDetailResponse,
-    ContactListResponse, ContactMutationResponse, ConversationsResponse, DeskLogoRemovalResponse,
-    DeskReplyResponse, DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketResponse,
-    DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
-    DialResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, EnrichResponse,
-    HqConfirmResponse, HqPromptResponse, KnowledgeCreateResponse, KnowledgeDeleteResponse,
-    KnowledgeListResponse, KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse,
-    MeetingDetail, MeetingSummary, MemberListResponse, MemberRemovalResponse, MemberResponse,
-    MessageThreadResponse, MessagingAccountSaveResponse, MessagingChannelDefaultResponse,
-    MessagingDefaultResponse, MessagingMetaResponse, MessagingResponse, MessagingTestResponse,
-    NativeRevokeResponse, NumberSearchResponse, OverviewResponse, OwnedNumbersResponse,
-    PersonaOptionsResponse, PersonaPreviewTokenResponse, PkceVector, PushRegistrationResponse,
-    RenameResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
+    CallDeclineResponse, CallDetailResponse, CallHangUpResponse, CallMonitorTokenResponse,
+    CallSummary, CallTakeoverResponse, CallTranscriptResponse, CallWhisperResponse,
+    CampaignStatusResponse, ClearIntelResponse, ContactDetailResponse, ContactListResponse,
+    ContactMutationResponse, ConversationsResponse, DeskLogoRemovalResponse, DeskReplyResponse,
+    DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketResponse, DeskTicketStatusResponse,
+    DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DialResponse,
+    DraftDeleteResponse, DraftListResponse, DraftResponse, EnrichResponse, HqConfirmResponse,
+    HqPromptResponse, KnowledgeCreateResponse, KnowledgeDeleteResponse, KnowledgeListResponse,
+    KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse, MeetingDetail, MeetingSummary,
+    MemberListResponse, MemberRemovalResponse, MemberResponse, MessageThreadResponse,
+    MessagingAccountSaveResponse, MessagingChannelDefaultResponse, MessagingDefaultResponse,
+    MessagingMetaResponse, MessagingResponse, MessagingTestResponse, NativeRevokeResponse,
+    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, PersonaOptionsResponse,
+    PersonaPreviewTokenResponse, PkceVector, PushRegistrationResponse, RenameResponse,
+    RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
     SchedulingStatusResponse, SendMessageResponse, SetupResponse, SupportCloseResponse,
     SupportReplyResponse, SupportRequestCreateResponse, SupportRequestResponse,
     SupportRequestsResponse, TelemetryEnvelope, TelemetryToken, TimelineResponse,
@@ -65,7 +66,7 @@ use district_model::{
     SchedulingWebhookCreated, SchedulingWebhookDelivery, SchedulingZoomStatus,
 };
 
-use crate::support::{Codec, Set, codec, names_in, read_in, transcript_frame};
+use crate::support::{Codec, Set, codec, names_in, read_in, transcript_frame, whisper_frame};
 
 /// One set's accounting, as the tests below read it.
 pub struct Manifest {
@@ -116,7 +117,7 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 203;
+pub const EXPECTED_FIXTURE_COUNT: usize = 208;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
@@ -156,12 +157,23 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ("district-call-decline.json", codec::<CallDeclineResponse>),
     // GET /api/district/calls/{callId}: the call log's row for one call.
     ("district-call-detail.json", codec::<CallDetailResponse>),
+    // POST /api/district/calls/token with a live call's id: a listen-only
+    // credential for the call's room.
+    (
+        "district-call-monitor-token.json",
+        codec::<CallMonitorTokenResponse>,
+    ),
+    // POST /api/district/calls/{callId}/takeover: the microphone-only
+    // credential that takes a live call over from the AI.
+    ("district-call-takeover.json", codec::<CallTakeoverResponse>),
     // GET /api/district/calls/{callId}/transcript.
     (
         "district-call-transcript.json",
         codec::<CallTranscriptResponse>,
     ),
     // GET /api/district/calls: the call log, a bare array.
+    // POST /api/district/calls/whisper: the note reached the call's room.
+    ("district-call-whisper.json", codec::<CallWhisperResponse>),
     ("district-calls.json", codec::<Vec<CallSummary>>),
     // PATCH /api/district/workspace/campaign-status: the campaign paused.
     (
@@ -886,6 +898,12 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ),
     ("telemetry-event-transcript-segment.json", transcript_frame),
     ("telemetry-event-transcript-snapshot.json", transcript_frame),
+    // The /ws/telemetry frames saying what the voice agent did with a
+    // supervisor's note: applied, and not applied with its reason. The data
+    // decodes as WhisperAppliedData, which TelemetryEnvelope::whisper_applied
+    // reads.
+    ("telemetry-event-whisper-applied.json", whisper_frame),
+    ("telemetry-event-whisper-not-applied.json", whisper_frame),
 ];
 
 /// The length [`NOT_YET_MODELLED`] may not exceed, kept equal to it.

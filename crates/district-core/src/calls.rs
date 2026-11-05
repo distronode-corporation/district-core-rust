@@ -17,6 +17,7 @@ use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::paging::Paging;
 use crate::signed_in::{Next, SignedIn, stay};
+use crate::supervise::Supervision;
 use crate::text::l;
 
 /// How many calls one page of the log asks for.
@@ -118,6 +119,10 @@ pub struct CallDetailScreen {
     pub transcript: TranscriptView,
     /// Why the last read again failed, shown beside the call.
     pub refresh_failure: Option<FailureText>,
+    /// Supervising the call while it is in progress: listening, the note to
+    /// the receptionist, and taking it over. See
+    /// [`SignedIn::supervise_controls`].
+    pub supervise: Supervision,
 }
 
 /// The call itself.
@@ -228,6 +233,7 @@ impl SignedIn {
             call: CallView::Loading,
             transcript: TranscriptView::Loading,
             refresh_failure: None,
+            supervise: Supervision::default(),
         });
         vec![
             Effect::LoadCall {
@@ -264,10 +270,12 @@ impl SignedIn {
             .unwrap_or_default()
     }
 
-    /// Closes the open call.
-    pub(crate) fn close_call(&mut self, tickets: &mut Tickets) {
-        tickets.cancel_each(&[Slot::CallDetail, Slot::Transcript]);
+    /// Closes the open call, and leaves its room if it is being supervised.
+    pub(crate) fn close_call(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        let effects = self.stop_supervising(tickets);
+        tickets.cancel_each(&[Slot::CallDetail, Slot::Transcript, Slot::SuperviseWhisper]);
         self.call = None;
+        effects
     }
 
     pub(crate) fn call_loaded(
@@ -280,11 +288,12 @@ impl SignedIn {
             return stay();
         }
         let workspace_id = self.workspace_id();
-        let effects = self
+        let mut effects = self
             .call
             .as_mut()
             .map(|screen| call_read(screen, result, workspace_id, tickets))
             .unwrap_or_default();
+        effects.extend(self.supervised_call_reread(tickets));
         Next::Stay(effects)
     }
 

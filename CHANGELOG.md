@@ -17,13 +17,20 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [8.0.0] - 2026-11-05
+
+The country-aware dialler (#63), the app parity fixtures (#64) and app parity on the
+desktop (#65). Breaking for the apps: `DialerScreen` and `DialerEvent` change shape,
+`ConversationSummary` gains public fields, and `CoreConfig`, `DistrictApi` and the thread
+screens change (below).
+
 Dialler design A, after district-ios (#95 and #96) and the web dialler: the number is
 typed the local way under a country the member can see, and is sent as E.164. Breaking:
 `DialerScreen` and `DialerEvent` change shape.
 
 App parity (1), (2), (3) and (5) on the desktop: the reply channels the service lists for a
 thread, Messenger and Instagram threads, who owns a thread, and the WhatsApp templates a closed
-window offers. Breaking for the apps (8.0.0 when released): `CoreConfig` gains `meta_channels`,
+window offers. Breaking for the apps: `CoreConfig` gains `meta_channels`,
 `DesktopPresence::new` takes it, `DistrictApi` has three new methods and four changed ones,
 `Effect`, `Event`, `ThreadEvent`, `ThreadScreen` and `ThreadControls` gain variants and
 fields, and `SendMessageRequest` gains three fields.
@@ -138,8 +145,22 @@ fields, and `SendMessageRequest` gains three fields.
   3.5 Flash as the stable brain (was 2.5), with `minimal` to `high` thinking, and the
   studio tests read the new catalogue. `contracts/desktop/` is unchanged.
 - The error table and wire labels have the service's new codes and values with its French,
-  and take the service's newer French for six sentences and labels. `live_changed` keeps
-  « paramètres » where the service says « réglages » (the Apple word).
+  and take the service's newer French for six sentences and labels.
+- `contracts/i18n/` from the server's 35edbd30c, with its five French wordings in the
+  catalogs: `live_changed` (« Mettez le brouillon à jour avec les réglages en
+  vigueur »), `caller_id_not_confirmed` and `caller_id_carrier_failed` (« transporteur »),
+  `caller_id_mobile_unverified` (« inscrivez-le ») and the workflow outcome
+  `quiet_hours` (« il n'était pas entre 8 h et 21 h »).
+- `contracts/i18n/` from the server's 14cf1a186: the reviewed French of six error
+  sentences (`extra_number_charge_required`, `audition_daily_cap`,
+  `workflow_draft_dry_run_stale`, `workflow_voice_cap`, `whatsapp_template_invalid`,
+  `messaging_apps_managed`) and two workflow reasons (`automated_sender`, `loop_paused`),
+  the disposition `info` as « Renseignements », and message delivery labels for `handled`
+  (« Traité ») and `read` (« Lu »).
+- `live_changed` says « réglages » as the service, the website and core-swift do (Sean's
+  French sign-off): the workspace's settings, not the OS Settings app. The entry records that
+  reason as `os_word_ok`, which frcheck's OS-WORD now honours (`tools/l10n/` vendored from the
+  server's 2980456), and the catalog is signed off for 8.0.0 (`i18n/fr-CA/signoff.json`).
 - Call sends the E.164 number the line before Call showed, no longer the text as typed,
   and works only for a whole number in a known shape. A wrong length keeps Call off, and
   is said only once the member stops typing (`CheckLength`, or a refused `Dial`).

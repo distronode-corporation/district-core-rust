@@ -114,6 +114,20 @@ pub fn codec<T: DeserializeOwned + Serialize>(raw: &str) -> Result<Value, String
         .map_err(|error| format!("{} does not encode: {error}", std::any::type_name::<T>()))
 }
 
+/// The [`Codec`] for a `whisper_applied` frame: the envelope, and its `data`
+/// as [`WhisperAppliedData`](district_model::WhisperAppliedData), both
+/// strictly.
+pub fn whisper_frame(raw: &str) -> Result<Value, String> {
+    use district_model::{TelemetryEnvelope, TelemetryEventType, WhisperAppliedData};
+    let mut envelope: TelemetryEnvelope =
+        serde_json::from_str(raw).map_err(|error| format!("not an envelope: {error}"))?;
+    if envelope.event_type != TelemetryEventType::WhisperApplied {
+        return Err(format!("{:?} is not a whisper event", envelope.event_type));
+    }
+    envelope.data = codec::<WhisperAppliedData>(&envelope.data.to_string())?;
+    serde_json::to_value(&envelope).map_err(|error| error.to_string())
+}
+
 /// The [`Codec`] for a live transcript frame: the envelope, and its `data` as
 /// the typed data of its event type, both strictly, encoded again with the typed
 /// data in place of the plain JSON the envelope carries.

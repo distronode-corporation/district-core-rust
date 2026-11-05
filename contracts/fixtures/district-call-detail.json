@@ -50,6 +50,7 @@
       },
       "lineType": "mobile",
       "carrier": "Rogers"
-    }
+    },
+    "receptionistOnCall": true
   }
 }

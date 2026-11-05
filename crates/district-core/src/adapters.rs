@@ -14,8 +14,9 @@ use district_l10n::Locale;
 use district_live::{LiveConfig, TelemetryHub, TokenMinter, WorkspaceUpdate};
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
-    BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse, CallSummary,
-    CallTranscriptResponse, CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse,
+    BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse,
+    CallMonitorTokenResponse, CallSummary, CallTakeoverResponse, CallTranscriptResponse,
+    CallWhisperResponse, CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse,
     ContactDetailResponse, ContactListResponse, ContactMutationResponse,
     ConversationAssignResponse, ConversationsResponse, CreateContactRequest,
     DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse,
@@ -23,17 +24,17 @@ use district_model::{
     DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
     DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
     HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqTurn,
-    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, MarkReadResponse,
-    MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
-    MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
-    OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
-    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
-    SupportRequestDraft, SupportRequestResponse, SupportRequestsResponse, ThreadRef,
-    TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
-    UsageHistoryResponse, UsageResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse,
-    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
-    WorkspaceListResponse,
+    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, LiveCallId,
+    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
+    OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse,
+    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
+    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WhatsAppTemplatesResponse,
+    WhatsAppWindowResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
+    WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -253,6 +254,30 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         call_id: &str,
     ) -> impl Future<Output = Result<CallTranscriptResponse, ApiError>> + Send {
         ApiClient::call_transcript(self, workspace_id, call_id)
+    }
+
+    fn monitor_call(
+        &self,
+        call_id: &LiveCallId,
+    ) -> impl Future<Output = Result<CallMonitorTokenResponse, ApiError>> + Send {
+        ApiClient::monitor_call(self, call_id)
+    }
+
+    fn take_over_call(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+    ) -> impl Future<Output = Result<CallTakeoverResponse, ApiError>> + Send {
+        ApiClient::take_over_call(self, workspace_id, call_id.as_str())
+    }
+
+    fn call_whisper(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+        whisper: &str,
+    ) -> impl Future<Output = Result<CallWhisperResponse, ApiError>> + Send {
+        ApiClient::call_whisper(self, workspace_id, call_id.as_str(), whisper)
     }
 
     fn contacts(
