@@ -23,7 +23,7 @@
 # `sha256sum -c SHA256SUMS` checks them.
 
 [sets.fixtures]
-commit = "e44c194b9d25337800d92f7544d978eeff84299d"
+commit = "6c0099cdfe779048b3c75a6d7354df2aaad7ba4e"
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
 file_count = 208
@@ -35,7 +35,7 @@ source_clean = true
 file_count = 14
 
 [sets.i18n]
-commit = "e44c194b9d25337800d92f7544d978eeff84299d"
+commit = "6c0099cdfe779048b3c75a6d7354df2aaad7ba4e"
 source = "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests"
 source_clean = true
 file_count = 3

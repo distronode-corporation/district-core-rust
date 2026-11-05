@@ -49,7 +49,8 @@
       },
       "lineType": "mobile",
       "carrier": "Rogers"
-    }
+    },
+    "receptionistOnCall": true
   },
   {
     "id": "call_contract_missed",
@@ -85,7 +86,8 @@
       },
       "lineType": null,
       "carrier": null
-    }
+    },
+    "receptionistOnCall": true
   },
   {
     "id": "call_contract_outbound",
@@ -110,7 +112,8 @@
     "analysis": null,
     "transferStatus": "completed",
     "transferReason": "caller_requested_human",
-    "phoneIntel": null
+    "phoneIntel": null,
+    "receptionistOnCall": true
   },
   {
     "id": "call_contract_outbound_unanswered",
@@ -135,7 +138,8 @@
     "analysis": null,
     "transferStatus": null,
     "transferReason": null,
-    "phoneIntel": null
+    "phoneIntel": null,
+    "receptionistOnCall": false
   },
   {
     "id": "call_contract_busy",
@@ -171,6 +175,7 @@
       },
       "lineType": null,
       "carrier": null
-    }
+    },
+    "receptionistOnCall": false
   }
 ]
