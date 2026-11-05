@@ -17,6 +17,12 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [8.0.0] - 2026-11-05
+
+The country-aware dialler (#63) and the app parity fixtures (#64). Breaking for the apps:
+`DialerScreen` and `DialerEvent` change shape, and `ConversationSummary` gains public
+fields.
+
 Dialler design A, after district-ios (#95 and #96) and the web dialler: the number is
 typed the local way under a country the member can see, and is sent as E.164. Breaking:
 `DialerScreen` and `DialerEvent` change shape.
