@@ -1167,3 +1167,39 @@ fn a_takeover_answered_after_the_room_ended_joins_nothing() {
         }
     }
 }
+
+/// Seer, PR #70: a listening session that finishes joining while a takeover
+/// is asked for does not put the member on the call.
+#[test]
+fn a_listening_session_joining_mid_takeover_leaves_the_takeover_asked_for() {
+    let mut model = on_live_call("agency");
+    let ticket = listen(&mut model);
+    let effects = model.update(Event::CallMonitorIssued {
+        ticket,
+        result: Ok(monitor_credential()),
+    });
+    let (listen_session, _, _) = connect(&effects);
+    let takeover = confirm_takeover(&mut model);
+    model.update(media(listen_session, MediaEvent::Connected));
+    assert_eq!(phase(&model), SupervisePhase::TakingOver);
+    assert!(model.update(Event::Microphone(true)).is_empty());
+
+    // Refused, it goes back to listening on the session that joined.
+    model.update(Event::CallTakeoverIssued {
+        ticket: takeover,
+        result: Err(server_error()),
+    });
+    assert_eq!(phase(&model), SupervisePhase::Listening);
+
+    // Granted, only the microphone's session puts the member on the call.
+    let takeover = confirm_takeover(&mut model);
+    let effects = model.update(Event::CallTakeoverIssued {
+        ticket: takeover,
+        result: Ok(takeover_credential()),
+    });
+    let (session, _, microphone) = connect(&effects);
+    assert!(microphone);
+    assert_eq!(phase(&model), SupervisePhase::TakingOver);
+    model.update(media(session, MediaEvent::Connected));
+    assert_eq!(phase(&model), SupervisePhase::OnCall);
+}

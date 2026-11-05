@@ -713,13 +713,16 @@ impl SignedIn {
     }
 
     /// The supervise session is in its room.
-    /// Connected again after reconnecting changes nothing.
+    /// Only the session joined with the microphone completes a takeover: a
+    /// listening session that finishes joining while a takeover is asked for
+    /// leaves it asked for (Seer, PR #70). Connected again after reconnecting
+    /// changes nothing.
     pub(crate) fn supervise_media_connected(&mut self) {
         self.with_supervision(|supervision| {
-            supervision.phase = match supervision.phase {
-                SupervisePhase::Joining => SupervisePhase::Listening,
-                SupervisePhase::TakingOver => SupervisePhase::OnCall,
-                other => other,
+            supervision.phase = match (supervision.phase, supervision.joined_with_microphone) {
+                (SupervisePhase::Joining, false) => SupervisePhase::Listening,
+                (SupervisePhase::TakingOver, true) => SupervisePhase::OnCall,
+                (phase, _) => phase,
             };
         });
     }
