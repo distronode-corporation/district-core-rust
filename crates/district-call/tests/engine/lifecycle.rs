@@ -512,3 +512,60 @@ fn a_credential_for_a_server_in_the_clear_elsewhere_is_never_sent() {
         }
     });
 }
+
+/// The runner runs each effect as its own task, so a hang-up can run before
+/// the join it ends has even begun. That join then joins nothing and reports
+/// nothing: without this the room was joined, the microphone published, and
+/// the session no longer one the model knows. A later session still joins.
+#[test]
+fn a_leave_that_overtakes_its_join_joins_nothing() {
+    runtime().block_on(async {
+        let server = Server::start();
+        let (mut alice, mut bob) = (Peer::new(true), Peer::new(false));
+        let (bob_session, credential) = Member::new().join(
+            &server.url(),
+            &token("overtaken", "bob", Kind::Standard),
+            None,
+        );
+        bob.engine.connect(bob_session, credential, false).await;
+        bob.reports
+            .until_event(JOIN, bob_session, &MediaEvent::Connected)
+            .await;
+
+        let mut member = Member::new();
+        let (session, credential) = member.join(
+            &server.url(),
+            &token("overtaken", "alice", Kind::Standard),
+            None,
+        );
+        alice.engine.disconnect(session).await;
+        alice.engine.connect(session, credential, true).await;
+        let later = alice.reports.during(Duration::from_secs(2)).await;
+        assert!(later.is_empty(), "joined after leaving: {later:?}");
+        let seen = bob.reports.during(Duration::from_secs(1)).await;
+        assert!(
+            !events(&seen)
+                .iter()
+                .any(|event| matches!(event, MediaEvent::ParticipantJoined(_))),
+            "{seen:?}"
+        );
+
+        let (next, credential) = member.join(
+            &server.url(),
+            &token("overtaken", "alice", Kind::Standard),
+            None,
+        );
+        assert_ne!(next, session);
+        alice.engine.connect(next, credential, false).await;
+        let seen = alice
+            .reports
+            .until_event(JOIN, next, &MediaEvent::Connected)
+            .await;
+        assert_eq!(
+            events(&seen),
+            [MediaEvent::Connecting, MediaEvent::Connected]
+        );
+        alice.engine.disconnect(next).await;
+        bob.engine.disconnect(bob_session).await;
+    });
+}

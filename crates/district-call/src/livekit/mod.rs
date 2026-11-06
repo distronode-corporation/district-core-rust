@@ -9,7 +9,9 @@
 //! only while the session it names is still the one held. Leaving takes the
 //! session out first, so once `disconnect` has run nothing more is reported
 //! for it, whatever is still in flight; a join that finishes after it closes
-//! the room it just joined.
+//! the room it just joined. A `disconnect` can even run before the `connect`
+//! for the same session has begun: the engine remembers it, and that connect
+//! then joins nothing.
 //!
 //! # What reaches a log
 //!
@@ -29,6 +31,7 @@ mod speech;
 
 pub use audio::{Audio, FrameAudio};
 
+use std::collections::VecDeque;
 use std::future::Future;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
@@ -57,6 +60,12 @@ const JOIN_LIMIT: Duration = Duration::from_secs(30);
 
 /// How often encrypted audio that has not yet decrypted is looked at.
 const DECRYPTION_CHECK: Duration = Duration::from_secs(1);
+
+/// How many sessions left before they were held are remembered. A disconnect
+/// overtakes its connect by the time it takes to start a task, so the newest
+/// few are all that can matter; the rest are sessions that ended on their own
+/// and were left afterwards.
+const LEFT_EARLY_KEPT: usize = 16;
 
 /// The [`CallEngine`] over LiveKit.
 ///
@@ -111,7 +120,10 @@ impl CallEngine for LiveKitCallEngine {
         let shared = Arc::clone(&self.shared);
         async move {
             let encrypted = credential.passphrase().is_some();
-            let (joining, previous) = shared.hold(session, microphone, encrypted);
+            // Left already: the hang-up's task ran before this one.
+            let Some((joining, previous)) = shared.hold(session, microphone, encrypted) else {
+                return;
+            };
             if let Some(previous) = previous {
                 previous.leave().await;
             }
@@ -165,6 +177,9 @@ struct Held {
     /// How many sessions have been held, which numbers each one: the model's
     /// ticket names a session to the app, this names it to the engine.
     count: u64,
+    /// Sessions asked to leave while not held, newest last: a connect for one
+    /// of them joins nothing.
+    left_early: VecDeque<Ticket>,
 }
 
 impl Shared {
@@ -187,14 +202,19 @@ impl Shared {
 
     /// Holds a new session named `ticket` and reports it connecting, leaving
     /// any session held before it, which is reported left first. Returns the
-    /// new session, and the old one for the caller to close.
+    /// new session, and the old one for the caller to close; `None`, holding
+    /// nothing and reporting nothing, when the session was already left.
     fn hold(
         &self,
         ticket: Ticket,
         microphone: bool,
         encrypted: bool,
-    ) -> (Arc<Session>, Option<Arc<Session>>) {
+    ) -> Option<(Arc<Session>, Option<Arc<Session>>)> {
         let mut held = self.lock();
+        if let Some(index) = held.left_early.iter().position(|left| *left == ticket) {
+            held.left_early.remove(index);
+            return None;
+        }
         let previous = held.session.take();
         if let Some(previous) = &previous {
             self.send(previous, MediaEvent::Disconnected(DisconnectReason::Left));
@@ -210,7 +230,7 @@ impl Shared {
         });
         held.session = Some(Arc::clone(&session));
         self.send(&session, MediaEvent::Connecting);
-        (session, previous)
+        Some((session, previous))
     }
 
     /// The session held, when it is the one `ticket` names.
@@ -223,7 +243,8 @@ impl Shared {
     }
 
     /// Stops holding the session `ticket` names, and returns it to be closed.
-    /// Nothing more is reported for it from here on.
+    /// Nothing more is reported for it from here on. When it is not held, it
+    /// is remembered, so that a connect for it still on its way joins nothing.
     fn release(&self, ticket: Ticket) -> Option<Arc<Session>> {
         let mut held = self.lock();
         if held
@@ -231,10 +252,15 @@ impl Shared {
             .as_ref()
             .is_some_and(|session| session.ticket == ticket)
         {
-            held.session.take()
-        } else {
-            None
+            return held.session.take();
         }
+        if !held.left_early.contains(&ticket) {
+            if held.left_early.len() == LEFT_EARLY_KEPT {
+                held.left_early.pop_front();
+            }
+            held.left_early.push_back(ticket);
+        }
+        None
     }
 
     /// Reports `event` for `session` while it is held. False when it is not,

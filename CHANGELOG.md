@@ -72,6 +72,12 @@ member an app matches on, implements or builds. The fixtures move to the server'
   agent still gone then has really left, and ends it as before. Known limit: a full
   reconnection the server asks for straight away, with no resume first, reports the
   leaves before `Reconnecting`, and those still read as leaving.
+- A hang-up that overtakes its own join no longer leaves a room joined. The runner runs
+  each effect as its own task on a multi-threaded runtime, so `disconnect` for a session can
+  run before `connect` for it has begun; the connect then joined the room with the
+  microphone on, for a session the model had already put away. `LiveKitCallEngine` now
+  remembers a session left before it was held (the newest 16), and a connect for one joins
+  nothing and reports nothing.
 
 ## [8.0.0] - 2026-11-05
 
