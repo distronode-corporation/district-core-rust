@@ -473,6 +473,61 @@ fn the_far_end_hanging_up_ends_the_call_here_and_at_the_carrier() {
     assert_eq!(*phase(&model), CallPhase::Ended(CallEnd::Remote));
 }
 
+/// A resume that fails becomes a full reconnection, and the media library
+/// reports everyone as having left before it reports them back. That is the
+/// connection, not the far end: the call goes on.
+#[test]
+fn a_rebuilt_connection_reporting_the_far_end_gone_and_back_ends_nothing() {
+    let mut model = at_dialler(AGENCY, "agency");
+    let (session, _) = answered(&mut model);
+    for event in [
+        MediaEvent::Reconnecting,
+        MediaEvent::ParticipantLeft {
+            identity: "sip_callee".to_owned(),
+        },
+        MediaEvent::ParticipantJoined(person("sip_callee")),
+        MediaEvent::Connected,
+    ] {
+        let effects = model.update(media(session, event.clone()));
+        assert!(effects.is_empty(), "{event:?}: {effects:?}");
+    }
+    assert_eq!(*phase(&model), CallPhase::InCall);
+    let held = signed_in(&model).media.as_ref().expect("still in the room");
+    assert_eq!(held.connection, MediaConnection::Connected);
+    assert_eq!(held.people().len(), 1);
+}
+
+/// The far end hanging up while the connection was down is found once it is
+/// back: nobody returned, so the call ends here and at the carrier.
+#[test]
+fn a_far_end_gone_when_the_connection_comes_back_ends_the_call() {
+    let mut model = at_dialler(AGENCY, "agency");
+    let (session, _) = answered(&mut model);
+    assert!(
+        model
+            .update(media(session, MediaEvent::Reconnecting))
+            .is_empty()
+    );
+    assert!(
+        model
+            .update(media(
+                session,
+                MediaEvent::ParticipantLeft {
+                    identity: "sip_callee".to_owned(),
+                },
+            ))
+            .is_empty(),
+        "not while reconnecting"
+    );
+    assert_eq!(*phase(&model), CallPhase::InCall);
+    let effects = model.update(media(session, MediaEvent::Connected));
+    assert_eq!(
+        and_transcript_read(effects),
+        [carrier_hang_up(), Effect::DisconnectMedia { session }]
+    );
+    assert_eq!(*phase(&model), CallPhase::Ended(CallEnd::Remote));
+}
+
 #[test]
 fn a_room_that_ends_before_an_answer_ends_the_call_unanswered() {
     let mut model = at_dialler(AGENCY, "agency");

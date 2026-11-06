@@ -60,6 +60,19 @@ member an app matches on, implements or builds. The fixtures move to the server'
   `district-meta-window-human-agent.json` and `district-meta-window-closed.json`, decoded by
   `MetaWindowResponse`. `contracts/desktop/` and `contracts/i18n/` are unchanged.
 
+### Fixed
+
+- A connection rebuilt after a failed resume no longer hangs up a placed call or ends an HQ
+  voice session. The media library (`livekit` 0.10.1) reports every remote participant as
+  having left when it falls back to a full reconnection, and as joining again once it is
+  back; a placed call took that as the far end hanging up (and ended it at the carrier),
+  and HQ voice as the agent leaving. While a session is reconnecting, people changes now
+  update the list but end nothing, and once it is in its room again
+  (`MediaEvent::Connected`) the call and HQ voice look at who is there: a far end or an
+  agent still gone then has really left, and ends it as before. Known limit: a full
+  reconnection the server asks for straight away, with no resume first, reports the
+  leaves before `Reconnecting`, and those still read as leaving.
+
 ## [8.0.0] - 2026-11-05
 
 The country-aware dialler (#63), the app parity fixtures (#64) and app parity on the

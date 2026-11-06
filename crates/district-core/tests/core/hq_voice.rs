@@ -949,6 +949,43 @@ fn the_session_ends_when_the_agent_leaves_and_the_cards_stay() {
     confirmation(&hq(&mut model, HqEvent::ConfirmVoiceCard(ID.to_owned())));
 }
 
+/// A rebuilt connection reports the agent as having left, then back: the
+/// session goes on. An agent still gone once the connection is back has ended
+/// it.
+#[test]
+fn a_rebuilt_connection_ends_the_session_only_when_the_agent_is_still_gone() {
+    let (mut model, session) = live();
+    for event in [
+        MediaEvent::Reconnecting,
+        MediaEvent::ParticipantLeft {
+            identity: "agent-1".to_owned(),
+        },
+        MediaEvent::ParticipantJoined(Participant::new("agent-1", None, true)),
+        MediaEvent::Connected,
+    ] {
+        let effects = report(&mut model, session, event.clone());
+        assert!(effects.is_empty(), "{event:?}: {effects:?}");
+    }
+    assert_eq!(voice(&model).phase, HqVoicePhase::Live { agent: None });
+
+    report(&mut model, session, MediaEvent::Reconnecting);
+    let effects = report(
+        &mut model,
+        session,
+        MediaEvent::ParticipantLeft {
+            identity: "agent-1".to_owned(),
+        },
+    );
+    assert!(effects.is_empty(), "not while reconnecting: {effects:?}");
+    assert_eq!(voice(&model).phase, HqVoicePhase::Live { agent: None });
+    let effects = report(&mut model, session, MediaEvent::Connected);
+    assert_eq!(effects, [Effect::DisconnectMedia { session }]);
+    assert_eq!(
+        voice(&model).phase,
+        HqVoicePhase::Ended(HqVoiceEnd::AgentLeft)
+    );
+}
+
 #[test]
 fn people_before_the_agent_joins_end_nothing() {
     let (mut model, ticket) = minting();

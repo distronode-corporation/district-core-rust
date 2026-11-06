@@ -501,6 +501,9 @@ pub(crate) enum MediaChange {
     Nothing,
     /// The session is in its room.
     Connected,
+    /// The session is in its room again after the connection was resumed or
+    /// rebuilt: the people in it may have changed meanwhile.
+    Resumed,
     /// The people in the room changed.
     People,
     /// The session is over, for this reason.
@@ -554,8 +557,13 @@ impl MediaSession {
         match event {
             MediaEvent::Connecting => MediaChange::Nothing,
             MediaEvent::Connected => {
+                let resumed = self.connection == MediaConnection::Reconnecting;
                 self.connection = MediaConnection::Connected;
-                MediaChange::Connected
+                if resumed {
+                    MediaChange::Resumed
+                } else {
+                    MediaChange::Connected
+                }
             }
             MediaEvent::Reconnecting => {
                 self.connection = MediaConnection::Reconnecting;
@@ -568,12 +576,12 @@ impl MediaSession {
                 self.participants
                     .retain(|present| present.identity != participant.identity);
                 self.participants.push(participant);
-                MediaChange::People
+                self.people_changed()
             }
             MediaEvent::ParticipantLeft { identity } => {
                 self.participants
                     .retain(|present| present.identity != identity);
-                MediaChange::People
+                self.people_changed()
             }
             MediaEvent::RemoteTrack {
                 identity,
@@ -603,6 +611,20 @@ impl MediaSession {
             event @ (MediaEvent::AgentData { .. }
             | MediaEvent::AgentState(_)
             | MediaEvent::Speech(_)) => MediaChange::Agent(event),
+        }
+    }
+
+    /// What a change in the people means. Nothing while the connection is
+    /// being resumed: when a resume fails and the media library rebuilds the
+    /// connection, it reports everyone as having left first, and as having
+    /// joined again once it is back, so the owner looks at who is there only
+    /// once the session is in its room again ([`MediaChange::Resumed`]). A far
+    /// end that really hung up meanwhile is still gone then.
+    fn people_changed(&self) -> MediaChange {
+        if self.connection == MediaConnection::Reconnecting {
+            MediaChange::Nothing
+        } else {
+            MediaChange::People
         }
     }
 
@@ -734,6 +756,11 @@ impl SignedIn {
         match media.apply(update.event) {
             MediaChange::Nothing => Vec::new(),
             MediaChange::Connected => self.media_connected(owner, tickets),
+            MediaChange::Resumed => {
+                let mut effects = self.media_connected(owner, tickets);
+                effects.extend(self.media_people_changed(owner, tickets));
+                effects
+            }
             MediaChange::People => self.media_people_changed(owner, tickets),
             MediaChange::Agent(event) => self.media_agent(owner, event),
             MediaChange::Ended(reason) => {
