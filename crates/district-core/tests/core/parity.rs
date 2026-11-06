@@ -1788,3 +1788,48 @@ fn a_viewer_reads_no_meta_window() {
         assert!(!controls(&model).can_reply);
     });
 }
+
+#[test]
+fn the_customer_writing_again_reads_the_meta_window_again() {
+    with_meta_channels(|| {
+        let mut model = on_meta(MESSENGER, meta_window("district-meta-window-closed.json"));
+        let mut page: TimelineResponse = fixture("district-timeline.json");
+
+        // Read again with nothing new from the customer: the window is not.
+        let effects = model.update(Event::Refresh);
+        let effects = model.update(Event::TimelineLoaded {
+            ticket: pick(&effects, |e| matches!(e, Effect::LoadTimeline { .. })),
+            result: Ok(page.clone()),
+        });
+        assert!(!has(&effects, |e| matches!(
+            e,
+            Effect::LoadMetaWindow { .. }
+        )));
+
+        // The customer wrote: the window is read again, and opens.
+        let mut wrote = page.timeline[0].clone();
+        wrote.id = "msg_meta_customer_again".to_owned();
+        wrote.direction = "inbound".to_owned();
+        wrote.timestamp = "2026-08-20T10:00:00.000Z".to_owned();
+        page.timeline.push(wrote);
+        let effects = model.update(Event::Refresh);
+        let effects = model.update(Event::TimelineLoaded {
+            ticket: pick(&effects, |e| matches!(e, Effect::LoadTimeline { .. })),
+            result: Ok(page),
+        });
+        let ticket = pick(&effects, |e| matches!(e, Effect::LoadMetaWindow { .. }));
+        assert!(
+            screen(&model).meta_window_closed(),
+            "until the answer lands"
+        );
+        model.update(Event::MetaWindowLoaded {
+            ticket,
+            result: Ok(meta_window("district-meta-window.json")),
+        });
+        thread_event(
+            &mut model,
+            ThreadEvent::Compose("Thanks for writing".to_owned()),
+        );
+        assert!(controls(&model).can_send);
+    });
+}

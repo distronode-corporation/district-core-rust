@@ -38,7 +38,8 @@ member an app matches on, implements or builds. The fixtures move to the server'
   keeps the text box, and the app says `MetaComposer::WINDOW_CLOSED`
   (`ThreadScreen::meta_window_closed`). Not yet read, unreadable or unknown, it blocks
   nothing. No countdown is shown; `until` is kept. The window is read again after each reply
-  that goes. A reply the service refuses with `messenger_window_closed` closes it, and a read
+  that goes, and whenever the thread's newest page brings a new message from the customer,
+  which opens it again. A reply the service refuses with `messenger_window_closed` closes it, and a read
   still on its way, asked before that refusal, is dropped so it cannot open it again.
   Breaking for an app that matches every `Effect` or `Event`, or builds a `ThreadScreen` with
   a struct literal: run the effect through the core's runner, or call

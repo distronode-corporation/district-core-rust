@@ -1307,12 +1307,20 @@ impl SignedIn {
         tickets: &mut Tickets,
     ) -> Next {
         if tickets.accept(Slot::Timeline, ticket) {
+            let mut effects = Vec::new();
             if let Some(screen) = self.thread.as_mut() {
+                // The customer wrote again: on Messenger or Instagram that
+                // opens the window, so it is read again.
+                let wrote = customer_wrote(&screen.history, &result);
                 newest_loaded(screen, result, tickets);
+                if wrote {
+                    effects.extend(read_meta_window(screen, tickets));
+                }
             }
             if tickets.take_again(Slot::Timeline) {
-                return Next::Stay(self.reload_thread(tickets));
+                effects.extend(self.reload_thread(tickets));
             }
+            return Next::Stay(effects);
         } else if tickets.accept(Slot::TimelineOlder, ticket)
             && let Some(ThreadHistory::Ready(held)) =
                 self.thread.as_mut().map(|screen| &mut screen.history)
@@ -1497,16 +1505,11 @@ fn meta_sent(
     result: &Result<SendMessageResponse, ApiError>,
     tickets: &mut Tickets,
 ) -> Vec<Effect> {
-    let (Some(meta), Some(target)) = (screen.meta.as_mut(), screen.reply_target.as_ref()) else {
+    let Some(meta) = screen.meta.as_mut() else {
         return Vec::new();
     };
     match result {
-        Ok(_) => vec![Effect::LoadMetaWindow {
-            ticket: tickets.issue(Slot::MetaWindow),
-            workspace_id: screen.workspace_id.clone(),
-            channel: target.channel.to_owned(),
-            to: target.to.clone(),
-        }],
+        Ok(_) => read_meta_window(screen, tickets),
         Err(error) if error.code() == Some(MESSENGER_WINDOW_CLOSED) => {
             tickets.cancel(Slot::MetaWindow);
             meta.window = MetaWindowState::Closed;
@@ -1514,6 +1517,33 @@ fn meta_sent(
         }
         Err(_) => Vec::new(),
     }
+}
+
+/// Reads the Messenger or Instagram window again, while the reply goes by one
+/// of them. What is shown stays until the answer lands; a read still on its way
+/// is superseded.
+fn read_meta_window(screen: &ThreadScreen, tickets: &mut Tickets) -> Vec<Effect> {
+    let (Some(_), Some(target)) = (&screen.meta, &screen.reply_target) else {
+        return Vec::new();
+    };
+    vec![Effect::LoadMetaWindow {
+        ticket: tickets.issue(Slot::MetaWindow),
+        workspace_id: screen.workspace_id.clone(),
+        channel: target.channel.to_owned(),
+        to: target.to.clone(),
+    }]
+}
+
+/// Whether the newest page brings a message from the customer that the
+/// history held did not have. The first page brings none: the window was read
+/// as the thread opened.
+fn customer_wrote(history: &ThreadHistory, page: &Result<TimelineResponse, ApiError>) -> bool {
+    let (ThreadHistory::Ready(held), Ok(page)) = (history, page) else {
+        return false;
+    };
+    page.timeline.iter().any(|event| {
+        event.direction == "inbound" && !held.events.iter().any(|known| known.id == event.id)
+    })
 }
 
 /// The written reply goes into the composer as if it had been typed, and is
