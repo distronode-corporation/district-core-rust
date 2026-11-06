@@ -60,6 +60,9 @@ member an app matches on, implements or builds. The fixtures move to the server'
 - `contracts/fixtures/` from the server's ef616838f: `district-meta-window.json`,
   `district-meta-window-human-agent.json` and `district-meta-window-closed.json`, decoded by
   `MetaWindowResponse`. `contracts/desktop/` and `contracts/i18n/` are unchanged.
+- The catalogs are signed off for 9.0.0 (`i18n/fr-CA/signoff.json`): `core.toml` gains
+  `thread.meta_human_agent` and `thread.meta_window_closed`, the web Inbox's reviewed
+  French verbatim; the other catalogs are unchanged.
 
 ### Fixed
 

@@ -1,7 +1,7 @@
 {
-  "signed_off_by": "Sean Dean, 2026-11-05 (single French sign-off, GitLab #2 note 4173250442; manager review by Claude xhigh, ThinkPad 78da7e6a)",
-  "release": "v8.0.0",
-  "commit": "05afbd6b175701df0a7e8bb7983d7878c2a56c8e",
+  "signed_off_by": "Sean Dean, 2026-11-06 (GitLab #2, ThinkPad 78da7e6a)",
+  "release": "v9.0.0",
+  "commit": "d327c42b1fa9c5e14400c605d4d3a73066001a4e",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
@@ -9,7 +9,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
-      "sha256": "f6c1b808b39941a57036b2773daaa9fef2dc8fef276257b5a7592321d6b66b10"
+      "sha256": "3ac174c44636f44a2f1f527d46273cbcb479ab6b4b03084b151d32c9e088589b"
     },
     {
       "path": "crates/district-l10n/catalog/numbers.toml",
