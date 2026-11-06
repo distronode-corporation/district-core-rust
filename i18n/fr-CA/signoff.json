@@ -1,15 +1,15 @@
 {
-  "signed_off_by": "ThinkPad manager session 78da7e6a (Opus 5.5), 2026-10-26: reviewed the 23 District HQ voice sentences in core.toml (applied in 780b7de) and approved its four length waivers. hq.voice_region_disclosure was added after that review by worker W6, copied byte for byte from the web dashboard's French, for the manager to confirm. Every other catalog is unchanged since the v6.1.0 sign-off. Recorded for the next release, a new major version with HQ voice.",
-  "release": "v7.0.0",
-  "commit": "7e7def485429325a465e3ee9056c3fc445887dc2",
+  "signed_off_by": "Sean Dean, 2026-11-05 (single French sign-off, GitLab #2 note 4173250442; manager review by Claude xhigh, ThinkPad 78da7e6a)",
+  "release": "v8.0.0",
+  "commit": "05afbd6b175701df0a7e8bb7983d7878c2a56c8e",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
-      "sha256": "36277110cc75007e8f70bdbab0ad9cf20e81fc9dc2bef7d8ba3ee8a5f24dddbe"
+      "sha256": "8439fa0b39705e22e97ceadbc2a70a0cfffdcdfef272210f0de851be8ece5e90"
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
-      "sha256": "45e456af42bec8d35ebc36aaa51b11abce998b61312696185fc751f41870ac5b"
+      "sha256": "f6c1b808b39941a57036b2773daaa9fef2dc8fef276257b5a7592321d6b66b10"
     },
     {
       "path": "crates/district-l10n/catalog/numbers.toml",
@@ -25,7 +25,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/wire.toml",
-      "sha256": "66476aa6ef1447a997acd8bd0ddea4de723c57b0565b1157d87b008cc52ba0fd"
+      "sha256": "32aa5b7b794199ed273398b2210034e451db68cb0e3c8ebff8e3cac6b02fa79c"
     }
   ]
 }

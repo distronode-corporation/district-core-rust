@@ -1,6 +1,6 @@
 //! Typed calls for the inbox: the threads, a thread's history, the unread count,
-//! search, sending, marking read, attachments, saved drafts and AI-written
-//! drafts.
+//! search, sending, marking read, attachments, saved drafts, AI-written drafts,
+//! who owns a thread, and the WhatsApp composer's window and templates.
 //!
 //! Reads are repeated once after a refused access token, like every read. The
 //! writes are sent once per call and never repeated: sending a message and
@@ -11,11 +11,13 @@
 //! `success: true` is [`ApiError::Unconfirmed`].
 
 use district_model::{
-    AiDraftResponse, ConversationsResponse, DraftDeleteResponse, DraftListResponse, DraftResponse,
-    DraftSaveRequest, MarkReadResponse, MediaUploadResponse, MessageSearchResponse,
-    MessageThreadResponse, SendMessageRequest, SendMessageResponse, ThreadRef, TimelineCursor,
-    TimelineResponse, UnreadCountResponse,
+    AiDraftResponse, ConversationAssignResponse, ConversationsResponse, DraftDeleteResponse,
+    DraftListResponse, DraftResponse, DraftSaveRequest, MarkReadResponse, MediaUploadResponse,
+    MessageSearchResponse, MessageThreadResponse, SendMessageRequest, SendMessageResponse,
+    ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse, WhatsAppTemplatesResponse,
+    WhatsAppWindowResponse,
 };
+use serde::Serialize;
 
 use crate::client::ApiClient;
 use crate::endpoints::Endpoint;
@@ -30,6 +32,43 @@ const ADDRESS_AS_PHONE_NUMBER: &str = "phoneNumber";
 /// The key the mark-read route reads an address from.
 const ADDRESS_AS_COUNTERPART: &str = "counterpart";
 
+/// The query parameter that has the inbox's reads list Messenger and Instagram
+/// as themselves. Without it the service leaves those messages out of every
+/// read a native app makes, so a build that cannot answer them never shows
+/// them.
+const META_CHANNELS: &str = "metaChannels";
+
+/// The query parameter that adds each thread's owner to the thread list.
+const ASSIGNMENTS: &str = "assignments";
+
+/// `"1"` when `on`, else nothing: each flag the inbox's reads take is sent as
+/// `1` or left out, and any other value is the default read.
+fn flag(on: bool) -> Option<&'static str> {
+    on.then_some("1")
+}
+
+/// What the thread list is asked to carry beyond its default rows. Both
+/// default to off, which is the list an app built before either existed reads.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
+pub struct ConversationsQuery {
+    /// List Messenger and Instagram threads too (`metaChannels=1`), and give
+    /// every row its `replyOptions`. Only for an app that shows those threads
+    /// and can answer them.
+    pub meta_channels: bool,
+    /// Give every row its owner (`assignments=1`): `assigneeEmail` and
+    /// `assignedToMe`.
+    pub assignments: bool,
+}
+
+/// The body of `POST /api/district/conversations/assign`, less the workspace.
+/// `assigneeEmail` is always sent: `null` is the unassign.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct AssignBody<'a> {
+    thread_key: &'a str,
+    assignee_email: Option<&'a str>,
+}
+
 /// The parameter naming `thread`, on a route that reads an address under
 /// `address_key`: a contact's thread is always `contactId`.
 fn thread_param<'a>(thread: &'a ThreadRef, address_key: &'static str) -> (&'static str, &'a str) {
@@ -42,13 +81,19 @@ fn thread_param<'a>(thread: &'a ThreadRef, address_key: &'static str) -> (&'stat
 impl<S: TokenSource> ApiClient<S> {
     /// The inbox's threads in `workspace_id`, most recent first. Recent threads
     /// only: see [`ConversationsResponse::may_be_incomplete`].
+    ///
+    /// `query` says what each row carries beyond the default; see
+    /// [`ConversationsQuery`].
     pub async fn conversations(
         &self,
         workspace_id: &str,
+        query: ConversationsQuery,
     ) -> Result<ConversationsResponse, ApiError> {
         let list: ConversationsResponse = self
             .request(Endpoint::Conversations)
             .workspace(workspace_id)
+            .query_opt(META_CHANNELS, flag(query.meta_channels))
+            .query_opt(ASSIGNMENTS, flag(query.assignments))
             .send()
             .await?;
         confirm(Endpoint::Conversations, list.success)?;
@@ -61,17 +106,22 @@ impl<S: TokenSource> ApiClient<S> {
     ///
     /// This is also a contact's history: pass
     /// [`ThreadRef::Contact`] with the contact's id.
+    ///
+    /// With `meta_channels`, Messenger and Instagram messages are in it, typed
+    /// as themselves; without, they are left out.
     pub async fn timeline(
         &self,
         workspace_id: &str,
         thread: &ThreadRef,
         older_than: Option<&TimelineCursor>,
+        meta_channels: bool,
     ) -> Result<TimelineResponse, ApiError> {
         let (key, value) = thread_param(thread, ADDRESS_AS_PHONE_NUMBER);
         let page: TimelineResponse = self
             .request(Endpoint::Timeline)
             .workspace(workspace_id)
             .query(key, value)
+            .query_opt(META_CHANNELS, flag(meta_channels))
             .query_opt("before", older_than.map(TimelineCursor::before))
             .query_opt("beforeId", older_than.map(TimelineCursor::before_id))
             .send()
@@ -80,11 +130,17 @@ impl<S: TokenSource> ApiClient<S> {
         Ok(page)
     }
 
-    /// How many messages in `workspace_id` nobody has read.
-    pub async fn unread_count(&self, workspace_id: &str) -> Result<UnreadCountResponse, ApiError> {
+    /// How many messages in `workspace_id` nobody has read, Messenger and
+    /// Instagram messages counted only with `meta_channels`.
+    pub async fn unread_count(
+        &self,
+        workspace_id: &str,
+        meta_channels: bool,
+    ) -> Result<UnreadCountResponse, ApiError> {
         let count: UnreadCountResponse = self
             .request(Endpoint::MessagesUnreadCount)
             .workspace(workspace_id)
+            .query_opt(META_CHANNELS, flag(meta_channels))
             .send()
             .await?;
         confirm(Endpoint::MessagesUnreadCount, count.success)?;
@@ -118,15 +174,19 @@ impl<S: TokenSource> ApiClient<S> {
     /// A message the service cannot find in this workspace is
     /// [`ApiError::NotFound`]; one with no address to thread it by is
     /// [`ApiError::Conflict`]. Neither is worth retrying.
+    ///
+    /// A Messenger or Instagram message is found only with `meta_channels`.
     pub async fn message_thread(
         &self,
         workspace_id: &str,
         message_id: &str,
+        meta_channels: bool,
     ) -> Result<MessageThreadResponse, ApiError> {
         let found: MessageThreadResponse = self
             .request(Endpoint::MessageThread)
             .path_param("messageId", message_id)
             .workspace(workspace_id)
+            .query_opt(META_CHANNELS, flag(meta_channels))
             .send()
             .await?;
         confirm(Endpoint::MessageThread, found.success)?;
@@ -274,5 +334,66 @@ impl<S: TokenSource> ApiClient<S> {
             .await?;
         confirm(Endpoint::MessageDraftGenerate, written.success)?;
         Ok(written)
+    }
+
+    /// Gives the thread `thread_key` to the member `assignee_email`, or takes it
+    /// from whoever holds it with `None`.
+    ///
+    /// Sent once: the assignee is notified. The service refuses a Viewer, who can
+    /// neither assign nor be assigned (`assignee_is_viewer`), and an address that
+    /// is not a member (`assignee_not_member`), and its refusal carries the code.
+    pub async fn assign_conversation(
+        &self,
+        workspace_id: &str,
+        thread_key: &str,
+        assignee_email: Option<&str>,
+    ) -> Result<ConversationAssignResponse, ApiError> {
+        let assigned: ConversationAssignResponse = self
+            .request(Endpoint::ConversationAssign)
+            .workspace(workspace_id)
+            .json(&AssignBody {
+                thread_key,
+                assignee_email,
+            })
+            .send()
+            .await?;
+        confirm(Endpoint::ConversationAssign, assigned.success)?;
+        Ok(assigned)
+    }
+
+    /// Whether free-form WhatsApp text may go to `to` now, and from which
+    /// sender: the one the send route would choose for this customer. The
+    /// composer's preview only; the send route enforces the window itself.
+    pub async fn whatsapp_window(
+        &self,
+        workspace_id: &str,
+        to: &str,
+    ) -> Result<WhatsAppWindowResponse, ApiError> {
+        let window: WhatsAppWindowResponse = self
+            .request(Endpoint::WhatsAppWindow)
+            .workspace(workspace_id)
+            .query("to", to)
+            .send()
+            .await?;
+        confirm(Endpoint::WhatsAppWindow, window.success)?;
+        Ok(window)
+    }
+
+    /// The WhatsApp templates of the sender `sender_id`, pending ones included:
+    /// see [`WhatsAppTemplate::sendable_variables`](district_model::WhatsAppTemplate::sendable_variables)
+    /// for which may be sent.
+    pub async fn whatsapp_templates(
+        &self,
+        workspace_id: &str,
+        sender_id: &str,
+    ) -> Result<WhatsAppTemplatesResponse, ApiError> {
+        let templates: WhatsAppTemplatesResponse = self
+            .request(Endpoint::WhatsAppTemplates)
+            .workspace(workspace_id)
+            .query("senderId", sender_id)
+            .send()
+            .await?;
+        confirm(Endpoint::WhatsAppTemplates, templates.success)?;
+        Ok(templates)
     }
 }

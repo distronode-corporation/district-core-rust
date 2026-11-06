@@ -40,7 +40,9 @@
 //!   [`ApiClient::hang_up_call`]) and this desktop's presence
 //!   ([`ApiClient::register_presence`], [`ApiClient::unregister_presence`]);
 //! - the inbox ([`ApiClient::conversations`], [`ApiClient::timeline`],
-//!   [`ApiClient::send_message`] and the rest);
+//!   [`ApiClient::send_message`] and the rest), who owns a thread
+//!   ([`ApiClient::assign_conversation`]) and the WhatsApp composer's window and
+//!   templates ([`ApiClient::whatsapp_window`], [`ApiClient::whatsapp_templates`]);
 //! - contacts ([`ApiClient::contacts`], [`ApiClient::contact`],
 //!   [`ApiClient::update_contact`] and the rest);
 //! - District HQ ([`ApiClient::hq_prompt`], and [`ApiClient::hq_confirm`] for a
@@ -73,6 +75,10 @@
 //! - meeting rooms ([`ApiClient::meetings`], [`ApiClient::meeting_detail`], and
 //!   [`ApiClient::room_token`], which takes only a
 //!   [`MeetRoomName`](district_model::MeetRoomName));
+//! - supervising a live call: listening in ([`ApiClient::monitor_call`],
+//!   which takes only a [`LiveCallId`](district_model::LiveCallId)), a private
+//!   note to the AI ([`ApiClient::call_whisper`]) and taking the call over
+//!   ([`ApiClient::take_over_call`]);
 //! - the workspace settings: the settings row ([`ApiClient::workspace_config`])
 //!   and the three saves that replace a whole list
 //!   ([`ApiClient::save_tools`], [`ApiClient::save_directory`],
@@ -135,6 +141,7 @@ mod rooms;
 mod scheduling;
 mod scheduling_admin;
 mod settings;
+mod supervise;
 mod support;
 mod telemetry;
 mod token;
@@ -151,4 +158,5 @@ pub use error::{
     TransportError, TransportKind, UnauthorizedReason,
 };
 pub use exclusions::{Addition, DESKTOP_ONLY, EXCLUDED, Exclusion, PathMatch, normalize_template};
+pub use inbox::ConversationsQuery;
 pub use token::{AccessToken, ReauthReason, RetryReason, TokenCell, TokenError, TokenSource};

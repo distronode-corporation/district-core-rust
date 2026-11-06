@@ -12,6 +12,8 @@
 //! `support.rs`, `rooms.rs`, and the workspace settings under `settings/`); this
 //! file holds what they share: navigation, the workspace switch and the overview.
 
+use std::collections::BTreeMap;
+
 use district_api::ApiError;
 use district_model::{
     DeviceListResponse, DeviceRevokeResponse, OverviewResponse, ThreadRef, WorkspaceListResponse,
@@ -164,9 +166,18 @@ pub struct SignedIn {
     pub(crate) transcript_watch: Option<TranscriptWatch>,
     /// The saved replies being written, one at a time.
     pub(crate) draft_writes: DraftWrites,
+    /// The owners this member's own assignment answers set, by thread key, each
+    /// with a ticket from the moment the answer was applied. A list read issued
+    /// before then (a smaller ticket) says who owned the thread before the
+    /// change, so its row keeps the answer's owner; once a read issued after
+    /// lands, the service's list is the word and the entry goes.
+    pub(crate) owners_answered: BTreeMap<String, (Ticket, Option<String>)>,
     /// Whether this build can carry a call's audio
     /// ([`CoreConfig::calls_available`]).
     pub(crate) calls_available: bool,
+    /// Whether the app lists and answers Messenger and Instagram threads
+    /// ([`CoreConfig::meta_channels`](crate::CoreConfig::meta_channels)).
+    pub(crate) meta_channels: bool,
 }
 
 /// What a signed-in step decided.
@@ -238,7 +249,9 @@ impl SignedIn {
             pending_dial: None,
             transcript_watch: None,
             draft_writes: DraftWrites::default(),
+            owners_answered: BTreeMap::new(),
             calls_available,
+            meta_channels: false,
         }
     }
 
@@ -303,8 +316,9 @@ impl SignedIn {
     /// Closes the detail screen showing, unless `next` is the same screen. The
     /// rooms lobby drops the credential it held, a settings section its
     /// edits, typed credentials and audition, and District HQ the residency
-    /// statement it showed. An HQ voice session goes on: the app's voice dock
-    /// holds its controls on every other screen.
+    /// statement it showed, and a call screen the room of the call it was
+    /// supervising. An HQ voice session goes on: the app's voice dock holds
+    /// its controls on every other screen.
     fn leave(&mut self, next: &Route, tickets: &mut Tickets) -> Vec<Effect> {
         if self.route == *next {
             return Vec::new();
@@ -313,7 +327,7 @@ impl SignedIn {
         if self.route == Route::Hq {
             self.decline_hq_voice_disclosure();
         }
-        self.close_call(tickets);
+        effects.extend(self.close_call(tickets));
         self.close_contact(tickets);
         self.close_desk_ticket(tickets);
         self.close_desk_settings(tickets);
@@ -482,6 +496,7 @@ impl SignedIn {
     fn close_screens(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         let mut effects = self.close_thread(tickets);
         effects.extend(self.stop_hq_voice(tickets));
+        effects.extend(self.close_call(tickets));
         effects.extend(self.close_rooms(tickets));
         effects.extend(self.close_settings(tickets));
         tickets.cancel_each(&WORKSPACE_SLOTS);
@@ -489,6 +504,7 @@ impl SignedIn {
         tickets.cancel_each(&NUMBER_SLOTS);
         self.unread = None;
         self.inbox = InboxScreen::default();
+        self.owners_answered.clear();
         self.calls = CallLog::default();
         self.call = None;
         self.contacts = ContactsScreen::default();
@@ -521,6 +537,7 @@ impl SignedIn {
         effects.extend(self.leave_room());
         effects.extend(self.stop_audition(tickets));
         effects.extend(self.stop_hq_voice(tickets));
+        effects.extend(self.stop_supervising(tickets));
         effects
     }
 

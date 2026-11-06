@@ -529,6 +529,7 @@ impl SignedIn {
             | TelemetryEventType::TranscriptEnded
             | TelemetryEventType::TranscriptRetracted
             | TelemetryEventType::TranscriptError
+            | TelemetryEventType::WhisperApplied
             | TelemetryEventType::Unknown(_) => Vec::new(),
         }
     }
@@ -553,6 +554,10 @@ impl SignedIn {
             // A ring's end says nothing new about the call: the call's own
             // events read the log and the call again.
             TelemetryEventType::CallRingCancelled => self.ring_cancelled(&envelope, tickets),
+            TelemetryEventType::WhisperApplied => {
+                self.whisper_applied(&envelope);
+                Vec::new()
+            }
             // An event type added after this build is left alone for the same
             // reason as a message that could not be read. A transcript frame
             // never reaches here; see `live`.
@@ -610,6 +615,7 @@ impl SignedIn {
                 ticket: tickets.issue_keyed(Slot::MessageLookup, &message_id),
                 workspace_id,
                 message_id,
+                meta_channels: self.meta_channels,
             }];
         }
         vec![Effect::Notify(Notification::message(
@@ -708,6 +714,7 @@ impl SignedIn {
                 ticket: tickets.issue(Slot::OpenLookup),
                 workspace_id,
                 message_id,
+                meta_channels: self.meta_channels,
             });
         }
         effects

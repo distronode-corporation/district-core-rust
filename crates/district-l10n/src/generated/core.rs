@@ -1958,6 +1958,15 @@ pub fn hq_voice_unencrypted(l: Locale) -> &'static str {
     }
 }
 
+/// `inbox.assigned_to`
+#[must_use]
+pub fn inbox_assigned_to(l: Locale, email: &str) -> String {
+    match l {
+        Locale::En => format!("Assigned to {email}"),
+        Locale::FrCa => format!("Assignée à {email}"),
+    }
+}
+
 /// `inbox.compose_action`
 #[must_use]
 pub fn inbox_compose_action(l: Locale) -> &'static str {
@@ -4082,6 +4091,276 @@ pub fn studio_leg_out(l: Locale, leg: &str, place: &str) -> String {
     }
 }
 
+/// `supervise.call_ended`
+#[must_use]
+pub fn supervise_call_ended(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The call has ended.",
+        Locale::FrCa => "L'appel est terminé.",
+    }
+}
+
+/// `supervise.hand_back`
+#[must_use]
+pub fn supervise_hand_back(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Hand back to your receptionist",
+        Locale::FrCa => "Redonner l'appel à votre réceptionniste",
+    }
+}
+
+/// `supervise.joining`
+#[must_use]
+pub fn supervise_joining(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Connecting you to the call.",
+        Locale::FrCa => "Connexion à l'appel en cours.",
+    }
+}
+
+/// `supervise.listen_action`
+#[must_use]
+pub fn supervise_listen_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Listen",
+        Locale::FrCa => "Écouter",
+    }
+}
+
+/// `supervise.listen_body`
+#[must_use]
+pub fn supervise_listen_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Hear the call as it happens. The caller does not hear you.",
+        Locale::FrCa => "Entendez l'appel en direct. L'appelant ne vous entend pas.",
+    }
+}
+
+/// `supervise.listen_failed`
+#[must_use]
+pub fn supervise_listen_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Could not connect you to the call. Try again.",
+        Locale::FrCa => "Impossible de vous connecter à l'appel. Réessayez.",
+    }
+}
+
+/// `supervise.listen_title`
+#[must_use]
+pub fn supervise_listen_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Listen in",
+        Locale::FrCa => "Écouter l'appel",
+    }
+}
+
+/// `supervise.listening`
+#[must_use]
+pub fn supervise_listening(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "You are listening",
+        Locale::FrCa => "Vous écoutez l'appel",
+    }
+}
+
+/// `supervise.no_receptionist`
+#[must_use]
+pub fn supervise_no_receptionist(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over.",
+        Locale::FrCa => "Il s'agit de l'appel d'un membre de l'équipe. Votre réceptionniste n'y participe pas, alors vous ne pouvez pas lui souffler de consigne ni prendre l'appel.",
+    }
+}
+
+/// `supervise.on_call_body`
+#[must_use]
+pub fn supervise_on_call_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your receptionist has stepped back and is waiting on the line. Hand the call back and it carries on.",
+        Locale::FrCa => "Votre réceptionniste s'est mise en retrait et attend en ligne. Redonnez-lui l'appel et elle reprend la conversation.",
+    }
+}
+
+/// `supervise.on_call_title`
+#[must_use]
+pub fn supervise_on_call_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "You are on the call",
+        Locale::FrCa => "Vous êtes en ligne avec l'appelant",
+    }
+}
+
+/// `supervise.stop_listening`
+#[must_use]
+pub fn supervise_stop_listening(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Stop listening",
+        Locale::FrCa => "Arrêter d'écouter",
+    }
+}
+
+/// `supervise.take_over`
+#[must_use]
+pub fn supervise_take_over(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Take over the call",
+        Locale::FrCa => "Prendre l'appel",
+    }
+}
+
+/// `supervise.take_over_cancel`
+#[must_use]
+pub fn supervise_take_over_cancel(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Cancel",
+        Locale::FrCa => "Annuler",
+    }
+}
+
+/// `supervise.take_over_confirm`
+#[must_use]
+pub fn supervise_take_over_confirm(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Take over",
+        Locale::FrCa => "Prendre l'appel",
+    }
+}
+
+/// `supervise.take_over_confirm_body`
+#[must_use]
+pub fn supervise_take_over_confirm_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your receptionist tells the caller a supervisor is taking over, then steps back. Your microphone is live on the call until you hand it back. Nothing is recorded.",
+        Locale::FrCa => "Votre réceptionniste annonce à l'appelant qu'un superviseur prend le relais, puis se met en retrait. Votre micro reste ouvert dans l'appel jusqu'à ce que vous lui redonniez l'appel. Rien n'est enregistré.",
+    }
+}
+
+/// `supervise.take_over_confirm_title`
+#[must_use]
+pub fn supervise_take_over_confirm_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Take over this call?",
+        Locale::FrCa => "Prendre cet appel?",
+    }
+}
+
+/// `supervise.take_over_failed`
+#[must_use]
+pub fn supervise_take_over_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The call could not be taken over. Try again.",
+        Locale::FrCa => "Impossible de prendre l'appel. Réessayez.",
+    }
+}
+
+/// `supervise.take_over_join_failed`
+#[must_use]
+pub fn supervise_take_over_join_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Could not join the call with your microphone. Check that a microphone is connected and that District AI may use it, then try again.",
+        Locale::FrCa => "Impossible de rejoindre l'appel avec votre micro. Vérifiez qu'un micro est branché et que District AI peut l'utiliser, puis réessayez.",
+    }
+}
+
+/// `supervise.taking_over`
+#[must_use]
+pub fn supervise_taking_over(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Taking over the call.",
+        Locale::FrCa => "Prise de l'appel en cours.",
+    }
+}
+
+/// `supervise.transcript_waiting`
+#[must_use]
+pub fn supervise_transcript_waiting(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "What is said shows up here while you listen.",
+        Locale::FrCa => "Ce qui se dit s'affiche ici pendant que vous écoutez.",
+    }
+}
+
+/// `supervise.whisper_applied`
+#[must_use]
+pub fn supervise_whisper_applied(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your receptionist used your note.",
+        Locale::FrCa => "Votre réceptionniste a utilisé votre consigne.",
+    }
+}
+
+/// `supervise.whisper_failed`
+#[must_use]
+pub fn supervise_whisper_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The note was not delivered. Try again.",
+        Locale::FrCa => "La consigne soufflée n'a pas été transmise. Réessayez.",
+    }
+}
+
+/// `supervise.whisper_not_applied`
+#[must_use]
+pub fn supervise_whisper_not_applied(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your receptionist could not use your note.",
+        Locale::FrCa => "Votre réceptionniste n'a pas pu utiliser votre consigne.",
+    }
+}
+
+/// `supervise.whisper_on_call`
+#[must_use]
+pub fn supervise_whisper_on_call(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Hand the call back to your receptionist to send a note",
+        Locale::FrCa => "Redonnez l'appel à votre réceptionniste pour souffler une consigne",
+    }
+}
+
+/// `supervise.whisper_placeholder`
+#[must_use]
+pub fn supervise_whisper_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "For example: Offer a 10% discount to book today.",
+        Locale::FrCa => "Par exemple\u{00A0}: offrez un rabais de 10\u{00A0}% pour réserver aujourd'hui.",
+    }
+}
+
+/// `supervise.whisper_send`
+#[must_use]
+pub fn supervise_whisper_send(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Send note",
+        Locale::FrCa => "Souffler la consigne",
+    }
+}
+
+/// `supervise.whisper_title`
+#[must_use]
+pub fn supervise_whisper_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Note to your receptionist",
+        Locale::FrCa => "Consigne à votre réceptionniste",
+    }
+}
+
+/// `supervise.whisper_too_long`
+#[must_use]
+pub fn supervise_whisper_too_long(l: Locale, max: i64) -> String {
+    match l {
+        Locale::En => format!("Keep the note to {} characters or fewer.", crate::format::integer(l, max)),
+        Locale::FrCa => format!("La consigne doit compter au plus {} caractères.", crate::format::integer(l, max)),
+    }
+}
+
+/// `supervise.whisper_viewer`
+#[must_use]
+pub fn supervise_whisper_viewer(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Viewers cannot send notes",
+        Locale::FrCa => "Les observateurs ne peuvent pas souffler de consigne",
+    }
+}
+
 /// `support.capped`
 #[must_use]
 pub fn support_capped(l: Locale) -> &'static str {
@@ -4199,12 +4478,66 @@ pub fn support_pending(l: Locale) -> &'static str {
     }
 }
 
+/// `thread.assign_label`
+#[must_use]
+pub fn thread_assign_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Assigned to",
+        Locale::FrCa => "Assignée à",
+    }
+}
+
 /// `thread.attachment_size`
 #[must_use]
 pub fn thread_attachment_size(l: Locale, megabytes: i64) -> String {
     match l {
         Locale::En => format!("Attachments must be between 1 byte and {} MB.", crate::format::integer(l, megabytes)),
         Locale::FrCa => format!("Les pièces jointes doivent faire entre 1 octet et {} Mo.", crate::format::integer(l, megabytes)),
+    }
+}
+
+/// `thread.attachments_sms_only`
+#[must_use]
+pub fn thread_attachments_sms_only(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Attachments can only go by text message. Remove them to send on this channel.",
+        Locale::FrCa => "Les pièces jointes ne peuvent partir que par texto. Retirez-les pour envoyer sur ce canal.",
+    }
+}
+
+/// `thread.channel_instagram`
+#[must_use]
+pub fn thread_channel_instagram(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Instagram",
+        Locale::FrCa => "Instagram",
+    }
+}
+
+/// `thread.channel_label`
+#[must_use]
+pub fn thread_channel_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Reply channel",
+        Locale::FrCa => "Canal de réponse",
+    }
+}
+
+/// `thread.channel_messenger`
+#[must_use]
+pub fn thread_channel_messenger(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Messenger",
+        Locale::FrCa => "Messenger",
+    }
+}
+
+/// `thread.channel_whatsapp`
+#[must_use]
+pub fn thread_channel_whatsapp(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "WhatsApp",
+        Locale::FrCa => "WhatsApp",
     }
 }
 
@@ -4226,6 +4559,96 @@ pub fn thread_read_only_role(l: Locale) -> &'static str {
     }
 }
 
+/// `thread.template_label`
+#[must_use]
+pub fn thread_template_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Template",
+        Locale::FrCa => "Modèle de message",
+    }
+}
+
+/// `thread.template_option`
+#[must_use]
+pub fn thread_template_option(l: Locale, name: &str, language: &str) -> String {
+    match l {
+        Locale::En => format!("{name} ({language})"),
+        Locale::FrCa => format!("{name} ({language})"),
+    }
+}
+
+/// `thread.template_placeholder`
+#[must_use]
+pub fn thread_template_placeholder(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Choose an approved template",
+        Locale::FrCa => "Choisir un modèle approuvé",
+    }
+}
+
+/// `thread.template_preview`
+#[must_use]
+pub fn thread_template_preview(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Preview",
+        Locale::FrCa => "Aperçu",
+    }
+}
+
+/// `thread.template_send`
+#[must_use]
+pub fn thread_template_send(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Send template",
+        Locale::FrCa => "Envoyer le modèle",
+    }
+}
+
+/// `thread.template_variable`
+#[must_use]
+pub fn thread_template_variable(l: Locale, placeholder: &str) -> String {
+    match l {
+        Locale::En => format!("Variable {placeholder}"),
+        Locale::FrCa => format!("Variable {placeholder}"),
+    }
+}
+
+/// `thread.template_variable_required`
+#[must_use]
+pub fn thread_template_variable_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Fill in this variable",
+        Locale::FrCa => "Remplissez cette variable",
+    }
+}
+
+/// `thread.templates_failed`
+#[must_use]
+pub fn thread_templates_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The templates could not be loaded. Try again in a moment.",
+        Locale::FrCa => "Les modèles n'ont pas pu être chargés. Réessayez dans un instant.",
+    }
+}
+
+/// `thread.templates_loading`
+#[must_use]
+pub fn thread_templates_loading(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Loading templates",
+        Locale::FrCa => "Chargement des modèles",
+    }
+}
+
+/// `thread.templates_none`
+#[must_use]
+pub fn thread_templates_none(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No approved template for this number yet. Refresh the templates in Messaging settings.",
+        Locale::FrCa => "Aucun modèle approuvé pour ce numéro pour l'instant. Actualisez les modèles dans les paramètres de messagerie.",
+    }
+}
+
 /// `thread.too_many_attachments`
 #[must_use]
 pub fn thread_too_many_attachments(l: Locale, count: i64) -> String {
@@ -4235,12 +4658,30 @@ pub fn thread_too_many_attachments(l: Locale, count: i64) -> String {
     }
 }
 
+/// `thread.unassigned`
+#[must_use]
+pub fn thread_unassigned(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Unassigned",
+        Locale::FrCa => "Non assignée",
+    }
+}
+
 /// `thread.untitled`
 #[must_use]
 pub fn thread_untitled(l: Locale) -> &'static str {
     match l {
         Locale::En => "Conversation",
         Locale::FrCa => "Conversation",
+    }
+}
+
+/// `thread.whatsapp_window_closed`
+#[must_use]
+pub fn thread_whatsapp_window_closed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Window closed: WhatsApp only allows a template now",
+        Locale::FrCa => "Fenêtre fermée\u{00A0}: WhatsApp n'accepte maintenant qu'un modèle de message",
     }
 }
 

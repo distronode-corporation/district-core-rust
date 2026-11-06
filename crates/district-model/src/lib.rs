@@ -64,6 +64,7 @@ mod scheduling;
 mod scheduling_admin;
 mod setup;
 mod softphone;
+mod supervise;
 mod support;
 mod telemetry;
 mod transcript;
@@ -122,12 +123,13 @@ pub use hq_voice::{
     read_packet,
 };
 pub use inbox::{
-    CHANNEL_EMAIL, CHANNEL_SMS, ConversationAssignResponse, ConversationAssignment,
-    ConversationAssignmentsResponse, ConversationLastMessage, ConversationSummary,
-    ConversationsResponse, MESSAGE_SEARCH_MIN_QUERY_LENGTH, MessageSearchHit,
-    MessageSearchResponse, MessageThreadMessage, MessageThreadResponse, MessageThreadTarget,
-    ReplyOption, ReplyTarget, ThreadRef, TimelineCursor, TimelineEvent, TimelinePageInfo,
-    TimelineResponse, UnreadCountResponse,
+    CHANNEL_EMAIL, CHANNEL_INSTAGRAM, CHANNEL_MESSENGER, CHANNEL_SMS, CHANNEL_WHATSAPP,
+    ConversationAssignResponse, ConversationAssignment, ConversationAssignmentsResponse,
+    ConversationLastMessage, ConversationSummary, ConversationsResponse,
+    MESSAGE_SEARCH_MIN_QUERY_LENGTH, MessageSearchHit, MessageSearchResponse, MessageThreadMessage,
+    MessageThreadResponse, MessageThreadTarget, REPLY_CHANNELS, ReplyOption, ReplyTarget,
+    ThreadRef, TimelineCursor, TimelineEvent, TimelinePageInfo, TimelineResponse,
+    UnreadCountResponse,
 };
 pub use knowledge::{
     KnowledgeCreateResponse, KnowledgeDeleteResponse, KnowledgeDocument, KnowledgeDocumentCreated,
@@ -168,7 +170,9 @@ pub use profile_settings::{
     LanguageSave, LanguageSaveProfile, SETTINGS_LANGUAGE_ENGLISH, SETTINGS_LANGUAGE_FRENCH,
     SettingsProfile, SettingsResponse, SettingsSaveResponse, SettingsSubscription,
 };
-pub use push::{PRESENCE_KIND, PresenceRegistration, PushRegistrationResponse};
+pub use push::{
+    META_CHANNELS_CAPABILITY, PRESENCE_KIND, PresenceRegistration, PushRegistrationResponse,
+};
 pub use refusal::RefusalResponse;
 pub use rooms::{
     GuestInvite, MeetRoomName, MeetingDetail, MeetingSummary, RoomE2ee, RoomTokenResponse,
@@ -182,12 +186,19 @@ pub use setup::{
     SETUP_STEP_DONE, SETUP_STEP_SKIPPED, SETUP_STEP_TODO, SetupProgress, SetupResponse, SetupSteps,
 };
 pub use softphone::{CallAnswerResponse, DIRECT_ROOM_PREFIX, DialResponse};
+pub use supervise::{
+    CallMonitorTokenResponse, CallTakeoverResponse, CallWhisperResponse, LiveCallId,
+    MAX_WHISPER_CHARS, TRANSCRIPT_CHUNK_TYPE, TranscriptChunk,
+};
 pub use support::{
     SUPPORT_STATUS_DONE, SupportCloseResponse, SupportMessage, SupportReplyResponse,
     SupportRequestCreateResponse, SupportRequestDetail, SupportRequestDraft, SupportRequestFiling,
     SupportRequestKind, SupportRequestResponse, SupportRequestSummary, SupportRequestsResponse,
 };
-pub use telemetry::{RingCancelReason, TelemetryEnvelope, TelemetryEventType, TelemetryToken};
+pub use telemetry::{
+    RingCancelReason, TelemetryEnvelope, TelemetryEventType, TelemetryToken, WhisperApplied,
+    WhisperAppliedData, WhisperSkipReason,
+};
 pub use transcript::{
     TRANSCRIPT_CALL_ID_MAX, TRANSCRIPT_SUBSCRIBE_OP, TRANSCRIPT_TEXT_MAX_UTF16, TRANSCRIPT_VERSION,
     TranscriptClientOp, TranscriptEndReason, TranscriptEndedData, TranscriptErrorCode,
@@ -206,7 +217,8 @@ pub use voice_studio::{
     StudioVoice, StudioVoiceGroup, StudioVoiceList, VoiceStudioResponse,
 };
 pub use whatsapp::{
-    WhatsAppTemplate, WhatsAppTemplatesResponse, WhatsAppWindow, WhatsAppWindowResponse,
+    TEMPLATE_STATUS_APPROVED, WhatsAppTemplate, WhatsAppTemplatesResponse, WhatsAppWindow,
+    WhatsAppWindowResponse, fill_whatsapp_template,
 };
 pub use workflows::{
     CampaignStatus, CampaignStatusResponse, WorkflowActionResult, WorkflowLatestRun,

@@ -15,20 +15,22 @@
 use std::future::Future;
 use std::time::Duration;
 
-use district_api::ApiError;
+use district_api::{ApiError, ConversationsQuery};
 use district_auth::{AccessClaims, DrainReport, SignOutReport};
 use district_l10n::Locale;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse,
-    BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse, CallSummary,
-    CallTranscriptResponse, CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse,
-    ContactDetailResponse, ContactListResponse, ContactMutationResponse, ConversationsResponse,
-    CreateContactRequest, DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch,
-    DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse,
-    DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse,
-    DeviceRevokeResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest,
-    EnrichResponse, HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse,
-    HqTurn, HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse,
+    BillingHandOffResponse, BlockTarget, BlockedContactsResponse, CallDetailResponse,
+    CallMonitorTokenResponse, CallSummary, CallTakeoverResponse, CallTranscriptResponse,
+    CallWhisperResponse, CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse,
+    ContactDetailResponse, ContactListResponse, ContactMutationResponse,
+    ConversationAssignResponse, ConversationsResponse, CreateContactRequest,
+    DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse,
+    DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse, DeskTicketStatus,
+    DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
+    DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
+    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqTurn,
+    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, LiveCallId,
     MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
     MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
     OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SETTINGS_LANGUAGE_ENGLISH,
@@ -37,8 +39,9 @@ use district_model::{
     SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
     SupportRequestDraft, SupportRequestResponse, SupportRequestsResponse, ThreadRef,
     TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
-    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
-    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
+    UsageHistoryResponse, UsageResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse,
+    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
+    WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -98,18 +101,23 @@ pub trait DistrictApi: Send + Sync {
     fn conversations(
         &self,
         workspace_id: &str,
+        query: ConversationsQuery,
     ) -> impl Future<Output = Result<ConversationsResponse, ApiError>> + Send;
-    /// One page of a thread's history.
+    /// One page of a thread's history, Messenger and Instagram messages in it
+    /// with `meta_channels`.
     fn timeline(
         &self,
         workspace_id: &str,
         thread: &ThreadRef,
         older_than: Option<&TimelineCursor>,
+        meta_channels: bool,
     ) -> impl Future<Output = Result<TimelineResponse, ApiError>> + Send;
-    /// How many messages nobody has read.
+    /// How many messages nobody has read, Messenger and Instagram messages
+    /// counted with `meta_channels`.
     fn unread_count(
         &self,
         workspace_id: &str,
+        meta_channels: bool,
     ) -> impl Future<Output = Result<UnreadCountResponse, ApiError>> + Send;
     /// Messages whose text or subject contains `query`.
     fn search_messages(
@@ -117,12 +125,34 @@ pub trait DistrictApi: Send + Sync {
         workspace_id: &str,
         query: &str,
     ) -> impl Future<Output = Result<MessageSearchResponse, ApiError>> + Send;
-    /// The thread a message belongs to.
+    /// The thread a message belongs to, a Messenger or Instagram message's
+    /// with `meta_channels`.
     fn message_thread(
         &self,
         workspace_id: &str,
         message_id: &str,
+        meta_channels: bool,
     ) -> impl Future<Output = Result<MessageThreadResponse, ApiError>> + Send;
+    /// Gives a thread to a member, or takes it back with `None`. Sent once.
+    fn assign_conversation(
+        &self,
+        workspace_id: &str,
+        thread_key: &str,
+        assignee_email: Option<&str>,
+    ) -> impl Future<Output = Result<ConversationAssignResponse, ApiError>> + Send;
+    /// Whether free-form WhatsApp text may go to `to` now, and from which
+    /// sender.
+    fn whatsapp_window(
+        &self,
+        workspace_id: &str,
+        to: &str,
+    ) -> impl Future<Output = Result<WhatsAppWindowResponse, ApiError>> + Send;
+    /// A WhatsApp sender's templates.
+    fn whatsapp_templates(
+        &self,
+        workspace_id: &str,
+        sender_id: &str,
+    ) -> impl Future<Output = Result<WhatsAppTemplatesResponse, ApiError>> + Send;
     /// Sends a message. Billed; sent once.
     fn send_message(
         &self,
@@ -191,6 +221,27 @@ pub trait DistrictApi: Send + Sync {
         workspace_id: &str,
         call_id: &str,
     ) -> impl Future<Output = Result<CallTranscriptResponse, ApiError>> + Send;
+    /// A listen-only credential for the live call `call_id`'s room, and the
+    /// media server that holds it.
+    fn monitor_call(
+        &self,
+        call_id: &LiveCallId,
+    ) -> impl Future<Output = Result<CallMonitorTokenResponse, ApiError>> + Send;
+    /// The credential that takes the live call `call_id` over from the AI.
+    /// Sent once.
+    fn take_over_call(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+    ) -> impl Future<Output = Result<CallTakeoverResponse, ApiError>> + Send;
+    /// Sends `whisper`, one note, to the AI on the live call `call_id`. Sent
+    /// once: the AI would act on a repeat.
+    fn call_whisper(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+        whisper: &str,
+    ) -> impl Future<Output = Result<CallWhisperResponse, ApiError>> + Send;
     /// One page of contacts.
     fn contacts(
         &self,
@@ -1032,16 +1083,18 @@ where
             Effect::LoadConversations {
                 ticket,
                 workspace_id,
+                query,
             } => Event::ConversationsLoaded {
                 ticket,
-                result: self.api.conversations(&workspace_id).await,
+                result: self.api.conversations(&workspace_id, query).await,
             },
             Effect::LoadUnreadCount {
                 ticket,
                 workspace_id,
+                meta_channels,
             } => Event::UnreadCountLoaded {
                 ticket,
-                result: self.api.unread_count(&workspace_id).await,
+                result: self.api.unread_count(&workspace_id, meta_channels).await,
             },
             Effect::LoadDraftKeys {
                 ticket,
@@ -1063,11 +1116,12 @@ where
                 workspace_id,
                 thread,
                 older_than,
+                meta_channels,
             } => Event::TimelineLoaded {
                 ticket,
                 result: self
                     .api
-                    .timeline(&workspace_id, &thread, older_than.as_ref())
+                    .timeline(&workspace_id, &thread, older_than.as_ref(), meta_channels)
                     .await,
             },
             Effect::LoadDraft {
@@ -1142,9 +1196,41 @@ where
                 ticket,
                 workspace_id,
                 message_id,
+                meta_channels,
             } => Event::MessageThreadFound {
                 ticket,
-                result: self.api.message_thread(&workspace_id, &message_id).await,
+                result: self
+                    .api
+                    .message_thread(&workspace_id, &message_id, meta_channels)
+                    .await,
+            },
+            Effect::AssignConversation {
+                ticket,
+                workspace_id,
+                thread_key,
+                assignee_email,
+            } => Event::ConversationAssigned {
+                ticket,
+                result: self
+                    .api
+                    .assign_conversation(&workspace_id, &thread_key, assignee_email.as_deref())
+                    .await,
+            },
+            Effect::LoadWhatsAppWindow {
+                ticket,
+                workspace_id,
+                to,
+            } => Event::WhatsAppWindowLoaded {
+                ticket,
+                result: self.api.whatsapp_window(&workspace_id, &to).await,
+            },
+            Effect::LoadWhatsAppTemplates {
+                ticket,
+                workspace_id,
+                sender_id,
+            } => Event::WhatsAppTemplatesLoaded {
+                ticket,
+                result: self.api.whatsapp_templates(&workspace_id, &sender_id).await,
             },
             Effect::LoadCalls {
                 ticket,
@@ -1170,6 +1256,27 @@ where
             } => Event::TranscriptLoaded {
                 ticket,
                 result: self.api.call_transcript(&workspace_id, &call_id).await,
+            },
+            Effect::RequestCallMonitor { ticket, call_id } => Event::CallMonitorIssued {
+                ticket,
+                result: self.api.monitor_call(&call_id).await,
+            },
+            Effect::RequestCallTakeover {
+                ticket,
+                workspace_id,
+                call_id,
+            } => Event::CallTakeoverIssued {
+                ticket,
+                result: self.api.take_over_call(&workspace_id, &call_id).await,
+            },
+            Effect::SendCallWhisper {
+                ticket,
+                workspace_id,
+                call_id,
+                text,
+            } => Event::CallWhispered {
+                ticket,
+                result: self.api.call_whisper(&workspace_id, &call_id, &text).await,
             },
             Effect::LoadContacts {
                 ticket,

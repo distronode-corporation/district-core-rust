@@ -1973,6 +1973,16 @@ tier = "T2"
 state = "reviewed"
 note = "The service answered without the room's encryption key. The app never joins a voice session unencrypted."
 
+[inbox.assigned_to]
+en = "Assigned to {email}"
+fr = "Assignée à {email}"
+ctx = "label"
+screen = "inbox"
+tier = "T3"
+args = { email = "str" }
+state = "reviewed"
+note = "Under an inbox row: the member who owns the conversation. {email} is their email address. Feminine agreement with the French word for conversation. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
 [inbox.compose_action]
 en = "New message"
 fr = "Nouveau message"
@@ -4120,6 +4130,285 @@ args = { leg = "str", place = "str" }
 state = "reviewed"
 note = "One part of the voice chain that runs outside the workspace's data region. {leg} is the part's name and {place} where it runs, both already in the reader's language. French puts a no-break space before the colon."
 
+[supervise.call_ended]
+en = "The call has ended."
+fr = "L'appel est terminé."
+ctx = "label"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Status after the call being supervised ended, or its room went."
+
+[supervise.hand_back]
+en = "Hand back to your receptionist"
+fr = "Redonner l'appel à votre réceptionniste"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that leaves the call's room, which hands the call back to the AI receptionist. The web dashboard's Live calls page, verbatim."
+
+[supervise.joining]
+en = "Connecting you to the call."
+fr = "Connexion à l'appel en cours."
+ctx = "label"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+note = "Status while the listen credential is asked for and the call's room joined. The web shows a disabled button instead."
+
+[supervise.listen_action]
+en = "Listen"
+fr = "Écouter"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that joins a call in progress to listen. The web dashboard's Live calls page, verbatim."
+
+[supervise.listen_body]
+en = "Hear the call as it happens. The caller does not hear you."
+fr = "Entendez l'appel en direct. L'appelant ne vous entend pas."
+ctx = "body"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Under the listen heading: listening joins the call's room with the microphone off, and the listen-only credential cannot publish. The web dashboard's Live calls page, verbatim."
+
+[supervise.listen_failed]
+en = "Could not connect you to the call. Try again."
+fr = "Impossible de vous connecter à l'appel. Réessayez."
+ctx = "error"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "The listen credential was refused with no reason the service named, or the room could not be joined. The web dashboard's Live calls page, verbatim."
+
+[supervise.listen_title]
+en = "Listen in"
+fr = "Écouter l'appel"
+ctx = "title"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Heading of the listen control on a call in progress. The web dashboard's Live calls page, verbatim."
+
+[supervise.listening]
+en = "You are listening"
+fr = "Vous écoutez l'appel"
+ctx = "label"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Status while listening to a call in progress. The web dashboard's Live calls page, verbatim."
+
+[supervise.no_receptionist]
+en = "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over."
+fr = "Il s'agit de l'appel d'un membre de l'équipe. Votre réceptionniste n'y participe pas, alors vous ne pouvez pas lui souffler de consigne ni prendre l'appel."
+ctx = "body"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "the service's words" }
+note = "The service refused a note or a takeover (call_has_no_receptionist) because the call is a member's own softphone call, with no AI on it. Listening still works. The service's own sentence for the code, verbatim."
+
+[supervise.on_call_body]
+en = "Your receptionist has stepped back and is waiting on the line. Hand the call back and it carries on."
+fr = "Votre réceptionniste s'est mise en retrait et attend en ligne. Redonnez-lui l'appel et elle reprend la conversation."
+ctx = "body"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Under the heading while the member has taken the call over. The web dashboard's Live calls page, verbatim."
+
+[supervise.on_call_title]
+en = "You are on the call"
+fr = "Vous êtes en ligne avec l'appelant"
+ctx = "title"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Heading, and the status line, while the member has taken the call over. The web dashboard's Live calls page, verbatim."
+
+[supervise.stop_listening]
+en = "Stop listening"
+fr = "Arrêter d'écouter"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that leaves the call's room while listening. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over]
+en = "Take over the call"
+fr = "Prendre l'appel"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that opens the takeover confirmation. Nothing is asked for until it is confirmed. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_cancel]
+en = "Cancel"
+fr = "Annuler"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Button that closes the takeover confirmation. Nothing is asked for."
+
+[supervise.take_over_confirm]
+en = "Take over"
+fr = "Prendre l'appel"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Button that confirms the takeover. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_confirm_body]
+en = "Your receptionist tells the caller a supervisor is taking over, then steps back. Your microphone is live on the call until you hand it back. Nothing is recorded."
+fr = "Votre réceptionniste annonce à l'appelant qu'un superviseur prend le relais, puis se met en retrait. Votre micro reste ouvert dans l'appel jusqu'à ce que vous lui redonniez l'appel. Rien n'est enregistré."
+ctx = "body"
+screen = "call supervise"
+tier = "T1"
+state = "reviewed"
+note = "Body of the takeover confirmation: what happens on the call, and that the microphone is live. No call is recorded. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_confirm_title]
+en = "Take over this call?"
+fr = "Prendre cet appel?"
+ctx = "title"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Heading of the takeover confirmation. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_failed]
+en = "The call could not be taken over. Try again."
+fr = "Impossible de prendre l'appel. Réessayez."
+ctx = "error"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "The takeover was refused with no reason the service named. A member who was listening still is. The web dashboard's Live calls page, verbatim."
+
+[supervise.take_over_join_failed]
+en = "Could not join the call with your microphone. Check that a microphone is connected and that District AI may use it, then try again."
+fr = "Impossible de rejoindre l'appel avec votre micro. Vérifiez qu'un micro est branché et que District AI peut l'utiliser, puis réessayez."
+ctx = "error"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "The takeover credential arrived but the room could not be joined. The web's sentence names the browser's microphone permission; this one names the desktop's."
+
+[supervise.taking_over]
+en = "Taking over the call."
+fr = "Prise de l'appel en cours."
+ctx = "label"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+note = "Status while the takeover credential is asked for and the room joined again with the microphone."
+
+[supervise.transcript_waiting]
+en = "What is said shows up here while you listen."
+fr = "Ce qui se dit s'affiche ici pendant que vous écoutez."
+ctx = "body"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+note = "In place of the call's lines while listening, before anyone has spoken. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_applied]
+en = "Your receptionist used your note."
+fr = "Votre réceptionniste a utilisé votre consigne."
+ctx = "label"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+note = "The service said the AI receptionist acted on the last note. The note's first words are shown beside it."
+
+[supervise.whisper_failed]
+en = "The note was not delivered. Try again."
+fr = "La consigne soufflée n'a pas été transmise. Réessayez."
+ctx = "error"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "The note failed with no reason the service named. The draft is kept. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_not_applied]
+en = "Your receptionist could not use your note."
+fr = "Votre réceptionniste n'a pas pu utiliser votre consigne."
+ctx = "label"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+note = "The service said the AI receptionist did not act on the last note. The note's first words are shown beside it."
+
+[supervise.whisper_on_call]
+en = "Hand the call back to your receptionist to send a note"
+fr = "Redonnez l'appel à votre réceptionniste pour souffler une consigne"
+ctx = "placeholder"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+note = "Placeholder of the note field while the member has taken the call over: the receptionist is not speaking. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_placeholder]
+en = "For example: Offer a 10% discount to book today."
+fr = "Par exemple\u00A0: offrez un rabais de 10\u00A0% pour réserver aujourd'hui."
+ctx = "placeholder"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Placeholder of the note field. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_send]
+en = "Send note"
+fr = "Souffler la consigne"
+ctx = "button"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Button that sends the note to the AI receptionist. The web dashboard's Live calls page, verbatim (its accessible name there)."
+
+[supervise.whisper_title]
+en = "Note to your receptionist"
+fr = "Consigne à votre réceptionniste"
+ctx = "title"
+screen = "call supervise"
+tier = "T2"
+state = "reviewed"
+note = "Heading of the field that sends the AI receptionist a private note on a call in progress. The caller never hears it. The web dashboard's Live calls page, verbatim."
+
+[supervise.whisper_too_long]
+en = "Keep the note to {max} characters or fewer."
+fr = "La consigne doit compter au plus {max} caractères."
+ctx = "error"
+screen = "call supervise"
+tier = "T3"
+args = { max = "int" }
+state = "reviewed"
+note = "The note is longer than the service accepts, so it was not sent. {max} is the limit, 2,000 today. The draft is kept."
+
+[supervise.whisper_viewer]
+en = "Viewers cannot send notes"
+fr = "Les observateurs ne peuvent pas souffler de consigne"
+ctx = "placeholder"
+screen = "call supervise"
+tier = "T3"
+state = "reviewed"
+waive = { LEN = "web dashboard's words" }
+note = "Placeholder of the note field for a viewer, who may listen but not send a note. The web dashboard's Live calls page, verbatim."
+
 [support.capped]
 en = "Showing the 100 most recent requests."
 fr = "Affichage des 100 demandes les plus récentes."
@@ -4239,6 +4528,15 @@ tier = "T3"
 state = "reviewed"
 note = "After sending a support request whose reference is not known yet. It was received."
 
+[thread.assign_label]
+en = "Assigned to"
+fr = "Assignée à"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Label of the picker in the conversation header that gives the conversation to a member of the workspace. Feminine agreement with the French word for conversation. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
 [thread.attachment_size]
 en = "Attachments must be between 1 byte and {megabytes} MB."
 fr = "Les pièces jointes doivent faire entre 1 octet et {megabytes} Mo."
@@ -4248,6 +4546,54 @@ tier = "T2"
 args = { megabytes = "int" }
 state = "reviewed"
 note = "When an image to attach is empty or too large. {megabytes} is the largest size in megabytes. MB is the unit (Mo in French)."
+
+[thread.attachments_sms_only]
+en = "Attachments can only go by text message. Remove them to send on this channel."
+fr = "Les pièces jointes ne peuvent partir que par texto. Retirez-les pour envoyer sur ce canal."
+ctx = "body"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Beside the attached images when the reply channel chosen is not text messages (email, WhatsApp, Messenger and Instagram carry no attachments from here). Send is off until they are removed. New French, not on the web."
+
+[thread.channel_instagram]
+en = "Instagram"
+fr = "Instagram"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "The Instagram reply channel, and the label on an Instagram conversation in the inbox. A brand name, the same in both languages. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.channel_label]
+en = "Reply channel"
+fr = "Canal de réponse"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Label of the choice of channel a reply goes on (text message, email, WhatsApp, Messenger or Instagram). Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.channel_messenger]
+en = "Messenger"
+fr = "Messenger"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "The Facebook Messenger reply channel, and the label on a Messenger conversation in the inbox. A brand name, the same in both languages. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.channel_whatsapp]
+en = "WhatsApp"
+fr = "WhatsApp"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "The WhatsApp reply channel. A brand name, the same in both languages. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
 
 [thread.no_reply_target]
 en = "Replies cannot be sent on this conversation from here."
@@ -4267,6 +4613,100 @@ tier = "T3"
 state = "reviewed"
 note = "In place of the reply box for a member whose role cannot reply."
 
+[thread.template_label]
+en = "Template"
+fr = "Modèle de message"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Label of the picker of WhatsApp message templates, offered when the window is closed. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_option]
+en = "{name} ({language})"
+fr = "{name} ({language})"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+args = { name = "str", language = "str" }
+state = "reviewed"
+same_ok = true
+note = "One template in the picker: {name} is its name at WhatsApp, {language} its language code (en_US). Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_placeholder]
+en = "Choose an approved template"
+fr = "Choisir un modèle approuvé"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "The template picker before a template is chosen. Only templates WhatsApp approved are listed. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_preview]
+en = "Preview"
+fr = "Aperçu"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Label of the template's text with the variables filled in, as the customer will read it. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_send]
+en = "Send template"
+fr = "Envoyer le modèle"
+ctx = "button"
+screen = "conversation"
+tier = "T2"
+state = "reviewed"
+note = "Sends the chosen WhatsApp template, filled. Billed. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_variable]
+en = "Variable {placeholder}"
+fr = "Variable {placeholder}"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+args = { placeholder = "str" }
+state = "reviewed"
+same_ok = true
+note = "Label of the field for one of the template's variables. {placeholder} is the variable as the template writes it, {{1}}, {{2}} and on. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.template_variable_required]
+en = "Fill in this variable"
+fr = "Remplissez cette variable"
+ctx = "error"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "Under a template variable left empty; the template cannot be sent until every one is filled. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.templates_failed]
+en = "The templates could not be loaded. Try again in a moment."
+fr = "Les modèles n'ont pas pu être chargés. Réessayez dans un instant."
+ctx = "error"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "When the WhatsApp templates could not be read. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.templates_loading]
+en = "Loading templates"
+fr = "Chargement des modèles"
+ctx = "body"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "While the WhatsApp templates are read. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.templates_none]
+en = "No approved template for this number yet. Refresh the templates in Messaging settings."
+fr = "Aucun modèle approuvé pour ce numéro pour l'instant. Actualisez les modèles dans les paramètres de messagerie."
+ctx = "body"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "When the WhatsApp number has no approved template the app can send. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
 [thread.too_many_attachments]
 en = "You can attach up to {count} images to one message."
 fr = "Vous pouvez joindre jusqu'à {count} images à un même message."
@@ -4277,6 +4717,15 @@ args = { count = "int" }
 state = "reviewed"
 note = "When attaching one image too many to a text message. {count} is the most allowed (more than one)."
 
+[thread.unassigned]
+en = "Unassigned"
+fr = "Non assignée"
+ctx = "label"
+screen = "conversation"
+tier = "T3"
+state = "reviewed"
+note = "The owner picker's choice for nobody: the conversation is not assigned to anyone. Feminine agreement with the French word for conversation. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
 [thread.untitled]
 en = "Conversation"
 fr = "Conversation"
@@ -4286,6 +4735,15 @@ tier = "T3"
 state = "reviewed"
 same_ok = true
 note = "Title of a conversation with a contact the app knows nothing else about yet."
+
+[thread.whatsapp_window_closed]
+en = "Window closed: WhatsApp only allows a template now"
+fr = "Fenêtre fermée\u00A0: WhatsApp n'accepte maintenant qu'un modèle de message"
+ctx = "body"
+screen = "conversation"
+tier = "T2"
+state = "reviewed"
+note = "Over the composer on WhatsApp once the 24-hour customer-service window has closed: free text cannot be sent, only an approved message template. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
 
 [tools.book_appointment]
 en = "Book appointments"

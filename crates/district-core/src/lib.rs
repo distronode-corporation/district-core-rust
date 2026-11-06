@@ -44,7 +44,8 @@
 //!   ([`DevicesScreen`]).
 //! - The screens of the second: the inbox with its search and badges
 //!   ([`InboxScreen`]) and the form that starts a conversation
-//!   ([`ComposeScreen`]), a thread with its composer ([`ThreadScreen`]), the call
+//!   ([`ComposeScreen`]), a thread with its composer, its reply channels, its
+//!   owner and the WhatsApp templates a closed window offers ([`ThreadScreen`]), the call
 //!   log and a call ([`CallLog`], [`CallDetailScreen`]), contacts, one contact
 //!   and the blocked callers ([`ContactsScreen`], [`ContactDetailScreen`],
 //!   [`BlockedScreen`]), and live updates with the notification for a new
@@ -81,8 +82,11 @@
 //!   and its answer ([`RingController`]), the call itself, placed or answered
 //!   ([`ActiveCall`]), meeting rooms and persona auditions joined through the
 //!   engine, and the one media session all of them share ([`MediaSession`],
-//!   through [`CallEngine`]); and this desktop's presence, which is what lets a
-//!   call ring it ([`PresenceState`], [`DesktopPresence`]).
+//!   through [`CallEngine`]); supervising a live AI call from its call screen,
+//!   by listening in, a note to the receptionist and a takeover by voice
+//!   ([`Supervision`], [`SuperviseControls`]); and this desktop's presence,
+//!   which is what lets a call ring it ([`PresenceState`],
+//!   [`DesktopPresence`]).
 //! - [`FailureText`]: the words for every failure, in one place.
 //! - [`palette`]: the brand's accent and semantic colours, light and dark, for
 //!   the app's stylesheet.
@@ -143,6 +147,7 @@ mod session;
 mod settings;
 mod signed_in;
 pub mod studio;
+mod supervise;
 mod support;
 mod text;
 mod thread;
@@ -274,14 +279,20 @@ pub use settings::{
     member_role_label, provider_label, settings_note, settings_rows,
 };
 pub use signed_in::SignedIn;
+pub use supervise::{
+    SUPERVISE_LINES, SuperviseControls, SuperviseEnd, SuperviseEvent, SupervisePhase, Supervision,
+    Whisper,
+};
 pub use support::{
     SUPPORT_LIST_CAP, SUPPORT_MESSAGE_MAX, SUPPORT_SUBJECT_MAX, SUPPORT_SUBJECT_MIN,
     SupportCompose, SupportEvent, SupportForm, SupportList, SupportRequestScreen,
     SupportRequestView, SupportRequests, SupportScreen, support_request_key,
 };
 pub use thread::{
-    ATTACHMENT_TYPES, Composer, DRAFT_SAVE_DEBOUNCE, MAX_ATTACHMENT_BYTES, MAX_ATTACHMENTS,
-    PickedAttachment, ThreadControls, ThreadEvent, ThreadEvents, ThreadHistory, ThreadScreen,
+    ATTACHMENT_TYPES, AssigneeList, Composer, DRAFT_SAVE_DEBOUNCE, MAX_ATTACHMENT_BYTES,
+    MAX_ATTACHMENTS, PickedAttachment, SendableTemplate, TemplateList, ThreadAssignment,
+    ThreadControls, ThreadEvent, ThreadEvents, ThreadHistory, ThreadScreen, WhatsAppComposer,
+    WhatsAppWindowState, reply_channel_label,
 };
 pub use transcript::{
     FINAL_FETCH_ATTEMPTS, FinalTranscript, GAP_HEAL, LiveTranscript, LiveTranscriptPhase,

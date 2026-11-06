@@ -13,7 +13,7 @@ members = [
 ]
 
 [workspace.package]
-version = "7.0.1"
+version = "8.0.0"
 edition = "2024"
 # NOT 1.85, WHICH IS WHAT EDITION 2024 ALONE WOULD IMPLY. The floor is the highest
 # of two numbers: the oldest Rust the apps that pin this repository build with
@@ -137,7 +137,7 @@ log = { version = "0.4.34", features = ["max_level_warn"] }
 # Its build script links libwebrtc, a prebuilt static library; see
 # scripts/fetch-libwebrtc.sh, which is pinned to the libwebrtc this version's
 # webrtc-sys-build names, and CONTRIBUTING.md for building with calls.
-livekit = { version = "0.9.3", default-features = false, features = ["native", "rustls-tls-native-roots"] }
+livekit = { version = "0.10.0", default-features = false, features = ["native", "rustls-tls-native-roots"] }
 # Test only: the call engine's tests sign their media server credentials (HS256)
 # and derive the room key the way libwebrtc does, to look for it in what the
 # engine logs.

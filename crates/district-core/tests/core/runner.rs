@@ -4,7 +4,7 @@
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
-use district_api::{ApiError, ErrorDetail};
+use district_api::{ApiError, ConversationsQuery, ErrorDetail};
 use district_auth::{
     AccessClaims, DrainReport, HandOffNonce, HandOffState, RevokeStatus, SignOutReport,
 };
@@ -27,24 +27,25 @@ use district_core::{NumberAnswer, NumberCall};
 use district_model::BillingHandOffResponse;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse, BlockTarget,
-    BlockedContactsResponse, CallDetailResponse, CallSummary, CallTranscriptResponse,
-    CampaignStatusResponse, ClearIntelResponse, ContactBlockResponse, ContactDetailResponse,
-    ContactListResponse, ContactMutationResponse, ConversationsResponse, CreateContactRequest,
-    DeskLogoRemovalResponse, DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse,
-    DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse, DeskTicketStatus,
-    DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
-    DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
-    HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqRole, HqTurn,
-    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, MarkReadResponse,
-    MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse,
-    MessageThreadResponse, NumberSearch, NumberSearchResponse, OverviewResponse,
-    OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
-    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
-    SupportRequestDraft, SupportRequestKind, SupportRequestResponse, SupportRequestsResponse,
-    ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
-    UsageHistoryResponse, UsageResponse, WorkflowListResponse, WorkflowRunsResponse,
-    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
+    BlockedContactsResponse, CallDetailResponse, CallMonitorTokenResponse, CallSummary,
+    CallTakeoverResponse, CallTranscriptResponse, CallWhisperResponse, CampaignStatusResponse,
+    ClearIntelResponse, ContactBlockResponse, ContactDetailResponse, ContactListResponse,
+    ContactMutationResponse, ConversationsResponse, CreateContactRequest, DeskLogoRemovalResponse,
+    DeskReplyResponse, DeskSettingsPatch, DeskSettingsResponse, DeskTicketCreateResponse,
+    DeskTicketDraft, DeskTicketResponse, DeskTicketStatus, DeskTicketStatusResponse,
+    DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DraftDeleteResponse,
+    DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse, HqConfirmResponse,
+    HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqRole, HqTurn,
+    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, LiveCallId,
+    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
+    MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
+    OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse,
+    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
+    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestKind, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WorkflowListResponse,
+    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -62,10 +63,13 @@ use district_model::{
 use district_model::{
     CallHandlingMode, MessagingChannel, MessagingCredentialSource, TwilioCredentials,
 };
+use district_model::{
+    ConversationAssignResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse,
+};
 
 use crate::support::{
-    AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, overview,
-    voice_credential, voice_proposal, workspace_list,
+    AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, monitor_credential,
+    overview, takeover_credential, voice_credential, voice_proposal, workspace_list,
 };
 
 /// What every fake did, in order.
@@ -83,6 +87,11 @@ impl Log {
 }
 
 struct FakeApi(Log);
+
+/// How the fake's log marks a read asked for Messenger and Instagram.
+fn meta(on: bool) -> &'static str {
+    if on { " meta" } else { "" }
+}
 
 impl DistrictApi for FakeApi {
     async fn workspace_list(&self) -> Result<WorkspaceListResponse, ApiError> {
@@ -115,8 +124,16 @@ impl DistrictApi for FakeApi {
         Err(server_error())
     }
 
-    async fn conversations(&self, workspace_id: &str) -> Result<ConversationsResponse, ApiError> {
-        self.0.push(format!("conversations {workspace_id}"));
+    async fn conversations(
+        &self,
+        workspace_id: &str,
+        query: ConversationsQuery,
+    ) -> Result<ConversationsResponse, ApiError> {
+        self.0.push(format!(
+            "conversations {workspace_id}{}{}",
+            meta(query.meta_channels),
+            if query.assignments { " owners" } else { "" }
+        ));
         Ok(fixture("district-conversations.json"))
     }
 
@@ -125,16 +142,24 @@ impl DistrictApi for FakeApi {
         workspace_id: &str,
         thread: &ThreadRef,
         older_than: Option<&TimelineCursor>,
+        meta_channels: bool,
     ) -> Result<TimelineResponse, ApiError> {
         let before =
             older_than.map(|cursor| (cursor.before().to_owned(), cursor.before_id().to_owned()));
-        self.0
-            .push(format!("timeline {workspace_id} {thread:?} {before:?}"));
+        self.0.push(format!(
+            "timeline {workspace_id} {thread:?} {before:?}{}",
+            meta(meta_channels)
+        ));
         Ok(fixture("district-timeline.json"))
     }
 
-    async fn unread_count(&self, workspace_id: &str) -> Result<UnreadCountResponse, ApiError> {
-        self.0.push(format!("unread {workspace_id}"));
+    async fn unread_count(
+        &self,
+        workspace_id: &str,
+        meta_channels: bool,
+    ) -> Result<UnreadCountResponse, ApiError> {
+        self.0
+            .push(format!("unread {workspace_id}{}", meta(meta_channels)));
         Ok(fixture("district-messages-unread-count.json"))
     }
 
@@ -155,10 +180,44 @@ impl DistrictApi for FakeApi {
         &self,
         workspace_id: &str,
         message_id: &str,
+        meta_channels: bool,
     ) -> Result<MessageThreadResponse, ApiError> {
-        self.0
-            .push(format!("message thread {workspace_id} {message_id}"));
+        self.0.push(format!(
+            "message thread {workspace_id} {message_id}{}",
+            meta(meta_channels)
+        ));
         Ok(fixture("district-message-thread.json"))
+    }
+
+    async fn assign_conversation(
+        &self,
+        workspace_id: &str,
+        thread_key: &str,
+        assignee_email: Option<&str>,
+    ) -> Result<ConversationAssignResponse, ApiError> {
+        self.0.push(format!(
+            "assign {workspace_id} {thread_key} {assignee_email:?}"
+        ));
+        Ok(fixture("district-conversation-assign.json"))
+    }
+
+    async fn whatsapp_window(
+        &self,
+        workspace_id: &str,
+        to: &str,
+    ) -> Result<WhatsAppWindowResponse, ApiError> {
+        self.0.push(format!("whatsapp window {workspace_id} {to}"));
+        Ok(fixture("district-whatsapp-window-closed.json"))
+    }
+
+    async fn whatsapp_templates(
+        &self,
+        workspace_id: &str,
+        sender_id: &str,
+    ) -> Result<WhatsAppTemplatesResponse, ApiError> {
+        self.0
+            .push(format!("whatsapp templates {workspace_id} {sender_id}"));
+        Ok(fixture("district-whatsapp-templates.json"))
     }
 
     async fn send_message(
@@ -264,6 +323,34 @@ impl DistrictApi for FakeApi {
     ) -> Result<CallTranscriptResponse, ApiError> {
         self.0.push(format!("transcript {workspace_id} {call_id}"));
         Ok(fixture("district-call-transcript.json"))
+    }
+
+    async fn monitor_call(
+        &self,
+        call_id: &LiveCallId,
+    ) -> Result<CallMonitorTokenResponse, ApiError> {
+        self.0.push(format!("monitor {call_id}"));
+        Ok(monitor_credential())
+    }
+
+    async fn take_over_call(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+    ) -> Result<CallTakeoverResponse, ApiError> {
+        self.0.push(format!("takeover {workspace_id} {call_id}"));
+        Ok(takeover_credential())
+    }
+
+    async fn call_whisper(
+        &self,
+        workspace_id: &str,
+        call_id: &LiveCallId,
+        whisper: &str,
+    ) -> Result<CallWhisperResponse, ApiError> {
+        self.0
+            .push(format!("whisper {workspace_id} {call_id} {whisper}"));
+        Ok(CallWhisperResponse { success: true })
     }
 
     async fn contacts(
@@ -1616,6 +1703,10 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
             Effect::LoadConversations {
                 ticket,
                 workspace_id: ws(),
+                query: ConversationsQuery {
+                    meta_channels: true,
+                    assignments: true,
+                },
             },
             Event::ConversationsLoaded {
                 ticket,
@@ -1626,6 +1717,7 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
             Effect::LoadUnreadCount {
                 ticket,
                 workspace_id: ws(),
+                meta_channels: true,
             },
             Event::UnreadCountLoaded {
                 ticket,
@@ -1663,6 +1755,7 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
                 workspace_id: ws(),
                 thread: thread.clone(),
                 older_than: cursor,
+                meta_channels: false,
             },
             Event::TimelineLoaded {
                 ticket,
@@ -1715,8 +1808,7 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
                     to: "+12125550142".to_owned(),
                     body: "On our way".to_owned(),
                     channel: "sms".to_owned(),
-                    subject: None,
-                    media_urls: Vec::new(),
+                    ..SendMessageRequest::default()
                 },
             },
             Event::MessageSent {
@@ -1766,10 +1858,45 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
                 ticket,
                 workspace_id: ws(),
                 message_id: "msg_contract_inbound".to_owned(),
+                meta_channels: true,
             },
             Event::MessageThreadFound {
                 ticket,
                 result: Ok(fixture("district-message-thread.json")),
+            },
+        ),
+        (
+            Effect::AssignConversation {
+                ticket,
+                workspace_id: ws(),
+                thread_key: "contact:contact_contract_1".to_owned(),
+                assignee_email: Some("contract@example.com".to_owned()),
+            },
+            Event::ConversationAssigned {
+                ticket,
+                result: Ok(fixture("district-conversation-assign.json")),
+            },
+        ),
+        (
+            Effect::LoadWhatsAppWindow {
+                ticket,
+                workspace_id: ws(),
+                to: "+14165550177".to_owned(),
+            },
+            Event::WhatsAppWindowLoaded {
+                ticket,
+                result: Ok(fixture("district-whatsapp-window-closed.json")),
+            },
+        ),
+        (
+            Effect::LoadWhatsAppTemplates {
+                ticket,
+                workspace_id: ws(),
+                sender_id: "wa_sender_contract".to_owned(),
+            },
+            Event::WhatsAppTemplatesLoaded {
+                ticket,
+                result: Ok(fixture("district-whatsapp-templates.json")),
             },
         ),
         (
@@ -1905,8 +2032,8 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
     assert_eq!(
         log.take(),
         [
-            "conversations ws-contract-active",
-            "unread ws-contract-active",
+            "conversations ws-contract-active meta owners",
+            "unread ws-contract-active meta",
             "drafts ws-contract-active",
             "search ws-contract-active roof",
             "timeline ws-contract-active Contact(\"contact_contract_1\") \
@@ -1918,7 +2045,10 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
             "upload ws-contract-active roof.png image/png 3",
             "ai draft ws-contract-active Contact(\"contact_contract_1\")",
             "mark read ws-contract-active Contact(\"contact_contract_1\")",
-            "message thread ws-contract-active msg_contract_inbound",
+            "message thread ws-contract-active msg_contract_inbound meta",
+            "assign ws-contract-active contact:contact_contract_1 Some(\"contract@example.com\")",
+            "whatsapp window ws-contract-active +14165550177",
+            "whatsapp templates ws-contract-active wa_sender_contract",
             "calls ws-contract-active 25 50",
             "call ws-contract-active call_contract_answered",
             "transcript ws-contract-active call_contract_answered",
@@ -2551,6 +2681,39 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
                 result: Ok(fixture("district-room-token.json")),
             },
         ),
+        (
+            Effect::RequestCallMonitor {
+                ticket,
+                call_id: live_call(),
+            },
+            Event::CallMonitorIssued {
+                ticket,
+                result: Ok(monitor_credential()),
+            },
+        ),
+        (
+            Effect::RequestCallTakeover {
+                ticket,
+                workspace_id: ws(),
+                call_id: live_call(),
+            },
+            Event::CallTakeoverIssued {
+                ticket,
+                result: Ok(takeover_credential()),
+            },
+        ),
+        (
+            Effect::SendCallWhisper {
+                ticket,
+                workspace_id: ws(),
+                call_id: live_call(),
+                text: "Offer the morning slot".to_owned(),
+            },
+            Event::CallWhispered {
+                ticket,
+                result: Ok(CallWhisperResponse { success: true }),
+            },
+        ),
     ];
     for (effect, event) in cases {
         // The ticket an effect names is the one its event comes back with.
@@ -2603,8 +2766,15 @@ async fn each_section_effect_calls_its_endpoint_and_reports_back() {
             "meetings ws-contract-active",
             "meeting ws-contract-active meeting_contract_completed",
             "room token meet_ws-contract-active_standup",
+            "monitor 5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a",
+            "takeover ws-contract-active 5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a",
+            "whisper ws-contract-active 5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a Offer the morning slot",
         ]
     );
+}
+
+fn live_call() -> LiveCallId {
+    LiveCallId::new("5d0c7a3e-2b1f-4c8d-9e6a-0f4b3c2d1e7a").unwrap()
 }
 
 /// A hand-off the browser answered is asked for with the answer's nonce, and

@@ -274,6 +274,15 @@ endpoint_table! {
     /// that may be repeated after a refused token.
     CallRoomToken => Post "/api/district/calls/token",
         workspace: None, body: Json, retry: OnceAfterRefresh;
+    /// One private note to the AI on a live call: `{workspaceId, callId,
+    /// whisper}`. The service delivers it into the call's room. The AI acts on
+    /// it, so it is never repeated.
+    CallWhisper => Post "/api/district/calls/whisper",
+        workspace: Body, body: Json, retry: Never;
+    /// A microphone-only credential that takes a live call over from the AI,
+    /// which steps back until the member leaves the room. Never repeated.
+    CallTakeover => Post "/api/district/calls/{callId}/takeover",
+        workspace: Body, body: Json, retry: Never;
     /// Recorded meetings.
     Meetings => Get "/api/district/meetings",
         workspace: Query, body: Empty, retry: OnceAfterRefresh;
@@ -357,6 +366,17 @@ endpoint_table! {
     /// from the saved-reply endpoints above, which cost nothing.
     MessageDraftGenerate => Post "/api/district/messages/draft",
         workspace: Body, body: Json, retry: Never;
+    /// Gives a thread to a member, or takes it back (`assigneeEmail: null`).
+    /// The assignee is notified, so it is never repeated.
+    ConversationAssign => Post "/api/district/conversations/assign",
+        workspace: Body, body: Json, retry: Never;
+    /// Whether free-form WhatsApp text may go to `to` now, and from which
+    /// sender.
+    WhatsAppWindow => Get "/api/district/workspace/whatsapp/window",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// A WhatsApp sender's message templates, named by `senderId`.
+    WhatsAppTemplates => Get "/api/district/workspace/whatsapp/templates",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
 
     // District HQ.
 

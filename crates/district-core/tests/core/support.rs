@@ -36,6 +36,10 @@ thread_local! {
     /// Whether [`config`] describes an app that buys in the app, for the test
     /// running on this thread. See [`with_purchases`].
     static IN_APP_PURCHASES: Cell<bool> = const { Cell::new(false) };
+    /// Whether [`config`] describes an app that answers Messenger and
+    /// Instagram, for the test running on this thread. See
+    /// [`with_meta_channels`].
+    static META_CHANNELS: Cell<bool> = const { Cell::new(false) };
 }
 
 /// The configuration of the Linux app: calls, and no purchases in the app.
@@ -45,6 +49,7 @@ pub fn config() -> CoreConfig {
         app_version: "0.1.0".to_owned(),
         calls_available: CALLS_AVAILABLE.get(),
         in_app_purchases: IN_APP_PURCHASES.get(),
+        meta_channels: META_CHANNELS.get(),
         locale: district_core::Locale::En,
     }
 }
@@ -55,6 +60,15 @@ pub fn with_purchases<T>(test: impl FnOnce() -> T) -> T {
     IN_APP_PURCHASES.set(true);
     let result = test();
     IN_APP_PURCHASES.set(false);
+    result
+}
+
+/// Runs `test` with every model these helpers build describing an app that
+/// lists and answers Messenger and Instagram threads.
+pub fn with_meta_channels<T>(test: impl FnOnce() -> T) -> T {
+    META_CHANNELS.set(true);
+    let result = test();
+    META_CHANNELS.set(false);
     result
 }
 
@@ -144,6 +158,30 @@ pub fn voice_credential() -> district_model::HqVoiceTokenResponse {
         "e2ee": {"key": "YFT+/ceW4bhgizPFpeX9E5a3PVZ9T07aWRQq4uwQwW0="},
     }))
     .expect("a voice credential")
+}
+
+/// The listen-only credential for a live call's room, as the token route
+/// writes it for a call: no passphrase, because a phone call's room is not
+/// encrypted. No supervise route has a recorded response yet.
+pub fn monitor_credential() -> district_model::CallMonitorTokenResponse {
+    serde_json::from_value(json!({
+        "success": true,
+        "token": "contract-livekit-monitor-jwt",
+        "url": "wss://media-room.example.com",
+    }))
+    .expect("a monitor credential")
+}
+
+/// The credential that takes a live call over, as the takeover route writes
+/// it.
+pub fn takeover_credential() -> district_model::CallTakeoverResponse {
+    serde_json::from_value(json!({
+        "success": true,
+        "url": "wss://media-room.example.com",
+        "token": "contract-livekit-takeover-jwt",
+        "roomName": "call-room-contract-1",
+    }))
+    .expect("a takeover credential")
 }
 
 /// A draft HQ voice packet's bytes, from district-model's drafts.

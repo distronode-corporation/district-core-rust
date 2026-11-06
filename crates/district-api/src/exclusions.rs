@@ -129,6 +129,32 @@ pub struct Addition {
 /// this table.
 pub const DESKTOP_ONLY: &[Addition] = &[
     Addition {
+        endpoint: Endpoint::CallWhisper,
+        reason: "A private note to the AI on a live call, from live supervise. The desktop apps \
+                 build it with the 8.0.0 core; the snapshot predates the Android app's.",
+    },
+    Addition {
+        endpoint: Endpoint::CallTakeover,
+        reason: "Taking a live call over from the AI by voice, from live supervise, for the same \
+                 reason as the note.",
+    },
+    Addition {
+        endpoint: Endpoint::ConversationAssign,
+        reason: "Giving an inbox thread to a member (app parity 3). The desktop apps build it \
+                 first; the snapshot predates it.",
+    },
+    Addition {
+        endpoint: Endpoint::WhatsAppWindow,
+        reason: "The WhatsApp customer-service window, which decides whether the composer \
+                 offers free text or templates (app parity 5). The desktop apps build it first; \
+                 the snapshot predates it.",
+    },
+    Addition {
+        endpoint: Endpoint::WhatsAppTemplates,
+        reason: "The approved WhatsApp templates a closed window offers (app parity 5), for the \
+                 same reason as the window.",
+    },
+    Addition {
         endpoint: Endpoint::HqVoiceToken,
         reason: "District HQ by voice. The desktop apps build it first; the Android app's voice \
                  mode is being built against the same contract, and the snapshot predates it.",

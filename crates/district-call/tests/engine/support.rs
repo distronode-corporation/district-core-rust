@@ -270,6 +270,7 @@ impl Member {
             app_version: "0.1.0".to_owned(),
             calls_available: district_call::CALLS_AVAILABLE,
             in_app_purchases: false,
+            meta_channels: false,
             locale: district_core::Locale::En,
         };
         let (mut model, effects) = Model::new(config);

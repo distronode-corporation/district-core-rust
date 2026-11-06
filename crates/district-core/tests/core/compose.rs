@@ -235,7 +235,7 @@ fn an_email_needs_a_subject_and_goes_with_it_trimmed() {
             body: "Hello there".to_owned(),
             channel: CHANNEL_EMAIL.to_owned(),
             subject: Some("Your quote".to_owned()),
-            media_urls: Vec::new(),
+            ..SendMessageRequest::default()
         }
     );
 }

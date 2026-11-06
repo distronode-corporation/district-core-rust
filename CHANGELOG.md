@@ -17,18 +17,80 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [8.0.0] - 2026-11-05
+
+The country-aware dialler (#63), the app parity fixtures (#64) and app parity on the
+desktop (#65). Breaking for the apps: `DialerScreen` and `DialerEvent` change shape,
+`ConversationSummary` gains public fields, and `CoreConfig`, `DistrictApi` and the thread
+screens change (below).
+
 Dialler design A, after district-ios (#95 and #96) and the web dialler: the number is
 typed the local way under a country the member can see, and is sent as E.164. Breaking:
 `DialerScreen` and `DialerEvent` change shape.
 
+App parity (1), (2), (3) and (5) on the desktop: the reply channels the service lists for a
+thread, Messenger and Instagram threads, who owns a thread, and the WhatsApp templates a closed
+window offers. Breaking for the apps: `CoreConfig` gains `meta_channels`,
+`DesktopPresence::new` takes it, `DistrictApi` has three new methods and four changed ones,
+`Effect`, `Event`, `ThreadEvent`, `ThreadScreen` and `ThreadControls` gain variants and
+fields, and `SendMessageRequest` gains three fields.
+
 ### Added
 
+- `CoreConfig::meta_channels`, for an app that lists and answers Messenger and Instagram
+  threads. With it, the thread list, the timeline, the unread count and the message lookup
+  ask for them (`metaChannels=1`), and the app passes the same value to
+  `DesktopPresence::new`, whose registration then declares `capabilities: ["metaChannels"]`
+  (`PresenceRegistration::with_meta_channels`, `META_CHANNELS_CAPABILITY`). Without it the
+  inbox is exactly as before.
+- Reply channels: `ThreadScreen::reply_choices` holds the thread's reply options in the
+  service's order (`ConversationSummary::reply_choices`), less any on a channel this build
+  does not know or with no address; the first is chosen when the thread opens, and
+  `ThreadEvent::ChooseChannel` chooses another (`ThreadControls::can_choose_channel`). No
+  options is no composer. Attachments go by text message only: on another channel send waits
+  until they are removed (`ThreadScreen::attachments_blocked`). `reply_channel_label` names
+  each channel, `InboxScreen::meta_channel_label` a Messenger or Instagram row.
+- Thread owners: the thread list is always read with `assignments=1`, so each row carries its
+  owner (`ConversationSummary::assignee`, `InboxScreen::assignee_line`). The open thread's
+  `ThreadAssignment` holds the owner and the picker's members (the workspace's Agency and
+  Client members, read with `Effect::LoadMembers` for a member who may assign; a Viewer is
+  never offered, and one who already owns the thread keeps showing).
+  `ThreadEvent::Assign(Some(email))` and `Assign(None)` send
+  `POST /api/district/conversations/assign` once (`Effect::AssignConversation`,
+  `Event::ConversationAssigned`); a refusal (`assignee_is_viewer`, `assignee_not_member`) is
+  shown beside the picker. The answer is the thread's it was asked for, so one landing after
+  the member has opened another thread changes that thread's row, never the open one. Each
+  read of the list sets the open thread's owner from its row, unless a change is on its way,
+  so a thread another member gave away meanwhile can be given back. A thread closed and
+  opened again while its change is on its way still waits for that answer before sending
+  another. A list read issued before an assignment answer was applied cannot undo it: the
+  thread's row, and so the open thread's owner, keep the answer's owner until a read issued
+  after it lands. A Viewer sees the owner and cannot change it.
+- WhatsApp: choosing the channel reads the customer-service window
+  (`Effect::LoadWhatsAppWindow`, `GET /api/district/workspace/whatsapp/window`). Open or
+  unreadable, free text goes, from the sender the window was read for (`whatsappSenderId`).
+  Closed, free text is not offered, and the sender's templates are read
+  (`Effect::LoadWhatsAppTemplates`, `GET /api/district/workspace/whatsapp/templates`); only
+  approved ones with numbered variables, of no sender or this one, are offered
+  (`WhatsAppTemplate::sendable_variables`, the web composer's rule). `ChooseTemplate`,
+  `TemplateVariable` and `SendTemplate` fill and send one; the preview and the body sent are
+  `fill_whatsapp_template`, the service's own fill. Free text the service refuses with
+  `whatsapp_window_closed` turns the composer to templates; when the window had not been read,
+  or named no sender, it is read again first, for the sender whose templates to offer. A
+  template cannot be sent while free text is still on its way.
+- `ApiClient::assign_conversation`, `ApiClient::whatsapp_window`,
+  `ApiClient::whatsapp_templates` and `ConversationsQuery`; the three endpoints are
+  desktop-only additions to the table. `SendMessageRequest` gains `whatsapp_sender_id`,
+  `template_id` and `template_variables`, and derives `Default`. `CHANNEL_WHATSAPP`,
+  `CHANNEL_MESSENGER`, `CHANNEL_INSTAGRAM`, `REPLY_CHANNELS` and `TEMPLATE_STATUS_APPROVED`.
+- Nineteen catalog entries for these screens. Eighteen carry the web Inbox's reviewed French
+  verbatim; `thread.attachments_sms_only` is new French and is a draft until it is signed
+  off, so `l10n.py check --require fr-CA` fails on it until then.
 - `district_model` types for the app parity fixtures, decoded strictly and round-tripped by
   the fixture manifest: `ReplyOption`, `ConversationAssignment`,
   `ConversationAssignmentsResponse`, `ConversationAssignResponse`,
   `WhatsAppWindowResponse`, `WhatsAppWindow`, `WhatsAppTemplatesResponse`,
   `WhatsAppTemplate` and `RefusalResponse` (a route's `{success, error, code}` refusal).
-  No screen uses them yet.
 - `ConversationSummary` gains `reply_options`, `assignee_email` and `assigned_to_me`, sent
   only when the list is asked for with `metaChannels=1` or `assignments=1`. Breaking for an
   app that builds a `ConversationSummary` with a struct literal.
@@ -69,9 +131,25 @@ typed the local way under a country the member can see, and is sent as E.164. Br
   States". As on the web it is said from eight digits (the 1 counted) to fifteen, with the
   bare digits until the number is whole; Call stays off and the wrong length is still
   said only once the member stops.
+- Live supervise (#70), from the call's own screen (`CallDetailScreen::supervise`,
+  `SupervisePhase`, `Event::Supervise`): listen in to a live AI call, send the receptionist
+  a private note (a whisper), and take the call over by voice. Every role may listen;
+  Agency and Client members may also whisper and take over, on a call that is in progress.
+  Listening joins with the microphone off; a takeover is confirmed first, and handing back
+  leaves the room. `DistrictApi` gains `monitor_call`, `call_whisper` and `take_over_call`,
+  none of them ever repeated. A member's own softphone call has no receptionist on it: every
+  call row says so (`CallSummary::receptionist_on_call`, from `receptionistOnCall`, true when
+  an older service sends none), so neither a note nor a takeover is offered there, and the
+  service's refusal (`call_has_no_receptionist`) still marks the call for an older service;
+  listening still works. Listening to an ended call is refused (`call_ended`).
+  `whisper_applied` live updates say what the receptionist did with the last note
+  (`Whisper::outcome`). Thirty `supervise.*` catalog entries, with reviewed French.
 
 ### Changed
 
+- `DistrictApi::conversations` takes a `ConversationsQuery`, and `timeline`,
+  `unread_count` and `message_thread` a `meta_channels` flag; `Effect::LoadConversations`,
+  `LoadUnreadCount`, `LoadTimeline` and `FindMessageThread` carry them.
 - `contracts/fixtures/` and `contracts/i18n/` from the server's 84c34dbd2. New: the
   conversation list's reply options and assignee, thread assignment (assign, unassign, the
   list, and the refusal to assign a Viewer), the WhatsApp window (open and closed) and
@@ -80,13 +158,32 @@ typed the local way under a country the member can see, and is sent as E.164. Br
   3.5 Flash as the stable brain (was 2.5), with `minimal` to `high` thinking, and the
   studio tests read the new catalogue. `contracts/desktop/` is unchanged.
 - The error table and wire labels have the service's new codes and values with its French,
-  and take the service's newer French for six sentences and labels. `live_changed` keeps
-  « paramètres » where the service says « réglages » (the Apple word).
+  and take the service's newer French for six sentences and labels.
+- `contracts/i18n/` from the server's 35edbd30c, with its five French wordings in the
+  catalogs: `live_changed` (« Mettez le brouillon à jour avec les réglages en
+  vigueur »), `caller_id_not_confirmed` and `caller_id_carrier_failed` (« transporteur »),
+  `caller_id_mobile_unverified` (« inscrivez-le ») and the workflow outcome
+  `quiet_hours` (« il n'était pas entre 8 h et 21 h »).
+- `contracts/i18n/` from the server's 14cf1a186: the reviewed French of six error
+  sentences (`extra_number_charge_required`, `audition_daily_cap`,
+  `workflow_draft_dry_run_stale`, `workflow_voice_cap`, `whatsapp_template_invalid`,
+  `messaging_apps_managed`) and two workflow reasons (`automated_sender`, `loop_paused`),
+  the disposition `info` as « Renseignements », and message delivery labels for `handled`
+  (« Traité ») and `read` (« Lu »).
+- `live_changed` says « réglages » as the service, the website and core-swift do (Sean's
+  French sign-off): the workspace's settings, not the OS Settings app. The entry records that
+  reason as `os_word_ok`, which frcheck's OS-WORD now honours (`tools/l10n/` vendored from the
+  server's 2980456), and the catalog is signed off for 8.0.0 (`i18n/fr-CA/signoff.json`).
 - Call sends the E.164 number the line before Call showed, no longer the text as typed,
   and works only for a whole number in a known shape. A wrong length keeps Call off, and
   is said only once the member stops typing (`CheckLength`, or a refused `Dial`).
 - Entering the dialler reads the workspace's numbers (`Effect::LoadOwnedNumbers`) unless
   they are already read, for its home country. No response field was added.
+- `livekit` 0.10.1 (was 0.9.7), with `livekit-signaling` 0.1.9 and the `libwebrtc` crate
+  0.4.0. The native libwebrtc is unchanged: `webrtc-sys-build` stays 0.3.21, whose
+  `WEBRTC_TAG` is `webrtc-a545de4`, so `scripts/fetch-libwebrtc.sh`, NOTICE and the
+  `libwebrtc-a545de4-audio-1` release stand. Nothing an app calls changes; the engine tests
+  send text with `SendTextOptions`, which `send_text` takes since 0.10.
 
 ### Removed
 

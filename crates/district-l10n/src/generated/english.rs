@@ -850,6 +850,64 @@ pub const SETTINGS_SAVED: &str = "Saved.";
 pub const SETTINGS_SAVED_STALE: &str = "Saved, but the settings could not be read back. Read them again before changing anything else.";
 /// `settings.viewer_note` in English.
 pub const SETTINGS_VIEWER_NOTE: &str = "You have read-only access to this workspace. These are the settings you may read; an agency or client member can change them.";
+/// `supervise.call_ended` in English.
+pub const SUPERVISE_CALL_ENDED: &str = "The call has ended.";
+/// `supervise.hand_back` in English.
+pub const SUPERVISE_HAND_BACK: &str = "Hand back to your receptionist";
+/// `supervise.joining` in English.
+pub const SUPERVISE_JOINING: &str = "Connecting you to the call.";
+/// `supervise.listen_action` in English.
+pub const SUPERVISE_LISTEN_ACTION: &str = "Listen";
+/// `supervise.listen_body` in English.
+pub const SUPERVISE_LISTEN_BODY: &str = "Hear the call as it happens. The caller does not hear you.";
+/// `supervise.listen_failed` in English.
+pub const SUPERVISE_LISTEN_FAILED: &str = "Could not connect you to the call. Try again.";
+/// `supervise.listen_title` in English.
+pub const SUPERVISE_LISTEN_TITLE: &str = "Listen in";
+/// `supervise.listening` in English.
+pub const SUPERVISE_LISTENING: &str = "You are listening";
+/// `supervise.no_receptionist` in English.
+pub const SUPERVISE_NO_RECEPTIONIST: &str = "That is a team member's own call. Your receptionist is not on it, so you cannot send a note or take the call over.";
+/// `supervise.on_call_body` in English.
+pub const SUPERVISE_ON_CALL_BODY: &str = "Your receptionist has stepped back and is waiting on the line. Hand the call back and it carries on.";
+/// `supervise.on_call_title` in English.
+pub const SUPERVISE_ON_CALL_TITLE: &str = "You are on the call";
+/// `supervise.stop_listening` in English.
+pub const SUPERVISE_STOP_LISTENING: &str = "Stop listening";
+/// `supervise.take_over` in English.
+pub const SUPERVISE_TAKE_OVER: &str = "Take over the call";
+/// `supervise.take_over_cancel` in English.
+pub const SUPERVISE_TAKE_OVER_CANCEL: &str = "Cancel";
+/// `supervise.take_over_confirm` in English.
+pub const SUPERVISE_TAKE_OVER_CONFIRM: &str = "Take over";
+/// `supervise.take_over_confirm_body` in English.
+pub const SUPERVISE_TAKE_OVER_CONFIRM_BODY: &str = "Your receptionist tells the caller a supervisor is taking over, then steps back. Your microphone is live on the call until you hand it back. Nothing is recorded.";
+/// `supervise.take_over_confirm_title` in English.
+pub const SUPERVISE_TAKE_OVER_CONFIRM_TITLE: &str = "Take over this call?";
+/// `supervise.take_over_failed` in English.
+pub const SUPERVISE_TAKE_OVER_FAILED: &str = "The call could not be taken over. Try again.";
+/// `supervise.take_over_join_failed` in English.
+pub const SUPERVISE_TAKE_OVER_JOIN_FAILED: &str = "Could not join the call with your microphone. Check that a microphone is connected and that District AI may use it, then try again.";
+/// `supervise.taking_over` in English.
+pub const SUPERVISE_TAKING_OVER: &str = "Taking over the call.";
+/// `supervise.transcript_waiting` in English.
+pub const SUPERVISE_TRANSCRIPT_WAITING: &str = "What is said shows up here while you listen.";
+/// `supervise.whisper_applied` in English.
+pub const SUPERVISE_WHISPER_APPLIED: &str = "Your receptionist used your note.";
+/// `supervise.whisper_failed` in English.
+pub const SUPERVISE_WHISPER_FAILED: &str = "The note was not delivered. Try again.";
+/// `supervise.whisper_not_applied` in English.
+pub const SUPERVISE_WHISPER_NOT_APPLIED: &str = "Your receptionist could not use your note.";
+/// `supervise.whisper_on_call` in English.
+pub const SUPERVISE_WHISPER_ON_CALL: &str = "Hand the call back to your receptionist to send a note";
+/// `supervise.whisper_placeholder` in English.
+pub const SUPERVISE_WHISPER_PLACEHOLDER: &str = "For example: Offer a 10% discount to book today.";
+/// `supervise.whisper_send` in English.
+pub const SUPERVISE_WHISPER_SEND: &str = "Send note";
+/// `supervise.whisper_title` in English.
+pub const SUPERVISE_WHISPER_TITLE: &str = "Note to your receptionist";
+/// `supervise.whisper_viewer` in English.
+pub const SUPERVISE_WHISPER_VIEWER: &str = "Viewers cannot send notes";
 /// `support.capped` in English.
 pub const SUPPORT_CAPPED: &str = "Showing the 100 most recent requests.";
 /// `support.close_action` in English.
@@ -872,12 +930,44 @@ pub const SUPPORT_KIND_QUESTION: &str = "A question";
 pub const SUPPORT_KIND_SUGGESTION: &str = "A suggestion";
 /// `support.pending` in English.
 pub const SUPPORT_PENDING: &str = "We have your request. Its reference will appear here shortly.";
+/// `thread.assign_label` in English.
+pub const THREAD_ASSIGN_LABEL: &str = "Assigned to";
+/// `thread.attachments_sms_only` in English.
+pub const THREAD_ATTACHMENTS_SMS_ONLY: &str = "Attachments can only go by text message. Remove them to send on this channel.";
+/// `thread.channel_instagram` in English.
+pub const THREAD_CHANNEL_INSTAGRAM: &str = "Instagram";
+/// `thread.channel_label` in English.
+pub const THREAD_CHANNEL_LABEL: &str = "Reply channel";
+/// `thread.channel_messenger` in English.
+pub const THREAD_CHANNEL_MESSENGER: &str = "Messenger";
+/// `thread.channel_whatsapp` in English.
+pub const THREAD_CHANNEL_WHATSAPP: &str = "WhatsApp";
 /// `thread.no_reply_target` in English.
 pub const THREAD_NO_REPLY_TARGET: &str = "Replies cannot be sent on this conversation from here.";
 /// `thread.read_only_role` in English.
 pub const THREAD_READ_ONLY_ROLE: &str = "You have read-only access to this workspace, so you cannot reply here.";
+/// `thread.template_label` in English.
+pub const THREAD_TEMPLATE_LABEL: &str = "Template";
+/// `thread.template_placeholder` in English.
+pub const THREAD_TEMPLATE_PLACEHOLDER: &str = "Choose an approved template";
+/// `thread.template_preview` in English.
+pub const THREAD_TEMPLATE_PREVIEW: &str = "Preview";
+/// `thread.template_send` in English.
+pub const THREAD_TEMPLATE_SEND: &str = "Send template";
+/// `thread.template_variable_required` in English.
+pub const THREAD_TEMPLATE_VARIABLE_REQUIRED: &str = "Fill in this variable";
+/// `thread.templates_failed` in English.
+pub const THREAD_TEMPLATES_FAILED: &str = "The templates could not be loaded. Try again in a moment.";
+/// `thread.templates_loading` in English.
+pub const THREAD_TEMPLATES_LOADING: &str = "Loading templates";
+/// `thread.templates_none` in English.
+pub const THREAD_TEMPLATES_NONE: &str = "No approved template for this number yet. Refresh the templates in Messaging settings.";
+/// `thread.unassigned` in English.
+pub const THREAD_UNASSIGNED: &str = "Unassigned";
 /// `thread.untitled` in English.
 pub const THREAD_UNTITLED: &str = "Conversation";
+/// `thread.whatsapp_window_closed` in English.
+pub const THREAD_WHATSAPP_WINDOW_CLOSED: &str = "Window closed: WhatsApp only allows a template now";
 /// `tools.book_appointment` in English.
 pub const TOOLS_BOOK_APPOINTMENT: &str = "Book appointments";
 /// `tools.cancel_appointment` in English.
