@@ -66,16 +66,20 @@ member an app matches on, implements or builds. The fixtures move to the server'
 
 ### Fixed
 
-- A connection rebuilt after a failed resume no longer hangs up a placed call or ends an HQ
-  voice session. The media library (`livekit` 0.10.1) reports every remote participant as
-  having left when it falls back to a full reconnection, and as joining again once it is
-  back; a placed call took that as the far end hanging up (and ended it at the carrier),
-  and HQ voice as the agent leaving. While a session is reconnecting, people changes now
-  update the list but end nothing, and once it is in its room again
-  (`MediaEvent::Connected`) the call and HQ voice look at who is there: a far end or an
-  agent still gone then has really left, and ends it as before. Known limit: a full
-  reconnection the server asks for straight away, with no resume first, reports the
-  leaves before `Reconnecting`, and those still read as leaving.
+- A connection the media library rebuilds no longer hangs up a placed call or ends an HQ
+  voice session. `livekit` 0.10.1 reports every remote participant as having left when it
+  falls back to a full reconnection, and as joining again once it is back; a placed call
+  took that as the far end hanging up (and ended it at the carrier), and HQ voice as the
+  agent leaving. Now the far end (a placed call's callee, the HQ voice agent) leaving opens a
+  grace window, `EMPTY_ROOM_GRACE` (2 seconds, an `Effect::Wait`): a connection reported
+  reconnecting within it closes it, people changes while reconnecting end nothing, and once
+  the session is in its room again (`MediaEvent::Connected`) the call and HQ voice look at
+  who is there. The far end back within the window closes it too. A room still without the
+  far end when the window is over, the connection up, ends the call or the session as
+  before, at the carrier too. This covers both orders the library reports a rebuild in:
+  `Reconnecting` before the leaves (a resume that failed) and after them (a full
+  reconnection straight away). Breaking only for an app that asserts a far-end hang-up
+  takes effect at once.
 - A hang-up that overtakes its own join no longer leaves a room joined. The runner runs
   each effect as its own task on a multi-threaded runtime, so `disconnect` for a session can
   run before `connect` for it has begun; the connect then joined the room with the

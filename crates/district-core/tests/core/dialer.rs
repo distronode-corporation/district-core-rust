@@ -7,8 +7,9 @@
 use district_api::{ApiError, ErrorDetail};
 use district_core::{
     ActiveCall, CALL_TICK, CallDirection, CallEnd, CallEvent, CallPhase, DialStatus, DialerEvent,
-    DialerScreen, DisconnectReason, Effect, Event, FailureText, MediaConnection, MediaEvent,
-    MediaSession, MicrophoneState, Model, OwnedNumbersList, Route, SessionState, Ticket,
+    DialerScreen, DisconnectReason, EMPTY_ROOM_GRACE, Effect, Event, FailureText, MediaConnection,
+    MediaEvent, MediaSession, MicrophoneState, Model, OwnedNumbersList, Route, SessionState,
+    Ticket,
 };
 use district_model::DialResponse;
 
@@ -456,21 +457,100 @@ fn hanging_up_ends_the_carrier_leg_and_leaves_the_room_once() {
     assert_eq!(call(&model).elapsed_secs, 1);
 }
 
-#[test]
-fn the_far_end_hanging_up_ends_the_call_here_and_at_the_carrier() {
-    let mut model = at_dialler(AGENCY, "agency");
-    let (session, _) = answered(&mut model);
+/// The far end leaving opens the grace window, and the room still empty
+/// when it is over is them hanging up.
+fn far_end_left(model: &mut Model, session: Ticket) -> Ticket {
     let effects = model.update(media(
         session,
         MediaEvent::ParticipantLeft {
             identity: "sip_callee".to_owned(),
         },
     ));
+    let [Effect::Wait { ticket, delay }] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(*delay, EMPTY_ROOM_GRACE);
+    assert_eq!(*phase(model), CallPhase::InCall, "not yet");
+    *ticket
+}
+
+#[test]
+fn the_far_end_hanging_up_ends_the_call_here_and_at_the_carrier() {
+    let mut model = at_dialler(AGENCY, "agency");
+    let (session, _) = answered(&mut model);
+    let window = far_end_left(&mut model, session);
+    // A service coming and going meanwhile is no person: the one window stays.
+    assert!(
+        model
+            .update(media(
+                session,
+                MediaEvent::ParticipantJoined(service("agent-1"))
+            ))
+            .is_empty()
+    );
+    let effects = model.update(Event::WaitOver { ticket: window });
     assert_eq!(
         and_transcript_read(effects),
         [carrier_hang_up(), Effect::DisconnectMedia { session }]
     );
     assert_eq!(*phase(&model), CallPhase::Ended(CallEnd::Remote));
+}
+
+/// A rebuilt connection can report the far end leaving before it says it is
+/// reconnecting. Within the window that report comes, and the leave ends
+/// nothing: the call looks again once it is back.
+#[test]
+fn a_leave_before_the_connection_says_it_is_reconnecting_ends_nothing() {
+    let mut model = at_dialler(AGENCY, "agency");
+    let (session, _) = answered(&mut model);
+    let window = far_end_left(&mut model, session);
+    assert!(
+        model
+            .update(media(session, MediaEvent::Reconnecting))
+            .is_empty()
+    );
+    // The window would be over while the connection is still being rebuilt.
+    assert!(
+        model.update(Event::WaitOver { ticket: window }).is_empty(),
+        "the window closed with the connection"
+    );
+    assert_eq!(*phase(&model), CallPhase::InCall);
+    for event in [
+        MediaEvent::ParticipantJoined(person("sip_callee")),
+        MediaEvent::Connected,
+    ] {
+        let effects = model.update(media(session, event.clone()));
+        assert!(effects.is_empty(), "{event:?}: {effects:?}");
+    }
+    assert_eq!(*phase(&model), CallPhase::InCall);
+}
+
+#[test]
+fn the_far_end_back_within_the_window_ends_nothing() {
+    let mut model = at_dialler(AGENCY, "agency");
+    let (session, _) = answered(&mut model);
+    let window = far_end_left(&mut model, session);
+    assert!(
+        model
+            .update(media(
+                session,
+                MediaEvent::ParticipantJoined(person("sip_callee"))
+            ))
+            .is_empty()
+    );
+    assert!(model.update(Event::WaitOver { ticket: window }).is_empty());
+    assert_eq!(*phase(&model), CallPhase::InCall);
+}
+
+#[test]
+fn a_call_hung_up_here_within_the_window_is_not_ended_again() {
+    let mut model = at_dialler(AGENCY, "agency");
+    let (session, _) = answered(&mut model);
+    let window = far_end_left(&mut model, session);
+    hang_up(&mut model);
+    assert_eq!(*phase(&model), CallPhase::Ended(CallEnd::HungUp));
+    assert!(model.update(Event::WaitOver { ticket: window }).is_empty());
+    assert_eq!(*phase(&model), CallPhase::Ended(CallEnd::HungUp));
 }
 
 /// A resume that fails becomes a full reconnection, and the media library
@@ -520,7 +600,13 @@ fn a_far_end_gone_when_the_connection_comes_back_ends_the_call() {
         "not while reconnecting"
     );
     assert_eq!(*phase(&model), CallPhase::InCall);
+    // Back, and nobody returned: the window opens, and ends the call.
     let effects = model.update(media(session, MediaEvent::Connected));
+    let [Effect::Wait { ticket, delay }] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(*delay, EMPTY_ROOM_GRACE);
+    let effects = model.update(Event::WaitOver { ticket: *ticket });
     assert_eq!(
         and_transcript_read(effects),
         [carrier_hang_up(), Effect::DisconnectMedia { session }]

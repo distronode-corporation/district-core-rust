@@ -434,17 +434,27 @@ impl SignedIn {
     }
 
     /// The people in the room changed: an agent that was there and is not
-    /// any more has ended the session.
-    pub(crate) fn hq_voice_people_changed(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+    /// any more has ended the session, once the room has stayed without it for
+    /// [`EMPTY_ROOM_GRACE`](crate::EMPTY_ROOM_GRACE) (`grace_over`). The agent
+    /// back meanwhile closes the window.
+    pub(crate) fn hq_voice_people_changed(
+        &mut self,
+        grace_over: bool,
+        tickets: &mut Tickets,
+    ) -> Vec<Effect> {
         let present = self
             .hq_voice_session()
             .is_some_and(MediaSession::service_present);
         if present {
             self.hq.voice.agent_seen = true;
+            tickets.cancel(Slot::EmptyRoom);
             return Vec::new();
         }
         if !self.hq.voice.agent_seen {
             return Vec::new();
+        }
+        if !grace_over {
+            return crate::media::empty_room_wait(tickets);
         }
         tickets.cancel(Slot::HqVoiceLimit);
         self.hq.voice.phase = HqVoicePhase::Ended(HqVoiceEnd::AgentLeft);

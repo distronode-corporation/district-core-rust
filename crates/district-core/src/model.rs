@@ -2840,6 +2840,8 @@ pub(crate) enum Slot {
     TranscriptFetchWait,
     TranscriptFetch,
     TranscriptCooldown,
+    /// The grace window of a room left empty of whoever ends the session.
+    EmptyRoom,
     RingDeadline,
 }
 

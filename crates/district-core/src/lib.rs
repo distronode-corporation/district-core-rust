@@ -216,8 +216,9 @@ pub use marketplace::{
     price_label,
 };
 pub use media::{
-    CallEngine, DisconnectReason, MediaConnection, MediaCredential, MediaEvent, MediaOwner,
-    MediaSession, MediaUpdate, MicrophoneState, Participant, Speaker, SpeechSegment, TrackKind,
+    CallEngine, DisconnectReason, EMPTY_ROOM_GRACE, MediaConnection, MediaCredential, MediaEvent,
+    MediaOwner, MediaSession, MediaUpdate, MicrophoneState, Participant, Speaker, SpeechSegment,
+    TrackKind,
 };
 pub use model::{CoreConfig, Effect, Event, Model, RESTORE_RETRY_FIRST, RESTORE_RETRY_MAX, Ticket};
 pub use number_admin::{
