@@ -6,9 +6,9 @@ use std::time::Duration;
 
 use district_api::{ApiError, ErrorDetail};
 use district_core::{
-    DisconnectReason, Effect, Event, HqAuthor, HqCardState, HqEvent, HqMessage, HqNote, HqText,
-    HqVoice, HqVoiceEnd, HqVoicePhase, MediaEvent, MediaOwner, MediaUpdate, Model, Participant,
-    RoomsEvent, Route, Speaker, SpeechSegment, Ticket,
+    DisconnectReason, EMPTY_ROOM_GRACE, Effect, Event, HqAuthor, HqCardState, HqEvent, HqMessage,
+    HqNote, HqText, HqVoice, HqVoiceEnd, HqVoicePhase, MediaEvent, MediaOwner, MediaUpdate, Model,
+    Participant, RoomsEvent, Route, Speaker, SpeechSegment, Ticket,
 };
 use district_model::{
     HQ_PROPOSAL_TOPIC, HQ_VOICE_SESSION_SECONDS, HqAgentState, HqConfirmResponse, HqRole, HqTurn,
@@ -930,16 +930,28 @@ fn a_refused_click_settles_the_card_by_its_code_or_keeps_it_to_try_again() {
     assert_eq!(last_note(&model), Some(HqNote::Cancelled));
 }
 
-#[test]
-fn the_session_ends_when_the_agent_leaves_and_the_cards_stay() {
-    let (mut model, session) = proposed();
+/// The agent leaving opens the grace window; the session is not ended yet.
+fn agent_left(model: &mut Model, session: Ticket) -> Ticket {
     let effects = report(
-        &mut model,
+        model,
         session,
         MediaEvent::ParticipantLeft {
             identity: "agent-1".to_owned(),
         },
     );
+    let [Effect::Wait { ticket, delay }] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(*delay, EMPTY_ROOM_GRACE);
+    assert_eq!(voice(model).phase, HqVoicePhase::Live { agent: None });
+    *ticket
+}
+
+#[test]
+fn the_session_ends_when_the_agent_leaves_and_the_cards_stay() {
+    let (mut model, session) = proposed();
+    let window = agent_left(&mut model, session);
+    let effects = model.update(Event::WaitOver { ticket: window });
     assert_eq!(effects, [Effect::DisconnectMedia { session }]);
     assert_eq!(
         voice(&model).phase,
@@ -947,6 +959,75 @@ fn the_session_ends_when_the_agent_leaves_and_the_cards_stay() {
     );
     assert_eq!(voice(&model).cards.len(), 1, "still confirmable by click");
     confirmation(&hq(&mut model, HqEvent::ConfirmVoiceCard(ID.to_owned())));
+}
+
+/// A rebuilt connection reports the agent as having left, then back: the
+/// session goes on. An agent still gone once the connection is back has ended
+/// it.
+#[test]
+fn a_rebuilt_connection_ends_the_session_only_when_the_agent_is_still_gone() {
+    let (mut model, session) = live();
+    for event in [
+        MediaEvent::Reconnecting,
+        MediaEvent::ParticipantLeft {
+            identity: "agent-1".to_owned(),
+        },
+        MediaEvent::ParticipantJoined(Participant::new("agent-1", None, true)),
+        MediaEvent::Connected,
+    ] {
+        let effects = report(&mut model, session, event.clone());
+        assert!(effects.is_empty(), "{event:?}: {effects:?}");
+    }
+    assert_eq!(voice(&model).phase, HqVoicePhase::Live { agent: None });
+
+    report(&mut model, session, MediaEvent::Reconnecting);
+    let effects = report(
+        &mut model,
+        session,
+        MediaEvent::ParticipantLeft {
+            identity: "agent-1".to_owned(),
+        },
+    );
+    assert!(effects.is_empty(), "not while reconnecting: {effects:?}");
+    assert_eq!(voice(&model).phase, HqVoicePhase::Live { agent: None });
+    let effects = report(&mut model, session, MediaEvent::Connected);
+    let [Effect::Wait { ticket, .. }] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    let effects = model.update(Event::WaitOver { ticket: *ticket });
+    assert_eq!(effects, [Effect::DisconnectMedia { session }]);
+    assert_eq!(
+        voice(&model).phase,
+        HqVoicePhase::Ended(HqVoiceEnd::AgentLeft)
+    );
+}
+
+#[test]
+fn an_agent_leave_before_the_connection_says_it_is_reconnecting_ends_nothing() {
+    let (mut model, session) = live();
+    let window = agent_left(&mut model, session);
+    assert!(report(&mut model, session, MediaEvent::Reconnecting).is_empty());
+    // The window would be over while the connection is still being rebuilt.
+    assert!(model.update(Event::WaitOver { ticket: window }).is_empty());
+    assert_eq!(voice(&model).phase, HqVoicePhase::Live { agent: None });
+    for event in [
+        MediaEvent::ParticipantJoined(Participant::new("agent-1", None, true)),
+        MediaEvent::Connected,
+    ] {
+        let effects = report(&mut model, session, event.clone());
+        assert!(effects.is_empty(), "{event:?}: {effects:?}");
+    }
+    assert_eq!(voice(&model).phase, HqVoicePhase::Live { agent: None });
+
+    // The agent back within the window ends nothing either.
+    let window = agent_left(&mut model, session);
+    report(
+        &mut model,
+        session,
+        MediaEvent::ParticipantJoined(Participant::new("agent-1", None, true)),
+    );
+    assert!(model.update(Event::WaitOver { ticket: window }).is_empty());
+    assert_eq!(voice(&model).phase, HqVoicePhase::Live { agent: None });
 }
 
 #[test]

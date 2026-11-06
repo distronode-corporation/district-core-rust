@@ -770,6 +770,8 @@ impl SignedIn {
             Vec::new()
         } else if tickets.accept(Slot::CallTick, ticket) {
             self.call_ticked(tickets)
+        } else if tickets.accept(Slot::EmptyRoom, ticket) {
+            self.empty_room_over(tickets)
         } else if tickets.accept(Slot::RingDeadline, ticket) {
             self.ring_deadline()
         } else if tickets.accept(Slot::PresenceHeartbeat, ticket) {

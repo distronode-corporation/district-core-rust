@@ -49,7 +49,9 @@ use district_model::{
     PresenceRegistration, PushRegistrationResponse, RenameResponse, RoutingRule,
     VoiceStudioResponse, WorkspaceConfigResponse, WorkspaceSaveResponse,
 };
-use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
+use district_model::{
+    MetaWindowResponse, SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
+};
 use tokio::sync::mpsc::UnboundedReceiver;
 use url::Url;
 
@@ -164,6 +166,15 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         sender_id: &str,
     ) -> impl Future<Output = Result<WhatsAppTemplatesResponse, ApiError>> + Send {
         ApiClient::whatsapp_templates(self, workspace_id, sender_id)
+    }
+
+    fn meta_window(
+        &self,
+        workspace_id: &str,
+        channel: &str,
+        to: &str,
+    ) -> impl Future<Output = Result<MetaWindowResponse, ApiError>> + Send {
+        ApiClient::meta_window(self, workspace_id, channel, to)
     }
 
     fn send_message(

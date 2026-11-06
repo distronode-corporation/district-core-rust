@@ -13,9 +13,9 @@
 use district_model::{
     AiDraftResponse, ConversationAssignResponse, ConversationsResponse, DraftDeleteResponse,
     DraftListResponse, DraftResponse, DraftSaveRequest, MarkReadResponse, MediaUploadResponse,
-    MessageSearchResponse, MessageThreadResponse, SendMessageRequest, SendMessageResponse,
-    ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse, WhatsAppTemplatesResponse,
-    WhatsAppWindowResponse,
+    MessageSearchResponse, MessageThreadResponse, MetaWindowResponse, SendMessageRequest,
+    SendMessageResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    WhatsAppTemplatesResponse, WhatsAppWindowResponse,
 };
 use serde::Serialize;
 
@@ -395,5 +395,27 @@ impl<S: TokenSource> ApiClient<S> {
             .await?;
         confirm(Endpoint::WhatsAppTemplates, templates.success)?;
         Ok(templates)
+    }
+
+    /// The Messenger or Instagram reply window for the customer `to` (`fb:<psid>`
+    /// or `ig:<igsid>`, the thread's address) on `channel` (`messenger` or
+    /// `instagram`): open, a person's reply only, or closed. The composer's
+    /// preview only; the send route enforces the window itself. A `to` that is
+    /// not an address of `channel` is refused (`invalid_request`).
+    pub async fn meta_window(
+        &self,
+        workspace_id: &str,
+        channel: &str,
+        to: &str,
+    ) -> Result<MetaWindowResponse, ApiError> {
+        let window: MetaWindowResponse = self
+            .request(Endpoint::MetaWindow)
+            .workspace(workspace_id)
+            .query("channel", channel)
+            .query("to", to)
+            .send()
+            .await?;
+        confirm(Endpoint::MetaWindow, window.success)?;
+        Ok(window)
     }
 }

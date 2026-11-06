@@ -1016,3 +1016,61 @@ async fn the_whatsapp_window_names_its_sender_open_or_closed() {
     assert_eq!(closed.window.expires_at, None);
     assert_eq!(closed.sender_id.as_deref(), Some("wa_sender_contract"));
 }
+
+/// The recorded Messenger and Instagram reply windows decode in each of their
+/// three states, a state this build does not know still decodes as text, and an
+/// address that is not the channel's is a coded refusal.
+#[tokio::test]
+async fn the_meta_window_reads_open_human_agent_closed_and_unknown() {
+    for (name, state, until) in [
+        (
+            "district-meta-window.json",
+            district_model::META_WINDOW_OPEN,
+            Some("2026-08-16T14:25:00.000Z"),
+        ),
+        (
+            "district-meta-window-human-agent.json",
+            district_model::META_WINDOW_HUMAN_AGENT,
+            Some("2026-08-22T14:25:00.000Z"),
+        ),
+        (
+            "district-meta-window-closed.json",
+            district_model::META_WINDOW_CLOSED,
+            None,
+        ),
+    ] {
+        let server = answering(200, fixture(name)).await;
+        let read = client(&server)
+            .meta_window(WS, "instagram", "ig:17841400000000001")
+            .await
+            .unwrap();
+        assert_eq!(read.window.state, state, "{name}");
+        assert_eq!(read.window.until.as_deref(), until, "{name}");
+    }
+
+    let server = answering(
+        200,
+        json!({ "success": true, "window": { "state": "ad_window", "until": null } }),
+    )
+    .await;
+    let unknown = client(&server)
+        .meta_window(WS, "messenger", "fb:24000000000000001")
+        .await
+        .unwrap();
+    assert_eq!(unknown.window.state, "ad_window");
+
+    let server = answering(
+        400,
+        json!({
+            "success": false,
+            "error": "Required: workspaceId, channel (messenger or instagram) and the customer's address for it as to",
+            "code": "invalid_request",
+        }),
+    )
+    .await;
+    let refused = client(&server)
+        .meta_window(WS, "messenger", "ig:17841400000000001")
+        .await
+        .unwrap_err();
+    assert_eq!(refused.code(), Some("invalid_request"), "{refused:?}");
+}

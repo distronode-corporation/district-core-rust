@@ -28,19 +28,39 @@
 
 use std::fmt;
 use std::future::Future;
+use std::time::Duration;
 
 use district_model::{
     CallAnswerResponse, CallMonitorTokenResponse, CallTakeoverResponse, DialResponse,
     HqVoiceTokenResponse, PersonaPreviewTokenResponse, RoomE2ee, RoomTokenResponse,
 };
 
-use crate::model::{Effect, Ticket, Tickets};
+use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::SignedIn;
 use crate::text::{l, s};
 
 /// The identity prefix of the note-taking Companion as it joined rooms before
 /// it joined as an agent. The web still treats it as one, and so does this.
 const RETIRED_COMPANION_PREFIX: &str = "ai-companion-";
+
+/// How long a room left without the far end (a placed call's callee, the HQ
+/// voice agent) is given before that counts as them having gone. A connection
+/// the media library rebuilds reports everyone as having left, and can do so
+/// before it reports [`MediaEvent::Reconnecting`]; within this window that
+/// report comes, and the leaves end nothing.
+pub const EMPTY_ROOM_GRACE: Duration = Duration::from_secs(2);
+
+/// Opens the grace window of an empty room, unless one is open already: the
+/// room has been empty since it opened.
+pub(crate) fn empty_room_wait(tickets: &mut Tickets) -> Vec<Effect> {
+    if tickets.awaiting(Slot::EmptyRoom) {
+        return Vec::new();
+    }
+    vec![Effect::Wait {
+        ticket: tickets.issue(Slot::EmptyRoom),
+        delay: EMPTY_ROOM_GRACE,
+    }]
+}
 
 /// Where to join and with what: a room's media server, a credential for it and,
 /// for an encrypted room, its passphrase.
@@ -501,6 +521,11 @@ pub(crate) enum MediaChange {
     Nothing,
     /// The session is in its room.
     Connected,
+    /// The connection is being resumed.
+    Reconnecting,
+    /// The session is in its room again after the connection was resumed or
+    /// rebuilt: the people in it may have changed meanwhile.
+    Resumed,
     /// The people in the room changed.
     People,
     /// The session is over, for this reason.
@@ -554,12 +579,17 @@ impl MediaSession {
         match event {
             MediaEvent::Connecting => MediaChange::Nothing,
             MediaEvent::Connected => {
+                let resumed = self.connection == MediaConnection::Reconnecting;
                 self.connection = MediaConnection::Connected;
-                MediaChange::Connected
+                if resumed {
+                    MediaChange::Resumed
+                } else {
+                    MediaChange::Connected
+                }
             }
             MediaEvent::Reconnecting => {
                 self.connection = MediaConnection::Reconnecting;
-                MediaChange::Nothing
+                MediaChange::Reconnecting
             }
             MediaEvent::Disconnected(reason) => MediaChange::Ended(reason),
             MediaEvent::ParticipantJoined(participant) => {
@@ -568,12 +598,12 @@ impl MediaSession {
                 self.participants
                     .retain(|present| present.identity != participant.identity);
                 self.participants.push(participant);
-                MediaChange::People
+                self.people_changed()
             }
             MediaEvent::ParticipantLeft { identity } => {
                 self.participants
                     .retain(|present| present.identity != identity);
-                MediaChange::People
+                self.people_changed()
             }
             MediaEvent::RemoteTrack {
                 identity,
@@ -603,6 +633,20 @@ impl MediaSession {
             event @ (MediaEvent::AgentData { .. }
             | MediaEvent::AgentState(_)
             | MediaEvent::Speech(_)) => MediaChange::Agent(event),
+        }
+    }
+
+    /// What a change in the people means. Nothing while the connection is
+    /// being resumed: when a resume fails and the media library rebuilds the
+    /// connection, it reports everyone as having left first, and as having
+    /// joined again once it is back, so the owner looks at who is there only
+    /// once the session is in its room again ([`MediaChange::Resumed`]). A far
+    /// end that really hung up meanwhile is still gone then.
+    fn people_changed(&self) -> MediaChange {
+        if self.connection == MediaConnection::Reconnecting {
+            MediaChange::Nothing
+        } else {
+            MediaChange::People
         }
     }
 
@@ -661,6 +705,8 @@ impl SignedIn {
     ) -> Vec<Effect> {
         let mut effects = self.leave_media();
         effects.extend(self.hold_ring());
+        // A window still open for the session left is no longer anyone's.
+        tickets.cancel(Slot::EmptyRoom);
         let session = tickets.revision();
         self.media = Some(MediaSession::new(session, owner));
         effects.push(Effect::ConnectMedia {
@@ -734,7 +780,18 @@ impl SignedIn {
         match media.apply(update.event) {
             MediaChange::Nothing => Vec::new(),
             MediaChange::Connected => self.media_connected(owner, tickets),
-            MediaChange::People => self.media_people_changed(owner, tickets),
+            // The leaves of a connection being rebuilt end nothing: the owner
+            // looks again once the session is back.
+            MediaChange::Reconnecting => {
+                tickets.cancel(Slot::EmptyRoom);
+                Vec::new()
+            }
+            MediaChange::Resumed => {
+                let mut effects = self.media_connected(owner, tickets);
+                effects.extend(self.media_people_changed(owner, false, tickets));
+                effects
+            }
+            MediaChange::People => self.media_people_changed(owner, false, tickets),
             MediaChange::Agent(event) => self.media_agent(owner, event),
             MediaChange::Ended(reason) => {
                 self.media = None;
@@ -774,10 +831,28 @@ impl SignedIn {
         }
     }
 
-    fn media_people_changed(&mut self, owner: MediaOwner, tickets: &mut Tickets) -> Vec<Effect> {
+    /// The grace window of an empty room is over: the owner looks at who is
+    /// there, and ends the session when the far end is still gone. Nothing when
+    /// the session has ended meanwhile. The window is cancelled whenever the
+    /// connection is lost, so the session is in its room.
+    pub(crate) fn empty_room_over(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        match self.media.as_ref().map(|media| media.owner) {
+            Some(owner) => self.media_people_changed(owner, true, tickets),
+            None => Vec::new(),
+        }
+    }
+
+    /// The people in the session's room changed, or the grace window of an
+    /// empty room is over (`grace_over`).
+    fn media_people_changed(
+        &mut self,
+        owner: MediaOwner,
+        grace_over: bool,
+        tickets: &mut Tickets,
+    ) -> Vec<Effect> {
         match owner {
-            MediaOwner::Call => self.call_people_changed(tickets),
-            MediaOwner::HqVoice => self.hq_voice_people_changed(tickets),
+            MediaOwner::Call => self.call_people_changed(grace_over, tickets),
+            MediaOwner::HqVoice => self.hq_voice_people_changed(grace_over, tickets),
             MediaOwner::Room | MediaOwner::Audition | MediaOwner::Supervise => Vec::new(),
         }
     }

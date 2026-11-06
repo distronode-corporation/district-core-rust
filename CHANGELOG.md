@@ -17,6 +17,76 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [9.0.0] - 2026-11-06
+
+The Messenger and Instagram reply window in the composer, as the web Inbox shows it: a
+person's reply only in the human agent window, and nothing sent once it has closed. A major
+version because `Effect`, `Event`, `DistrictApi`, `Endpoint` and `ThreadScreen` each gain a
+member an app matches on, implements or builds. The fixtures move to the server's ef616838f
+(three new files, nothing else changed).
+
+### Added
+
+- The Messenger and Instagram reply window. Choosing a Messenger or Instagram channel reads
+  it (`Effect::LoadMetaWindow`, `Event::MetaWindowLoaded`,
+  `GET /api/district/messages/send?workspaceId&channel&to`) into `ThreadScreen::meta`, a
+  `MetaComposer` whose `window` is a `MetaWindowState`: `Loading`, `Open { until }`,
+  `HumanAgent { until }`, `Closed` or `Unknown(Option<FailureText>)` (the read failed, with
+  why, or named a state this build does not know). In `HumanAgent` a person may reply but
+  `ThreadControls::can_draft_reply` is off, and the app shows `MetaComposer::HUMAN_AGENT`
+  (`ThreadScreen::meta_human_agent`); `Closed` turns off `can_send` and `can_draft_reply`,
+  keeps the text box, and the app says `MetaComposer::WINDOW_CLOSED`
+  (`ThreadScreen::meta_window_closed`). Not yet read, unreadable or unknown, it blocks
+  nothing. No countdown is shown; `until` is kept. The window is read again after each reply
+  that goes, and whenever the thread's newest page brings a new message from the customer,
+  which opens it again. A reply the service refuses with `messenger_window_closed` closes it, and a read
+  still on its way, asked before that refusal, is dropped so it cannot open it again.
+  Breaking for an app that matches every `Effect` or `Event`, or builds a `ThreadScreen` with
+  a struct literal: run the effect through the core's runner, or call
+  `ApiClient::meta_window` yourself.
+- `DistrictApi::meta_window`, which the runner calls for that effect. Breaking for an app or
+  a test that implements `DistrictApi` by hand; `ApiClient` implements it.
+- `ApiClient::meta_window(workspace_id, channel, to)` and `Endpoint::MetaWindow` (a GET on
+  the send's own path, retried once after a refresh), with `district_model::MetaWindowResponse`,
+  `MetaWindow` and `META_WINDOW_OPEN`, `META_WINDOW_HUMAN_AGENT` and `META_WINDOW_CLOSED`.
+  `MetaWindow::state` is text, so a newer state still decodes. The endpoint is a desktop-only
+  addition to the table until the endpoint snapshot is refreshed from an Android release
+  that reads it.
+- Catalog entries `thread.meta_human_agent` and `thread.meta_window_closed`, both with the
+  web Inbox's reviewed French verbatim.
+
+### Changed
+
+- `contracts/fixtures/` from the server's ef616838f: `district-meta-window.json`,
+  `district-meta-window-human-agent.json` and `district-meta-window-closed.json`, decoded by
+  `MetaWindowResponse`. `contracts/desktop/` and `contracts/i18n/` are unchanged.
+- The catalogs are signed off for 9.0.0 (`i18n/fr-CA/signoff.json`): `core.toml` gains
+  `thread.meta_human_agent` and `thread.meta_window_closed`, the web Inbox's reviewed
+  French verbatim; the other catalogs are unchanged.
+
+### Fixed
+
+- A connection the media library rebuilds no longer hangs up a placed call or ends an HQ
+  voice session. `livekit` 0.10.1 reports every remote participant as having left when it
+  falls back to a full reconnection, and as joining again once it is back; a placed call
+  took that as the far end hanging up (and ended it at the carrier), and HQ voice as the
+  agent leaving. Now the far end (a placed call's callee, the HQ voice agent) leaving opens a
+  grace window, `EMPTY_ROOM_GRACE` (2 seconds, an `Effect::Wait`): a connection reported
+  reconnecting within it closes it, people changes while reconnecting end nothing, and once
+  the session is in its room again (`MediaEvent::Connected`) the call and HQ voice look at
+  who is there. The far end back within the window closes it too. A room still without the
+  far end when the window is over, the connection up, ends the call or the session as
+  before, at the carrier too. This covers both orders the library reports a rebuild in:
+  `Reconnecting` before the leaves (a resume that failed) and after them (a full
+  reconnection straight away). Breaking only for an app that asserts a far-end hang-up
+  takes effect at once.
+- A hang-up that overtakes its own join no longer leaves a room joined. The runner runs
+  each effect as its own task on a multi-threaded runtime, so `disconnect` for a session can
+  run before `connect` for it has begun; the connect then joined the room with the
+  microphone on, for a session the model had already put away. `LiveKitCallEngine` now
+  remembers a session left before it was held (the newest 16), and a connect for one joins
+  nothing and reports nothing.
+
 ## [8.0.0] - 2026-11-05
 
 The country-aware dialler (#63), the app parity fixtures (#64) and app parity on the

@@ -155,6 +155,13 @@ pub const DESKTOP_ONLY: &[Addition] = &[
                  same reason as the window.",
     },
     Addition {
+        endpoint: Endpoint::MetaWindow,
+        reason: "The Messenger and Instagram reply window, which decides whether the composer \
+                 may send and whether the AI may draft. The desktop apps build it first; the \
+                 snapshot predates it. Remove this entry in the sync that brings it into the \
+                 snapshot.",
+    },
+    Addition {
         endpoint: Endpoint::HqVoiceToken,
         reason: "District HQ by voice. The desktop apps build it first; the Android app's voice \
                  mode is being built against the same contract, and the snapshot predates it.",

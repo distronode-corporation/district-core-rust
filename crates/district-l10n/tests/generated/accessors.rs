@@ -1012,6 +1012,10 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::thread_channel_messenger(Locale::FrCa), "Messenger");
     assert_eq!(strings::thread_channel_whatsapp(Locale::En), "WhatsApp");
     assert_eq!(strings::thread_channel_whatsapp(Locale::FrCa), "WhatsApp");
+    assert_eq!(strings::thread_meta_human_agent(Locale::En), "Human agent reply (7-day window)");
+    assert_eq!(strings::thread_meta_human_agent(Locale::FrCa), "Réponse d'un agent humain (fenêtre de 7\u{00A0}jours)");
+    assert_eq!(strings::thread_meta_window_closed(Locale::En), "Reply window closed: Messenger and Instagram allow a reply only within 24 hours of the customer's last message (7 days for a human agent reply, when it is turned on). You can reply once they write again.");
+    assert_eq!(strings::thread_meta_window_closed(Locale::FrCa), "Fenêtre de réponse fermée\u{00A0}: Messenger et Instagram n'acceptent une réponse que dans les 24\u{00A0}heures suivant le dernier message du client (7\u{00A0}jours pour une réponse d'un agent humain, si elle est activée). Vous pourrez répondre quand il vous écrira de nouveau.");
     assert_eq!(strings::thread_no_reply_target(Locale::En), "Replies cannot be sent on this conversation from here.");
     assert_eq!(strings::thread_no_reply_target(Locale::FrCa), "Impossible de répondre à cette conversation à partir d'ici.");
     assert_eq!(strings::thread_read_only_role(Locale::En), "You have read-only access to this workspace, so you cannot reply here.");

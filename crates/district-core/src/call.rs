@@ -34,7 +34,7 @@ use district_model::{CallAnswerResponse, DialResponse};
 
 use crate::dialer::format_call_duration;
 use crate::failure::FailureText;
-use crate::media::{DisconnectReason, MediaCredential, MediaOwner};
+use crate::media::{DisconnectReason, MediaCredential, MediaOwner, empty_room_wait};
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::{l, s};
@@ -361,14 +361,20 @@ impl SignedIn {
         if call.is_outbound() {
             call.phase = CallPhase::Ringing;
             // The callee may have picked up before the room finished joining.
-            return self.call_people_changed(tickets);
+            return self.call_people_changed(false, tickets);
         }
         call.answer(tickets)
     }
 
     /// The people in a placed call's room changed: the first person is the
-    /// answer, and the last one leaving is the far end hanging up.
-    pub(crate) fn call_people_changed(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+    /// answer, and the last one leaving is the far end hanging up, once the
+    /// room has stayed without anyone for [`EMPTY_ROOM_GRACE`](crate::EMPTY_ROOM_GRACE)
+    /// (`grace_over`). Someone back in the room meanwhile closes the window.
+    pub(crate) fn call_people_changed(
+        &mut self,
+        grace_over: bool,
+        tickets: &mut Tickets,
+    ) -> Vec<Effect> {
         let people = self
             .media
             .as_ref()
@@ -378,8 +384,12 @@ impl SignedIn {
         };
         match (&call.phase, people) {
             (CallPhase::Ringing, true) => call.answer(tickets),
-            (CallPhase::InCall, false) => self.hang_up(CallEnd::Remote, tickets),
-            _ => Vec::new(),
+            (CallPhase::InCall, false) if grace_over => self.hang_up(CallEnd::Remote, tickets),
+            (CallPhase::InCall, false) => empty_room_wait(tickets),
+            _ => {
+                tickets.cancel(Slot::EmptyRoom);
+                Vec::new()
+            }
         }
     }
 

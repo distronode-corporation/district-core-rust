@@ -475,6 +475,21 @@ pub fn cases() -> Vec<Case> {
             body: Sent::Nothing,
         },
         Case {
+            name: "meta_window",
+            endpoint: Endpoint::MetaWindow,
+            retried: true,
+            answer: fixture("district-meta-window-human-agent.json"),
+            call: call!(c => c.meta_window(WS, "messenger", "fb:24000000000000001")),
+            method: "GET",
+            path: "/api/district/messages/send",
+            query: vec![
+                ("workspaceId", WS),
+                ("channel", "messenger"),
+                ("to", "fb:24000000000000001"),
+            ],
+            body: Sent::Nothing,
+        },
+        Case {
             name: "timeline",
             endpoint: Endpoint::Timeline,
             retried: true,

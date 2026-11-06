@@ -41,8 +41,9 @@
 //!   ([`ApiClient::register_presence`], [`ApiClient::unregister_presence`]);
 //! - the inbox ([`ApiClient::conversations`], [`ApiClient::timeline`],
 //!   [`ApiClient::send_message`] and the rest), who owns a thread
-//!   ([`ApiClient::assign_conversation`]) and the WhatsApp composer's window and
-//!   templates ([`ApiClient::whatsapp_window`], [`ApiClient::whatsapp_templates`]);
+//!   ([`ApiClient::assign_conversation`]), the WhatsApp composer's window and
+//!   templates ([`ApiClient::whatsapp_window`], [`ApiClient::whatsapp_templates`])
+//!   and the Messenger and Instagram reply window ([`ApiClient::meta_window`]);
 //! - contacts ([`ApiClient::contacts`], [`ApiClient::contact`],
 //!   [`ApiClient::update_contact`] and the rest);
 //! - District HQ ([`ApiClient::hq_prompt`], and [`ApiClient::hq_confirm`] for a

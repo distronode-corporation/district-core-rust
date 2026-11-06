@@ -942,6 +942,10 @@ pub const THREAD_CHANNEL_LABEL: &str = "Reply channel";
 pub const THREAD_CHANNEL_MESSENGER: &str = "Messenger";
 /// `thread.channel_whatsapp` in English.
 pub const THREAD_CHANNEL_WHATSAPP: &str = "WhatsApp";
+/// `thread.meta_human_agent` in English.
+pub const THREAD_META_HUMAN_AGENT: &str = "Human agent reply (7-day window)";
+/// `thread.meta_window_closed` in English.
+pub const THREAD_META_WINDOW_CLOSED: &str = "Reply window closed: Messenger and Instagram allow a reply only within 24 hours of the customer's last message (7 days for a human agent reply, when it is turned on). You can reply once they write again.";
 /// `thread.no_reply_target` in English.
 pub const THREAD_NO_REPLY_TARGET: &str = "Replies cannot be sent on this conversation from here.";
 /// `thread.read_only_role` in English.

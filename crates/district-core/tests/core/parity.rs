@@ -1,18 +1,18 @@
 //! App parity: the reply channels the service lists for a thread, Messenger and
-//! Instagram, who owns a thread, and the WhatsApp templates a closed window
-//! offers.
+//! Instagram, who owns a thread, the WhatsApp templates a closed window offers,
+//! and the Messenger and Instagram reply window.
 
 use district_api::{ApiError, ConversationsQuery, ErrorDetail};
 use district_core::{
-    AssigneeList, Effect, Event, FailureText, InboxScreen, Model, PickedAttachment, Route,
-    TemplateList, ThreadAssignment, ThreadControls, ThreadEvent, ThreadScreen, Ticket,
-    WhatsAppComposer, WhatsAppWindowState, reply_channel_label,
+    AssigneeList, Effect, Event, FailureText, InboxScreen, MetaComposer, MetaWindowState, Model,
+    PickedAttachment, Route, TemplateList, ThreadAssignment, ThreadControls, ThreadEvent,
+    ThreadScreen, Ticket, WhatsAppComposer, WhatsAppWindowState, reply_channel_label,
 };
 use district_model::{
     CHANNEL_EMAIL, CHANNEL_INSTAGRAM, CHANNEL_MESSENGER, CHANNEL_SMS, CHANNEL_WHATSAPP,
-    ConversationAssignResponse, ConversationsResponse, MemberListResponse, ReplyOption,
-    ReplyTarget, SendMessageRequest, TelemetryEnvelope, TelemetryEventType, TimelineResponse,
-    WhatsAppTemplatesResponse, WhatsAppWindowResponse,
+    ConversationAssignResponse, ConversationsResponse, MemberListResponse, MetaWindowResponse,
+    ReplyOption, ReplyTarget, SendMessageRequest, TelemetryEnvelope, TelemetryEventType,
+    TimelineResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse,
 };
 use serde_json::json;
 
@@ -1433,5 +1433,403 @@ fn a_viewer_reads_no_whatsapp_window() {
         )));
         assert!(screen(&model).whatsapp.is_none());
         assert!(!controls(&model).can_reply);
+    });
+}
+
+// Messenger and Instagram.
+
+/// Its Instagram thread.
+const INSTAGRAM: &str = "addr:ig:5550102";
+
+fn meta(model: &Model) -> &MetaComposer {
+    screen(model)
+        .meta
+        .as_ref()
+        .expect("the reply goes by Messenger or Instagram")
+}
+
+fn meta_window(name: &str) -> MetaWindowResponse {
+    fixture(name)
+}
+
+/// On `thread_key`'s Messenger or Instagram channel, with the window read as
+/// `window`.
+fn on_meta(thread_key: &str, window: MetaWindowResponse) -> Model {
+    let (mut model, _) = inbox_with(AGENCY, "agency", reply_options());
+    let effects = opened(&mut model, thread_key);
+    let ticket = pick(&effects, |e| matches!(e, Effect::LoadMetaWindow { .. }));
+    assert_eq!(meta(&model).window, MetaWindowState::Loading);
+    assert!(
+        model
+            .update(Event::MetaWindowLoaded {
+                ticket,
+                result: Ok(window),
+            })
+            .is_empty()
+    );
+    model
+}
+
+/// Sends `text` and lands the service's `result`, returning what follows.
+fn send_and_land(
+    model: &mut Model,
+    text: &str,
+    result: Result<district_model::SendMessageResponse, ApiError>,
+) -> Vec<Effect> {
+    thread_event(model, ThreadEvent::Compose(text.to_owned()));
+    let effects = thread_event(model, ThreadEvent::Send);
+    model.update(Event::MessageSent {
+        ticket: pick(&effects, |e| matches!(e, Effect::SendMessage { .. })),
+        result,
+    })
+}
+
+fn window_closed_refusal() -> ApiError {
+    coded(
+        409,
+        "messenger_window_closed",
+        "The Messenger or Instagram reply window with this contact is closed.",
+    )
+}
+
+#[test]
+fn choosing_messenger_or_instagram_reads_its_window_for_the_customer() {
+    with_meta_channels(|| {
+        for (thread_key, channel, to) in [
+            (MESSENGER, CHANNEL_MESSENGER, "fb:5550101"),
+            (INSTAGRAM, CHANNEL_INSTAGRAM, "ig:5550102"),
+        ] {
+            let (mut model, _) = inbox_with(AGENCY, "agency", reply_options());
+            let effects = opened(&mut model, thread_key);
+            let read: Vec<(&str, &str, &str)> = effects
+                .iter()
+                .filter_map(|effect| match effect {
+                    Effect::LoadMetaWindow {
+                        workspace_id,
+                        channel,
+                        to,
+                        ..
+                    } => Some((workspace_id.as_str(), channel.as_str(), to.as_str())),
+                    _ => None,
+                })
+                .collect();
+            assert_eq!(read, [(AGENCY, channel, to)], "{thread_key}");
+            assert!(screen(&model).whatsapp.is_none());
+            // Not yet known, it blocks nothing.
+            thread_event(&mut model, ThreadEvent::Compose("Hello".to_owned()));
+            let controls = controls(&model);
+            assert!(
+                controls.can_send && controls.can_draft_reply,
+                "{thread_key}"
+            );
+        }
+    });
+}
+
+#[test]
+fn an_open_meta_window_blocks_nothing_and_is_read_again_after_a_reply() {
+    with_meta_channels(|| {
+        let mut model = on_meta(MESSENGER, meta_window("district-meta-window.json"));
+        assert_eq!(
+            meta(&model).window,
+            MetaWindowState::Open {
+                until: Some("2026-08-16T14:25:00.000Z".to_owned())
+            }
+        );
+        assert!(!screen(&model).meta_window_closed() && !screen(&model).meta_human_agent());
+        let effects = send_and_land(
+            &mut model,
+            "Thanks!",
+            Ok(fixture("district-message-send.json")),
+        );
+        let reread: Vec<(&str, &str)> = effects
+            .iter()
+            .filter_map(|effect| match effect {
+                Effect::LoadMetaWindow { channel, to, .. } => Some((channel.as_str(), to.as_str())),
+                _ => None,
+            })
+            .collect();
+        assert_eq!(reread, [("messenger", "fb:5550101")], "{effects:?}");
+        // What is shown stays until the new answer lands.
+        assert!(matches!(meta(&model).window, MetaWindowState::Open { .. }));
+        model.update(Event::MetaWindowLoaded {
+            ticket: pick(&effects, |e| matches!(e, Effect::LoadMetaWindow { .. })),
+            result: Ok(meta_window("district-meta-window-human-agent.json")),
+        });
+        assert!(screen(&model).meta_human_agent());
+    });
+}
+
+#[test]
+fn the_human_agent_window_lets_a_person_reply_but_not_the_model() {
+    with_meta_channels(|| {
+        let mut model = on_meta(
+            INSTAGRAM,
+            meta_window("district-meta-window-human-agent.json"),
+        );
+        assert_eq!(
+            meta(&model).window,
+            MetaWindowState::HumanAgent {
+                until: Some("2026-08-22T14:25:00.000Z".to_owned())
+            }
+        );
+        assert!(screen(&model).meta_human_agent());
+        assert_eq!(
+            MetaComposer::HUMAN_AGENT,
+            "Human agent reply (7-day window)"
+        );
+        assert!(!controls(&model).can_draft_reply);
+        assert!(thread_event(&mut model, ThreadEvent::DraftReply).is_empty());
+        thread_event(&mut model, ThreadEvent::Compose("A person here".to_owned()));
+        assert!(controls(&model).can_send);
+        let message = the_send(&thread_event(&mut model, ThreadEvent::Send));
+        assert_eq!(
+            (message.channel.as_str(), message.to.as_str()),
+            ("instagram", "ig:5550102")
+        );
+    });
+}
+
+#[test]
+fn a_closed_meta_window_sends_nothing_and_says_why() {
+    with_meta_channels(|| {
+        let mut model = on_meta(MESSENGER, meta_window("district-meta-window-closed.json"));
+        assert_eq!(meta(&model).window, MetaWindowState::Closed);
+        assert!(screen(&model).meta_window_closed());
+        assert!(MetaComposer::WINDOW_CLOSED.starts_with("Reply window closed:"));
+        thread_event(&mut model, ThreadEvent::Compose("Too late".to_owned()));
+        let controls = controls(&model);
+        assert!(controls.can_reply, "the box stays, as on the web");
+        assert!(!controls.can_send && !controls.can_draft_reply);
+        assert!(thread_event(&mut model, ThreadEvent::Send).is_empty());
+        assert!(thread_event(&mut model, ThreadEvent::DraftReply).is_empty());
+        assert_eq!(screen(&model).composer.text, "Too late", "kept");
+    });
+}
+
+#[test]
+fn a_reply_refused_for_a_closed_window_closes_it_and_an_earlier_read_cannot_open_it() {
+    with_meta_channels(|| {
+        let mut model = on_meta(MESSENGER, meta_window("district-meta-window.json"));
+        // A reply goes, and the window is read again; that read is still on its
+        // way when the next reply is refused.
+        let effects = send_and_land(
+            &mut model,
+            "First",
+            Ok(fixture("district-message-send.json")),
+        );
+        let earlier = pick(&effects, |e| matches!(e, Effect::LoadMetaWindow { .. }));
+        let effects = send_and_land(&mut model, "Second", Err(window_closed_refusal()));
+        assert!(!has(&effects, |e| matches!(
+            e,
+            Effect::LoadMetaWindow { .. }
+        )));
+        assert!(screen(&model).meta_window_closed());
+        assert_eq!(screen(&model).composer.text, "Second", "kept");
+        assert!(
+            screen(&model).composer.failure.is_some(),
+            "the refusal is said"
+        );
+        assert!(
+            model
+                .update(Event::MetaWindowLoaded {
+                    ticket: earlier,
+                    result: Ok(meta_window("district-meta-window.json")),
+                })
+                .is_empty()
+        );
+        assert!(screen(&model).meta_window_closed(), "still closed");
+        assert!(!controls(&model).can_send);
+    });
+}
+
+#[test]
+fn another_refusal_leaves_the_meta_window_as_it_was() {
+    with_meta_channels(|| {
+        let mut model = on_meta(MESSENGER, meta_window("district-meta-window.json"));
+        let effects = send_and_land(&mut model, "Hello", Err(server_error()));
+        assert!(!has(&effects, |e| matches!(
+            e,
+            Effect::LoadMetaWindow { .. }
+        )));
+        assert!(matches!(meta(&model).window, MetaWindowState::Open { .. }));
+        assert!(controls(&model).can_send, "tried again");
+    });
+}
+
+#[test]
+fn a_meta_window_that_cannot_be_read_or_is_not_known_blocks_nothing() {
+    with_meta_channels(|| {
+        let (mut model, _) = inbox_with(AGENCY, "agency", reply_options());
+        let effects = opened(&mut model, MESSENGER);
+        model.update(Event::MetaWindowLoaded {
+            ticket: pick(&effects, |e| matches!(e, Effect::LoadMetaWindow { .. })),
+            result: Err(server_error()),
+        });
+        assert!(matches!(
+            meta(&model).window,
+            MetaWindowState::Unknown(Some(_))
+        ));
+        thread_event(&mut model, ThreadEvent::Compose("Hello".to_owned()));
+        assert!(controls(&model).can_send && controls(&model).can_draft_reply);
+
+        let unknown: MetaWindowResponse = serde_json::from_value(json!({
+            "success": true,
+            "window": { "state": "ad_window", "until": "2026-08-22T14:25:00.000Z" },
+        }))
+        .unwrap();
+        let mut model = on_meta(INSTAGRAM, unknown);
+        assert_eq!(meta(&model).window, MetaWindowState::Unknown(None));
+        thread_event(&mut model, ThreadEvent::Compose("Hello".to_owned()));
+        assert!(controls(&model).can_send && controls(&model).can_draft_reply);
+    });
+}
+
+/// The reply options fixture with Ada's thread also answerable on Messenger.
+fn ada_on_messenger_too() -> ConversationsResponse {
+    let mut list = reply_options();
+    let ada = list
+        .conversations
+        .iter_mut()
+        .find(|row| row.thread_key == ADA)
+        .expect("Ada's thread");
+    ada.reply_options.push(ReplyOption {
+        channel: "messenger".to_owned(),
+        to: "fb:5550103".to_owned(),
+    });
+    list
+}
+
+#[test]
+fn leaving_messenger_forgets_its_window_and_a_late_answer_lands_nowhere() {
+    with_meta_channels(|| {
+        let (mut model, _) = inbox_with(AGENCY, "agency", ada_on_messenger_too());
+        opened(&mut model, ADA);
+        assert!(screen(&model).meta.is_none(), "it opens on email");
+        let effects = thread_event(
+            &mut model,
+            ThreadEvent::ChooseChannel("messenger".to_owned()),
+        );
+        let [Effect::LoadMetaWindow { ticket, to, .. }] = effects.as_slice() else {
+            panic!("{effects:?}");
+        };
+        assert_eq!(to, "fb:5550103");
+        let first = *ticket;
+        let effects = thread_event(
+            &mut model,
+            ThreadEvent::ChooseChannel("whatsapp".to_owned()),
+        );
+        assert!(screen(&model).meta.is_none());
+        assert!(screen(&model).whatsapp.is_some());
+        assert!(!has(&effects, |e| matches!(
+            e,
+            Effect::LoadMetaWindow { .. }
+        )));
+        // The Messenger read lands after the change: it is no one's.
+        assert!(
+            model
+                .update(Event::MetaWindowLoaded {
+                    ticket: first,
+                    result: Ok(meta_window("district-meta-window-closed.json")),
+                })
+                .is_empty()
+        );
+        assert!(screen(&model).meta.is_none());
+
+        // Closed on Messenger, then text again: nothing of Messenger blocks it.
+        let effects = thread_event(
+            &mut model,
+            ThreadEvent::ChooseChannel("messenger".to_owned()),
+        );
+        model.update(Event::MetaWindowLoaded {
+            ticket: pick(&effects, |e| matches!(e, Effect::LoadMetaWindow { .. })),
+            result: Ok(meta_window("district-meta-window-closed.json")),
+        });
+        assert!(screen(&model).meta_window_closed());
+        thread_event(&mut model, ThreadEvent::ChooseChannel("sms".to_owned()));
+        assert!(screen(&model).meta.is_none());
+        thread_event(&mut model, ThreadEvent::Compose("By text".to_owned()));
+        assert!(controls(&model).can_send && controls(&model).can_draft_reply);
+    });
+}
+
+#[test]
+fn a_meta_window_read_as_the_thread_closes_lands_nowhere() {
+    with_meta_channels(|| {
+        let (mut model, _) = inbox_with(AGENCY, "agency", reply_options());
+        let effects = opened(&mut model, MESSENGER);
+        let ticket = pick(&effects, |e| matches!(e, Effect::LoadMetaWindow { .. }));
+        model.update(Event::Navigate(Route::Inbox));
+        let effects = opened(&mut model, MESSENGER);
+        let fresh = pick(&effects, |e| matches!(e, Effect::LoadMetaWindow { .. }));
+        assert_ne!(ticket, fresh);
+        assert!(
+            model
+                .update(Event::MetaWindowLoaded {
+                    ticket,
+                    result: Ok(meta_window("district-meta-window-closed.json")),
+                })
+                .is_empty()
+        );
+        assert_eq!(meta(&model).window, MetaWindowState::Loading);
+    });
+}
+
+#[test]
+fn a_viewer_reads_no_meta_window() {
+    with_meta_channels(|| {
+        let (mut model, _) = inbox_with(VIEWER, "viewer", reply_options());
+        let effects = opened(&mut model, MESSENGER);
+        assert!(!has(&effects, |e| matches!(
+            e,
+            Effect::LoadMetaWindow { .. }
+        )));
+        assert!(screen(&model).meta.is_none());
+        assert!(!controls(&model).can_reply);
+    });
+}
+
+#[test]
+fn the_customer_writing_again_reads_the_meta_window_again() {
+    with_meta_channels(|| {
+        let mut model = on_meta(MESSENGER, meta_window("district-meta-window-closed.json"));
+        let mut page: TimelineResponse = fixture("district-timeline.json");
+
+        // Read again with nothing new from the customer: the window is not.
+        let effects = model.update(Event::Refresh);
+        let effects = model.update(Event::TimelineLoaded {
+            ticket: pick(&effects, |e| matches!(e, Effect::LoadTimeline { .. })),
+            result: Ok(page.clone()),
+        });
+        assert!(!has(&effects, |e| matches!(
+            e,
+            Effect::LoadMetaWindow { .. }
+        )));
+
+        // The customer wrote: the window is read again, and opens.
+        let mut wrote = page.timeline[0].clone();
+        wrote.id = "msg_meta_customer_again".to_owned();
+        wrote.direction = "inbound".to_owned();
+        wrote.timestamp = "2026-08-20T10:00:00.000Z".to_owned();
+        page.timeline.push(wrote);
+        let effects = model.update(Event::Refresh);
+        let effects = model.update(Event::TimelineLoaded {
+            ticket: pick(&effects, |e| matches!(e, Effect::LoadTimeline { .. })),
+            result: Ok(page),
+        });
+        let ticket = pick(&effects, |e| matches!(e, Effect::LoadMetaWindow { .. }));
+        assert!(
+            screen(&model).meta_window_closed(),
+            "until the answer lands"
+        );
+        model.update(Event::MetaWindowLoaded {
+            ticket,
+            result: Ok(meta_window("district-meta-window.json")),
+        });
+        thread_event(
+            &mut model,
+            ThreadEvent::Compose("Thanks for writing".to_owned()),
+        );
+        assert!(controls(&model).can_send);
     });
 }
