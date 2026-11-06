@@ -1307,16 +1307,11 @@ impl SignedIn {
         tickets: &mut Tickets,
     ) -> Next {
         if tickets.accept(Slot::Timeline, ticket) {
-            let mut effects = Vec::new();
-            if let Some(screen) = self.thread.as_mut() {
-                // The customer wrote again: on Messenger or Instagram that
-                // opens the window, so it is read again.
-                let wrote = customer_wrote(&screen.history, &result);
-                newest_loaded(screen, result, tickets);
-                if wrote {
-                    effects.extend(read_meta_window(screen, tickets));
-                }
-            }
+            let mut effects = self
+                .thread
+                .as_mut()
+                .map(|screen| newest_arrived(screen, result, tickets))
+                .unwrap_or_default();
             if tickets.take_again(Slot::Timeline) {
                 effects.extend(self.reload_thread(tickets));
             }
@@ -1736,6 +1731,22 @@ fn send_template(
         workspace_id: screen.workspace_id.clone(),
         message,
     }]
+}
+
+/// The newest page arrived, and with it, when the customer wrote again, a
+/// read of the Messenger or Instagram window, which their message opens.
+fn newest_arrived(
+    screen: &mut ThreadScreen,
+    result: Result<TimelineResponse, ApiError>,
+    tickets: &mut Tickets,
+) -> Vec<Effect> {
+    let wrote = customer_wrote(&screen.history, &result);
+    newest_loaded(screen, result, tickets);
+    if wrote {
+        read_meta_window(screen, tickets)
+    } else {
+        Vec::new()
+    }
 }
 
 /// The newest page arrived.
