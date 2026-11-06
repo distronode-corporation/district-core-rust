@@ -50,6 +50,7 @@ mod inbox;
 mod knowledge;
 mod members;
 mod messaging;
+mod meta_window;
 mod number_admin;
 mod numbers;
 mod overview;
@@ -146,6 +147,9 @@ pub use messaging::{
     MessagingMetaResponse, MessagingProvider, MessagingResponse, MessagingSetChannelDefault,
     MessagingSetDefault, MessagingTestDetails, MessagingTestResponse, SinchCredentials,
     TelnyxCredentials, TwilioCredentials,
+};
+pub use meta_window::{
+    META_WINDOW_CLOSED, META_WINDOW_HUMAN_AGENT, META_WINDOW_OPEN, MetaWindow, MetaWindowResponse,
 };
 pub use number_admin::{
     A2P_CAMPAIGN_TYPES, A2pRegistrationDraft, A2pRegistrationResponse, NumberConfigureResponse,

@@ -187,7 +187,7 @@ async fn the_api_client_is_the_runners_api() {
 #[tokio::test]
 async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
     let server = MockServer::start().await;
-    let routes: [(&str, &str, serde_json::Value); 28] = [
+    let routes: [(&str, &str, serde_json::Value); 29] = [
         (
             "GET",
             "/api/district/conversations",
@@ -325,6 +325,11 @@ async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
             "/api/district/workspace/whatsapp/templates",
             fixture("district-whatsapp-templates.json"),
         ),
+        (
+            "GET",
+            "/api/district/messages/send",
+            fixture("district-meta-window-closed.json"),
+        ),
     ];
     for (index, (verb, route, body)) in routes.into_iter().enumerate() {
         // The single draft is the read that names a thread; the list is the one
@@ -406,6 +411,14 @@ async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
             .templates
             .len(),
         2
+    );
+    assert_eq!(
+        DistrictApi::meta_window(&client, ws, "messenger", "fb:5550101")
+            .await
+            .unwrap()
+            .window
+            .state,
+        "closed"
     );
     let message = SendMessageRequest {
         to: "+14165550142".to_owned(),

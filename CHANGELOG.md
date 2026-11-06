@@ -17,6 +17,49 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [9.0.0] - 2026-11-06
+
+The Messenger and Instagram reply window in the composer, as the web Inbox shows it: a
+person's reply only in the human agent window, and nothing sent once it has closed. A major
+version because `Effect`, `Event`, `DistrictApi`, `Endpoint` and `ThreadScreen` each gain a
+member an app matches on, implements or builds. The fixtures move to the server's ef616838f
+(three new files, nothing else changed).
+
+### Added
+
+- The Messenger and Instagram reply window. Choosing a Messenger or Instagram channel reads
+  it (`Effect::LoadMetaWindow`, `Event::MetaWindowLoaded`,
+  `GET /api/district/messages/send?workspaceId&channel&to`) into `ThreadScreen::meta`, a
+  `MetaComposer` whose `window` is a `MetaWindowState`: `Loading`, `Open { until }`,
+  `HumanAgent { until }`, `Closed` or `Unknown(Option<FailureText>)` (the read failed, with
+  why, or named a state this build does not know). In `HumanAgent` a person may reply but
+  `ThreadControls::can_draft_reply` is off, and the app shows `MetaComposer::HUMAN_AGENT`
+  (`ThreadScreen::meta_human_agent`); `Closed` turns off `can_send` and `can_draft_reply`,
+  keeps the text box, and the app says `MetaComposer::WINDOW_CLOSED`
+  (`ThreadScreen::meta_window_closed`). Not yet read, unreadable or unknown, it blocks
+  nothing. No countdown is shown; `until` is kept. The window is read again after each reply
+  that goes. A reply the service refuses with `messenger_window_closed` closes it, and a read
+  still on its way, asked before that refusal, is dropped so it cannot open it again.
+  Breaking for an app that matches every `Effect` or `Event`, or builds a `ThreadScreen` with
+  a struct literal: run the effect through the core's runner, or call
+  `ApiClient::meta_window` yourself.
+- `DistrictApi::meta_window`, which the runner calls for that effect. Breaking for an app or
+  a test that implements `DistrictApi` by hand; `ApiClient` implements it.
+- `ApiClient::meta_window(workspace_id, channel, to)` and `Endpoint::MetaWindow` (a GET on
+  the send's own path, retried once after a refresh), with `district_model::MetaWindowResponse`,
+  `MetaWindow` and `META_WINDOW_OPEN`, `META_WINDOW_HUMAN_AGENT` and `META_WINDOW_CLOSED`.
+  `MetaWindow::state` is text, so a newer state still decodes. The endpoint is a desktop-only
+  addition to the table until the endpoint snapshot is refreshed from an Android release
+  that reads it.
+- Catalog entries `thread.meta_human_agent` and `thread.meta_window_closed`, both with the
+  web Inbox's reviewed French verbatim.
+
+### Changed
+
+- `contracts/fixtures/` from the server's ef616838f: `district-meta-window.json`,
+  `district-meta-window-human-agent.json` and `district-meta-window-closed.json`, decoded by
+  `MetaWindowResponse`. `contracts/desktop/` and `contracts/i18n/` are unchanged.
+
 ## [8.0.0] - 2026-11-05
 
 The country-aware dialler (#63), the app parity fixtures (#64) and app parity on the

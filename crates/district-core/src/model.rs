@@ -62,7 +62,9 @@ use district_model::{
     WhatsAppWindowResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
     WorkspaceBillingResponse, WorkspaceConfigResponse, WorkspaceListResponse,
 };
-use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
+use district_model::{
+    MetaWindowResponse, SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
+};
 use url::Url;
 
 use crate::account::AccountView;
@@ -505,6 +507,13 @@ pub enum Event {
         ticket: Ticket,
         /// The templates, pending ones included.
         result: Result<WhatsAppTemplatesResponse, ApiError>,
+    },
+    /// The open thread's Messenger or Instagram reply window was read.
+    MetaWindowLoaded {
+        /// The ticket of [`Effect::LoadMetaWindow`].
+        ticket: Ticket,
+        /// The window.
+        result: Result<MetaWindowResponse, ApiError>,
     },
     /// The thread a message belongs to was looked up.
     MessageThreadFound {
@@ -1124,6 +1133,10 @@ impl Event {
                 ticket,
                 result: Err(error),
             }
+            | Event::MetaWindowLoaded {
+                ticket,
+                result: Err(error),
+            }
             | Event::CallsLoaded {
                 ticket,
                 result: Err(error),
@@ -1697,6 +1710,17 @@ pub enum Effect {
         workspace_id: String,
         /// The sender.
         sender_id: String,
+    },
+    /// Read the Messenger or Instagram reply window for a customer.
+    LoadMetaWindow {
+        /// Returned in [`Event::MetaWindowLoaded`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// `messenger` or `instagram`.
+        channel: String,
+        /// The customer's address on it: `fb:<psid>` or `ig:<igsid>`.
+        to: String,
     },
     /// Read a page of the call log.
     LoadCalls {
@@ -2558,6 +2582,7 @@ impl Effect {
             | Self::AssignConversation { ticket, .. }
             | Self::LoadWhatsAppWindow { ticket, .. }
             | Self::LoadWhatsAppTemplates { ticket, .. }
+            | Self::LoadMetaWindow { ticket, .. }
             | Self::LoadCalls { ticket, .. }
             | Self::LoadCall { ticket, .. }
             | Self::LoadTranscript { ticket, .. }
@@ -2698,6 +2723,7 @@ pub(crate) enum Slot {
     Assign,
     WhatsAppWindow,
     WhatsAppTemplates,
+    MetaWindow,
     OpenLookup,
     /// Keyed by message id.
     MessageLookup,
@@ -2824,7 +2850,7 @@ const SLOTS: usize = Slot::RingDeadline as usize + 1;
 /// forgotten with the sections. The draft write is not among them: a reply
 /// saved as the workspace closes still lands, and the writes waiting behind it
 /// go after it.
-pub(crate) const WORKSPACE_SLOTS: [Slot; 75] = [
+pub(crate) const WORKSPACE_SLOTS: [Slot; 76] = [
     Slot::Unread,
     Slot::Conversations,
     Slot::DraftKeys,
@@ -2842,6 +2868,7 @@ pub(crate) const WORKSPACE_SLOTS: [Slot; 75] = [
     Slot::Assign,
     Slot::WhatsAppWindow,
     Slot::WhatsAppTemplates,
+    Slot::MetaWindow,
     Slot::OpenLookup,
     Slot::MessageLookup,
     Slot::CallLog,
@@ -3334,6 +3361,9 @@ impl Model {
             }
             Event::WhatsAppTemplatesLoaded { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.whatsapp_templates_loaded(ticket, result, tickets))
+            }
+            Event::MetaWindowLoaded { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.meta_window_loaded(ticket, result, tickets))
             }
             Event::MarkedRead { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.marked_read(ticket, result, tickets))

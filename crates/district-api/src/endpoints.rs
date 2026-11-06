@@ -377,6 +377,11 @@ endpoint_table! {
     /// A WhatsApp sender's message templates, named by `senderId`.
     WhatsAppTemplates => Get "/api/district/workspace/whatsapp/templates",
         workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// The Messenger or Instagram reply window for `to` on `channel`: open, a
+    /// person's reply only, or closed. The send's own path, read with GET; the
+    /// send enforces the same window.
+    MetaWindow => Get "/api/district/messages/send",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
 
     // District HQ.
 

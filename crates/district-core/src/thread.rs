@@ -46,6 +46,14 @@
 //! known or unreadable, the window blocks nothing: the service is the
 //! authority, and a guess either way would mislead.
 //!
+//! On Messenger and Instagram, the reply window is read when the channel is
+//! chosen, and again after each reply that goes. Closed, nothing may be sent
+//! and the composer says why; in the human agent window (24 hours to 7 days,
+//! where the page or account allows it) a person may reply but the model may
+//! not write the reply. A refusal for a closed window closes it here too.
+//! Not yet known, unreadable or in a state this build does not know, it
+//! blocks nothing, as on WhatsApp.
+//!
 //! # The owner
 //!
 //! A member who may write gives the thread to a member, or takes it back, from
@@ -61,9 +69,10 @@ use district_api::ApiError;
 use district_model::{
     AiDraftResponse, CHANNEL_EMAIL, CHANNEL_INSTAGRAM, CHANNEL_MESSENGER, CHANNEL_SMS,
     CHANNEL_WHATSAPP, ConversationAssignResponse, DraftResponse, DraftSaveRequest,
-    MarkReadResponse, MediaUploadResponse, MemberListResponse, ReplyTarget, SendMessageRequest,
-    SendMessageResponse, ThreadRef, TimelineCursor, TimelineEvent, TimelineResponse,
-    WhatsAppTemplatesResponse, WhatsAppWindowResponse, fill_whatsapp_template,
+    META_WINDOW_CLOSED, META_WINDOW_HUMAN_AGENT, META_WINDOW_OPEN, MarkReadResponse,
+    MediaUploadResponse, MemberListResponse, MetaWindow, MetaWindowResponse, ReplyTarget,
+    SendMessageRequest, SendMessageResponse, ThreadRef, TimelineCursor, TimelineEvent,
+    TimelineResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse, fill_whatsapp_template,
 };
 
 use crate::failure::FailureText;
@@ -88,7 +97,7 @@ pub const ATTACHMENT_TYPES: [&str; 4] = ["image/jpeg", "image/png", "image/gif",
 /// The slots of an open thread, forgotten when it closes. The draft write is
 /// not among them: a save sent as the thread closes still lands. Nor is an
 /// assignment: the inbox list shows its outcome.
-const THREAD_SLOTS: [Slot; 10] = [
+const THREAD_SLOTS: [Slot; 11] = [
     Slot::Timeline,
     Slot::TimelineOlder,
     Slot::DraftLoad,
@@ -99,11 +108,16 @@ const THREAD_SLOTS: [Slot; 10] = [
     Slot::ThreadMembers,
     Slot::WhatsAppWindow,
     Slot::WhatsAppTemplates,
+    Slot::MetaWindow,
 ];
 
 /// The error code of the service's refusal of free WhatsApp text once the
 /// window has closed.
 const WHATSAPP_WINDOW_CLOSED: &str = "whatsapp_window_closed";
+
+/// The error code of the service's refusal of a Messenger or Instagram reply
+/// once the window has closed (for Instagram too).
+const MESSENGER_WINDOW_CLOSED: &str = "messenger_window_closed";
 
 /// What a reply channel is called, in the app's language: on the channel
 /// chooser and on an inbox row. `None` for a channel this build does not know.
@@ -233,6 +247,9 @@ pub struct ThreadScreen {
     pub assignment: ThreadAssignment,
     /// The WhatsApp window and its templates, while the reply goes by WhatsApp.
     pub whatsapp: Option<WhatsAppComposer>,
+    /// The Messenger or Instagram reply window, while the reply goes by one of
+    /// them.
+    pub meta: Option<MetaComposer>,
     pub(crate) thread: ThreadRef,
     pub(crate) workspace_id: String,
     pub(crate) meta_channels: bool,
@@ -270,6 +287,7 @@ impl ThreadScreen {
         let composer = &self.composer;
         let on_sms = self.on_channel(CHANNEL_SMS);
         let window_closed = self.whatsapp_window_closed();
+        let meta_closed = self.meta_window_closed();
         let busy = composer.sending || self.whatsapp.as_ref().is_some_and(|w| w.sending);
         ThreadControls {
             can_reply,
@@ -288,8 +306,17 @@ impl ThreadScreen {
                 && !composer.attaching
                 && !composer.text.trim().is_empty()
                 && (on_sms || composer.attachments.is_empty())
-                && !window_closed,
-            can_draft_reply: can_reply && ready && !composer.generating && !window_closed,
+                && !window_closed
+                && !meta_closed,
+            // Nor once a Messenger or Instagram window has closed, when nothing
+            // written could go, nor in its human agent window, where only a
+            // person may reply.
+            can_draft_reply: can_reply
+                && ready
+                && !composer.generating
+                && !window_closed
+                && !meta_closed
+                && !self.meta_human_agent(),
             can_choose_channel: can_reply && !busy && self.reply_choices.len() > 1,
             can_assign: capabilities.can_change
                 && !self.assignment.saving
@@ -320,6 +347,24 @@ impl ThreadScreen {
         self.whatsapp
             .as_ref()
             .is_some_and(|whatsapp| whatsapp.window == WhatsAppWindowState::Closed)
+    }
+
+    /// Whether the reply goes by Messenger or Instagram and the service said
+    /// the window is closed: say
+    /// [`MetaComposer::WINDOW_CLOSED`], and nothing may be sent.
+    pub fn meta_window_closed(&self) -> bool {
+        self.meta
+            .as_ref()
+            .is_some_and(|meta| meta.window == MetaWindowState::Closed)
+    }
+
+    /// Whether the reply goes by Messenger or Instagram in the human agent
+    /// window: show [`MetaComposer::HUMAN_AGENT`], and the model may not write
+    /// the reply.
+    pub fn meta_human_agent(&self) -> bool {
+        self.meta
+            .as_ref()
+            .is_some_and(|meta| matches!(meta.window, MetaWindowState::HumanAgent { .. }))
     }
 
     /// Whether to say [`ATTACHMENTS_SMS_ONLY`](Self::ATTACHMENTS_SMS_ONLY):
@@ -495,6 +540,61 @@ pub enum WhatsAppWindowState {
     Unknown(FailureText),
 }
 
+/// The Messenger and Instagram side of the composer.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct MetaComposer {
+    /// The reply window.
+    pub window: MetaWindowState,
+}
+
+impl MetaComposer {
+    /// The badge over the composer in the human agent window.
+    pub const HUMAN_AGENT: &'static str = district_l10n::english::THREAD_META_HUMAN_AGENT;
+    /// Said over the composer when the window is closed.
+    pub const WINDOW_CLOSED: &'static str = district_l10n::english::THREAD_META_WINDOW_CLOSED;
+}
+
+/// The Messenger or Instagram reply window, as the service last said. No
+/// countdown is shown; `until` is kept for an app that wants one.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum MetaWindowState {
+    /// Being read. Nothing is blocked meanwhile: the service decides.
+    #[default]
+    Loading,
+    /// Any reply may go, within 24 hours of the customer's last message.
+    Open {
+        /// When it ends, as an ISO 8601 instant.
+        until: Option<String>,
+    },
+    /// Only a person may reply (sent tagged as a human agent), until 7 days
+    /// after the customer's last message. The model may not write the reply.
+    HumanAgent {
+        /// When it ends, as an ISO 8601 instant.
+        until: Option<String>,
+    },
+    /// Nothing may be sent until the customer writes again.
+    Closed,
+    /// The read failed (with why), or named a state this build does not know
+    /// (`None`). Nothing is blocked: the service is the authority.
+    Unknown(Option<FailureText>),
+}
+
+impl MetaWindowState {
+    /// The service's answer as a state.
+    fn from_window(window: MetaWindow) -> Self {
+        match window.state.as_str() {
+            META_WINDOW_OPEN => Self::Open {
+                until: window.until,
+            },
+            META_WINDOW_HUMAN_AGENT => Self::HumanAgent {
+                until: window.until,
+            },
+            META_WINDOW_CLOSED => Self::Closed,
+            _ => Self::Unknown(None),
+        }
+    }
+}
+
 /// The templates of the sender whose window is closed.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub enum TemplateList {
@@ -546,7 +646,8 @@ pub struct ThreadControls {
     /// which is what makes a second click harmless.
     pub can_send: bool,
     /// Whether the "Draft reply" button works now. False while one is being
-    /// written, and while the WhatsApp window is closed.
+    /// written, while the WhatsApp or the Messenger or Instagram window is
+    /// closed, and in the Messenger or Instagram human agent window.
     pub can_draft_reply: bool,
     /// Whether to offer the channel chooser: there is more than one way to
     /// reply, and nothing is on its way.
@@ -750,6 +851,7 @@ impl SignedIn {
                     ..ThreadAssignment::default()
                 },
                 whatsapp: None,
+                meta: None,
                 thread_key,
                 thread,
                 workspace_id: self.workspace_id(),
@@ -979,6 +1081,31 @@ impl SignedIn {
                     .collect(),
             ),
             Err(error) => TemplateList::Failed(FailureText::from_api_error(&error)),
+        };
+        stay()
+    }
+
+    /// The open thread's Messenger or Instagram reply window was read.
+    pub(crate) fn meta_window_loaded(
+        &mut self,
+        ticket: Ticket,
+        result: Result<MetaWindowResponse, ApiError>,
+        tickets: &mut Tickets,
+    ) -> Next {
+        // Forgotten with the thread and the channel, like the WhatsApp window,
+        // and on a refusal for a closed window, which an earlier read must not
+        // open again.
+        let Some(meta) = self
+            .thread
+            .as_mut()
+            .filter(|_| tickets.accept(Slot::MetaWindow, ticket))
+            .and_then(|screen| screen.meta.as_mut())
+        else {
+            return stay();
+        };
+        meta.window = match result {
+            Ok(answer) => MetaWindowState::from_window(answer.window),
+            Err(error) => MetaWindowState::Unknown(Some(FailureText::from_api_error(&error))),
         };
         stay()
     }
@@ -1334,6 +1461,7 @@ fn sent(
             _ => effects.extend(load_templates(whatsapp, workspace_id, tickets)),
         }
     }
+    effects.extend(meta_sent(screen, &result, tickets));
     let composer = &mut screen.composer;
     composer.sending = false;
     let (body, media) = composer.sent.take().unwrap_or_default();
@@ -1358,6 +1486,34 @@ fn sent(
         }
     }
     effects
+}
+
+/// A Messenger or Instagram reply was sent, or refused. Sent, the window is
+/// read again, as the web composer does. Refused because the window had
+/// closed, it is closed here too, and a read still on its way, asked before the
+/// refusal, is forgotten: it could only say the window was open.
+fn meta_sent(
+    screen: &mut ThreadScreen,
+    result: &Result<SendMessageResponse, ApiError>,
+    tickets: &mut Tickets,
+) -> Vec<Effect> {
+    let (Some(meta), Some(target)) = (screen.meta.as_mut(), screen.reply_target.as_ref()) else {
+        return Vec::new();
+    };
+    match result {
+        Ok(_) => vec![Effect::LoadMetaWindow {
+            ticket: tickets.issue(Slot::MetaWindow),
+            workspace_id: screen.workspace_id.clone(),
+            channel: target.channel.to_owned(),
+            to: target.to.clone(),
+        }],
+        Err(error) if error.code() == Some(MESSENGER_WINDOW_CLOSED) => {
+            tickets.cancel(Slot::MetaWindow);
+            meta.window = MetaWindowState::Closed;
+            Vec::new()
+        }
+        Err(_) => Vec::new(),
+    }
 }
 
 /// The written reply goes into the composer as if it had been typed, and is
@@ -1410,11 +1566,28 @@ fn newest(screen: &ThreadScreen, ticket: Ticket) -> Effect {
     }
 }
 
-/// The reply now goes on the channel chosen: on WhatsApp, its window is read;
-/// on any other, whatever WhatsApp held is forgotten.
+/// The reply now goes on the channel chosen: on WhatsApp, Messenger or
+/// Instagram, its window is read; whatever another channel held is forgotten.
 fn enter_channel(screen: &mut ThreadScreen, tickets: &mut Tickets) -> Vec<Effect> {
     tickets.cancel(Slot::WhatsAppWindow);
     tickets.cancel(Slot::WhatsAppTemplates);
+    tickets.cancel(Slot::MetaWindow);
+    screen.meta = None;
+    if let Some(target) = screen
+        .reply_target
+        .as_ref()
+        .filter(|target| matches!(target.channel, CHANNEL_MESSENGER | CHANNEL_INSTAGRAM))
+    {
+        let effect = Effect::LoadMetaWindow {
+            ticket: tickets.issue(Slot::MetaWindow),
+            workspace_id: screen.workspace_id.clone(),
+            channel: target.channel.to_owned(),
+            to: target.to.clone(),
+        };
+        screen.whatsapp = None;
+        screen.meta = Some(MetaComposer::default());
+        return vec![effect];
+    }
     let Some(target) = screen
         .reply_target
         .as_ref()

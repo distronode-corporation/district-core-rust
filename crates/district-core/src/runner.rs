@@ -56,7 +56,9 @@ use district_model::{
     RenameResponse, RoutingRule, VoiceStudioResponse, WorkspaceConfigResponse,
     WorkspaceSaveResponse,
 };
-use district_model::{SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret};
+use district_model::{
+    MetaWindowResponse, SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
+};
 
 use crate::contacts::{ContactWrite, ContactWritten};
 use crate::live::Notification;
@@ -153,6 +155,14 @@ pub trait DistrictApi: Send + Sync {
         workspace_id: &str,
         sender_id: &str,
     ) -> impl Future<Output = Result<WhatsAppTemplatesResponse, ApiError>> + Send;
+    /// The Messenger or Instagram reply window for the customer `to` on
+    /// `channel`.
+    fn meta_window(
+        &self,
+        workspace_id: &str,
+        channel: &str,
+        to: &str,
+    ) -> impl Future<Output = Result<MetaWindowResponse, ApiError>> + Send;
     /// Sends a message. Billed; sent once.
     fn send_message(
         &self,
@@ -1231,6 +1241,15 @@ where
             } => Event::WhatsAppTemplatesLoaded {
                 ticket,
                 result: self.api.whatsapp_templates(&workspace_id, &sender_id).await,
+            },
+            Effect::LoadMetaWindow {
+                ticket,
+                workspace_id,
+                channel,
+                to,
+            } => Event::MetaWindowLoaded {
+                ticket,
+                result: self.api.meta_window(&workspace_id, &channel, &to).await,
             },
             Effect::LoadCalls {
                 ticket,

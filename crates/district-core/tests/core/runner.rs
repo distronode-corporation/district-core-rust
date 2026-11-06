@@ -25,6 +25,7 @@ use district_core::{
 };
 use district_core::{NumberAnswer, NumberCall};
 use district_model::BillingHandOffResponse;
+use district_model::MetaWindowResponse;
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsRange, AnalyticsResponse, BlockTarget,
     BlockedContactsResponse, CallDetailResponse, CallMonitorTokenResponse, CallSummary,
@@ -218,6 +219,17 @@ impl DistrictApi for FakeApi {
         self.0
             .push(format!("whatsapp templates {workspace_id} {sender_id}"));
         Ok(fixture("district-whatsapp-templates.json"))
+    }
+
+    async fn meta_window(
+        &self,
+        workspace_id: &str,
+        channel: &str,
+        to: &str,
+    ) -> Result<MetaWindowResponse, ApiError> {
+        self.0
+            .push(format!("meta window {workspace_id} {channel} {to}"));
+        Ok(fixture("district-meta-window-human-agent.json"))
     }
 
     async fn send_message(
@@ -1900,6 +1912,18 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
             },
         ),
         (
+            Effect::LoadMetaWindow {
+                ticket,
+                workspace_id: ws(),
+                channel: "instagram".to_owned(),
+                to: "ig:5550102".to_owned(),
+            },
+            Event::MetaWindowLoaded {
+                ticket,
+                result: Ok(fixture("district-meta-window-human-agent.json")),
+            },
+        ),
+        (
             Effect::LoadCalls {
                 ticket,
                 workspace_id: ws(),
@@ -2049,6 +2073,7 @@ async fn each_screen_effect_calls_its_endpoint_and_reports_back() {
             "assign ws-contract-active contact:contact_contract_1 Some(\"contract@example.com\")",
             "whatsapp window ws-contract-active +14165550177",
             "whatsapp templates ws-contract-active wa_sender_contract",
+            "meta window ws-contract-active instagram ig:5550102",
             "calls ws-contract-active 25 50",
             "call ws-contract-active call_contract_answered",
             "transcript ws-contract-active call_contract_answered",

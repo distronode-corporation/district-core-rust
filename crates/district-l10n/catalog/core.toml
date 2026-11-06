@@ -4595,6 +4595,24 @@ state = "reviewed"
 same_ok = true
 note = "The WhatsApp reply channel. A brand name, the same in both languages. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
 
+[thread.meta_human_agent]
+en = "Human agent reply (7-day window)"
+fr = "Réponse d'un agent humain (fenêtre de 7\u00A0jours)"
+ctx = "label"
+screen = "conversation"
+tier = "T2"
+state = "reviewed"
+note = "A badge over the composer on Messenger or Instagram between 24 hours and 7 days after the customer's last message, when the page or account allows a human agent reply: a person may still reply (Meta's human agent tag), the AI draft may not. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
+[thread.meta_window_closed]
+en = "Reply window closed: Messenger and Instagram allow a reply only within 24 hours of the customer's last message (7 days for a human agent reply, when it is turned on). You can reply once they write again."
+fr = "Fenêtre de réponse fermée\u00A0: Messenger et Instagram n'acceptent une réponse que dans les 24\u00A0heures suivant le dernier message du client (7\u00A0jours pour une réponse d'un agent humain, si elle est activée). Vous pourrez répondre quand il vous écrira de nouveau."
+ctx = "body"
+screen = "conversation"
+tier = "T2"
+state = "reviewed"
+note = "Over the composer on Messenger or Instagram once the reply window has closed: nothing can be sent until the customer writes again, so Send is off. Reused verbatim from the web Inbox (inboxI18n.ts), reviewed there."
+
 [thread.no_reply_target]
 en = "Replies cannot be sent on this conversation from here."
 fr = "Impossible de répondre à cette conversation à partir d'ici."

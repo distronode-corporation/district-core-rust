@@ -84,8 +84,8 @@ fn the_default_configuration_is_english() {
     assert_eq!(Locale::default(), Locale::En);
 }
 
-/// The refusals the reply channels, the owner picker and the WhatsApp composer
-/// meet are read from the error table in French, by their codes, and keep the
+/// The refusals the reply channels, the owner picker, the WhatsApp composer and
+/// the Messenger and Instagram window meet are read from the error table in French, by their codes, and keep the
 /// service's own English otherwise.
 /// Called from the test above, not a test of its own: the language is the
 /// process's, and tests run side by side.
@@ -98,6 +98,7 @@ fn the_parity_refusals_are_read_by_their_codes(model: &mut Model) {
         "assignee_is_viewer",
         "whatsapp_window_closed",
         "whatsapp_template_invalid",
+        "messenger_window_closed",
     ] {
         let refusal = ApiError::Envelope {
             status: 400,
@@ -125,5 +126,14 @@ fn the_parity_refusals_are_read_by_their_codes(model: &mut Model) {
     assert_eq!(
         district_core::WhatsAppComposer::variable_label(1),
         "Variable {{2}}"
+    );
+    // The Messenger and Instagram window's two lines, the web Inbox's French.
+    assert_eq!(
+        strings::thread_meta_human_agent(Locale::FrCa),
+        "Réponse d'un agent humain (fenêtre de 7\u{a0}jours)"
+    );
+    assert!(
+        strings::thread_meta_window_closed(Locale::FrCa)
+            .starts_with("Fenêtre de réponse fermée\u{a0}:")
     );
 }

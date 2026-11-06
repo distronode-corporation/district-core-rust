@@ -4541,6 +4541,24 @@ pub fn thread_channel_whatsapp(l: Locale) -> &'static str {
     }
 }
 
+/// `thread.meta_human_agent`
+#[must_use]
+pub fn thread_meta_human_agent(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Human agent reply (7-day window)",
+        Locale::FrCa => "Réponse d'un agent humain (fenêtre de 7\u{00A0}jours)",
+    }
+}
+
+/// `thread.meta_window_closed`
+#[must_use]
+pub fn thread_meta_window_closed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Reply window closed: Messenger and Instagram allow a reply only within 24 hours of the customer's last message (7 days for a human agent reply, when it is turned on). You can reply once they write again.",
+        Locale::FrCa => "Fenêtre de réponse fermée\u{00A0}: Messenger et Instagram n'acceptent une réponse que dans les 24\u{00A0}heures suivant le dernier message du client (7\u{00A0}jours pour une réponse d'un agent humain, si elle est activée). Vous pourrez répondre quand il vous écrira de nouveau.",
+    }
+}
+
 /// `thread.no_reply_target`
 #[must_use]
 pub fn thread_no_reply_target(l: Locale) -> &'static str {

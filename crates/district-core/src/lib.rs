@@ -290,9 +290,9 @@ pub use support::{
 };
 pub use thread::{
     ATTACHMENT_TYPES, AssigneeList, Composer, DRAFT_SAVE_DEBOUNCE, MAX_ATTACHMENT_BYTES,
-    MAX_ATTACHMENTS, PickedAttachment, SendableTemplate, TemplateList, ThreadAssignment,
-    ThreadControls, ThreadEvent, ThreadEvents, ThreadHistory, ThreadScreen, WhatsAppComposer,
-    WhatsAppWindowState, reply_channel_label,
+    MAX_ATTACHMENTS, MetaComposer, MetaWindowState, PickedAttachment, SendableTemplate,
+    TemplateList, ThreadAssignment, ThreadControls, ThreadEvent, ThreadEvents, ThreadHistory,
+    ThreadScreen, WhatsAppComposer, WhatsAppWindowState, reply_channel_label,
 };
 pub use transcript::{
     FINAL_FETCH_ATTEMPTS, FinalTranscript, GAP_HEAL, LiveTranscript, LiveTranscriptPhase,

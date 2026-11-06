@@ -23,11 +23,11 @@ use std::collections::BTreeMap;
 
 use district_model::{
     A2pRegistrationResponse, BlockedContactsResponse, ContactBlockResponse,
-    ConversationAssignResponse, ConversationAssignmentsResponse, NumberConfigureResponse,
-    NumberLookupResponse, NumberReleaseResponse, ProviderStatusResponse, RefusalResponse,
-    SettingsResponse, SettingsSaveResponse, SipTrunkCreateResponse, SipTrunksResponse,
-    TollFreeVerificationResponse, VerifyServiceResponse, WhatsAppTemplatesResponse,
-    WhatsAppWindowResponse,
+    ConversationAssignResponse, ConversationAssignmentsResponse, MetaWindowResponse,
+    NumberConfigureResponse, NumberLookupResponse, NumberReleaseResponse, ProviderStatusResponse,
+    RefusalResponse, SettingsResponse, SettingsSaveResponse, SipTrunkCreateResponse,
+    SipTrunksResponse, TollFreeVerificationResponse, VerifyServiceResponse,
+    WhatsAppTemplatesResponse, WhatsAppWindowResponse,
 };
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CallAnswerResponse,
@@ -117,7 +117,7 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 208;
+pub const EXPECTED_FIXTURE_COUNT: usize = 211;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
@@ -445,6 +445,19 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ),
     // GET /api/district/workspace/messaging: two accounts and Distronode's numbers.
     ("district-messaging.json", codec::<MessagingResponse>),
+    // GET /api/district/messages/send: the Messenger or Instagram reply window,
+    // closed.
+    (
+        "district-meta-window-closed.json",
+        codec::<MetaWindowResponse>,
+    ),
+    // GET /api/district/messages/send: the reply window, a person's reply only.
+    (
+        "district-meta-window-human-agent.json",
+        codec::<MetaWindowResponse>,
+    ),
+    // GET /api/district/messages/send: the reply window, open.
+    ("district-meta-window.json", codec::<MetaWindowResponse>),
     // POST /api/auth/native/revoke: this installation signing itself out.
     ("district-native-revoke.json", codec::<NativeRevokeResponse>),
     // POST /api/district/workspace/numbers/configure.
