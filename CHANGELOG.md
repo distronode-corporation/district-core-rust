@@ -17,10 +17,32 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
-A number's regulatory registration, the Android app's Registrations tab. Breaking, so the
-next release is a major one: `Endpoint`, `NumberCall`, `NumberAnswer`, `NumberAdminEvent`,
-`NumberConfirmation`, `MarketplaceTab` and `WireCategory` each gain variants an app matches
-on, and `NumberAdmin` and `HqVoiceTokenResponse` fields an app builds.
+## [10.0.0] - 2026-11-07
+
+A number's regulatory registration, the Android app's Registrations tab, and the whole of
+the HQ voice credential, with push-to-talk. A major version because `Endpoint`,
+`NumberCall`, `NumberAnswer`, `NumberAdminEvent`, `NumberConfirmation`, `MarketplaceTab` and
+`WireCategory` each gain variants an app matches on, and `NumberAdmin` and
+`HqVoiceTokenResponse` fields an app builds. The fixtures move to the server's 1ccb9a631
+(20 new files, nothing else changed), and `contracts/i18n/` to its ea43f86ef.
+
+### Upgrading from 9.0.x
+
+- A `match` with no wildcard arm on any of the seven enums above stops compiling. Each new
+  variant is listed under Added: `Endpoint`'s six registration rows,
+  `NumberCall::{Requirements, Registrations, CreateRegistration, UploadRegistrationDocument,
+  RemoveRegistrationDocument, SubmitRegistration}` and their `NumberAnswer`s,
+  `NumberAdminEvent::Registration`, `NumberConfirmation::SubmitRegistration`,
+  `MarketplaceTab::Registrations`, and the four `WireCategory` registration categories. An
+  app that runs `Effect::NumberAdmin` through the core's runner needs no change for the
+  calls; an app that shows every `MarketplaceTab` shows the new one with
+  `MarketplaceTab::registrations_label`.
+- A `NumberAdmin` built with a struct literal (a test, usually) needs `registrations`
+  (`NumberRegistrations::default()`), and an `HqVoiceTokenResponse` needs `mic_mode` and
+  `session_id`.
+- HQ voice: with a push-to-talk credential the session joins with the microphone off, so
+  an app that offers HQ voice sends `Event::Microphone(true)` and `(false)` from its talk
+  control, and reads `HqVoice::push_to_talk` to show one.
 
 ### Added
 
