@@ -300,6 +300,15 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `checkout_subscription_exists`, in place of the service's own English."
 
+[api_error.confirmation_mismatch]
+en = "Type the account's email address exactly to confirm."
+fr = "Tapez exactement l'adresse courriel du compte pour confirmer."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `confirmation_mismatch`, in place of the service's own English."
+
 [api_error.connector_not_found]
 en = "That connector could not be found."
 fr = "Ce connecteur est introuvable."
@@ -1192,6 +1201,24 @@ screen = "api_error"
 tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `rate_limited`, in place of the service's own English."
+
+[api_error.reauth_failed]
+en = "We could not confirm it is you. Please try again."
+fr = "Nous n'avons pas pu confirmer qu'il s'agit bien de vous. Veuillez réessayer."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `reauth_failed`, in place of the service's own English."
+
+[api_error.reauth_required]
+en = "Confirm it is you again, then try once more."
+fr = "Confirmez de nouveau qu'il s'agit bien de vous, puis réessayez."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `reauth_required`, in place of the service's own English."
 
 [api_error.region_elsewhere]
 en = "Your account is hosted in another region. Sign in there."

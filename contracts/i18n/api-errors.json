@@ -68,6 +68,18 @@
       "en": "This can only be changed from a browser signed in to this account.",
       "fr": "Ce réglage ne peut être modifié que depuis un navigateur connecté à ce compte."
     },
+    "reauth_required": {
+      "en": "Confirm it is you again, then try once more.",
+      "fr": "Confirmez de nouveau qu'il s'agit bien de vous, puis réessayez."
+    },
+    "reauth_failed": {
+      "en": "We could not confirm it is you. Please try again.",
+      "fr": "Nous n'avons pas pu confirmer qu'il s'agit bien de vous. Veuillez réessayer."
+    },
+    "confirmation_mismatch": {
+      "en": "Type the account's email address exactly to confirm.",
+      "fr": "Tapez exactement l'adresse courriel du compte pour confirmer."
+    },
     "region_elsewhere": {
       "en": "Your account is hosted in another region. Sign in there.",
       "fr": "Votre compte est hébergé dans une autre région. Connectez-vous dans cette région."

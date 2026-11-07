@@ -302,6 +302,15 @@ pub fn api_error_checkout_subscription_exists(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.confirmation_mismatch`
+#[must_use]
+pub fn api_error_confirmation_mismatch(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Type the account's email address exactly to confirm.",
+        Locale::FrCa => "Tapez exactement l'adresse courriel du compte pour confirmer.",
+    }
+}
+
 /// `api_error.connector_not_found`
 #[must_use]
 pub fn api_error_connector_not_found(l: Locale) -> &'static str {
@@ -1190,6 +1199,24 @@ pub fn api_error_rate_limited(l: Locale) -> &'static str {
     match l {
         Locale::En => "That has been tried several times just now. Please wait a moment and try again.",
         Locale::FrCa => "Cette action a été tentée plusieurs fois à l'instant. Attendez un moment, puis réessayez.",
+    }
+}
+
+/// `api_error.reauth_failed`
+#[must_use]
+pub fn api_error_reauth_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We could not confirm it is you. Please try again.",
+        Locale::FrCa => "Nous n'avons pas pu confirmer qu'il s'agit bien de vous. Veuillez réessayer.",
+    }
+}
+
+/// `api_error.reauth_required`
+#[must_use]
+pub fn api_error_reauth_required(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Confirm it is you again, then try once more.",
+        Locale::FrCa => "Confirmez de nouveau qu'il s'agit bien de vous, puis réessayez.",
     }
 }
 

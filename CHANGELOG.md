@@ -103,8 +103,10 @@ on, and `NumberAdmin` and `HqVoiceTokenResponse` fields an app builds.
   app calls and the desktop apps do not: number registration and its requirements, the
   thread owners list, and a message's sender for a notification. No change to what any
   client calls.
-- `contracts/i18n/` from a server branch that adds the four registration categories to the
-  wire vocabulary. It is synced again from the server's main before this is released.
+- `contracts/i18n/` from the server's main (ea43f86ef): the wire vocabulary gains the four
+  registration categories, and the API error sentences gain `reauth_required`,
+  `reauth_failed` and `confirmation_mismatch`, each with the service's French, in
+  `api_errors.toml`.
 - The two registration routes leave `EXCLUDED`: the desktop apps call them now.
 
 ## [9.0.0] - 2026-11-06

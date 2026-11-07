@@ -1262,6 +1262,8 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_checkout_setup_in_progress(Locale::FrCa), "Votre forfait est déjà payé. Terminez la configuration de votre réceptionniste depuis votre tableau de bord avant d'acheter un autre forfait.");
     assert_eq!(api_error_strings::api_error_checkout_subscription_exists(Locale::En), "You already have an active plan. Change it from Billing in your dashboard instead of buying a second one.");
     assert_eq!(api_error_strings::api_error_checkout_subscription_exists(Locale::FrCa), "Vous avez déjà un forfait actif. Modifiez-le depuis la section Facturation de votre tableau de bord plutôt que d'en acheter un deuxième.");
+    assert_eq!(api_error_strings::api_error_confirmation_mismatch(Locale::En), "Type the account's email address exactly to confirm.");
+    assert_eq!(api_error_strings::api_error_confirmation_mismatch(Locale::FrCa), "Tapez exactement l'adresse courriel du compte pour confirmer.");
     assert_eq!(api_error_strings::api_error_connector_not_found(Locale::En), "That connector could not be found.");
     assert_eq!(api_error_strings::api_error_connector_not_found(Locale::FrCa), "Ce connecteur est introuvable.");
     assert_eq!(api_error_strings::api_error_contact_not_found(Locale::En), "That contact could not be found in this workspace.");
@@ -1460,6 +1462,10 @@ fn every_api_errors_accessor_says_what_its_catalog_says() {
     assert_eq!(api_error_strings::api_error_provider_unsupported(Locale::FrCa), "Ce fournisseur n'est pas pris en charge ici.");
     assert_eq!(api_error_strings::api_error_rate_limited(Locale::En), "That has been tried several times just now. Please wait a moment and try again.");
     assert_eq!(api_error_strings::api_error_rate_limited(Locale::FrCa), "Cette action a été tentée plusieurs fois à l'instant. Attendez un moment, puis réessayez.");
+    assert_eq!(api_error_strings::api_error_reauth_failed(Locale::En), "We could not confirm it is you. Please try again.");
+    assert_eq!(api_error_strings::api_error_reauth_failed(Locale::FrCa), "Nous n'avons pas pu confirmer qu'il s'agit bien de vous. Veuillez réessayer.");
+    assert_eq!(api_error_strings::api_error_reauth_required(Locale::En), "Confirm it is you again, then try once more.");
+    assert_eq!(api_error_strings::api_error_reauth_required(Locale::FrCa), "Confirmez de nouveau qu'il s'agit bien de vous, puis réessayez.");
     assert_eq!(api_error_strings::api_error_region_elsewhere(Locale::En), "Your account is hosted in another region. Sign in there.");
     assert_eq!(api_error_strings::api_error_region_elsewhere(Locale::FrCa), "Votre compte est hébergé dans une autre région. Connectez-vous dans cette région.");
     assert_eq!(api_error_strings::api_error_region_handoff(Locale::En), "This checkout continues on the site for the data region you chose.");
