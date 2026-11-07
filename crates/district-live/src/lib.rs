@@ -1,9 +1,13 @@
 //! The client for District AI's live telemetry WebSocket.
 //!
-//! A desktop has no mobile push service, so calls and messages reach the app as
-//! they happen over this socket: one per workspace, carrying the
+//! While a desktop app runs, calls and messages reach it as they happen over
+//! this socket: one per workspace, carrying the
 //! [`TelemetryEnvelope`](district_model::TelemetryEnvelope)s the service
-//! publishes whenever a call or a message thread changes.
+//! publishes whenever a call or a message thread changes. District AI for Linux
+//! has no push service, so the socket is the only way in. District AI for
+//! Windows can also be woken while closed by Windows push notifications (WNS),
+//! which that app registers itself; a push carries ids only and is taken as
+//! this socket's own update for that id.
 //!
 //! - [`TelemetryConnection`] runs one workspace's socket: it mints a credential,
 //!   connects, replaces the socket before the credential expires, and reconnects
