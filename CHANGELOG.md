@@ -108,6 +108,15 @@ on, and `NumberAdmin` and `HqVoiceTokenResponse` fields an app builds.
   `reauth_failed` and `confirmation_mismatch`, each with the service's French, in
   `api_errors.toml`.
 - The two registration routes leave `EXCLUDED`: the desktop apps call them now.
+- `contracts/fixtures/` from the server's main: 20 new fixtures, 211 to 231. Four decode
+  with types this crate already has (`HqVoiceTokenResponse`, the voice minutes refusal as a
+  `RefusalResponse`, `HqVoiceContextResponse`, `HqProposalCancelResponse`), so the cancel
+  answer's draft in `tests/hq-voice-drafts/` gives way to the recorded file. The other 16
+  are `EXCLUDED_BY_DECISION`, each group with its reason: campaign dialling, the rest of the
+  web setup wizard, the integrations read, HQ voice settings, and a phone app's native
+  re-authentication, two-factor and account deletion. The sync's substitution for the
+  recurring caller's stand-in is also applied to the forwarding check fixtures, where the
+  server writes that number as the verifier. No change to what any client calls.
 
 ## [9.0.0] - 2026-11-06
 

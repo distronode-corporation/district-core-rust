@@ -1,0 +1,16 @@
+{
+  "connections": [
+    {
+      "provider": "google-calendar",
+      "status": "active"
+    },
+    {
+      "provider": "microsoft-calendar",
+      "status": "error"
+    },
+    {
+      "provider": "azure-ad",
+      "status": "active"
+    }
+  ]
+}

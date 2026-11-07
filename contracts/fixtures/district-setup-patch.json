@@ -1,0 +1,35 @@
+{
+  "setupProgress": {
+    "steps": {
+      "business": "done",
+      "number": "done",
+      "receptionist": "done",
+      "callers": "todo",
+      "calls": "todo",
+      "golive": "todo"
+    },
+    "paidAt": "2026-09-23T15:04:05.000Z"
+  },
+  "businessFacts": {
+    "address": {
+      "line1": "100 Example Street",
+      "city": "Toronto",
+      "region": "ON",
+      "postalCode": "M5V 1A1",
+      "country": "CA"
+    },
+    "weeklyHours": {
+      "mon": [
+        {
+          "open": "09:00",
+          "close": "17:00"
+        }
+      ],
+      "sun": "closed"
+    }
+  },
+  "region": "ca",
+  "tier": "VoicePro",
+  "includedNumbers": 3,
+  "numbersHeld": 1
+}

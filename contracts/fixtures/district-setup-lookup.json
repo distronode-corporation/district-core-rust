@@ -1,0 +1,42 @@
+{
+  "draft": {
+    "services": [
+      {
+        "name": "Cleaning",
+        "price": "$120",
+        "enabled": false
+      },
+      {
+        "name": "Whitening",
+        "enabled": false
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do you take new patients?",
+        "answer": "Yes, call to book.",
+        "enabled": false
+      }
+    ],
+    "dropped": 1,
+    "address": {
+      "line1": "100 Example Street",
+      "city": "Toronto",
+      "region": "ON",
+      "postalCode": "M5V 1A1",
+      "country": "CA"
+    },
+    "weeklyHours": {
+      "mon": [
+        {
+          "open": "09:00",
+          "close": "17:00"
+        }
+      ]
+    }
+  },
+  "source": {
+    "kind": "website",
+    "url": "https://example.com/"
+  }
+}

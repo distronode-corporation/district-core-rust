@@ -23,11 +23,12 @@ use std::collections::BTreeMap;
 
 use district_model::{
     A2pRegistrationResponse, BlockedContactsResponse, ContactBlockResponse,
-    ConversationAssignResponse, ConversationAssignmentsResponse, MetaWindowResponse,
-    NumberConfigureResponse, NumberLookupResponse, NumberReleaseResponse, ProviderStatusResponse,
-    RefusalResponse, SettingsResponse, SettingsSaveResponse, SipTrunkCreateResponse,
-    SipTrunksResponse, TollFreeVerificationResponse, VerifyServiceResponse,
-    WhatsAppTemplatesResponse, WhatsAppWindowResponse,
+    ConversationAssignResponse, ConversationAssignmentsResponse, HqProposalCancelResponse,
+    HqVoiceContextResponse, HqVoiceTokenResponse, MetaWindowResponse, NumberConfigureResponse,
+    NumberLookupResponse, NumberReleaseResponse, ProviderStatusResponse, RefusalResponse,
+    SettingsResponse, SettingsSaveResponse, SipTrunkCreateResponse, SipTrunksResponse,
+    TollFreeVerificationResponse, VerifyServiceResponse, WhatsAppTemplatesResponse,
+    WhatsAppWindowResponse,
 };
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CallAnswerResponse,
@@ -117,7 +118,7 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 211;
+pub const EXPECTED_FIXTURE_COUNT: usize = 231;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
@@ -334,6 +335,26 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ("district-hq-confirm.json", codec::<HqConfirmResponse>),
     // POST /api/district/hq with a prompt: a change proposed, not applied.
     ("district-hq-pending-write.json", codec::<HqPromptResponse>),
+    // POST /api/district/hq/proposals/cancel: a card proposed from voice mode, cancelled.
+    (
+        "district-hq-proposal-cancel.json",
+        codec::<HqProposalCancelResponse>,
+    ),
+    // POST /api/district/hq/voice-context: the screen was recorded.
+    (
+        "district-hq-voice-context.json",
+        codec::<HqVoiceContextResponse>,
+    ),
+    // POST /api/district/hq/voice-token refused: this month's voice minutes are used up.
+    (
+        "district-hq-voice-token-allowance.json",
+        codec::<RefusalResponse>,
+    ),
+    // POST /api/district/hq/voice-token: the credential for one voice session.
+    (
+        "district-hq-voice-token.json",
+        codec::<HqVoiceTokenResponse>,
+    ),
     // POST /api/district/workspace/knowledge: the document stored, without its source address.
     (
         "district-knowledge-create.json",
@@ -980,6 +1001,61 @@ pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
         fixtures: &[
             "district-call-live-activity.json",
             "district-live-activity-start-token.json",
+        ],
+    },
+    Exclusion {
+        reason: "Campaign dialling: `POST /api/district/calls/outbound` puts an AI \
+                 agent on the line for a list of contacts, and is web-only (the \
+                 endpoint table excludes it as `campaign dialling`).",
+        fixtures: &["district-calls-outbound.json"],
+    },
+    Exclusion {
+        reason: "The rest of the setup wizard, which runs on the web dashboard (this \
+                 client reads only where the owner is in it, `GET \
+                 /api/district/setup`, and opens the web page): the business facts \
+                 patch, the website lookup and its refusal, the test call, and the \
+                 call forwarding check's start and poll.",
+        fixtures: &[
+            "district-forwarding-check-start.json",
+            "district-forwarding-check.json",
+            "district-setup-lookup-unreadable.json",
+            "district-setup-lookup.json",
+            "district-setup-patch.json",
+            "district-setup-test-call.json",
+        ],
+    },
+    Exclusion {
+        reason: "The integrations read, `GET /api/district/connections` (and its \
+                 Viewer answer, without `calendar`): the integrations page is the \
+                 web dashboard's, and this client has no integrations screen.",
+        fixtures: &[
+            "district-connections-viewer.json",
+            "district-connections.json",
+        ],
+    },
+    Exclusion {
+        reason: "District HQ by voice's settings (voice, length, pace, language and \
+                 microphone), read and saved by the web console. This client never \
+                 reads or writes them.",
+        fixtures: &[
+            "district-hq-voice-settings-put.json",
+            "district-hq-voice-settings.json",
+        ],
+    },
+    Exclusion {
+        reason: "A phone app's native account security: re-authentication before a \
+                 sensitive action (`POST /api/auth/native/reauth/password` and \
+                 `/sso`), two-factor \
+                 enrolment, confirmation and removal, and deleting the account. A \
+                 desktop signs in through the browser, which asks for the second \
+                 factor itself, and opens the web page to delete the account \
+                 (`ACCOUNT_DELETION_PATH`, district-core).",
+        fixtures: &[
+            "district-account-delete.json",
+            "district-mfa-confirm.json",
+            "district-mfa-disable.json",
+            "district-mfa-enroll.json",
+            "district-native-reauth.json",
         ],
     },
 ];

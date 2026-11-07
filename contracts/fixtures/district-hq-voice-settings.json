@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "settings": {
+    "voice": "Puck",
+    "length": "normal",
+    "pace": "normal",
+    "language": "portal",
+    "micMode": "open"
+  }
+}

@@ -23,10 +23,10 @@
 # `sha256sum -c SHA256SUMS` checks them.
 
 [sets.fixtures]
-commit = "ef616838f3f524cd2bc1a052d4fd3d51364261f9"
+commit = "1ccb9a631772f209844d94f02e6bf2cdf4135fbc"
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
-file_count = 211
+file_count = 231
 
 [sets.desktop]
 commit = "6cd0ff6674360ce56a83bfc1763315db2a056a24"
@@ -79,11 +79,13 @@ count = 35
 kind = "phone"
 original_sha256 = "806f0c0f923e353dfefba1cf4412cf300610d9496dbfa9148233093ea1502efc"
 replacement = "+14165550143"
-reason = "the looked-up number in the number lookup fixture, which the server records as the stand-in this table writes for the recurring caller"
-only_in = ["fixtures/district-number-lookup.json"]
-count = 1
+reason = "the looked-up number in the number lookup fixture and the verifier number in the forwarding check fixtures, which the server records as the stand-in this table writes for the recurring caller"
+only_in = ["fixtures/district-forwarding-check-start.json", "fixtures/district-forwarding-check.json", "fixtures/district-number-lookup.json"]
+count = 3
 
 [substitution.files]
+"fixtures/district-forwarding-check-start.json" = 1
+"fixtures/district-forwarding-check.json" = 1
 "fixtures/district-number-lookup.json" = 1
 
 [[substitution]]
@@ -347,13 +349,14 @@ kind = "host"
 original_sha256 = "32ca8563ef65ed5c4ce3f28255954bfd1b433b329dcc0250dd56138ef0c02981"
 replacement = "media.example.com"
 reason = "the real-time media server's host, in the call and room token fixtures"
-count = 7
+count = 8
 
 [substitution.files]
 "fixtures/district-call-answer.json" = 1
 "fixtures/district-call-monitor-token.json" = 1
 "fixtures/district-call-takeover.json" = 1
 "fixtures/district-dial.json" = 1
+"fixtures/district-hq-voice-token.json" = 1
 "fixtures/district-persona-preview-token.json" = 1
 "fixtures/district-room-token-viewer.json" = 1
 "fixtures/district-room-token.json" = 1
