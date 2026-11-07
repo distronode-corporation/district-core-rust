@@ -17,8 +17,71 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+A number's regulatory registration, the Android app's Registrations tab. Breaking, so the
+next release is a major one: `Endpoint`, `NumberCall`, `NumberAnswer`, `NumberAdminEvent`,
+`NumberConfirmation`, `MarketplaceTab` and `WireCategory` each gain variants an app matches
+on, and `NumberAdmin` and `HqVoiceTokenResponse` fields an app builds.
+
+### Added
+
+- The Registrations tab of the phone numbers screen (`MarketplaceTab::Registrations`,
+  `MarketplaceTab::registrations_label`), in `NumberAdmin::registrations`, a
+  `NumberRegistrations`: the workspace's filings (`RegistrationList`), read on opening the
+  tab, at a refresh, at `RegistrationEvent::Reload` and after every write that lands; what a
+  country's regulator asks for (`RegistrationEvent::CheckRequirements`, into
+  `RequirementsState`, where a country with no regulation is `NoRegulation`, an answer, and a
+  failed lookup `Failed`); the form that starts a draft (`RegistrationForm`,
+  `RegistrationEvent::Edit` and `Start`); a document put on a draft or taken off it
+  (`RegistrationEvent::Upload`, `RemoveDocument`), refused for a filing that is not a draft;
+  the end-user details a draft is filed with (`RegistrationEvent::EditDetails`); and filing a
+  draft behind `NumberConfirmation::SubmitRegistration`, sent once. One write goes at a
+  time, and the filings are read again after each, whatever the outcome. Starting a draft,
+  an upload and a removal converge, so each is offered again after any failure. A filing is
+  offered again after a refusal (a 422 `validation_failed` or `carrier_rejected`); after a
+  failure that does not prove it was not filed, that draft alone is held back
+  (`NumberRegistrations::unconfirmed_filing`, a set, and `can_file`) until its own filing
+  is confirmed, the list reads it back as no longer a draft, or the workspace is opened
+  again. Each answer is read as the write it answers (`NumberRegistrations::written`, a
+  `RegistrationWrite`: `Start`, `Upload`, `Remove` or `Submit` with its draft). Changing the country, number type or end-user type puts away the requirements
+  shown, and drops a lookup still on its way. A viewer, whom the service refuses, is sent nothing and offered nothing. Every
+  event is `NumberAdminEvent::Registration(RegistrationEvent)`, every call a `NumberCall`
+  through `Effect::NumberAdmin`, as the carrier tab's are.
+- Labels through the wire vocabulary only: `registration_status`, `registration_title`,
+  `number_type_label`, `end_user_type_label`, `requirement_kind`, `requirement_fields`,
+  `document_state` and `Tone::of_registration`; a status the carrier added since reads as
+  the generic "Other" (« Autre »), never as sent.
+- `ApiClient::number_requirements`, `number_registrations`, `create_number_registration`,
+  `upload_registration_document`, `delete_registration_document` and
+  `submit_number_registration`, and their `Endpoint` rows, with the Android app's methods,
+  paths and shapes: the workspace in the query on all six, the upload a multipart form with
+  `bundleId` and `requirementName` beside the file, and the removal the one `DELETE` with a
+  JSON body. With the `district_model` types (`NumberRequirementsResponse`,
+  `CountryRequirements`, `RegulatoryRequirement`, `AcceptedDocument`,
+  `NumberRegistrationsResponse`, `NumberRegistration`, `RegistrationDocument`,
+  `NumberRegistrationDraft`, `NumberRegistrationCreateResponse`, `RegistrationDocumentUpload`,
+  whose `Debug` prints the file's size and never its bytes, `RegistrationDocumentResponse`,
+  `UploadedRegistrationDocument`, `RegistrationDocumentRemovalResponse`,
+  `NumberRegistrationSubmitResponse`, `SubmittedRegistration`, `EndUserAttributes`) and
+  constants (`REGISTRATION_DRAFT`, `REGISTRATION_NUMBER_TYPES`,
+  `REGISTRATION_END_USER_TYPES`, `REQUIREMENT_END_USER`, `REQUIREMENT_SUPPORTING_DOCUMENT`).
+  The service records no fixture of these routes yet; each type is written from its route.
+- `WireCategory::NumberRegistrationStatus`, `NumberRegistrationEndUserType`,
+  `NumberRegistrationNumberType` and `NumberRequirementKind`, and their 13 labels in
+  `wire.toml`, with the service's French.
+- 29 entries in `numbers.toml` for the tab's headings, fields, buttons, empty state and
+  confirmation, each the Android app's numbers catalog's English and reviewed French
+  verbatim.
+
 ### Fixed
 
+- `HqVoiceTokenResponse` reads the whole of the server's voice credential: it gains
+  `mic_mode` (`HQ_VOICE_MIC_OPEN` or `HQ_VOICE_MIC_PUSH`, read by `is_push_to_talk`) and
+  `session_id` (redacted in `Debug`), which the server sends and which the strict contract
+  decode refused as unknown fields. Breaking for an app that builds one with a struct
+  literal. A push-to-talk credential joins HQ voice with the microphone off
+  (`HqVoice::push_to_talk`), so the member sends nothing before acting; the app's
+  `Event::Microphone(true)` and `(false)` are the talk action. An open one joins live, as
+  before.
 - The window's Refresh on the booking pages' Settings and Developer sections keeps the tab
   they showed. Each opened afresh on its first tab (Booking page, API keys) whatever tab was
   shown; each now reads the tab shown again, and the other tabs are read when next shown.
@@ -40,6 +103,11 @@ variant, or a field of one. Those take a new major version.
   app calls and the desktop apps do not: number registration and its requirements, the
   thread owners list, and a message's sender for a notification. No change to what any
   client calls.
+- `contracts/i18n/` from the server's main (ea43f86ef): the wire vocabulary gains the four
+  registration categories, and the API error sentences gain `reauth_required`,
+  `reauth_failed` and `confirmation_mismatch`, each with the service's French, in
+  `api_errors.toml`.
+- The two registration routes leave `EXCLUDED`: the desktop apps call them now.
 
 ## [9.0.0] - 2026-11-06
 

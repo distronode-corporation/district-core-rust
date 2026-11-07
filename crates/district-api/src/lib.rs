@@ -57,7 +57,12 @@
 //!   [`ApiClient::provider_status`], [`ApiClient::sip_trunks`],
 //!   [`ApiClient::create_sip_trunk`], [`ApiClient::verify_service`],
 //!   [`ApiClient::set_verify_service`], [`ApiClient::register_a2p`],
-//!   [`ApiClient::verify_toll_free`]);
+//!   [`ApiClient::verify_toll_free`]), and a number's regulatory registration
+//!   in a country that asks for one ([`ApiClient::number_requirements`],
+//!   [`ApiClient::number_registrations`], [`ApiClient::create_number_registration`],
+//!   [`ApiClient::upload_registration_document`],
+//!   [`ApiClient::delete_registration_document`],
+//!   [`ApiClient::submit_number_registration`]);
 //! - billing, read only ([`ApiClient::workspace_billing`],
 //!   [`ApiClient::account_billing`]), and the hand-off to the service's
 //!   checkout and billing pages for an app that buys in the app
@@ -135,6 +140,7 @@ mod members;
 mod messaging;
 mod methods;
 mod number_admin;
+mod number_registration;
 mod numbers;
 mod persona;
 mod presence;

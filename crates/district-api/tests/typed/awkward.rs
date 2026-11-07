@@ -1074,3 +1074,88 @@ async fn the_meta_window_reads_open_human_agent_closed_and_unknown() {
         .unwrap_err();
     assert_eq!(refused.code(), Some("invalid_request"), "{refused:?}");
 }
+
+/// A requirements read with no number type or end-user type leaves both out,
+/// so the route's own defaults (`local`, `business`) apply, as Android does.
+#[tokio::test]
+async fn requirements_without_a_type_leave_it_out() {
+    let server = answering(
+        200,
+        json!({
+            "success": true, "country": "CA", "numberType": "local",
+            "purchasable": true, "requirements": null
+        }),
+    )
+    .await;
+
+    let answer = client(&server)
+        .number_requirements(WS, "CA", None, None)
+        .await
+        .unwrap();
+
+    assert_eq!(answer.requirements, None, "no regulation is an answer");
+    assert_eq!(
+        query(&only_request(&server).await),
+        pairs(&[("workspaceId", WS), ("country", "CA")])
+    );
+}
+
+/// A filing with no end-user details still sends the object, empty, as the
+/// Android app does.
+#[tokio::test]
+async fn a_filing_with_no_details_sends_an_empty_object() {
+    let server = answering(
+        200,
+        json!({"success": true, "registration": {
+            "id": "item_1", "status": "pending-review", "submittedAt": "2026-11-07T10:05:00.000Z"
+        }}),
+    )
+    .await;
+
+    client(&server)
+        .submit_number_registration(WS, "item_1", &Default::default())
+        .await
+        .unwrap();
+
+    assert_eq!(
+        body(&only_request(&server).await),
+        json!({"bundleId": "item_1", "endUserAttributes": {}})
+    );
+}
+
+/// The two refusals of a filing come back as coded 422s: missing details or
+/// documents, and the carrier's refusal.
+#[tokio::test]
+async fn a_refused_filing_is_a_coded_422() {
+    for (code, extra) in [
+        (
+            "validation_failed",
+            json!({"missingRequirements": ["proof_of_address"]}),
+        ),
+        (
+            "carrier_rejected",
+            json!({"reasons": ["Proof of address: the address does not match."]}),
+        ),
+    ] {
+        let mut refusal = json!({"success": false, "error": "Refused.", "code": code});
+        refusal
+            .as_object_mut()
+            .unwrap()
+            .extend(extra.as_object().unwrap().clone());
+        let server = answering(422, refusal).await;
+
+        let error = client(&server)
+            .submit_number_registration(WS, "item_1", &Default::default())
+            .await
+            .unwrap_err();
+
+        match error {
+            ApiError::Envelope {
+                status: 422,
+                code: sent,
+                ..
+            } if sent == code => {}
+            other => panic!("{code}: {other:?}"),
+        }
+    }
+}

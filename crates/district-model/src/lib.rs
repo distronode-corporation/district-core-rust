@@ -52,6 +52,7 @@ mod members;
 mod messaging;
 mod meta_window;
 mod number_admin;
+mod number_registration;
 mod numbers;
 mod overview;
 mod persona;
@@ -118,10 +119,10 @@ pub use hq::{HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqRole, HqTurn
 pub use hq_voice::{
     ATTR_AGENT_STATE, ATTR_SEGMENT_ID, ATTR_TRANSCRIBED_TRACK_ID, ATTR_TRANSCRIPTION_FINAL,
     HQ_PROPOSAL_TOPIC, HQ_ROOM_PREFIX, HQ_VOICE_HISTORY_MAX_CHARS, HQ_VOICE_HISTORY_MAX_TURNS,
-    HQ_VOICE_RECORD_ID_MAX, HQ_VOICE_SESSION_SECONDS, HqAgentState, HqProposalCancelResponse,
-    HqResolutionStatus, HqVoiceContextResponse, HqVoicePacket, HqVoiceProposal, HqVoiceRecordKind,
-    HqVoiceResolution, HqVoiceScreen, HqVoiceSelection, HqVoiceTokenResponse, TRANSCRIPTION_TOPIC,
-    read_packet,
+    HQ_VOICE_MIC_OPEN, HQ_VOICE_MIC_PUSH, HQ_VOICE_RECORD_ID_MAX, HQ_VOICE_SESSION_SECONDS,
+    HqAgentState, HqProposalCancelResponse, HqResolutionStatus, HqVoiceContextResponse,
+    HqVoicePacket, HqVoiceProposal, HqVoiceRecordKind, HqVoiceResolution, HqVoiceScreen,
+    HqVoiceSelection, HqVoiceTokenResponse, TRANSCRIPTION_TOPIC, read_packet,
 };
 pub use inbox::{
     CHANNEL_EMAIL, CHANNEL_INSTAGRAM, CHANNEL_MESSENGER, CHANNEL_SMS, CHANNEL_WHATSAPP,
@@ -157,6 +158,15 @@ pub use number_admin::{
     ProviderStatusResponse, SipTrunk, SipTrunkCreateResponse, SipTrunkDraft, SipTrunksResponse,
     TOLL_FREE_USE_CASES, TollFreeVerificationDraft, TollFreeVerificationResponse,
     VerifyServiceResponse,
+};
+pub use number_registration::{
+    AcceptedDocument, CountryRequirements, EndUserAttributes, NumberRegistration,
+    NumberRegistrationCreateResponse, NumberRegistrationDraft, NumberRegistrationSubmitResponse,
+    NumberRegistrationsResponse, NumberRequirementsResponse, REGISTRATION_DRAFT,
+    REGISTRATION_END_USER_TYPES, REGISTRATION_NUMBER_TYPES, REQUIREMENT_END_USER,
+    REQUIREMENT_SUPPORTING_DOCUMENT, RegistrationDocument, RegistrationDocumentRemovalResponse,
+    RegistrationDocumentResponse, RegistrationDocumentUpload, RegulatoryRequirement,
+    SubmittedRegistration, UploadedRegistrationDocument,
 };
 pub use numbers::{
     AvailableNumber, NumberSearch, NumberSearchResponse, OwnedNumber, OwnedNumbersResponse,

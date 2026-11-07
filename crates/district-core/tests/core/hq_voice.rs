@@ -1182,3 +1182,47 @@ fn the_new_notes_have_their_sentences() {
     );
     assert!(HqNote::Expired.text().starts_with("This change expired"));
 }
+
+/// A member who chose push-to-talk sends nothing before they act: the session
+/// joins with the microphone off, and the app's microphone control is the
+/// talk action. An open microphone joins live.
+#[test]
+fn push_to_talk_joins_muted_and_the_microphone_control_talks() {
+    // live() asserts an open credential connects with `microphone: true`.
+    let (open, _) = live();
+    assert!(!voice(&open).push_to_talk);
+
+    let (mut model, ticket) = minting();
+    let mut push = voice_credential();
+    push.mic_mode = district_model::HQ_VOICE_MIC_PUSH.to_owned();
+    let effects = model.update(Event::HqVoiceIssued {
+        ticket,
+        result: Ok(push),
+    });
+    let Some(Effect::ConnectMedia {
+        session,
+        microphone,
+        ..
+    }) = effects.first()
+    else {
+        panic!("{effects:?}");
+    };
+    assert!(!microphone, "push-to-talk joins muted");
+    let session = *session;
+    assert!(voice(&model).push_to_talk);
+    report(&mut model, session, MediaEvent::Connected);
+    assert_eq!(
+        model.update(Event::Microphone(true)),
+        [Effect::SetMicrophone {
+            session,
+            enabled: true
+        }]
+    );
+    assert_eq!(
+        model.update(Event::Microphone(false)),
+        [Effect::SetMicrophone {
+            session,
+            enabled: false
+        }]
+    );
+}

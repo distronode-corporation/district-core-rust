@@ -81,13 +81,33 @@ pub struct HqVoiceTokenResponse {
     /// Where the member's voice is processed, `us` today. The app says so
     /// before the microphone starts.
     pub processing_region: String,
+    /// How the member's microphone is held, from their HQ voice settings:
+    /// [`HQ_VOICE_MIC_OPEN`] (always listening) or [`HQ_VOICE_MIC_PUSH`]
+    /// (muted until pressed). Text, so a mode added later still decodes.
+    pub mic_mode: String,
+    /// The session's id, which only this installation learns: its proof to
+    /// the service when the connection fails after this answer. Never log it.
+    pub session_id: String,
     /// The room's end-to-end encryption passphrase. Absent when the room has
     /// none, which the app does not join.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub e2ee: Option<RoomE2ee>,
 }
 
+/// [`HqVoiceTokenResponse::mic_mode`] for a microphone that always listens,
+/// the service's default.
+pub const HQ_VOICE_MIC_OPEN: &str = "open";
+/// [`HqVoiceTokenResponse::mic_mode`] for push-to-talk: the microphone is
+/// muted until the member holds it open.
+pub const HQ_VOICE_MIC_PUSH: &str = "push";
+
 impl HqVoiceTokenResponse {
+    /// Whether the member asked for push-to-talk. Any other mode, an unknown
+    /// one included, is the open microphone the service defaults to.
+    pub fn is_push_to_talk(&self) -> bool {
+        self.mic_mode == HQ_VOICE_MIC_PUSH
+    }
+
     /// Whether this credential is one to join: an HQ room, with a passphrase.
     /// A room without one is not joined unencrypted; it is not joined.
     pub fn is_joinable(&self) -> bool {
@@ -107,6 +127,8 @@ impl fmt::Debug for HqVoiceTokenResponse {
             .field("url", &self.url)
             .field("room_name", &self.room_name)
             .field("processing_region", &self.processing_region)
+            .field("mic_mode", &self.mic_mode)
+            .field("session_id", &"<redacted>")
             .field("e2ee", &self.e2ee)
             .finish()
     }
@@ -522,8 +544,37 @@ mod tests {
             "url": "wss://media.example.com",
             "roomName": "hq_ws-1_00000000-0000-4000-8000-000000000000",
             "processingRegion": "us",
+            "micMode": "open",
+            "sessionId": "secret-session",
             "e2ee": {"key": "secret-key"},
         })
+    }
+
+    /// The server's recorded answer (the mobile fixture
+    /// `district-hq-voice-token.json`, not vendored here yet), with this
+    /// repository's stand-in for its media host: it decodes under
+    /// `strict-contracts`, both new fields included, and writes back the same.
+    #[test]
+    fn the_servers_voice_credential_decodes_whole() {
+        let recorded = json!({
+            "success": true,
+            "token": "contract-livekit-hq-jwt",
+            "url": "wss://media.example.com",
+            "roomName": "hq_ws-contract-test_00000000-0000-4000-8000-000000000000",
+            "processingRegion": "us",
+            "micMode": "push",
+            "sessionId": "00000000-0000-4000-8000-000000000000",
+            "e2ee": {"key": "YFT+/ceW4bhgizPFpeX9E5a3PVZ9T07aWRQq4uwQwW0="}
+        });
+        let credential = token(recorded.clone());
+        assert!(credential.is_push_to_talk());
+        assert_eq!(
+            credential.session_id,
+            "00000000-0000-4000-8000-000000000000"
+        );
+        assert!(credential.is_joinable());
+        assert_eq!(serde_json::to_value(&credential).unwrap(), recorded);
+        assert!(!token(with(recorded, "micMode", json!("open"))).is_push_to_talk());
     }
 
     #[test]
@@ -538,7 +589,9 @@ mod tests {
     fn no_secret_of_a_voice_credential_is_printed() {
         let shown = format!("{:?}", token(credential()));
         assert!(
-            !shown.contains("secret-jwt") && !shown.contains("secret-key"),
+            !shown.contains("secret-jwt")
+                && !shown.contains("secret-key")
+                && !shown.contains("secret-session"),
             "{shown}"
         );
         assert!(shown.contains("wss://media.example.com") && shown.contains("\"us\""));

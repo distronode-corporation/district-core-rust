@@ -296,6 +296,15 @@ pub fn numbers_configure_done(l: Locale) -> &'static str {
     }
 }
 
+/// `numbers.document_remove_action`
+#[must_use]
+pub fn numbers_document_remove_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Remove",
+        Locale::FrCa => "Retirer",
+    }
+}
+
 /// `numbers.lookup_action`
 #[must_use]
 pub fn numbers_lookup_action(l: Locale) -> &'static str {
@@ -377,6 +386,150 @@ pub fn numbers_purchase_elsewhere(l: Locale) -> &'static str {
     }
 }
 
+/// `numbers.ready_buy_today`
+#[must_use]
+pub fn numbers_ready_buy_today(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Ready to buy today",
+        Locale::FrCa => "Achat immédiat",
+    }
+}
+
+/// `numbers.registration_country_label`
+#[must_use]
+pub fn numbers_registration_country_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Country (two letters)",
+        Locale::FrCa => "Pays (deux lettres)",
+    }
+}
+
+/// `numbers.registration_document_filed`
+#[must_use]
+pub fn numbers_registration_document_filed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Filed with the carrier",
+        Locale::FrCa => "Déposé chez le transporteur",
+    }
+}
+
+/// `numbers.registration_document_recorded`
+#[must_use]
+pub fn numbers_registration_document_recorded(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Recorded, no file yet",
+        Locale::FrCa => "Consigné, aucun fichier pour l'instant",
+    }
+}
+
+/// `numbers.registration_document_stored`
+#[must_use]
+pub fn numbers_registration_document_stored(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Stored, not yet filed",
+        Locale::FrCa => "Stocké, pas encore déposé",
+    }
+}
+
+/// `numbers.registration_documents_eyebrow`
+#[must_use]
+pub fn numbers_registration_documents_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Documents",
+        Locale::FrCa => "Documents",
+    }
+}
+
+/// `numbers.registration_name_label`
+#[must_use]
+pub fn numbers_registration_name_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Name for your carrier console (optional)",
+        Locale::FrCa => "Nom dans votre console de transporteur (facultatif)",
+    }
+}
+
+/// `numbers.registration_reasons_eyebrow`
+#[must_use]
+pub fn numbers_registration_reasons_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "What the carrier objected to",
+        Locale::FrCa => "Objections du transporteur",
+    }
+}
+
+/// `numbers.registration_start_action`
+#[must_use]
+pub fn numbers_registration_start_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Start registration",
+        Locale::FrCa => "Commencer l'inscription",
+    }
+}
+
+/// `numbers.registration_start_title`
+#[must_use]
+pub fn numbers_registration_start_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Start a registration",
+        Locale::FrCa => "Commencer une inscription",
+    }
+}
+
+/// `numbers.registration_status_caption`
+#[must_use]
+pub fn numbers_registration_status_caption(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Statuses are refreshed when this list loads. A review can take a day or more.",
+        Locale::FrCa => "Les états sont actualisés au chargement de cette liste. Un examen peut prendre un jour ou plus.",
+    }
+}
+
+/// `numbers.registration_title`
+#[must_use]
+pub fn numbers_registration_title(l: Locale, country: &str, number_type: &str) -> String {
+    match l {
+        Locale::En => format!("{country} · {number_type}"),
+        Locale::FrCa => format!("{country} · {number_type}"),
+    }
+}
+
+/// `numbers.registrations_empty_body`
+#[must_use]
+pub fn numbers_registrations_empty_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Some countries require a registration before a number there can be bought. Start one for the country you want.",
+        Locale::FrCa => "Certains pays exigent une inscription avant qu'un numéro puisse y être acheté. Commencez-en une pour le pays voulu.",
+    }
+}
+
+/// `numbers.registrations_empty_title`
+#[must_use]
+pub fn numbers_registrations_empty_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Nothing filed yet",
+        Locale::FrCa => "Aucune demande déposée",
+    }
+}
+
+/// `numbers.registrations_eyebrow`
+#[must_use]
+pub fn numbers_registrations_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Regulatory registrations",
+        Locale::FrCa => "Inscriptions réglementaires",
+    }
+}
+
+/// `numbers.registrations_failed`
+#[must_use]
+pub fn numbers_registrations_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Could not load this workspace's registrations.",
+        Locale::FrCa => "Impossible de charger les inscriptions de cet espace de travail.",
+    }
+}
+
 /// `numbers.release_action`
 #[must_use]
 pub fn numbers_release_action(l: Locale) -> &'static str {
@@ -428,6 +581,60 @@ pub fn numbers_release_warning(l: Locale, warnings: &str) -> String {
     match l {
         Locale::En => format!("Released, but {warnings}"),
         Locale::FrCa => format!("Numéro libéré, avec des réserves\u{00A0}: {warnings}"),
+    }
+}
+
+/// `numbers.requirement_no_fields`
+#[must_use]
+pub fn numbers_requirement_no_fields(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No fields",
+        Locale::FrCa => "Aucun champ",
+    }
+}
+
+/// `numbers.requirements_check_action`
+#[must_use]
+pub fn numbers_requirements_check_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Check requirements",
+        Locale::FrCa => "Vérifier les exigences",
+    }
+}
+
+/// `numbers.requirements_eyebrow`
+#[must_use]
+pub fn numbers_requirements_eyebrow(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "What this country asks for",
+        Locale::FrCa => "Exigences de ce pays",
+    }
+}
+
+/// `numbers.requirements_none_body`
+#[must_use]
+pub fn numbers_requirements_none_body(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This country publishes no regulation for this number type, so there is nothing to file.",
+        Locale::FrCa => "Ce pays ne publie aucune réglementation pour ce type de numéro; il n'y a donc rien à déposer.",
+    }
+}
+
+/// `numbers.requirements_none_heading`
+#[must_use]
+pub fn numbers_requirements_none_heading(l: Locale, country: &str) -> String {
+    match l {
+        Locale::En => format!("{country} · No registration required"),
+        Locale::FrCa => format!("{country} · aucune inscription requise"),
+    }
+}
+
+/// `numbers.requirements_not_purchasable`
+#[must_use]
+pub fn numbers_requirements_not_purchasable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Numbers in this country are not purchasable through Distronode today, even with a registration.",
+        Locale::FrCa => "Les numéros de ce pays ne peuvent pas être achetés auprès de Distronode pour l'instant, même avec une inscription.",
     }
 }
 
@@ -551,12 +758,57 @@ pub fn numbers_sip_unprovisioned(l: Locale) -> &'static str {
     }
 }
 
+/// `numbers.submit_confirm_action`
+#[must_use]
+pub fn numbers_submit_confirm_action(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "File it",
+        Locale::FrCa => "Déposer",
+    }
+}
+
+/// `numbers.submit_confirm_body`
+#[must_use]
+pub fn numbers_submit_confirm_body(l: Locale, country: &str) -> String {
+    match l {
+        Locale::En => format!("This uploads your documents to the carrier and files a regulatory application for {country} in your business's name. Review can take a day or more, and the filing cannot be edited while it is under review."),
+        Locale::FrCa => format!("Cette action téléverse vos documents vers le transporteur et dépose une demande réglementaire au nom de votre entreprise (pays\u{00A0}: {country}). L'examen peut prendre un jour ou plus, et le dépôt ne peut pas être modifié pendant l'examen."),
+    }
+}
+
+/// `numbers.submit_confirm_title`
+#[must_use]
+pub fn numbers_submit_confirm_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "File this registration?",
+        Locale::FrCa => "Déposer cette inscription?",
+    }
+}
+
+/// `numbers.submit_filed`
+#[must_use]
+pub fn numbers_submit_filed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Filed. The carrier is reviewing it.",
+        Locale::FrCa => "Déposée. Le transporteur l'examine.",
+    }
+}
+
 /// `numbers.tab_carrier`
 #[must_use]
 pub fn numbers_tab_carrier(l: Locale) -> &'static str {
     match l {
         Locale::En => "Carrier",
         Locale::FrCa => "Transporteur",
+    }
+}
+
+/// `numbers.tab_registrations`
+#[must_use]
+pub fn numbers_tab_registrations(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Registrations",
+        Locale::FrCa => "Inscriptions",
     }
 }
 
@@ -782,5 +1034,14 @@ pub fn numbers_write_unrepeatable(l: Locale) -> &'static str {
     match l {
         Locale::En => "We could not confirm whether that went through, so it is not offered again. Reload to see where things stand.",
         Locale::FrCa => "Nous n'avons pas pu confirmer si l'opération a abouti; elle n'est donc pas proposée de nouveau. Actualisez pour voir où en sont les choses.",
+    }
+}
+
+/// `numbers.your_approvals`
+#[must_use]
+pub fn numbers_your_approvals(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your approvals",
+        Locale::FrCa => "Vos approbations",
     }
 }

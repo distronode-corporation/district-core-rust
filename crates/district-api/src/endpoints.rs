@@ -449,6 +449,34 @@ endpoint_table! {
     TollFreeVerification => Post "/api/district/workspace/tfv",
         workspace: Body, body: Json, retry: Never;
 
+    // A number's regulatory registration in a country that asks for one. The
+    // workspace is a query parameter on every one of these, writes included:
+    // the routes check the role before reading any body.
+
+    /// What a country's regulator asks for one number type (`type`) and
+    /// end-user type (`endUserType`), named by `country`.
+    NumberRequirements => Get "/api/district/workspace/numbers/requirements",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// The workspace's filings, and the countries open to it. Reading it is
+    /// what moves a filing under review to its next status.
+    NumberRegistrations => Get "/api/district/workspace/numbers/registrations",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// Starts a draft filing. Nothing reaches the carrier.
+    NumberRegistrationCreate => Post "/api/district/workspace/numbers/registrations",
+        workspace: Query, body: Json, retry: Never;
+    /// Puts a document on a draft filing, replacing the one its requirement
+    /// had. The filing and the requirement are form fields.
+    RegistrationDocumentUpload => Post "/api/district/workspace/numbers/registrations/documents",
+        workspace: Query, body: Multipart, retry: Never;
+    /// Takes a document off a draft filing. The only `DELETE` with a body:
+    /// `{bundleId, documentId}`.
+    RegistrationDocumentDelete => Delete "/api/district/workspace/numbers/registrations/documents",
+        workspace: Query, body: Json, retry: Never;
+    /// Files a draft with the carrier: a regulated application in the
+    /// business's name.
+    NumberRegistrationSubmit => Post "/api/district/workspace/numbers/registrations/submit",
+        workspace: Query, body: Json, retry: Never;
+
     // Push and presence for this installation. The service identifies the
     // installation from the access token, so no device id is sent.
 

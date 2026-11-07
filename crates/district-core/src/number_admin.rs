@@ -22,12 +22,18 @@
 //!
 //! A viewer may read the carriers' status, the SIP trunks and the passcode
 //! sender, and is offered nothing that changes them.
+//!
+//! A number's regulatory registration, on its own tab, is
+//! [`NumberRegistrations`]: the calls and answers are here with the others.
 
 use district_api::ApiError;
 use district_model::{
-    A2P_CAMPAIGN_TYPES, A2pRegistrationDraft, A2pRegistrationResponse, NumberLookupInfo,
-    NumberLookupResponse, NumberReleaseResponse, OwnedNumber, ProviderStatusEntry,
-    ProviderStatusResponse, SipTrunk, SipTrunkCreateResponse, SipTrunkDraft, SipTrunksResponse,
+    A2P_CAMPAIGN_TYPES, A2pRegistrationDraft, A2pRegistrationResponse, EndUserAttributes,
+    NumberLookupInfo, NumberLookupResponse, NumberRegistrationCreateResponse,
+    NumberRegistrationDraft, NumberRegistrationSubmitResponse, NumberRegistrationsResponse,
+    NumberReleaseResponse, NumberRequirementsResponse, OwnedNumber, ProviderStatusEntry,
+    ProviderStatusResponse, RegistrationDocumentRemovalResponse, RegistrationDocumentResponse,
+    RegistrationDocumentUpload, SipTrunk, SipTrunkCreateResponse, SipTrunkDraft, SipTrunksResponse,
     TOLL_FREE_USE_CASES, TollFreeVerificationDraft, TollFreeVerificationResponse,
     VerifyServiceResponse,
 };
@@ -35,18 +41,24 @@ use district_model::{
 use crate::failure::FailureText;
 use crate::marketplace::OwnedNumbersList;
 use crate::model::{Effect, Slot, Ticket, Tickets};
+use crate::number_registration::{
+    NumberRegistrations, RegistrationEvent, RegistrationList, RegistrationWrite, RequirementsState,
+};
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::l;
 use district_l10n::{WireCategory, format, numbers_strings as ns, wire_label};
 
 /// The slots of number management, forgotten with the workspace.
-pub(crate) const NUMBER_SLOTS: [Slot; 6] = [
+pub(crate) const NUMBER_SLOTS: [Slot; 9] = [
     Slot::NumberCarrier,
     Slot::NumberSip,
     Slot::NumberVerify,
     Slot::NumberWrite,
     Slot::NumberCarrierWrite,
     Slot::NumberLookup,
+    Slot::NumberRequirements,
+    Slot::NumberRegistrations,
+    Slot::NumberRegistrationWrite,
 ];
 
 /// A call to the service about a held number or the carrier account. Run by
@@ -73,6 +85,35 @@ pub enum NumberCall {
     RegisterA2p(A2pRegistrationDraft),
     /// File a toll-free verification.
     VerifyTollFree(TollFreeVerificationDraft),
+    /// Read what a country's regulator asks for.
+    Requirements {
+        /// The country, two letters.
+        country: String,
+        /// The regulatory number type, or `None` for the service's default.
+        number_type: Option<String>,
+        /// The end-user type, or `None` for the service's default.
+        end_user_type: Option<String>,
+    },
+    /// Read the workspace's regulatory filings.
+    Registrations,
+    /// Start a draft filing.
+    CreateRegistration(NumberRegistrationDraft),
+    /// Put a document on a draft filing.
+    UploadRegistrationDocument(RegistrationDocumentUpload),
+    /// Take a document off a draft filing.
+    RemoveRegistrationDocument {
+        /// The filing.
+        bundle_id: String,
+        /// The document.
+        document_id: String,
+    },
+    /// File a draft with the carrier. A regulated application; sent once.
+    SubmitRegistration {
+        /// The filing.
+        bundle_id: String,
+        /// The end-user details, by the field names its regulation lists.
+        end_user_attributes: EndUserAttributes,
+    },
 }
 
 /// The service's answer to a [`NumberCall`], one variant per call.
@@ -97,6 +138,18 @@ pub enum NumberAnswer {
     A2pRegistered(A2pRegistrationResponse),
     /// To [`NumberCall::VerifyTollFree`].
     TollFreeFiled(TollFreeVerificationResponse),
+    /// To [`NumberCall::Requirements`].
+    Requirements(NumberRequirementsResponse),
+    /// To [`NumberCall::Registrations`].
+    Registrations(NumberRegistrationsResponse),
+    /// To [`NumberCall::CreateRegistration`].
+    RegistrationCreated(NumberRegistrationCreateResponse),
+    /// To [`NumberCall::UploadRegistrationDocument`].
+    RegistrationDocumentUploaded(RegistrationDocumentResponse),
+    /// To [`NumberCall::RemoveRegistrationDocument`].
+    RegistrationDocumentRemoved(RegistrationDocumentRemovalResponse),
+    /// To [`NumberCall::SubmitRegistration`].
+    RegistrationSubmitted(NumberRegistrationSubmitResponse),
 }
 
 /// Number management's part of the phone numbers screen.
@@ -129,6 +182,8 @@ pub struct NumberAdmin {
     pub a2p_form: A2pForm,
     /// The toll-free verification form.
     pub toll_free_form: TollFreeForm,
+    /// The Registrations tab.
+    pub registrations: NumberRegistrations,
 }
 
 /// Which carriers are connected.
@@ -250,7 +305,11 @@ impl NumberWrite {
 
     /// `done` once it worked, else what failed and whether it may be tried
     /// again.
-    fn after<T>(result: Result<T, ApiError>, repeat: Repeat, done: impl FnOnce(T) -> Self) -> Self {
+    pub(crate) fn after<T>(
+        result: Result<T, ApiError>,
+        repeat: Repeat,
+        done: impl FnOnce(T) -> Self,
+    ) -> Self {
         match result {
             Ok(answer) => done(answer),
             Err(error) => Self::Failed {
@@ -263,7 +322,7 @@ impl NumberWrite {
 
 /// Whether sending a write again does the same thing again.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-enum Repeat {
+pub(crate) enum Repeat {
     /// The service ends in the same state however often it is sent.
     Converges,
     /// A repeat costs something or cannot be undone.
@@ -310,6 +369,13 @@ pub enum NumberConfirmation {
     A2p,
     /// Before filing the toll-free verification.
     TollFree,
+    /// Before filing a draft regulatory registration with the carrier.
+    SubmitRegistration {
+        /// The filing.
+        bundle_id: String,
+        /// Its country, which the question names.
+        country: String,
+    },
 }
 
 impl NumberConfirmation {
@@ -320,6 +386,7 @@ impl NumberConfirmation {
             Self::Lookup { .. } => ns::numbers_lookup_confirm_title(l()),
             Self::A2p => ns::numbers_a2p_confirm_title(l()),
             Self::TollFree => ns::numbers_tfv_confirm_title(l()),
+            Self::SubmitRegistration { .. } => ns::numbers_submit_confirm_title(l()),
         }
     }
 
@@ -330,6 +397,9 @@ impl NumberConfirmation {
             Self::Lookup { .. } => ns::numbers_lookup_confirm_body(l()).to_owned(),
             Self::A2p => ns::numbers_a2p_confirm_body(l()).to_owned(),
             Self::TollFree => ns::numbers_tfv_confirm_body(l()).to_owned(),
+            Self::SubmitRegistration { country, .. } => {
+                ns::numbers_submit_confirm_body(l(), country)
+            }
         }
     }
 
@@ -340,6 +410,7 @@ impl NumberConfirmation {
             Self::Lookup { .. } => ns::numbers_lookup_confirm_action(l()),
             Self::A2p => ns::numbers_a2p_confirm_action(l()),
             Self::TollFree => ns::numbers_tfv_confirm_action(l()),
+            Self::SubmitRegistration { .. } => ns::numbers_submit_confirm_action(l()),
         }
     }
 
@@ -352,7 +423,7 @@ impl NumberConfirmation {
 impl NumberAdmin {
     /// Closes the confirmation open when `which` picks it, and says whether it
     /// did. A write landing closes its own confirmation and no other.
-    fn close_confirmation(&mut self, which: fn(&NumberConfirmation) -> bool) -> bool {
+    pub(crate) fn close_confirmation(&mut self, which: fn(&NumberConfirmation) -> bool) -> bool {
         let close = self.confirmation.as_ref().is_some_and(which);
         if close {
             self.confirmation = None;
@@ -366,6 +437,7 @@ impl NumberAdmin {
             NumberConfirmation::Release { .. } => &self.number_write,
             NumberConfirmation::Lookup { .. } => &self.lookup_write,
             NumberConfirmation::A2p | NumberConfirmation::TollFree => &self.carrier_write,
+            NumberConfirmation::SubmitRegistration { .. } => &self.registrations.write,
         }
     }
 
@@ -715,6 +787,8 @@ pub enum NumberAdminEvent {
     Confirm,
     /// Close the confirmation. Refused while its write is on its way.
     CancelConfirmation,
+    /// Something on the Registrations tab.
+    Registration(RegistrationEvent),
 }
 
 impl SignedIn {
@@ -825,6 +899,7 @@ impl SignedIn {
                 }
                 None
             }
+            NumberAdminEvent::Registration(event) => self.registration_event(event, tickets),
             NumberAdminEvent::Confirm => self.confirmed(),
             NumberAdminEvent::CancelConfirmation => {
                 let admin = &mut self.marketplace.admin;
@@ -849,7 +924,7 @@ impl SignedIn {
     }
 
     /// Opens `confirmation`, unless its write may not be pressed now.
-    fn ask(&mut self, confirmation: NumberConfirmation) {
+    pub(crate) fn ask(&mut self, confirmation: NumberConfirmation) {
         let admin = &mut self.marketplace.admin;
         if admin.write_for(&confirmation).is_armed() {
             admin.confirmation = Some(confirmation);
@@ -862,7 +937,15 @@ impl SignedIn {
     fn confirmed(&mut self) -> Option<(Slot, NumberCall)> {
         let admin = &mut self.marketplace.admin;
         let confirmation = admin.confirmation.clone()?;
-        if !admin.write_for(&confirmation).is_armed() {
+        let armed = match &confirmation {
+            // One draft's filing that may have happened holds back that draft
+            // alone, not the tab's other writes.
+            NumberConfirmation::SubmitRegistration { bundle_id, .. } => {
+                admin.registrations.can_file(bundle_id)
+            }
+            other => admin.write_for(other).is_armed(),
+        };
+        if !armed {
             return None;
         }
         Some(match confirmation {
@@ -887,6 +970,25 @@ impl SignedIn {
                 (
                     Slot::NumberCarrierWrite,
                     NumberCall::VerifyTollFree(admin.toll_free_form.draft()),
+                )
+            }
+            NumberConfirmation::SubmitRegistration { bundle_id, .. } => {
+                let registrations = &mut admin.registrations;
+                registrations.write = NumberWrite::Running;
+                registrations.written = Some(RegistrationWrite::Submit {
+                    bundle_id: bundle_id.clone(),
+                });
+                let end_user_attributes = registrations
+                    .details
+                    .get(&bundle_id)
+                    .cloned()
+                    .unwrap_or_default();
+                (
+                    Slot::NumberRegistrationWrite,
+                    NumberCall::SubmitRegistration {
+                        bundle_id,
+                        end_user_attributes,
+                    },
                 )
             }
         })
@@ -936,6 +1038,40 @@ impl SignedIn {
             });
         } else if tickets.accept(Slot::NumberCarrierWrite, ticket) {
             return self.carrier_written(result, tickets);
+        } else if tickets.accept(Slot::NumberRequirements, ticket) {
+            admin.registrations.requirements = match result {
+                Ok(NumberAnswer::Requirements(answer)) => match answer.requirements {
+                    Some(regulation) => RequirementsState::Ready {
+                        regulation,
+                        purchasable: answer.purchasable,
+                    },
+                    None => RequirementsState::NoRegulation {
+                        country: answer.country,
+                        purchasable: answer.purchasable,
+                    },
+                },
+                Ok(_) => RequirementsState::Failed(FailureText::unexpected()),
+                Err(error) => RequirementsState::Failed(FailureText::from_api_error(&error)),
+            };
+        } else if tickets.accept(Slot::NumberRegistrations, ticket) {
+            admin.registrations.list = match result {
+                Ok(NumberAnswer::Registrations(answer)) => {
+                    // A filing read back as no longer a draft was filed after
+                    // all: nothing is held back for it any more.
+                    let filed = &mut admin.registrations.unconfirmed_filing;
+                    filed.retain(|id| {
+                        answer
+                            .registrations
+                            .iter()
+                            .all(|r| r.id != *id || r.is_draft())
+                    });
+                    RegistrationList::Ready(answer)
+                }
+                Ok(_) => RegistrationList::Failed(FailureText::unexpected()),
+                Err(error) => RegistrationList::Failed(FailureText::from_api_error(&error)),
+            };
+        } else if tickets.accept(Slot::NumberRegistrationWrite, ticket) {
+            return self.registration_written(result, tickets);
         }
         stay()
     }

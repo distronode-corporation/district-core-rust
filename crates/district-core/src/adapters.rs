@@ -489,6 +489,44 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
             NumberCall::VerifyTollFree(draft) => {
                 NumberAnswer::TollFreeFiled(self.verify_toll_free(ws, draft).await?)
             }
+            NumberCall::Requirements {
+                country,
+                number_type,
+                end_user_type,
+            } => NumberAnswer::Requirements(
+                self.number_requirements(
+                    ws,
+                    country,
+                    number_type.as_deref(),
+                    end_user_type.as_deref(),
+                )
+                .await?,
+            ),
+            NumberCall::Registrations => {
+                NumberAnswer::Registrations(self.number_registrations(ws).await?)
+            }
+            NumberCall::CreateRegistration(draft) => {
+                NumberAnswer::RegistrationCreated(self.create_number_registration(ws, draft).await?)
+            }
+            NumberCall::UploadRegistrationDocument(upload) => {
+                NumberAnswer::RegistrationDocumentUploaded(
+                    self.upload_registration_document(ws, upload).await?,
+                )
+            }
+            NumberCall::RemoveRegistrationDocument {
+                bundle_id,
+                document_id,
+            } => NumberAnswer::RegistrationDocumentRemoved(
+                self.delete_registration_document(ws, bundle_id, document_id)
+                    .await?,
+            ),
+            NumberCall::SubmitRegistration {
+                bundle_id,
+                end_user_attributes,
+            } => NumberAnswer::RegistrationSubmitted(
+                self.submit_number_registration(ws, bundle_id, end_user_attributes)
+                    .await?,
+            ),
         })
     }
 
