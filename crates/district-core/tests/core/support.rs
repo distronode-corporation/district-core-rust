@@ -155,6 +155,8 @@ pub fn voice_credential() -> district_model::HqVoiceTokenResponse {
         "url": "wss://media.example.com",
         "roomName": "hq_ws-contract-test_00000000-0000-4000-8000-000000000000",
         "processingRegion": "us",
+        "micMode": "open",
+        "sessionId": "00000000-0000-4000-8000-000000000000",
         "e2ee": {"key": "YFT+/ceW4bhgizPFpeX9E5a3PVZ9T07aWRQq4uwQwW0="},
     }))
     .expect("a voice credential")

@@ -20,7 +20,7 @@ variant, or a field of one. Those take a new major version.
 A number's regulatory registration, the Android app's Registrations tab. Breaking, so the
 next release is a major one: `Endpoint`, `NumberCall`, `NumberAnswer`, `NumberAdminEvent`,
 `NumberConfirmation`, `MarketplaceTab` and `WireCategory` each gain variants an app matches
-on, and `NumberAdmin` a field an app builds.
+on, and `NumberAdmin` and `HqVoiceTokenResponse` fields an app builds.
 
 ### Added
 
@@ -69,6 +69,11 @@ on, and `NumberAdmin` a field an app builds.
 
 ### Fixed
 
+- `HqVoiceTokenResponse` reads the whole of the server's voice credential: it gains
+  `mic_mode` (`HQ_VOICE_MIC_OPEN` or `HQ_VOICE_MIC_PUSH`, read by `is_push_to_talk`) and
+  `session_id` (redacted in `Debug`), which the server sends and which the strict contract
+  decode refused as unknown fields. Breaking for an app that builds one with a struct
+  literal.
 - The window's Refresh on the booking pages' Settings and Developer sections keeps the tab
   they showed. Each opened afresh on its first tab (Booking page, API keys) whatever tab was
   shown; each now reads the tab shown again, and the other tabs are read when next shown.
