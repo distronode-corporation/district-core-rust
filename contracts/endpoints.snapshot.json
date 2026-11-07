@@ -1,7 +1,7 @@
 {
   "generated_by": "scripts/sync-endpoints.py",
   "source": {
-    "commit": "e9368c272dfc320d79bd80362b84b763935fa27b",
+    "commit": "39a1c39b94fff7e1b426d43a54899eb704a1dd57",
     "uncommitted_changes": false
   },
   "endpoints": [
@@ -72,6 +72,12 @@
       "workspace": "none"
     },
     {
+      "method": "POST",
+      "path": "/api/district/calls/whisper",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
       "method": "GET",
       "path": "/api/district/calls/{callId}",
       "auth": "bearer",
@@ -85,7 +91,19 @@
     },
     {
       "method": "POST",
+      "path": "/api/district/calls/{callId}/decline",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "POST",
       "path": "/api/district/calls/{callId}/hangup",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/calls/{callId}/takeover",
       "auth": "bearer",
       "workspace": "body"
     },
@@ -98,6 +116,18 @@
     {
       "method": "GET",
       "path": "/api/district/contacts",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/contacts/block",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/contacts/blocked",
       "auth": "bearer",
       "workspace": "query"
     },
@@ -140,6 +170,18 @@
     {
       "method": "GET",
       "path": "/api/district/conversations",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/conversations/assign",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/conversations/assignments",
       "auth": "bearer",
       "workspace": "query"
     },
@@ -270,6 +312,12 @@
       "workspace": "query"
     },
     {
+      "method": "GET",
+      "path": "/api/district/messages/send",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
       "method": "POST",
       "path": "/api/district/messages/send",
       "auth": "bearer",
@@ -284,6 +332,12 @@
     {
       "method": "GET",
       "path": "/api/district/messages/{messageId}",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/messages/{messageId}/sender",
       "auth": "bearer",
       "workspace": "query"
     },
@@ -366,6 +420,12 @@
       "workspace": "query"
     },
     {
+      "method": "POST",
+      "path": "/api/district/telemetry/token",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
       "method": "GET",
       "path": "/api/district/timeline",
       "auth": "bearer",
@@ -388,6 +448,12 @@
       "path": "/api/district/workflows/runs",
       "auth": "bearer",
       "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/workspace/a2p",
+      "auth": "bearer",
+      "workspace": "body"
     },
     {
       "method": "GET",
@@ -480,6 +546,12 @@
       "workspace": "none"
     },
     {
+      "method": "GET",
+      "path": "/api/district/workspace/lookup",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
       "method": "DELETE",
       "path": "/api/district/workspace/members",
       "auth": "bearer",
@@ -522,6 +594,54 @@
       "workspace": "body"
     },
     {
+      "method": "POST",
+      "path": "/api/district/workspace/numbers/configure",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/workspace/numbers/registrations",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/workspace/numbers/registrations",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/district/workspace/numbers/registrations/documents",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/workspace/numbers/registrations/documents",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/workspace/numbers/registrations/submit",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/workspace/numbers/release",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/workspace/numbers/requirements",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
       "method": "GET",
       "path": "/api/district/workspace/numbers/search",
       "auth": "bearer",
@@ -558,6 +678,12 @@
       "workspace": "query"
     },
     {
+      "method": "GET",
+      "path": "/api/district/workspace/provider/status",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
       "method": "PATCH",
       "path": "/api/district/workspace/rename",
       "auth": "bearer",
@@ -566,6 +692,24 @@
     {
       "method": "POST",
       "path": "/api/district/workspace/routing-rules",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/workspace/sip",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/workspace/sip",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/workspace/tfv",
       "auth": "bearer",
       "workspace": "body"
     },
@@ -580,6 +724,36 @@
       "path": "/api/district/workspace/usage",
       "auth": "bearer",
       "workspace": "query"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/workspace/verify",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/workspace/verify",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/workspace/whatsapp/templates",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/workspace/whatsapp/window",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/settings",
+      "auth": "bearer",
+      "workspace": "none"
     }
   ]
 }

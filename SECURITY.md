@@ -211,8 +211,11 @@ district-call's engine tests, which voice.yml runs.
 
 ### Calls (district-core, district-call)
 
-- A desktop has no push service. While "ring on this computer" is on and the
-  machine is awake, the core registers the desktop's presence with the service:
+- This core registers no push service. District AI for Linux has none; District
+  AI for Windows registers a Windows push (WNS) channel itself, beside the
+  presence below, and the core's sign-out removes that registration too.
+- While "ring on this computer" is on and the machine is awake, the core
+  registers the desktop's presence with the service:
   the platform, `kind: "desktop"` and a random value made by each run of the app,
   which identifies nothing else. The registration is renewed every five minutes,
   and removed when the setting is turned off, before the machine sleeps, when the

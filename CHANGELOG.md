@@ -27,6 +27,20 @@ variant, or a field of one. Those take a new major version.
   as before. Opening either section from another one still starts on its first tab. No API
   change.
 
+### Changed
+
+- The endpoint snapshot is read again from the Android app's main branch. It was last read
+  from the Android app of 2026-10-04, and the weekly check had been red since 2026-10-19,
+  because the sync script stopped at a client call written with positional arguments; it now
+  names them in the client's parameter order, and follows a class's private body builder
+  (which had put two number routes' workspace nowhere instead of in the body). The Android app now calls 21 of the endpoints
+  `DESKTOP_ONLY` listed (blocking, number management, decline, live supervise, thread
+  assignment, the WhatsApp, Messenger and Instagram windows, the account's language and the
+  telemetry credential), so they leave it. `EXCLUDED` gains the four routes the Android
+  app calls and the desktop apps do not: number registration and its requirements, the
+  thread owners list, and a message's sender for a notification. No change to what any
+  client calls.
+
 ## [9.0.0] - 2026-11-06
 
 The Messenger and Instagram reply window in the composer, as the web Inbox shows it: a

@@ -113,6 +113,39 @@ pub const EXCLUDED: &[Exclusion] = &[
         reason: "Bulk dialling puts an AI agent on the line and is web-only.",
         android_calls_it: false,
     },
+    Exclusion {
+        name: "number registration",
+        method: None,
+        path: PathMatch::Subtree("/api/district/workspace/numbers/registrations"),
+        reason: "The regulatory registration a number needs in some countries (the bundle, its \
+                 documents and its submission), on the Android app's Registrations tab. The \
+                 desktop apps do not have that tab yet.",
+        android_calls_it: true,
+    },
+    Exclusion {
+        name: "number requirements",
+        method: Some(HttpMethod::Get),
+        path: PathMatch::Exact("/api/district/workspace/numbers/requirements"),
+        reason: "What a number registration asks for, for the same tab as the registration.",
+        android_calls_it: true,
+    },
+    Exclusion {
+        name: "thread owners",
+        method: Some(HttpMethod::Get),
+        path: PathMatch::Exact("/api/district/conversations/assignments"),
+        reason: "Every thread's owner, which the Android app reads when a thread opens. The \
+                 desktop apps read each owner from the thread list instead (`assignments=1`).",
+        android_calls_it: true,
+    },
+    Exclusion {
+        name: "message sender for a notification",
+        method: Some(HttpMethod::Get),
+        path: PathMatch::Exact("/api/district/messages/{messageId}/sender"),
+        reason: "The sender's name for the title of a notification a push raised, which carries \
+                 ids only. A desktop app notifies from the live socket's own update, and \
+                 District AI for Windows reads a pushed message whole under its own session.",
+        android_calls_it: true,
+    },
 ];
 
 /// An endpoint this client calls that the Android app does not.
@@ -129,42 +162,9 @@ pub struct Addition {
 /// this table.
 pub const DESKTOP_ONLY: &[Addition] = &[
     Addition {
-        endpoint: Endpoint::CallWhisper,
-        reason: "A private note to the AI on a live call, from live supervise. The desktop apps \
-                 build it with the 8.0.0 core; the snapshot predates the Android app's.",
-    },
-    Addition {
-        endpoint: Endpoint::CallTakeover,
-        reason: "Taking a live call over from the AI by voice, from live supervise, for the same \
-                 reason as the note.",
-    },
-    Addition {
-        endpoint: Endpoint::ConversationAssign,
-        reason: "Giving an inbox thread to a member (app parity 3). The desktop apps build it \
-                 first; the snapshot predates it.",
-    },
-    Addition {
-        endpoint: Endpoint::WhatsAppWindow,
-        reason: "The WhatsApp customer-service window, which decides whether the composer \
-                 offers free text or templates (app parity 5). The desktop apps build it first; \
-                 the snapshot predates it.",
-    },
-    Addition {
-        endpoint: Endpoint::WhatsAppTemplates,
-        reason: "The approved WhatsApp templates a closed window offers (app parity 5), for the \
-                 same reason as the window.",
-    },
-    Addition {
-        endpoint: Endpoint::MetaWindow,
-        reason: "The Messenger and Instagram reply window, which decides whether the composer \
-                 may send and whether the AI may draft. The desktop apps build it first; the \
-                 snapshot predates it. Remove this entry in the sync that brings it into the \
-                 snapshot.",
-    },
-    Addition {
         endpoint: Endpoint::HqVoiceToken,
-        reason: "District HQ by voice. The desktop apps build it first; the Android app's voice \
-                 mode is being built against the same contract, and the snapshot predates it.",
+        reason: "District HQ by voice. The desktop apps have it; the Android app has no voice \
+                 mode yet.",
     },
     Addition {
         endpoint: Endpoint::HqProposalCancel,
@@ -177,89 +177,10 @@ pub const DESKTOP_ONLY: &[Addition] = &[
                  same reason as the voice credential.",
     },
     Addition {
-        endpoint: Endpoint::SaveSettings,
-        reason: "The account's language, written when a desktop app signs in or starts in a \
-                 language the account was not last told, so that what the service says to the \
-                 member away from the app (an email, a text message) is in that language. The \
-                 Android app's 3.0 writes it too; the snapshot predates it.",
-    },
-    Addition {
-        endpoint: Endpoint::TelemetryToken,
-        reason: "Live calls and messages reach a desktop app over the telemetry socket while it \
-                 runs. District AI for Linux has no push service; District AI for Windows can \
-                 also be reached by Windows push notifications (WNS).",
-    },
-    Addition {
         endpoint: Endpoint::AuthMe,
         reason: "The simplest authenticated request, which the client's own auth tests drive. \
                  The Android app called it only to decide whether to show its administration \
                  screens, and stopped when those left the app.",
-    },
-    Addition {
-        endpoint: Endpoint::ContactBlock,
-        reason: "Blocking a caller from a contact's page. The Android app has no screen that \
-                 blocks a caller and removed its unused client for these routes.",
-    },
-    Addition {
-        endpoint: Endpoint::ContactsBlocked,
-        reason: "The blocked callers list on the contacts page, for the same reason as blocking.",
-    },
-    Addition {
-        endpoint: Endpoint::NumberConfigure,
-        reason: "Pointing a held number back at the workspace. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::NumberRelease,
-        reason: "Releasing a held number, behind a confirmation. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::NumberLookup,
-        reason: "The billed number lookup, behind a confirmation. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::ProviderStatus,
-        reason: "The carrier accounts' status on the phone numbers screen. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::SipTrunks,
-        reason: "The SIP trunks on the phone numbers screen. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::SipTrunkCreate,
-        reason: "Creating a SIP trunk. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::VerifyService,
-        reason: "Whether the one-time passcode sender is in use. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::VerifyServiceSet,
-        reason: "Turning the one-time passcode sender on or off. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::A2pRegistration,
-        reason: "Filing an A2P 10DLC registration, behind a confirmation. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::TollFreeVerification,
-        reason: "Filing a toll-free number's verification, behind a confirmation. Number management, as in the iOS and \
-                 Mac apps; the Android app has no screen for it yet.",
-    },
-    Addition {
-        endpoint: Endpoint::CallDecline,
-        reason: "Telling the service a member declined a call that rang here, so that once \
-                 every member rung has declined the receptionist takes a message at once. \
-                 The Android app adds the same call (declineCall); this entry leaves once \
-                 the endpoint snapshot is refreshed from an Android release that has it.",
     },
     Addition {
         endpoint: Endpoint::BillingHandOff,

@@ -26,7 +26,8 @@ What is read:
     core/core-network/src/main/.../core/network/*.kt
         Every call through the shared API client: `client.get`, `client.send`,
         `client.sendMultipart` and `client.redirectTarget`. The path is the
-        `segments = ...` argument, evaluated against the path objects declared in
+        `segments` argument (named, or positional in the client's parameter
+        order), evaluated against the path objects declared in
         the same directory; a value that is not a known constant (an id) becomes a
         `{name}` placeholder. The method is `GET` for `get` and `redirectTarget`,
         `POST` for `sendMultipart`, and the `method = "..."` argument for `send`.
@@ -73,6 +74,15 @@ MODEL_DIR = CORE / "core-model/src/main"
 
 CLIENT_CALL = re.compile(r"\bclient\.(get|send|sendMultipart|redirectTarget)\s*\(")
 TRANSPORT_METHOD = {"get": "GET", "redirectTarget": "GET", "sendMultipart": "POST"}
+# The leading parameters of each client function, in declaration order
+# (DistrictApiClient.kt), so that a positional argument can be named. Only the
+# ones this script reads come after the first one it does not need.
+TRANSPORT_PARAMS = {
+    "get": ("segments", "serializer", "query"),
+    "redirectTarget": ("segments", "query"),
+    "send": ("method", "segments", "serializer", "query", "body"),
+    "sendMultipart": ("segments", "serializer", "fields"),
+}
 
 
 class SyncError(Exception):
@@ -178,13 +188,23 @@ def split_top_level(args: str) -> list[str]:
     return [p.strip() for p in parts if p.strip()]
 
 
-def named_arguments(args: str) -> dict[str, str]:
+def named_arguments(args: str, params: tuple[str, ...]) -> dict[str, str]:
+    """The call's arguments by parameter name. Positional arguments are named
+    from `params`, the function's parameters in order; as in Kotlin they may only
+    come before the named ones here."""
     named: dict[str, str] = {}
-    for part in split_top_level(args):
-        m = re.match(r"(\w+)\s*=\s*(.*)\Z", part, re.S)
-        if not m:
-            raise SyncError(f"positional argument in a client call: {part!r}")
-        named[m.group(1)] = m.group(2).strip()
+    seen_named = False
+    for index, part in enumerate(split_top_level(args)):
+        m = re.match(r"(\w+)\s*=(?!=)\s*(.*)\Z", part, re.S)
+        if m:
+            named[m.group(1)] = m.group(2).strip()
+            seen_named = True
+            continue
+        if seen_named:
+            raise SyncError(f"positional argument after a named one in a client call: {part!r}")
+        if index >= len(params):
+            raise SyncError(f"positional argument past the known parameters in a client call: {part!r}")
+        named[params[index]] = part.strip()
     return named
 
 
@@ -426,19 +446,24 @@ def enclosing_function(text: str, offset: int) -> str:
 
 
 def file_helpers(text: str, *, private: bool = True) -> dict[str, str]:
-    """Top-level helper functions and their bodies, e.g. `workspaceQuery(...)`.
+    """Helper functions and their bodies, e.g. `workspaceQuery(...)`: the
+    top-level ones, and with `private=True` also a class's own `private fun`
+    members, such as a body builder `numberBody(...)` beside the calls that use it.
 
-    With `private=False`, only the ones other files in the package can call
-    (not `private`), which `package_helpers` gathers.
+    With `private=False`, only the top-level ones other files in the package can
+    call (not `private`), which `package_helpers` gathers.
     """
     helpers = {}
-    for m in re.finditer(r"^(private\s+|internal\s+)?fun\s+(\w+)\s*\(", text, re.M):
-        if not private and m.group(1) and m.group(1).startswith("private"):
+    for m in re.finditer(r"^([ \t]*)(private\s+|internal\s+)?fun\s+(\w+)\s*\(", text, re.M):
+        indented, visibility = bool(m.group(1)), m.group(2) or ""
+        if indented and not (private and visibility.startswith("private")):
+            continue
+        if not private and visibility.startswith("private"):
             continue
         close = matching(text, m.end() - 1)
         eq = text.find("=", close)
         end = text.find("\n\n", eq)
-        helpers[m.group(2)] = text[eq : end if end >= 0 else len(text)]
+        helpers[m.group(3)] = text[eq : end if end >= 0 else len(text)]
     return helpers
 
 
@@ -487,8 +512,8 @@ def network_endpoints(sources: dict[str, str], evaluator: PathEvaluator, dtos: d
         helpers = {**shared, **file_helpers(text)}
         for m in CLIENT_CALL.finditer(text):
             open_at = m.end() - 1
-            args = named_arguments(text[open_at + 1 : matching(text, open_at)])
             transport = m.group(1)
+            args = named_arguments(text[open_at + 1 : matching(text, open_at)], TRANSPORT_PARAMS[transport])
             if transport == "send":
                 method_arg = args.get("method", "")
                 if not re.fullmatch(r'"[A-Z]+"', method_arg):
