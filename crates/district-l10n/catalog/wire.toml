@@ -822,6 +822,127 @@ tier = "T3"
 state = "reviewed"
 note = "A label for the stored value `unknown` of numberProvider. `numbers[].provider` in GET /api/district/workspace/provider/numbers, and `provider` in the number search response. `unknown` is a managed number whose carrier is not recorded. The service has no label for it; the English is the value as the apps show it."
 
+[wire.number_registration_end_user_type.business]
+en = "Business"
+fr = "Entreprise"
+ctx = "label"
+screen = "wire number_registration_end_user_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `business` of numberRegistrationEndUserType. `registrations[].endUserType` in GET and POST /api/district/workspace/numbers/registrations and `requirements.endUserType` in GET /api/district/workspace/numbers/requirements: who the filing is for. Also a request value (`endUserType`), sent as the carrier's own word."
+
+[wire.number_registration_end_user_type.individual]
+en = "Individual"
+fr = "Particulier"
+ctx = "label"
+screen = "wire number_registration_end_user_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `individual` of numberRegistrationEndUserType. `registrations[].endUserType` in GET and POST /api/district/workspace/numbers/registrations and `requirements.endUserType` in GET /api/district/workspace/numbers/requirements: who the filing is for. Also a request value (`endUserType`), sent as the carrier's own word."
+
+[wire.number_registration_number_type.local]
+en = "Local"
+fr = "Local"
+ctx = "label"
+screen = "wire number_registration_number_type"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "A label for the stored value `local` of numberRegistrationNumberType. `registrations[].numberType` in GET and POST /api/district/workspace/numbers/registrations and `numberType`/`requirements.numberType` in GET /api/district/workspace/numbers/requirements: the carrier's regulatory number type, \"toll free\" with its space. NOT numberType, which is the owned-numbers list's own vocabulary (`tollFree`). Also a request value, sent as is."
+
+[wire.number_registration_number_type.mobile]
+en = "Mobile"
+fr = "Mobile"
+ctx = "label"
+screen = "wire number_registration_number_type"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "A label for the stored value `mobile` of numberRegistrationNumberType. `registrations[].numberType` in GET and POST /api/district/workspace/numbers/registrations and `numberType`/`requirements.numberType` in GET /api/district/workspace/numbers/requirements: the carrier's regulatory number type, \"toll free\" with its space. NOT numberType, which is the owned-numbers list's own vocabulary (`tollFree`). Also a request value, sent as is."
+
+[wire.number_registration_number_type.national]
+en = "National"
+fr = "National"
+ctx = "label"
+screen = "wire number_registration_number_type"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "A label for the stored value `national` of numberRegistrationNumberType. `registrations[].numberType` in GET and POST /api/district/workspace/numbers/registrations and `numberType`/`requirements.numberType` in GET /api/district/workspace/numbers/requirements: the carrier's regulatory number type, \"toll free\" with its space. NOT numberType, which is the owned-numbers list's own vocabulary (`tollFree`). Also a request value, sent as is."
+
+[wire.number_registration_number_type.toll_free]
+en = "Toll-free"
+fr = "Sans frais"
+ctx = "label"
+screen = "wire number_registration_number_type"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `toll free` of numberRegistrationNumberType. `registrations[].numberType` in GET and POST /api/district/workspace/numbers/registrations and `numberType`/`requirements.numberType` in GET /api/district/workspace/numbers/requirements: the carrier's regulatory number type, \"toll free\" with its space. NOT numberType, which is the owned-numbers list's own vocabulary (`tollFree`). Also a request value, sent as is."
+
+[wire.number_registration_status.draft]
+en = "Draft"
+fr = "Brouillon"
+ctx = "label"
+screen = "wire number_registration_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `draft` of numberRegistrationStatus. `registrations[].status` in GET and POST /api/district/workspace/numbers/registrations, and `registration.status` in the POST .../registrations/submit answer: a filing's place in the carrier's review. Only `draft` may be edited or filed. The carrier can add a status without notice, and the portal shows one it does not know as sent."
+
+[wire.number_registration_status.in_review]
+en = "In review"
+fr = "En cours d'examen"
+ctx = "label"
+screen = "wire number_registration_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `in-review` of numberRegistrationStatus. `registrations[].status` in GET and POST /api/district/workspace/numbers/registrations, and `registration.status` in the POST .../registrations/submit answer: a filing's place in the carrier's review. Only `draft` may be edited or filed. The carrier can add a status without notice, and the portal shows one it does not know as sent."
+
+[wire.number_registration_status.pending_review]
+en = "Pending review"
+fr = "En attente d'examen"
+ctx = "label"
+screen = "wire number_registration_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `pending-review` of numberRegistrationStatus. `registrations[].status` in GET and POST /api/district/workspace/numbers/registrations, and `registration.status` in the POST .../registrations/submit answer: a filing's place in the carrier's review. Only `draft` may be edited or filed. The carrier can add a status without notice, and the portal shows one it does not know as sent."
+
+[wire.number_registration_status.twilio_approved]
+en = "Approved"
+fr = "Approuvée"
+ctx = "label"
+screen = "wire number_registration_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `twilio-approved` of numberRegistrationStatus. `registrations[].status` in GET and POST /api/district/workspace/numbers/registrations, and `registration.status` in the POST .../registrations/submit answer: a filing's place in the carrier's review. Only `draft` may be edited or filed. The carrier can add a status without notice, and the portal shows one it does not know as sent."
+
+[wire.number_registration_status.twilio_rejected]
+en = "Rejected"
+fr = "Refusée"
+ctx = "label"
+screen = "wire number_registration_status"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `twilio-rejected` of numberRegistrationStatus. `registrations[].status` in GET and POST /api/district/workspace/numbers/registrations, and `registration.status` in the POST .../registrations/submit answer: a filing's place in the carrier's review. Only `draft` may be edited or filed. The carrier can add a status without notice, and the portal shows one it does not know as sent."
+
+[wire.number_requirement_kind.end_user]
+en = "Your details"
+fr = "Vos renseignements"
+ctx = "label"
+screen = "wire number_requirement_kind"
+tier = "T3"
+state = "reviewed"
+note = "A label for the stored value `end_user` of numberRequirementKind. `requirements.requirements[].kind` in GET /api/district/workspace/numbers/requirements: whether a requirement is details about the end user (its `fields`) or a document. The portal has no badge for it; it lists the two under the headings these labels are."
+
+[wire.number_requirement_kind.supporting_document]
+en = "Documents"
+fr = "Documents"
+ctx = "label"
+screen = "wire number_requirement_kind"
+tier = "T3"
+state = "reviewed"
+same_ok = true
+note = "A label for the stored value `supporting_document` of numberRequirementKind. `requirements.requirements[].kind` in GET /api/district/workspace/numbers/requirements: whether a requirement is details about the end user (its `fields`) or a document. The portal has no badge for it; it lists the two under the headings these labels are."
+
 [wire.number_status.active]
 en = "Active"
 fr = "Actif"
@@ -940,7 +1061,7 @@ screen = "wire placeholder"
 tier = "T3"
 state = "reviewed"
 same_ok = true
-note = "Text the service stores or sends in English in place of a real value, in the booking name inside a scheduling timeline message. Shown where that value is shown."
+note = "Text the service stores or sends in English in place of a real value, in the booking name inside a booking line's Message.body, when the event type has no name and no slug (a French read, Accept-Language: fr-CA, gets the whole line in French from Message.bookingEvent). Shown where that value is shown."
 
 [wire.placeholder.customer]
 en = "Customer"

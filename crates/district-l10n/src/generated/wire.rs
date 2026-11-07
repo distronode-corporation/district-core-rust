@@ -815,6 +815,123 @@ pub fn wire_number_provider_unknown(l: Locale) -> &'static str {
     }
 }
 
+/// `wire.number_registration_end_user_type.business`
+#[must_use]
+pub fn wire_number_registration_end_user_type_business(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Business",
+        Locale::FrCa => "Entreprise",
+    }
+}
+
+/// `wire.number_registration_end_user_type.individual`
+#[must_use]
+pub fn wire_number_registration_end_user_type_individual(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Individual",
+        Locale::FrCa => "Particulier",
+    }
+}
+
+/// `wire.number_registration_number_type.local`
+#[must_use]
+pub fn wire_number_registration_number_type_local(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Local",
+        Locale::FrCa => "Local",
+    }
+}
+
+/// `wire.number_registration_number_type.mobile`
+#[must_use]
+pub fn wire_number_registration_number_type_mobile(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Mobile",
+        Locale::FrCa => "Mobile",
+    }
+}
+
+/// `wire.number_registration_number_type.national`
+#[must_use]
+pub fn wire_number_registration_number_type_national(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "National",
+        Locale::FrCa => "National",
+    }
+}
+
+/// `wire.number_registration_number_type.toll_free`
+#[must_use]
+pub fn wire_number_registration_number_type_toll_free(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Toll-free",
+        Locale::FrCa => "Sans frais",
+    }
+}
+
+/// `wire.number_registration_status.draft`
+#[must_use]
+pub fn wire_number_registration_status_draft(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Draft",
+        Locale::FrCa => "Brouillon",
+    }
+}
+
+/// `wire.number_registration_status.in_review`
+#[must_use]
+pub fn wire_number_registration_status_in_review(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "In review",
+        Locale::FrCa => "En cours d'examen",
+    }
+}
+
+/// `wire.number_registration_status.pending_review`
+#[must_use]
+pub fn wire_number_registration_status_pending_review(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Pending review",
+        Locale::FrCa => "En attente d'examen",
+    }
+}
+
+/// `wire.number_registration_status.twilio_approved`
+#[must_use]
+pub fn wire_number_registration_status_twilio_approved(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Approved",
+        Locale::FrCa => "Approuvée",
+    }
+}
+
+/// `wire.number_registration_status.twilio_rejected`
+#[must_use]
+pub fn wire_number_registration_status_twilio_rejected(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Rejected",
+        Locale::FrCa => "Refusée",
+    }
+}
+
+/// `wire.number_requirement_kind.end_user`
+#[must_use]
+pub fn wire_number_requirement_kind_end_user(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your details",
+        Locale::FrCa => "Vos renseignements",
+    }
+}
+
+/// `wire.number_requirement_kind.supporting_document`
+#[must_use]
+pub fn wire_number_requirement_kind_supporting_document(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Documents",
+        Locale::FrCa => "Documents",
+    }
+}
+
 /// `wire.number_status.active`
 #[must_use]
 pub fn wire_number_status_active(l: Locale) -> &'static str {

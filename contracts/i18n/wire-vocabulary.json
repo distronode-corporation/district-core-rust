@@ -1933,6 +1933,158 @@
           "fr": "Case à cocher"
         }
       ]
+    },
+    "numberRegistrationStatus": {
+      "description": "`registrations[].status` in GET and POST /api/district/workspace/numbers/registrations, and `registration.status` in the POST .../registrations/submit answer: a filing's place in the carrier's review. Only `draft` may be edited or filed. The carrier can add a status without notice, and the portal shows one it does not know as sent.",
+      "labelSource": "distronode-website/src/components/district/marketplace/marketplaceI18n.ts registrations.status*",
+      "values": [
+        {
+          "value": "draft",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-bundles.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/submit/route.ts"
+          ],
+          "en": "Draft",
+          "fr": "Brouillon"
+        },
+        {
+          "value": "pending-review",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-bundles.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/submit/route.ts"
+          ],
+          "en": "Pending review",
+          "fr": "En attente d'examen"
+        },
+        {
+          "value": "in-review",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-bundles.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/submit/route.ts"
+          ],
+          "en": "In review",
+          "fr": "En cours d'examen"
+        },
+        {
+          "value": "twilio-approved",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-bundles.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/submit/route.ts"
+          ],
+          "en": "Approved",
+          "fr": "Approuvée"
+        },
+        {
+          "value": "twilio-rejected",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-bundles.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/submit/route.ts"
+          ],
+          "en": "Rejected",
+          "fr": "Refusée"
+        }
+      ]
+    },
+    "numberRegistrationEndUserType": {
+      "description": "`registrations[].endUserType` in GET and POST /api/district/workspace/numbers/registrations and `requirements.endUserType` in GET /api/district/workspace/numbers/requirements: who the filing is for. Also a request value (`endUserType`), sent as the carrier's own word.",
+      "labelSource": "distronode-website/src/components/district/marketplace/marketplaceI18n.ts registrations.kind*",
+      "values": [
+        {
+          "value": "individual",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-regulatory.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/requirements/route.ts"
+          ],
+          "en": "Individual",
+          "fr": "Particulier"
+        },
+        {
+          "value": "business",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-regulatory.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/requirements/route.ts"
+          ],
+          "en": "Business",
+          "fr": "Entreprise"
+        }
+      ]
+    },
+    "numberRegistrationNumberType": {
+      "description": "`registrations[].numberType` in GET and POST /api/district/workspace/numbers/registrations and `numberType`/`requirements.numberType` in GET /api/district/workspace/numbers/requirements: the carrier's regulatory number type, \"toll free\" with its space. NOT numberType, which is the owned-numbers list's own vocabulary (`tollFree`). Also a request value, sent as is.",
+      "labelSource": "distronode-website/src/components/district/marketplace/marketplaceI18n.ts registrations.numberTypes",
+      "values": [
+        {
+          "value": "local",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-regulatory.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/requirements/route.ts"
+          ],
+          "en": "Local",
+          "fr": "Local"
+        },
+        {
+          "value": "mobile",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-regulatory.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/requirements/route.ts"
+          ],
+          "en": "Mobile",
+          "fr": "Mobile"
+        },
+        {
+          "value": "national",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-regulatory.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/requirements/route.ts"
+          ],
+          "en": "National",
+          "fr": "National"
+        },
+        {
+          "value": "toll free",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-regulatory.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/registrations/route.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/requirements/route.ts"
+          ],
+          "en": "Toll-free",
+          "fr": "Sans frais"
+        }
+      ]
+    },
+    "numberRequirementKind": {
+      "description": "`requirements.requirements[].kind` in GET /api/district/workspace/numbers/requirements: whether a requirement is details about the end user (its `fields`) or a document. The portal has no badge for it; it lists the two under the headings these labels are.",
+      "labelSource": "distronode-website/src/components/district/marketplace/marketplaceI18n.ts registrations.yourDetails, registrations.documentsHeading",
+      "values": [
+        {
+          "value": "end_user",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-regulatory.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/requirements/route.ts"
+          ],
+          "en": "Your details",
+          "fr": "Vos renseignements"
+        },
+        {
+          "value": "supporting_document",
+          "definedIn": [
+            "distronode-website/src/lib/providers/twilio-regulatory.ts",
+            "distronode-website/src/app/api/district/workspace/numbers/requirements/route.ts"
+          ],
+          "en": "Documents",
+          "fr": "Documents"
+        }
+      ]
     }
   },
   "placeholders": [
@@ -2097,13 +2249,13 @@
       "value": "Consultation",
       "kind": "stored",
       "fields": [
-        "the booking name inside a scheduling timeline message"
+        "the booking name inside a booking line's Message.body, when the event type has no name and no slug (a French read, Accept-Language: fr-CA, gets the whole line in French from Message.bookingEvent)"
       ],
       "definedIn": [
-        "distronode-website/src/app/api/district/scheduling/webhook/[workspaceId]/route.ts"
+        "distronode-website/src/lib/i18n/bookings.ts"
       ],
-      "fr": null,
-      "frSource": null
+      "fr": "Consultation",
+      "frSource": "distronode-website/src/lib/i18n/bookings.ts untitled"
     },
     {
       "value": "Distronode Support",

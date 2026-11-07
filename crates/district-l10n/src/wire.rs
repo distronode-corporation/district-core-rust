@@ -100,11 +100,24 @@ pub enum WireCategory {
     SchedulingHostRole,
     /// `type` on a booking question in the scheduling administration.
     SchedulingQuestionType,
+    /// `status` on a phone number registration: its place in the carrier's
+    /// review.
+    NumberRegistrationStatus,
+    /// `endUserType` on a phone number registration and its requirements:
+    /// who the filing is for.
+    NumberRegistrationEndUserType,
+    /// `numberType` on a phone number registration and its requirements:
+    /// the carrier's regulatory number type (`toll free`, with its space),
+    /// not the owned-numbers list's `type`.
+    NumberRegistrationNumberType,
+    /// `kind` of one of a registration's requirements: details about the end
+    /// user, or a document.
+    NumberRequirementKind,
 }
 
 impl WireCategory {
     /// Every category.
-    pub const ALL: [Self; 39] = [
+    pub const ALL: [Self; 43] = [
         Self::CallStatus,
         Self::CallDirection,
         Self::CallType,
@@ -144,6 +157,10 @@ impl WireCategory {
         Self::SchedulingWebhookDeliveryStatus,
         Self::SchedulingHostRole,
         Self::SchedulingQuestionType,
+        Self::NumberRegistrationStatus,
+        Self::NumberRegistrationEndUserType,
+        Self::NumberRegistrationNumberType,
+        Self::NumberRequirementKind,
     ];
 
     /// The name the vocabulary gives the category (`callStatus`).
@@ -188,6 +205,10 @@ impl WireCategory {
             Self::SchedulingWebhookDeliveryStatus => "schedulingWebhookDeliveryStatus",
             Self::SchedulingHostRole => "schedulingHostRole",
             Self::SchedulingQuestionType => "schedulingQuestionType",
+            Self::NumberRegistrationStatus => "numberRegistrationStatus",
+            Self::NumberRegistrationEndUserType => "numberRegistrationEndUserType",
+            Self::NumberRegistrationNumberType => "numberRegistrationNumberType",
+            Self::NumberRequirementKind => "numberRequirementKind",
         }
     }
 
