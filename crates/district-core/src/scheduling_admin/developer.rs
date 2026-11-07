@@ -671,11 +671,25 @@ fn send(pending: Pending, request: SchedulingAdminRequest) -> Out {
     Out::Send(AdminPending::Developer(pending), Box::new(request))
 }
 
+/// Opens the section: on its first tab, or, read afresh while it shows (the
+/// window's Refresh), on the tab it showed, with the webhook whose deliveries
+/// were open on the webhooks tab still open and its deliveries read again.
+/// Every tab is read again when next shown, and the dialog and any question
+/// close.
 pub(crate) fn enter(admin: &mut SchedulingAdmin, tickets: &mut Tickets) -> Vec<Out> {
     admin.forget(tickets, |p| matches!(p, AdminPending::Developer(_)));
     let mut section = DeveloperSection::default();
+    if let Some(shown) = admin.developer.as_ref() {
+        section.tab = shown.tab;
+        if shown.tab == DeveloperTab::Webhooks {
+            section.open_webhook = shown.open_webhook.clone();
+        }
+    }
     let mut outs = vec![send(Pending::Me, SchedulingAdminRequest::Me)];
     outs.extend(read_tab(&mut section));
+    if let Some(id) = section.open_webhook.clone() {
+        outs.push(read_deliveries(&mut section, id));
+    }
     admin.developer = Some(section);
     outs
 }

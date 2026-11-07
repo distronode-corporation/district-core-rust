@@ -7,7 +7,7 @@ use district_core::scheduling_admin::{
     Removal, SectionLoad, WEBHOOK_EVENTS, WEBHOOK_FIELDS, WebhookEditor, WriteState,
     delivery_outcome, is_personal_data,
 };
-use district_core::{Effect, Model, SchedulingAdminEvent, SchedulingSection, Tone};
+use district_core::{Effect, Event, Model, Route, SchedulingAdminEvent, SchedulingSection, Tone};
 use district_model::{
     SchedulingAdminData, SchedulingAdminRequest, SchedulingApiKey, SchedulingApiKeyCreated,
     SchedulingItems, SchedulingMe, SchedulingOauthConnection, SchedulingOk, SchedulingWebhook,
@@ -277,6 +277,94 @@ fn deliveries_open_under_their_webhook_and_say_what_came_of_each() {
     assert_eq!(
         with_locale(Locale::FrCa, || outcome("success", Some(200))).0,
         "Livr\u{e9}"
+    );
+}
+
+#[test]
+fn the_windows_refresh_reads_the_section_again_on_the_tab_and_webhook_it_showed() {
+    let mut model = read("viewer");
+    show(
+        &mut model,
+        DeveloperTab::Webhooks,
+        SchedulingAdminData::Webhooks(hooks()),
+    );
+    let effects = developer(
+        &mut model,
+        DeveloperEvent::ToggleDeliveries("wh-contract-1".into()),
+    );
+    answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Deliveries(items(
+            "district-scheduling-webhook-deliveries.json",
+        ))),
+    );
+    // The tab and the open deliveries stay, and both are read again.
+    let effects = model.update(Event::Refresh);
+    assert_eq!(section(&model).tab, DeveloperTab::Webhooks);
+    assert_eq!(
+        section(&model).open_webhook.as_deref(),
+        Some("wh-contract-1")
+    );
+    let requests: Vec<SchedulingAdminRequest> = sent(&effects).into_iter().map(|s| s.1).collect();
+    assert_eq!(
+        requests,
+        [
+            SchedulingAdminRequest::Me,
+            SchedulingAdminRequest::Webhooks,
+            SchedulingAdminRequest::WebhookDeliveries {
+                id: "wh-contract-1".into()
+            },
+        ]
+    );
+    assert!(section(&model).keys.is_none());
+    for (ticket, request) in sent(&effects) {
+        let data = match request {
+            SchedulingAdminRequest::Me => {
+                SchedulingAdminData::Me(data("district-scheduling-me.json"))
+            }
+            SchedulingAdminRequest::Webhooks => SchedulingAdminData::Webhooks(hooks()),
+            _ => SchedulingAdminData::Deliveries(items(
+                "district-scheduling-webhook-deliveries.json",
+            )),
+        };
+        answer(&mut model, ticket, done(data));
+    }
+    assert!(
+        section(&model).deliveries["wh-contract-1"]
+            .value()
+            .is_some()
+    );
+    // On another tab the webhook it left open is closed: its deliveries are not
+    // shown there, and nothing would read them on the way back.
+    show(
+        &mut model,
+        DeveloperTab::Apps,
+        SchedulingAdminData::OauthConnections(apps()),
+    );
+    let effects = model.update(Event::Refresh);
+    assert_eq!(section(&model).tab, DeveloperTab::Apps);
+    assert_eq!(section(&model).open_webhook, None);
+    let requests: Vec<SchedulingAdminRequest> = sent(&effects).into_iter().map(|s| s.1).collect();
+    assert_eq!(
+        requests,
+        [
+            SchedulingAdminRequest::Me,
+            SchedulingAdminRequest::OauthConnections
+        ]
+    );
+    // Left and opened again, it starts on its first tab.
+    model.update(Event::Navigate(Route::SchedulingAdmin(
+        SchedulingSection::Overview,
+    )));
+    let effects = model.update(Event::Navigate(Route::SchedulingAdmin(
+        SchedulingSection::Developer,
+    )));
+    assert_eq!(section(&model).tab, DeveloperTab::Keys);
+    let requests: Vec<SchedulingAdminRequest> = sent(&effects).into_iter().map(|s| s.1).collect();
+    assert_eq!(
+        requests,
+        [SchedulingAdminRequest::Me, SchedulingAdminRequest::ApiKeys]
     );
 }
 

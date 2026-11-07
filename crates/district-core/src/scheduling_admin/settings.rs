@@ -688,9 +688,15 @@ fn send(pending: Pending, request: SchedulingAdminRequest) -> Out {
     Out::Send(AdminPending::Settings(pending), Box::new(request))
 }
 
+/// Opens the section: on its first tab, or, read afresh while it shows (the
+/// window's Refresh), on the tab it showed. Every tab is read again when next
+/// shown, and the dialog closes.
 pub(crate) fn enter(admin: &mut SchedulingAdmin, tickets: &mut Tickets) -> Vec<Out> {
     admin.forget(tickets, |p| matches!(p, AdminPending::Settings(_)));
-    let mut section = SettingsSection::default();
+    let mut section = SettingsSection {
+        tab: admin.settings.as_ref().map(|s| s.tab).unwrap_or_default(),
+        ..SettingsSection::default()
+    };
     let outs = read_tab(&mut section);
     admin.settings = Some(section);
     outs

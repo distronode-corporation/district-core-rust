@@ -7,7 +7,7 @@ use district_core::scheduling_admin::{
     SettingsSection, SettingsTab, WriteState, date_format_label, locale_label, notification_groups,
     notification_label, notification_value, set_label, time_format_label, week_start_label,
 };
-use district_core::{Effect, Model, SchedulingAdminEvent, SchedulingSection};
+use district_core::{Effect, Event, Model, Route, SchedulingAdminEvent, SchedulingSection};
 use district_model::{
     SchedulingAdminData, SchedulingAdminRequest, SchedulingBranding, SchedulingBrandingPatch,
     SchedulingLlmSettings, SchedulingMe, SchedulingOk, SchedulingProfilePatch,
@@ -203,6 +203,52 @@ fn a_refresh_reads_the_tab_again_and_a_failed_read_says_why() {
     // Closed: the events do nothing.
     let (mut model, _) = open("agency", SchedulingSection::Overview);
     assert!(settings(&mut model, SettingsEvent::Refresh).is_empty());
+}
+
+#[test]
+fn the_windows_refresh_reads_the_section_again_on_the_tab_it_showed() {
+    let mut model = read("agency");
+    show(
+        &mut model,
+        SettingsTab::Assistant,
+        SchedulingAdminData::Llm(llm()),
+    );
+    let effects = model.update(Event::Refresh);
+    // The tab shown stays and is read again; the others are read when next shown.
+    assert_eq!(section(&model).tab, SettingsTab::Assistant);
+    assert_eq!(sent(&effects).len(), 1);
+    assert_eq!(sent(&effects)[0].1, SchedulingAdminRequest::Llm);
+    assert!(section(&model).branding.is_none());
+    answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Llm(llm())),
+    );
+    assert!(
+        section(&model)
+            .assistant
+            .as_ref()
+            .is_some_and(|a| a.value().is_some())
+    );
+    let again = settings(
+        &mut model,
+        SettingsEvent::SelectTab(SettingsTab::BookingPage),
+    );
+    assert_eq!(sent(&again)[0].1, SchedulingAdminRequest::Branding);
+    // Left and opened again, it starts on its first tab.
+    show(
+        &mut model,
+        SettingsTab::Profile,
+        SchedulingAdminData::Me(me()),
+    );
+    model.update(Event::Navigate(Route::SchedulingAdmin(
+        SchedulingSection::Overview,
+    )));
+    let effects = model.update(Event::Navigate(Route::SchedulingAdmin(
+        SchedulingSection::Settings,
+    )));
+    assert_eq!(section(&model).tab, SettingsTab::BookingPage);
+    assert_eq!(sent(&effects)[0].1, SchedulingAdminRequest::Branding);
 }
 
 fn profile(model: &Model) -> &ProfileEditor {
