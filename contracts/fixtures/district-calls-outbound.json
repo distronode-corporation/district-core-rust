@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "results": [
+    {
+      "contactId": "contact_queued",
+      "callId": "CAabababababababababababababababab",
+      "status": "queued",
+      "provider": "twilio",
+      "accountId": "acct_contract"
+    },
+    {
+      "contactId": "contact_dnc",
+      "status": "skipped",
+      "error": "Number is on the Do Not Call list",
+      "code": "do_not_call"
+    },
+    {
+      "contactId": "contact_failed",
+      "status": "failed",
+      "error": "Something went wrong. Please try again."
+    }
+  ]
+}

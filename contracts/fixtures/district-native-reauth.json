@@ -1,0 +1,5 @@
+{
+  "success": true,
+  "action": "delete-account",
+  "expiresInSeconds": 300
+}

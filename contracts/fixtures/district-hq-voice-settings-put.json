@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "settings": {
+    "voice": "Charon",
+    "length": "detailed",
+    "pace": "normal",
+    "language": "fr",
+    "micMode": "push"
+  }
+}

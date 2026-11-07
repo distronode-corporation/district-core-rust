@@ -1,0 +1,5 @@
+{
+  "error": "That website could not be read.",
+  "code": "website_unreadable",
+  "reason": "host_unavailable"
+}
