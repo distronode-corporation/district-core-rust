@@ -34,11 +34,14 @@ on, and `NumberAdmin` and `HqVoiceTokenResponse` fields an app builds.
   `RegistrationEvent::Edit` and `Start`); a document put on a draft or taken off it
   (`RegistrationEvent::Upload`, `RemoveDocument`), refused for a filing that is not a draft;
   the end-user details a draft is filed with (`RegistrationEvent::EditDetails`); and filing a
-  draft behind `NumberConfirmation::SubmitRegistration`, sent once. Starting a draft, an
-  upload and a removal converge, so each is offered again after any failure; a filing is
-  offered again only after a refusal (a 422 `validation_failed` or `carrier_rejected`), and
-  the filings are read again either way, because a refusal changes the filing's status and
-  reasons. A viewer, whom the service refuses, is sent nothing and offered nothing. Every
+  draft behind `NumberConfirmation::SubmitRegistration`, sent once. One write goes at a
+  time, and the filings are read again after each, whatever the outcome. Starting a draft,
+  an upload and a removal converge, so each is offered again after any failure. A filing is
+  offered again after a refusal (a 422 `validation_failed` or `carrier_rejected`); after a
+  failure that does not prove it was not filed, that draft alone is held back
+  (`NumberRegistrations::unconfirmed_filing`, `can_file`) until the workspace is opened
+  again. Changing the country, number type or end-user type puts away the requirements
+  shown, and drops a lookup still on its way. A viewer, whom the service refuses, is sent nothing and offered nothing. Every
   event is `NumberAdminEvent::Registration(RegistrationEvent)`, every call a `NumberCall`
   through `Effect::NumberAdmin`, as the carrier tab's are.
 - Labels through the wire vocabulary only: `registration_status`, `registration_title`,

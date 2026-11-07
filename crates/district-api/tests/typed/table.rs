@@ -151,6 +151,17 @@ fn assert_sent_as_android_sends(case: &Case, request: &wiremock::Request) {
                     "{name}: the {field} field, once"
                 );
             }
+            // Every part is one the row names: the workspace when it is a
+            // field, each text field, and the file. Nothing else.
+            let parts = body
+                .windows(b"form-data; name=".len())
+                .filter(|w| w.eq_ignore_ascii_case(b"form-data; name="))
+                .count();
+            assert_eq!(
+                parts,
+                fields.len() + usize::from(*workspace_field) + 1,
+                "{name}: the form's parts"
+            );
             let mut part = format!(
                 "name=\"file\"; filename=\"{file_name}\"\r\nContent-Type: {mime_type}\r\n\r\n"
             )

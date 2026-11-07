@@ -38,7 +38,7 @@ use district_model::{
 use crate::failure::FailureText;
 use crate::model::{Effect, Slot, Tickets};
 use crate::number_admin::{NumberAnswer, NumberCall, NumberConfirmation, NumberWrite, Repeat};
-use crate::signed_in::{Next, SignedIn, stay};
+use crate::signed_in::{Next, SignedIn};
 use crate::text::l;
 use crate::workflows::Tone;
 
@@ -60,6 +60,12 @@ pub struct NumberRegistrations {
     pub write: NumberWrite,
     /// The filing [`write`](Self::write) is about, or `None` for starting one.
     pub written: Option<String>,
+    /// The draft whose filing failed in a way that does not prove it was not
+    /// filed (a server error, no answer): it is not offered for filing again
+    /// until the workspace is opened again, because a second filing would be
+    /// a second regulated application. Every other draft, and every other
+    /// write, is offered as before.
+    pub unconfirmed_filing: Option<String>,
 }
 
 impl NumberRegistrations {
@@ -78,9 +84,21 @@ impl NumberRegistrations {
             .is_some_and(NumberRegistration::is_draft)
     }
 
-    /// Whether a draft's control (Remove, File it) may be pressed now.
+    /// Whether no write is on its way. Only one goes at a time.
+    fn idle(&self) -> bool {
+        !self.write.is_running()
+    }
+
+    /// Whether a draft's document controls (Upload, Remove) may be pressed
+    /// now.
     pub fn draft_armed(&self, bundle_id: &str) -> bool {
-        self.is_draft(bundle_id) && self.write.is_armed()
+        self.is_draft(bundle_id) && self.idle()
+    }
+
+    /// Whether a draft's "File it" may be pressed now: not for a draft whose
+    /// filing may already have happened ([`unconfirmed_filing`](Self::unconfirmed_filing)).
+    pub fn can_file(&self, bundle_id: &str) -> bool {
+        self.draft_armed(bundle_id) && self.unconfirmed_filing.as_deref() != Some(bundle_id)
     }
 
     /// Marks the filings as being read, and the call that reads them. A list
@@ -95,7 +113,22 @@ impl NumberRegistrations {
     /// Whether "Start registration" may be pressed now: a country typed, and
     /// no write on its way.
     pub fn can_start(&self) -> bool {
-        self.form.is_submittable() && self.write.is_armed()
+        self.form.is_submittable() && self.idle()
+    }
+
+    /// The form changed to `form`. A change of what the requirements are
+    /// asked for (the country, the number type or the end-user type) puts
+    /// away the requirements shown, which were for the old question, and
+    /// says whether a lookup on its way is for it.
+    fn edit(&mut self, form: RegistrationForm) -> bool {
+        let asked =
+            |f: &RegistrationForm| (f.trimmed_country(), f.number_type(), f.end_user_type());
+        let changed = asked(&self.form) != asked(&form);
+        if changed {
+            self.requirements = RequirementsState::Idle;
+        }
+        self.form = form;
+        changed
     }
 }
 
@@ -354,12 +387,16 @@ impl SignedIn {
     pub(crate) fn registration_event(
         &mut self,
         event: RegistrationEvent,
+        tickets: &mut Tickets,
     ) -> Option<(Slot, NumberCall)> {
         let registrations = &mut self.marketplace.admin.registrations;
         match event {
             RegistrationEvent::Reload => Some(registrations.reading()),
             RegistrationEvent::Edit(form) => {
-                registrations.form = form;
+                if registrations.edit(form) {
+                    // Its answer would be for a question no longer asked.
+                    tickets.cancel(Slot::NumberRequirements);
+                }
                 None
             }
             RegistrationEvent::CheckRequirements => {
@@ -420,12 +457,12 @@ impl SignedIn {
                 })
             }
             RegistrationEvent::AskSubmit { bundle_id } => {
-                if let Some(registration) = registrations
-                    .registration(&bundle_id)
-                    .filter(|r| r.is_draft())
+                if registrations.can_file(&bundle_id)
+                    && let Some(registration) = registrations.registration(&bundle_id)
                 {
                     let country = registration.iso_country.clone();
-                    self.ask(NumberConfirmation::SubmitRegistration { bundle_id, country });
+                    self.marketplace.admin.confirmation =
+                        Some(NumberConfirmation::SubmitRegistration { bundle_id, country });
                 }
                 None
             }
@@ -433,8 +470,10 @@ impl SignedIn {
     }
 
     /// A filing was started, a document put on or taken off, or a draft
-    /// filed. Each reads the filings again, a refused filing too: a refusal
-    /// changes its status and its reasons.
+    /// filed. Each reads the filings again whatever the outcome: a refusal
+    /// changes a filing's status and its reasons, and a write whose answer
+    /// was lost may still have landed (a draft started, so a second start
+    /// would only be refused as a duplicate).
     pub(crate) fn registration_written(
         &mut self,
         result: Result<NumberAnswer, ApiError>,
@@ -449,24 +488,22 @@ impl SignedIn {
             Repeat::Converges
         };
         let registrations = &mut admin.registrations;
-        let mut reread = filing;
-        registrations.write = NumberWrite::after(result, repeat, |answer| {
-            reread = true;
-            match answer {
-                NumberAnswer::RegistrationCreated(_) => {
-                    registrations.form = RegistrationForm::default();
-                    NumberWrite::Idle
-                }
-                NumberAnswer::RegistrationSubmitted(filed) => {
-                    registrations.details.remove(&filed.registration.id);
-                    NumberWrite::Done(ns::numbers_submit_filed(l()).to_owned())
-                }
-                _ => NumberWrite::Idle,
+        registrations.write = NumberWrite::after(result, repeat, |answer| match answer {
+            NumberAnswer::RegistrationCreated(_) => {
+                registrations.form = RegistrationForm::default();
+                NumberWrite::Idle
             }
+            NumberAnswer::RegistrationSubmitted(filed) => {
+                registrations.details.remove(&filed.registration.id);
+                NumberWrite::Done(ns::numbers_submit_filed(l()).to_owned())
+            }
+            _ => NumberWrite::Idle,
         });
-        if reread {
-            return Next::Stay(vec![self.read_registrations(tickets)]);
+        if filing && registrations.write.unrepeatable_note().is_some() {
+            registrations
+                .unconfirmed_filing
+                .clone_from(&registrations.written);
         }
-        stay()
+        Next::Stay(vec![self.read_registrations(tickets)])
     }
 }

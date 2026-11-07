@@ -16,7 +16,8 @@ use district_model::{
     CountryRequirements, NumberRegistration, NumberRegistrationCreateResponse,
     NumberRegistrationDraft, NumberRegistrationSubmitResponse, NumberRegistrationsResponse,
     NumberRequirementsResponse, RegistrationDocument, RegistrationDocumentRemovalResponse,
-    RegistrationDocumentUpload, RegulatoryRequirement, SubmittedRegistration,
+    RegistrationDocumentResponse, RegistrationDocumentUpload, RegulatoryRequirement,
+    SubmittedRegistration, UploadedRegistrationDocument,
 };
 
 use crate::support::{AGENCY, VIEWER, fixture, last_ticket, loaded, server_error, signed_in};
@@ -335,15 +336,16 @@ fn a_refused_start_keeps_the_form_and_may_be_tried_again() {
         }),
     );
     let (ticket, _) = called(&event(&mut model, RegistrationEvent::Start));
-    let effects = answer(
+    let (_, reread) = called(&answer(
         &mut model,
         ticket,
         Err(ApiError::Conflict(ErrorDetail {
             message: Some("This workspace already has a registration.".to_owned()),
             ..ErrorDetail::default()
         })),
-    );
-    assert!(effects.is_empty(), "nothing changed, nothing to read");
+    ));
+    // Read again all the same: a start whose answer was lost may have landed.
+    assert_eq!(reread, NumberCall::Registrations);
     assert_eq!(registrations(&model).form.country, "DE");
     assert!(registrations(&model).write.is_armed());
     assert_eq!(
@@ -401,9 +403,35 @@ fn documents_go_on_and_off_a_draft_only() {
         !registrations(&model).draft_armed("bu_draft"),
         "one at a time"
     );
-    // A failed upload is offered again: it replaces, so it converges.
-    assert!(answer(&mut model, ticket, Err(server_error())).is_empty());
+    // A failed upload is offered again: it replaces, so it converges. The
+    // filings are read again, in case it landed.
+    let (_, reread) = called(&answer(&mut model, ticket, Err(server_error())));
+    assert_eq!(reread, NumberCall::Registrations);
     assert!(registrations(&model).draft_armed("bu_draft"));
+
+    // One that lands reads the filings again, to show it.
+    let (ticket, _) = called(&event(
+        &mut model,
+        RegistrationEvent::Upload(upload("bu_draft")),
+    ));
+    let (_, reread) = called(&answer(
+        &mut model,
+        ticket,
+        Ok(NumberAnswer::RegistrationDocumentUploaded(
+            RegistrationDocumentResponse {
+                success: true,
+                document: UploadedRegistrationDocument {
+                    id: "doc_2".to_owned(),
+                    requirement_name: "proof_of_address".to_owned(),
+                    mime_type: "application/pdf".to_owned(),
+                    size_bytes: 4,
+                    created_at: "2026-11-07T10:00:00.000Z".to_owned(),
+                },
+            },
+        )),
+    ));
+    assert_eq!(reread, NumberCall::Registrations);
+    assert_eq!(registrations(&model).write, NumberWrite::Idle);
 
     let (ticket, call) = called(&event(
         &mut model,
@@ -546,15 +574,92 @@ fn a_refused_filing_reads_the_list_again_and_only_a_refusal_is_offered_again() {
         let (ticket, _) = called(&numbers(&mut model, NumberAdminEvent::Confirm));
         // Read again either way: a refusal changes the filing's status and
         // reasons, and a failure may have filed it.
-        let (_, reread) = called(&answer(&mut model, ticket, Err(error.clone())));
-        assert_eq!(reread, NumberCall::Registrations, "{error:?}");
+        let (reread, call) = called(&answer(&mut model, ticket, Err(error.clone())));
+        assert_eq!(call, NumberCall::Registrations, "{error:?}");
         assert_eq!(signed_in(&model).marketplace.admin.confirmation, None);
+        answer(
+            &mut model,
+            reread,
+            Ok(listing(vec![
+                filing("bu_draft", "draft"),
+                filing("bu_other", "draft"),
+            ])),
+        );
+        let tab = registrations(&model);
+        assert_eq!(tab.can_file("bu_draft"), repeatable, "{error:?}");
+        // A filing that may have happened holds back that draft alone: the
+        // other draft is filed, and documents and starts go, as before.
+        assert!(tab.can_file("bu_other"), "{error:?}");
+        assert!(tab.draft_armed("bu_draft"), "{error:?}");
+        event(
+            &mut model,
+            RegistrationEvent::AskSubmit {
+                bundle_id: "bu_draft".to_owned(),
+            },
+        );
         assert_eq!(
-            registrations(&model).write.is_armed(),
+            signed_in(&model).marketplace.admin.confirmation.is_some(),
             repeatable,
             "{error:?}"
         );
+        event(
+            &mut model,
+            RegistrationEvent::AskSubmit {
+                bundle_id: "bu_other".to_owned(),
+            },
+        );
+        let (_, call) = called(&numbers(&mut model, NumberAdminEvent::Confirm));
+        assert!(
+            matches!(call, NumberCall::SubmitRegistration { ref bundle_id, .. } if bundle_id == "bu_other"),
+            "{error:?}"
+        );
     }
+}
+
+#[test]
+fn changing_what_is_asked_puts_the_old_requirements_away() {
+    let mut model = on_registrations();
+    let form = RegistrationForm {
+        country: "DE".to_owned(),
+        ..RegistrationForm::default()
+    };
+    event(&mut model, RegistrationEvent::Edit(form.clone()));
+    let (ticket, _) = called(&event(&mut model, RegistrationEvent::CheckRequirements));
+
+    // A new name changes nothing asked: the lookup still lands.
+    event(
+        &mut model,
+        RegistrationEvent::Edit(RegistrationForm {
+            friendly_name: "Berlin".to_owned(),
+            ..form.clone()
+        }),
+    );
+    assert_eq!(
+        registrations(&model).requirements,
+        RequirementsState::Loading
+    );
+
+    // Another number type does: the lookup for the old one lands on nothing.
+    event(
+        &mut model,
+        RegistrationEvent::Edit(RegistrationForm {
+            number_type: "mobile".to_owned(),
+            ..form
+        }),
+    );
+    assert_eq!(registrations(&model).requirements, RequirementsState::Idle);
+    answer(
+        &mut model,
+        ticket,
+        Ok(NumberAnswer::Requirements(NumberRequirementsResponse {
+            success: true,
+            country: "DE".to_owned(),
+            number_type: "local".to_owned(),
+            purchasable: true,
+            requirements: None,
+        })),
+    );
+    assert_eq!(registrations(&model).requirements, RequirementsState::Idle);
 }
 
 #[test]
@@ -659,11 +764,7 @@ fn the_confirmation_reads_in_french() {
         .expect("asked");
     french(|| {
         assert_eq!(confirmation.title(), "Déposer cette inscription?");
-        assert!(
-            confirmation.body().contains("(pays\u{a0}: DE)"),
-            "{}",
-            confirmation.body()
-        );
+        assert!(confirmation.body().contains("(pays\u{a0}: DE)"));
         assert_eq!(confirmation.action(), "Déposer");
     });
 }

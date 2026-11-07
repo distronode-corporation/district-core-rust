@@ -899,7 +899,7 @@ impl SignedIn {
                 }
                 None
             }
-            NumberAdminEvent::Registration(event) => self.registration_event(event),
+            NumberAdminEvent::Registration(event) => self.registration_event(event, tickets),
             NumberAdminEvent::Confirm => self.confirmed(),
             NumberAdminEvent::CancelConfirmation => {
                 let admin = &mut self.marketplace.admin;
@@ -937,7 +937,15 @@ impl SignedIn {
     fn confirmed(&mut self) -> Option<(Slot, NumberCall)> {
         let admin = &mut self.marketplace.admin;
         let confirmation = admin.confirmation.clone()?;
-        if !admin.write_for(&confirmation).is_armed() {
+        let armed = match &confirmation {
+            // One draft's filing that may have happened holds back that draft
+            // alone, not the tab's other writes.
+            NumberConfirmation::SubmitRegistration { bundle_id, .. } => {
+                admin.registrations.can_file(bundle_id)
+            }
+            other => admin.write_for(other).is_armed(),
+        };
+        if !armed {
             return None;
         }
         Some(match confirmation {
@@ -966,9 +974,6 @@ impl SignedIn {
             }
             NumberConfirmation::SubmitRegistration { bundle_id, .. } => {
                 let registrations = &mut admin.registrations;
-                if !registrations.is_draft(&bundle_id) {
-                    return None;
-                }
                 registrations.write = NumberWrite::Running;
                 registrations.written = Some(bundle_id.clone());
                 let end_user_attributes = registrations
