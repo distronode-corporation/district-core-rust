@@ -19,10 +19,13 @@ variant, or a field of one. Those take a new major version.
 
 ### Fixed
 
-- The window's Refresh on the booking pages' Settings keeps the tab it showed. It opened
-  the section afresh on Booking page whatever tab was shown; it now reads the tab shown
-  again, the other tabs are read when next shown, and the dialog closes as before. Opening
-  Settings from another section still starts on Booking page. No API change.
+- The window's Refresh on the booking pages' Settings and Developer sections keeps the tab
+  they showed. Each opened afresh on its first tab (Booking page, API keys) whatever tab was
+  shown; each now reads the tab shown again, and the other tabs are read when next shown.
+  On Developer's webhooks tab the webhook whose deliveries are open stays open, and its
+  deliveries are read again. The dialog, and Developer's question before a removal, close
+  as before. Opening either section from another one still starts on its first tab. No API
+  change.
 
 ## [9.0.0] - 2026-11-06
 
