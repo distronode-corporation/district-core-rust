@@ -116,6 +116,7 @@ fn assert_sent_as_android_sends(case: &Case, request: &wiremock::Request) {
         }
         Sent::Form {
             workspace_field,
+            fields,
             file_name,
             mime_type,
             bytes,
@@ -138,6 +139,18 @@ fn assert_sent_as_android_sends(case: &Case, request: &wiremock::Request) {
                 *workspace_field,
                 "{name}: a workspace field in the form"
             );
+            for (field, value) in *fields {
+                let sent = format!("name=\"{field}\"\r\n\r\n{value}\r\n");
+                assert!(contains(sent.as_bytes()), "{name}: the {field} field");
+                let named = format!("name=\"{field}\"");
+                assert_eq!(
+                    body.windows(named.len())
+                        .filter(|w| *w == named.as_bytes())
+                        .count(),
+                    1,
+                    "{name}: the {field} field, once"
+                );
+            }
             let mut part = format!(
                 "name=\"file\"; filename=\"{file_name}\"\r\nContent-Type: {mime_type}\r\n\r\n"
             )
@@ -157,7 +170,7 @@ fn assert_sent_as_android_sends(case: &Case, request: &wiremock::Request) {
 #[tokio::test]
 async fn every_method_sends_what_android_sends_and_decodes_the_answer() {
     let cases = cases();
-    assert_eq!(cases.len(), 125, "a method without a row is not tested");
+    assert_eq!(cases.len(), 131, "a method without a row is not tested");
     let names: BTreeSet<&str> = cases.iter().map(|case| case.name).collect();
     assert_eq!(names.len(), cases.len(), "two rows share a name");
     for case in &cases {

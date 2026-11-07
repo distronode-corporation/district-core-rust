@@ -52,6 +52,7 @@ mod members;
 mod messaging;
 mod meta_window;
 mod number_admin;
+mod number_registration;
 mod numbers;
 mod overview;
 mod persona;
@@ -157,6 +158,15 @@ pub use number_admin::{
     ProviderStatusResponse, SipTrunk, SipTrunkCreateResponse, SipTrunkDraft, SipTrunksResponse,
     TOLL_FREE_USE_CASES, TollFreeVerificationDraft, TollFreeVerificationResponse,
     VerifyServiceResponse,
+};
+pub use number_registration::{
+    AcceptedDocument, CountryRequirements, EndUserAttributes, NumberRegistration,
+    NumberRegistrationCreateResponse, NumberRegistrationDraft, NumberRegistrationSubmitResponse,
+    NumberRegistrationsResponse, NumberRequirementsResponse, REGISTRATION_DRAFT,
+    REGISTRATION_END_USER_TYPES, REGISTRATION_NUMBER_TYPES, REQUIREMENT_END_USER,
+    REQUIREMENT_SUPPORTING_DOCUMENT, RegistrationDocument, RegistrationDocumentRemovalResponse,
+    RegistrationDocumentResponse, RegistrationDocumentUpload, RegulatoryRequirement,
+    SubmittedRegistration, UploadedRegistrationDocument,
 };
 pub use numbers::{
     AvailableNumber, NumberSearch, NumberSearchResponse, OwnedNumber, OwnedNumbersResponse,

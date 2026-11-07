@@ -17,6 +17,56 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+A number's regulatory registration, the Android app's Registrations tab. Breaking, so the
+next release is a major one: `Endpoint`, `NumberCall`, `NumberAnswer`, `NumberAdminEvent`,
+`NumberConfirmation`, `MarketplaceTab` and `WireCategory` each gain variants an app matches
+on, and `NumberAdmin` a field an app builds.
+
+### Added
+
+- The Registrations tab of the phone numbers screen (`MarketplaceTab::Registrations`,
+  `MarketplaceTab::registrations_label`), in `NumberAdmin::registrations`, a
+  `NumberRegistrations`: the workspace's filings (`RegistrationList`), read on opening the
+  tab, at a refresh, at `RegistrationEvent::Reload` and after every write that lands; what a
+  country's regulator asks for (`RegistrationEvent::CheckRequirements`, into
+  `RequirementsState`, where a country with no regulation is `NoRegulation`, an answer, and a
+  failed lookup `Failed`); the form that starts a draft (`RegistrationForm`,
+  `RegistrationEvent::Edit` and `Start`); a document put on a draft or taken off it
+  (`RegistrationEvent::Upload`, `RemoveDocument`), refused for a filing that is not a draft;
+  the end-user details a draft is filed with (`RegistrationEvent::EditDetails`); and filing a
+  draft behind `NumberConfirmation::SubmitRegistration`, sent once. Starting a draft, an
+  upload and a removal converge, so each is offered again after any failure; a filing is
+  offered again only after a refusal (a 422 `validation_failed` or `carrier_rejected`), and
+  the filings are read again either way, because a refusal changes the filing's status and
+  reasons. A viewer, whom the service refuses, is sent nothing and offered nothing. Every
+  event is `NumberAdminEvent::Registration(RegistrationEvent)`, every call a `NumberCall`
+  through `Effect::NumberAdmin`, as the carrier tab's are.
+- Labels through the wire vocabulary only: `registration_status`, `registration_title`,
+  `number_type_label`, `end_user_type_label`, `requirement_kind`, `requirement_fields`,
+  `document_state` and `Tone::of_registration`; a status the carrier added since reads as
+  the generic "Other" (« Autre »), never as sent.
+- `ApiClient::number_requirements`, `number_registrations`, `create_number_registration`,
+  `upload_registration_document`, `delete_registration_document` and
+  `submit_number_registration`, and their `Endpoint` rows, with the Android app's methods,
+  paths and shapes: the workspace in the query on all six, the upload a multipart form with
+  `bundleId` and `requirementName` beside the file, and the removal the one `DELETE` with a
+  JSON body. With the `district_model` types (`NumberRequirementsResponse`,
+  `CountryRequirements`, `RegulatoryRequirement`, `AcceptedDocument`,
+  `NumberRegistrationsResponse`, `NumberRegistration`, `RegistrationDocument`,
+  `NumberRegistrationDraft`, `NumberRegistrationCreateResponse`, `RegistrationDocumentUpload`,
+  whose `Debug` prints the file's size and never its bytes, `RegistrationDocumentResponse`,
+  `UploadedRegistrationDocument`, `RegistrationDocumentRemovalResponse`,
+  `NumberRegistrationSubmitResponse`, `SubmittedRegistration`, `EndUserAttributes`) and
+  constants (`REGISTRATION_DRAFT`, `REGISTRATION_NUMBER_TYPES`,
+  `REGISTRATION_END_USER_TYPES`, `REQUIREMENT_END_USER`, `REQUIREMENT_SUPPORTING_DOCUMENT`).
+  The service records no fixture of these routes yet; each type is written from its route.
+- `WireCategory::NumberRegistrationStatus`, `NumberRegistrationEndUserType`,
+  `NumberRegistrationNumberType` and `NumberRequirementKind`, and their 13 labels in
+  `wire.toml`, with the service's French.
+- 29 entries in `numbers.toml` for the tab's headings, fields, buttons, empty state and
+  confirmation, each the Android app's numbers catalog's English and reviewed French
+  verbatim.
+
 ### Fixed
 
 - The window's Refresh on the booking pages' Settings and Developer sections keeps the tab
@@ -40,6 +90,9 @@ variant, or a field of one. Those take a new major version.
   app calls and the desktop apps do not: number registration and its requirements, the
   thread owners list, and a message's sender for a notification. No change to what any
   client calls.
+- `contracts/i18n/` from a server branch that adds the four registration categories to the
+  wire vocabulary. It is synced again from the server's main before this is released.
+- The two registration routes leave `EXCLUDED`: the desktop apps call them now.
 
 ## [9.0.0] - 2026-11-06
 

@@ -130,6 +130,7 @@ mod marketplace;
 mod media;
 mod model;
 mod number_admin;
+mod number_registration;
 mod overview;
 mod paging;
 pub mod palette;
@@ -226,6 +227,11 @@ pub use number_admin::{
     NumberConfirmation, NumberWrite, SipTrunkForm, SipTrunks, TollFreeForm, VerifyService,
     carrier_balance, carrier_number_count, carrier_state, number_actions_note, number_row_note,
     numbers_scope_note, sip_trunk_meta, verify_state,
+};
+pub use number_registration::{
+    NumberRegistrations, RegistrationEvent, RegistrationForm, RegistrationList, RequirementsState,
+    document_state, end_user_type_label, number_type_label, registration_status,
+    registration_title, requirement_fields, requirement_kind,
 };
 pub use overview::{
     FINISH_SETUP_ACTION, FINISH_SETUP_BODY, FINISH_SETUP_TITLE, OverviewContent, OverviewScreen,

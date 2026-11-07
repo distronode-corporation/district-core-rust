@@ -27,6 +27,7 @@ use crate::dialer::home_country;
 use crate::failure::FailureText;
 use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets};
 use crate::number_admin::{CarrierStatus, NumberAdmin, NumberAdminEvent, numbers_scope_note};
+use crate::number_registration::RegistrationList;
 use crate::role::Capabilities;
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::{self, l, s};
@@ -87,12 +88,19 @@ pub enum MarketplaceTab {
     /// The carrier accounts, SIP trunks, one-time passcodes and messaging
     /// registrations.
     Carrier,
+    /// A number's regulatory registration, in a country that asks for one.
+    Registrations,
 }
 
 impl MarketplaceTab {
     /// The carrier tab's label.
     pub fn carrier_label() -> &'static str {
         district_l10n::numbers_strings::numbers_tab_carrier(l())
+    }
+
+    /// The Registrations tab's label.
+    pub fn registrations_label() -> &'static str {
+        district_l10n::numbers_strings::numbers_tab_registrations(l())
     }
 }
 
@@ -286,8 +294,10 @@ impl SignedIn {
             ticket: tickets.issue(Slot::OwnedNumbers),
             workspace_id: self.workspace_id(),
         }];
-        if self.marketplace.tab == MarketplaceTab::Carrier {
-            effects.extend(self.enter_carrier_tab(tickets));
+        match self.marketplace.tab {
+            MarketplaceTab::Carrier => effects.extend(self.enter_carrier_tab(tickets)),
+            MarketplaceTab::Registrations => effects.extend(self.enter_registrations_tab(tickets)),
+            MarketplaceTab::Owned | MarketplaceTab::Search => {}
         }
         effects
     }
@@ -301,11 +311,17 @@ impl SignedIn {
         let effects = match event {
             MarketplaceEvent::SelectTab(tab) => {
                 self.marketplace.tab = tab;
-                let unread = self.marketplace.admin.carrier == CarrierStatus::NotLoaded;
-                if tab == MarketplaceTab::Carrier && unread {
-                    self.enter_carrier_tab(tickets)
-                } else {
-                    Vec::new()
+                let admin = &self.marketplace.admin;
+                match tab {
+                    MarketplaceTab::Carrier if admin.carrier == CarrierStatus::NotLoaded => {
+                        self.enter_carrier_tab(tickets)
+                    }
+                    MarketplaceTab::Registrations
+                        if admin.registrations.list == RegistrationList::NotLoaded =>
+                    {
+                        self.enter_registrations_tab(tickets)
+                    }
+                    _ => Vec::new(),
                 }
             }
             MarketplaceEvent::EditSearch(form) => {

@@ -288,6 +288,15 @@ tier = "T1"
 state = "reviewed"
 note = "After a number's routing was reapplied."
 
+[numbers.document_remove_action]
+en = "Remove"
+fr = "Retirer"
+ctx = "button"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
 [numbers.lookup_action]
 en = "Look this number up"
 fr = "Rechercher ce numéro"
@@ -369,6 +378,153 @@ tier = "T1"
 state = "reviewed"
 note = "On the phone numbers screen, for a member whose role can change numbers. Buying a number is done on the web."
 
+[numbers.ready_buy_today]
+en = "Ready to buy today"
+fr = "Achat immédiat"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "Countries where numbers can be bought now without a filing of your own. From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_country_label]
+en = "Country (two letters)"
+fr = "Pays (deux lettres)"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "An ISO 3166 two-letter country code, such as CA. From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_document_filed]
+en = "Filed with the carrier"
+fr = "Déposé chez le transporteur"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_document_recorded]
+en = "Recorded, no file yet"
+fr = "Consigné, aucun fichier pour l'instant"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_document_stored]
+en = "Stored, not yet filed"
+fr = "Stocké, pas encore déposé"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_documents_eyebrow]
+en = "Documents"
+fr = "Documents"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+same_ok = true
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_name_label]
+en = "Name for your carrier console (optional)"
+fr = "Nom dans votre console de transporteur (facultatif)"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_reasons_eyebrow]
+en = "What the carrier objected to"
+fr = "Objections du transporteur"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_start_action]
+en = "Start registration"
+fr = "Commencer l'inscription"
+ctx = "button"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_start_title]
+en = "Start a registration"
+fr = "Commencer une inscription"
+ctx = "title"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_status_caption]
+en = "Statuses are refreshed when this list loads. A review can take a day or more."
+fr = "Les états sont actualisés au chargement de cette liste. Un examen peut prendre un jour ou plus."
+ctx = "body"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registration_title]
+en = "{country} · {number_type}"
+fr = "{country} · {number_type}"
+ctx = "title"
+screen = "numbers"
+tier = "T1"
+args = { country = "str", number_type = "str" }
+state = "reviewed"
+same_ok = true
+note = "{country} is a two-letter country code and {number_type} the number type as the carrier names it. From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registrations_empty_body]
+en = "Some countries require a registration before a number there can be bought. Start one for the country you want."
+fr = "Certains pays exigent une inscription avant qu'un numéro puisse y être acheté. Commencez-en une pour le pays voulu."
+ctx = "body"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registrations_empty_title]
+en = "Nothing filed yet"
+fr = "Aucune demande déposée"
+ctx = "title"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registrations_eyebrow]
+en = "Regulatory registrations"
+fr = "Inscriptions réglementaires"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.registrations_failed]
+en = "Could not load this workspace's registrations."
+fr = "Impossible de charger les inscriptions de cet espace de travail."
+ctx = "error"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
 [numbers.release_action]
 en = "Release this number"
 fr = "Libérer ce numéro"
@@ -424,6 +580,61 @@ tier = "T1"
 args = { warnings = "str" }
 state = "reviewed"
 note = "After a number was released while a step after it did not finish. {warnings} is the service's English sentences, for example that the monthly charge could not be ended."
+
+[numbers.requirement_no_fields]
+en = "No fields"
+fr = "Aucun champ"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.requirements_check_action]
+en = "Check requirements"
+fr = "Vérifier les exigences"
+ctx = "button"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.requirements_eyebrow]
+en = "What this country asks for"
+fr = "Exigences de ce pays"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.requirements_none_body]
+en = "This country publishes no regulation for this number type, so there is nothing to file."
+fr = "Ce pays ne publie aucune réglementation pour ce type de numéro; il n'y a donc rien à déposer."
+ctx = "body"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.requirements_none_heading]
+en = "{country} · No registration required"
+fr = "{country} · aucune inscription requise"
+ctx = "title"
+screen = "numbers"
+tier = "T1"
+args = { country = "str" }
+state = "reviewed"
+note = "{country} is a two-letter country code. From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.requirements_not_purchasable]
+en = "Numbers in this country are not purchasable through Distronode today, even with a registration."
+fr = "Les numéros de ce pays ne peuvent pas être achetés auprès de Distronode pour l'instant, même avec une inscription."
+ctx = "body"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
 
 [numbers.sip_address_count]
 en.one = "{count} address"
@@ -538,6 +749,43 @@ tier = "T1"
 state = "reviewed"
 note = "On a SIP trunk the carrier holds nothing for."
 
+[numbers.submit_confirm_action]
+en = "File it"
+fr = "Déposer"
+ctx = "button"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.submit_confirm_body]
+en = "This uploads your documents to the carrier and files a regulatory application for {country} in your business's name. Review can take a day or more, and the filing cannot be edited while it is under review."
+fr = "Cette action téléverse vos documents vers le transporteur et dépose une demande réglementaire au nom de votre entreprise (pays\u00A0: {country}). L'examen peut prendre un jour ou plus, et le dépôt ne peut pas être modifié pendant l'examen."
+ctx = "body"
+screen = "numbers"
+tier = "T1"
+args = { country = "str" }
+state = "reviewed"
+note = "Files a regulated application in the business's name. From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.submit_confirm_title]
+en = "File this registration?"
+fr = "Déposer cette inscription?"
+ctx = "title"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
+[numbers.submit_filed]
+en = "Filed. The carrier is reviewing it."
+fr = "Déposée. Le transporteur l'examine."
+ctx = "toast"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
+
 [numbers.tab_carrier]
 en = "Carrier"
 fr = "Transporteur"
@@ -546,6 +794,15 @@ screen = "numbers"
 tier = "T3"
 state = "reviewed"
 note = "The tab of the phone numbers screen with the carrier accounts, SIP trunks, one-time passcodes and messaging registrations."
+
+[numbers.tab_registrations]
+en = "Registrations"
+fr = "Inscriptions"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "From the Android app's numbers catalog, verbatim, with its review."
 
 [numbers.tfv_caption]
 en = "Required before a toll-free number can send text messages."
@@ -774,3 +1031,12 @@ screen = "numbers"
 tier = "T1"
 state = "reviewed"
 note = "Under a failure, explaining why the button that failed is gone: the action may already have happened, and doing it again would cost money or cannot be undone."
+
+[numbers.your_approvals]
+en = "Your approvals"
+fr = "Vos approbations"
+ctx = "label"
+screen = "numbers"
+tier = "T1"
+state = "reviewed"
+note = "Countries this workspace's own approved filings unlock. From the Android app's numbers catalog, verbatim, with its review."

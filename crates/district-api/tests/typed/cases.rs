@@ -15,11 +15,12 @@ use district_model::{
     HqTurn, HqVoiceProposal, HqVoiceRecordKind, HqVoiceScreen, HqVoiceSelection,
     KnowledgeDocumentDraft, KnowledgeMode, MeetRoomName, MemberRole, MessagingAccountSave,
     MessagingChannel, MessagingCreatorCell, MessagingCredentialSource, MessagingCredentials,
-    MessagingDelete, MessagingSetChannelDefault, MessagingSetDefault, NumberSearch, PRESENCE_KIND,
-    PersonaEngineChoice, PersonaPatch, PersonaPreviewForm, Platform, PresenceRegistration,
-    RoutingRule, RoutingRuleField, SETTINGS_LANGUAGE_FRENCH, SendMessageRequest, SipTrunkDraft,
-    SupportRequestDraft, SupportRequestKind, ThreadRef, TollFreeVerificationDraft,
-    TwilioCredentials, UpdateContactRequest, WorkspaceConfig, WorkspaceConfigResponse,
+    MessagingDelete, MessagingSetChannelDefault, MessagingSetDefault, NumberRegistrationDraft,
+    NumberSearch, PRESENCE_KIND, PersonaEngineChoice, PersonaPatch, PersonaPreviewForm, Platform,
+    PresenceRegistration, RegistrationDocumentUpload, RoutingRule, RoutingRuleField,
+    SETTINGS_LANGUAGE_FRENCH, SendMessageRequest, SipTrunkDraft, SupportRequestDraft,
+    SupportRequestKind, ThreadRef, TollFreeVerificationDraft, TwilioCredentials,
+    UpdateContactRequest, WorkspaceConfig, WorkspaceConfigResponse,
 };
 use serde_json::{Value, json};
 
@@ -63,6 +64,8 @@ pub enum Sent {
     Form {
         /// Whether the form carries the workspace as a `workspaceId` field.
         workspace_field: bool,
+        /// The other text fields beside the file, each exactly once.
+        fields: &'static [(&'static str, &'static str)],
         /// The file part's name.
         file_name: &'static str,
         /// The file part's type.
@@ -133,6 +136,9 @@ fn fixture_in(set: &str, name: &str) -> Value {
 pub const KEY: &str = "3f1c9a52-7d0e-4b8a-9c61-2e5f08b7d4a1";
 
 pub const PNG: &[u8] = b"\x89PNG\r\n\x1a\nroof";
+
+/// A regulatory document's bytes.
+pub const PDF: &[u8] = b"%PDF-1.7 proof of address";
 
 fn contact_thread() -> ThreadRef {
     ThreadRef::Contact("contact_contract_1".to_owned())
@@ -646,6 +652,7 @@ pub fn cases() -> Vec<Case> {
             query: vec![],
             body: Sent::Form {
                 workspace_field: true,
+                fields: &[],
                 file_name: "roof.png",
                 mime_type: "image/png",
                 bytes: PNG,
@@ -1294,6 +1301,162 @@ pub fn cases() -> Vec<Case> {
                 "optInImageUrls": ["https://example.com/opt-in.png"],
             })),
         },
+        // A number's regulatory registration. The service records no fixture of
+        // these either: each answer is written from its route.
+        Case {
+            name: "number_requirements",
+            endpoint: Endpoint::NumberRequirements,
+            retried: true,
+            answer: json!({
+                "success": true,
+                "country": "DE",
+                "numberType": "mobile",
+                "purchasable": true,
+                "requirements": {
+                    "isoCountry": "DE",
+                    "numberType": "mobile",
+                    "endUserType": "individual",
+                    "regulationSid": "RN0001",
+                    "friendlyName": "Germany mobile, individual",
+                    "requirements": [
+                        {
+                            "kind": "end_user",
+                            "name": "Individual",
+                            "requirementName": "individual_info",
+                            "type": "individual",
+                            "fields": ["first_name", "last_name"],
+                        },
+                        {
+                            "kind": "supporting_document",
+                            "name": "Proof of address",
+                            "requirementName": "proof_of_address",
+                            "type": "document",
+                            "fields": [],
+                            "acceptedDocuments": [
+                                {"name": "Utility bill", "type": "utility_bill", "fields": ["address_sids"]},
+                            ],
+                        },
+                    ],
+                },
+            }),
+            call: call!(c => c.number_requirements(WS, "DE", Some("mobile"), Some("individual"))),
+            method: "GET",
+            path: "/api/district/workspace/numbers/requirements",
+            query: vec![
+                ("workspaceId", WS),
+                ("country", "DE"),
+                ("type", "mobile"),
+                ("endUserType", "individual"),
+            ],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "number_registrations",
+            endpoint: Endpoint::NumberRegistrations,
+            retried: true,
+            answer: json!({
+                "success": true,
+                "registrations": [registration_json()],
+                "approvedCountries": ["FR"],
+                "platformCountries": ["CA", "US"],
+            }),
+            call: call!(c => c.number_registrations(WS)),
+            method: "GET",
+            path: "/api/district/workspace/numbers/registrations",
+            query: vec![("workspaceId", WS)],
+            body: Sent::Nothing,
+        },
+        Case {
+            name: "create_number_registration",
+            endpoint: Endpoint::NumberRegistrationCreate,
+            retried: false,
+            answer: json!({"success": true, "registration": registration_json()}),
+            call: call!(c => c.create_number_registration(WS, &NumberRegistrationDraft {
+                iso_country: "DE".to_owned(),
+                number_type: Some("local".to_owned()),
+                end_user_type: None,
+                friendly_name: Some("Berlin office".to_owned()),
+            })),
+            method: "POST",
+            path: "/api/district/workspace/numbers/registrations",
+            query: vec![("workspaceId", WS)],
+            body: Sent::Json(json!({
+                "isoCountry": "DE",
+                "numberType": "local",
+                "friendlyName": "Berlin office",
+            })),
+        },
+        Case {
+            name: "upload_registration_document",
+            endpoint: Endpoint::RegistrationDocumentUpload,
+            retried: false,
+            answer: json!({
+                "success": true,
+                "document": {
+                    "id": "item_7",
+                    "requirementName": "proof_of_address",
+                    "mimeType": "application/pdf",
+                    "sizeBytes": 25,
+                    "createdAt": "2026-11-07T10:00:00.000Z",
+                },
+            }),
+            call: call!(c => c.upload_registration_document(WS, &RegistrationDocumentUpload {
+                bundle_id: "item_1".to_owned(),
+                requirement_name: "proof_of_address".to_owned(),
+                file_name: "address.pdf".to_owned(),
+                mime_type: "application/pdf".to_owned(),
+                bytes: PDF.to_vec(),
+            })),
+            method: "POST",
+            path: "/api/district/workspace/numbers/registrations/documents",
+            query: vec![("workspaceId", WS)],
+            body: Sent::Form {
+                workspace_field: false,
+                fields: &[
+                    ("bundleId", "item_1"),
+                    ("requirementName", "proof_of_address"),
+                ],
+                file_name: "address.pdf",
+                mime_type: "application/pdf",
+                bytes: PDF,
+            },
+        },
+        Case {
+            name: "delete_registration_document",
+            endpoint: Endpoint::RegistrationDocumentDelete,
+            retried: false,
+            answer: json!({"success": true, "documentId": "item_7"}),
+            call: call!(c => c.delete_registration_document(WS, "item_1", "item_7")),
+            method: "DELETE",
+            path: "/api/district/workspace/numbers/registrations/documents",
+            query: vec![("workspaceId", WS)],
+            body: Sent::Json(json!({"bundleId": "item_1", "documentId": "item_7"})),
+        },
+        Case {
+            name: "submit_number_registration",
+            endpoint: Endpoint::NumberRegistrationSubmit,
+            retried: false,
+            answer: json!({
+                "success": true,
+                "registration": {
+                    "id": "item_1",
+                    "status": "pending-review",
+                    "submittedAt": "2026-11-07T10:05:00.000Z",
+                },
+            }),
+            call: call!(c => c.submit_number_registration(
+                WS,
+                "item_1",
+                &[("first_name".to_owned(), "Dana".to_owned())].into_iter().collect(),
+            )),
+            method: "POST",
+            path: "/api/district/workspace/numbers/registrations/submit",
+            query: vec![("workspaceId", WS)],
+            body: Sent::Json(json!({
+                "bundleId": "item_1",
+                "endUserAttributes": {"first_name": "Dana"},
+            })),
+        },
         // Billing.
         Case {
             name: "workspace_billing",
@@ -1479,6 +1642,7 @@ pub fn cases() -> Vec<Case> {
             query: vec![("workspaceId", WS)],
             body: Sent::Form {
                 workspace_field: false,
+                fields: &[],
                 file_name: "logo.png",
                 mime_type: "image/png",
                 bytes: PNG,
@@ -2206,4 +2370,30 @@ pub fn cases() -> Vec<Case> {
             body: Sent::Json(json!({"kind": "desktop"})),
         },
     ]
+}
+
+/// One filing as the registration routes answer it: a draft with a document
+/// recorded and none filed.
+fn registration_json() -> Value {
+    json!({
+        "id": "item_1",
+        "isoCountry": "DE",
+        "numberType": "local",
+        "endUserType": "business",
+        "friendlyName": "Berlin office",
+        "status": "draft",
+        "rejectionReasons": [],
+        "submittedAt": null,
+        "reviewedAt": null,
+        "createdAt": "2026-11-07T09:00:00.000Z",
+        "documents": [{
+            "id": "item_7",
+            "requirementName": "proof_of_address",
+            "mimeType": "application/pdf",
+            "sizeBytes": 25,
+            "stored": true,
+            "submitted": false,
+            "updatedAt": "2026-11-07T09:30:00.000Z",
+        }],
+    })
 }

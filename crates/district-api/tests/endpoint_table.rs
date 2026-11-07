@@ -147,6 +147,10 @@ fn calls_with_side_effects_or_cost_never_repeat() {
         Endpoint::VerifyServiceSet,
         Endpoint::A2pRegistration,
         Endpoint::TollFreeVerification,
+        Endpoint::NumberRegistrationCreate,
+        Endpoint::RegistrationDocumentUpload,
+        Endpoint::RegistrationDocumentDelete,
+        Endpoint::NumberRegistrationSubmit,
     ];
     for endpoint in never {
         assert_eq!(
@@ -163,6 +167,11 @@ fn bodies_fit_their_methods() {
     for spec in ALL_ENDPOINTS {
         let name = spec.id.name();
         match spec.method {
+            // The one DELETE the service reads a body for: which document of
+            // which filing, as the Android app sends it.
+            HttpMethod::Delete if spec.id == Endpoint::RegistrationDocumentDelete => {
+                assert_eq!(spec.body, BodyKind::Json, "{name}");
+            }
             HttpMethod::Get | HttpMethod::Delete => {
                 assert_eq!(spec.body, BodyKind::Empty, "{name}");
             }

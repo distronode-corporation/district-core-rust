@@ -114,22 +114,6 @@ pub const EXCLUDED: &[Exclusion] = &[
         android_calls_it: false,
     },
     Exclusion {
-        name: "number registration",
-        method: None,
-        path: PathMatch::Subtree("/api/district/workspace/numbers/registrations"),
-        reason: "The regulatory registration a number needs in some countries (the bundle, its \
-                 documents and its submission), on the Android app's Registrations tab. The \
-                 desktop apps do not have that tab yet.",
-        android_calls_it: true,
-    },
-    Exclusion {
-        name: "number requirements",
-        method: Some(HttpMethod::Get),
-        path: PathMatch::Exact("/api/district/workspace/numbers/requirements"),
-        reason: "What a number registration asks for, for the same tab as the registration.",
-        android_calls_it: true,
-    },
-    Exclusion {
         name: "thread owners",
         method: Some(HttpMethod::Get),
         path: PathMatch::Exact("/api/district/conversations/assignments"),

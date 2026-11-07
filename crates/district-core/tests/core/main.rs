@@ -27,6 +27,7 @@ mod members;
 mod messaging;
 mod no_calls;
 mod number_admin;
+mod number_registration;
 mod overview;
 mod palette;
 mod parity;

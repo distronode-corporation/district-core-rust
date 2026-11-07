@@ -2284,8 +2284,16 @@ async fn signing_out_unregisters_the_presence_first_as_its_own_change() {
 #[tokio::test]
 async fn the_api_client_manages_numbers() {
     use district_core::{NumberAnswer, NumberCall};
-    use district_model::{A2pRegistrationDraft, SipTrunkDraft, TollFreeVerificationDraft};
+    use district_model::{
+        A2pRegistrationDraft, NumberRegistrationDraft, RegistrationDocumentUpload, SipTrunkDraft,
+        TollFreeVerificationDraft,
+    };
 
+    let registration = json!({
+        "id": "item_1", "isoCountry": "DE", "numberType": "local", "endUserType": "business",
+        "friendlyName": null, "status": "draft", "rejectionReasons": [], "submittedAt": null,
+        "reviewedAt": null, "createdAt": "2026-11-07T09:00:00.000Z", "documents": []
+    });
     let trunk = json!({
         "id": "item_1", "name": "Office", "domain": "office.sip.twilio.com",
         "ipAccessControlList": ["203.0.113.7"], "domainSid": "SD1", "ipAclSid": "AL1",
@@ -2344,6 +2352,40 @@ async fn the_api_client_manages_numbers() {
             "/api/district/workspace/tfv",
             json!({"success": true, "status": "PENDING_REVIEW", "tfvSid": "HH1"}),
         ),
+        (
+            "GET",
+            "/api/district/workspace/numbers/requirements",
+            json!({"success": true, "country": "CA", "numberType": "local",
+            "purchasable": true, "requirements": null}),
+        ),
+        (
+            "GET",
+            "/api/district/workspace/numbers/registrations",
+            json!({"success": true, "registrations": [registration],
+            "approvedCountries": [], "platformCountries": ["US"]}),
+        ),
+        (
+            "POST",
+            "/api/district/workspace/numbers/registrations",
+            json!({"success": true, "registration": registration}),
+        ),
+        (
+            "POST",
+            "/api/district/workspace/numbers/registrations/documents",
+            json!({"success": true, "document": {"id": "item_7", "requirementName": "proof",
+            "mimeType": "application/pdf", "sizeBytes": 3, "createdAt": "2026-11-07T09:30:00.000Z"}}),
+        ),
+        (
+            "DELETE",
+            "/api/district/workspace/numbers/registrations/documents",
+            json!({"success": true, "documentId": "item_7"}),
+        ),
+        (
+            "POST",
+            "/api/district/workspace/numbers/registrations/submit",
+            json!({"success": true, "registration": {"id": "item_1", "status": "pending-review",
+            "submittedAt": "2026-11-07T10:00:00.000Z"}}),
+        ),
     ];
     let server = MockServer::start().await;
     for (verb, route, body) in routes {
@@ -2381,6 +2423,31 @@ async fn the_api_client_manages_numbers() {
             opt_in_flow: None,
             opt_in_image_urls: vec!["https://example.com/opt-in.png".to_owned()],
         }),
+        NumberCall::Requirements {
+            country: "CA".to_owned(),
+            number_type: None,
+            end_user_type: None,
+        },
+        NumberCall::Registrations,
+        NumberCall::CreateRegistration(NumberRegistrationDraft {
+            iso_country: "DE".to_owned(),
+            ..NumberRegistrationDraft::default()
+        }),
+        NumberCall::UploadRegistrationDocument(RegistrationDocumentUpload {
+            bundle_id: "item_1".to_owned(),
+            requirement_name: "proof".to_owned(),
+            file_name: "proof.pdf".to_owned(),
+            mime_type: "application/pdf".to_owned(),
+            bytes: b"%PD".to_vec(),
+        }),
+        NumberCall::RemoveRegistrationDocument {
+            bundle_id: "item_1".to_owned(),
+            document_id: "item_7".to_owned(),
+        },
+        NumberCall::SubmitRegistration {
+            bundle_id: "item_1".to_owned(),
+            end_user_attributes: Default::default(),
+        },
     ];
     let api = ApiClient::new(local(&server), OneToken).unwrap();
     let mut kinds = Vec::new();
@@ -2406,6 +2473,21 @@ async fn the_api_client_manages_numbers() {
             }
             NumberAnswer::A2pRegistered(_) => "a2p",
             NumberAnswer::TollFreeFiled(_) => "tfv",
+            NumberAnswer::Requirements(found) => {
+                assert_eq!(found.requirements, None);
+                "requirements"
+            }
+            NumberAnswer::Registrations(list) => {
+                assert_eq!(list.registrations.len(), 1);
+                "registrations"
+            }
+            NumberAnswer::RegistrationCreated(_) => "registration created",
+            NumberAnswer::RegistrationDocumentUploaded(_) => "document uploaded",
+            NumberAnswer::RegistrationDocumentRemoved(_) => "document removed",
+            NumberAnswer::RegistrationSubmitted(filed) => {
+                assert_eq!(filed.registration.status, "pending-review");
+                "registration filed"
+            }
         });
     }
     assert_eq!(
@@ -2420,7 +2502,13 @@ async fn the_api_client_manages_numbers() {
             "released",
             "looked up",
             "a2p",
-            "tfv"
+            "tfv",
+            "requirements",
+            "registrations",
+            "registration created",
+            "document uploaded",
+            "document removed",
+            "registration filed"
         ]
     );
 
