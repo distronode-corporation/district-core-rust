@@ -42,7 +42,7 @@ use crate::failure::FailureText;
 use crate::marketplace::OwnedNumbersList;
 use crate::model::{Effect, Slot, Ticket, Tickets};
 use crate::number_registration::{
-    NumberRegistrations, RegistrationEvent, RegistrationList, RequirementsState,
+    NumberRegistrations, RegistrationEvent, RegistrationList, RegistrationWrite, RequirementsState,
 };
 use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::l;
@@ -975,7 +975,9 @@ impl SignedIn {
             NumberConfirmation::SubmitRegistration { bundle_id, .. } => {
                 let registrations = &mut admin.registrations;
                 registrations.write = NumberWrite::Running;
-                registrations.written = Some(bundle_id.clone());
+                registrations.written = Some(RegistrationWrite::Submit {
+                    bundle_id: bundle_id.clone(),
+                });
                 let end_user_attributes = registrations
                     .details
                     .get(&bundle_id)
@@ -1053,7 +1055,18 @@ impl SignedIn {
             };
         } else if tickets.accept(Slot::NumberRegistrations, ticket) {
             admin.registrations.list = match result {
-                Ok(NumberAnswer::Registrations(answer)) => RegistrationList::Ready(answer),
+                Ok(NumberAnswer::Registrations(answer)) => {
+                    // A filing read back as no longer a draft was filed after
+                    // all: nothing is held back for it any more.
+                    let filed = &mut admin.registrations.unconfirmed_filing;
+                    filed.retain(|id| {
+                        answer
+                            .registrations
+                            .iter()
+                            .all(|r| r.id != *id || r.is_draft())
+                    });
+                    RegistrationList::Ready(answer)
+                }
                 Ok(_) => RegistrationList::Failed(FailureText::unexpected()),
                 Err(error) => RegistrationList::Failed(FailureText::from_api_error(&error)),
             };

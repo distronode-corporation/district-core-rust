@@ -229,8 +229,8 @@ pub use number_admin::{
     numbers_scope_note, sip_trunk_meta, verify_state,
 };
 pub use number_registration::{
-    NumberRegistrations, RegistrationEvent, RegistrationForm, RegistrationList, RequirementsState,
-    document_state, end_user_type_label, number_type_label, registration_status,
+    NumberRegistrations, RegistrationEvent, RegistrationForm, RegistrationList, RegistrationWrite,
+    RequirementsState, document_state, end_user_type_label, number_type_label, registration_status,
     registration_title, requirement_fields, requirement_kind,
 };
 pub use overview::{

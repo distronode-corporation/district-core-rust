@@ -25,7 +25,7 @@
 //! end-user type, a requirement's kind) is labelled through the wire
 //! vocabulary, never shown as sent.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use district_api::ApiError;
 use district_l10n::{WireCategory, numbers_strings as ns, wire_label};
@@ -58,14 +58,39 @@ pub struct NumberRegistrations {
     /// Starting a filing, a document put on or taken off, and filing one: one
     /// at a time.
     pub write: NumberWrite,
-    /// The filing [`write`](Self::write) is about, or `None` for starting one.
-    pub written: Option<String>,
-    /// The draft whose filing failed in a way that does not prove it was not
-    /// filed (a server error, no answer): it is not offered for filing again
-    /// until the workspace is opened again, because a second filing would be
-    /// a second regulated application. Every other draft, and every other
-    /// write, is offered as before.
-    pub unconfirmed_filing: Option<String>,
+    /// What [`write`](Self::write) is or was: its kind, and the draft it is
+    /// about. Its answer is read as the write it answers, never by what else
+    /// is open on screen.
+    pub written: Option<RegistrationWrite>,
+    /// The drafts whose filing failed in a way that does not prove it was not
+    /// filed (a server error, no answer). None is offered for filing again,
+    /// because a second filing would be a second regulated application, until
+    /// its own filing is confirmed or the list reads it back as no longer a
+    /// draft, or the workspace is opened again. Every other draft, and every
+    /// other write, is offered as before.
+    pub unconfirmed_filing: BTreeSet<String>,
+}
+
+/// One write of the Registrations tab: what it does, and to which draft.
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+pub enum RegistrationWrite {
+    /// Starting a draft.
+    Start,
+    /// Putting a document on this draft.
+    Upload {
+        /// The draft.
+        bundle_id: String,
+    },
+    /// Taking a document off this draft.
+    Remove {
+        /// The draft.
+        bundle_id: String,
+    },
+    /// Filing this draft with the carrier.
+    Submit {
+        /// The draft.
+        bundle_id: String,
+    },
 }
 
 impl NumberRegistrations {
@@ -98,7 +123,7 @@ impl NumberRegistrations {
     /// Whether a draft's "File it" may be pressed now: not for a draft whose
     /// filing may already have happened ([`unconfirmed_filing`](Self::unconfirmed_filing)).
     pub fn can_file(&self, bundle_id: &str) -> bool {
-        self.draft_armed(bundle_id) && self.unconfirmed_filing.as_deref() != Some(bundle_id)
+        self.draft_armed(bundle_id) && !self.unconfirmed_filing.contains(bundle_id)
     }
 
     /// Marks the filings as being read, and the call that reads them. A list
@@ -415,7 +440,7 @@ impl SignedIn {
             }
             RegistrationEvent::Start => registrations.can_start().then(|| {
                 registrations.write = NumberWrite::Running;
-                registrations.written = None;
+                registrations.written = Some(RegistrationWrite::Start);
                 (
                     Slot::NumberRegistrationWrite,
                     NumberCall::CreateRegistration(registrations.form.draft()),
@@ -430,7 +455,9 @@ impl SignedIn {
             RegistrationEvent::Upload(upload) => {
                 registrations.draft_armed(&upload.bundle_id).then(|| {
                     registrations.write = NumberWrite::Running;
-                    registrations.written = Some(upload.bundle_id.clone());
+                    registrations.written = Some(RegistrationWrite::Upload {
+                        bundle_id: upload.bundle_id.clone(),
+                    });
                     (
                         Slot::NumberRegistrationWrite,
                         NumberCall::UploadRegistrationDocument(upload),
@@ -446,7 +473,9 @@ impl SignedIn {
                     .is_some_and(|r| r.documents.iter().any(|d| d.id == document_id));
                 (held && registrations.draft_armed(&bundle_id)).then(|| {
                     registrations.write = NumberWrite::Running;
-                    registrations.written = Some(bundle_id.clone());
+                    registrations.written = Some(RegistrationWrite::Remove {
+                        bundle_id: bundle_id.clone(),
+                    });
                     (
                         Slot::NumberRegistrationWrite,
                         NumberCall::RemoveRegistrationDocument {
@@ -480,9 +509,16 @@ impl SignedIn {
         tickets: &mut Tickets,
     ) -> Next {
         let admin = &mut self.marketplace.admin;
-        let filing = admin
-            .close_confirmation(|c| matches!(c, NumberConfirmation::SubmitRegistration { .. }));
-        let repeat = if filing {
+        // The answer is to the write on its way: its kind decides, never what
+        // else is open on screen.
+        let filed = match &admin.registrations.written {
+            Some(RegistrationWrite::Submit { bundle_id }) => Some(bundle_id.clone()),
+            _ => None,
+        };
+        let repeat = if filed.is_some() {
+            // Its confirmation stayed open to report it, and closes now.
+            admin
+                .close_confirmation(|c| matches!(c, NumberConfirmation::SubmitRegistration { .. }));
             Repeat::Once
         } else {
             Repeat::Converges
@@ -493,16 +529,19 @@ impl SignedIn {
                 registrations.form = RegistrationForm::default();
                 NumberWrite::Idle
             }
-            NumberAnswer::RegistrationSubmitted(filed) => {
-                registrations.details.remove(&filed.registration.id);
+            NumberAnswer::RegistrationSubmitted(done) => {
+                registrations.details.remove(&done.registration.id);
+                registrations
+                    .unconfirmed_filing
+                    .remove(&done.registration.id);
                 NumberWrite::Done(ns::numbers_submit_filed(l()).to_owned())
             }
             _ => NumberWrite::Idle,
         });
-        if filing && registrations.write.unrepeatable_note().is_some() {
-            registrations
-                .unconfirmed_filing
-                .clone_from(&registrations.written);
+        if let Some(bundle_id) = filed
+            && registrations.write.unrepeatable_note().is_some()
+        {
+            registrations.unconfirmed_filing.insert(bundle_id);
         }
         Next::Stay(vec![self.read_registrations(tickets)])
     }

@@ -39,8 +39,10 @@ on, and `NumberAdmin` and `HqVoiceTokenResponse` fields an app builds.
   an upload and a removal converge, so each is offered again after any failure. A filing is
   offered again after a refusal (a 422 `validation_failed` or `carrier_rejected`); after a
   failure that does not prove it was not filed, that draft alone is held back
-  (`NumberRegistrations::unconfirmed_filing`, `can_file`) until the workspace is opened
-  again. Changing the country, number type or end-user type puts away the requirements
+  (`NumberRegistrations::unconfirmed_filing`, a set, and `can_file`) until its own filing
+  is confirmed, the list reads it back as no longer a draft, or the workspace is opened
+  again. Each answer is read as the write it answers (`NumberRegistrations::written`, a
+  `RegistrationWrite`: `Start`, `Upload`, `Remove` or `Submit` with its draft). Changing the country, number type or end-user type puts away the requirements
   shown, and drops a lookup still on its way. A viewer, whom the service refuses, is sent nothing and offered nothing. Every
   event is `NumberAdminEvent::Registration(RegistrationEvent)`, every call a `NumberCall`
   through `Effect::NumberAdmin`, as the carrier tab's are.
@@ -76,7 +78,10 @@ on, and `NumberAdmin` and `HqVoiceTokenResponse` fields an app builds.
   `mic_mode` (`HQ_VOICE_MIC_OPEN` or `HQ_VOICE_MIC_PUSH`, read by `is_push_to_talk`) and
   `session_id` (redacted in `Debug`), which the server sends and which the strict contract
   decode refused as unknown fields. Breaking for an app that builds one with a struct
-  literal.
+  literal. A push-to-talk credential joins HQ voice with the microphone off
+  (`HqVoice::push_to_talk`), so the member sends nothing before acting; the app's
+  `Event::Microphone(true)` and `(false)` are the talk action. An open one joins live, as
+  before.
 - The window's Refresh on the booking pages' Settings and Developer sections keeps the tab
   they showed. Each opened afresh on its first tab (Booking page, API keys) whatever tab was
   shown; each now reads the tab shown again, and the other tabs are read when next shown.

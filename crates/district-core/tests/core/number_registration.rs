@@ -8,9 +8,9 @@ use district_api::{ApiError, ErrorDetail};
 use district_core::{
     Effect, Event, MarketplaceEvent, MarketplaceTab, Model, NumberAdminEvent, NumberAnswer,
     NumberCall, NumberConfirmation, NumberRegistrations, NumberWrite, RegistrationEvent,
-    RegistrationForm, RegistrationList, RequirementsState, Route, Ticket, Tone, document_state,
-    end_user_type_label, number_type_label, registration_status, registration_title,
-    requirement_fields, requirement_kind,
+    RegistrationForm, RegistrationList, RegistrationWrite, RequirementsState, Route, Ticket, Tone,
+    document_state, end_user_type_label, number_type_label, registration_status,
+    registration_title, requirement_fields, requirement_kind,
 };
 use district_model::{
     CountryRequirements, NumberRegistration, NumberRegistrationCreateResponse,
@@ -398,7 +398,12 @@ fn documents_go_on_and_off_a_draft_only() {
         call,
         NumberCall::UploadRegistrationDocument(upload("bu_draft"))
     );
-    assert_eq!(registrations(&model).written.as_deref(), Some("bu_draft"));
+    assert_eq!(
+        registrations(&model).written,
+        Some(RegistrationWrite::Upload {
+            bundle_id: "bu_draft".to_owned()
+        })
+    );
     assert!(
         !registrations(&model).draft_armed("bu_draft"),
         "one at a time"
@@ -828,4 +833,84 @@ fn an_answer_of_another_kind_is_an_unreadable_one() {
         registrations(&model).requirements,
         RequirementsState::Failed(ref failure) if !failure.retryable
     ));
+}
+
+/// Files `bundle_id` and has it fail with a server error: a filing that may
+/// have happened.
+fn file_and_lose(model: &mut Model, bundle_id: &str) {
+    event(
+        model,
+        RegistrationEvent::AskSubmit {
+            bundle_id: bundle_id.to_owned(),
+        },
+    );
+    let (ticket, _) = called(&numbers(model, NumberAdminEvent::Confirm));
+    let (reread, _) = called(&answer(model, ticket, Err(server_error())));
+    answer(
+        model,
+        reread,
+        Ok(listing(vec![
+            filing("bu_draft", "draft"),
+            filing("bu_other", "draft"),
+        ])),
+    );
+}
+
+#[test]
+fn two_filings_that_may_have_happened_hold_back_both_drafts() {
+    let mut model = on_registrations();
+    file_and_lose(&mut model, "bu_draft");
+    file_and_lose(&mut model, "bu_other");
+    let tab = registrations(&model);
+    assert!(!tab.can_file("bu_draft"), "the first lock is kept");
+    assert!(!tab.can_file("bu_other"));
+    assert_eq!(tab.unconfirmed_filing.len(), 2);
+
+    // A draft read back as filed is held back no longer: it was filed.
+    let (ticket, _) = called(&event(&mut model, RegistrationEvent::Reload));
+    answer(
+        &mut model,
+        ticket,
+        Ok(listing(vec![
+            filing("bu_draft", "pending-review"),
+            filing("bu_other", "draft"),
+        ])),
+    );
+    assert_eq!(
+        registrations(&model).unconfirmed_filing,
+        ["bu_other".to_owned()].into()
+    );
+}
+
+#[test]
+fn a_failed_upload_while_a_filing_is_asked_locks_no_filing() {
+    let mut model = on_registrations();
+    event(
+        &mut model,
+        RegistrationEvent::AskSubmit {
+            bundle_id: "bu_draft".to_owned(),
+        },
+    );
+    let (ticket, _) = called(&event(
+        &mut model,
+        RegistrationEvent::Upload(RegistrationDocumentUpload {
+            bundle_id: "bu_draft".to_owned(),
+            requirement_name: "proof_of_address".to_owned(),
+            file_name: "address.pdf".to_owned(),
+            mime_type: "application/pdf".to_owned(),
+            bytes: b"%PDF".to_vec(),
+        }),
+    ));
+    let (reread, _) = called(&answer(&mut model, ticket, Err(server_error())));
+    answer(
+        &mut model,
+        reread,
+        Ok(listing(vec![filing("bu_draft", "draft")])),
+    );
+    assert!(registrations(&model).unconfirmed_filing.is_empty());
+    assert!(registrations(&model).can_file("bu_draft"));
+    // The question is still open, and still goes ahead.
+    assert!(signed_in(&model).marketplace.admin.confirmation.is_some());
+    let (_, call) = called(&numbers(&mut model, NumberAdminEvent::Confirm));
+    assert!(matches!(call, NumberCall::SubmitRegistration { .. }));
 }

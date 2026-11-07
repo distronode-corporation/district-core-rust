@@ -97,6 +97,11 @@ pub struct HqVoice {
     agent_seen: bool,
     /// The last session's room, and what was last reported to it.
     room: Option<VoiceRoom>,
+    /// Whether the member chose push-to-talk in their HQ voice settings: the
+    /// session's microphone starts off, and the app turns it on only while
+    /// the member holds it open ([`Event::Microphone`](crate::Event::Microphone)).
+    /// With an open microphone, it starts on.
+    pub push_to_talk: bool,
 }
 
 /// A session's room, as its credential named it, and what was reported to it.
@@ -382,8 +387,11 @@ impl SignedIn {
             reports: 0,
             last: None,
         });
+        // A member who chose push-to-talk sends nothing until they act.
+        let push_to_talk = credential.is_push_to_talk();
+        self.hq.voice.push_to_talk = push_to_talk;
         let media = MediaCredential::from_hq_voice(&credential);
-        let mut effects = self.start_media(MediaOwner::HqVoice, media, true, tickets);
+        let mut effects = self.start_media(MediaOwner::HqVoice, media, !push_to_talk, tickets);
         effects.push(Effect::Wait {
             ticket: tickets.issue(Slot::HqVoiceLimit),
             delay: Duration::from_secs(HQ_VOICE_SESSION_SECONDS),
