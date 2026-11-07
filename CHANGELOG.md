@@ -17,6 +17,13 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Fixed
+
+- The window's Refresh on the booking pages' Settings keeps the tab it showed. It opened
+  the section afresh on Booking page whatever tab was shown; it now reads the tab shown
+  again, the other tabs are read when next shown, and the dialog closes as before. Opening
+  Settings from another section still starts on Booking page. No API change.
+
 ## [9.0.0] - 2026-11-06
 
 The Messenger and Instagram reply window in the composer, as the web Inbox shows it: a
