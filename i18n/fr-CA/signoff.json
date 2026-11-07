@@ -1,11 +1,11 @@
 {
-  "signed_off_by": "Sean Dean, 2026-11-06 (tracked privately)",
-  "release": "v9.0.0",
-  "commit": "d327c42b1fa9c5e14400c605d4d3a73066001a4e",
+  "signed_off_by": "Sean Dean (sign-off 2026-11-07 for 10.0.0: 45 strings, 29 copied from Android's reviewed numbers catalog, 16 from the service's wire vocabulary and API errors)",
+  "release": "v10.0.0",
+  "commit": "de708c50f4bd67756159730707d84e74d9cb9e26",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
-      "sha256": "8439fa0b39705e22e97ceadbc2a70a0cfffdcdfef272210f0de851be8ece5e90"
+      "sha256": "25b0b09321cfddc4d5716add21fc88d38611d1a7850e60862fa99c710b5cc978"
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
@@ -13,7 +13,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/numbers.toml",
-      "sha256": "1f0575e5d6a6df4e56c2e38bd407edece2507b1cf2ba986ad5da96fd3bd89f09"
+      "sha256": "2439ce2fd61bb06df00cd5e20f7d36fb91126db13aeb1d293b230542d4855abf"
     },
     {
       "path": "crates/district-l10n/catalog/scheduling.toml",
@@ -25,7 +25,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/wire.toml",
-      "sha256": "32aa5b7b794199ed273398b2210034e451db68cb0e3c8ebff8e3cac6b02fa79c"
+      "sha256": "494e970992f5541e052c21b3e7a7dc58c07d9ba34e2833f6b8fe63d7b29b2de5"
     }
   ]
 }
