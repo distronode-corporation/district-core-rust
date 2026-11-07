@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "accountDeleted": true,
+  "externalErasurePending": false,
+  "message": "Account deleted and correlated support-data erasure completed.",
+  "supportErasure": {
+    "status": "complete",
+    "localRows": 0,
+    "queued": 0,
+    "correlationPending": 0,
+    "messagesDeleted": 0,
+    "contactInquiriesDeleted": 0,
+    "deleted": 0,
+    "redacted": 0,
+    "notFound": 0,
+    "blocked": 0,
+    "unconfigured": 0,
+    "failed": 0,
+    "pending": 0,
+    "reviewRequired": 0,
+    "searchCandidatesExcluded": 0,
+    "discoveryCappedRegions": 0,
+    "discoveryFailedRegions": 0
+  }
+}

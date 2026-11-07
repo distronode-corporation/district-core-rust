@@ -16,8 +16,7 @@ use std::fs;
 use std::path::PathBuf;
 
 use district_model::{
-    HqConfirmResponse, HqProposalCancelResponse, HqResolutionStatus, HqVoicePacket,
-    HqVoiceResolution, read_packet,
+    HqConfirmResponse, HqResolutionStatus, HqVoicePacket, HqVoiceResolution, read_packet,
 };
 use serde_json::{Value, json};
 
@@ -103,31 +102,16 @@ fn each_resolution_packet_reads_with_its_status() {
     );
 }
 
+/// The spoken confirmation's answer. The cancel click's answer is recorded by
+/// the server now (`contracts/fixtures/district-hq-proposal-cancel.json`, in
+/// the manifest), so its draft is gone.
 #[test]
-fn the_click_answers_decode_strictly_and_round_trip() {
-    for (name, codec) in [
-        (
-            "district-hq-voice-confirm.json",
-            codec::<HqConfirmResponse> as fn(&str) -> Result<Value, String>,
-        ),
-        (
-            "district-hq-proposal-cancel.json",
-            codec::<HqProposalCancelResponse>,
-        ),
-    ] {
-        let raw = draft(name);
-        let encoded = codec(&raw).unwrap_or_else(|error| panic!("{name} {error}"));
-        let original: Value = serde_json::from_str(&raw).expect("JSON");
-        assert_eq!(differences(&original, &encoded), Vec::new(), "{name}");
-    }
-    let confirmed: HqConfirmResponse = decode_str(
-        "district-hq-voice-confirm.json",
-        &draft("district-hq-voice-confirm.json"),
-    );
+fn the_voice_confirm_answer_decodes_strictly_and_round_trips() {
+    let name = "district-hq-voice-confirm.json";
+    let raw = draft(name);
+    let encoded = codec::<HqConfirmResponse>(&raw).unwrap_or_else(|error| panic!("{name} {error}"));
+    let original: Value = serde_json::from_str(&raw).expect("JSON");
+    assert_eq!(differences(&original, &encoded), Vec::new(), "{name}");
+    let confirmed: HqConfirmResponse = decode_str(name, &raw);
     assert!(confirmed.success && confirmed.executed);
-    let cancelled: HqProposalCancelResponse = decode_str(
-        "district-hq-proposal-cancel.json",
-        &draft("district-hq-proposal-cancel.json"),
-    );
-    assert!(cancelled.success);
 }

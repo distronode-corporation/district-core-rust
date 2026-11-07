@@ -1,0 +1,5 @@
+{
+  "success": false,
+  "error": "This workspace has used all 120 of this month's District HQ voice minutes. Voice mode is back on the 1st of next month; the text console still works.",
+  "code": "hq_voice_allowance_reached"
+}

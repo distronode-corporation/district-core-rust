@@ -1,0 +1,14 @@
+{
+  "available": true,
+  "forwardingCheck": {
+    "id": "fwd_contract_1",
+    "status": "pending",
+    "mode": "unanswered",
+    "businessLine": "+14165550123",
+    "startedAt": "2026-09-23T15:10:00.000Z",
+    "at": "2026-09-23T15:10:00.000Z",
+    "verifierNumber": "+14165550143",
+    "carrier": "twilio"
+  },
+  "attemptsLeft": 4
+}

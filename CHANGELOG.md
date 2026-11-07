@@ -23,8 +23,8 @@ A number's regulatory registration, the Android app's Registrations tab, and the
 the HQ voice credential, with push-to-talk. A major version because `Endpoint`,
 `NumberCall`, `NumberAnswer`, `NumberAdminEvent`, `NumberConfirmation`, `MarketplaceTab` and
 `WireCategory` each gain variants an app matches on, and `NumberAdmin` and
-`HqVoiceTokenResponse` fields an app builds. `contracts/` moves to the server's ea43f86ef:
-the two `i18n/` files change, and no fixture does.
+`HqVoiceTokenResponse` fields an app builds. The fixtures move to the server's 1ccb9a631
+(20 new files, nothing else changed), and `contracts/i18n/` to its ea43f86ef.
 
 ### Upgrading from 9.0.x
 
@@ -130,6 +130,15 @@ the two `i18n/` files change, and no fixture does.
   `reauth_failed` and `confirmation_mismatch`, each with the service's French, in
   `api_errors.toml`.
 - The two registration routes leave `EXCLUDED`: the desktop apps call them now.
+- `contracts/fixtures/` from the server's main: 20 new fixtures, 211 to 231. Four decode
+  with types this crate already has (`HqVoiceTokenResponse`, the voice minutes refusal as a
+  `RefusalResponse`, `HqVoiceContextResponse`, `HqProposalCancelResponse`), so the cancel
+  answer's draft in `tests/hq-voice-drafts/` gives way to the recorded file. The other 16
+  are `EXCLUDED_BY_DECISION`, each group with its reason: campaign dialling, the rest of the
+  web setup wizard, the integrations read, HQ voice settings, and a phone app's native
+  re-authentication, two-factor and account deletion. The sync's substitution for the
+  recurring caller's stand-in is also applied to the forwarding check fixtures, where the
+  server writes that number as the verifier. No change to what any client calls.
 
 ## [9.0.0] - 2026-11-06
 
