@@ -17,9 +17,22 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
-Breaking: `Endpoint` gains `HqVoiceEnd` and `HqVoiceDiscard`, `Effect` gains `EndHqVoice`
-and `DiscardHqVoice`, and `DistrictApi` gains `hq_voice_end` and `hq_voice_discard`, so the
-next release is a major version.
+## [11.0.0] - 2026-11-08
+
+The HQ voice session tells the service when it ends: the end and discard routes, and the
+core's session calling them once, however it ends. A major version because `Endpoint`
+gains `HqVoiceEnd` and `HqVoiceDiscard`, `Effect` gains `EndHqVoice` and `DiscardHqVoice`,
+and `DistrictApi` gains `hq_voice_end` and `hq_voice_discard`. The fixtures move to the
+server's 27559927 (two new files, nothing else changed).
+
+### Upgrading from 10.0.x
+
+- A `match` with no wildcard arm on `Endpoint` or `Effect` stops compiling: handle
+  `Endpoint::{HqVoiceEnd, HqVoiceDiscard}` and `Effect::{EndHqVoice, DiscardHqVoice}`. An
+  app that runs effects with `EffectRunner` over `ApiClient` needs no code for the two
+  effects.
+- An app that implements `DistrictApi` itself (a test double, usually) implements
+  `hq_voice_end` and `hq_voice_discard`.
 
 ### Added
 
