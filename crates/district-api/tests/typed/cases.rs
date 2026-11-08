@@ -1061,6 +1061,34 @@ pub fn cases() -> Vec<Case> {
                 },
             })),
         },
+        Case {
+            name: "hq_voice_end",
+            endpoint: Endpoint::HqVoiceEnd,
+            retried: false,
+            answer: fixture("district-hq-voice-end.json"),
+            call: call!(c => c.hq_voice_end(WS, "00000000-0000-4000-8000-000000000000")),
+            method: "POST",
+            path: "/api/district/hq/voice-end",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "sessionId": "00000000-0000-4000-8000-000000000000",
+            })),
+        },
+        Case {
+            name: "hq_voice_discard",
+            endpoint: Endpoint::HqVoiceDiscard,
+            retried: false,
+            answer: fixture("district-hq-voice-discard.json"),
+            call: call!(c => c.hq_voice_discard(WS, "00000000-0000-4000-8000-000000000000")),
+            method: "POST",
+            path: "/api/district/hq/voice-discard",
+            query: vec![],
+            body: Sent::Json(json!({
+                "workspaceId": WS,
+                "sessionId": "00000000-0000-4000-8000-000000000000",
+            })),
+        },
         // Analytics and usage.
         Case {
             name: "analytics",

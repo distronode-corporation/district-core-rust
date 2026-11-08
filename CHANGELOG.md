@@ -17,6 +17,25 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+Breaking: `Endpoint` gains `HqVoiceEnd` and `HqVoiceDiscard`, so the next release is a
+major version.
+
+### Added
+
+- `ApiClient::hq_voice_end` (`POST /api/district/hq/voice-end`, `HqVoiceEndResponse`): ends a
+  running HQ voice session by its credential's `session_id`, so only the minutes used are
+  counted, and the service ends its room.
+- `ApiClient::hq_voice_discard` (`POST /api/district/hq/voice-discard`,
+  `HqVoiceDiscardResponse`): gives back a session that never started.
+- Both are desktop-only endpoints (the Android app has no voice mode). The core's own
+  voice session does not call them yet.
+
+### Changed
+
+- Contracts: the fixtures move to the server's 27559927 (two new files,
+  `district-hq-voice-end.json` and `district-hq-voice-discard.json`, both decoded; nothing
+  else changed). `contracts/desktop/` and `contracts/i18n/` stay where they were.
+
 ## [10.0.0] - 2026-11-07
 
 A number's regulatory registration, the Android app's Registrations tab, and the whole of

@@ -17,8 +17,9 @@
 use district_l10n::Locale;
 use district_model::{
     HQ_VOICE_HISTORY_MAX_CHARS, HQ_VOICE_HISTORY_MAX_TURNS, HqConfirmResponse, HqPendingWrite,
-    HqPromptResponse, HqProposalCancelResponse, HqTurn, HqVoiceContextResponse, HqVoiceProposal,
-    HqVoiceScreen, HqVoiceTokenResponse,
+    HqPromptResponse, HqProposalCancelResponse, HqTurn, HqVoiceContextResponse,
+    HqVoiceDiscardResponse, HqVoiceEndResponse, HqVoiceProposal, HqVoiceScreen,
+    HqVoiceTokenResponse,
 };
 use serde::Serialize;
 use serde_json::{Map, Value};
@@ -229,6 +230,46 @@ impl<S: TokenSource> ApiClient<S> {
             .await?;
         confirm(Endpoint::HqVoiceContext, recorded.success)?;
         Ok(recorded)
+    }
+
+    /// Ends the running voice session `session_id` (its credential's
+    /// [`session_id`](HqVoiceTokenResponse::session_id)), at the member's
+    /// word, so only the minutes used are counted; the service also ends its
+    /// room. [`HqVoiceEndResponse::ended`] is `false` for a session already
+    /// ended or discarded, or one the service does not know for this member.
+    /// Sent once and never repeated.
+    pub async fn hq_voice_end(
+        &self,
+        workspace_id: &str,
+        session_id: &str,
+    ) -> Result<HqVoiceEndResponse, ApiError> {
+        let ended: HqVoiceEndResponse = self
+            .request(Endpoint::HqVoiceEnd)
+            .workspace(workspace_id)
+            .field("sessionId", session_id)
+            .send()
+            .await?;
+        confirm(Endpoint::HqVoiceEnd, ended.success)?;
+        Ok(ended)
+    }
+
+    /// Gives back the voice session `session_id`, which never started (the
+    /// join failed before it went live). The service discards only a session
+    /// still open and moments old; [`HqVoiceDiscardResponse::discarded`] is
+    /// `false` otherwise. Sent once and never repeated.
+    pub async fn hq_voice_discard(
+        &self,
+        workspace_id: &str,
+        session_id: &str,
+    ) -> Result<HqVoiceDiscardResponse, ApiError> {
+        let discarded: HqVoiceDiscardResponse = self
+            .request(Endpoint::HqVoiceDiscard)
+            .workspace(workspace_id)
+            .field("sessionId", session_id)
+            .send()
+            .await?;
+        confirm(Endpoint::HqVoiceDiscard, discarded.success)?;
+        Ok(discarded)
     }
 }
 

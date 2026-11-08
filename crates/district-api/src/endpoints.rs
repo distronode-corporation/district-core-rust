@@ -403,6 +403,16 @@ endpoint_table! {
     /// it is never repeated.
     HqVoiceContext => Post "/api/district/hq/voice-context",
         workspace: Body, body: Json, retry: Never;
+    /// Ends a running HQ voice session, named by `sessionId` (the credential's),
+    /// at the member's word, so only the minutes used are counted. A write,
+    /// never repeated (the service answers a repeat with `ended: false`).
+    HqVoiceEnd => Post "/api/district/hq/voice-end",
+        workspace: Body, body: Json, retry: Never;
+    /// Gives back an HQ voice session that never started, named by
+    /// `sessionId`. Only a session moments old is discarded, so it is never
+    /// repeated.
+    HqVoiceDiscard => Post "/api/district/hq/voice-discard",
+        workspace: Body, body: Json, retry: Never;
 
     // Phone numbers. Buying one stays on the web: a number is a recurring
     // carrier charge, so there is no purchase here.
