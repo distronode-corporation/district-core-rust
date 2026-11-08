@@ -17,9 +17,11 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [12.0.0] - 2026-11-08
+
 A timeline message says which of its attachments are files, and the fixtures move to the
-server's e7ec6d31 (eleven new files, the two timeline fixtures changed). Breaking for the
-next release: `TimelineEvent` gains a field.
+server's e7ec6d31 (eleven new files, the two timeline fixtures changed). A major version
+because `TimelineEvent` gains a field.
 
 ### Upgrading from 11.0.x
 
