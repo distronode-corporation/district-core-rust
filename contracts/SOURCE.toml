@@ -23,10 +23,10 @@
 # `sha256sum -c SHA256SUMS` checks them.
 
 [sets.fixtures]
-commit = "f5ffc0a3c8cefd4d84c689f162b095a224144b17"
+commit = "7e882f5e18bb0b887c4b7fc296bbf3f8de86352a"
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
-file_count = 190
+file_count = 195
 
 [sets.desktop]
 commit = "6cd0ff6674360ce56a83bfc1763315db2a056a24"
@@ -35,13 +35,13 @@ source_clean = true
 file_count = 14
 
 [sets.i18n]
-commit = "a9cf0ef7a056ebc64eba94d0ee47171b94d1ae1c"
+commit = "7e882f5e18bb0b887c4b7fc296bbf3f8de86352a"
 source = "the service's localization facts (error sentences, wire value labels, formatting vectors), recorded by its contract tests"
 source_clean = true
 file_count = 3
 
 [sync]
-date = "2026-10-25"
+date = "2026-11-04"
 checksums = "SHA256SUMS"
 
 [[substitution]]
@@ -49,7 +49,7 @@ kind = "phone"
 original_sha256 = "da624dd9d311d5fc6f92bfdeeb818e6525a505be2793a2c45083be744a9b1ee3"
 replacement = "+14165550142"
 reason = "the recurring caller across the call, contact, message, desk and booking fixtures; outside the fictional range"
-count = 29
+count = 33
 
 [substitution.files]
 "fixtures/district-call-detail.json" = 3
@@ -59,6 +59,7 @@ count = 29
 "fixtures/district-contact-unblock.json" = 1
 "fixtures/district-contacts-blocked.json" = 1
 "fixtures/district-contacts.json" = 1
+"fixtures/district-conversations-reply-options.json" = 4
 "fixtures/district-conversations.json" = 2
 "fixtures/district-desk-ticket-create.json" = 1
 "fixtures/district-desk-ticket-reply.json" = 1
@@ -111,10 +112,11 @@ kind = "phone"
 original_sha256 = "064b497210b7f9471be6c38cc91136d5521501c0a4ea54794871bc459e16d038"
 replacement = "+14165550181"
 reason = "an unanswered outbound call and an unknown texter; outside the fictional range"
-count = 7
+count = 13
 
 [substitution.files]
 "fixtures/district-calls.json" = 1
+"fixtures/district-conversations-reply-options.json" = 6
 "fixtures/district-conversations.json" = 4
 "fixtures/district-drafts-list.json" = 1
 "fixtures/district-overview.json" = 1
@@ -135,11 +137,12 @@ kind = "email"
 original_sha256 = "767ccefb5496543e5390b4b087d6091bdbb69b385fda5489023e40c3a9027799"
 replacement = "ada@example.com"
 reason = "a contact's address in the contact, conversation and message fixtures"
-count = 7
+count = 12
 
 [substitution.files]
 "fixtures/district-contact-detail.json" = 1
 "fixtures/district-contacts.json" = 1
+"fixtures/district-conversations-reply-options.json" = 5
 "fixtures/district-conversations.json" = 4
 "fixtures/district-message-send-email.json" = 1
 
@@ -325,6 +328,16 @@ count = 1
 "fixtures/district-contacts.json" = 1
 
 [[substitution]]
+kind = "email"
+original_sha256 = "619fdf651c1bd16afaab8e35c9a86f6243cf11034734b043869055304ca2db1a"
+replacement = "teammate@example.com"
+reason = "the assignee in the Inbox thread-assignment fixture"
+count = 1
+
+[substitution.files]
+"fixtures/district-conversation-assignments.json" = 1
+
+[[substitution]]
 kind = "host"
 original_sha256 = "32ca8563ef65ed5c4ce3f28255954bfd1b433b329dcc0250dd56138ef0c02981"
 replacement = "media.example.com"
@@ -343,10 +356,11 @@ kind = "text"
 original = " \u2014 "
 replacement = " - "
 reason = "the em dash is not allowed in this repository; the fixtures use it as a spaced separator"
-count = 13
+count = 15
 
 [substitution.files]
 "fixtures/district-ai-draft.json" = 1
+"fixtures/district-conversations-reply-options.json" = 1
 "fixtures/district-conversations.json" = 1
 "fixtures/district-draft-put.json" = 1
 "fixtures/district-draft.json" = 1
@@ -354,5 +368,6 @@ count = 13
 "fixtures/district-member-last-agency.json" = 1
 "fixtures/district-message-send-email.json" = 1
 "fixtures/district-persona-options.json" = 4
+"fixtures/district-timeline-meta.json" = 1
 "fixtures/district-timeline.json" = 1
 "i18n/wire-vocabulary.json" = 1

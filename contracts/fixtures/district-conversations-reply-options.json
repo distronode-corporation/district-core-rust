@@ -1,0 +1,186 @@
+{
+  "success": true,
+  "conversations": [
+    {
+      "key": "14165550177",
+      "threadKey": "addr:14165550177",
+      "counterpart": "+14165550177",
+      "matchKeys": [
+        "14165550177"
+      ],
+      "kind": "phone",
+      "channels": [
+        "whatsapp"
+      ],
+      "contactId": null,
+      "contactName": null,
+      "contactEmail": null,
+      "contactPhone": null,
+      "canSms": true,
+      "canEmail": false,
+      "lastMessage": {
+        "body": "Hi, do you do flat roofs?",
+        "direction": "inbound",
+        "type": "whatsapp",
+        "status": "received",
+        "createdAt": "2026-08-15T14:40:00.000Z"
+      },
+      "unreadCount": 1,
+      "totalMessages": 1,
+      "replyOptions": [
+        {
+          "channel": "whatsapp",
+          "to": "+14165550177"
+        }
+      ]
+    },
+    {
+      "key": "fb:5550101",
+      "threadKey": "addr:fb:5550101",
+      "counterpart": "fb:5550101",
+      "matchKeys": [
+        "fb:5550101"
+      ],
+      "kind": "messenger",
+      "channels": [
+        "messenger"
+      ],
+      "contactId": null,
+      "contactName": null,
+      "contactEmail": null,
+      "contactPhone": null,
+      "canSms": false,
+      "canEmail": false,
+      "lastMessage": {
+        "body": "Are you open Saturday?",
+        "direction": "inbound",
+        "type": "messenger",
+        "status": "received",
+        "createdAt": "2026-08-15T14:35:00.000Z"
+      },
+      "unreadCount": 1,
+      "totalMessages": 1,
+      "replyOptions": [
+        {
+          "channel": "messenger",
+          "to": "fb:5550101"
+        }
+      ]
+    },
+    {
+      "key": "ig:5550102",
+      "threadKey": "addr:ig:5550102",
+      "counterpart": "ig:5550102",
+      "matchKeys": [
+        "ig:5550102"
+      ],
+      "kind": "instagram",
+      "channels": [
+        "instagram"
+      ],
+      "contactId": null,
+      "contactName": null,
+      "contactEmail": null,
+      "contactPhone": null,
+      "canSms": false,
+      "canEmail": false,
+      "lastMessage": {
+        "body": "Saw your post, what does a repair cost?",
+        "direction": "inbound",
+        "type": "instagram",
+        "status": "received",
+        "createdAt": "2026-08-15T14:30:00.000Z"
+      },
+      "unreadCount": 0,
+      "totalMessages": 1,
+      "replyOptions": [
+        {
+          "channel": "instagram",
+          "to": "ig:5550102"
+        }
+      ]
+    },
+    {
+      "key": "ada@example.com",
+      "threadKey": "contact:contact_contract_1",
+      "counterpart": "Contract Test Caller <ada@example.com>",
+      "matchKeys": [
+        "14165550142",
+        "ada@example.com"
+      ],
+      "kind": "email",
+      "channels": [
+        "email",
+        "sms"
+      ],
+      "contactId": "contact_contract_1",
+      "contactName": "Contract Test Caller",
+      "contactEmail": "ada@example.com",
+      "contactPhone": "14165550142",
+      "canSms": true,
+      "canEmail": true,
+      "lastMessage": {
+        "body": "Following up by email - could we move Thursday to Friday?",
+        "direction": "inbound",
+        "type": "email",
+        "status": "received",
+        "createdAt": "2026-08-15T14:20:00.000Z"
+      },
+      "unreadCount": 2,
+      "totalMessages": 3,
+      "replyOptions": [
+        {
+          "channel": "email",
+          "to": "ada@example.com"
+        },
+        {
+          "channel": "sms",
+          "to": "14165550142"
+        },
+        {
+          "channel": "whatsapp",
+          "to": "+14165550142"
+        }
+      ]
+    },
+    {
+      "key": "14165550181",
+      "threadKey": "addr:14165550181",
+      "counterpart": "+14165550181",
+      "matchKeys": [
+        "14165550181"
+      ],
+      "kind": "phone",
+      "channels": [
+        "sms"
+      ],
+      "contactId": null,
+      "contactName": null,
+      "contactEmail": null,
+      "contactPhone": null,
+      "canSms": true,
+      "canEmail": false,
+      "lastMessage": {
+        "body": "Is this the roofing company?",
+        "direction": "inbound",
+        "type": "sms",
+        "status": "received",
+        "createdAt": "2026-08-15T13:10:00.000Z"
+      },
+      "unreadCount": 0,
+      "totalMessages": 1,
+      "replyOptions": [
+        {
+          "channel": "sms",
+          "to": "+14165550181"
+        },
+        {
+          "channel": "whatsapp",
+          "to": "+14165550181"
+        }
+      ]
+    }
+  ],
+  "scanned": 7,
+  "scanLimit": 500
+}

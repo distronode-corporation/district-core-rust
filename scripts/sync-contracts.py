@@ -245,6 +245,8 @@ SUBSTITUTIONS: tuple[Substitution, ...] = (
                  "a round-robin host in the scheduling host and team fixtures"),
     Substitution("email", "f310f9d00a146bc476cbe2663f4d222f9a218f63e270ece7653c7f9ba9a2fb89", "sparse@example.com",
                  "the sparsely filled contact in the contact list"),
+    Substitution("email", "619fdf651c1bd16afaab8e35c9a86f6243cf11034734b043869055304ca2db1a", "teammate@example.com",
+                 "the assignee in the Inbox thread-assignment fixture"),
     # Host names under the service's domain, other than the public website's.
     Substitution("host", "32ca8563ef65ed5c4ce3f28255954bfd1b433b329dcc0250dd56138ef0c02981", "media.example.com",
                  "the real-time media server's host, in the call and room token fixtures"),
