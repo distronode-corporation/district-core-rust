@@ -219,6 +219,41 @@ pub struct HqVoiceContextResponse {
     pub success: bool,
 }
 
+/// `POST /api/district/hq/voice-end`: the member stopped a running session.
+///
+/// The service closes the session's row, so only the minutes used are counted,
+/// and ends its room. Idempotent: a session already ended or discarded, or one
+/// it does not know for this member, answers `ended: false`.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct HqVoiceEndResponse {
+    /// `true` when the request was understood.
+    #[serde(default)]
+    pub success: bool,
+    /// `true` when this request closed the session.
+    #[serde(default)]
+    pub ended: bool,
+}
+
+/// `POST /api/district/hq/voice-discard`: a session that never started, given
+/// back.
+///
+/// The service discards only a session that is still open and young (it was
+/// minted moments ago), so the minutes of a session that ran are never erased;
+/// anything else answers `discarded: false`.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct HqVoiceDiscardResponse {
+    /// `true` when the request was understood.
+    #[serde(default)]
+    pub success: bool,
+    /// `true` when this request discarded the session.
+    #[serde(default)]
+    pub discarded: bool,
+}
+
 /// A change the voice agent proposed, as its `HQ_PROPOSAL` packet carries it.
 ///
 /// Nothing has been changed. Show [`summary`](Self::summary); confirming by

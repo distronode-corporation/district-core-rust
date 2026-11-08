@@ -24,11 +24,11 @@ use std::collections::BTreeMap;
 use district_model::{
     A2pRegistrationResponse, BlockedContactsResponse, ContactBlockResponse,
     ConversationAssignResponse, ConversationAssignmentsResponse, HqProposalCancelResponse,
-    HqVoiceContextResponse, HqVoiceTokenResponse, MetaWindowResponse, NumberConfigureResponse,
-    NumberLookupResponse, NumberReleaseResponse, ProviderStatusResponse, RefusalResponse,
-    SettingsResponse, SettingsSaveResponse, SipTrunkCreateResponse, SipTrunksResponse,
-    TollFreeVerificationResponse, VerifyServiceResponse, WhatsAppTemplatesResponse,
-    WhatsAppWindowResponse,
+    HqVoiceContextResponse, HqVoiceDiscardResponse, HqVoiceEndResponse, HqVoiceTokenResponse,
+    MetaWindowResponse, NumberConfigureResponse, NumberLookupResponse, NumberReleaseResponse,
+    ProviderStatusResponse, RefusalResponse, SettingsResponse, SettingsSaveResponse,
+    SipTrunkCreateResponse, SipTrunksResponse, TollFreeVerificationResponse, VerifyServiceResponse,
+    WhatsAppTemplatesResponse, WhatsAppWindowResponse,
 };
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CallAnswerResponse,
@@ -118,7 +118,7 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 231;
+pub const EXPECTED_FIXTURE_COUNT: usize = 233;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
@@ -345,6 +345,13 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
         "district-hq-voice-context.json",
         codec::<HqVoiceContextResponse>,
     ),
+    // POST /api/district/hq/voice-discard: a session that never started, given back.
+    (
+        "district-hq-voice-discard.json",
+        codec::<HqVoiceDiscardResponse>,
+    ),
+    // POST /api/district/hq/voice-end: the member's Stop, the session closed.
+    ("district-hq-voice-end.json", codec::<HqVoiceEndResponse>),
     // POST /api/district/hq/voice-token refused: this month's voice minutes are used up.
     (
         "district-hq-voice-token-allowance.json",

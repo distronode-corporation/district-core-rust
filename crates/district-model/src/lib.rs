@@ -121,8 +121,9 @@ pub use hq_voice::{
     HQ_PROPOSAL_TOPIC, HQ_ROOM_PREFIX, HQ_VOICE_HISTORY_MAX_CHARS, HQ_VOICE_HISTORY_MAX_TURNS,
     HQ_VOICE_MIC_OPEN, HQ_VOICE_MIC_PUSH, HQ_VOICE_RECORD_ID_MAX, HQ_VOICE_SESSION_SECONDS,
     HqAgentState, HqProposalCancelResponse, HqResolutionStatus, HqVoiceContextResponse,
-    HqVoicePacket, HqVoiceProposal, HqVoiceRecordKind, HqVoiceResolution, HqVoiceScreen,
-    HqVoiceSelection, HqVoiceTokenResponse, TRANSCRIPTION_TOPIC, read_packet,
+    HqVoiceDiscardResponse, HqVoiceEndResponse, HqVoicePacket, HqVoiceProposal, HqVoiceRecordKind,
+    HqVoiceResolution, HqVoiceScreen, HqVoiceSelection, HqVoiceTokenResponse, TRANSCRIPTION_TOPIC,
+    read_packet,
 };
 pub use inbox::{
     CHANNEL_EMAIL, CHANNEL_INSTAGRAM, CHANNEL_MESSENGER, CHANNEL_SMS, CHANNEL_WHATSAPP,

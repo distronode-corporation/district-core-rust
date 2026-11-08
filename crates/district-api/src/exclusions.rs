@@ -161,6 +161,16 @@ pub const DESKTOP_ONLY: &[Addition] = &[
                  same reason as the voice credential.",
     },
     Addition {
+        endpoint: Endpoint::HqVoiceEnd,
+        reason: "Ending an HQ voice session at the member's word, so only the minutes used are \
+                 counted, for the same reason as the voice credential.",
+    },
+    Addition {
+        endpoint: Endpoint::HqVoiceDiscard,
+        reason: "Giving back an HQ voice session that never started, for the same reason as the \
+                 voice credential.",
+    },
+    Addition {
         endpoint: Endpoint::AuthMe,
         reason: "The simplest authenticated request, which the client's own auth tests drive. \
                  The Android app called it only to decide whether to show its administration \
