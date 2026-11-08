@@ -472,6 +472,32 @@ fn a_thread_interleaves_calls_and_messages_of_every_channel() {
             .iter()
             .any(|e| e.event_type == "sms" && e.media_urls.is_empty()),
     );
+    assert!(
+        events.iter().all(|e| e
+            .attachments
+            .iter()
+            .map(|a| a.url.as_str())
+            .eq(e.media_urls.iter().map(String::as_str))),
+        "one attachment per media URL, in the same order"
+    );
+    covers(
+        "an image attachment, drawn as a thumbnail",
+        events.iter().any(|e| {
+            e.attachments.iter().any(|a| a.is_image())
+                && e.media_urls
+                    .iter()
+                    .all(|u| e.file_attachment_for(u).is_none())
+        }),
+    );
+    covers(
+        "a file attachment, shown by its name",
+        events.iter().any(|e| {
+            e.media_urls
+                .iter()
+                .filter_map(|u| e.file_attachment_for(u))
+                .any(|a| a.mime_type == "application/pdf" && a.file_name == "Roof quote.pdf")
+        }),
+    );
     covers(
         "an email with a subject",
         events

@@ -1,0 +1,31 @@
+{
+  "success": true,
+  "emailBranding": {
+    "provider": "postmark",
+    "domain": "mail.contract.test",
+    "postmarkDomainId": 4321,
+    "records": [
+      {
+        "kind": "dkim",
+        "type": "TXT",
+        "host": "20260810._domainkey.mail.contract.test",
+        "value": "k=rsa;p=CONTRACTTESTPUBLICKEY",
+        "verified": true
+      },
+      {
+        "kind": "return-path",
+        "type": "CNAME",
+        "host": "pm-bounces.mail.contract.test",
+        "value": "pm.mtasv.net",
+        "verified": true
+      }
+    ],
+    "dkimHost": "20260810._domainkey.mail.contract.test",
+    "dkimValue": "k=rsa;p=CONTRACTTESTPUBLICKEY",
+    "returnPathDomain": "pm-bounces.mail.contract.test",
+    "returnPathCnameValue": "pm.mtasv.net",
+    "dkimVerified": true,
+    "returnPathVerified": true,
+    "verifiedAt": "2026-08-10T09:00:00.000Z"
+  }
+}

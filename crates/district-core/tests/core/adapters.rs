@@ -364,7 +364,7 @@ async fn the_api_client_serves_the_screens_of_the_inbox_calls_and_contacts() {
             .unwrap()
             .timeline
             .len(),
-        5
+        6
     );
     assert_eq!(
         DistrictApi::unread_count(&client, ws, false)

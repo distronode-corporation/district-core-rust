@@ -23,10 +23,10 @@
 # `sha256sum -c SHA256SUMS` checks them.
 
 [sets.fixtures]
-commit = "27559927081be6d2049f567eb0cb57471de2c85d"
+commit = "e7ec6d31e4b1abc03d16cfe21a12210162404f7c"
 source = "the Android app's contract fixtures, recorded by the District AI server's contract tests"
 source_clean = true
-file_count = 233
+file_count = 244
 
 [sets.desktop]
 commit = "6cd0ff6674360ce56a83bfc1763315db2a056a24"
@@ -212,10 +212,11 @@ kind = "email"
 original_sha256 = "6af1521778a24650da09dc7de13bcc62b197fb2694f55a1b508aa84fd3992404"
 replacement = "contract@example.com"
 reason = "the scheduling account's own user in the scheduling fixtures"
-count = 11
+count = 12
 
 [substitution.files]
 "fixtures/district-conversations-assignee.json" = 1
+"fixtures/district-email-identity.json" = 1
 "fixtures/district-scheduling-calendar-status.json" = 1
 "fixtures/district-scheduling-calendars.json" = 1
 "fixtures/district-scheduling-event-types.json" = 1
@@ -290,6 +291,17 @@ count = 1
 
 [substitution.files]
 "fixtures/district-member-add.json" = 1
+
+[[substitution]]
+kind = "email"
+original_sha256 = "bc244be21b333cdbaa4df92532d3c1e6a93bd0a872a34ed760b8b27b6f0d384e"
+replacement = "office@example.com"
+reason = "the reply-to address in the email identity fixtures"
+count = 2
+
+[substitution.files]
+"fixtures/district-email-identity-patch.json" = 1
+"fixtures/district-email-identity.json" = 1
 
 [[substitution]]
 kind = "email"

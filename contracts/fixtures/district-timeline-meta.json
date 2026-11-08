@@ -39,6 +39,31 @@
       "status": "received",
       "mediaUrls": [
         "https://media.contract.test/roof.jpg"
+      ],
+      "attachments": [
+        {
+          "url": "https://media.contract.test/roof.jpg",
+          "mimeType": "image/jpeg",
+          "fileName": "roof.jpg"
+        }
+      ]
+    },
+    {
+      "id": "msg_timeline_pdf_out",
+      "type": "sms",
+      "timestamp": "2026-08-15T14:15:00.000Z",
+      "direction": "outbound",
+      "body": "Here is the quote for the roof.",
+      "status": "delivered",
+      "mediaUrls": [
+        "https://www.distronode.test/api/media/0b5e7c1a-3f2d-4c8e-9a61-7d2f4e8b9c10?name=Roof%20quote.pdf"
+      ],
+      "attachments": [
+        {
+          "url": "https://www.distronode.test/api/media/0b5e7c1a-3f2d-4c8e-9a61-7d2f4e8b9c10?name=Roof%20quote.pdf",
+          "mimeType": "application/pdf",
+          "fileName": "Roof quote.pdf"
+        }
       ]
     },
     {

@@ -462,6 +462,12 @@ pub struct TimelineEvent {
     /// none.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub media_urls: Vec<String>,
+    /// One entry per [`media_urls`](Self::media_urls) URL, in the same order,
+    /// with its type and file name. Left out when there are none, like
+    /// `mediaUrls`. Read it through
+    /// [`file_attachment_for`](Self::file_attachment_for), not by index.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub attachments: Vec<TimelineAttachment>,
     /// A call's length in seconds.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
@@ -489,6 +495,39 @@ impl TimelineEvent {
     /// message from either side.
     pub fn is_missed_call(&self) -> bool {
         !self.is_message() && self.direction == "missed"
+    }
+
+    /// The attachment behind `url` when the service says it is not an image (a
+    /// PDF, say), so an app shows it as a named file instead of fetching it as a
+    /// thumbnail. `None` for an image, and for a URL with no entry, which an app
+    /// draws as an image as it did before the service sent `attachments`.
+    pub fn file_attachment_for(&self, url: &str) -> Option<&TimelineAttachment> {
+        self.attachments
+            .iter()
+            .find(|a| a.url == url)
+            .filter(|a| !a.is_image())
+    }
+}
+
+/// One attachment of a [`TimelineEvent`]: its URL (one of the event's
+/// `mediaUrls`), its MIME type and the file name the service shows for it.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
+#[serde(default, rename_all = "camelCase")]
+pub struct TimelineAttachment {
+    /// The attachment's URL, as it appears in `mediaUrls`.
+    pub url: String,
+    /// Its MIME type, such as `image/jpeg` or `application/pdf`.
+    pub mime_type: String,
+    /// The name to show for it.
+    pub file_name: String,
+}
+
+impl TimelineAttachment {
+    /// Whether this is an image. An empty type counts as one, the shape every
+    /// attachment had before the service sent types.
+    pub fn is_image(&self) -> bool {
+        self.mime_type.is_empty() || self.mime_type.starts_with("image/")
     }
 }
 
@@ -772,6 +811,44 @@ mod tests {
         assert!(!event("sms", "missed").is_missed_call());
         assert!(event("email", "inbound").is_message());
         assert!(!event("call", "inbound").is_message());
+    }
+
+    #[test]
+    fn only_a_typed_non_image_attachment_is_a_file() {
+        let attachment = |url: &str, mime_type: &str| TimelineAttachment {
+            url: url.to_owned(),
+            mime_type: mime_type.to_owned(),
+            file_name: format!("{url}.name"),
+        };
+        let event = TimelineEvent {
+            media_urls: vec![
+                "a".to_owned(),
+                "b".to_owned(),
+                "c".to_owned(),
+                "d".to_owned(),
+            ],
+            attachments: vec![
+                attachment("a", "image/png"),
+                attachment("b", "application/pdf"),
+                attachment("c", ""),
+            ],
+            ..TimelineEvent::default()
+        };
+        assert_eq!(event.file_attachment_for("a"), None);
+        assert_eq!(
+            event.file_attachment_for("b").map(|a| a.file_name.as_str()),
+            Some("b.name")
+        );
+        assert_eq!(
+            event.file_attachment_for("c"),
+            None,
+            "no type reads as an image"
+        );
+        assert_eq!(
+            event.file_attachment_for("d"),
+            None,
+            "no entry reads as an image"
+        );
     }
 
     #[test]

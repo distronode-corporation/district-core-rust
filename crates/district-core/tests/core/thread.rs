@@ -171,6 +171,7 @@ fn opening_a_listed_thread_reads_it_restores_the_draft_and_marks_it_read() {
             "call_contract_answered",
             "msg_timeline_sms_out",
             "msg_timeline_mms",
+            "msg_timeline_pdf_out",
             "msg_timeline_email"
         ]
     );
@@ -352,7 +353,7 @@ fn a_thread_that_cannot_be_read_says_so_and_can_be_read_again() {
         ticket: pick(&effects, |e| matches!(e, Effect::LoadTimeline { .. })),
         result: Ok(newest()),
     });
-    assert_eq!(ids(&model).len(), 5);
+    assert_eq!(ids(&model).len(), 6);
 }
 
 /// Older pages are read backwards one at a time, merged by id (the copy on
@@ -501,7 +502,7 @@ fn a_newest_page_sharing_nothing_starts_the_thread_again() {
         ticket: pick(&effects, |e| matches!(e, Effect::LoadTimeline { .. })),
         result: Ok(newest()),
     });
-    assert_eq!(ids(&model).len(), 5);
+    assert_eq!(ids(&model).len(), 6);
     assert!(!events(&model).loading_older);
     assert!(
         model
@@ -511,7 +512,7 @@ fn a_newest_page_sharing_nothing_starts_the_thread_again() {
             })
             .is_empty()
     );
-    assert_eq!(ids(&model).len(), 5);
+    assert_eq!(ids(&model).len(), 6);
 }
 
 // The composer and its saved draft.
@@ -834,7 +835,7 @@ fn a_refused_send_keeps_the_reply_and_saves_it_again() {
     assert!(!composer.sending);
     assert_eq!(composer.text, "On our way");
     assert_eq!(composer.failure, Some(FailureText::from_api_error(&error)));
-    assert_eq!(ids(&model).len(), 5);
+    assert_eq!(ids(&model).len(), 6);
     // The draft is saved again, once the delete sent with the message has
     // landed: one write at a time, so the two cannot land the wrong way round.
     assert!(model.update(Event::WaitOver { ticket: *wait }).is_empty());

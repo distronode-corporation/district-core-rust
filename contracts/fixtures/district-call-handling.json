@@ -1,0 +1,5 @@
+{
+  "success": true,
+  "callHandling": "ai_then_app",
+  "appRingSeconds": 15
+}
