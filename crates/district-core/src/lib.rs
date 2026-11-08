@@ -204,7 +204,10 @@ pub use failure::FailureText;
 pub use hq::{
     HqAuthor, HqControls, HqEvent, HqMessage, HqNote, HqPhase, HqScreen, HqText, is_web_link,
 };
-pub use hq_voice::{HqCardState, HqVoice, HqVoiceCard, HqVoiceControls, HqVoiceEnd, HqVoicePhase};
+pub use hq_voice::{
+    HQ_VOICE_RELEASE_TIMEOUT, HqCardState, HqVoice, HqVoiceCard, HqVoiceControls, HqVoiceEnd,
+    HqVoicePhase, HqVoiceSessionId,
+};
 pub use inbox::{
     ConversationList, Conversations, InboxEvent, InboxScreen, SEARCH_DEBOUNCE, SearchState,
 };

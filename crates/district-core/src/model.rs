@@ -77,6 +77,7 @@ use crate::desk::DeskEvent;
 use crate::devices::DevicesEvent;
 use crate::dialer::DialerEvent;
 use crate::hq::HqEvent;
+use crate::hq_voice::HqVoiceSessionId;
 use crate::inbox::InboxEvent;
 use crate::live::{Notification, NotificationTarget};
 use crate::marketplace::MarketplaceEvent;
@@ -1881,6 +1882,29 @@ pub enum Effect {
         /// What is on screen.
         screen: HqVoiceScreen,
     },
+    /// End the HQ voice session whose room was joined, at the member's Stop
+    /// or however else it ended here: the service stops counting its minutes
+    /// and ends the room. Reports nothing back: best effort, bounded by
+    /// [`HQ_VOICE_RELEASE_TIMEOUT`](crate::HQ_VOICE_RELEASE_TIMEOUT), a failure
+    /// logged and not tried again. Sent once per session.
+    EndHqVoice {
+        /// The workspace the session was opened in.
+        workspace_id: String,
+        /// The session, as its credential named it.
+        session_id: HqVoiceSessionId,
+    },
+    /// Give back the HQ voice session whose room was never joined, which the
+    /// service then does not count. The service gives back only a session
+    /// minted moments ago: when it declines, refuses or does not answer, the
+    /// runner ends the session instead, once. Reports nothing back, as
+    /// [`EndHqVoice`](Self::EndHqVoice). Sent once per session, and never for
+    /// one that was ended.
+    DiscardHqVoice {
+        /// The workspace the session was opened in.
+        workspace_id: String,
+        /// The session, as its credential named it.
+        session_id: HqVoiceSessionId,
+    },
     /// Cancel a change proposed by voice. Sent once.
     CancelHqVoice {
         /// Returned in [`Event::HqVoiceCancelled`].
@@ -2679,6 +2703,8 @@ impl Effect {
             | Self::HangUpCall { .. }
             | Self::DeclineCall { .. }
             | Self::ReportHqVoiceScreen { .. }
+            | Self::EndHqVoice { .. }
+            | Self::DiscardHqVoice { .. }
             | Self::ConnectMedia { .. }
             | Self::SetMicrophone { .. }
             | Self::DisconnectMedia { .. }

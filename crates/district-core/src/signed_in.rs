@@ -178,6 +178,10 @@ pub struct SignedIn {
     /// Whether the app lists and answers Messenger and Instagram threads
     /// ([`CoreConfig::meta_channels`](crate::CoreConfig::meta_channels)).
     pub(crate) meta_channels: bool,
+    /// The HQ voice credentials asked for and then stopped before they
+    /// answered, each with its workspace: the session each opens is given
+    /// back as it lands.
+    pub(crate) hq_voice_abandoned: Vec<(Ticket, String)>,
 }
 
 /// What a signed-in step decided.
@@ -252,6 +256,7 @@ impl SignedIn {
             owners_answered: BTreeMap::new(),
             calls_available,
             meta_channels: false,
+            hq_voice_abandoned: Vec::new(),
         }
     }
 

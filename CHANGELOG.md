@@ -17,8 +17,9 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
-Breaking: `Endpoint` gains `HqVoiceEnd` and `HqVoiceDiscard`, so the next release is a
-major version.
+Breaking: `Endpoint` gains `HqVoiceEnd` and `HqVoiceDiscard`, `Effect` gains `EndHqVoice`
+and `DiscardHqVoice`, and `DistrictApi` gains `hq_voice_end` and `hq_voice_discard`, so the
+next release is a major version.
 
 ### Added
 
@@ -27,8 +28,23 @@ major version.
   counted, and the service ends its room.
 - `ApiClient::hq_voice_discard` (`POST /api/district/hq/voice-discard`,
   `HqVoiceDiscardResponse`): gives back a session that never started.
-- Both are desktop-only endpoints (the Android app has no voice mode). The core's own
-  voice session does not call them yet.
+- Both are desktop-only endpoints (the Android app has no voice mode).
+- The core's HQ voice session now tells the service when it ends, once per session, by
+  the new `Effect::EndHqVoice` and `Effect::DiscardHqVoice` (each carrying the workspace
+  the session was opened in and an `HqVoiceSessionId`, whose `Debug` never prints the
+  id). A session whose room was joined is ended, however it ended here: Stop, a workspace
+  switch, sign-out, sleep or quit, the time limit, the agent gone, or the room lost. One
+  whose room was never joined (a stop or a failure during the join, a credential without
+  a passphrase, or a credential that lands after Stop) is given back. A session can be
+  given back only within the service's window after it was minted, so the runner follows
+  a discard that is declined (`discarded: false`), refused or unanswered with exactly one
+  end. Both are best effort: the room is left and the microphone stops first, nothing
+  waits on them, each request has `HQ_VOICE_RELEASE_TIMEOUT` (10 s) to answer, and a
+  failure is written to standard error and not tried again.
+- `DistrictApi::hq_voice_end` and `DistrictApi::hq_voice_discard`, which `ApiClient`
+  implements. An app that runs effects with `EffectRunner` over `ApiClient` needs no code
+  for them; one that implements `DistrictApi` itself, or matches `Effect` without a
+  wildcard, does.
 
 ### Changed
 

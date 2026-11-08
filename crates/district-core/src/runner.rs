@@ -12,7 +12,9 @@
 //! settings store, the desktop's way of opening a URL, its notifications, its
 //! ringtone and window, and [`TokioClock`].
 
-use std::future::Future;
+use std::future::{Future, poll_fn};
+use std::pin::pin;
+use std::task::Poll;
 use std::time::Duration;
 
 use district_api::{ApiError, ConversationsQuery};
@@ -30,18 +32,18 @@ use district_model::{
     DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
     DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
     HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqTurn,
-    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, LiveCallId,
-    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
-    MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
-    OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SETTINGS_LANGUAGE_ENGLISH,
-    SETTINGS_LANGUAGE_FRENCH, SchedulingEnableResponse, SchedulingHandOffResponse,
-    SchedulingStatusResponse, SendMessageRequest, SendMessageResponse, SettingsSaveResponse,
-    SetupResponse, SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse,
-    SupportRequestDraft, SupportRequestResponse, SupportRequestsResponse, ThreadRef,
-    TimelineCursor, TimelineResponse, UnreadCountResponse, UpdateContactRequest,
-    UsageHistoryResponse, UsageResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse,
-    WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
-    WorkspaceListResponse,
+    HqVoiceContextResponse, HqVoiceDiscardResponse, HqVoiceEndResponse, HqVoiceProposal,
+    HqVoiceScreen, HqVoiceTokenResponse, LiveCallId, MarkReadResponse, MediaUploadResponse,
+    MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse, MessageThreadResponse,
+    NumberSearch, NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, RoomTokenResponse,
+    SETTINGS_LANGUAGE_ENGLISH, SETTINGS_LANGUAGE_FRENCH, SchedulingEnableResponse,
+    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
+    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
+    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
+    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
+    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WhatsAppTemplatesResponse,
+    WhatsAppWindowResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
+    WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -61,6 +63,7 @@ use district_model::{
 };
 
 use crate::contacts::{ContactWrite, ContactWritten};
+use crate::hq_voice::{HQ_VOICE_RELEASE_TIMEOUT, HqVoiceSessionId};
 use crate::live::Notification;
 use crate::media::CallEngine;
 use crate::model::{Effect, Event, Ticket};
@@ -342,6 +345,20 @@ pub trait DistrictApi: Send + Sync {
         workspace_id: &str,
         proposal_id: &str,
     ) -> impl Future<Output = Result<HqProposalCancelResponse, ApiError>> + Send;
+    /// Ends the HQ voice session `session_id`, whose room was joined. Sent
+    /// once; a lost one is not tried again.
+    fn hq_voice_end(
+        &self,
+        workspace_id: &str,
+        session_id: &str,
+    ) -> impl Future<Output = Result<HqVoiceEndResponse, ApiError>> + Send;
+    /// Gives back the HQ voice session `session_id`, whose room was never
+    /// joined. Sent once; a lost one is not tried again.
+    fn hq_voice_discard(
+        &self,
+        workspace_id: &str,
+        session_id: &str,
+    ) -> impl Future<Output = Result<HqVoiceDiscardResponse, ApiError>> + Send;
     /// Reports `screen` to the voice session in `room_name`, for the voice
     /// agent to read. Sent once; the next report replaces a lost one.
     fn hq_voice_context(
@@ -1985,6 +2002,42 @@ where
                     .await;
                 return None;
             }
+            Effect::EndHqVoice {
+                workspace_id,
+                session_id,
+            } => {
+                self.end_hq_voice(&workspace_id, &session_id).await;
+                return None;
+            }
+            Effect::DiscardHqVoice {
+                workspace_id,
+                session_id,
+            } => {
+                let answer = self
+                    .released(
+                        self.api
+                            .hq_voice_discard(&workspace_id, session_id.as_str()),
+                    )
+                    .await;
+                // The service gives back only a session minted moments ago: one
+                // older than that, or a discard refused or unanswered, would
+                // stay open and counted until its time ran out. It is ended
+                // instead, once.
+                match answer {
+                    Some(Ok(HqVoiceDiscardResponse {
+                        discarded: true, ..
+                    })) => {}
+                    Some(Ok(_)) => {
+                        eprintln!("district-core: the HQ voice discard was declined; ending it");
+                        self.end_hq_voice(&workspace_id, &session_id).await;
+                    }
+                    failed => {
+                        log_release("discard", failed.map(|answer| answer.map(drop)));
+                        self.end_hq_voice(&workspace_id, &session_id).await;
+                    }
+                }
+                return None;
+            }
             Effect::DeclineCall {
                 workspace_id,
                 call_id,
@@ -2116,6 +2169,46 @@ where
                 .await
                 .map(ContactWritten::Blocked),
         }
+    }
+
+    /// The answer to a voice session's end or discard, or `None` when the
+    /// service has not answered within [`HQ_VOICE_RELEASE_TIMEOUT`]: nothing
+    /// waits on it, so it is not waited for longer.
+    async fn released<T>(
+        &self,
+        request: impl Future<Output = Result<T, ApiError>>,
+    ) -> Option<Result<T, ApiError>> {
+        let mut request = pin!(request);
+        let mut limit = pin!(self.clock.sleep(HQ_VOICE_RELEASE_TIMEOUT));
+        poll_fn(|cx| {
+            if let Poll::Ready(answer) = request.as_mut().poll(cx) {
+                return Poll::Ready(Some(answer));
+            }
+            limit.as_mut().poll(cx).map(|()| None)
+        })
+        .await
+    }
+
+    /// Ends the voice session `session_id`, once, logging a failure.
+    async fn end_hq_voice(&self, workspace_id: &str, session_id: &HqVoiceSessionId) {
+        let answer = self
+            .released(self.api.hq_voice_end(workspace_id, session_id.as_str()))
+            .await;
+        log_release("end", answer.map(|answer| answer.map(drop)));
+    }
+}
+
+/// Logs a voice session's end or discard that failed or went unanswered. An
+/// end is not tried again: the agent closes the session on its own, and the
+/// service closes it when its time is out. The session's id is never written.
+fn log_release(route: &str, answer: Option<Result<(), ApiError>>) {
+    match answer {
+        Some(Ok(())) => {}
+        Some(Err(error)) => eprintln!("district-core: the HQ voice {route} failed: {error}"),
+        None => eprintln!(
+            "district-core: the HQ voice {route} had no answer in {} s",
+            HQ_VOICE_RELEASE_TIMEOUT.as_secs()
+        ),
     }
 }
 

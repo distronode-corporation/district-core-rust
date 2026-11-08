@@ -592,7 +592,7 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
         )
         .mount(&server)
         .await;
-    let routes: [(&str, &str, serde_json::Value); 40] = [
+    let routes: [(&str, &str, serde_json::Value); 42] = [
         (
             "POST",
             "/api/district/hq/voice-token",
@@ -607,6 +607,16 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
             "POST",
             "/api/district/hq/voice-context",
             json!({"success": true}),
+        ),
+        (
+            "POST",
+            "/api/district/hq/voice-end",
+            fixture("district-hq-voice-end.json"),
+        ),
+        (
+            "POST",
+            "/api/district/hq/voice-discard",
+            fixture("district-hq-voice-discard.json"),
         ),
         (
             "POST",
@@ -830,6 +840,18 @@ async fn the_api_client_serves_the_workspaces_other_sections() {
             .await
             .unwrap()
             .success
+    );
+    assert!(
+        DistrictApi::hq_voice_end(&client, ws, &credential.session_id)
+            .await
+            .unwrap()
+            .ended
+    );
+    assert!(
+        DistrictApi::hq_voice_discard(&client, ws, &credential.session_id)
+            .await
+            .unwrap()
+            .discarded
     );
     let answer = DistrictApi::hq_prompt(&client, ws, "Change the greeting", &[])
         .await
