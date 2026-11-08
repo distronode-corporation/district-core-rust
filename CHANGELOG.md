@@ -17,6 +17,32 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+A timeline message says which of its attachments are files, and the fixtures move to the
+server's e7ec6d31 (eleven new files, the two timeline fixtures changed). Breaking for the
+next release: `TimelineEvent` gains a field.
+
+### Upgrading from 11.0.x
+
+- A `TimelineEvent { .. }` literal that names every field stops compiling: add
+  `attachments` or end it with `..TimelineEvent::default()`.
+
+### Added
+
+- `TimelineEvent::attachments` (`TimelineAttachment`: `url`, `mime_type`, `file_name`), one
+  entry per `media_urls` URL in the same order, and `TimelineEvent::file_attachment_for`,
+  which answers the attachment behind a URL only when it is not an image. An app shows that
+  one as a named file rather than fetching it as a thumbnail; a URL with no entry, or an
+  entry with no type, is still an image.
+- The call-handling read and its save's echo are decoded against their fixtures
+  (`CallHandlingResponse`).
+
+### Changed
+
+- `contracts/fixtures/`: the call handling, email identity, two-factor status, sending
+  domain, settings calendar disconnect and agent picture library fixtures. All but the call
+  handling pair are excluded by decision: this client has no screen for them, and the
+  two-factor status joins the native account security group.
+
 ## [11.0.0] - 2026-11-08
 
 The HQ voice session tells the service when it ends: the end and discard routes, and the

@@ -131,8 +131,8 @@ pub use inbox::{
     ConversationLastMessage, ConversationSummary, ConversationsResponse,
     MESSAGE_SEARCH_MIN_QUERY_LENGTH, MessageSearchHit, MessageSearchResponse, MessageThreadMessage,
     MessageThreadResponse, MessageThreadTarget, REPLY_CHANNELS, ReplyOption, ReplyTarget,
-    ThreadRef, TimelineCursor, TimelineEvent, TimelinePageInfo, TimelineResponse,
-    UnreadCountResponse,
+    ThreadRef, TimelineAttachment, TimelineCursor, TimelineEvent, TimelinePageInfo,
+    TimelineResponse, UnreadCountResponse,
 };
 pub use knowledge::{
     KnowledgeCreateResponse, KnowledgeDeleteResponse, KnowledgeDocument, KnowledgeDocumentCreated,

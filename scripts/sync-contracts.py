@@ -238,6 +238,8 @@ SUBSTITUTIONS: tuple[Substitution, ...] = (
                  "a shared holiday calendar's address-shaped id in the scheduling calendar list"),
     Substitution("email", "71c9f49e8f284d69cfcf4c703aa878c78557ede007dbf8c43ff28a3b05acd432", "newcomer@example.com",
                  "the member added by the member-add fixture"),
+    Substitution("email", "bc244be21b333cdbaa4df92532d3c1e6a93bd0a872a34ed760b8b27b6f0d384e", "office@example.com",
+                 "the reply-to address in the email identity fixtures"),
     Substitution("email", "2890d0be96aa7857beebb30dc8c7c2b528d31bcc4cfffdf057e704c7f64efca3", "operator@example.com",
                  "a workspace member's address in the member fixtures"),
     Substitution("email", "1959fa7670fd11a9447e36d0d677463ce5f6e0b8e809ce1e7c5918664b8127a2", "other@example.com",

@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "items": [
+    {
+      "id": "6f1c2b9e-4d3a-4e8f-9a1b-0c2d3e4f5a61",
+      "name": "Menu",
+      "mediaId": "media-contract-1",
+      "mimeType": "image/jpeg",
+      "sizeBytes": 182044,
+      "createdAt": "2026-08-12T10:00:00.000Z"
+    },
+    {
+      "id": "7a2d3c0f-5e4b-4f90-8b2c-1d3e4f5a6b72",
+      "name": "Pâtisserie l'été",
+      "mediaId": "media-contract-2",
+      "mimeType": "image/png",
+      "sizeBytes": 96512,
+      "createdAt": "2026-08-13T11:15:00.000Z"
+    }
+  ]
+}

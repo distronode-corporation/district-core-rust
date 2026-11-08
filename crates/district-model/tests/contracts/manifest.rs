@@ -32,21 +32,21 @@ use district_model::{
 };
 use district_model::{
     AccountBillingResponse, AiDraftResponse, AnalyticsResponse, CallAnswerResponse,
-    CallDeclineResponse, CallDetailResponse, CallHangUpResponse, CallMonitorTokenResponse,
-    CallSummary, CallTakeoverResponse, CallTranscriptResponse, CallWhisperResponse,
-    CampaignStatusResponse, ClearIntelResponse, ContactDetailResponse, ContactListResponse,
-    ContactMutationResponse, ConversationsResponse, DeskLogoRemovalResponse, DeskReplyResponse,
-    DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketResponse, DeskTicketStatusResponse,
-    DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DialResponse,
-    DraftDeleteResponse, DraftListResponse, DraftResponse, EnrichResponse, HqConfirmResponse,
-    HqPromptResponse, KnowledgeCreateResponse, KnowledgeDeleteResponse, KnowledgeListResponse,
-    KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse, MeetingDetail, MeetingSummary,
-    MemberListResponse, MemberRemovalResponse, MemberResponse, MessageThreadResponse,
-    MessagingAccountSaveResponse, MessagingChannelDefaultResponse, MessagingDefaultResponse,
-    MessagingMetaResponse, MessagingResponse, MessagingTestResponse, NativeRevokeResponse,
-    NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, PersonaOptionsResponse,
-    PersonaPreviewTokenResponse, PkceVector, PushRegistrationResponse, RenameResponse,
-    RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
+    CallDeclineResponse, CallDetailResponse, CallHandlingResponse, CallHangUpResponse,
+    CallMonitorTokenResponse, CallSummary, CallTakeoverResponse, CallTranscriptResponse,
+    CallWhisperResponse, CampaignStatusResponse, ClearIntelResponse, ContactDetailResponse,
+    ContactListResponse, ContactMutationResponse, ConversationsResponse, DeskLogoRemovalResponse,
+    DeskReplyResponse, DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketResponse,
+    DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
+    DialResponse, DraftDeleteResponse, DraftListResponse, DraftResponse, EnrichResponse,
+    HqConfirmResponse, HqPromptResponse, KnowledgeCreateResponse, KnowledgeDeleteResponse,
+    KnowledgeListResponse, KnowledgeModeResponse, MarkReadResponse, MediaUploadResponse,
+    MeetingDetail, MeetingSummary, MemberListResponse, MemberRemovalResponse, MemberResponse,
+    MessageThreadResponse, MessagingAccountSaveResponse, MessagingChannelDefaultResponse,
+    MessagingDefaultResponse, MessagingMetaResponse, MessagingResponse, MessagingTestResponse,
+    NativeRevokeResponse, NumberSearchResponse, OverviewResponse, OwnedNumbersResponse,
+    PersonaOptionsResponse, PersonaPreviewTokenResponse, PkceVector, PushRegistrationResponse,
+    RenameResponse, RoomTokenResponse, SchedulingEnableResponse, SchedulingHandOffResponse,
     SchedulingStatusResponse, SendMessageResponse, SetupResponse, SupportCloseResponse,
     SupportReplyResponse, SupportRequestCreateResponse, SupportRequestResponse,
     SupportRequestsResponse, TelemetryEnvelope, TelemetryToken, TimelineResponse,
@@ -118,7 +118,7 @@ pub const SETS: &[Manifest] = &[
 /// Asserted exactly, not as a floor: a floor passes against a directory that lost
 /// files, and never notices one the server started recording. When a sync adds a
 /// fixture, this fails until the new file is placed in one of the sets below.
-pub const EXPECTED_FIXTURE_COUNT: usize = 233;
+pub const EXPECTED_FIXTURE_COUNT: usize = 244;
 
 /// Fixtures decoded by a type in this crate: the fixture's name and the decoder
 /// for its type. Sorted by name.
@@ -158,6 +158,13 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ("district-call-decline.json", codec::<CallDeclineResponse>),
     // GET /api/district/calls/{callId}: the call log's row for one call.
     ("district-call-detail.json", codec::<CallDetailResponse>),
+    // PATCH /api/district/workspace/call-handling: the setting stored, echoed.
+    (
+        "district-call-handling-patch.json",
+        codec::<CallHandlingResponse>,
+    ),
+    // GET /api/district/workspace/call-handling: who answers, and the ring.
+    ("district-call-handling.json", codec::<CallHandlingResponse>),
     // POST /api/district/calls/token with a live call's id: a listen-only
     // credential for the call's room.
     (
@@ -1053,7 +1060,7 @@ pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
         reason: "A phone app's native account security: re-authentication before a \
                  sensitive action (`POST /api/auth/native/reauth/password` and \
                  `/sso`), two-factor \
-                 enrolment, confirmation and removal, and deleting the account. A \
+                 status, enrolment, confirmation and removal, and deleting the account. A \
                  desktop signs in through the browser, which asks for the second \
                  factor itself, and opens the web page to delete the account \
                  (`ACCOUNT_DELETION_PATH`, district-core).",
@@ -1062,7 +1069,27 @@ pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
             "district-mfa-confirm.json",
             "district-mfa-disable.json",
             "district-mfa-enroll.json",
+            "district-mfa-status.json",
             "district-native-reauth.json",
+        ],
+    },
+    Exclusion {
+        reason: "Workspace settings this client has no screen for, all on the web \
+                 dashboard: the email identity (`GET` and `PATCH \
+                 /api/district/workspace/email-identity`), the sending domain \
+                 (`POST` and `DELETE /api/district/workspace/email-domain`), the \
+                 settings calendar disconnect (`POST \
+                 /api/district/actions/calendar/disconnect`) and the agent's \
+                 picture library (`/api/district/workspace/agent-media`).",
+        fixtures: &[
+            "district-agent-media-delete.json",
+            "district-agent-media-post.json",
+            "district-agent-media.json",
+            "district-calendar-disconnect.json",
+            "district-email-domain-delete.json",
+            "district-email-domain-post.json",
+            "district-email-identity-patch.json",
+            "district-email-identity.json",
         ],
     },
 ];
