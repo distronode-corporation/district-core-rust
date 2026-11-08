@@ -23,6 +23,7 @@ use district_core::{
     CallEnd, CallEvent, CallPhase, DialerEvent, MediaEvent, MediaUpdate, MemberWrite,
     MessagingWrite, MicrophoneState,
 };
+use district_core::{HQ_VOICE_RELEASE_TIMEOUT, HqVoiceSessionId};
 use district_core::{NumberAnswer, NumberCall};
 use district_model::BillingHandOffResponse;
 use district_model::MetaWindowResponse;
@@ -37,16 +38,17 @@ use district_model::{
     DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse, DraftDeleteResponse,
     DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse, HqConfirmResponse,
     HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqRole, HqTurn,
-    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, LiveCallId,
-    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
-    MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
-    OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse,
-    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
-    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
-    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestKind, SupportRequestResponse,
-    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
-    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WorkflowListResponse,
-    WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
+    HqVoiceContextResponse, HqVoiceDiscardResponse, HqVoiceEndResponse, HqVoiceProposal,
+    HqVoiceScreen, HqVoiceTokenResponse, LiveCallId, MarkReadResponse, MediaUploadResponse,
+    MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse, MessageThreadResponse,
+    NumberSearch, NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, RoomTokenResponse,
+    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
+    SendMessageRequest, SendMessageResponse, SettingsSaveResponse, SetupResponse,
+    SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
+    SupportRequestKind, SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor,
+    TimelineResponse, UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse,
+    UsageResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
+    WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -517,6 +519,34 @@ impl DistrictApi for FakeApi {
         self.0
             .push(format!("hq voice cancel {workspace_id} {proposal_id}"));
         Ok(HqProposalCancelResponse { success: true })
+    }
+
+    async fn hq_voice_end(
+        &self,
+        workspace_id: &str,
+        session_id: &str,
+    ) -> Result<HqVoiceEndResponse, ApiError> {
+        self.0
+            .push(format!("hq voice end {workspace_id} {session_id}"));
+        voice_release(session_id).await?;
+        Ok(HqVoiceEndResponse {
+            success: true,
+            ended: true,
+        })
+    }
+
+    async fn hq_voice_discard(
+        &self,
+        workspace_id: &str,
+        session_id: &str,
+    ) -> Result<HqVoiceDiscardResponse, ApiError> {
+        self.0
+            .push(format!("hq voice discard {workspace_id} {session_id}"));
+        voice_release(session_id).await?;
+        Ok(HqVoiceDiscardResponse {
+            success: true,
+            discarded: session_id != "too-old",
+        })
     }
 
     async fn hq_voice_context(
@@ -1431,6 +1461,18 @@ fn fakes(remembered: Option<&str>, browser: bool) -> (Runner, Log) {
         FakeRing(log.clone()),
     );
     (runner, log)
+}
+
+/// How the fake service answers a voice session's end or discard, by its id:
+/// `hangs` never answers, `fails` is refused, any other is answered (and a
+/// discard of `too-old` declined, as the service declines a session minted
+/// more than moments ago).
+async fn voice_release(session_id: &str) -> Result<(), ApiError> {
+    match session_id {
+        "hangs" => std::future::pending().await,
+        "fails" => Err(server_error()),
+        _ => Ok(()),
+    }
 }
 
 fn server_error() -> ApiError {
@@ -3462,6 +3504,83 @@ async fn each_voice_effect_calls_its_dependency_and_reports_back() {
             "withdraw call:call_1",
         ]
     );
+}
+
+/// A voice session's end and discard each send their request once and report
+/// nothing, answered, refused or unanswered: a refusal is logged and not tried
+/// again, and an answer that does not come is waited for no longer than
+/// [`HQ_VOICE_RELEASE_TIMEOUT`].
+#[tokio::test(start_paused = true)]
+async fn a_voice_sessions_end_is_sent_once_and_waited_for_a_bounded_time() {
+    let (runner, log) = fakes(None, true);
+    assert_eq!(runner.run(end("s1")).await, None);
+    assert_eq!(runner.run(end("fails")).await, None);
+    let start = tokio::time::Instant::now();
+    assert_eq!(runner.run(end("hangs")).await, None);
+    assert_eq!(start.elapsed(), HQ_VOICE_RELEASE_TIMEOUT);
+    assert_eq!(
+        log.take(),
+        [
+            "hq voice end ws-contract-active s1",
+            "hq voice end ws-contract-active fails",
+            "hq voice end ws-contract-active hangs",
+        ]
+    );
+    // The id is the session's proof, and never printed.
+    let shown = format!("{:?}", end("00000000-0000-4000-8000-000000000000"));
+    assert!(!shown.contains("00000000"), "{shown}");
+}
+
+/// A discard the service takes is the only request. One it declines (the
+/// session is older than its window), refuses, or leaves unanswered past
+/// [`HQ_VOICE_RELEASE_TIMEOUT`] is followed by exactly one end, so the session
+/// does not stay open and counted; the end is not tried again either.
+#[tokio::test(start_paused = true)]
+async fn a_discard_not_taken_is_followed_by_exactly_one_end() {
+    let (runner, log) = fakes(None, true);
+    assert_eq!(runner.run(discard("s2")).await, None);
+    assert_eq!(log.take(), ["hq voice discard ws-contract-active s2"]);
+
+    for id in ["too-old", "fails"] {
+        assert_eq!(runner.run(discard(id)).await, None);
+        assert_eq!(
+            log.take(),
+            [
+                format!("hq voice discard ws-contract-active {id}"),
+                format!("hq voice end ws-contract-active {id}"),
+            ],
+            "{id}"
+        );
+    }
+
+    let start = tokio::time::Instant::now();
+    assert_eq!(runner.run(discard("hangs")).await, None);
+    assert_eq!(
+        start.elapsed(),
+        HQ_VOICE_RELEASE_TIMEOUT * 2,
+        "each bounded"
+    );
+    assert_eq!(
+        log.take(),
+        [
+            "hq voice discard ws-contract-active hangs",
+            "hq voice end ws-contract-active hangs",
+        ]
+    );
+}
+
+fn end(id: &str) -> Effect {
+    Effect::EndHqVoice {
+        workspace_id: AGENCY.to_owned(),
+        session_id: HqVoiceSessionId::new(id),
+    }
+}
+
+fn discard(id: &str) -> Effect {
+    Effect::DiscardHqVoice {
+        workspace_id: AGENCY.to_owned(),
+        session_id: HqVoiceSessionId::new(id),
+    }
 }
 
 /// Plays the far end: on joining, reports the room joined, the callee picking

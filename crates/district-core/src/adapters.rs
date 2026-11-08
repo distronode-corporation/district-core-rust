@@ -24,17 +24,17 @@ use district_model::{
     DeskTicketStatusResponse, DeskTicketsResponse, DeviceListResponse, DeviceRevokeResponse,
     DraftDeleteResponse, DraftListResponse, DraftResponse, DraftSaveRequest, EnrichResponse,
     HqConfirmResponse, HqPendingWrite, HqPromptResponse, HqProposalCancelResponse, HqTurn,
-    HqVoiceContextResponse, HqVoiceProposal, HqVoiceScreen, HqVoiceTokenResponse, LiveCallId,
-    MarkReadResponse, MediaUploadResponse, MeetRoomName, MeetingDetail, MeetingSummary,
-    MessageSearchResponse, MessageThreadResponse, NumberSearch, NumberSearchResponse,
-    OverviewResponse, OwnedNumbersResponse, RoomTokenResponse, SchedulingEnableResponse,
-    SchedulingHandOffResponse, SchedulingStatusResponse, SendMessageRequest, SendMessageResponse,
-    SettingsSaveResponse, SetupResponse, SupportCloseResponse, SupportReplyResponse,
-    SupportRequestCreateResponse, SupportRequestDraft, SupportRequestResponse,
-    SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse, UnreadCountResponse,
-    UpdateContactRequest, UsageHistoryResponse, UsageResponse, WhatsAppTemplatesResponse,
-    WhatsAppWindowResponse, WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse,
-    WorkspaceBillingResponse, WorkspaceListResponse,
+    HqVoiceContextResponse, HqVoiceDiscardResponse, HqVoiceEndResponse, HqVoiceProposal,
+    HqVoiceScreen, HqVoiceTokenResponse, LiveCallId, MarkReadResponse, MediaUploadResponse,
+    MeetRoomName, MeetingDetail, MeetingSummary, MessageSearchResponse, MessageThreadResponse,
+    NumberSearch, NumberSearchResponse, OverviewResponse, OwnedNumbersResponse, RoomTokenResponse,
+    SchedulingEnableResponse, SchedulingHandOffResponse, SchedulingStatusResponse,
+    SendMessageRequest, SendMessageResponse, SettingsSaveResponse, SetupResponse,
+    SupportCloseResponse, SupportReplyResponse, SupportRequestCreateResponse, SupportRequestDraft,
+    SupportRequestResponse, SupportRequestsResponse, ThreadRef, TimelineCursor, TimelineResponse,
+    UnreadCountResponse, UpdateContactRequest, UsageHistoryResponse, UsageResponse,
+    WhatsAppTemplatesResponse, WhatsAppWindowResponse, WorkflowListResponse, WorkflowRunsResponse,
+    WorkflowToggleResponse, WorkspaceBillingResponse, WorkspaceListResponse,
 };
 use district_model::{
     AvailabilityResponse, CallAnswerResponse, CallDeclineResponse, CallHandlingPatch,
@@ -404,6 +404,22 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         proposal_id: &str,
     ) -> impl Future<Output = Result<HqProposalCancelResponse, ApiError>> + Send {
         ApiClient::hq_proposal_cancel(self, workspace_id, proposal_id)
+    }
+
+    fn hq_voice_end(
+        &self,
+        workspace_id: &str,
+        session_id: &str,
+    ) -> impl Future<Output = Result<HqVoiceEndResponse, ApiError>> + Send {
+        ApiClient::hq_voice_end(self, workspace_id, session_id)
+    }
+
+    fn hq_voice_discard(
+        &self,
+        workspace_id: &str,
+        session_id: &str,
+    ) -> impl Future<Output = Result<HqVoiceDiscardResponse, ApiError>> + Send {
+        ApiClient::hq_voice_discard(self, workspace_id, session_id)
     }
 
     fn hq_voice_context(

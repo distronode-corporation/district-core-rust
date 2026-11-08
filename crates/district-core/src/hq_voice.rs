@@ -37,6 +37,23 @@
 //! never a name, a number or what was typed. A card can be confirmed or
 //! cancelled from any screen.
 //!
+//! # Handing the session back
+//!
+//! The credential opens the session on the service, counted against the
+//! month, before the room is joined. However the session ends here, the
+//! service is told once, by its id ([`HqVoiceSessionId`]): a session whose
+//! room was joined is ended ([`Effect::EndHqVoice`]), so only the minutes used
+//! count and the room goes at once; one whose room was never joined (the
+//! join failed, the member stopped it first, or the credential cannot be
+//! joined) never started, and is given back ([`Effect::DiscardHqVoice`]). A
+//! credential that answers after the member stopped asking for it is given
+//! back as it arrives. The service gives back only a session minted moments
+//! ago, so a discard it declines, refuses or leaves unanswered is followed by
+//! one end. Both are best effort: the room is left and the microphone stops
+//! without waiting for them, each request has [`HQ_VOICE_RELEASE_TIMEOUT`] to
+//! answer, and a failure is logged, never tried again, since the agent closes
+//! the session on its own as well.
+//!
 //! # Changes
 //!
 //! A change the agent proposes is a card, keyed by its id, and nothing has
@@ -49,6 +66,7 @@
 //! click's late answer with it. A card stays after the session ends, because
 //! the service still accepts a click on it for a while.
 
+use std::fmt;
 use std::time::Duration;
 
 use district_api::ApiError;
@@ -70,6 +88,10 @@ use crate::signed_in::{Next, SignedIn, stay};
 use crate::text::{l, s};
 use crate::workspaces::WorkspacesState;
 use district_l10n::{WireCategory, wire_label};
+
+/// How long the service has to answer an end or a discard of a voice session
+/// before the runner stops waiting. Nothing waits on it meanwhile.
+pub const HQ_VOICE_RELEASE_TIMEOUT: Duration = Duration::from_secs(10);
 
 /// The refusal code of a proposal already confirmed or cancelled, by voice or
 /// by another click.
@@ -102,6 +124,68 @@ pub struct HqVoice {
     /// the member holds it open ([`Event::Microphone`](crate::Event::Microphone)).
     /// With an open microphone, it starts on.
     pub push_to_talk: bool,
+    /// The credential being asked for: its ticket and its workspace.
+    mint: Option<(Ticket, String)>,
+    /// The session the service opened for this member and has not been told
+    /// the end of.
+    claim: Option<VoiceClaim>,
+}
+
+/// The id the service gave a voice session, which only this installation
+/// learns: its proof when it ends or gives back the session. `Debug` never
+/// prints it.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub struct HqVoiceSessionId(String);
+
+impl HqVoiceSessionId {
+    /// The id the service sent.
+    pub fn new(id: impl Into<String>) -> Self {
+        Self(id.into())
+    }
+
+    /// The id, for the request that hands the session back.
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+}
+
+impl fmt::Debug for HqVoiceSessionId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("HqVoiceSessionId(<redacted>)")
+    }
+}
+
+/// A session the service opened, until it is handed back.
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct VoiceClaim {
+    /// The workspace it was opened in, which stays its own after a switch.
+    workspace_id: String,
+    /// Its id.
+    session_id: HqVoiceSessionId,
+    /// Whether its room was ever joined: ended if so, given back if not.
+    joined: bool,
+}
+
+impl VoiceClaim {
+    /// The one request that hands it back.
+    fn release(self) -> Effect {
+        let Self {
+            workspace_id,
+            session_id,
+            joined,
+        } = self;
+        if joined {
+            Effect::EndHqVoice {
+                workspace_id,
+                session_id,
+            }
+        } else {
+            Effect::DiscardHqVoice {
+                workspace_id,
+                session_id,
+            }
+        }
+    }
 }
 
 /// A session's room, as its credential named it, and what was reported to it.
@@ -326,26 +410,66 @@ impl SignedIn {
     /// Asks for a session's credential, with the conversation so far.
     fn mint_hq_voice(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         self.hq.voice.phase = HqVoicePhase::Minting;
+        let ticket = tickets.issue(Slot::HqVoiceToken);
+        let workspace_id = self.workspace_id();
+        self.hq.voice.mint = Some((ticket, workspace_id.clone()));
         vec![Effect::RequestHqVoice {
-            ticket: tickets.issue(Slot::HqVoiceToken),
-            workspace_id: self.workspace_id(),
+            ticket,
+            workspace_id,
             locale: l(),
             history: self.hq.history(),
         }]
     }
 
     /// Ends the session, whatever stage it is at, at the member's word or
-    /// because the workspace, the session or the desktop is going away.
+    /// because the workspace, the session or the desktop is going away. The
+    /// room is left first; the service is told after, without waiting. A
+    /// credential still on its way is given back when it lands.
     pub(crate) fn stop_hq_voice(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         tickets.cancel(Slot::HqVoiceToken);
         tickets.cancel(Slot::HqVoiceLimit);
+        if let Some(mint) = self.hq.voice.mint.take() {
+            self.hq_voice_abandoned.push(mint);
+        }
         if matches!(
             self.hq.voice.phase,
             HqVoicePhase::Minting | HqVoicePhase::Live { .. } | HqVoicePhase::Disclosing
         ) {
             self.hq.voice.phase = HqVoicePhase::Off;
         }
-        self.leave_media_of(MediaOwner::HqVoice)
+        let mut effects = self.leave_media_of(MediaOwner::HqVoice);
+        effects.extend(self.release_hq_voice());
+        effects
+    }
+
+    /// Tells the service the session is over, once: the claim goes with the
+    /// request, so whatever ends the session next finds nothing to send.
+    fn release_hq_voice(&mut self) -> Option<Effect> {
+        self.hq.voice.claim.take().map(VoiceClaim::release)
+    }
+
+    /// The answer to a credential no longer asked for: one the member stopped
+    /// waiting for opened a session that never starts, and goes back.
+    fn hq_voice_abandoned_answer(
+        &mut self,
+        ticket: Ticket,
+        result: &Result<HqVoiceTokenResponse, ApiError>,
+    ) -> Vec<Effect> {
+        let Some(index) = self
+            .hq_voice_abandoned
+            .iter()
+            .position(|(abandoned, _)| *abandoned == ticket)
+        else {
+            return Vec::new();
+        };
+        let (_, workspace_id) = self.hq_voice_abandoned.remove(index);
+        match result {
+            Ok(credential) => unjoined(workspace_id, credential)
+                .map(VoiceClaim::release)
+                .into_iter()
+                .collect(),
+            Err(_) => Vec::new(),
+        }
     }
 
     /// The member dismissed what the voice controls were saying.
@@ -366,14 +490,24 @@ impl SignedIn {
         tickets: &mut Tickets,
     ) -> Next {
         if !tickets.accept(Slot::HqVoiceToken, ticket) {
-            return stay();
+            return Next::Stay(self.hq_voice_abandoned_answer(ticket, &result));
         }
+        // An accepted ticket is the one minted last, recorded with it.
+        let workspace_id = self
+            .hq
+            .voice
+            .mint
+            .take()
+            .map(|(_, workspace_id)| workspace_id)
+            .unwrap_or_default();
         let credential = match result {
             Ok(credential) if credential.is_joinable() => credential,
-            Ok(_) => {
+            Ok(credential) => {
                 let failure = FailureText::final_(s::hq_voice_unencrypted(l()));
                 self.hq.voice.phase = HqVoicePhase::Failed(failure);
-                return stay();
+                // Opened on the service, and never to be joined.
+                let discard = unjoined(workspace_id, &credential).map(VoiceClaim::release);
+                return Next::Stay(discard.into_iter().collect());
             }
             Err(error) => {
                 self.hq.voice.phase = HqVoicePhase::Failed(FailureText::from_api_error(&error));
@@ -382,6 +516,7 @@ impl SignedIn {
         };
         self.hq.voice.phase = HqVoicePhase::Live { agent: None };
         self.hq.voice.agent_seen = false;
+        self.hq.voice.claim = unjoined(workspace_id, &credential);
         self.hq.voice.room = Some(VoiceRoom {
             name: credential.room_name.clone(),
             reports: 0,
@@ -438,7 +573,16 @@ impl SignedIn {
     /// is live when it fires.
     pub(crate) fn hq_voice_time_up(&mut self) -> Vec<Effect> {
         self.hq.voice.phase = HqVoicePhase::Ended(HqVoiceEnd::TimeLimit);
-        self.leave_media_of(MediaOwner::HqVoice)
+        let mut effects = self.leave_media_of(MediaOwner::HqVoice);
+        effects.extend(self.release_hq_voice());
+        effects
+    }
+
+    /// The session's room is joined: from now on it is ended, not given back.
+    pub(crate) fn hq_voice_connected(&mut self) {
+        if let Some(claim) = self.hq.voice.claim.as_mut() {
+            claim.joined = true;
+        }
     }
 
     /// The people in the room changed: an agent that was there and is not
@@ -466,11 +610,20 @@ impl SignedIn {
         }
         tickets.cancel(Slot::HqVoiceLimit);
         self.hq.voice.phase = HqVoicePhase::Ended(HqVoiceEnd::AgentLeft);
-        self.leave_media_of(MediaOwner::HqVoice)
+        // An agent that went without closing its session (it crashed, or its
+        // host restarted) leaves the session open on the service until told.
+        let mut effects = self.leave_media_of(MediaOwner::HqVoice);
+        effects.extend(self.release_hq_voice());
+        effects
     }
 
-    /// The room ended under the session.
-    pub(crate) fn hq_voice_media_ended(&mut self, reason: DisconnectReason, tickets: &mut Tickets) {
+    /// The room ended under the session, or could never be joined: the
+    /// service is told, as for a stop.
+    pub(crate) fn hq_voice_media_ended(
+        &mut self,
+        reason: DisconnectReason,
+        tickets: &mut Tickets,
+    ) -> Vec<Effect> {
         tickets.cancel(Slot::HqVoiceLimit);
         let end = match reason {
             // The agent deletes the room when it closes the session.
@@ -478,6 +631,7 @@ impl SignedIn {
             other => HqVoiceEnd::Media(other),
         };
         self.hq.voice.phase = HqVoicePhase::Ended(end);
+        self.release_hq_voice().into_iter().collect()
     }
 
     /// Something the agent said or sent.
@@ -647,6 +801,16 @@ impl SignedIn {
             };
         }
     }
+}
+
+/// The session `credential` opened in `workspace_id`, not yet joined; `None`
+/// for a credential without an id, which has nothing to hand back.
+fn unjoined(workspace_id: String, credential: &HqVoiceTokenResponse) -> Option<VoiceClaim> {
+    (!credential.session_id.is_empty()).then(|| VoiceClaim {
+        workspace_id,
+        session_id: HqVoiceSessionId::new(credential.session_id.clone()),
+        joined: false,
+    })
 }
 
 impl crate::hq::HqScreen {

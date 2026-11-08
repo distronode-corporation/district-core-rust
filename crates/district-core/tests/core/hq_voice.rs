@@ -7,8 +7,8 @@ use std::time::Duration;
 use district_api::{ApiError, ErrorDetail};
 use district_core::{
     DisconnectReason, EMPTY_ROOM_GRACE, Effect, Event, HqAuthor, HqCardState, HqEvent, HqMessage,
-    HqNote, HqText, HqVoice, HqVoiceEnd, HqVoicePhase, MediaEvent, MediaOwner, MediaUpdate, Model,
-    Participant, RoomsEvent, Route, Speaker, SpeechSegment, Ticket,
+    HqNote, HqText, HqVoice, HqVoiceEnd, HqVoicePhase, HqVoiceSessionId, MediaEvent, MediaOwner,
+    MediaUpdate, Model, Participant, RoomsEvent, Route, Speaker, SpeechSegment, Ticket,
 };
 use district_model::{
     HQ_PROPOSAL_TOPIC, HQ_VOICE_SESSION_SECONDS, HqAgentState, HqConfirmResponse, HqRole, HqTurn,
@@ -235,14 +235,14 @@ fn the_residency_statement_comes_first_and_only_once_per_workspace() {
     );
     hq(&mut model, HqEvent::StopVoice);
     assert_eq!(voice(&model).phase, HqVoicePhase::Off);
-    // A late answer to a stopped start joins nothing.
-    assert!(
-        model
-            .update(Event::HqVoiceIssued {
-                ticket,
-                result: Ok(voice_credential()),
-            })
-            .is_empty()
+    // A late answer to a stopped start joins nothing, and its session goes
+    // back.
+    assert_eq!(
+        model.update(Event::HqVoiceIssued {
+            ticket,
+            result: Ok(voice_credential()),
+        }),
+        [discard(AGENCY)]
     );
 
     // Accepted once, the next start asks for a credential at once.
@@ -565,13 +565,13 @@ fn a_credential_without_a_passphrase_or_a_failure_joins_nothing() {
     let (mut model, ticket) = minting();
     let mut clear = voice_credential();
     clear.e2ee = None;
-    assert!(
-        model
-            .update(Event::HqVoiceIssued {
-                ticket,
-                result: Ok(clear),
-            })
-            .is_empty()
+    // The session it opened never starts, and goes back.
+    assert_eq!(
+        model.update(Event::HqVoiceIssued {
+            ticket,
+            result: Ok(clear),
+        }),
+        [discard(AGENCY)]
     );
     let HqVoicePhase::Failed(failure) = &voice(&model).phase else {
         panic!("{:?}", voice(&model).phase);
@@ -952,7 +952,8 @@ fn the_session_ends_when_the_agent_leaves_and_the_cards_stay() {
     let (mut model, session) = proposed();
     let window = agent_left(&mut model, session);
     let effects = model.update(Event::WaitOver { ticket: window });
-    assert_eq!(effects, [Effect::DisconnectMedia { session }]);
+    // An agent gone without closing its session leaves it open until told.
+    assert_eq!(effects, [Effect::DisconnectMedia { session }, end(AGENCY)]);
     assert_eq!(
         voice(&model).phase,
         HqVoicePhase::Ended(HqVoiceEnd::AgentLeft)
@@ -995,7 +996,7 @@ fn a_rebuilt_connection_ends_the_session_only_when_the_agent_is_still_gone() {
         panic!("{effects:?}");
     };
     let effects = model.update(Event::WaitOver { ticket: *ticket });
-    assert_eq!(effects, [Effect::DisconnectMedia { session }]);
+    assert_eq!(effects, [Effect::DisconnectMedia { session }, end(AGENCY)]);
     assert_eq!(
         voice(&model).phase,
         HqVoicePhase::Ended(HqVoiceEnd::AgentLeft)
@@ -1101,8 +1102,12 @@ fn the_session_is_left_at_its_time_limit() {
     else {
         panic!("{effects:?}");
     };
+    report(&mut model, *session, MediaEvent::Connected);
     let effects = model.update(Event::WaitOver { ticket: *wait });
-    assert_eq!(effects, [Effect::DisconnectMedia { session: *session }]);
+    assert_eq!(
+        effects,
+        [Effect::DisconnectMedia { session: *session }, end(AGENCY)]
+    );
     assert_eq!(
         voice(&model).phase,
         HqVoicePhase::Ended(HqVoiceEnd::TimeLimit)
@@ -1115,9 +1120,10 @@ fn stopping_switching_workspace_or_sleeping_leaves_the_room() {
     let (mut model, session) = live();
     assert_eq!(
         hq(&mut model, HqEvent::StopVoice),
-        [Effect::DisconnectMedia { session }]
+        [Effect::DisconnectMedia { session }, end(AGENCY)]
     );
     assert_eq!(voice(&model).phase, HqVoicePhase::Off);
+    assert!(hq(&mut model, HqEvent::StopVoice).is_empty(), "once");
 
     let (mut model, session) = live();
     let effects = model.update(Event::Suspending);
@@ -1125,14 +1131,253 @@ fn stopping_switching_workspace_or_sleeping_leaves_the_room() {
         effects.contains(&Effect::DisconnectMedia { session }),
         "{effects:?}"
     );
+    assert_eq!(count_releases(&effects), 1, "{effects:?}");
+    assert!(effects.contains(&end(AGENCY)), "{effects:?}");
 
+    // The session is ended in the workspace it was opened in.
     let (mut model, session) = live();
     let effects = model.update(Event::SelectWorkspace(VIEWER.to_owned()));
     assert!(
         effects.contains(&Effect::DisconnectMedia { session }),
         "{effects:?}"
     );
+    assert_eq!(count_releases(&effects), 1, "{effects:?}");
+    assert!(effects.contains(&end(AGENCY)), "{effects:?}");
     assert_eq!(*voice(&model), HqVoice::default());
+}
+
+/// The end of the session opened in `workspace`, for the credential's id.
+fn end(workspace: &str) -> Effect {
+    Effect::EndHqVoice {
+        workspace_id: workspace.to_owned(),
+        session_id: HqVoiceSessionId::new(voice_credential().session_id),
+    }
+}
+
+/// The giving back of the session opened in `workspace`, for the credential's
+/// id.
+fn discard(workspace: &str) -> Effect {
+    Effect::DiscardHqVoice {
+        workspace_id: workspace.to_owned(),
+        session_id: HqVoiceSessionId::new(voice_credential().session_id),
+    }
+}
+
+/// How many ends and discards `effects` hold.
+fn count_releases(effects: &[Effect]) -> usize {
+    effects
+        .iter()
+        .filter(|effect| {
+            matches!(
+                effect,
+                Effect::EndHqVoice { .. } | Effect::DiscardHqVoice { .. }
+            )
+        })
+        .count()
+}
+
+/// The credential answered and the room being joined, not joined yet: the
+/// media session's name.
+fn joining() -> (Model, Ticket) {
+    let (mut model, ticket) = minting();
+    let effects = model.update(Event::HqVoiceIssued {
+        ticket,
+        result: Ok(voice_credential()),
+    });
+    let [Effect::ConnectMedia { session, .. }, ..] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    assert_eq!(count_releases(&effects), 0, "{effects:?}");
+    (model, *session)
+}
+
+#[test]
+fn a_stop_while_the_room_is_joined_ends_the_session_once() {
+    let (mut model, session) = live();
+    let effects = hq(&mut model, HqEvent::StopVoice);
+    // The room is left first; the service is told after, without waiting.
+    assert_eq!(effects, [Effect::DisconnectMedia { session }, end(AGENCY)]);
+    assert!(hq(&mut model, HqEvent::StopVoice).is_empty());
+    // The room's own end, reported after, says nothing more.
+    assert!(
+        report(
+            &mut model,
+            session,
+            MediaEvent::Disconnected(DisconnectReason::Left)
+        )
+        .is_empty()
+    );
+}
+
+#[test]
+fn a_stop_while_reconnecting_ends_the_session_once() {
+    let (mut model, session) = live();
+    assert!(report(&mut model, session, MediaEvent::Reconnecting).is_empty());
+    let effects = hq(&mut model, HqEvent::StopVoice);
+    assert_eq!(effects, [Effect::DisconnectMedia { session }, end(AGENCY)]);
+    assert!(report(&mut model, session, MediaEvent::Connected).is_empty());
+    assert!(hq(&mut model, HqEvent::StopVoice).is_empty());
+}
+
+/// Stopped while the room is still being joined, the session never started:
+/// the service's own client gives it back, and so does this one. The join's
+/// failure arriving after the stop sends nothing more.
+#[test]
+fn a_stop_during_the_join_gives_the_session_back_once() {
+    let (mut model, session) = joining();
+    let effects = hq(&mut model, HqEvent::StopVoice);
+    assert_eq!(
+        effects,
+        [Effect::DisconnectMedia { session }, discard(AGENCY)]
+    );
+    assert_eq!(voice(&model).phase, HqVoicePhase::Off);
+    assert!(
+        report(
+            &mut model,
+            session,
+            MediaEvent::Disconnected(DisconnectReason::ConnectFailed)
+        )
+        .is_empty()
+    );
+    assert!(hq(&mut model, HqEvent::StopVoice).is_empty());
+}
+
+/// The other order of the same race: the join fails, then the member stops.
+#[test]
+fn a_failed_join_gives_the_session_back_once_and_a_stop_after_sends_nothing() {
+    let (mut model, session) = joining();
+    let effects = report(
+        &mut model,
+        session,
+        MediaEvent::Disconnected(DisconnectReason::ConnectFailed),
+    );
+    assert_eq!(effects, [discard(AGENCY)]);
+    assert_eq!(
+        voice(&model).phase,
+        HqVoicePhase::Ended(HqVoiceEnd::Media(DisconnectReason::ConnectFailed))
+    );
+    assert!(hq(&mut model, HqEvent::StopVoice).is_empty());
+    assert!(model.update(Event::Suspending).is_empty());
+}
+
+#[test]
+fn a_room_lost_after_it_was_joined_ends_the_session_once() {
+    for reason in [
+        DisconnectReason::ConnectionLost,
+        DisconnectReason::RoomEnded,
+    ] {
+        let (mut model, session) = live();
+        let effects = report(&mut model, session, MediaEvent::Disconnected(reason));
+        assert_eq!(effects, [end(AGENCY)], "{reason:?}");
+        assert!(hq(&mut model, HqEvent::StopVoice).is_empty(), "{reason:?}");
+    }
+}
+
+/// A credential that lands after the member stopped asking opened a session
+/// that never starts: it goes back as it lands, in the workspace it was asked
+/// for, and only once. A failure to mint has nothing to give back.
+#[test]
+fn a_credential_landing_after_a_stop_gives_its_session_back() {
+    let (mut model, first) = minting();
+    // Stopped while minting: there is nothing to tell yet.
+    assert!(hq(&mut model, HqEvent::StopVoice).is_empty());
+    // A new start is under way when the first answer lands.
+    let (second, _) = requested(&hq(&mut model, HqEvent::StartVoice));
+    let late = Event::HqVoiceIssued {
+        ticket: first,
+        result: Ok(voice_credential()),
+    };
+    assert_eq!(model.update(late.clone()), [discard(AGENCY)]);
+    assert!(model.update(late).is_empty(), "once");
+    assert_eq!(voice(&model).phase, HqVoicePhase::Minting);
+    // The new start is not disturbed by it.
+    let effects = model.update(Event::HqVoiceIssued {
+        ticket: second,
+        result: Ok(voice_credential()),
+    });
+    assert!(matches!(effects.first(), Some(Effect::ConnectMedia { .. })));
+
+    let (mut model, ticket) = minting();
+    hq(&mut model, HqEvent::StopVoice);
+    assert!(
+        model
+            .update(Event::HqVoiceIssued {
+                ticket,
+                result: Err(server_error()),
+            })
+            .is_empty()
+    );
+
+    // Switched away while minting: given back in the workspace it was for.
+    let (mut model, ticket) = minting();
+    model.update(Event::SelectWorkspace(VIEWER.to_owned()));
+    assert_eq!(
+        model.update(Event::HqVoiceIssued {
+            ticket,
+            result: Ok(voice_credential()),
+        }),
+        [discard(AGENCY)]
+    );
+}
+
+/// A credential without an id has nothing to hand back: it is joined, or
+/// refused, as any other, and nothing is sent when it ends.
+#[test]
+fn a_credential_without_a_session_id_sends_no_end_or_discard() {
+    let mut anonymous = voice_credential();
+    anonymous.session_id = String::new();
+
+    let (mut model, ticket) = minting();
+    let effects = model.update(Event::HqVoiceIssued {
+        ticket,
+        result: Ok(anonymous.clone()),
+    });
+    let [Effect::ConnectMedia { session, .. }, ..] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    let session = *session;
+    report(&mut model, session, MediaEvent::Connected);
+    assert_eq!(
+        hq(&mut model, HqEvent::StopVoice),
+        [Effect::DisconnectMedia { session }]
+    );
+
+    let (mut model, ticket) = minting();
+    let mut clear = anonymous.clone();
+    clear.e2ee = None;
+    assert!(
+        model
+            .update(Event::HqVoiceIssued {
+                ticket,
+                result: Ok(clear),
+            })
+            .is_empty()
+    );
+
+    let (mut model, ticket) = minting();
+    hq(&mut model, HqEvent::StopVoice);
+    assert!(
+        model
+            .update(Event::HqVoiceIssued {
+                ticket,
+                result: Ok(anonymous),
+            })
+            .is_empty()
+    );
+}
+
+#[test]
+fn the_session_id_is_never_printed() {
+    let (model, _) = live();
+    // The room's name carries the same id, as the service names rooms.
+    let shown = format!("{model:?} {:?}", end(AGENCY)).replace(&voice_credential().room_name, "");
+    assert!(!shown.contains(&voice_credential().session_id), "{shown}");
+    assert!(shown.contains("HqVoiceSessionId(<redacted>)"));
+    assert_eq!(
+        HqVoiceSessionId::new("abc").as_str(),
+        "abc",
+        "sent as given"
+    );
 }
 
 #[test]

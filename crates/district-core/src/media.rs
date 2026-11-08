@@ -809,7 +809,11 @@ impl SignedIn {
                 self.supervise_media_connected();
                 Vec::new()
             }
-            MediaOwner::Room | MediaOwner::Audition | MediaOwner::HqVoice => Vec::new(),
+            MediaOwner::HqVoice => {
+                self.hq_voice_connected();
+                Vec::new()
+            }
+            MediaOwner::Room | MediaOwner::Audition => Vec::new(),
         }
     }
 
@@ -870,10 +874,7 @@ impl SignedIn {
                 Vec::new()
             }
             MediaOwner::Audition => self.audition_media_ended(reason, tickets),
-            MediaOwner::HqVoice => {
-                self.hq_voice_media_ended(reason, tickets);
-                Vec::new()
-            }
+            MediaOwner::HqVoice => self.hq_voice_media_ended(reason, tickets),
             MediaOwner::Supervise => {
                 self.supervise_media_ended(reason, tickets);
                 Vec::new()
