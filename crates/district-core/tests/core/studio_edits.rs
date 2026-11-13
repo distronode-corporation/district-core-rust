@@ -825,6 +825,16 @@ fn the_controls_are_the_open_legs_and_each_writes_its_own_key() {
         Some("fixed")
     );
     ready.set_choice("engineMix.tts.speed", "1");
+    // A key the catalogue draws as lines that are not the key terms writes
+    // nothing: only the key terms are typed as lines.
+    let mut as_lines = ready.clone();
+    for key in &mut as_lines.studio.advanced {
+        if key.key == "engineMix.turn.minDelay" {
+            key.control = "lines".to_owned();
+        }
+    }
+    as_lines.set_lines("engineMix.turn.minDelay", "1");
+    assert_eq!(as_lines.held, ready.held);
 
     // Thinking's choices are the brain's own.
     ready.select_leg(BRAIN);
@@ -876,6 +886,28 @@ fn the_realtime_temperature_always_has_a_value_and_the_voice_style_is_the_person
     ready.set_flag(PREEMPTIVE_TTS, true);
     ready.set_lines(KEYTERMS, "Ada");
     assert_eq!(ready.held.voice_style.as_deref(), Some("en-GB-Studio-B"));
+    // A catalogue that draws the temperature as a choice and the style as a
+    // slider writes neither: each holds only its own kind of value.
+    let mut swapped = ready.clone();
+    let temperature = key(REALTIME_TEMPERATURE);
+    let style = key(VOICE_STYLE);
+    for key in &mut swapped.studio.advanced {
+        if key.key == REALTIME_TEMPERATURE {
+            key.control.clone_from(&style.control);
+            key.options.clone_from(&style.options);
+        } else if key.key == VOICE_STYLE {
+            key.control.clone_from(&temperature.control);
+            (key.min, key.max) = (temperature.min, temperature.max);
+        }
+    }
+    assert!(matches!(
+        swapped.controls().as_slice(),
+        [TuningControl::Choice { .. }, TuningControl::Number { .. }]
+    ));
+    swapped.set_number(VOICE_STYLE, Some(0.5));
+    let first_style = style.options.as_ref().unwrap()[0].value.clone();
+    swapped.set_choice(REALTIME_TEMPERATURE, &first_style);
+    assert_eq!(swapped.held, ready.held);
     // A slider with no range is not drawn.
     let mut no_range = ready.clone();
     no_range.studio.advanced[17].max = None;

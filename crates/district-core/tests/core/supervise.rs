@@ -442,6 +442,17 @@ fn a_refused_listen_says_why_and_a_call_no_longer_live_ends() {
     supervise(&mut model, SuperviseEvent::Dismiss);
     assert_eq!(phase(&model), SupervisePhase::Idle);
     assert_eq!(supervision(&model).status(), None);
+
+    // A failure put away while nothing has ended leaves the session as it is.
+    let ticket = listen(&mut model);
+    model.update(Event::CallMonitorIssued {
+        ticket,
+        result: Err(server_error()),
+    });
+    supervise(&mut model, SuperviseEvent::Dismiss);
+    assert_eq!(phase(&model), SupervisePhase::Idle);
+    assert_eq!(supervision(&model).failure, None);
+    assert!(controls(&model).can_listen);
 }
 
 #[test]

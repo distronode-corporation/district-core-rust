@@ -518,11 +518,16 @@ impl SignedIn {
                 Next::Stay(self.enter_support(tickets))
             }
             // The draft, and its key, survive: a retry is a repeat.
+            // Cancel is refused while submitting, and leaving the workspace
+            // drops the create's slot, so the form is still open.
             Err(error) => {
-                if let Some(compose) = self.support.compose.as_mut() {
-                    compose.submitting = false;
-                    compose.failure = Some(FailureText::from_api_error(&error));
-                }
+                let compose = self
+                    .support
+                    .compose
+                    .as_mut()
+                    .expect("a submit keeps its form");
+                compose.submitting = false;
+                compose.failure = Some(FailureText::from_api_error(&error));
                 stay()
             }
         }

@@ -297,11 +297,10 @@ impl NativeAuthApi {
         url.set_fragment(None);
         // `NativeAuthApi::new` admitted only http and https, which always have
         // path segments.
-        if let Ok(mut segments) = url.path_segments_mut() {
-            segments
-                .pop_if_empty()
-                .extend(path.trim_start_matches('/').split('/'));
-        }
+        url.path_segments_mut()
+            .expect("an http or https URL has path segments")
+            .pop_if_empty()
+            .extend(path.trim_start_matches('/').split('/'));
         url
     }
 }

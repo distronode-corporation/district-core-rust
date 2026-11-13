@@ -741,6 +741,16 @@ fn a_thread_given_away_while_open_can_be_taken_back() {
         screen(&model).assignment.assignee.as_deref(),
         Some("founder@example.com")
     );
+    // A list read without owners says nothing about who owns it now.
+    let mut without_owners = owners();
+    for thread in &mut without_owners.conversations {
+        thread.assignee_email = None;
+    }
+    list_read_again(&mut model, without_owners);
+    assert_eq!(
+        screen(&model).assignment.assignee.as_deref(),
+        Some("founder@example.com")
+    );
     // Taking it back to nobody, its owner before, is sent.
     let effects = thread_event(&mut model, ThreadEvent::Assign(None));
     let [
@@ -1021,6 +1031,15 @@ fn the_filled_template_is_previewed_and_sent_as_the_service_fills_it() {
         thread_event(
             &mut model,
             ThreadEvent::TemplateVariable(1, "Thursday".to_owned()),
+        );
+        // An earlier variable typed again is changed in place.
+        thread_event(
+            &mut model,
+            ThreadEvent::TemplateVariable(0, "Ada".to_owned()),
+        );
+        assert_eq!(
+            whatsapp(&model).preview().as_deref(),
+            Some("Hi Ada, this is a reminder of your appointment on Thursday.")
         );
         assert!(controls(&model).can_send_template);
         assert_eq!(WhatsAppComposer::variable_label(0), "Variable {{1}}");

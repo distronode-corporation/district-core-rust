@@ -1071,6 +1071,20 @@ fn the_blocked_list_shows_live_blocks_and_unblocks_one_caller_at_a_time() {
             })
             .is_empty()
     );
+    // An answer that is not a block's standing ends the wait and changes no row.
+    ask(&mut model, "c3");
+    let third = last_ticket(&contacts_event(&mut model, ContactsEvent::ConfirmUnblock));
+    model.update(Event::ContactWritten {
+        ticket: third,
+        result: Ok(ContactWritten::Updated),
+    });
+    let blocked = &signed_in(&model).blocked;
+    assert!(blocked.unblocking.is_empty());
+    assert_eq!(blocked.failure, None);
+    let BlockedList::Ready(rows) = &blocked.list else {
+        panic!();
+    };
+    assert_eq!(rows.len(), 1);
     assert_eq!(BlockedList::EMPTY_TITLE, "No blocked callers");
     assert_eq!(BlockedList::FAILED_TITLE, "Could not load blocked callers");
 }

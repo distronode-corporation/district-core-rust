@@ -233,6 +233,11 @@ fn a_call_rows_length_is_the_services_in_english_and_read_from_its_seconds_in_fr
         french(|| call_duration_label(&call("2m 34s", None))),
         format!("2{NBSP}min{NBSP}34{NBSP}s")
     );
+    // Whole minutes with the seconds left off read as whole minutes.
+    assert_eq!(
+        french(|| call_duration_label(&call("3m", None))),
+        format!("3{NBSP}min")
+    );
     // A length that cannot be read is shown as the service wrote it.
     assert_eq!(french(|| call_duration_label(&call("", None))), "");
     assert_eq!(

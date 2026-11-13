@@ -479,6 +479,15 @@ fn a_draft_is_filed_behind_a_confirmation_with_its_details() {
 
     let details: district_model::EndUserAttributes =
         [("business_name".to_owned(), "Acme".to_owned())].into();
+    // Only a draft's details are kept: one under review is filed already.
+    event(
+        &mut model,
+        RegistrationEvent::EditDetails {
+            bundle_id: "bu_review".to_owned(),
+            details: details.clone(),
+        },
+    );
+    assert!(registrations(&model).details.is_empty());
     event(
         &mut model,
         RegistrationEvent::EditDetails {

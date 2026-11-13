@@ -92,6 +92,9 @@ fn a_failed_read_offers_nothing_to_edit_and_a_refresh_reads_again() {
     assert!(section(&model).ready().is_none());
     assert!(edit(&mut model, StudioEdit::Reset).is_empty());
     assert!(send(&mut model, VoiceStudioEvent::Save).is_empty());
+    // No legs are shown, so there is none to pick.
+    assert!(send(&mut model, VoiceStudioEvent::SelectLeg(MOUTH.to_owned())).is_empty());
+    assert!(section(&model).ready().is_none());
     let again = model.update(Event::Refresh);
     assert!(matches!(again.as_slice(), [Effect::LoadVoiceStudio { .. }]));
     assert!(!VoiceStudioSection::FAILED_TITLE.is_empty());

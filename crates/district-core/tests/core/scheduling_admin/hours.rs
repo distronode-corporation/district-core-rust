@@ -281,6 +281,14 @@ fn the_week_is_edited_window_by_window_and_checked_before_it_is_sent() {
     );
     hours(
         &mut model,
+        HoursEvent::SetRangeStart {
+            day: 9,
+            key: sunday,
+            value: "x".into(),
+        },
+    );
+    hours(
+        &mut model,
         HoursEvent::SetRangeEnd {
             day: 9,
             key: sunday,

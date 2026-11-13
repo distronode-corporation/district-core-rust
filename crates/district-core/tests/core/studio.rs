@@ -551,6 +551,10 @@ fn a_deepgram_voice_has_its_own_median_and_a_voice_without_one_is_missing() {
         meter(&hera, &studio).stages[2].value.text(&studio),
         studio.labels.not_measured
     );
+    // Nor has a voice its model's list does not name.
+    mix.tts.voice = "aura-2-unlisted-en".to_owned();
+    let unlisted = chained(mix.clone());
+    assert_eq!(blocks(&unlisted, &studio)[3].latency, LatencyText::None);
     // A voice model whose list the service did not send has no per-voice number.
     studio.voices.retain(|list| list.model != "aura-2");
     assert_eq!(blocks(&hera, &studio)[3].latency, LatencyText::None);
@@ -658,6 +662,17 @@ fn an_engine_naming_a_model_the_catalogue_does_not_list_draws_nothing_and_claims
     assert!(!out.in_region && out.legs_out.is_empty());
     assert_eq!(out.text, studio.labels.leaves_region);
     assert_eq!(meter(&engine, &studio).stages[1].value, LatencyText::None);
+    // So does an ear or a brain the catalogue does not list.
+    for retire in [
+        (|mix: &mut EngineMix| mix.stt.model = "retired".to_owned()) as fn(&mut EngineMix),
+        |mix: &mut EngineMix| mix.llm.model = "retired".to_owned(),
+    ] {
+        let mut mix = saved_mix();
+        retire(&mut mix);
+        let engine = chained(mix);
+        assert!(blocks(&engine, &studio).is_empty());
+        assert!(residency(&engine, &studio).legs_out.is_empty());
+    }
     let unknown = realtime("retired-live", "Puck");
     assert!(blocks(&unknown, &studio).is_empty());
     assert_eq!(meter(&unknown, &studio).headline, MeterHeadline::None);

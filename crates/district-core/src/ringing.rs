@@ -397,15 +397,17 @@ impl SignedIn {
     /// The deadline is dropped on every other way a ring ends, so the ring is
     /// there and still live.
     pub(crate) fn ring_deadline(&mut self) -> Vec<Effect> {
-        let mut effects = Vec::new();
-        if let Some(ring) = self.ring.ring.as_mut() {
-            effects = stop_ringtone(ring);
-            ring.phase = RingPhase::Ended(RingEnd::Missed);
-            effects.push(Effect::Notify(Notification::missed_call(
-                &ring.workspace_id,
-                &ring.call_id,
-            )));
-        }
+        let ring = self
+            .ring
+            .ring
+            .as_mut()
+            .expect("a live ring has its deadline");
+        let mut effects = stop_ringtone(ring);
+        ring.phase = RingPhase::Ended(RingEnd::Missed);
+        effects.push(Effect::Notify(Notification::missed_call(
+            &ring.workspace_id,
+            &ring.call_id,
+        )));
         effects
     }
 

@@ -262,9 +262,13 @@ pub fn is_enabled() -> bool {
 pub fn capture_error<E: std::error::Error + ?Sized>(error: &E) -> Option<String> {
     let capture = Capture::begin()?;
     let mut event = sentry::event_from_error(error);
-    if let Some(outermost) = event.exception.values.last_mut() {
-        outermost.stacktrace = current_stacktrace();
-    }
+    // `event_from_error` lists the error itself last, after its sources.
+    event
+        .exception
+        .values
+        .last_mut()
+        .expect("the error itself is always listed")
+        .stacktrace = current_stacktrace();
     let id = capture.client().capture_event(event, None);
     Some(id.simple().to_string())
 }

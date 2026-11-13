@@ -727,11 +727,12 @@ impl SignedIn {
                 });
                 Next::Stay(self.enter_desk(tickets))
             }
+            // Cancel is refused while submitting, and leaving the workspace
+            // drops the create's slot, so the form is still open.
             Err(error) => {
-                if let Some(compose) = self.desk.compose.as_mut() {
-                    compose.submitting = false;
-                    compose.failure = Some(FailureText::from_api_error(&error));
-                }
+                let compose = self.desk.compose.as_mut().expect("a submit keeps its form");
+                compose.submitting = false;
+                compose.failure = Some(FailureText::from_api_error(&error));
                 stay()
             }
         }
