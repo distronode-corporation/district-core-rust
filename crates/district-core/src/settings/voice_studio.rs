@@ -359,9 +359,9 @@ impl SignedIn {
         tickets: &mut Tickets,
     ) -> Next {
         if tickets.accept(Slot::VoiceStudio, ticket) {
-            if let Some(section) = self.voice_studio.as_mut() {
-                section.loaded(result);
-            }
+            // Closing settings drops the section's slots with it.
+            let section = self.voice_studio.as_mut().expect("a read has its section");
+            section.loaded(result);
             return stay();
         }
         if tickets.accept(Slot::PersonaStudio, ticket) {

@@ -865,6 +865,13 @@ fn the_hosts_are_edited_and_saved_whole_with_the_routing_after() {
             priority: "1".into(),
         },
     );
+    one(
+        &mut model,
+        EventTypeEvent::SetHostRole {
+            user_id: "nobody".into(),
+            role: "rotation".into(),
+        },
+    );
     assert!(one(&mut model, EventTypeEvent::SaveHosts).is_empty());
     assert_eq!(
         hosts_dialog(&model).validation,

@@ -784,12 +784,18 @@ fn calendar_answer(section: &mut CalendarSection, pending: Pending, answer: Answ
                         },
                     )];
                 }
-                Ok(_) => return saved(section),
+                Ok(_) => {
+                    saved(picker);
+                    return reread(section);
+                }
                 Err(failure) => picker.write = WriteState::Failed(failure),
             }
         }
         (Pending::PickerDestination, Some(CalendarDialog::Calendars(picker))) => match answer {
-            Ok(_) => return saved(section),
+            Ok(_) => {
+                saved(picker);
+                return reread(section);
+            }
             Err(failure) => picker.write = WriteState::Failed(failure),
         },
         // A CalDAV account connected: the password goes, and the section is
@@ -820,11 +826,9 @@ fn calendar_answer(section: &mut CalendarSection, pending: Pending, answer: Answ
     Vec::new()
 }
 
-fn saved(section: &mut CalendarSection) -> Vec<Out> {
-    if let Some(CalendarDialog::Calendars(picker)) = &mut section.dialog {
-        picker.write = WriteState::Done(ss::calendars_saved(l()).to_owned());
-    }
-    reread(section)
+/// The picker's calendars saved; the caller reads the section again.
+fn saved(picker: &mut CalendarPicker) {
+    picker.write = WriteState::Done(ss::calendars_saved(l()).to_owned());
 }
 
 /// The scheduler sign-in arrived: opened at once in the browser, if it is an

@@ -648,6 +648,23 @@ async fn an_unusable_address_ends_the_connection() {
     }
 }
 
+/// An address the URL parser takes but the handshake's request cannot carry:
+/// HTTP request targets stop short of 64 KiB.
+#[tokio::test(start_paused = true)]
+async fn an_address_too_long_for_a_request_ends_the_connection() {
+    let long = format!("wss://telemetry.example.com/{}", "a".repeat(70_000));
+    let clock = TestClock::new();
+    let minter = FakeMinter::new(clock.clone());
+    minter.set_url(Some(&long));
+    let (config, transport, _server) = memory(clock, no_jitter);
+    let (_connection, mut updates) = TelemetryConnection::start(WORKSPACE, minter, config);
+    assert_eq!(
+        next(&mut updates).await,
+        ended(LiveError::Endpoint(EndpointError::Invalid))
+    );
+    assert!(transport.opened().is_empty());
+}
+
 #[tokio::test(start_paused = true)]
 async fn encrypted_and_loopback_addresses_are_dialled_with_the_workspace_added() {
     let cases = [

@@ -953,9 +953,9 @@ impl SignedIn {
             return Some(self.sync_transcript_watch(tickets));
         }
         if tickets.accept(Slot::TranscriptCooldown, ticket) {
-            if let Some(transcript) = self.transcript_mut() {
-                transcript.not_live_cooling = false;
-            }
+            // Every way a transcript goes drops its waits.
+            let transcript = self.transcript_mut().expect("a cooling transcript is held");
+            transcript.not_live_cooling = false;
             return Some(Vec::new());
         }
         if !tickets.accept(Slot::TranscriptFetchWait, ticket) {

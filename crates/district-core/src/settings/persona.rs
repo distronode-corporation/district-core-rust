@@ -883,11 +883,11 @@ impl SignedIn {
         &mut self,
         result: Result<WorkspaceConfigResponse, ApiError>,
     ) {
-        if let Some(section) = self.persona.as_mut() {
-            section.config = settle(&mut section.save, result);
-            section.edits.clear();
-            section.hydrate();
-        }
+        // Closing settings drops the section's slots with it.
+        let section = self.persona.as_mut().expect("a read has its section");
+        section.config = settle(&mut section.save, result);
+        section.edits.clear();
+        section.hydrate();
     }
 
     pub(crate) fn persona_options_loaded(
@@ -959,8 +959,8 @@ impl SignedIn {
 
     /// The cooldown after an audition is over.
     pub(crate) fn persona_cooled(&mut self) {
-        if let Some(section) = self.persona.as_mut() {
-            section.preview_cooling = false;
-        }
+        // Closing settings drops the cooldown; opening the section again keeps it.
+        let section = self.persona.as_mut().expect("a cooldown has its section");
+        section.preview_cooling = false;
     }
 }

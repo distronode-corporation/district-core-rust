@@ -402,9 +402,10 @@ impl Parts {
             .map_err(|message| invalid(format!("{name}: {message}")))?;
         // An http or https URL always has path segments, and `ApiConfig::check`
         // admitted no other scheme, so there is no failure to handle here.
-        if let Ok(mut segments) = url.path_segments_mut() {
-            segments.pop_if_empty().extend(&path);
-        }
+        url.path_segments_mut()
+            .expect("an http or https URL has path segments")
+            .pop_if_empty()
+            .extend(&path);
         {
             let mut pairs = url.query_pairs_mut();
             if let Some((WorkspaceIn::Query, id)) = &workspace {

@@ -690,10 +690,15 @@ impl SignedIn {
             self.contacts.create = None;
             return Next::Stay(self.enter_contacts(tickets));
         };
-        if let Some(create) = self.contacts.create.as_mut() {
-            create.saving = false;
-            create.failure = Some(failure);
-        }
+        // Cancel is refused while saving, and leaving the workspace drops the
+        // create's slot, so the form is still open.
+        let create = self
+            .contacts
+            .create
+            .as_mut()
+            .expect("a save keeps its form");
+        create.saving = false;
+        create.failure = Some(failure);
         stay()
     }
 

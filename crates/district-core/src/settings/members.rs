@@ -392,14 +392,15 @@ impl SignedIn {
         result: Result<RenameResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
+        // Closing the workspace closes the section and drops the rename's slot,
+        // so a section with an answer is always in an open workspace.
         if tickets.accept(Slot::WorkspaceRename, ticket)
             && let Some(section) = self.members.as_mut()
+            && let WorkspacesState::Ready(workspaces) = &mut self.workspaces
         {
             match result {
                 Ok(answer) => {
-                    if let WorkspacesState::Ready(workspaces) = &mut self.workspaces {
-                        workspaces.rename_active(&answer.name);
-                    }
+                    workspaces.rename_active(&answer.name);
                     section.stored_name = Some(answer.name);
                     section.new_name.clear();
                     section.write = SaveState::Saved;

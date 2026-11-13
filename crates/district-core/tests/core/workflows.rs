@@ -516,3 +516,42 @@ fn a_switch_moved_during_a_read_is_not_undone_by_it() {
     });
     assert!(!active_of(&model, PAUSED));
 }
+
+/// A switch moved during a read that no longer lists the workflow, or that
+/// failed, has no row to keep or put back: its answer only ends the wait.
+#[test]
+fn a_switch_whose_row_a_read_dropped_ends_with_no_row_to_change() {
+    let mut model = on_workflows(AGENCY, "agency");
+    let refresh = model.update(Event::Refresh);
+    let toggle = set_active(&mut model, ACTIVE, false);
+    let mut read: WorkflowListResponse = fixture("district-workflows.json");
+    read.workflows.retain(|workflow| workflow.id != ACTIVE);
+    model.update(Event::WorkflowsLoaded {
+        ticket: pick(&refresh, |e| matches!(e, Effect::LoadWorkflows { .. })),
+        result: Ok(read),
+    });
+    model.update(Event::WorkflowActiveSet {
+        ticket: last_ticket(&toggle),
+        result: Err(server_error()),
+    });
+    assert!(!screen(&model).is_toggling(ACTIVE));
+    assert!(screen(&model).toggle_failure.is_some());
+    let WorkflowList::Ready(list) = &screen(&model).list else {
+        panic!("{:?}", screen(&model).list);
+    };
+    assert!(list.iter().all(|workflow| workflow.id != ACTIVE));
+
+    // The read failed while the switch was on its way: no list to change.
+    let refresh = model.update(Event::Refresh);
+    let toggle = set_active(&mut model, PAUSED, true);
+    model.update(Event::WorkflowsLoaded {
+        ticket: pick(&refresh, |e| matches!(e, Effect::LoadWorkflows { .. })),
+        result: Err(server_error()),
+    });
+    model.update(Event::WorkflowActiveSet {
+        ticket: last_ticket(&toggle),
+        result: toggled(),
+    });
+    assert!(!screen(&model).is_toggling(PAUSED));
+    assert!(matches!(screen(&model).list, WorkflowList::Failed(_)));
+}

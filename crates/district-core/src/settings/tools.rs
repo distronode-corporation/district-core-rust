@@ -425,9 +425,9 @@ impl SignedIn {
         &mut self,
         result: Result<WorkspaceConfigResponse, ApiError>,
     ) {
-        if let Some(section) = self.tools.as_mut() {
-            section.read(result);
-        }
+        // Closing settings drops the section's slots with it.
+        let section = self.tools.as_mut().expect("a read has its section");
+        section.read(result);
     }
 
     pub(crate) fn tools_saved(

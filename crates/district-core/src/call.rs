@@ -312,18 +312,18 @@ impl SignedIn {
     /// The dial on screen was refused: there is no call, and the screen says
     /// why in the service's words.
     fn dial_refused(&mut self, failure: FailureText) {
-        if let Some(call) = self.active_call.as_mut() {
-            call.phase = CallPhase::Ended(CallEnd::NotPlaced(failure));
-        }
+        // Only a hang-up ends a dial's call, and it marks the dial abandoned.
+        let call = self.active_call.as_mut().expect("a live dial has its call");
+        call.phase = CallPhase::Ended(CallEnd::NotPlaced(failure));
     }
 
     /// A dial that answered while its call is on screen: join its room.
     fn join_placed_call(&mut self, answer: DialResponse, tickets: &mut Tickets) -> Vec<Effect> {
         let credential = MediaCredential::from_dial(&answer);
-        if let Some(call) = self.active_call.as_mut() {
-            call.call_id = Some(answer.call_id);
-            call.phase = CallPhase::Connecting;
-        }
+        // Only a hang-up ends a dial's call, and it marks the dial abandoned.
+        let call = self.active_call.as_mut().expect("a live dial has its call");
+        call.call_id = Some(answer.call_id);
+        call.phase = CallPhase::Connecting;
         let mut effects = self.start_media(MediaOwner::Call, credential, true, tickets);
         effects.extend(self.start_transcript(tickets));
         effects
@@ -434,9 +434,9 @@ impl SignedIn {
     /// is answered and dropped when it ends, so this is always a second of
     /// conversation.
     pub(crate) fn call_ticked(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
-        if let Some(call) = self.active_call.as_mut() {
-            call.elapsed_secs += 1;
-        }
+        // A hang-up drops the wait before the call can be put away.
+        let call = self.active_call.as_mut().expect("a ticking call is held");
+        call.elapsed_secs += 1;
         vec![tick(tickets)]
     }
 }

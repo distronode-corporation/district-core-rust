@@ -637,10 +637,13 @@ impl SignedIn {
     /// Something the agent said or sent.
     pub(crate) fn hq_voice_agent(&mut self, event: MediaEvent) {
         match event {
+            // Every way out of Live leaves the room first, so the session is
+            // live while its room reports.
             MediaEvent::AgentState(raw) => {
-                if let HqVoicePhase::Live { agent } = &mut self.hq.voice.phase {
-                    *agent = HqAgentState::from_wire(&raw);
-                }
+                debug_assert!(matches!(self.hq.voice.phase, HqVoicePhase::Live { .. }));
+                self.hq.voice.phase = HqVoicePhase::Live {
+                    agent: HqAgentState::from_wire(&raw),
+                };
             }
             MediaEvent::AgentData { topic, payload } if topic == HQ_PROPOSAL_TOPIC => {
                 match read_packet(&payload) {
@@ -794,7 +797,9 @@ impl SignedIn {
         if matches!(error.code(), Some(CODE_NOT_FOUND | CODE_INVALID_REQUEST)) {
             voice.remove(proposal_id);
             voice.notice = Some(failure);
-        } else if let Some(card) = voice.card_mut(proposal_id) {
+        } else {
+            // Looked up on entry, and nothing since has removed it.
+            let card = voice.card_mut(proposal_id).expect("the card is shown");
             card.state = HqCardState::Failed {
                 failure,
                 confirming,

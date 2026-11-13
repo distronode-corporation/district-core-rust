@@ -469,10 +469,13 @@ impl SignedIn {
             effects.extend(self.open_live(update, tickets));
             return Next::Stay(effects);
         }
-        let socket = self.live.others.get_mut(&workspace_id);
-        if let Some(socket) = socket {
-            reported(&mut socket.status, &mut socket.connected_before, &update);
-        }
+        // Checked on entry, and nothing since changes which sockets are held.
+        let socket = self
+            .live
+            .others
+            .get_mut(&workspace_id)
+            .expect("a watched socket");
+        reported(&mut socket.status, &mut socket.connected_before, &update);
         if let LiveUpdate::Event(envelope) = update {
             effects.extend(self.other_event(workspace_id, envelope, tickets));
         }

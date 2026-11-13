@@ -263,11 +263,11 @@ impl SignedIn {
         &mut self,
         result: Result<WorkspaceConfigResponse, ApiError>,
     ) {
-        if let Some(section) = self.routing_rules.as_mut() {
-            section.config = settle(&mut section.save, result);
-            section.draft = None;
-            section.confirming = false;
-        }
+        // Closing settings drops the section's slots with it.
+        let section = self.routing_rules.as_mut().expect("a read has its section");
+        section.config = settle(&mut section.save, result);
+        section.draft = None;
+        section.confirming = false;
     }
 
     pub(crate) fn routing_saved(

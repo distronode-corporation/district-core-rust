@@ -97,6 +97,21 @@ fn the_authorize_url_keeps_the_base_path_and_drops_its_query() {
     assert_eq!(url.fragment(), None);
 }
 
+/// `with_base_url` takes any URL, and only the API client refuses one that is
+/// not http or https. A flow handed such a config without that check adds no
+/// path to a URL that cannot hold one, rather than failing.
+#[test]
+fn a_base_url_that_cannot_hold_a_path_gets_none_added() {
+    let config = service()
+        .with_base_url("data:text/plain,sign-in?leak=1#f")
+        .unwrap();
+    let url = LoginFlow::new(&config).authorize_url();
+    assert_eq!(url.scheme(), "data");
+    assert_eq!(url.path(), "text/plain,sign-in");
+    assert!(!url.as_str().contains("leak"));
+    assert_eq!(url.fragment(), None);
+}
+
 #[test]
 fn a_matching_callback_yields_the_code_and_this_attempts_verifier() {
     let mut flow = LoginFlow::new(&service());

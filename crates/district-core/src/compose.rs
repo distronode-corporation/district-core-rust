@@ -408,11 +408,12 @@ impl SignedIn {
                 }
                 Next::Stay(effects)
             }
+            // Cancel is refused while sending, and leaving the workspace drops
+            // the send's slot, so the form is still open.
             Err(error) => {
-                if let Some(compose) = self.inbox.compose.as_mut() {
-                    compose.sending = false;
-                    compose.failure = Some(FailureText::from_api_error(&error));
-                }
+                let compose = self.inbox.compose.as_mut().expect("a send keeps its form");
+                compose.sending = false;
+                compose.failure = Some(FailureText::from_api_error(&error));
                 stay()
             }
         }

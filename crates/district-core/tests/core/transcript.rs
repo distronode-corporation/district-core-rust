@@ -357,6 +357,20 @@ fn the_recorded_frames_become_the_calls_lines() {
 }
 
 #[test]
+fn a_snapshot_after_a_retraction_leaves_the_erased_line_out() {
+    let mut model = on_call();
+    model.update(snapshot());
+    model.update(frame("telemetry-event-transcript-retracted.json", |data| {
+        data["all"] = json!(false);
+        data["segmentIds"] = json!(["item_a1"]);
+    }));
+    assert_eq!(ids(&model), ["item_b2"]);
+    // A snapshot that still holds the erased line does not bring it back.
+    assert!(model.update(snapshot()).is_empty());
+    assert_eq!(ids(&model), ["item_b2"]);
+}
+
+#[test]
 fn lines_are_shown_by_epoch_then_index_whatever_order_they_arrive_in() {
     let mut model = on_call();
     model.update(snapshot());
