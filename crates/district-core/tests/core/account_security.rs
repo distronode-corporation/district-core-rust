@@ -374,7 +374,7 @@ fn a_first_read_that_fails_offers_a_retry_and_a_later_one_keeps_the_status() {
 fn each_kind_of_failed_read_has_its_sentence() {
     for (error, sentence) in [
         (unconfirmed(), en::TWO_STEP_ERROR_LOAD.to_owned()),
-        (not_json(), en::FAILURE_NOT_JSON.to_owned()),
+        (not_json(), en::TWO_STEP_ERROR_OFFLINE_LOAD.to_owned()),
         (
             forbidden("account_not_found"),
             "The service says account_not_found.".to_owned(),
@@ -583,18 +583,10 @@ fn back_inside_the_screen_steps_back_and_drops_what_it_held() {
 
 #[test]
 fn leaving_the_screen_drops_the_secret_and_ignores_late_answers() {
+    // The secret with nothing on its way is dropped (a confirm on its way is
+    // kept: a_confirm_sent_before_leaving_still_shows_its_recovery_codes).
     let (mut model, _) = at_scan();
-    let ticket = confirmed(&mut model, "123456");
     model.update(Event::Navigate(Route::Account));
-    assert_eq!(two_step(&model), &TwoStepScreen::default());
-    assert!(
-        model
-            .update(Event::TwoStepConfirmed {
-                ticket,
-                result: Ok(fixture("district-mfa-confirm.json")),
-            })
-            .is_empty()
-    );
     assert_eq!(two_step(&model), &TwoStepScreen::default());
 
     // Each answer of a screen that was left is dropped.
@@ -767,6 +759,7 @@ fn only_this_attempts_answer_is_spent() {
     let second = model.update(Event::TwoStep(TwoStepEvent::UseProvider(
         ReauthProvider::Apple,
     )));
+    // The first attempt's answer is refused, and the second still waits.
     assert!(model.update(answer(&first, "c")).is_empty());
     assert_eq!(
         two_step(&model).failure.as_deref(),
@@ -776,11 +769,34 @@ fn only_this_attempts_answer_is_spent() {
         two_step(&model).step,
         TwoStepStep::Reauth {
             change: TwoStepChange::TurnOn,
+            step: ReauthStep::Browser(ReauthProvider::Apple)
+        }
+    );
+    assert_eq!(model.update(answer(&second, "c")).len(), 1);
+    assert!(two_step(&model).busy);
+
+    // This attempt's own answer without a code spends it.
+    let mut model = at_overview(status(false));
+    model.update(Event::TwoStep(TwoStepEvent::Begin(TwoStepChange::TurnOn)));
+    let effects = model.update(Event::TwoStep(TwoStepEvent::UseProvider(
+        ReauthProvider::Google,
+    )));
+    let state = param(&opened(&effects), "state");
+    assert!(
+        model
+            .update(Event::SignInCallback(format!(
+                "districtai://auth?state={state}"
+            )))
+            .is_empty()
+    );
+    assert_eq!(
+        two_step(&model).step,
+        TwoStepStep::Reauth {
+            change: TwoStepChange::TurnOn,
             step: ReauthStep::Choose
         }
     );
-    // The refused answer dropped the attempt, so the right one comes too late.
-    assert!(model.update(answer(&second, "c")).is_empty());
+    assert!(model.update(answer(&effects, "c")).is_empty());
 
     // No attempt at all: a stale link is ignored.
     assert!(
@@ -1344,7 +1360,8 @@ fn a_refused_browser_answer_on_the_deletion_screen_says_so() {
         delete(&model).failure.as_ref().unwrap().message,
         en::REAUTH_ERROR_SIGN_IN_NOT_VERIFIED
     );
-    assert!(model.update(answer(&effects, "c")).is_empty());
+    // A forged link does not cancel the attempt: its own answer still works.
+    assert_eq!(model.update(answer(&effects, "c")).len(), 1);
 }
 
 #[test]
@@ -1353,6 +1370,11 @@ fn every_refused_deletion_says_whether_anything_was_deleted() {
     let cases = [
         (
             offline(),
+            None,
+            en::DELETE_ACCOUNT_ERROR_OFFLINE_OUTCOME_UNKNOWN.to_owned(),
+        ),
+        (
+            not_json(),
             None,
             en::DELETE_ACCOUNT_ERROR_OFFLINE_OUTCOME_UNKNOWN.to_owned(),
         ),
@@ -1552,5 +1574,71 @@ fn a_start_refused_after_a_provider_sign_in_goes_back_to_the_ways_to_confirm() {
     assert_eq!(
         two_step(&model).failure.as_deref(),
         Some(en::TWO_STEP_ERROR_TRY_AGAIN)
+    );
+}
+
+#[test]
+fn a_confirm_sent_before_leaving_still_shows_its_recovery_codes() {
+    let (mut model, _) = at_scan();
+    let ticket = confirmed(&mut model, "123456");
+    // Leaving while the confirm is on its way keeps it awaited.
+    model.update(Event::Navigate(Route::Account));
+    model.update(Event::TwoStepConfirmed {
+        ticket,
+        result: Ok(fixture("district-mfa-confirm.json")),
+    });
+    // Coming back shows the codes, the service's only showing of them.
+    assert!(model.update(Event::Navigate(Route::TwoStep)).is_empty());
+    assert!(matches!(
+        two_step(&model).step,
+        TwoStepStep::RecoveryCodes(_)
+    ));
+    // And leaving again keeps them until they are saved.
+    model.update(Event::Back);
+    model.update(Event::Navigate(Route::TwoStep));
+    assert!(matches!(
+        two_step(&model).step,
+        TwoStepStep::RecoveryCodes(_)
+    ));
+    let effects = model.update(Event::TwoStep(TwoStepEvent::FinishRecoveryCodes));
+    assert!(matches!(effects.as_slice(), [Effect::LoadTwoStep { .. }]));
+
+    // A secret with nothing on its way is dropped on leaving.
+    let (mut model, _) = at_scan();
+    model.update(Event::Back);
+    let effects = model.update(Event::Navigate(Route::TwoStep));
+    assert!(matches!(effects.as_slice(), [Effect::LoadTwoStep { .. }]));
+    assert_eq!(two_step(&model).step, TwoStepStep::Loading);
+}
+
+#[test]
+fn a_refresh_reads_the_status_only_while_the_status_shows() {
+    let (mut model, _) = at_scan();
+    assert!(model.update(Event::Refresh).is_empty());
+    assert!(matches!(two_step(&model).step, TwoStepStep::Scan(_)));
+    let mut model = at_password(TwoStepChange::TurnOn);
+    assert!(model.update(Event::Refresh).is_empty());
+}
+
+#[test]
+fn leaving_the_deletion_screen_during_a_reauthentication_leaves_it_usable() {
+    let mut model = deletion_at_password();
+    delete_submit(&mut model, "pw", None);
+    assert!(delete(&model).busy);
+    model.update(Event::Back);
+    model.update(Event::Navigate(Route::DeleteAccount));
+    assert!(
+        !delete(&model).busy,
+        "only a deletion on its way keeps it busy"
+    );
+    assert_eq!(
+        model
+            .update(Event::AccountDeletion(DeleteAccountEvent::UsePassword))
+            .len(),
+        0
+    );
+    assert_eq!(
+        delete(&model).step,
+        DeleteAccountStep::Explain(ReauthStep::Password { needs_code: false })
     );
 }

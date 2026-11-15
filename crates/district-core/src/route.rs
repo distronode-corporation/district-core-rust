@@ -23,8 +23,9 @@ pub enum Tab {
     Calls,
     /// Contacts.
     Contacts,
-    /// The account: sign-out, devices, account deletion. Not tied to a
-    /// workspace, so it is reachable when no workspace can be opened at all.
+    /// The account: sign-out, devices, two-step verification, account
+    /// deletion. Not tied to a workspace, so it is reachable when no workspace
+    /// can be opened at all.
     Account,
 }
 
@@ -196,8 +197,9 @@ impl Route {
         }
     }
 
-    /// Whether the route shows the open workspace's data. The account and the
-    /// devices list do not, and stay reachable when no workspace can be opened.
+    /// Whether the route shows the open workspace's data. The account, the
+    /// devices list, two-step verification and the account's deletion do not,
+    /// and stay reachable when no workspace can be opened.
     pub fn is_workspace_scoped(&self) -> bool {
         !matches!(
             self,
@@ -237,8 +239,9 @@ impl Route {
     /// way to the overview, because the member's role in the new workspace,
     /// which decides whether they open at all, is not known until the new
     /// overview arrives. A call under way is not a route, and goes on.
-    /// Tabs, the workspace's other sections, the blocked list, the account and
-    /// the devices list stay, and read the new workspace's data.
+    /// Tabs, the workspace's other sections, the blocked list, the account, the
+    /// devices list, two-step verification and the account's deletion stay, and
+    /// read the new workspace's data.
     pub fn after_workspace_switch(&self) -> Route {
         match self {
             Self::Workspace(_)

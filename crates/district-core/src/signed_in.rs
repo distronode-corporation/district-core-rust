@@ -370,7 +370,7 @@ impl SignedIn {
             }
             Route::TwoStep => self.enter_two_step(tickets),
             Route::DeleteAccount => {
-                self.enter_delete_account();
+                self.enter_delete_account(tickets);
                 Vec::new()
             }
             Route::Inbox => self.enter_inbox(tickets),

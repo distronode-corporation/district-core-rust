@@ -103,22 +103,22 @@ async fn confirming_sends_the_code_and_answers_the_recovery_codes() {
         json!({"totp": "123456"})
     );
 
-    let server = serving(
-        "POST",
-        "/api/auth/mfa/confirm",
-        200,
-        json!({"enrolled": false}),
-    )
-    .await;
-    assert_eq!(
-        client(&server)
-            .mfa_confirm(&code("123456"))
-            .await
-            .unwrap_err(),
-        ApiError::Unconfirmed {
-            endpoint: Endpoint::MfaConfirm
-        }
-    );
+    for answer in [
+        json!({"enrolled": false, "backupCodes": ["aaaa-bbbb"]}),
+        json!({"enrolled": true, "backupCodes": []}),
+        json!({"enrolled": true}),
+    ] {
+        let server = serving("POST", "/api/auth/mfa/confirm", 200, answer).await;
+        assert_eq!(
+            client(&server)
+                .mfa_confirm(&code("123456"))
+                .await
+                .unwrap_err(),
+            ApiError::Unconfirmed {
+                endpoint: Endpoint::MfaConfirm
+            }
+        );
+    }
 }
 
 #[tokio::test]

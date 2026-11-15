@@ -725,9 +725,9 @@ pub const PURCHASE_TERM_MONTHLY: &str = "Monthly";
 /// `reauth.back` in English.
 pub const REAUTH_BACK: &str = "Back";
 /// `reauth.code_label` in English.
-pub const REAUTH_CODE_LABEL: &str = "6-digit code";
+pub const REAUTH_CODE_LABEL: &str = "Authenticator code or recovery code";
 /// `reauth.code_prompt` in English.
-pub const REAUTH_CODE_PROMPT: &str = "Your account uses an authenticator app. Enter the 6-digit code it shows for District AI.";
+pub const REAUTH_CODE_PROMPT: &str = "Your account uses two-step verification. Enter the code your authenticator app shows for District AI, or one of your recovery codes.";
 /// `reauth.confirm_it_is_you` in English.
 pub const REAUTH_CONFIRM_IT_IS_YOU: &str = "Confirm it is you";
 /// `reauth.continue` in English.

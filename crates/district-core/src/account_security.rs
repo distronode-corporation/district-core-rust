@@ -21,7 +21,7 @@ use std::fmt;
 
 use base64::Engine;
 use base64::engine::general_purpose::STANDARD;
-use district_api::{ApiError, CODE_MFA_REQUIRED, TransportKind};
+use district_api::{ApiError, CODE_MFA_REQUIRED};
 use district_auth::{LoginError, REAUTH_PATH, ReauthAttempt, ReauthProvider};
 use district_l10n::api_error_text;
 use district_l10n::format::{self, CivilDateTime, DateStyle};
@@ -397,35 +397,57 @@ pub enum DeleteAccountEvent {
 
 impl SignedIn {
     /// Opens the two-step screen afresh and reads the status.
+    /// Opens the two-step screen and reads the status, unless it holds
+    /// recovery codes not yet saved (a confirm that landed while the screen was
+    /// left), which it shows first.
     pub(crate) fn enter_two_step(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
+        if self.keeps_two_step(tickets) {
+            return Vec::new();
+        }
         self.two_step = TwoStepScreen::default();
         self.load_two_step(tickets)
     }
 
     /// Opens the deletion screen afresh. A deletion still on its way keeps it
-    /// busy, so its answer lands on the new visit.
-    pub(crate) fn enter_delete_account(&mut self) {
+    /// busy, so its answer lands on the new visit; nothing else does.
+    pub(crate) fn enter_delete_account(&mut self, tickets: &Tickets) {
         self.delete_account = DeleteAccountScreen {
-            busy: self.delete_account.busy,
+            busy: tickets.awaiting(Slot::AccountDelete),
             ..DeleteAccountScreen::default()
         };
     }
 
-    /// Leaves either screen: the secret, the codes and a re-authentication
-    /// under way are dropped. A deletion already sent is still awaited, so its
-    /// answer is never lost.
+    /// Leaves either screen: the secret and a re-authentication under way are
+    /// dropped. Two things are kept, because losing them would cost the
+    /// account: a deletion already sent, so its answer is never lost, and a
+    /// confirm of two-step verification already sent or its recovery codes,
+    /// which the service shows once.
     pub(crate) fn close_account_security(&mut self, tickets: &mut Tickets) {
-        tickets.cancel(Slot::TwoStep);
-        tickets.cancel(Slot::TwoStepWrite);
         tickets.cancel(Slot::Reauth);
         self.reauth = None;
-        self.two_step = TwoStepScreen::default();
-        self.enter_delete_account();
+        if !self.keeps_two_step(tickets) {
+            tickets.cancel(Slot::TwoStep);
+            tickets.cancel(Slot::TwoStepWrite);
+            self.two_step = TwoStepScreen::default();
+        }
+        self.enter_delete_account(tickets);
     }
 
-    /// The two-step screen's refresh: a read, unless something is on its way.
+    /// Whether the two-step screen holds what must outlive a visit: a confirm
+    /// on its way, or recovery codes not yet saved.
+    fn keeps_two_step(&self, tickets: &Tickets) -> bool {
+        match self.two_step.step {
+            TwoStepStep::Scan(_) => tickets.awaiting(Slot::TwoStepWrite),
+            TwoStepStep::RecoveryCodes(_) => true,
+            _ => false,
+        }
+    }
+
+    /// The two-step screen's refresh: a read of the status, only while the
+    /// status is what it shows. A read in the middle of a change would take
+    /// the screen back to the status and drop the secret or the codes.
     pub(crate) fn refresh_two_step(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
-        if self.two_step.busy {
+        if self.two_step.busy || self.two_step.step != TwoStepStep::Overview {
             return Vec::new();
         }
         self.load_two_step(tickets)
@@ -639,7 +661,20 @@ impl SignedIn {
                 self.reauth = Some(attempt);
                 stay()
             }
-            // Another attempt's answer, or none: never spent.
+            // Another attempt's answer, or a forged one: never spent, and the
+            // attempt still waits for its own, so a stray link cannot cancel it.
+            Err(LoginError::StateMismatch) => {
+                self.reauth = Some(attempt);
+                let message = s::reauth_error_sign_in_not_verified(l()).to_owned();
+                match action {
+                    ReauthAction::TwoStepChange => self.two_step.failure = Some(message),
+                    ReauthAction::DeleteAccount => {
+                        self.delete_account.failure = Some(DeleteFailure::plain(message));
+                    }
+                }
+                stay()
+            }
+            // This attempt's answer, without a code: it is spent.
             Err(_) => {
                 self.reauth_refused(action, s::reauth_error_sign_in_not_verified(l()).to_owned());
                 stay()
@@ -1040,11 +1075,11 @@ fn service_sentence(error: &ApiError) -> String {
         .unwrap_or_else(|| FailureText::from_api_error(error).message)
 }
 
+/// No answer from the service: no connection, or a page that was not its
+/// answer (a network's sign-in page). A change sent this way may or may not
+/// have reached it.
 fn is_offline(error: &ApiError) -> bool {
-    matches!(
-        error,
-        ApiError::Offline(transport) if !matches!(transport.kind, TransportKind::NotJson { .. })
-    )
+    matches!(error, ApiError::Offline(_))
 }
 
 fn is_rate_limited(error: &ApiError) -> bool {

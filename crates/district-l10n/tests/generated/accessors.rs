@@ -770,10 +770,10 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::purchase_term_monthly(Locale::FrCa), "Mensuel");
     assert_eq!(strings::reauth_back(Locale::En), "Back");
     assert_eq!(strings::reauth_back(Locale::FrCa), "Retour");
-    assert_eq!(strings::reauth_code_label(Locale::En), "6-digit code");
-    assert_eq!(strings::reauth_code_label(Locale::FrCa), "Code à 6 chiffres");
-    assert_eq!(strings::reauth_code_prompt(Locale::En), "Your account uses an authenticator app. Enter the 6-digit code it shows for District AI.");
-    assert_eq!(strings::reauth_code_prompt(Locale::FrCa), "Votre compte utilise une app d'authentification. Entrez le code à 6 chiffres qu'elle affiche pour District AI.");
+    assert_eq!(strings::reauth_code_label(Locale::En), "Authenticator code or recovery code");
+    assert_eq!(strings::reauth_code_label(Locale::FrCa), "Code d'authentification ou code de récupération");
+    assert_eq!(strings::reauth_code_prompt(Locale::En), "Your account uses two-step verification. Enter the code your authenticator app shows for District AI, or one of your recovery codes.");
+    assert_eq!(strings::reauth_code_prompt(Locale::FrCa), "Votre compte utilise la vérification en deux étapes. Entrez le code que votre application d'authentification affiche pour District AI, ou l'un de vos codes de récupération.");
     assert_eq!(strings::reauth_confirm_it_is_you(Locale::En), "Confirm it is you");
     assert_eq!(strings::reauth_confirm_it_is_you(Locale::FrCa), "Confirmez qu'il s'agit bien de vous");
     assert_eq!(strings::reauth_continue(Locale::En), "Continue");

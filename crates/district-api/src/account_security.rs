@@ -45,14 +45,20 @@ impl<S: TokenSource> ApiClient<S> {
 
     /// Turns two-step verification on with `code`, one of the authenticator's
     /// codes, and answers the recovery codes, which the service never shows
-    /// again. Spends the `2fa-change` proof.
+    /// again. Spends the `2fa-change` proof. An answer that is not on, or has
+    /// no codes, is [`ApiError::Unconfirmed`].
     pub async fn mfa_confirm(&self, code: &Credential) -> Result<MfaConfirmation, ApiError> {
         let confirmed: MfaConfirmation = self
             .request(Endpoint::MfaConfirm)
             .field("totp", code.expose())
             .send()
             .await?;
-        confirm(Endpoint::MfaConfirm, confirmed.enrolled)?;
+        // On, and with its codes: an answer without them would leave the
+        // person nothing to save, so it reads as one this build cannot trust.
+        confirm(
+            Endpoint::MfaConfirm,
+            confirmed.enrolled && !confirmed.backup_codes.is_empty(),
+        )?;
         Ok(confirmed)
     }
 

@@ -3456,8 +3456,8 @@ pub fn reauth_back(l: Locale) -> &'static str {
 #[must_use]
 pub fn reauth_code_label(l: Locale) -> &'static str {
     match l {
-        Locale::En => "6-digit code",
-        Locale::FrCa => "Code à 6 chiffres",
+        Locale::En => "Authenticator code or recovery code",
+        Locale::FrCa => "Code d'authentification ou code de récupération",
     }
 }
 
@@ -3465,8 +3465,8 @@ pub fn reauth_code_label(l: Locale) -> &'static str {
 #[must_use]
 pub fn reauth_code_prompt(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Your account uses an authenticator app. Enter the 6-digit code it shows for District AI.",
-        Locale::FrCa => "Votre compte utilise une app d'authentification. Entrez le code à 6 chiffres qu'elle affiche pour District AI.",
+        Locale::En => "Your account uses two-step verification. Enter the code your authenticator app shows for District AI, or one of your recovery codes.",
+        Locale::FrCa => "Votre compte utilise la vérification en deux étapes. Entrez le code que votre application d'authentification affiche pour District AI, ou l'un de vos codes de récupération.",
     }
 }
 

@@ -3483,22 +3483,22 @@ state = "reviewed"
 note = "Back from the password, or the browser's sign-in, to the ways to confirm it is you. French from the iOS app's reviewed catalog."
 
 [reauth.code_label]
-en = "6-digit code"
-fr = "Code à 6 chiffres"
+en = "Authenticator code or recovery code"
+fr = "Code d'authentification ou code de récupération"
 ctx = "label"
 screen = "confirm it is you"
 tier = "T1"
 state = "reviewed"
-note = "Label of the code field shown with the password once the account turns out to have two-step verification; it takes a recovery code too. French from the iOS app's reviewed catalog."
+note = "Label of the one field shown with the password once the account turns out to have two-step verification: it takes the authenticator app's code or one of the recovery codes. Written for this screen; the French follows the iOS app's reviewed terms."
 
 [reauth.code_prompt]
-en = "Your account uses an authenticator app. Enter the 6-digit code it shows for District AI."
-fr = "Votre compte utilise une app d'authentification. Entrez le code à 6 chiffres qu'elle affiche pour District AI."
+en = "Your account uses two-step verification. Enter the code your authenticator app shows for District AI, or one of your recovery codes."
+fr = "Votre compte utilise la vérification en deux étapes. Entrez le code que votre application d'authentification affiche pour District AI, ou l'un de vos codes de récupération."
 ctx = "body"
 screen = "confirm it is you"
 tier = "T1"
 state = "reviewed"
-note = "Over the code field, once the service asked for the second factor with the password. French from the iOS app's reviewed catalog."
+note = "Over the code field, once the service asked for the second factor with the password. Written for this screen (a recovery code works too); the French follows the iOS app's reviewed terms."
 
 [reauth.confirm_it_is_you]
 en = "Confirm it is you"

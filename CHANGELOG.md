@@ -53,9 +53,10 @@ request's; it changes if the tag lands another day.
   typed email address. A refusal says whether anything was deleted. After the deletion
   the session ends as `SignOutScope::AccountDeleted`, whose headline says the account was
   deleted, and whether a vendor is still erasing support data.
-- The fresh re-authentication both share (`ReauthStep`, `ReauthProof`): a fresh sign-in
+- The fresh re-authentication shared by both (`ReauthStep`, `ReauthProof`): a fresh sign-in
   at Google, Microsoft or Apple in the browser, or the password with the authenticator or
-  recovery code once the service asks for it. In district-auth, `ReauthAttempt` opens
+  recovery code once the service asks for it. A link with another attempt's `state` is
+  refused and the attempt keeps waiting for its own. In district-auth, `ReauthAttempt` opens
   `REAUTH_PATH` with a PKCE challenge, a `state`, the action and the SHA-256 of the
   installation id (never the id), and takes the code back only with its own `state`;
   `ReauthProvider` names the three providers.
