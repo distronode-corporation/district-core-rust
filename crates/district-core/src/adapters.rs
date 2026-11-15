@@ -7,7 +7,7 @@ use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 use district_api::{ApiClient, ApiConfig, ApiError, ConversationsQuery, TokenSource};
 use district_auth::{
     AccessClaims, AuthorizationGrant, DrainReport, ExchangeOutcome, LoginError, LoginFlow,
-    NativeAuthApi, RefreshApi, RevokeApi, SessionStore, SignOut, SignOutReport,
+    NativeAuthApi, REDIRECT_URI, RefreshApi, RevokeApi, SessionStore, SignOut, SignOutReport,
     TokenRefreshCoordinator,
 };
 use district_l10n::Locale;
@@ -49,12 +49,14 @@ use district_model::{
     PresenceRegistration, PushRegistrationResponse, RenameResponse, RoutingRule,
     VoiceStudioResponse, WorkspaceConfigResponse, WorkspaceSaveResponse,
 };
+use district_model::{Credential, MfaConfirmation, MfaEnrollment, MfaStatus, ReauthAction};
 use district_model::{
     MetaWindowResponse, SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
 };
 use tokio::sync::mpsc::UnboundedReceiver;
 use url::Url;
 
+use crate::account_security::ReauthProof;
 use crate::model::Ticket;
 use crate::number_admin::{NumberAnswer, NumberCall};
 use crate::presence::{Presence, PresenceApi, PresenceSignOut};
@@ -98,6 +100,49 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         &self,
     ) -> impl Future<Output = Result<DeviceRevokeResponse, ApiError>> + Send {
         ApiClient::revoke_all_devices(self)
+    }
+
+    fn mfa_status(&self) -> impl Future<Output = Result<MfaStatus, ApiError>> + Send {
+        ApiClient::mfa_status(self)
+    }
+
+    fn mfa_enroll(&self) -> impl Future<Output = Result<MfaEnrollment, ApiError>> + Send {
+        ApiClient::mfa_enroll(self)
+    }
+
+    fn mfa_confirm(
+        &self,
+        code: &Credential,
+    ) -> impl Future<Output = Result<MfaConfirmation, ApiError>> + Send {
+        ApiClient::mfa_confirm(self, code)
+    }
+
+    fn mfa_disable(&self) -> impl Future<Output = Result<(), ApiError>> + Send {
+        ApiClient::mfa_disable(self)
+    }
+
+    async fn reauthenticate(
+        &self,
+        action: ReauthAction,
+        proof: &ReauthProof,
+    ) -> Result<i64, ApiError> {
+        match proof {
+            ReauthProof::Provider { code, verifier } => {
+                self.native_reauth_sso(action, code, verifier.expose(), REDIRECT_URI)
+                    .await
+            }
+            ReauthProof::Password { password, code } => {
+                self.native_reauth_password(action, password, code.as_ref())
+                    .await
+            }
+        }
+    }
+
+    fn delete_account(
+        &self,
+        confirmation: &str,
+    ) -> impl Future<Output = Result<bool, ApiError>> + Send {
+        ApiClient::delete_account(self, confirmation)
     }
 
     fn conversations(

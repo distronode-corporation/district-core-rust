@@ -9,6 +9,7 @@ use district_auth::{
     AccessClaims, DrainReport, HandOffNonce, HandOffState, RevokeStatus, SignOutReport,
 };
 use district_core::Locale;
+use district_core::ReauthProof;
 use district_core::{
     Auth, CallEngine, ContactWrite, ContactWritten, DistrictApi, Effect, EffectRunner, Event,
     ExchangeFailure, HAND_OFF_CALLBACK_WAIT, InboxEvent, LiveUpdates, MediaCredential, Model,
@@ -69,6 +70,7 @@ use district_model::{
 use district_model::{
     ConversationAssignResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse,
 };
+use district_model::{Credential, MfaConfirmation, MfaEnrollment, MfaStatus, ReauthAction};
 
 use crate::support::{
     AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, monitor_credential,
@@ -125,6 +127,40 @@ impl DistrictApi for FakeApi {
     async fn revoke_all_devices(&self) -> Result<DeviceRevokeResponse, ApiError> {
         self.0.push("revoke all");
         Err(server_error())
+    }
+
+    async fn mfa_status(&self) -> Result<MfaStatus, ApiError> {
+        self.0.push("mfa status");
+        Ok(fixture("district-mfa-status.json"))
+    }
+
+    async fn mfa_enroll(&self) -> Result<MfaEnrollment, ApiError> {
+        self.0.push("mfa enroll");
+        Ok(fixture("district-mfa-enroll.json"))
+    }
+
+    async fn mfa_confirm(&self, code: &Credential) -> Result<MfaConfirmation, ApiError> {
+        self.0.push(format!("mfa confirm {}", code.expose()));
+        Ok(fixture("district-mfa-confirm.json"))
+    }
+
+    async fn mfa_disable(&self) -> Result<(), ApiError> {
+        self.0.push("mfa disable");
+        Err(server_error())
+    }
+
+    async fn reauthenticate(
+        &self,
+        action: ReauthAction,
+        proof: &ReauthProof,
+    ) -> Result<i64, ApiError> {
+        self.0.push(format!("reauth {} {proof:?}", action.wire()));
+        Ok(300)
+    }
+
+    async fn delete_account(&self, confirmation: &str) -> Result<bool, ApiError> {
+        self.0.push(format!("delete account {confirmation}"));
+        Ok(true)
     }
 
     async fn conversations(
@@ -1592,6 +1628,68 @@ async fn each_effect_calls_its_dependency_and_reports_back() {
         })
     );
     assert_eq!(
+        runner.run(Effect::LoadTwoStep { ticket }).await,
+        Some(Event::TwoStepLoaded {
+            ticket,
+            result: Ok(fixture("district-mfa-status.json")),
+        })
+    );
+    assert_eq!(
+        runner.run(Effect::StartTwoStep { ticket }).await,
+        Some(Event::TwoStepStarted {
+            ticket,
+            result: Ok(fixture("district-mfa-enroll.json")),
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::ConfirmTwoStep {
+                ticket,
+                code: Credential::new("123456"),
+            })
+            .await,
+        Some(Event::TwoStepConfirmed {
+            ticket,
+            result: Ok(fixture("district-mfa-confirm.json")),
+        })
+    );
+    assert_eq!(
+        runner.run(Effect::TurnOffTwoStep { ticket }).await,
+        Some(Event::TwoStepTurnedOff {
+            ticket,
+            result: Err(server_error()),
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::Reauthenticate {
+                ticket,
+                action: ReauthAction::DeleteAccount,
+                proof: ReauthProof::Password {
+                    password: Credential::new("pw"),
+                    code: None,
+                },
+            })
+            .await,
+        Some(Event::Reauthenticated {
+            ticket,
+            action: ReauthAction::DeleteAccount,
+            result: Ok(300),
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::DeleteAccount {
+                ticket,
+                confirmation: "ada@example.com".to_owned(),
+            })
+            .await,
+        Some(Event::AccountDeleted {
+            ticket,
+            result: Ok(true),
+        })
+    );
+    assert_eq!(
         runner
             .run(Effect::CompleteSignIn {
                 ticket,
@@ -1631,6 +1729,12 @@ async fn each_effect_calls_its_dependency_and_reports_back() {
             "devices",
             "revoke device-1",
             "revoke all",
+            "mfa status",
+            "mfa enroll",
+            "mfa confirm 123456",
+            "mfa disable",
+            "reauth delete-account Password { password: Credential(<redacted>), code: None }",
+            "delete account ada@example.com",
             "complete districtai://auth?code=c",
             "sign out",
             "cancel sign-in",

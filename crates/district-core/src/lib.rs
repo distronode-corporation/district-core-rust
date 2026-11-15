@@ -41,7 +41,10 @@
 //! - The screens of the first milestone: the overview with its finish-setup
 //!   card ([`OverviewScreen`]), the workspace switcher ([`WorkspacesState`]),
 //!   the account screen ([`AccountView`]) and the devices list
-//!   ([`DevicesScreen`]).
+//!   ([`DevicesScreen`]), and the account's own security: two-step
+//!   verification ([`TwoStepScreen`]) and deleting the account
+//!   ([`DeleteAccountScreen`]), each behind a fresh re-authentication
+//!   ([`ReauthStep`]).
 //! - The screens of the second: the inbox with its search and badges
 //!   ([`InboxScreen`]) and the form that starts a conversation
 //!   ([`ComposeScreen`]), a thread with its composer, its reply channels, its
@@ -111,6 +114,7 @@
 #![forbid(unsafe_code)]
 
 mod account;
+mod account_security;
 mod adapters;
 mod analytics;
 mod billing;
@@ -157,6 +161,11 @@ mod workflows;
 mod workspaces;
 
 pub use account::{ACCOUNT_DELETION_PATH, AccountView};
+pub use account_security::{
+    DeleteAccountEvent, DeleteAccountScreen, DeleteAccountStep, DeleteFailure, ReauthProof,
+    ReauthStep, RecoveryCodes, TwoStepChange, TwoStepEvent, TwoStepNotice, TwoStepScreen,
+    TwoStepSecret, TwoStepStep,
+};
 pub use adapters::{CodeExchange, LiveHub, NativeAuth};
 pub use analytics::{
     AnalyticsCard, AnalyticsEvent, AnalyticsReport, AnalyticsScreen, ChartBar, HistoryCard,
@@ -197,6 +206,7 @@ pub use dialer::{
     format_dial_entry, format_phone_number, home_country, national_example, read_dial_entry,
     search_countries, sorted_countries, suggested_countries,
 };
+pub use district_auth::ReauthProvider;
 /// The words the core writes and their formats, in English and Canadian French.
 pub use district_l10n as l10n;
 pub use district_l10n::Locale;

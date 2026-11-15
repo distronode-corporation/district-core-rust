@@ -146,6 +146,36 @@ pub struct Addition {
 /// this table.
 pub const DESKTOP_ONLY: &[Addition] = &[
     Addition {
+        endpoint: Endpoint::MfaStatus,
+        reason: "Two-step verification settings. The desktop apps have them; the Android app \
+                 has no screen for them yet.",
+    },
+    Addition {
+        endpoint: Endpoint::MfaEnroll,
+        reason: "Starting two-step verification, for the same reason as its status.",
+    },
+    Addition {
+        endpoint: Endpoint::MfaConfirm,
+        reason: "Confirming two-step verification, for the same reason as its status.",
+    },
+    Addition {
+        endpoint: Endpoint::MfaDisable,
+        reason: "Turning two-step verification off, for the same reason as its status.",
+    },
+    Addition {
+        endpoint: Endpoint::NativeReauthSso,
+        reason: "The fresh re-authentication before a two-step change or the account's \
+                 deletion, by a provider sign-in. The Android app has neither yet.",
+    },
+    Addition {
+        endpoint: Endpoint::NativeReauthPassword,
+        reason: "The same fresh re-authentication, by the account's password.",
+    },
+    Addition {
+        endpoint: Endpoint::DeleteAccount,
+        reason: "Deleting the account in the app, which the Android app does on the web.",
+    },
+    Addition {
         endpoint: Endpoint::HqVoiceToken,
         reason: "District HQ by voice. The desktop apps have it; the Android app has no voice \
                  mode yet.",

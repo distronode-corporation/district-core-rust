@@ -34,6 +34,7 @@
 
 #![forbid(unsafe_code)]
 
+mod account_security;
 mod analytics;
 mod auth;
 mod billing;
@@ -77,6 +78,10 @@ mod workflows;
 mod workspace;
 mod workspace_config;
 
+pub use account_security::{
+    AccountDeleteResponse, Credential, MfaConfirmation, MfaDisableResponse, MfaEnrollment,
+    MfaStatus, NativeReauthResponse, ReauthAction,
+};
 pub use analytics::{
     AnalyticsMetrics, AnalyticsRange, AnalyticsResponse, CallVolumeDelta, DIRECTION_DOWN,
     DIRECTION_FLAT, DIRECTION_UP, EngagementPoint, FunnelStage, SentimentSlice,

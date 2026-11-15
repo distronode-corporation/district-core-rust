@@ -203,6 +203,34 @@ endpoint_table! {
     /// Signs every device out, this one included.
     NativeRevokeAll => Post "/api/auth/native/revoke-all",
         workspace: None, body: Empty, retry: Never;
+    /// Whether two-step verification is on, and how many recovery codes are
+    /// left. The one two-step route that needs no fresh re-authentication.
+    MfaStatus => Get "/api/auth/mfa",
+        workspace: None, body: Empty, retry: OnceAfterRefresh;
+    /// A new authenticator secret, not on until confirmed. Needs a fresh
+    /// `2fa-change` proof, which it checks without spending. No body.
+    MfaEnroll => Post "/api/auth/mfa/enroll",
+        workspace: None, body: Empty, retry: Never;
+    /// Turns two-step verification on with a code from the authenticator:
+    /// `{totp}`. Spends the `2fa-change` proof.
+    MfaConfirm => Post "/api/auth/mfa/confirm",
+        workspace: None, body: Json, retry: Never;
+    /// Turns two-step verification off. Spends the `2fa-change` proof, which
+    /// stands in for the password, so it has no body.
+    MfaDisable => Post "/api/auth/mfa/disable",
+        workspace: None, body: Empty, retry: Never;
+    /// A fresh re-authentication from the one-time code the re-authentication
+    /// page handed back: `{action, code, codeVerifier, redirectUri}`.
+    NativeReauthSso => Post "/api/auth/native/reauth/sso",
+        workspace: None, body: Json, retry: Never;
+    /// A fresh re-authentication from the account's password, and its
+    /// authenticator code once asked for: `{action, password, code?}`.
+    NativeReauthPassword => Post "/api/auth/native/reauth/password",
+        workspace: None, body: Json, retry: Never;
+    /// Deletes the signed-in account: `{confirmation}`, its email address as
+    /// typed. Spends a `delete-account` proof.
+    DeleteAccount => Delete "/api/auth/delete-account",
+        workspace: None, body: Json, retry: Never;
     /// The account's subscription and invoices. Read only.
     StripeBilling => Get "/api/billing",
         workspace: None, body: Empty, retry: OnceAfterRefresh;

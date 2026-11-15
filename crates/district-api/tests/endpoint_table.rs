@@ -139,6 +139,12 @@ fn calls_with_side_effects_or_cost_never_repeat() {
         Endpoint::SupportRequestCreate,
         Endpoint::NativeDeviceRevoke,
         Endpoint::NativeRevokeAll,
+        Endpoint::MfaEnroll,
+        Endpoint::MfaConfirm,
+        Endpoint::MfaDisable,
+        Endpoint::NativeReauthSso,
+        Endpoint::NativeReauthPassword,
+        Endpoint::DeleteAccount,
         Endpoint::PushRegister,
         Endpoint::NumberConfigure,
         Endpoint::NumberRelease,
@@ -167,9 +173,15 @@ fn bodies_fit_their_methods() {
     for spec in ALL_ENDPOINTS {
         let name = spec.id.name();
         match spec.method {
-            // The one DELETE the service reads a body for: which document of
-            // which filing, as the Android app sends it.
-            HttpMethod::Delete if spec.id == Endpoint::RegistrationDocumentDelete => {
+            // The two DELETEs the service reads a body for: which document of
+            // which filing, as the Android app sends it, and the account's
+            // deletion, whose body is the email address the person typed.
+            HttpMethod::Delete
+                if matches!(
+                    spec.id,
+                    Endpoint::RegistrationDocumentDelete | Endpoint::DeleteAccount
+                ) =>
+            {
                 assert_eq!(spec.body, BodyKind::Json, "{name}");
             }
             HttpMethod::Get | HttpMethod::Delete => {
@@ -218,6 +230,15 @@ fn only_account_and_device_endpoints_are_unscoped() {
         Endpoint::NativeDevices,
         Endpoint::NativeDeviceRevoke,
         Endpoint::NativeRevokeAll,
+        // The account's own security: two-step verification, the fresh
+        // re-authentication before a change to it, and the account's deletion.
+        Endpoint::MfaStatus,
+        Endpoint::MfaEnroll,
+        Endpoint::MfaConfirm,
+        Endpoint::MfaDisable,
+        Endpoint::NativeReauthSso,
+        Endpoint::NativeReauthPassword,
+        Endpoint::DeleteAccount,
         Endpoint::StripeBilling,
         Endpoint::SaveSettings,
         // An account the app just created buys before it has a workspace; one

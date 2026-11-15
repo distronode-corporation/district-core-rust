@@ -59,9 +59,11 @@ use district_model::{
     WorkspaceSaveResponse,
 };
 use district_model::{
-    MetaWindowResponse, SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
+    Credential, MetaWindowResponse, MfaConfirmation, MfaEnrollment, MfaStatus, ReauthAction,
+    SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
 };
 
+use crate::account_security::ReauthProof;
 use crate::contacts::{ContactWrite, ContactWritten};
 use crate::hq_voice::{HQ_VOICE_RELEASE_TIMEOUT, HqVoiceSessionId};
 use crate::live::Notification;
@@ -102,6 +104,29 @@ pub trait DistrictApi: Send + Sync {
     fn revoke_all_devices(
         &self,
     ) -> impl Future<Output = Result<DeviceRevokeResponse, ApiError>> + Send;
+    /// Whether two-step verification is on.
+    fn mfa_status(&self) -> impl Future<Output = Result<MfaStatus, ApiError>> + Send;
+    /// Starts two-step verification: a new secret.
+    fn mfa_enroll(&self) -> impl Future<Output = Result<MfaEnrollment, ApiError>> + Send;
+    /// Turns two-step verification on with `code`.
+    fn mfa_confirm(
+        &self,
+        code: &Credential,
+    ) -> impl Future<Output = Result<MfaConfirmation, ApiError>> + Send;
+    /// Turns two-step verification off.
+    fn mfa_disable(&self) -> impl Future<Output = Result<(), ApiError>> + Send;
+    /// A fresh re-authentication for `action`. Answers the seconds the proof
+    /// stands.
+    fn reauthenticate(
+        &self,
+        action: ReauthAction,
+        proof: &ReauthProof,
+    ) -> impl Future<Output = Result<i64, ApiError>> + Send;
+    /// Deletes the account. Answers whether a vendor's erasure is pending.
+    fn delete_account(
+        &self,
+        confirmation: &str,
+    ) -> impl Future<Output = Result<bool, ApiError>> + Send;
     /// The inbox's threads.
     fn conversations(
         &self,
@@ -1078,6 +1103,38 @@ where
             Effect::RevokeAllDevices { ticket } => Event::AllDevicesRevoked {
                 ticket,
                 result: self.api.revoke_all_devices().await,
+            },
+            Effect::LoadTwoStep { ticket } => Event::TwoStepLoaded {
+                ticket,
+                result: self.api.mfa_status().await,
+            },
+            Effect::StartTwoStep { ticket } => Event::TwoStepStarted {
+                ticket,
+                result: self.api.mfa_enroll().await,
+            },
+            Effect::ConfirmTwoStep { ticket, code } => Event::TwoStepConfirmed {
+                ticket,
+                result: self.api.mfa_confirm(&code).await,
+            },
+            Effect::TurnOffTwoStep { ticket } => Event::TwoStepTurnedOff {
+                ticket,
+                result: self.api.mfa_disable().await,
+            },
+            Effect::Reauthenticate {
+                ticket,
+                action,
+                proof,
+            } => Event::Reauthenticated {
+                ticket,
+                action,
+                result: self.api.reauthenticate(action, &proof).await,
+            },
+            Effect::DeleteAccount {
+                ticket,
+                confirmation,
+            } => Event::AccountDeleted {
+                ticket,
+                result: self.api.delete_account(&confirmation).await,
             },
             Effect::OpenUrl { url } => {
                 if self.opener.open(&url).await {

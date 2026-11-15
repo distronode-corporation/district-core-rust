@@ -16,7 +16,9 @@ use url::Url;
 
 use crate::config::{ApiConfig, ConfigError};
 use crate::endpoints::{BodyKind, Endpoint, EndpointSpec, HttpMethod, RetryPolicy, WorkspaceIn};
-use crate::error::{ApiError, TransportError, TransportKind, UnauthorizedReason};
+use crate::error::{
+    ApiError, CODE_MFA_REQUIRED, TransportError, TransportKind, UnauthorizedReason,
+};
 use crate::token::{TokenError, TokenSource};
 
 /// The name of the workspace parameter, wherever it goes.
@@ -99,6 +101,15 @@ impl<S: TokenSource> ApiClient<S> {
                 } else {
                     Err(ApiError::from_failure(response).await)
                 };
+            }
+
+            // A 401 that asks for the account's second factor is the service
+            // answering, not refusing the token: a re-authentication by password
+            // on an account with two-step verification. The token is kept, and
+            // the request is not repeated.
+            let refusal = ApiError::from_failure(response).await;
+            if refusal.code() == Some(CODE_MFA_REQUIRED) {
+                return Err(refusal);
             }
 
             // Compare-and-clear: a no-op if a concurrent request already replaced

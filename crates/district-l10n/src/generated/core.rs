@@ -9,8 +9,8 @@ pub const FR_COMPLETE: bool = true;
 #[must_use]
 pub fn account_delete_account_caption(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Request deletion of your account and its data. Opens in your browser.",
-        Locale::FrCa => "Demander la suppression de votre compte et de ses données. S'ouvre dans votre navigateur.",
+        Locale::En => "Delete your account and its data for good. You confirm it is you first.",
+        Locale::FrCa => "Supprimez votre compte et ses données pour de bon. Vous confirmez d'abord qu'il s'agit bien de vous.",
     }
 }
 
@@ -29,6 +29,15 @@ pub fn account_sign_out_caption(l: Locale) -> &'static str {
     match l {
         Locale::En => "Sign out of District AI on this device.",
         Locale::FrCa => "Se déconnecter de District AI sur cet appareil.",
+    }
+}
+
+/// `account.two_step_caption`
+#[must_use]
+pub fn account_two_step_caption(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Ask for a code from an authenticator app each time you sign in.",
+        Locale::FrCa => "Demander un code d'une application d'authentification à chaque connexion.",
     }
 }
 
@@ -794,6 +803,177 @@ pub fn contacts_unnamed(l: Locale) -> &'static str {
     match l {
         Locale::En => "Unnamed contact",
         Locale::FrCa => "Contact sans nom",
+    }
+}
+
+/// `delete_account.cannot_be_undone`
+#[must_use]
+pub fn delete_account_cannot_be_undone(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This cannot be undone.",
+        Locale::FrCa => "Cette action est irréversible.",
+    }
+}
+
+/// `delete_account.confirm_intro`
+#[must_use]
+pub fn delete_account_confirm_intro(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sign in again the way you usually do. You then have a few minutes to delete the account.",
+        Locale::FrCa => "Connectez-vous de nouveau comme d'habitude. Vous aurez ensuite quelques minutes pour supprimer le compte.",
+    }
+}
+
+/// `delete_account.deleted`
+#[must_use]
+pub fn delete_account_deleted(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your account was deleted.",
+        Locale::FrCa => "Votre compte a été supprimé.",
+    }
+}
+
+/// `delete_account.deleted_erasure_pending`
+#[must_use]
+pub fn delete_account_deleted_erasure_pending(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your account was deleted. Support data held by a provider is still being erased.",
+        Locale::FrCa => "Votre compte a été supprimé. Des données de soutien conservées par un fournisseur sont encore en cours d'effacement.",
+    }
+}
+
+/// `delete_account.deleting`
+#[must_use]
+pub fn delete_account_deleting(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Deleting…",
+        Locale::FrCa => "Suppression…",
+    }
+}
+
+/// `delete_account.email_label`
+#[must_use]
+pub fn delete_account_email_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your email address",
+        Locale::FrCa => "Votre adresse courriel",
+    }
+}
+
+/// `delete_account.error_email_mismatch`
+#[must_use]
+pub fn delete_account_error_email_mismatch(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That is not this account's email address. Type it exactly, then try again. Nothing was deleted.",
+        Locale::FrCa => "Ce n'est pas l'adresse courriel de ce compte. Tapez-la exactement, puis réessayez. Rien n'a été supprimé.",
+    }
+}
+
+/// `delete_account.error_offline_outcome_unknown`
+#[must_use]
+pub fn delete_account_error_offline_outcome_unknown(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The connection failed before we heard back, so we cannot tell whether your account was deleted. Check your connection, then close this and sign in again to check.",
+        Locale::FrCa => "La connexion a échoué avant que nous recevions une réponse, et nous ne savons pas si votre compte a été supprimé. Vérifiez votre connexion, puis fermez cette fenêtre et reconnectez-vous pour vérifier.",
+    }
+}
+
+/// `delete_account.error_outcome_unknown`
+#[must_use]
+pub fn delete_account_error_outcome_unknown(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We could not read the answer, so we cannot tell whether your account was deleted. Close this and sign in again to check.",
+        Locale::FrCa => "Nous n'avons pas pu lire la réponse, et nous ne savons pas si votre compte a été supprimé. Fermez cette fenêtre et reconnectez-vous pour vérifier.",
+    }
+}
+
+/// `delete_account.error_proof_expired`
+#[must_use]
+pub fn delete_account_error_proof_expired(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your confirmation ran out before the account was deleted. Confirm it is you again.",
+        Locale::FrCa => "Votre confirmation a expiré avant la suppression du compte. Confirmez de nouveau qu'il s'agit bien de vous.",
+    }
+}
+
+/// `delete_account.error_try_again_shortly`
+#[must_use]
+pub fn delete_account_error_try_again_shortly(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Something went wrong on our side. Try again in a moment.",
+        Locale::FrCa => "Un problème est survenu de notre côté. Réessayez dans un instant.",
+    }
+}
+
+/// `delete_account.last_step`
+#[must_use]
+pub fn delete_account_last_step(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Last step",
+        Locale::FrCa => "Dernière étape",
+    }
+}
+
+/// `delete_account.not_deleted`
+#[must_use]
+pub fn delete_account_not_deleted(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your account was not deleted.",
+        Locale::FrCa => "Votre compte n'a pas été supprimé.",
+    }
+}
+
+/// `delete_account.submit`
+#[must_use]
+pub fn delete_account_submit(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete my account",
+        Locale::FrCa => "Supprimer mon compte",
+    }
+}
+
+/// `delete_account.subscriptions_cancelled`
+#[must_use]
+pub fn delete_account_subscriptions_cancelled(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The subscriptions of the workspaces you own are cancelled at once.",
+        Locale::FrCa => "Les abonnements des espaces de travail dont vous êtes propriétaire sont annulés sur-le-champ.",
+    }
+}
+
+/// `delete_account.title`
+#[must_use]
+pub fn delete_account_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Delete your account",
+        Locale::FrCa => "Supprimer votre compte",
+    }
+}
+
+/// `delete_account.type_email`
+#[must_use]
+pub fn delete_account_type_email(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Type your account's email address to confirm. Nothing is deleted until you click Delete my account.",
+        Locale::FrCa => "Tapez l'adresse courriel de votre compte pour confirmer. Rien n'est supprimé avant que vous cliquiez sur Supprimer mon compte.",
+    }
+}
+
+/// `delete_account.what_is_deleted`
+#[must_use]
+pub fn delete_account_what_is_deleted(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your user profile, your settings and all workspaces where you are the owner are deleted for good.",
+        Locale::FrCa => "Votre profil d'utilisateur, vos paramètres et tous les espaces de travail dont vous êtes propriétaire sont supprimés pour de bon.",
+    }
+}
+
+/// `delete_account.what_is_kept`
+#[must_use]
+pub fn delete_account_what_is_kept(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Workspaces you belong to but do not own are kept. You are removed from them, and their owners keep their data.",
+        Locale::FrCa => "Les espaces de travail dont vous êtes membre sans en être propriétaire sont conservés. Vous n'en faites plus partie, et leurs propriétaires gardent leurs données.",
     }
 }
 
@@ -3263,6 +3443,159 @@ pub fn purchase_term_monthly(l: Locale) -> &'static str {
     }
 }
 
+/// `reauth.back`
+#[must_use]
+pub fn reauth_back(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Back",
+        Locale::FrCa => "Retour",
+    }
+}
+
+/// `reauth.code_label`
+#[must_use]
+pub fn reauth_code_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "6-digit code",
+        Locale::FrCa => "Code à 6 chiffres",
+    }
+}
+
+/// `reauth.code_prompt`
+#[must_use]
+pub fn reauth_code_prompt(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your account uses an authenticator app. Enter the 6-digit code it shows for District AI.",
+        Locale::FrCa => "Votre compte utilise une app d'authentification. Entrez le code à 6 chiffres qu'elle affiche pour District AI.",
+    }
+}
+
+/// `reauth.confirm_it_is_you`
+#[must_use]
+pub fn reauth_confirm_it_is_you(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Confirm it is you",
+        Locale::FrCa => "Confirmez qu'il s'agit bien de vous",
+    }
+}
+
+/// `reauth.continue`
+#[must_use]
+pub fn reauth_continue(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Continue",
+        Locale::FrCa => "Continuer",
+    }
+}
+
+/// `reauth.continue_with`
+#[must_use]
+pub fn reauth_continue_with(l: Locale, provider: &str) -> String {
+    match l {
+        Locale::En => format!("Continue with {provider}"),
+        Locale::FrCa => format!("Continuer avec {provider}"),
+    }
+}
+
+/// `reauth.error_browser_did_not_open`
+#[must_use]
+pub fn reauth_error_browser_did_not_open(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The sign-in window could not open. Try again.",
+        Locale::FrCa => "La fenêtre de connexion n'a pas pu s'ouvrir. Réessayez.",
+    }
+}
+
+/// `reauth.error_no_password`
+#[must_use]
+pub fn reauth_error_no_password(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This account has no password. Confirm it is you with Google, Microsoft or Apple, whichever you sign in with.",
+        Locale::FrCa => "Ce compte n'a aucun mot de passe. Confirmez qu'il s'agit bien de vous avec Google, Microsoft ou Apple, selon votre mode de connexion.",
+    }
+}
+
+/// `reauth.error_not_confirmed`
+#[must_use]
+pub fn reauth_error_not_confirmed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We could not confirm it is you right now. Try again in a moment.",
+        Locale::FrCa => "Nous n'avons pas pu confirmer qu'il s'agit bien de vous pour l'instant. Réessayez dans un instant.",
+    }
+}
+
+/// `reauth.error_offline_not_confirmed`
+#[must_use]
+pub fn reauth_error_offline_not_confirmed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "You appear to be offline, so nothing was confirmed. Check your connection and try again.",
+        Locale::FrCa => "Vous semblez être hors ligne, et rien n'a été confirmé. Vérifiez votre connexion et réessayez.",
+    }
+}
+
+/// `reauth.error_sign_in_not_verified`
+#[must_use]
+pub fn reauth_error_sign_in_not_verified(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That sign-in could not be verified, so nothing was confirmed. Try again.",
+        Locale::FrCa => "Cette connexion n'a pas pu être vérifiée, et rien n'a été confirmé. Réessayez.",
+    }
+}
+
+/// `reauth.error_too_many_attempts`
+#[must_use]
+pub fn reauth_error_too_many_attempts(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Too many attempts. Wait a minute, then try again.",
+        Locale::FrCa => "Trop de tentatives. Attendez une minute, puis réessayez.",
+    }
+}
+
+/// `reauth.error_wrong_account`
+#[must_use]
+pub fn reauth_error_wrong_account(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We could not confirm it is you. In the sign-in window, use the account this app is signed in to, then try again.",
+        Locale::FrCa => "Nous n'avons pas pu confirmer qu'il s'agit bien de vous. Dans la fenêtre de connexion, utilisez le compte connecté à cette application, puis réessayez.",
+    }
+}
+
+/// `reauth.error_wrong_code`
+#[must_use]
+pub fn reauth_error_wrong_code(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That code is not valid, or it has already been used. Enter the newest code.",
+        Locale::FrCa => "Ce code n'est pas valide, ou il a déjà été utilisé. Entrez le code le plus récent.",
+    }
+}
+
+/// `reauth.error_wrong_password`
+#[must_use]
+pub fn reauth_error_wrong_password(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That password is not correct. Check it and try again.",
+        Locale::FrCa => "Ce mot de passe n'est pas le bon. Vérifiez-le et réessayez.",
+    }
+}
+
+/// `reauth.password_label`
+#[must_use]
+pub fn reauth_password_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your password",
+        Locale::FrCa => "Votre mot de passe",
+    }
+}
+
+/// `reauth.use_password`
+#[must_use]
+pub fn reauth_use_password(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Use my password",
+        Locale::FrCa => "Utiliser mon mot de passe",
+    }
+}
+
 /// `ringing.answered_elsewhere`
 #[must_use]
 pub fn ringing_answered_elsewhere(l: Locale) -> &'static str {
@@ -4970,6 +5303,357 @@ pub fn transcript_waiting(l: Locale) -> &'static str {
     match l {
         Locale::En => "Nothing has been said yet.",
         Locale::FrCa => "Rien n'a encore été dit.",
+    }
+}
+
+/// `two_step.code_label`
+#[must_use]
+pub fn two_step_code_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "6-digit code",
+        Locale::FrCa => "Code à 6 chiffres",
+    }
+}
+
+/// `two_step.code_prompt`
+#[must_use]
+pub fn two_step_code_prompt(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Then enter the 6-digit code your authenticator app shows for District AI.",
+        Locale::FrCa => "Entrez ensuite le code à 6 chiffres que votre application d'authentification affiche pour District AI.",
+    }
+}
+
+/// `two_step.codes_done`
+#[must_use]
+pub fn two_step_codes_done(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "I have saved them",
+        Locale::FrCa => "Je les ai enregistrés",
+    }
+}
+
+/// `two_step.codes_left_many`
+#[must_use]
+pub fn two_step_codes_left_many(l: Locale, count: i64) -> String {
+    match l {
+        Locale::En => format!("{} recovery codes left.", crate::format::integer(l, count)),
+        Locale::FrCa => format!("{} codes de récupération restants.", crate::format::integer(l, count)),
+    }
+}
+
+/// `two_step.codes_left_one`
+#[must_use]
+pub fn two_step_codes_left_one(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "1 recovery code left.",
+        Locale::FrCa => "1 code de récupération restant.",
+    }
+}
+
+/// `two_step.codes_none`
+#[must_use]
+pub fn two_step_codes_none(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No recovery codes are left. Turn two-step verification off and on again to get new ones.",
+        Locale::FrCa => "Il ne reste aucun code de récupération. Désactivez puis réactivez la vérification en deux étapes pour en obtenir de nouveaux.",
+    }
+}
+
+/// `two_step.codes_title`
+#[must_use]
+pub fn two_step_codes_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Save your recovery codes",
+        Locale::FrCa => "Enregistrez vos codes de récupération",
+    }
+}
+
+/// `two_step.codes_warning`
+#[must_use]
+pub fn two_step_codes_warning(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Each code signs you in once if you lose your authenticator app. Save them somewhere safe now. They will not be shown again.",
+        Locale::FrCa => "Chaque code permet une seule connexion si vous perdez votre application d'authentification. Enregistrez-les maintenant en lieu sûr. Ils ne seront plus affichés.",
+    }
+}
+
+/// `two_step.confirm_button`
+#[must_use]
+pub fn two_step_confirm_button(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Turn on two-step verification",
+        Locale::FrCa => "Activer la vérification en deux étapes",
+    }
+}
+
+/// `two_step.copied`
+#[must_use]
+pub fn two_step_copied(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Copied",
+        Locale::FrCa => "Copié",
+    }
+}
+
+/// `two_step.copy_all`
+#[must_use]
+pub fn two_step_copy_all(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Copy all",
+        Locale::FrCa => "Tout copier",
+    }
+}
+
+/// `two_step.copy_key`
+#[must_use]
+pub fn two_step_copy_key(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Copy key",
+        Locale::FrCa => "Copier la clé",
+    }
+}
+
+/// `two_step.error_load`
+#[must_use]
+pub fn two_step_error_load(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Two-step verification could not be read right now. Try again in a moment.",
+        Locale::FrCa => "Impossible de lire l'état de la vérification en deux étapes pour l'instant. Réessayez dans un moment.",
+    }
+}
+
+/// `two_step.error_offline_load`
+#[must_use]
+pub fn two_step_error_offline_load(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "You appear to be offline. Check your connection and try again.",
+        Locale::FrCa => "Vous semblez être hors ligne. Vérifiez votre connexion et réessayez.",
+    }
+}
+
+/// `two_step.error_offline_nothing_changed`
+#[must_use]
+pub fn two_step_error_offline_nothing_changed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "You appear to be offline, so nothing was changed. Check your connection and try again.",
+        Locale::FrCa => "Vous semblez être hors ligne, donc rien n'a été modifié. Vérifiez votre connexion et réessayez.",
+    }
+}
+
+/// `two_step.error_outcome_unknown_off`
+#[must_use]
+pub fn two_step_error_outcome_unknown_off(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We did not hear back, so we cannot tell whether two-step verification was turned off. This screen now shows what is on.",
+        Locale::FrCa => "Nous n'avons pas reçu de réponse et ne savons pas si la vérification en deux étapes a été désactivée. Cet écran affiche maintenant son état.",
+    }
+}
+
+/// `two_step.error_outcome_unknown_on`
+#[must_use]
+pub fn two_step_error_outcome_unknown_on(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We did not hear back, so we cannot tell whether two-step verification was turned on. This screen now shows what is on. If it is on, turn it off and on again to get recovery codes you can save.",
+        Locale::FrCa => "Nous n'avons pas reçu de réponse et ne savons pas si la vérification en deux étapes a été activée. Cet écran affiche maintenant son état. Si elle est activée, désactivez-la puis réactivez-la pour obtenir des codes de récupération à enregistrer.",
+    }
+}
+
+/// `two_step.error_proof_expired`
+#[must_use]
+pub fn two_step_error_proof_expired(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your confirmation ran out before the change was made. Confirm it is you again.",
+        Locale::FrCa => "Votre confirmation a expiré avant que la modification soit faite. Confirmez de nouveau qu'il s'agit bien de vous.",
+    }
+}
+
+/// `two_step.error_try_again`
+#[must_use]
+pub fn two_step_error_try_again(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Something went wrong on our side. Nothing was changed. Try again in a moment.",
+        Locale::FrCa => "Un problème est survenu de notre côté. Rien n'a été modifié. Réessayez dans un moment.",
+    }
+}
+
+/// `two_step.key_label`
+#[must_use]
+pub fn two_step_key_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Key",
+        Locale::FrCa => "Clé",
+    }
+}
+
+/// `two_step.no_password_note`
+#[must_use]
+pub fn two_step_no_password_note(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This account has no password, so confirm it is you with Google, Microsoft or Apple to turn this off.",
+        Locale::FrCa => "Ce compte n'a pas de mot de passe. Pour désactiver cette option, confirmez qu'il s'agit bien de vous avec Google, Microsoft ou Apple.",
+    }
+}
+
+/// `two_step.off_explain`
+#[must_use]
+pub fn two_step_off_explain(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "When it is on, signing in also asks for a 6-digit code from an authenticator app, so your password alone is not enough.",
+        Locale::FrCa => "Lorsqu'elle est activée, la connexion demande aussi un code à 6 chiffres d'une application d'authentification, et votre mot de passe seul ne suffit plus.",
+    }
+}
+
+/// `two_step.on_since`
+#[must_use]
+pub fn two_step_on_since(l: Locale, date: &str) -> String {
+    match l {
+        Locale::En => format!("On since {date}."),
+        Locale::FrCa => format!("Activée depuis le {date}."),
+    }
+}
+
+/// `two_step.open_authenticator`
+#[must_use]
+pub fn two_step_open_authenticator(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Open in an authenticator app",
+        Locale::FrCa => "Ouvrir dans une application d'authentification",
+    }
+}
+
+/// `two_step.open_failed`
+#[must_use]
+pub fn two_step_open_failed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "No app on this device opened it. Scan the QR code from another device, or enter the key by hand.",
+        Locale::FrCa => "Aucune application de cet appareil ne l'a ouvert. Balayez le code QR depuis un autre appareil, ou entrez la clé à la main.",
+    }
+}
+
+/// `two_step.qr_label`
+#[must_use]
+pub fn two_step_qr_label(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "QR code for your authenticator app",
+        Locale::FrCa => "Code QR pour votre application d'authentification",
+    }
+}
+
+/// `two_step.qr_unreadable`
+#[must_use]
+pub fn two_step_qr_unreadable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "The QR code could not be shown. Enter the key by hand instead.",
+        Locale::FrCa => "Le code QR n'a pas pu être affiché. Entrez plutôt la clé à la main.",
+    }
+}
+
+/// `two_step.reauth_intro_off`
+#[must_use]
+pub fn two_step_reauth_intro_off(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sign in again the way you usually do. Two-step verification turns off as soon as you do.",
+        Locale::FrCa => "Connectez-vous de nouveau comme d'habitude. La vérification en deux étapes est désactivée dès que c'est fait.",
+    }
+}
+
+/// `two_step.reauth_intro_on`
+#[must_use]
+pub fn two_step_reauth_intro_on(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sign in again the way you usually do. You then add District AI to your authenticator app.",
+        Locale::FrCa => "Connectez-vous de nouveau comme d'habitude. Vous ajouterez ensuite District AI à votre application d'authentification.",
+    }
+}
+
+/// `two_step.retry`
+#[must_use]
+pub fn two_step_retry(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Try again",
+        Locale::FrCa => "Réessayer",
+    }
+}
+
+/// `two_step.scan_intro`
+#[must_use]
+pub fn two_step_scan_intro(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Scan this QR code with your authenticator app, or enter the key below by hand.",
+        Locale::FrCa => "Balayez ce code QR avec votre application d'authentification, ou entrez à la main la clé ci-dessous.",
+    }
+}
+
+/// `two_step.scan_title`
+#[must_use]
+pub fn two_step_scan_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Add District AI to your authenticator app",
+        Locale::FrCa => "Ajoutez District AI à votre application d'authentification",
+    }
+}
+
+/// `two_step.status_off`
+#[must_use]
+pub fn two_step_status_off(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Off",
+        Locale::FrCa => "Désactivée",
+    }
+}
+
+/// `two_step.status_on`
+#[must_use]
+pub fn two_step_status_on(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "On",
+        Locale::FrCa => "Activée",
+    }
+}
+
+/// `two_step.title`
+#[must_use]
+pub fn two_step_title(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Two-step verification",
+        Locale::FrCa => "Vérification en deux étapes",
+    }
+}
+
+/// `two_step.turn_off`
+#[must_use]
+pub fn two_step_turn_off(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Turn off",
+        Locale::FrCa => "Désactiver",
+    }
+}
+
+/// `two_step.turn_on`
+#[must_use]
+pub fn two_step_turn_on(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Turn on",
+        Locale::FrCa => "Activer",
+    }
+}
+
+/// `two_step.turned_off`
+#[must_use]
+pub fn two_step_turned_off(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Two-step verification is off.",
+        Locale::FrCa => "La vérification en deux étapes est désactivée.",
+    }
+}
+
+/// `two_step.turned_on`
+#[must_use]
+pub fn two_step_turned_on(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Two-step verification is on.",
+        Locale::FrCa => "La vérification en deux étapes est activée.",
     }
 }
 

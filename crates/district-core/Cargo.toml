@@ -10,6 +10,9 @@ authors.workspace = true
 publish.workspace = true
 
 [dependencies]
+# Reads the QR code the service draws for a new two-step secret, a PNG in a
+# data URL.
+base64 = { workspace = true }
 district-api = { workspace = true }
 district-auth = { workspace = true }
 district-l10n = { workspace = true }

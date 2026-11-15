@@ -17,6 +17,67 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [13.0.0] - 2026-11-15
+
+Two-step verification and deleting the account, in the app, each behind a fresh
+re-authentication: the service's routes for both, the browser leg of the
+re-authentication, and the screens' state. A major version because `Event`, `Effect`,
+`Endpoint`, `Route`, `SignOutScope` and `SignedIn` gain variants and fields,
+`DistrictApi` gains six methods, and `Event::DeleteAccount` is gone. The date is the pull
+request's; it changes if the tag lands another day.
+
+### Upgrading from 12.0.x
+
+- `Event::DeleteAccount`, which opened the web page, is gone: the account screen's
+  deletion row navigates to `Route::DeleteAccount`. `ACCOUNT_DELETION_PATH` stays, as the
+  data-deletion address the store listings name.
+- A `match` with no wildcard arm on `Event`, `Effect`, `Endpoint`, `Route` or
+  `SignOutScope` stops compiling: handle the new variants below. An app that runs effects
+  with `EffectRunner` over `ApiClient` needs no code for the new effects.
+- A type that implements `DistrictApi` itself (a test fake) adds `mfa_status`,
+  `mfa_enroll`, `mfa_confirm`, `mfa_disable`, `reauthenticate` and `delete_account`.
+- A `districtai://auth` link that arrives while signed in now goes to the
+  re-authentication under way; forward it with `Event::from_link` as before.
+
+### Added
+
+- Two-step verification (`Route::TwoStep`, `TwoStepScreen`, `TwoStepEvent`): whether it is
+  on, since when and how many recovery codes are left; turning it on (a fresh
+  re-authentication, then the new secret as a QR code and a key, the authenticator's
+  first code, and the recovery codes shown once); and turning it off. A confirm or a
+  turn-off whose answer is lost says it cannot tell and reads the status again. An account
+  with no password turns it off after a provider sign-in. There is no route that makes
+  new recovery codes; the screen says to turn it off and on again for them.
+- Deleting the account in the app (`Route::DeleteAccount`, `DeleteAccountScreen`,
+  `DeleteAccountEvent`): what is deleted and kept, a fresh re-authentication, then the
+  typed email address. A refusal says whether anything was deleted. After the deletion
+  the session ends as `SignOutScope::AccountDeleted`, whose headline says the account was
+  deleted, and whether a vendor is still erasing support data.
+- The fresh re-authentication both share (`ReauthStep`, `ReauthProof`): a fresh sign-in
+  at Google, Microsoft or Apple in the browser, or the password with the authenticator or
+  recovery code once the service asks for it. In district-auth, `ReauthAttempt` opens
+  `REAUTH_PATH` with a PKCE challenge, a `state`, the action and the SHA-256 of the
+  installation id (never the id), and takes the code back only with its own `state`;
+  `ReauthProvider` names the three providers.
+- district-api: `mfa_status`, `mfa_enroll`, `mfa_confirm`, `mfa_disable`,
+  `native_reauth_sso`, `native_reauth_password` and `delete_account`, with their
+  `Endpoint`s (all desktop-only: the Android app has neither feature). A 401 whose code is
+  `MFA_REQUIRED` is the service asking for the second factor, not refusing the session:
+  the client keeps the token, does not repeat the request, and answers it as an
+  `ApiError::Envelope` with status 401 (`CODE_MFA_REQUIRED`).
+- district-model: `MfaStatus`, `MfaEnrollment`, `MfaConfirmation`, `MfaDisableResponse`,
+  `NativeReauthResponse`, `AccountDeleteResponse`, `ReauthAction` and `Credential`, held
+  to the server's six fixtures, which move from excluded to implemented. The secret, the
+  recovery codes and every `Credential` are redacted in `Debug`.
+- The screens' words in English and Canadian French (`two_step.*`, `delete_account.*`,
+  `reauth.*`, `account.two_step_caption`), the iOS app's reviewed words, with two adapted
+  for a desktop (click for tap, « paramètres » for « réglages »).
+
+### Changed
+
+- `account.delete_account_caption` says the person confirms it is them first, rather than
+  that a page opens in the browser.
+
 ## [12.0.0] - 2026-11-08
 
 A timeline message says which of its attachments are files, and the fixtures move to the
@@ -439,7 +500,7 @@ fields, and `SendMessageRequest` gains three fields.
   `messaging_apps_managed`) and two workflow reasons (`automated_sender`, `loop_paused`),
   the disposition `info` as « Renseignements », and message delivery labels for `handled`
   (« Traité ») and `read` (« Lu »).
-- `live_changed` says « réglages » as the service, the website and core-swift do (Sean's
+- `live_changed` says « réglages » as the service, the website and core-swift do (the
   French sign-off): the workspace's settings, not the OS Settings app. The entry records that
   reason as `os_word_ok`, which frcheck's OS-WORD now honours (`tools/l10n/` vendored from the
   server's 2980456), and the catalog is signed off for 8.0.0 (`i18n/fr-CA/signoff.json`).
@@ -547,7 +608,7 @@ Opt-in crash reports for the desktop apps, in a new crate. A minor version. Repo
 until the user says yes (the apps ask once, at first start), and nothing is set up or sent
 without a DSN and that consent. A report holds what symbolicates a stripped build and
 nothing that names the user or the machine. Nothing an app calls or implements changes,
-and an app that does not depend on the new crate builds exactly what it did. GitLab #230.
+and an app that does not depend on the new crate builds exactly what it did.
 
 ### Added
 
