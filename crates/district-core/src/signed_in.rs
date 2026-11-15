@@ -436,9 +436,9 @@ impl SignedIn {
             return Next::Stay(self.refresh_two_step(tickets));
         }
         // The deletion screen reads nothing, and starting it again would drop
-        // a re-authentication under way.
+        // a re-authentication under way: only the live sockets are seen to.
         if self.route == Route::DeleteAccount {
-            return stay();
+            return Next::Stay(self.rewatch(tickets));
         }
         let mut effects = self.rewatch(tickets);
         let ready = matches!(self.workspaces, WorkspacesState::Ready(_));
