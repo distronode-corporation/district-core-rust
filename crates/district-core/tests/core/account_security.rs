@@ -1685,3 +1685,12 @@ fn opening_a_screen_again_drops_the_change_under_way() {
         DeleteAccountStep::Explain(ReauthStep::Choose)
     );
 }
+
+#[test]
+fn a_refresh_on_the_deletion_screen_keeps_its_reauthentication() {
+    let mut model = deletion_at_password();
+    let effects = delete_submit(&mut model, "pw", None);
+    assert!(model.update(Event::Refresh).is_empty());
+    model.update(reauthenticated(&effects, Ok(300)));
+    assert_eq!(delete(&model).step, DeleteAccountStep::Confirm);
+}

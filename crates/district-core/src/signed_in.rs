@@ -435,6 +435,11 @@ impl SignedIn {
         if self.route == Route::TwoStep {
             return Next::Stay(self.refresh_two_step(tickets));
         }
+        // The deletion screen reads nothing, and starting it again would drop
+        // a re-authentication under way.
+        if self.route == Route::DeleteAccount {
+            return stay();
+        }
         let mut effects = self.rewatch(tickets);
         let ready = matches!(self.workspaces, WorkspacesState::Ready(_));
         if !ready || self.route == Route::Overview {
