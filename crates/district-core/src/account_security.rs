@@ -403,13 +403,22 @@ impl SignedIn {
         if self.keeps_two_step(tickets) {
             return Vec::new();
         }
+        // A fresh screen has no change under way: one still waiting is
+        // dropped with the screen it belonged to, even on a second visit to the
+        // screen that is showing.
+        tickets.cancel(Slot::Reauth);
+        tickets.cancel(Slot::TwoStepWrite);
+        self.reauth = None;
         self.two_step = TwoStepScreen::default();
         self.load_two_step(tickets)
     }
 
     /// Opens the deletion screen afresh. A deletion still on its way keeps it
     /// busy, so its answer lands on the new visit; nothing else does.
-    pub(crate) fn enter_delete_account(&mut self, tickets: &Tickets) {
+    pub(crate) fn enter_delete_account(&mut self, tickets: &mut Tickets) {
+        // A re-authentication under way belonged to the screen being replaced.
+        tickets.cancel(Slot::Reauth);
+        self.reauth = None;
         self.delete_account = DeleteAccountScreen {
             busy: tickets.awaiting(Slot::AccountDelete),
             ..DeleteAccountScreen::default()

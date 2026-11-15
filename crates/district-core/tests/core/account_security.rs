@@ -1657,3 +1657,31 @@ fn leaving_the_deletion_screen_during_a_reauthentication_leaves_it_usable() {
         DeleteAccountStep::Explain(ReauthStep::Password { needs_code: false })
     );
 }
+
+#[test]
+fn opening_a_screen_again_drops_the_change_under_way() {
+    let mut model = at_password(TwoStepChange::TurnOn);
+    let effects = submit(&mut model, "pw", None);
+    let effects_again = model.update(Event::Navigate(Route::TwoStep));
+    assert!(matches!(
+        effects_again.as_slice(),
+        [Effect::LoadTwoStep { .. }]
+    ));
+    // The answer of the dropped re-authentication starts no change.
+    assert!(model.update(reauthenticated(&effects, Ok(300))).is_empty());
+
+    let mut model = opened_deletion();
+    let effects = model.update(Event::AccountDeletion(DeleteAccountEvent::UseProvider(
+        ReauthProvider::Google,
+    )));
+    model.update(Event::Navigate(Route::DeleteAccount));
+    assert!(model.update(answer(&effects, "c")).is_empty());
+    let mut model = deletion_at_password();
+    let effects = delete_submit(&mut model, "pw", None);
+    model.update(Event::Navigate(Route::DeleteAccount));
+    model.update(reauthenticated(&effects, Ok(300)));
+    assert_eq!(
+        delete(&model).step,
+        DeleteAccountStep::Explain(ReauthStep::Choose)
+    );
+}
