@@ -396,7 +396,6 @@ pub enum DeleteAccountEvent {
 // ── The signed-in state's part ─────────────────────────────────────────────
 
 impl SignedIn {
-    /// Opens the two-step screen afresh and reads the status.
     /// Opens the two-step screen and reads the status, unless it holds
     /// recovery codes not yet saved (a confirm that landed while the screen was
     /// left), which it shows first.
@@ -886,10 +885,18 @@ impl SignedIn {
         }]
     }
 
+    /// This attempt's own answer is being checked: busy, and any warning about
+    /// a stray link before it is gone.
     fn set_reauth_busy(&mut self, action: ReauthAction) {
         match action {
-            ReauthAction::TwoStepChange => self.two_step.busy = true,
-            ReauthAction::DeleteAccount => self.delete_account.busy = true,
+            ReauthAction::TwoStepChange => {
+                self.two_step.busy = true;
+                self.two_step.failure = None;
+            }
+            ReauthAction::DeleteAccount => {
+                self.delete_account.busy = true;
+                self.delete_account.failure = None;
+            }
         }
     }
 

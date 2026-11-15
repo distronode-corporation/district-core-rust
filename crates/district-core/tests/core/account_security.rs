@@ -774,6 +774,11 @@ fn only_this_attempts_answer_is_spent() {
     );
     assert_eq!(model.update(answer(&second, "c")).len(), 1);
     assert!(two_step(&model).busy);
+    assert_eq!(
+        two_step(&model).failure,
+        None,
+        "the stray link's warning goes"
+    );
 
     // This attempt's own answer without a code spends it.
     let mut model = at_overview(status(false));
@@ -1362,6 +1367,7 @@ fn a_refused_browser_answer_on_the_deletion_screen_says_so() {
     );
     // A forged link does not cancel the attempt: its own answer still works.
     assert_eq!(model.update(answer(&effects, "c")).len(), 1);
+    assert_eq!(delete(&model).failure, None);
 }
 
 #[test]
@@ -1587,6 +1593,15 @@ fn a_confirm_sent_before_leaving_still_shows_its_recovery_codes() {
         ticket,
         result: Ok(fixture("district-mfa-confirm.json")),
     });
+    // The same answer twice is taken once.
+    assert!(
+        model
+            .update(Event::TwoStepConfirmed {
+                ticket,
+                result: Ok(fixture("district-mfa-confirm.json")),
+            })
+            .is_empty()
+    );
     // Coming back shows the codes, the service's only showing of them.
     assert!(model.update(Event::Navigate(Route::TwoStep)).is_empty());
     assert!(matches!(
