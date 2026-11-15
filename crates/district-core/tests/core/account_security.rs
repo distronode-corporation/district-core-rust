@@ -1528,3 +1528,29 @@ fn a_code_this_build_does_not_know_reads_as_the_service_wrote_it() {
         })
     );
 }
+
+#[test]
+fn a_start_refused_after_a_provider_sign_in_goes_back_to_the_ways_to_confirm() {
+    let mut model = at_overview(status(false));
+    model.update(Event::TwoStep(TwoStepEvent::Begin(TwoStepChange::TurnOn)));
+    let effects = model.update(Event::TwoStep(TwoStepEvent::UseProvider(
+        ReauthProvider::Google,
+    )));
+    let spent = model.update(answer(&effects, "c"));
+    let effects = model.update(reauthenticated(&spent, Ok(300)));
+    model.update(Event::TwoStepStarted {
+        ticket: last_ticket(&effects),
+        result: Err(server_error()),
+    });
+    assert_eq!(
+        two_step(&model).step,
+        TwoStepStep::Reauth {
+            change: TwoStepChange::TurnOn,
+            step: ReauthStep::Choose
+        }
+    );
+    assert_eq!(
+        two_step(&model).failure.as_deref(),
+        Some(en::TWO_STEP_ERROR_TRY_AGAIN)
+    );
+}

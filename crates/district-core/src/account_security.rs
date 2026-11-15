@@ -861,27 +861,47 @@ impl SignedIn {
     /// The re-authentication for `action` did not stand: `message`, and back
     /// to the ways to confirm when the browser was the way.
     fn reauth_refused(&mut self, action: ReauthAction, message: String) {
+        // The browser's attempt is over; the password step stays as it was.
+        let in_browser = self.reauth_in_browser(action);
         match action {
             ReauthAction::TwoStepChange => {
-                let screen = &mut self.two_step;
-                screen.busy = false;
-                if let TwoStepStep::Reauth { change, step } = screen.step.clone() {
-                    screen.step = TwoStepStep::Reauth {
-                        change,
-                        step: after_refusal(step),
-                    };
+                self.two_step.busy = false;
+                if in_browser {
+                    self.set_two_step_reauth(ReauthStep::Choose);
                 }
-                screen.failure = Some(message);
+                self.two_step.failure = Some(message);
             }
             ReauthAction::DeleteAccount => {
-                let screen = &mut self.delete_account;
-                screen.busy = false;
-                if let DeleteAccountStep::Explain(step) = screen.step {
-                    screen.step = DeleteAccountStep::Explain(after_refusal(step));
+                self.delete_account.busy = false;
+                if in_browser {
+                    self.delete_account.step = DeleteAccountStep::Explain(ReauthStep::Choose);
                 }
-                screen.failure = Some(DeleteFailure::plain(message));
+                self.delete_account.failure = Some(DeleteFailure::plain(message));
             }
         }
+    }
+
+    /// The change the two-step screen's re-authentication is for. Only ever
+    /// asked while it is on that step, which no click can leave while busy.
+    fn reauth_change(&self) -> TwoStepChange {
+        if matches!(
+            self.two_step.step,
+            TwoStepStep::Reauth {
+                change: TwoStepChange::TurnOn,
+                ..
+            }
+        ) {
+            TwoStepChange::TurnOn
+        } else {
+            TwoStepChange::TurnOff
+        }
+    }
+
+    fn set_two_step_reauth(&mut self, step: ReauthStep) {
+        self.two_step.step = TwoStepStep::Reauth {
+            change: self.reauth_change(),
+            step,
+        };
     }
 
     fn reauth_failed(&mut self, action: ReauthAction, error: &ApiError) {
@@ -923,9 +943,7 @@ impl SignedIn {
         match action {
             ReauthAction::TwoStepChange => {
                 self.two_step.busy = false;
-                if let TwoStepStep::Reauth { change, .. } = self.two_step.step {
-                    self.two_step.step = TwoStepStep::Reauth { change, step };
-                }
+                self.set_two_step_reauth(step);
             }
             ReauthAction::DeleteAccount => {
                 self.delete_account.busy = false;
@@ -938,17 +956,9 @@ impl SignedIn {
     /// re-authentication: while it was busy nothing could move it.
     fn change_two_step(&mut self, tickets: &mut Tickets) -> Next {
         let ticket = tickets.issue(Slot::TwoStepWrite);
-        let turn_on = matches!(
-            self.two_step.step,
-            TwoStepStep::Reauth {
-                change: TwoStepChange::TurnOn,
-                ..
-            }
-        );
-        Next::Stay(vec![if turn_on {
-            Effect::StartTwoStep { ticket }
-        } else {
-            Effect::TurnOffTwoStep { ticket }
+        Next::Stay(vec![match self.reauth_change() {
+            TwoStepChange::TurnOn => Effect::StartTwoStep { ticket },
+            TwoStepChange::TurnOff => Effect::TurnOffTwoStep { ticket },
         }])
     }
 
@@ -963,41 +973,30 @@ impl SignedIn {
             TwoStepWrite::Disable => TwoStepChange::TurnOff,
             TwoStepWrite::Enroll | TwoStepWrite::Confirm => TwoStepChange::TurnOn,
         };
-        let screen = &mut self.two_step;
-        screen.failure = Some(message);
+        self.two_step.failure = Some(message);
         match after {
+            // A start refused after a provider sign-in goes back to the ways
+            // to confirm; a confirm stays on the secret, a password on itself.
             AfterRefusal::Stay => {
-                if let TwoStepStep::Reauth { change, step } = screen.step.clone() {
-                    screen.step = TwoStepStep::Reauth {
-                        change,
-                        step: after_refusal(step),
-                    };
+                if self.reauth_in_browser(ReauthAction::TwoStepChange) {
+                    self.set_two_step_reauth(ReauthStep::Choose);
                 }
                 stay()
             }
             // A new proof means a new secret for turning on: the old one is
             // dropped.
             AfterRefusal::Reauth => {
-                screen.step = TwoStepStep::Reauth {
+                self.two_step.step = TwoStepStep::Reauth {
                     change,
                     step: ReauthStep::Choose,
                 };
                 stay()
             }
             AfterRefusal::Reread => {
-                screen.step = TwoStepStep::Overview;
+                self.two_step.step = TwoStepStep::Overview;
                 Next::Stay(self.load_two_step(tickets))
             }
         }
-    }
-}
-
-/// The step a refused re-authentication returns to: the ways to confirm when
-/// the browser was the way, the same step otherwise.
-fn after_refusal(step: ReauthStep) -> ReauthStep {
-    match step {
-        ReauthStep::Browser(_) => ReauthStep::Choose,
-        step => step,
     }
 }
 
