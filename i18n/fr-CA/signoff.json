@@ -1,7 +1,7 @@
 {
-  "signed_off_by": "Sean Dean (sign-off 2026-11-07 for 10.0.0: 45 strings, 29 copied from Android's reviewed numbers catalog, 16 from the service's wire vocabulary and API errors)",
-  "release": "v10.0.0",
-  "commit": "de708c50f4bd67756159730707d84e74d9cb9e26",
+  "signed_off_by": "PENDING: Sean Dean's review of the 13.0.0 French (district-core-rust pull request for this file). Replace this line with his sign-off before merging; do not tag v13.0.0 until then.",
+  "release": "v13.0.0",
+  "commit": "cf10ac18ea250c95e2d84e431d4ee3909820b753",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
@@ -9,7 +9,7 @@
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
-      "sha256": "3ac174c44636f44a2f1f527d46273cbcb479ab6b4b03084b151d32c9e088589b"
+      "sha256": "019cdb956f189d6659866cfe40506da1d99f0554bc53b345ef4207d09e4e9f81"
     },
     {
       "path": "crates/district-l10n/catalog/numbers.toml",
