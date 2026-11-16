@@ -1,5 +1,5 @@
 {
-  "signed_off_by": "PENDING: Sean Dean's review of the 13.0.0 French (district-core-rust pull request for this file). Replace this line with his sign-off before merging; do not tag v13.0.0 until then.",
+  "signed_off_by": "Sean Dean (sign-off 2026-11-16 for 13.0.0: 77 strings for two-step verification and deleting the account, 76 new and 1 changed; 73 from the iOS app's reviewed catalog, 4 written or adapted for a desktop)",
   "release": "v13.0.0",
   "commit": "cf10ac18ea250c95e2d84e431d4ee3909820b753",
   "catalogs": [
