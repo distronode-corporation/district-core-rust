@@ -30,6 +30,13 @@ pub const ERROR_CODE_HEADER: &str = "X-Distronode-Error-Code";
 /// response would have been incomplete.
 pub const CODE_REGIONS_DEGRADED: &str = "REGIONS_DEGRADED";
 
+/// The code of a 401 that asks for the account's second factor rather than
+/// refusing its session: the service's answer to a re-authentication by
+/// password on an account with two-step verification. The client hands it back
+/// as an [`ApiError::Envelope`] with status 401, keeps the token and does not
+/// repeat the request.
+pub const CODE_MFA_REQUIRED: &str = "MFA_REQUIRED";
+
 /// Shown when the service gave no usable message.
 pub const FALLBACK_MESSAGE: &str = "Something went wrong. Please try again.";
 

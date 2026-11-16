@@ -85,8 +85,8 @@ KEPT = ("fr", "state", "same_ok", "fr_variant", "waive", "max", "id")
 CONTRACT_STATE = "reviewed"
 
 # French this crate words differently from the service: (error code, the
-# contract's words, the catalog's words). Empty since Sean's French sign-off of
-# 2026-11-05 (GitLab #2 note 4173250442) took the service's « réglages » for
+# contract's words, the catalog's words). Empty since the French sign-off of
+# 2026-11-05 took the service's « réglages » for
 # live_changed (OS_WORD_OK below). A row whose words the contract no longer holds
 # fails the generation, and tests/errors.rs reads this list from
 # tests/generated/french_ahead.rs.

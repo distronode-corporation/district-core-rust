@@ -46,11 +46,20 @@
 //! a cookie, and the link is asked for with that nonce, so it is redeemed only
 //! where the cookie is.
 //!
+//! # Re-authenticating
+//!
+//! Before a sensitive change (deleting the account, turning two-step
+//! verification on or off) the service asks for a fresh proof of who is signed
+//! in. [`ReauthAttempt`] is the browser leg: the page it opens ([`REAUTH_PATH`])
+//! sends the person to their provider again and hands a one-time code back
+//! through `districtai://auth`, which the attempt checks against its `state`.
+//! The code is then spent with the attempt's PKCE verifier by the API client.
+//!
 //! # Secrets and logs
 //!
 //! Every credential here (refresh token, access token, authorization code, PKCE
-//! verifier, a hand-off's `state` and nonce) is wrapped in a type whose `Debug`
-//! output is redacted, and no error carries one.
+//! verifier, a hand-off's `state` and nonce, a re-authentication's `state`) is
+//! wrapped in a type whose `Debug` output is redacted, and no error carries one.
 
 #![forbid(unsafe_code)]
 
@@ -60,6 +69,7 @@ mod coordinator;
 mod handoff;
 mod login;
 mod pkce;
+mod reauth;
 mod sign_out;
 mod store;
 mod tokens;
@@ -82,6 +92,7 @@ pub use login::{
     LoginFlow, REDIRECT_SCHEME, REDIRECT_URI,
 };
 pub use pkce::{Pkce, PkceVerifier, challenge_for, is_valid_challenge, is_valid_verifier};
+pub use reauth::{REAUTH_PATH, ReauthAttempt, ReauthProvider, device_hash};
 pub use sign_out::{
     DrainReport, NoPresence, PRESENCE_TIMEOUT, PresenceHook, RevokeStatus, SignOut, SignOutReport,
 };

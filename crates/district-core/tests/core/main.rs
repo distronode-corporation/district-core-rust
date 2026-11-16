@@ -5,6 +5,7 @@
 //! with fakes, a paused clock and a local mock server. No test needs a display,
 //! a keyring or the network.
 
+mod account_security;
 mod adapters;
 mod analytics;
 mod billing;

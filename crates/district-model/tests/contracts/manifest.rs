@@ -54,6 +54,10 @@ use district_model::{
     WorkflowListResponse, WorkflowRunsResponse, WorkflowToggleResponse, WorkspaceBillingResponse,
     WorkspaceConfigResponse, WorkspaceListResponse, WorkspaceSaveResponse,
 };
+use district_model::{
+    AccountDeleteResponse, MfaConfirmation, MfaDisableResponse, MfaEnrollment, MfaStatus,
+    NativeReauthResponse,
+};
 
 use district_model::{
     SchedulingAdminErrorBody, SchedulingAdminFailure, SchedulingAdminSuccess, SchedulingApiKey,
@@ -127,6 +131,11 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     (
         "district-a2p-registration.json",
         codec::<A2pRegistrationResponse>,
+    ),
+    // DELETE /api/auth/delete-account: the account deleted, with the support-data erasure's counts.
+    (
+        "district-account-delete.json",
+        codec::<AccountDeleteResponse>,
     ),
     // POST /api/district/messages/draft: a reply written by a model.
     ("district-ai-draft.json", codec::<AiDraftResponse>),
@@ -493,6 +502,16 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ),
     // GET /api/district/messages/send: the reply window, open.
     ("district-meta-window.json", codec::<MetaWindowResponse>),
+    // POST /api/auth/mfa/confirm: two-step verification on, with its recovery codes.
+    ("district-mfa-confirm.json", codec::<MfaConfirmation>),
+    // POST /api/auth/mfa/disable: two-step verification off.
+    ("district-mfa-disable.json", codec::<MfaDisableResponse>),
+    // POST /api/auth/mfa/enroll: a new authenticator secret, its URI and its QR code.
+    ("district-mfa-enroll.json", codec::<MfaEnrollment>),
+    // GET /api/auth/mfa: two-step verification on, and the recovery codes left.
+    ("district-mfa-status.json", codec::<MfaStatus>),
+    // POST /api/auth/native/reauth/sso and /password: a proof for one action.
+    ("district-native-reauth.json", codec::<NativeReauthResponse>),
     // POST /api/auth/native/revoke: this installation signing itself out.
     ("district-native-revoke.json", codec::<NativeRevokeResponse>),
     // POST /api/district/workspace/numbers/configure.
@@ -1054,23 +1073,6 @@ pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
         fixtures: &[
             "district-hq-voice-settings-put.json",
             "district-hq-voice-settings.json",
-        ],
-    },
-    Exclusion {
-        reason: "A phone app's native account security: re-authentication before a \
-                 sensitive action (`POST /api/auth/native/reauth/password` and \
-                 `/sso`), two-factor \
-                 status, enrolment, confirmation and removal, and deleting the account. A \
-                 desktop signs in through the browser, which asks for the second \
-                 factor itself, and opens the web page to delete the account \
-                 (`ACCOUNT_DELETION_PATH`, district-core).",
-        fixtures: &[
-            "district-account-delete.json",
-            "district-mfa-confirm.json",
-            "district-mfa-disable.json",
-            "district-mfa-enroll.json",
-            "district-mfa-status.json",
-            "district-native-reauth.json",
         ],
     },
     Exclusion {

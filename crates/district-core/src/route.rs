@@ -23,8 +23,9 @@ pub enum Tab {
     Calls,
     /// Contacts.
     Contacts,
-    /// The account: sign-out, devices, account deletion. Not tied to a
-    /// workspace, so it is reachable when no workspace can be opened at all.
+    /// The account: sign-out, devices, two-step verification, account
+    /// deletion. Not tied to a workspace, so it is reachable when no workspace
+    /// can be opened at all.
     Account,
 }
 
@@ -117,6 +118,12 @@ pub enum Route {
     /// The installations signed in to the account. Like the account, not tied to
     /// a workspace: a session belongs to a person, not to a workspace.
     Devices,
+    /// Two-step verification for the account: whether it is on, and turning
+    /// it on or off. Like the account, not tied to a workspace.
+    TwoStep,
+    /// Deleting the account, from the app. Like the account, not tied to a
+    /// workspace.
+    DeleteAccount,
     /// The workspace settings hub, or one of its sections. Some sections are
     /// closed to some roles: see [`Capabilities::allows`](crate::Capabilities::allows).
     Workspace(WorkspaceSection),
@@ -185,15 +192,19 @@ impl Route {
             Self::Inbox | Self::Thread { .. } => Tab::Inbox,
             Self::Calls | Self::CallDetail { .. } | Self::Dialer => Tab::Calls,
             Self::Contacts | Self::ContactDetail { .. } | Self::BlockedContacts => Tab::Contacts,
-            Self::Account | Self::Devices => Tab::Account,
+            Self::Account | Self::Devices | Self::TwoStep | Self::DeleteAccount => Tab::Account,
             _ => Tab::Overview,
         }
     }
 
-    /// Whether the route shows the open workspace's data. The account and the
-    /// devices list do not, and stay reachable when no workspace can be opened.
+    /// Whether the route shows the open workspace's data. The account, the
+    /// devices list, two-step verification and the account's deletion do not,
+    /// and stay reachable when no workspace can be opened.
     pub fn is_workspace_scoped(&self) -> bool {
-        !matches!(self, Self::Account | Self::Devices)
+        !matches!(
+            self,
+            Self::Account | Self::Devices | Self::TwoStep | Self::DeleteAccount
+        )
     }
 
     /// Where going back from this route leads, or `None` for a tab's own route.
@@ -204,7 +215,7 @@ impl Route {
             Self::ContactDetail { .. } | Self::BlockedContacts => Some(Self::Contacts),
             Self::DeskTicket { .. } | Self::DeskSettings => Some(Self::Desk),
             Self::SupportRequest { .. } => Some(Self::Support),
-            Self::Devices => Some(Self::Account),
+            Self::Devices | Self::TwoStep | Self::DeleteAccount => Some(Self::Account),
             Self::Workspace(WorkspaceSection::Hub) => Some(Self::Overview),
             Self::Workspace(_) => Some(Self::Workspace(WorkspaceSection::Hub)),
             Self::SchedulingAdmin(section) => Some(section.parent()),
@@ -228,8 +239,9 @@ impl Route {
     /// way to the overview, because the member's role in the new workspace,
     /// which decides whether they open at all, is not known until the new
     /// overview arrives. A call under way is not a route, and goes on.
-    /// Tabs, the workspace's other sections, the blocked list, the account and
-    /// the devices list stay, and read the new workspace's data.
+    /// Tabs, the workspace's other sections, the blocked list, the account, the
+    /// devices list, two-step verification and the account's deletion stay, and
+    /// read the new workspace's data.
     pub fn after_workspace_switch(&self) -> Route {
         match self {
             Self::Workspace(_)
@@ -296,7 +308,7 @@ impl Route {
             Self::Desk | Self::DeskTicket { .. } | Self::DeskSettings => page("desk"),
             Self::Support | Self::SupportRequest { .. } => page("support"),
             Self::Rooms => page("rooms"),
-            Self::Account | Self::Devices => page("account"),
+            Self::Account | Self::Devices | Self::TwoStep | Self::DeleteAccount => page("account"),
             Self::Workspace(WorkspaceSection::Hub) => page("studio"),
             Self::Workspace(WorkspaceSection::Persona) => page("studio-persona"),
             Self::Workspace(WorkspaceSection::VoiceStudio) => page("studio-voice"),

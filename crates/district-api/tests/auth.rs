@@ -299,6 +299,36 @@ async fn other_refusals_are_not_retried_and_keep_the_token() {
     assert_eq!(client.token_source().current().as_deref(), Some("t1"));
 }
 
+/// A 401 that asks for the second factor is an answer: the token is kept, the
+/// request is not repeated, and the code comes through for the caller.
+#[tokio::test]
+async fn a_401_asking_for_the_second_factor_is_an_answer_not_a_refusal() {
+    let server = MockServer::start().await;
+    Mock::given(any())
+        .respond_with(ResponseTemplate::new(401).set_body_json(
+            json!({"error": "Enter the code from your authenticator app.", "code": "MFA_REQUIRED"}),
+        ))
+        .mount(&server)
+        .await;
+    let client = client(&server);
+
+    for endpoint in [Endpoint::NativeReauthPassword, Endpoint::AuthMe] {
+        let error = client.request(endpoint).send::<Value>().await.unwrap_err();
+        assert_eq!(
+            error.code(),
+            Some(district_api::CODE_MFA_REQUIRED),
+            "{error:?}"
+        );
+        assert!(
+            matches!(error, ApiError::Envelope { status: 401, .. }),
+            "{error:?}"
+        );
+    }
+    assert_eq!(authorizations(&server).await, ["Bearer t1", "Bearer t1"]);
+    assert!(client.token_source().invalidated().is_empty());
+    assert_eq!(client.token_source().current().as_deref(), Some("t1"));
+}
+
 /// No answer at all is not a refusal either: nothing is invalidated.
 #[tokio::test]
 async fn no_answer_keeps_the_token() {

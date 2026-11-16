@@ -63,11 +63,13 @@ use district_model::{
     WorkspaceBillingResponse, WorkspaceConfigResponse, WorkspaceListResponse,
 };
 use district_model::{
-    MetaWindowResponse, SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
+    Credential, MetaWindowResponse, MfaConfirmation, MfaEnrollment, MfaStatus, ReauthAction,
+    SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
 };
 use url::Url;
 
 use crate::account::AccountView;
+use crate::account_security::{DeleteAccountEvent, ReauthProof, TwoStepEvent};
 use crate::analytics::AnalyticsEvent;
 use crate::billing::BillingEvent;
 use crate::call::CallEvent;
@@ -229,10 +231,12 @@ pub enum Event {
     SelectWorkspace(String),
     /// Open the web dashboard to finish setting up, from the overview's card.
     OpenFinishSetup,
-    /// Open the account deletion page, from the account screen.
-    DeleteAccount,
     /// Something on the devices screen.
     Devices(DevicesEvent),
+    /// Something on the two-step verification screen.
+    TwoStep(TwoStepEvent),
+    /// Something on the account deletion screen.
+    AccountDeletion(DeleteAccountEvent),
     /// Something on the inbox list.
     Inbox(InboxEvent),
     /// Something in the open thread.
@@ -409,6 +413,50 @@ pub enum Event {
         ticket: Ticket,
         /// The service's answer.
         result: Result<DeviceRevokeResponse, ApiError>,
+    },
+    /// The two-step verification status was read.
+    TwoStepLoaded {
+        /// The ticket of [`Effect::LoadTwoStep`].
+        ticket: Ticket,
+        /// The status.
+        result: Result<MfaStatus, ApiError>,
+    },
+    /// Two-step verification was started: a new secret.
+    TwoStepStarted {
+        /// The ticket of [`Effect::StartTwoStep`].
+        ticket: Ticket,
+        /// The secret, redacted in `Debug`.
+        result: Result<MfaEnrollment, ApiError>,
+    },
+    /// Two-step verification was turned on.
+    TwoStepConfirmed {
+        /// The ticket of [`Effect::ConfirmTwoStep`].
+        ticket: Ticket,
+        /// The recovery codes, redacted in `Debug`.
+        result: Result<MfaConfirmation, ApiError>,
+    },
+    /// Two-step verification was turned off.
+    TwoStepTurnedOff {
+        /// The ticket of [`Effect::TurnOffTwoStep`].
+        ticket: Ticket,
+        /// Whether it was.
+        result: Result<(), ApiError>,
+    },
+    /// A fresh re-authentication was answered.
+    Reauthenticated {
+        /// The ticket of [`Effect::Reauthenticate`].
+        ticket: Ticket,
+        /// What it was for.
+        action: ReauthAction,
+        /// How many seconds the proof stands.
+        result: Result<i64, ApiError>,
+    },
+    /// The account was deleted.
+    AccountDeleted {
+        /// The ticket of [`Effect::DeleteAccount`].
+        ticket: Ticket,
+        /// Whether support data a vendor holds is still being erased.
+        result: Result<bool, ApiError>,
     },
     /// The inbox's threads were read.
     ConversationsLoaded {
@@ -1074,6 +1122,31 @@ impl Event {
                 ticket,
                 result: Err(error),
             }
+            | Event::TwoStepLoaded {
+                ticket,
+                result: Err(error),
+            }
+            | Event::TwoStepStarted {
+                ticket,
+                result: Err(error),
+            }
+            | Event::TwoStepConfirmed {
+                ticket,
+                result: Err(error),
+            }
+            | Event::TwoStepTurnedOff {
+                ticket,
+                result: Err(error),
+            }
+            | Event::Reauthenticated {
+                ticket,
+                result: Err(error),
+                ..
+            }
+            | Event::AccountDeleted {
+                ticket,
+                result: Err(error),
+            }
             | Event::ConversationsLoaded {
                 ticket,
                 result: Err(error),
@@ -1517,6 +1590,45 @@ pub enum Effect {
     RevokeAllDevices {
         /// Returned in [`Event::AllDevicesRevoked`].
         ticket: Ticket,
+    },
+    /// Read whether two-step verification is on.
+    LoadTwoStep {
+        /// Returned in [`Event::TwoStepLoaded`].
+        ticket: Ticket,
+    },
+    /// Start two-step verification: a new secret. Needs a fresh `2fa-change`
+    /// proof.
+    StartTwoStep {
+        /// Returned in [`Event::TwoStepStarted`].
+        ticket: Ticket,
+    },
+    /// Turn two-step verification on with the authenticator's code.
+    ConfirmTwoStep {
+        /// Returned in [`Event::TwoStepConfirmed`].
+        ticket: Ticket,
+        /// The code, redacted in `Debug`.
+        code: Credential,
+    },
+    /// Turn two-step verification off. Needs a fresh `2fa-change` proof.
+    TurnOffTwoStep {
+        /// Returned in [`Event::TwoStepTurnedOff`].
+        ticket: Ticket,
+    },
+    /// Re-authenticate for `action`. Sent once, never repeated.
+    Reauthenticate {
+        /// Returned in [`Event::Reauthenticated`].
+        ticket: Ticket,
+        /// What the proof is for.
+        action: ReauthAction,
+        /// What proves it, redacted in `Debug`.
+        proof: ReauthProof,
+    },
+    /// Delete the account. Needs a fresh `delete-account` proof.
+    DeleteAccount {
+        /// Returned in [`Event::AccountDeleted`].
+        ticket: Ticket,
+        /// The account's email address, as typed.
+        confirmation: String,
     },
     /// Open a page in the user's browser. Reports back only a failure, as
     /// [`Event::UrlOpenFailed`].
@@ -2590,6 +2702,12 @@ impl Effect {
             | Self::LoadDevices { ticket }
             | Self::RevokeDevice { ticket, .. }
             | Self::RevokeAllDevices { ticket }
+            | Self::LoadTwoStep { ticket }
+            | Self::StartTwoStep { ticket }
+            | Self::ConfirmTwoStep { ticket, .. }
+            | Self::TurnOffTwoStep { ticket }
+            | Self::Reauthenticate { ticket, .. }
+            | Self::DeleteAccount { ticket, .. }
             | Self::LoadConversations { ticket, .. }
             | Self::LoadUnreadCount { ticket, .. }
             | Self::LoadDraftKeys { ticket, .. }
@@ -2730,6 +2848,14 @@ pub(crate) enum Slot {
     Setup,
     Devices,
     DeviceWrite,
+    /// The two-step status.
+    TwoStep,
+    /// A two-step change: starting, confirming or turning off.
+    TwoStepWrite,
+    /// A fresh re-authentication.
+    Reauth,
+    /// The account's deletion.
+    AccountDelete,
     Unread,
     Conversations,
     DraftKeys,
@@ -3218,7 +3344,12 @@ impl Model {
             Event::Refresh => self.signed_in(|s, tickets, _| s.refresh(tickets)),
             Event::SelectWorkspace(id) => self.signed_in(|s, tickets, _| s.select(&id, tickets)),
             Event::OpenFinishSetup => self.signed_in(|s, _, config| s.open_finish_setup(config)),
-            Event::DeleteAccount => self.signed_in(|s, _, config| s.open_account_deletion(config)),
+            Event::TwoStep(event) => {
+                self.signed_in(|s, tickets, config| s.two_step_event(event, tickets, config))
+            }
+            Event::AccountDeletion(event) => {
+                self.signed_in(|s, tickets, config| s.delete_account_event(event, tickets, config))
+            }
             Event::Devices(event) => {
                 self.signed_in(|s, tickets, _| s.devices_event(event, tickets))
             }
@@ -3353,6 +3484,26 @@ impl Model {
             }
             Event::AllDevicesRevoked { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.all_devices_revoked(ticket, result, tickets))
+            }
+            Event::TwoStepLoaded { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.two_step_loaded(ticket, result, tickets))
+            }
+            Event::TwoStepStarted { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.two_step_started(ticket, result, tickets))
+            }
+            Event::TwoStepConfirmed { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.two_step_confirmed(ticket, result, tickets))
+            }
+            Event::TwoStepTurnedOff { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.two_step_turned_off(ticket, result, tickets))
+            }
+            Event::Reauthenticated {
+                ticket,
+                action,
+                result,
+            } => self.signed_in(|s, tickets, _| s.reauthenticated(ticket, action, result, tickets)),
+            Event::AccountDeleted { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.account_deleted(ticket, result, tickets))
             }
             Event::ConversationsLoaded { ticket, result } => {
                 self.signed_in(|s, tickets, _| s.conversations_loaded(ticket, result, tickets))
@@ -3762,6 +3913,10 @@ impl Model {
     }
 
     fn callback(&mut self, callback: String) -> Vec<Effect> {
+        // Signed in, the link can only be a fresh re-authentication's answer.
+        if matches!(self.session, SessionState::SignedIn(_)) {
+            return self.signed_in(|s, tickets, _| s.reauth_callback(&callback, tickets));
+        }
         match &mut self.session {
             SessionState::SigningIn(signing_in) if signing_in.phase != SignInPhase::Exchanging => {
                 signing_in.phase = SignInPhase::Exchanging;

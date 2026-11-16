@@ -30,7 +30,7 @@
 //! dropped because the desktop sleeps, quits or signs out send nothing, so a
 //! desktop nobody was at still reads to the service as nobody answering. This
 //! reverses the earlier rule that a decline sent nothing either (decided
-//! 2026-10-24, decisions log note 4083623386). The service's hang-up is for
+//! 2026-10-24). The service's hang-up is for
 //! calls this desktop placed, and refuses this kind.
 //!
 //! # Answering

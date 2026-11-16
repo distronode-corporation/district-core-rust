@@ -908,20 +908,23 @@ fn a_failed_refresh_keeps_the_open_workspace() {
 }
 
 #[test]
-fn account_deletion_opens_on_the_web_and_a_missing_browser_is_a_notice() {
+fn a_missing_browser_is_a_notice() {
     let (mut model, _) = loaded(AGENCY, "agency");
-    assert_eq!(
-        model.update(Event::DeleteAccount),
-        [Effect::OpenUrl {
-            url: "https://www.distronode.com/privacy/account-deletion".to_owned()
-        }]
-    );
     assert!(model.update(Event::UrlOpenFailed).is_empty());
     assert_eq!(signed_in(&model).notice, Some(Notice::NoBrowser));
     model.update(Event::DismissNotice);
     assert_eq!(signed_in(&model).notice, None);
     assert_eq!(
         district_core::AccountView::DELETE_ACCOUNT_CAPTION,
-        "Request deletion of your account and its data. Opens in your browser."
+        "Delete your account and its data for good. You confirm it is you first."
+    );
+    assert_eq!(
+        district_core::AccountView::TWO_STEP_CAPTION,
+        "Ask for a code from an authenticator app each time you sign in."
+    );
+    // The page stays the store listings' data-deletion address.
+    assert_eq!(
+        district_core::ACCOUNT_DELETION_PATH,
+        "/privacy/account-deletion"
     );
 }
