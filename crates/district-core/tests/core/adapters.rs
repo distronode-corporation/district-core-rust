@@ -12,6 +12,7 @@ use district_auth::{
     NativeTokens, Persistence, RefreshApi, RefreshOutcome, RefreshToken, RevokeApi, RevokeOutcome,
     RevokeStatus, TokenRefreshCoordinator,
 };
+use district_core::ReauthProof;
 use district_core::{
     Auth, CodeExchange, DesktopPresence, DistrictApi, Effect, Event, ExchangeFailure, LiveHub,
     LiveUpdates, NativeAuth, Presence, PresenceApi, RestoreError, Route, SignInError, Ticket,
@@ -32,6 +33,7 @@ use district_model::{
     PersonaPreviewForm, TelnyxCredentials,
 };
 use district_model::{ClientIdentity, Platform};
+use district_model::{Credential, ReauthAction};
 use serde_json::json;
 use url::Url;
 use wiremock::matchers::{body_string_contains, method, path, query_param};
@@ -179,6 +181,92 @@ async fn the_api_client_is_the_runners_api() {
             .unwrap()
             .revoked,
         2
+    );
+}
+
+/// The account's security through the API client: two-step verification, both
+/// ways to re-authenticate, and the deletion, each against its recording.
+#[tokio::test]
+async fn the_api_client_serves_two_step_verification_and_account_deletion() {
+    let server = MockServer::start().await;
+    for (verb, route, body) in [
+        ("GET", "/api/auth/mfa", fixture("district-mfa-status.json")),
+        (
+            "POST",
+            "/api/auth/mfa/enroll",
+            fixture("district-mfa-enroll.json"),
+        ),
+        (
+            "POST",
+            "/api/auth/mfa/confirm",
+            fixture("district-mfa-confirm.json"),
+        ),
+        (
+            "POST",
+            "/api/auth/mfa/disable",
+            fixture("district-mfa-disable.json"),
+        ),
+        (
+            "POST",
+            "/api/auth/native/reauth/password",
+            fixture("district-native-reauth.json"),
+        ),
+        (
+            "DELETE",
+            "/api/auth/delete-account",
+            fixture("district-account-delete.json"),
+        ),
+    ] {
+        serve(&server, verb, route, body).await;
+    }
+    Mock::given(method("POST"))
+        .and(path("/api/auth/native/reauth/sso"))
+        .and(body_string_contains(
+            "\"redirectUri\":\"districtai://auth\"",
+        ))
+        .and(body_string_contains("\"codeVerifier\":\"v\""))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .set_body_json(fixture::<serde_json::Value>("district-native-reauth.json")),
+        )
+        .mount(&server)
+        .await;
+    let client = ApiClient::new(local(&server), OneToken).unwrap();
+
+    assert!(DistrictApi::mfa_status(&client).await.unwrap().enrolled);
+    assert_eq!(
+        DistrictApi::mfa_enroll(&client).await.unwrap().secret,
+        "JBSWY3DPEHPK3PXP"
+    );
+    assert_eq!(
+        DistrictApi::mfa_confirm(&client, &Credential::new("123456"))
+            .await
+            .unwrap()
+            .backup_codes
+            .len(),
+        2
+    );
+    DistrictApi::mfa_disable(&client).await.unwrap();
+    let provider = ReauthProof::Provider {
+        code: Credential::new("c"),
+        verifier: Credential::new("v"),
+    };
+    let password = ReauthProof::Password {
+        password: Credential::new("pw"),
+        code: Some(Credential::new("123456")),
+    };
+    for proof in [provider, password] {
+        assert_eq!(
+            DistrictApi::reauthenticate(&client, ReauthAction::DeleteAccount, &proof)
+                .await
+                .unwrap(),
+            300
+        );
+    }
+    assert!(
+        !DistrictApi::delete_account(&client, "ada@example.com")
+            .await
+            .unwrap()
     );
 }
 

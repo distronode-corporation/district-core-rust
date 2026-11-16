@@ -309,6 +309,13 @@ pub const KEYED_MAPS: &[OpaqueObject] = &[OpaqueObject {
 /// as stale: a type that starts modelling one of these gets the probe back.
 pub const OPAQUE_OBJECTS: &[OpaqueObject] = &[
     OpaqueObject {
+        fixture: "fixtures/district-account-delete.json",
+        path: "$.supportErasure",
+        reason: "AccountDeleteResponse::support_erasure: the support-data erasure's counts, \
+                 kept whole and never read (nothing on a device acts on them, and the \
+                 service may add a count)",
+    },
+    OpaqueObject {
         fixture: "fixtures/district-billing.json",
         path: "$.billingAddress",
         reason: ACCOUNT_BILLING,

@@ -279,6 +279,12 @@ pub enum SignOutScope {
     /// Every device: the service has already ended every session, and this is
     /// the local half.
     Everywhere,
+    /// The account was deleted, and its sessions with it: this is the local
+    /// half, which forgets the session, the workspace and the rest.
+    AccountDeleted {
+        /// Whether support data a vendor holds is still being erased.
+        erasure_pending: bool,
+    },
 }
 
 /// What a sign-out achieved, in the terms the user needs.
@@ -334,6 +340,12 @@ impl SignOutOutcome {
         match self.scope {
             SignOutScope::ThisDevice => s::session_signed_out(l()),
             SignOutScope::Everywhere => s::session_signed_out_everywhere(l()),
+            SignOutScope::AccountDeleted {
+                erasure_pending: false,
+            } => s::delete_account_deleted(l()),
+            SignOutScope::AccountDeleted {
+                erasure_pending: true,
+            } => s::delete_account_deleted_erasure_pending(l()),
         }
     }
 

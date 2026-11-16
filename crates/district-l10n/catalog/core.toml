@@ -4,13 +4,13 @@ platform = "rust"
 apple = false
 
 [account.delete_account_caption]
-en = "Request deletion of your account and its data. Opens in your browser."
-fr = "Demander la suppression de votre compte et de ses données. S'ouvre dans votre navigateur."
+en = "Delete your account and its data for good. You confirm it is you first."
+fr = "Supprimez votre compte et ses données pour de bon. Vous confirmez d'abord qu'il s'agit bien de vous."
 ctx = "body"
 screen = "account"
 tier = "T0"
 state = "reviewed"
-note = "Caption of the account deletion row. Deletion cannot be undone; the request continues in the web browser, which is why the caption says so."
+note = "Caption of the account deletion row, which opens the deletion screen in the app. French from the iOS app's reviewed catalog."
 
 [account.devices_caption]
 en = "See where you are signed in, and sign out a device you no longer have."
@@ -29,6 +29,15 @@ screen = "account"
 tier = "T2"
 state = "reviewed"
 note = "Caption of the sign-out row on the account screen."
+
+[account.two_step_caption]
+en = "Ask for a code from an authenticator app each time you sign in."
+fr = "Demander un code d'une application d'authentification à chaque connexion."
+ctx = "body"
+screen = "account"
+tier = "T2"
+state = "reviewed"
+note = "Caption of the two-step verification row on the account screen. French from the iOS app's reviewed catalog."
 
 [analytics.change_down]
 en = "Down {pct}% on the previous period."
@@ -797,6 +806,177 @@ screen = "contacts"
 tier = "T3"
 state = "reviewed"
 note = "What a contact with no name, phone number or email address is called in lists."
+
+[delete_account.cannot_be_undone]
+en = "This cannot be undone."
+fr = "Cette action est irréversible."
+ctx = "body"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "Under what deleting the account removes. French from the iOS app's reviewed catalog."
+
+[delete_account.confirm_intro]
+en = "Sign in again the way you usually do. You then have a few minutes to delete the account."
+fr = "Connectez-vous de nouveau comme d'habitude. Vous aurez ensuite quelques minutes pour supprimer le compte."
+ctx = "body"
+screen = "account deletion"
+tier = "T1"
+state = "reviewed"
+note = "Over the ways to confirm it is you, before deleting the account. French from the iOS app's reviewed catalog."
+
+[delete_account.deleted]
+en = "Your account was deleted."
+fr = "Votre compte a été supprimé."
+ctx = "title"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "Headline of the sign-in screen after the account was deleted. French from the iOS app's reviewed catalog."
+
+[delete_account.deleted_erasure_pending]
+en = "Your account was deleted. Support data held by a provider is still being erased."
+fr = "Votre compte a été supprimé. Des données de soutien conservées par un fournisseur sont encore en cours d'effacement."
+ctx = "title"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "Headline of the sign-in screen after the account was deleted, while a vendor still erases support data. French from the iOS app's reviewed catalog."
+
+[delete_account.deleting]
+en = "Deleting…"
+fr = "Suppression…"
+ctx = "button"
+screen = "account deletion"
+tier = "T2"
+state = "reviewed"
+note = "The final button while the deletion is on its way. French from the iOS app's reviewed catalog."
+
+[delete_account.email_label]
+en = "Your email address"
+fr = "Votre adresse courriel"
+ctx = "label"
+screen = "account deletion"
+tier = "T1"
+state = "reviewed"
+note = "Label of the field where the account's email address is typed to confirm the deletion. French from the iOS app's reviewed catalog."
+
+[delete_account.error_email_mismatch]
+en = "That is not this account's email address. Type it exactly, then try again. Nothing was deleted."
+fr = "Ce n'est pas l'adresse courriel de ce compte. Tapez-la exactement, puis réessayez. Rien n'a été supprimé."
+ctx = "error"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "The typed email address is not the account's. French from the iOS app's reviewed catalog."
+
+[delete_account.error_offline_outcome_unknown]
+en = "The connection failed before we heard back, so we cannot tell whether your account was deleted. Check your connection, then close this and sign in again to check."
+fr = "La connexion a échoué avant que nous recevions une réponse, et nous ne savons pas si votre compte a été supprimé. Vérifiez votre connexion, puis fermez cette fenêtre et reconnectez-vous pour vérifier."
+ctx = "error"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "The deletion's answer was lost in transport, so whether it happened is unknown. French from the iOS app's reviewed catalog."
+
+[delete_account.error_outcome_unknown]
+en = "We could not read the answer, so we cannot tell whether your account was deleted. Close this and sign in again to check."
+fr = "Nous n'avons pas pu lire la réponse, et nous ne savons pas si votre compte a été supprimé. Fermez cette fenêtre et reconnectez-vous pour vérifier."
+ctx = "error"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "The deletion's answer could not be read, so whether it happened is unknown. French from the iOS app's reviewed catalog."
+
+[delete_account.error_proof_expired]
+en = "Your confirmation ran out before the account was deleted. Confirm it is you again."
+fr = "Votre confirmation a expiré avant la suppression du compte. Confirmez de nouveau qu'il s'agit bien de vous."
+ctx = "error"
+screen = "account deletion"
+tier = "T1"
+state = "reviewed"
+note = "The few minutes after confirming it is you ran out before the final button. French from the iOS app's reviewed catalog."
+
+[delete_account.error_try_again_shortly]
+en = "Something went wrong on our side. Try again in a moment."
+fr = "Un problème est survenu de notre côté. Réessayez dans un instant."
+ctx = "error"
+screen = "account deletion"
+tier = "T2"
+state = "reviewed"
+note = "A server error while deleting; shown under the not-deleted headline. French from the iOS app's reviewed catalog."
+
+[delete_account.last_step]
+en = "Last step"
+fr = "Dernière étape"
+ctx = "title"
+screen = "account deletion"
+tier = "T1"
+state = "reviewed"
+note = "Heading over the typed email address and the final button. French from the iOS app's reviewed catalog."
+
+[delete_account.not_deleted]
+en = "Your account was not deleted."
+fr = "Votre compte n'a pas été supprimé."
+ctx = "title"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "Headline over a refusal when it is certain nothing was deleted. French from the iOS app's reviewed catalog."
+
+[delete_account.submit]
+en = "Delete my account"
+fr = "Supprimer mon compte"
+ctx = "button"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "The final button that deletes the account. French from the iOS app's reviewed catalog."
+
+[delete_account.subscriptions_cancelled]
+en = "The subscriptions of the workspaces you own are cancelled at once."
+fr = "Les abonnements des espaces de travail dont vous êtes propriétaire sont annulés sur-le-champ."
+ctx = "body"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "What deleting the account does to billing. French from the iOS app's reviewed catalog."
+
+[delete_account.title]
+en = "Delete your account"
+fr = "Supprimer votre compte"
+ctx = "title"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "Title of the account deletion screen. French from the iOS app's reviewed catalog."
+
+[delete_account.type_email]
+en = "Type your account's email address to confirm. Nothing is deleted until you click Delete my account."
+fr = "Tapez l'adresse courriel de votre compte pour confirmer. Rien n'est supprimé avant que vous cliquiez sur Supprimer mon compte."
+ctx = "body"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "Over the email field. 'Delete my account' is the final button's label (delete_account.submit). Adapted from the iOS app's reviewed sentence: click (cliquiez sur) for its tap (touchiez); the rest is the iOS French."
+
+[delete_account.what_is_deleted]
+en = "Your user profile, your settings and all workspaces where you are the owner are deleted for good."
+fr = "Votre profil d'utilisateur, vos paramètres et tous les espaces de travail dont vous êtes propriétaire sont supprimés pour de bon."
+ctx = "body"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "What deleting the account removes. The iOS app's reviewed French, with « paramètres », the word outside Apple systems, for its « réglages »."
+
+[delete_account.what_is_kept]
+en = "Workspaces you belong to but do not own are kept. You are removed from them, and their owners keep their data."
+fr = "Les espaces de travail dont vous êtes membre sans en être propriétaire sont conservés. Vous n'en faites plus partie, et leurs propriétaires gardent leurs données."
+ctx = "body"
+screen = "account deletion"
+tier = "T0"
+state = "reviewed"
+note = "What deleting the account keeps. French from the iOS app's reviewed catalog."
 
 [desk.author_assistant]
 en = "Receptionist"
@@ -3293,6 +3473,160 @@ tier = "T1"
 state = "reviewed"
 note = "How often a plan is billed: every month."
 
+[reauth.back]
+en = "Back"
+fr = "Retour"
+ctx = "button"
+screen = "confirm it is you"
+tier = "T3"
+state = "reviewed"
+note = "Back from the password, or the browser's sign-in, to the ways to confirm it is you. French from the iOS app's reviewed catalog."
+
+[reauth.code_label]
+en = "Authenticator code or recovery code"
+fr = "Code d'authentification ou code de récupération"
+ctx = "label"
+screen = "confirm it is you"
+tier = "T1"
+state = "reviewed"
+note = "Label of the one field shown with the password once the account turns out to have two-step verification: it takes the authenticator app's code or one of the recovery codes. Written for this screen; the French follows the iOS app's reviewed terms."
+
+[reauth.code_prompt]
+en = "Your account uses two-step verification. Enter the code your authenticator app shows for District AI, or one of your recovery codes."
+fr = "Votre compte utilise la vérification en deux étapes. Entrez le code que votre application d'authentification affiche pour District AI, ou l'un de vos codes de récupération."
+ctx = "body"
+screen = "confirm it is you"
+tier = "T1"
+state = "reviewed"
+note = "Over the code field, once the service asked for the second factor with the password. Written for this screen (a recovery code works too); the French follows the iOS app's reviewed terms."
+
+[reauth.confirm_it_is_you]
+en = "Confirm it is you"
+fr = "Confirmez qu'il s'agit bien de vous"
+ctx = "title"
+screen = "confirm it is you"
+tier = "T1"
+state = "reviewed"
+note = "Heading over the ways to confirm it is you before a sensitive change. French from the iOS app's reviewed catalog."
+
+[reauth.continue]
+en = "Continue"
+fr = "Continuer"
+ctx = "button"
+screen = "confirm it is you"
+tier = "T3"
+state = "reviewed"
+note = "Sends the password (and the code). French from the iOS app's reviewed catalog."
+
+[reauth.continue_with]
+en = "Continue with {provider}"
+fr = "Continuer avec {provider}"
+ctx = "button"
+screen = "confirm it is you"
+tier = "T2"
+args = { provider = "str" }
+state = "reviewed"
+note = "Opens the browser to sign in again at {provider} (Google, Microsoft or Apple, a proper noun). French from the iOS app's reviewed catalog."
+
+[reauth.error_browser_did_not_open]
+en = "The sign-in window could not open. Try again."
+fr = "La fenêtre de connexion n'a pas pu s'ouvrir. Réessayez."
+ctx = "error"
+screen = "confirm it is you"
+tier = "T2"
+state = "reviewed"
+note = "No browser opened the page where the person signs in again. French from the iOS app's reviewed catalog."
+
+[reauth.error_no_password]
+en = "This account has no password. Confirm it is you with Google, Microsoft or Apple, whichever you sign in with."
+fr = "Ce compte n'a aucun mot de passe. Confirmez qu'il s'agit bien de vous avec Google, Microsoft ou Apple, selon votre mode de connexion."
+ctx = "error"
+screen = "confirm it is you"
+tier = "T1"
+state = "reviewed"
+note = "The password was chosen for an account that has none. French from the iOS app's reviewed catalog."
+
+[reauth.error_not_confirmed]
+en = "We could not confirm it is you right now. Try again in a moment."
+fr = "Nous n'avons pas pu confirmer qu'il s'agit bien de vous pour l'instant. Réessayez dans un instant."
+ctx = "error"
+screen = "confirm it is you"
+tier = "T2"
+state = "reviewed"
+note = "The re-authentication failed on the service's side. French from the iOS app's reviewed catalog."
+
+[reauth.error_offline_not_confirmed]
+en = "You appear to be offline, so nothing was confirmed. Check your connection and try again."
+fr = "Vous semblez être hors ligne, et rien n'a été confirmé. Vérifiez votre connexion et réessayez."
+ctx = "error"
+screen = "confirm it is you"
+tier = "T2"
+state = "reviewed"
+note = "The re-authentication could not reach the service. French from the iOS app's reviewed catalog."
+
+[reauth.error_sign_in_not_verified]
+en = "That sign-in could not be verified, so nothing was confirmed. Try again."
+fr = "Cette connexion n'a pas pu être vérifiée, et rien n'a été confirmé. Réessayez."
+ctx = "error"
+screen = "confirm it is you"
+tier = "T1"
+state = "reviewed"
+note = "The browser's answer was not this attempt's, or carried no code. French from the iOS app's reviewed catalog."
+
+[reauth.error_too_many_attempts]
+en = "Too many attempts. Wait a minute, then try again."
+fr = "Trop de tentatives. Attendez une minute, puis réessayez."
+ctx = "error"
+screen = "confirm it is you"
+tier = "T2"
+state = "reviewed"
+note = "The service is limiting attempts. French from the iOS app's reviewed catalog."
+
+[reauth.error_wrong_account]
+en = "We could not confirm it is you. In the sign-in window, use the account this app is signed in to, then try again."
+fr = "Nous n'avons pas pu confirmer qu'il s'agit bien de vous. Dans la fenêtre de connexion, utilisez le compte connecté à cette application, puis réessayez."
+ctx = "error"
+screen = "confirm it is you"
+tier = "T1"
+state = "reviewed"
+note = "The browser's sign-in was refused: most often another account. French from the iOS app's reviewed catalog."
+
+[reauth.error_wrong_code]
+en = "That code is not valid, or it has already been used. Enter the newest code."
+fr = "Ce code n'est pas valide, ou il a déjà été utilisé. Entrez le code le plus récent."
+ctx = "error"
+screen = "confirm it is you"
+tier = "T2"
+state = "reviewed"
+note = "The authenticator or recovery code was refused. French from the iOS app's reviewed catalog."
+
+[reauth.error_wrong_password]
+en = "That password is not correct. Check it and try again."
+fr = "Ce mot de passe n'est pas le bon. Vérifiez-le et réessayez."
+ctx = "error"
+screen = "confirm it is you"
+tier = "T2"
+state = "reviewed"
+note = "The password was refused. French from the iOS app's reviewed catalog."
+
+[reauth.password_label]
+en = "Your password"
+fr = "Votre mot de passe"
+ctx = "label"
+screen = "confirm it is you"
+tier = "T2"
+state = "reviewed"
+note = "Label of the password field. French from the iOS app's reviewed catalog."
+
+[reauth.use_password]
+en = "Use my password"
+fr = "Utiliser mon mot de passe"
+ctx = "button"
+screen = "confirm it is you"
+tier = "T2"
+state = "reviewed"
+note = "Confirms it is you with the password instead of a provider. French from the iOS app's reviewed catalog."
+
 [ringing.answered_elsewhere]
 en = "That call was answered on another device."
 fr = "Cet appel a été pris sur un autre appareil."
@@ -5032,6 +5366,361 @@ screen = "call transcript"
 tier = "T3"
 state = "reviewed"
 note = "While the live transcript is open and nobody has spoken yet."
+
+[two_step.code_label]
+en = "6-digit code"
+fr = "Code à 6 chiffres"
+ctx = "label"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "Label of the field for the authenticator's first code. French from the iOS app's reviewed catalog."
+
+[two_step.code_prompt]
+en = "Then enter the 6-digit code your authenticator app shows for District AI."
+fr = "Entrez ensuite le code à 6 chiffres que votre application d'authentification affiche pour District AI."
+ctx = "body"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Over the field for the authenticator's first code. French from the iOS app's reviewed catalog."
+
+[two_step.codes_done]
+en = "I have saved them"
+fr = "Je les ai enregistrés"
+ctx = "button"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Below the recovery codes: they are saved, and the screen may drop them. French from the iOS app's reviewed catalog."
+
+[two_step.codes_left_many]
+en = "{count} recovery codes left."
+fr = "{count} codes de récupération restants."
+ctx = "body"
+screen = "two-step verification"
+tier = "T2"
+args = { count = "int" }
+state = "reviewed"
+note = "How many unused recovery codes are left, 2 or more. French from the iOS app's reviewed catalog."
+
+[two_step.codes_left_one]
+en = "1 recovery code left."
+fr = "1 code de récupération restant."
+ctx = "body"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "One unused recovery code is left. French from the iOS app's reviewed catalog."
+
+[two_step.codes_none]
+en = "No recovery codes are left. Turn two-step verification off and on again to get new ones."
+fr = "Il ne reste aucun code de récupération. Désactivez puis réactivez la vérification en deux étapes pour en obtenir de nouveaux."
+ctx = "body"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "No unused recovery code is left, and how to get new ones. French from the iOS app's reviewed catalog."
+
+[two_step.codes_title]
+en = "Save your recovery codes"
+fr = "Enregistrez vos codes de récupération"
+ctx = "title"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Heading over the recovery codes, shown once. French from the iOS app's reviewed catalog."
+
+[two_step.codes_warning]
+en = "Each code signs you in once if you lose your authenticator app. Save them somewhere safe now. They will not be shown again."
+fr = "Chaque code permet une seule connexion si vous perdez votre application d'authentification. Enregistrez-les maintenant en lieu sûr. Ils ne seront plus affichés."
+ctx = "body"
+screen = "two-step verification"
+tier = "T0"
+state = "reviewed"
+note = "Under the recovery codes' heading. French from the iOS app's reviewed catalog."
+
+[two_step.confirm_button]
+en = "Turn on two-step verification"
+fr = "Activer la vérification en deux étapes"
+ctx = "button"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Sends the authenticator's first code, which turns it on. French from the iOS app's reviewed catalog."
+
+[two_step.copied]
+en = "Copied"
+fr = "Copié"
+ctx = "toast"
+screen = "two-step verification"
+tier = "T3"
+state = "reviewed"
+note = "After copying the key or the recovery codes. French from the iOS app's reviewed catalog."
+
+[two_step.copy_all]
+en = "Copy all"
+fr = "Tout copier"
+ctx = "button"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "Copies every recovery code. French from the iOS app's reviewed catalog."
+
+[two_step.copy_key]
+en = "Copy key"
+fr = "Copier la clé"
+ctx = "button"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "Copies the authenticator key. French from the iOS app's reviewed catalog."
+
+[two_step.error_load]
+en = "Two-step verification could not be read right now. Try again in a moment."
+fr = "Impossible de lire l'état de la vérification en deux étapes pour l'instant. Réessayez dans un moment."
+ctx = "error"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "The status could not be read. French from the iOS app's reviewed catalog."
+
+[two_step.error_offline_load]
+en = "You appear to be offline. Check your connection and try again."
+fr = "Vous semblez être hors ligne. Vérifiez votre connexion et réessayez."
+ctx = "error"
+screen = "two-step verification"
+tier = "T3"
+state = "reviewed"
+note = "The status could not be read: no connection. French from the iOS app's reviewed catalog."
+
+[two_step.error_offline_nothing_changed]
+en = "You appear to be offline, so nothing was changed. Check your connection and try again."
+fr = "Vous semblez être hors ligne, donc rien n'a été modifié. Vérifiez votre connexion et réessayez."
+ctx = "error"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "Starting failed: no connection. French from the iOS app's reviewed catalog."
+
+[two_step.error_outcome_unknown_off]
+en = "We did not hear back, so we cannot tell whether two-step verification was turned off. This screen now shows what is on."
+fr = "Nous n'avons pas reçu de réponse et ne savons pas si la vérification en deux étapes a été désactivée. Cet écran affiche maintenant son état."
+ctx = "error"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Turning off was lost in transport; the status is read again. French from the iOS app's reviewed catalog."
+
+[two_step.error_outcome_unknown_on]
+en = "We did not hear back, so we cannot tell whether two-step verification was turned on. This screen now shows what is on. If it is on, turn it off and on again to get recovery codes you can save."
+fr = "Nous n'avons pas reçu de réponse et ne savons pas si la vérification en deux étapes a été activée. Cet écran affiche maintenant son état. Si elle est activée, désactivez-la puis réactivez-la pour obtenir des codes de récupération à enregistrer."
+ctx = "error"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Turning on was lost in transport; the status is read again. French from the iOS app's reviewed catalog."
+
+[two_step.error_proof_expired]
+en = "Your confirmation ran out before the change was made. Confirm it is you again."
+fr = "Votre confirmation a expiré avant que la modification soit faite. Confirmez de nouveau qu'il s'agit bien de vous."
+ctx = "error"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "The few minutes after confirming it is you ran out. French from the iOS app's reviewed catalog."
+
+[two_step.error_try_again]
+en = "Something went wrong on our side. Nothing was changed. Try again in a moment."
+fr = "Un problème est survenu de notre côté. Rien n'a été modifié. Réessayez dans un moment."
+ctx = "error"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "A server error during a change. French from the iOS app's reviewed catalog."
+
+[two_step.key_label]
+en = "Key"
+fr = "Clé"
+ctx = "label"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "Label of the authenticator key, typed by hand. French from the iOS app's reviewed catalog."
+
+[two_step.no_password_note]
+en = "This account has no password, so confirm it is you with Google, Microsoft or Apple to turn this off."
+fr = "Ce compte n'a pas de mot de passe. Pour désactiver cette option, confirmez qu'il s'agit bien de vous avec Google, Microsoft ou Apple."
+ctx = "body"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Under the status of an account with no password. French from the iOS app's reviewed catalog."
+
+[two_step.off_explain]
+en = "When it is on, signing in also asks for a 6-digit code from an authenticator app, so your password alone is not enough."
+fr = "Lorsqu'elle est activée, la connexion demande aussi un code à 6 chiffres d'une application d'authentification, et votre mot de passe seul ne suffit plus."
+ctx = "body"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Under the status while it is off. French from the iOS app's reviewed catalog."
+
+[two_step.on_since]
+en = "On since {date}."
+fr = "Activée depuis le {date}."
+ctx = "body"
+screen = "two-step verification"
+tier = "T2"
+args = { date = "str" }
+state = "reviewed"
+note = "Under the status: the day it was turned on. French from the iOS app's reviewed catalog."
+
+[two_step.open_authenticator]
+en = "Open in an authenticator app"
+fr = "Ouvrir dans une application d'authentification"
+ctx = "button"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "Hands the otpauth link to an authenticator app on this computer. French from the iOS app's reviewed catalog."
+
+[two_step.open_failed]
+en = "No app on this device opened it. Scan the QR code from another device, or enter the key by hand."
+fr = "Aucune application de cet appareil ne l'a ouvert. Balayez le code QR depuis un autre appareil, ou entrez la clé à la main."
+ctx = "error"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "No app on this computer opened the otpauth link. French from the iOS app's reviewed catalog."
+
+[two_step.qr_label]
+en = "QR code for your authenticator app"
+fr = "Code QR pour votre application d'authentification"
+ctx = "a11y"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "What a screen reader says for the QR code. French from the iOS app's reviewed catalog."
+
+[two_step.qr_unreadable]
+en = "The QR code could not be shown. Enter the key by hand instead."
+fr = "Le code QR n'a pas pu être affiché. Entrez plutôt la clé à la main."
+ctx = "error"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "The service's QR picture could not be read. French from the iOS app's reviewed catalog."
+
+[two_step.reauth_intro_off]
+en = "Sign in again the way you usually do. Two-step verification turns off as soon as you do."
+fr = "Connectez-vous de nouveau comme d'habitude. La vérification en deux étapes est désactivée dès que c'est fait."
+ctx = "body"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Over the ways to confirm it is you, before turning it off. French from the iOS app's reviewed catalog."
+
+[two_step.reauth_intro_on]
+en = "Sign in again the way you usually do. You then add District AI to your authenticator app."
+fr = "Connectez-vous de nouveau comme d'habitude. Vous ajouterez ensuite District AI à votre application d'authentification."
+ctx = "body"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Over the ways to confirm it is you, before turning it on. French from the iOS app's reviewed catalog."
+
+[two_step.retry]
+en = "Try again"
+fr = "Réessayer"
+ctx = "button"
+screen = "two-step verification"
+tier = "T3"
+state = "reviewed"
+note = "After the status could not be read. French from the iOS app's reviewed catalog."
+
+[two_step.scan_intro]
+en = "Scan this QR code with your authenticator app, or enter the key below by hand."
+fr = "Balayez ce code QR avec votre application d'authentification, ou entrez à la main la clé ci-dessous."
+ctx = "body"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Over the QR code and the key. French from the iOS app's reviewed catalog."
+
+[two_step.scan_title]
+en = "Add District AI to your authenticator app"
+fr = "Ajoutez District AI à votre application d'authentification"
+ctx = "title"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Heading of the step with the QR code. French from the iOS app's reviewed catalog."
+
+[two_step.status_off]
+en = "Off"
+fr = "Désactivée"
+ctx = "label"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+fr_variant = "two-step verification's status: agrees with « vérification » (feminine)"
+note = "The status while it is off (feminine: la vérification). French from the iOS app's reviewed catalog."
+
+[two_step.status_on]
+en = "On"
+fr = "Activée"
+ctx = "label"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+fr_variant = "two-step verification's status: agrees with « vérification » (feminine)"
+note = "The status while it is on (feminine: la vérification). French from the iOS app's reviewed catalog."
+
+[two_step.title]
+en = "Two-step verification"
+fr = "Vérification en deux étapes"
+ctx = "title"
+screen = "two-step verification"
+tier = "T1"
+state = "reviewed"
+note = "Title of the screen and of its row on the account screen. French from the iOS app's reviewed catalog."
+
+[two_step.turn_off]
+en = "Turn off"
+fr = "Désactiver"
+ctx = "button"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "Starts turning it off. French from the iOS app's reviewed catalog."
+
+[two_step.turn_on]
+en = "Turn on"
+fr = "Activer"
+ctx = "button"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "Starts turning it on. French from the iOS app's reviewed catalog."
+
+[two_step.turned_off]
+en = "Two-step verification is off."
+fr = "La vérification en deux étapes est désactivée."
+ctx = "toast"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "After turning it off. French from the iOS app's reviewed catalog."
+
+[two_step.turned_on]
+en = "Two-step verification is on."
+fr = "La vérification en deux étapes est activée."
+ctx = "toast"
+screen = "two-step verification"
+tier = "T2"
+state = "reviewed"
+note = "After turning it on. French from the iOS app's reviewed catalog."
 
 [voice_studio.failed_title]
 en = "Could not load Voice Studio"

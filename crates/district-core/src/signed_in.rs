@@ -19,7 +19,7 @@ use district_model::{
     DeviceListResponse, DeviceRevokeResponse, OverviewResponse, ThreadRef, WorkspaceListResponse,
 };
 
-use crate::account::ACCOUNT_DELETION_PATH;
+use crate::account_security::{DeleteAccountScreen, TwoStepScreen};
 use crate::analytics::AnalyticsScreen;
 use crate::billing::BillingScreen;
 use crate::call::{ActiveCall, CallEnd};
@@ -56,6 +56,7 @@ use crate::thread::{DraftWrites, ThreadScreen};
 use crate::transcript::TranscriptWatch;
 use crate::workflows::WorkflowsScreen;
 use crate::workspaces::{self, Resolved, WorkspacesState};
+use district_auth::ReauthAttempt;
 
 /// The signed-in session and its screens.
 ///
@@ -72,6 +73,10 @@ pub struct SignedIn {
     pub overview: OverviewScreen,
     /// The devices screen.
     pub devices: DevicesScreen,
+    /// The two-step verification screen.
+    pub two_step: TwoStepScreen,
+    /// The account deletion screen.
+    pub delete_account: DeleteAccountScreen,
     /// A notice over every screen until it is dismissed.
     pub notice: Option<Notice>,
     /// How many messages in the open workspace nobody has read, for the inbox
@@ -160,6 +165,9 @@ pub struct SignedIn {
     /// once the workspace list is read: before that there is no workspace to
     /// switch to.
     pub(crate) pending_open: Option<NotificationTarget>,
+    /// The fresh re-authentication waiting for the browser's answer, held only
+    /// while its screen waits for it.
+    pub(crate) reauth: Option<ReauthAttempt>,
     /// The dial whose answer is awaited.
     pub(crate) pending_dial: Option<PendingDial>,
     /// The live transcript the call's socket was last asked for.
@@ -210,6 +218,8 @@ impl SignedIn {
             route: Route::Overview,
             overview: OverviewScreen::Loading,
             devices: DevicesScreen::default(),
+            two_step: TwoStepScreen::default(),
+            delete_account: DeleteAccountScreen::default(),
             notice,
             unread: None,
             inbox: InboxScreen::default(),
@@ -250,6 +260,7 @@ impl SignedIn {
             media: None,
             presence: PresenceState::default(),
             pending_open: None,
+            reauth: None,
             pending_dial: None,
             transcript_watch: None,
             draft_writes: DraftWrites::default(),
@@ -336,6 +347,7 @@ impl SignedIn {
         self.close_contact(tickets);
         self.close_desk_ticket(tickets);
         self.close_desk_settings(tickets);
+        self.close_account_security(tickets);
         self.close_support_request(tickets);
         self.close_scheduling_admin(next, tickets);
         effects.extend(self.close_rooms(tickets));
@@ -355,6 +367,11 @@ impl SignedIn {
                     ..DevicesScreen::default()
                 };
                 self.load_devices(tickets)
+            }
+            Route::TwoStep => self.enter_two_step(tickets),
+            Route::DeleteAccount => {
+                self.enter_delete_account(tickets);
+                Vec::new()
             }
             Route::Inbox => self.enter_inbox(tickets),
             Route::Calls => self.enter_calls(tickets),
@@ -414,6 +431,14 @@ impl SignedIn {
     pub(crate) fn refresh(&mut self, tickets: &mut Tickets) -> Next {
         if self.route == Route::Devices {
             return Next::Stay(self.load_devices(tickets));
+        }
+        if self.route == Route::TwoStep {
+            return Next::Stay(self.refresh_two_step(tickets));
+        }
+        // The deletion screen reads nothing, and starting it again would drop
+        // a re-authentication under way: only the live sockets are seen to.
+        if self.route == Route::DeleteAccount {
+            return Next::Stay(self.rewatch(tickets));
         }
         let mut effects = self.rewatch(tickets);
         let ready = matches!(self.workspaces, WorkspacesState::Ready(_));
@@ -552,14 +577,9 @@ impl SignedIn {
         }])
     }
 
-    pub(crate) fn open_account_deletion(&mut self, config: &CoreConfig) -> Next {
-        Next::Stay(vec![Effect::OpenUrl {
-            url: config.web_url(ACCOUNT_DELETION_PATH),
-        }])
-    }
-
     pub(crate) fn url_open_failed(&mut self, tickets: &mut Tickets) -> Next {
         self.notice = Some(Notice::NoBrowser);
+        self.reauth_unopened();
         self.hand_off_unopened(tickets);
         self.purchase_unopened(tickets);
         stay()

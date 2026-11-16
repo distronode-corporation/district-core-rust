@@ -120,6 +120,7 @@
 
 #![forbid(unsafe_code)]
 
+mod account_security;
 mod analytics;
 mod billing;
 mod call_handling;
@@ -161,8 +162,8 @@ pub use endpoints::{
     ALL_ENDPOINTS, Auth, BodyKind, Endpoint, EndpointSpec, HttpMethod, RetryPolicy, WorkspaceIn,
 };
 pub use error::{
-    ApiError, CODE_REGIONS_DEGRADED, ERROR_CODE_HEADER, ErrorDetail, FALLBACK_MESSAGE,
-    TransportError, TransportKind, UnauthorizedReason,
+    ApiError, CODE_MFA_REQUIRED, CODE_REGIONS_DEGRADED, ERROR_CODE_HEADER, ErrorDetail,
+    FALLBACK_MESSAGE, TransportError, TransportKind, UnauthorizedReason,
 };
 pub use exclusions::{Addition, DESKTOP_ONLY, EXCLUDED, Exclusion, PathMatch, normalize_template};
 pub use inbox::ConversationsQuery;
