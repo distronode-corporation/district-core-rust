@@ -439,7 +439,8 @@ catalogs) over every catalog; an error fails it, a warning does not.
 The French is signed off per release. `i18n/fr-CA/signoff.json` names who signed
 it off, the release and commit the catalogs were read at, and the SHA-256 of
 every catalog; `python3 scripts/check-fr-signoff.py` fails, naming each catalog,
-when one differs, is missing or is not listed. It runs on the tag build
+when one differs, is missing or is not listed, and fails when `signed_off_by` is
+blank or a placeholder (it starts with PENDING). It runs on the tag build
 (`release-guard.yml`), never on pull requests, because catalogs change between
 releases. A release whose catalogs changed (French, or English the French
 follows) needs the manager's review of the French and a new `signoff.json`

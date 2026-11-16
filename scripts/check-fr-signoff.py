@@ -15,8 +15,11 @@ A catalog is what `tools/l10n/frcheck.py all` lints (its find_catalogs): a .toml
 file with a `[meta] catalog` key, in a directory named l10n, catalog or i18n,
 build output pruned. The check fails, and names each catalog, when one's bytes
 differ from the hash the sign-off records, when one the sign-off lists is gone,
-or when one exists that the sign-off does not list. A changed catalog is printed
-with its hash in the tree, which is what a renewed sign-off records.
+or when one exists that the sign-off does not list. It also fails when
+`signed_off_by` is empty or blank, or is a placeholder (it starts with
+PENDING, in any case), so a tag cut before the review cannot pass. A changed
+catalog is printed with its hash in the tree, which is what a renewed sign-off
+records.
 
 Run by the release workflow's guard, on the tag build only: catalogs change
 between releases, and the sign-off is renewed per release (CONTRIBUTING.md), so
@@ -70,6 +73,11 @@ def read_signoff(root: Path) -> tuple[dict, list[str]]:
     for key in ("signed_off_by", "release", "commit"):
         if not isinstance(data.get(key), str) or not data[key].strip():
             errors.append(f"{SIGNOFF}: `{key}` must be a non-empty string")
+    signer = data.get("signed_off_by")
+    if isinstance(signer, str) and signer.strip().upper().startswith("PENDING"):
+        # A placeholder written before the review is not a sign-off, and a tag
+        # cut while it is still there must not pass the guard.
+        errors.append(f"{SIGNOFF}: `signed_off_by` is a placeholder, not a sign-off")
     if isinstance(data.get("commit"), str) and not HEX40.match(data["commit"]):
         errors.append(f"{SIGNOFF}: `commit` must be a full 40-character commit id")
     rows = data.get("catalogs")
@@ -166,6 +174,9 @@ def self_test() -> int:
         for label, doc in (
             ("a short commit id", {**base, "commit": "abc1234"}),
             ("no signer", {**base, "signed_off_by": ""}),
+            ("a blank signer", {**base, "signed_off_by": " \t "}),
+            ("a pending signer", {**base, "signed_off_by": "PENDING: review"}),
+            ("a pending signer in lower case", {**base, "signed_off_by": "  pending review"}),
             ("no catalogs", {**base, "catalogs": []}),
             ("an uppercase hash", {**base, "catalogs": [{"path": "l10n/app.toml", "sha256": good.upper()}]}),
             ("an extra field", {**base, "catalogs": [{"path": "l10n/app.toml", "sha256": good, "x": 1}]}),
