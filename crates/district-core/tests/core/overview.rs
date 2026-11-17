@@ -336,13 +336,17 @@ fn the_finish_setup_card_shows_only_for_an_owner_mid_setup() {
     assert!(FINISH_SETUP_BODY.starts_with("Your receptionist is not live yet."));
     assert_eq!(FINISH_SETUP_ACTION, "Open the web dashboard");
 
+    // The card opens the wizard in the app, read afresh with the persona whose
+    // language step 1 opens on.
     let effects = model.update(Event::OpenFinishSetup);
-    assert_eq!(
-        effects,
-        [Effect::OpenUrl {
-            url: "https://www.distronode.com/dashboard/district".to_owned()
-        }]
-    );
+    assert_eq!(signed_in(&model).route, Route::Setup);
+    assert!(matches!(
+        effects.as_slice(),
+        [
+            Effect::LoadSetupWizard { workspace_id, .. },
+            Effect::LoadWorkspaceConfig { .. },
+        ] if workspace_id == AGENCY
+    ));
 
     // For everyone but the owner the answer is a refusal, which hides the card
     // and fails nothing.

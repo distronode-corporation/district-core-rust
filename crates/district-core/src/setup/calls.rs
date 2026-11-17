@@ -341,11 +341,8 @@ impl SignedIn {
     /// Both reads are in: the step is ready, or failed with the first failure.
     fn settle_calls(&mut self) {
         let step = &mut self.setup.calls;
-        let (Some(handling), Some(config)) = (step.handling.take(), step.config.take()) else {
-            return;
-        };
-        match (handling, config) {
-            (Ok(handling), Ok(config)) => {
+        match (step.handling.take(), step.config.take()) {
+            (Some(Ok(handling)), Some(Ok(config))) => {
                 step.adopt(&handling);
                 step.transfer_number = transfer_number(&config);
                 step.profiles_offered = profiles_offered(config.subscription_tier.as_deref());
@@ -356,7 +353,14 @@ impl SignedIn {
                     == Some(true);
                 step.phase = StepPhase::Ready;
             }
-            (Err(failure), _) | (_, Err(failure)) => step.phase = StepPhase::Failed(failure),
+            (Some(Err(failure)), Some(_)) | (Some(_), Some(Err(failure))) => {
+                step.phase = StepPhase::Failed(failure);
+            }
+            // One read is still on its way: the one that landed waits for it.
+            (handling, config) => {
+                step.handling = handling;
+                step.config = config;
+            }
         }
     }
 

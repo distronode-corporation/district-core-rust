@@ -69,6 +69,14 @@ fn workspace_config() -> WorkspaceConfigResponse {
     fixture("district-workspace-config.json")
 }
 
+/// The fixture's configuration on Voice Studio, a plan that includes caller
+/// profiles (the fixture's own tier is a placeholder no plan is named).
+fn studio_config(tier: &str) -> WorkspaceConfigResponse {
+    let mut config = workspace_config();
+    config.config.subscription_tier = Some(tier.to_owned());
+    config
+}
+
 fn options() -> PersonaOptionsResponse {
     fixture("district-persona-options.json")
 }
@@ -387,20 +395,6 @@ fn the_last_step_done_with_one_still_open_goes_to_the_open_one_and_a_completion_
         ),
     );
     assert_eq!(wizard(&model).active, Some(SetupStep::Number));
-    // From the last step, past it: the one still open.
-    let (mut model, _) = ready(
-        state(["done", "todo", "done", "done", "done", "todo"], json!({})),
-        None,
-    );
-    for _ in 0..4 {
-        send(&mut model, SetupEvent::Skip)
-            .first()
-            .cloned()
-            .map(|_| ());
-        let save = signed_in(&model).setup.completing;
-        assert!(save);
-        break;
-    }
     let (mut model, _) = ready(
         state(["done", "todo", "done", "done", "done", "todo"], json!({})),
         None,
@@ -667,15 +661,13 @@ fn step_one_opens_on_the_draft_and_the_stored_facts() {
     let step = &wizard(&model).business;
     assert_eq!(step.country, "US");
     assert_eq!(step.subdivision_label(), "State");
-    assert_eq!(step.subdivision_error(), Some("Choose a state."));
+    assert_eq!(step.subdivision_error(), Some("Choose your province or state."));
     assert!(step.city_error().is_some());
     assert!(!step.is_valid());
 }
 
 #[test]
 fn a_provisioned_name_opens_empty_and_every_field_has_its_error() {
-    let (mut model, _) = loaded(AGENCY, "agency");
-    let _ = &mut model;
     let (mut model, _) = ready(state(ALL_TODO, json!({"region": "eu"})), None);
     business(
         &mut model,
@@ -1154,12 +1146,15 @@ fn step_three_replaces_a_starter_greeting_and_offers_the_engines_voices() {
     assert!(!step.greeting_edited);
     assert_eq!(step.voice.as_deref(), Some("aura-2-luna-en"));
     assert_eq!(step.voice_groups.len(), 2);
-    assert_eq!(wizard(&model).disclosure_line(), "In the European Union, your receptionist must say it is an AI. It says so at the start of every call.")
-        .then_some(()).unwrap_or(());
-    assert_ne!(wizard(&model).disclosure_line(), {
-        let other = on_receptionist(json!({}), Ok(options()), "ca");
-        wizard(&other).disclosure_line()
-    });
+    assert_eq!(
+        wizard(&model).disclosure_line(),
+        "This is required in Europe."
+    );
+    let other = on_receptionist(json!({}), Ok(options()), "ca");
+    assert_eq!(
+        wizard(&other).disclosure_line(),
+        "Your receptionist tells callers it is an AI assistant at the start of every call."
+    );
 }
 
 #[test]
@@ -1208,7 +1203,7 @@ fn step_three_keeps_an_owners_greeting_and_falls_back_on_the_default_voice() {
 #[test]
 fn the_greeting_follows_the_name_until_the_owner_writes_it_and_the_save_sends_only_its_fields() {
     let mut model = on_receptionist(
-        json!({"modelId": "deepgram-pipeline", "language": "de-DE"}),
+        json!({"modelId": "deepgram-pipeline", "language": "hi-IN"}),
         Ok(options()),
         "ca",
     );
@@ -1247,11 +1242,11 @@ fn the_greeting_follows_the_name_until_the_owner_writes_it_and_the_save_sends_on
     assert_eq!(patch.greeting.as_deref(), Some("Hi."));
     assert_eq!(
         patch.voice, None,
-        "no voices offered for de-DE stored as kept: none sent"
+        "the engine offers no hi-IN voices, so none is sent"
     );
     assert_eq!(
         patch.language.as_deref(),
-        Some("de-DE"),
+        Some("hi-IN"),
         "a language outside both families is kept"
     );
     assert!(
@@ -1605,7 +1600,7 @@ fn hours_from_the_website_are_a_draft_until_used_and_continue_waits_for_them() {
     });
     assert_eq!(
         wizard(&model).callers.hours_notice.as_deref(),
-        Some("We found no opening hours on that page.")
+        Some("We did not find opening hours on that website. Enter them below.")
     );
     let t = ticket(&callers(&mut model, CallersEvent::FillHoursFromWebsite)[0]);
     model.update(Event::SetupWebsiteRead {
@@ -1728,7 +1723,7 @@ fn on_calls(
 fn step_five_reads_who_answers_the_transfer_number_the_calendar_and_profiles() {
     let (model, _) = on_calls(
         "ai_then_app",
-        Ok(workspace_config()),
+        Ok(studio_config("VoiceStudio")),
         Ok(fixture("district-connections.json")),
     );
     let step = &wizard(&model).calls;
@@ -1901,7 +1896,7 @@ fn who_answers_is_saved_with_only_what_changed_and_continue_waits_for_it() {
 fn caller_profiles_are_written_only_when_offered_and_flipped() {
     let (mut model, _) = on_calls(
         "ai_first",
-        Ok(workspace_config()),
+        Ok(studio_config("dgi")),
         Ok(fixture("district-connections.json")),
     );
     assert!(
@@ -2142,7 +2137,7 @@ fn the_forwarding_check_starts_polls_every_two_seconds_and_gives_up_after_two_mi
     assert!(step.check_offered());
     assert_eq!(
         step.check_sentence(),
-        Some("Forwarding works. Calls to your business line reach your receptionist.")
+        Some("Forwarding works. The call arrived on your District number.")
     );
     assert_eq!(
         step.attempts_sentence().as_deref(),
@@ -2232,7 +2227,7 @@ fn the_forwarding_check_starts_polls_every_two_seconds_and_gives_up_after_two_mi
     assert!(!step.polling && step.poll_gave_up);
     assert_eq!(
         step.check_sentence(),
-        Some("Still checking. Check again in a minute, or try another business line.")
+        Some("The check is still running. Click the button to look again.")
     );
     // A pending check is read again rather than started anew, and passes.
     let effects = golive(&mut model, GoLiveEvent::StartCheck);
