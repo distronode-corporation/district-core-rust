@@ -757,7 +757,7 @@ state = "reviewed"
 note = "A label for the stored value `managed` of messagingCredentialSource. `accounts[].credentialSource` in GET /api/district/workspace/messaging (missing reads as `byok`)."
 
 [wire.number_capability.mms]
-en = "Mms"
+en = "MMS"
 fr = "MMS"
 ctx = "label"
 screen = "wire number_capability"
@@ -766,7 +766,7 @@ state = "reviewed"
 note = "A label for the stored value `mms` of numberCapability. `numbers[].capabilities[]` in GET /api/district/workspace/provider/numbers. The portal shows the value itself; it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
 
 [wire.number_capability.sms]
-en = "Sms"
+en = "SMS"
 fr = "Texto"
 ctx = "label"
 screen = "wire number_capability"
@@ -1617,7 +1617,7 @@ state = "reviewed"
 note = "A label for the stored value `failed` of workflowActionOutcome. `actionResults[].outcome` on a workflow run. The portal shows the value itself (only its colour depends on it); it has no label for any of them. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_outcome.ok]
-en = "Ok"
+en = "OK"
 fr = "OK"
 ctx = "label"
 screen = "wire workflow_action_outcome"
@@ -1662,7 +1662,7 @@ state = "reviewed"
 note = "A label for the stored value `contact-not-found` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail. The service has no label for it; the English is the value as the apps show it."
 
 [wire.workflow_action_reason.dnc]
-en = "Dnc"
+en = "DNC"
 fr = "Liste d'exclusion"
 ctx = "label"
 screen = "wire workflow_action_reason"
@@ -1752,7 +1752,7 @@ state = "reviewed"
 note = "A label for the stored value `fallback-push` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
 
 [wire.workflow_action_reason.http_status]
-en = "Http {{status}}"
+en = "HTTP {{status}}"
 fr = "HTTP {{status}}"
 ctx = "label"
 screen = "wire workflow_action_reason"
@@ -1788,7 +1788,7 @@ state = "reviewed"
 note = "A label for the stored value `loop-paused` of workflowActionReason. The code that opens `actionResults[].reason` on a workflow run: the reason is an English sentence `<code>: <detail>` (the detail can name a number, a tag or a status). The portal shows the whole sentence as sent, under the code's label where it has one (the fallback codes of a text to the owner or a team member, the team push codes and the webhook signing code); an app shows the code's entry, never the detail."
 
 [wire.workflow_action_reason.missing_webhook_url]
-en = "Missing webhook url"
+en = "Missing webhook URL"
 fr = "URL du webhook manquante"
 ctx = "label"
 screen = "wire workflow_action_reason"

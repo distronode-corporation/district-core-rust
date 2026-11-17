@@ -16,7 +16,7 @@ fn vocabulary() -> Value {
 }
 
 /// Words a humanized value writes in capitals (scripts/gen-l10n.py INITIALISMS).
-const INITIALISMS: [&str; 1] = ["SES"];
+const INITIALISMS: [&str; 7] = ["DNC", "HTTP", "MMS", "OK", "SES", "SMS", "URL"];
 
 /// What District AI for Linux shows for a value with no label (`humanize`),
 /// an initialism in capitals ("ses-missing" reads "SES missing").
