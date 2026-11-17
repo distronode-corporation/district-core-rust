@@ -58,7 +58,7 @@ of `district-core` has the whole shape.
 | Crate | What it holds |
 | --- | --- |
 | `district-model` | Serde data types for the District AI API, mirroring the Android app's core model, and the live telemetry envelopes. `Platform` and `ClientIdentity` name the app on the wire. No IO. |
-| `district-api` | The HTTP client and the endpoint table. A bearer token and an explicit workspace on every call, no cookie store, redirects never followed, rustls. |
+| `district-api` | The HTTP client and the endpoint table. A bearer token on every call and an explicit workspace on every workspace-scoped one, no cookie store, redirects never followed, rustls. |
 | `district-auth` | Sign-in with OAuth 2.0 and PKCE through the system browser, the token exchange, single-flight refresh-token rotation, sign-out. |
 | `district-live` | The live telemetry WebSocket client. |
 | `district-core` | App state with no user interface toolkit and no IO of its own: the session, routes, role capabilities, a model per screen, and the effect runner with the traits an app implements. |

@@ -100,12 +100,16 @@ builds the authorize URL, the app opens it, and the browser returns through
 
 ## What the crates are tested against
 
-`contracts/` holds the server's recorded responses, its localization facts, the Android
-app's endpoint list and the brand palette, each vendored with its source commit and pinned
-by `contracts/SHA256SUMS`. `district-model` decodes every recorded response with unknown
-fields refused; `district-api` holds its endpoint table to the Android app's; and
-`district-l10n` holds its formats to the service's own outputs. CONTRIBUTING.md says how
-each set is refreshed.
+`contracts/` holds the server's recorded responses and its localization facts, three sets
+whose source commits `contracts/SOURCE.toml` records and whose bytes `contracts/SHA256SUMS`
+pins (`fixtures/`, `desktop/` and `i18n/`), and two snapshots that each record their own
+source commit and are not in `SHA256SUMS`: the Android app's endpoint list
+(`endpoints.snapshot.json`) and the brand palette (`palette.snapshot.json`).
+`district-model` decodes every recorded response with unknown fields refused, except those
+its fixture manifest lists as not yet modelled (`NOT_YET_MODELLED`) or excluded by decision
+(`EXCLUDED_BY_DECISION`), both in `crates/district-model/tests/contracts/manifest.rs`;
+`district-api` holds its endpoint table to the Android app's; and `district-l10n` holds
+its formats to the service's own outputs. CONTRIBUTING.md says how each set is refreshed.
 
 ## Build and release
 

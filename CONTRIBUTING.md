@@ -20,8 +20,8 @@ crates/district-model/    Serde data types for the District AI API, mirroring th
                           and the live telemetry envelopes; `Platform` and
                           `ClientIdentity`, which name the app on the wire. No IO.
 crates/district-api/      The HTTP client and the endpoint table. A bearer token and
-                          an explicit workspace on every call, no cookie store,
-                          redirects never followed.
+                          an explicit workspace on every workspace-scoped call,
+                          no cookie store, redirects never followed.
 crates/district-auth/     Sign-in with OAuth 2.0 and PKCE through the system
                           browser, the token exchange, single-flight refresh-token
                           rotation, sign-out.
@@ -117,9 +117,9 @@ Two things differ on Windows by design:
   directory they are in (the app's own data directory), because the owner-only
   modes it sets on Unix have no Windows equivalent in the standard library.
 - Line endings: `.gitattributes` keeps every text file LF in every checkout,
-  Windows included, and never converts anything under `contracts/`, whose bytes
-  `contracts/SHA256SUMS` pins. A checkout made before `.gitattributes` existed,
-  or with a global setting that overrides it, fails the checksum test; clone
+  Windows included, and never converts anything under `contracts/`, where
+  `contracts/SHA256SUMS` pins the bytes of the three vendored sets. A checkout
+  made before `.gitattributes` existed, or with a global setting that overrides it, fails the checksum test; clone
   again.
 
 The call engine (`livekit`) is not built on Windows here: District AI for Windows
@@ -187,9 +187,22 @@ refused, as the last two `devices::` tests show.
 
 ## Logging
 
-Nothing in these crates logs or prints: no `println!`, `eprintln!` or `dbg!`
-outside tests, and no `log` macro. `log` is a dependency only for its
-`max_level_warn` feature, which compiles every line below warn out of a whole
+Nothing in these crates logs: there is no `log` macro. Nothing prints either (no
+`println!`, `eprintln!` or `dbg!` outside tests), with two exceptions:
+
+- `crates/district-core/src/runner.rs` writes one line to stderr with
+  `eprintln!` when the core's own end or give-back of an HQ voice session is
+  declined, fails or goes unanswered (`log_release`, and the declined discard in
+  `Effect::DiscardHqVoice`). Nothing waits on those calls, so there is no caller
+  to return the error to. The line names the route (`end` or `discard`) and
+  either the `ApiError`'s own text or the timeout, never a token, a session or
+  workspace id or a response body. Do not add another: a new failure is
+  returned as an error.
+- `examples/` may print with `println!`, because printing is how an example
+  shows its result (`crates/district-l10n/examples/quick_start.rs` prints two
+  formatted prices). An example prints no credential and no customer data.
+
+`log` is a dependency only for its `max_level_warn` feature, which compiles every line below warn out of a whole
 build; SECURITY.md says why, and a test in `district-live` (and, with the engine,
 one in `district-call`) fails if it goes. Keep it that way: an error is returned,
 not logged, and what reaches a user is the app's decision.
@@ -361,12 +374,14 @@ its money, number, date and duration formatters in English and French.
 two and tests its formats against the third, byte for byte.
 
 `crates/district-model` decodes every file in the first two sets in its tests with unknown
-fields refused (the `strict-contracts` feature, which its tests always enable), so
-a field the server renames or adds fails here rather than in an app. The files
-are a snapshot: `contracts/SOURCE.toml` says which server commit they came from,
+fields refused (the `strict-contracts` feature, which its tests always enable),
+except those its fixture manifest (`crates/district-model/tests/contracts/manifest.rs`)
+lists as not yet modelled (`NOT_YET_MODELLED`, which may only shrink) or excluded by
+decision (`EXCLUDED_BY_DECISION`), so a field the server renames or adds fails here
+rather than in an app. The files are a snapshot: `contracts/SOURCE.toml` says which server commit they came from,
 with a `[sets.<name>]` table for each set, and lists every substitution made to
 keep real-looking data out of this public repository; `contracts/SHA256SUMS` pins
-the bytes of both sets. Do not edit them by hand; maintainers with access to the
+the bytes of all three sets. Do not edit them by hand; maintainers with access to the
 server repository re-run
 
 ```

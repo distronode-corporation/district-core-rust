@@ -26,7 +26,7 @@ that app's SECURITY.md.
 | Someone on the network path | Read or alter traffic, or answer as the service | rustls with certificate verification against the operating system's trust store and no option to turn it off; plain `ws` and `http` refused unless the address is this machine |
 | A hostile or compromised server, or a redirect | Send the token elsewhere, or send data the client does not expect | Redirects are never followed; every response is decoded into a typed `district-model` value or is an error; a live event that cannot be read, or names another workspace, is dropped unread |
 | Someone who sends the member a link | Get a browser signed in to their account, or open an arbitrary page | A web hand-off is bound to the browser the app opened with a fresh `state` and a service nonce; links are opened only when they are web pages, and hand-off links only on the service's own address over HTTPS |
-| Someone with the member's logs, crash reports or screenshots of debug output | Read a token, a credential or customer data | Nothing logs or prints; `log`'s `max_level_warn` compiles lower levels out of the whole build; every type holding a credential redacts it from `Debug`; no error carries a token, a code or a response body; crash reports are opt-in and scrubbed |
+| Someone with the member's logs, crash reports or screenshots of debug output | Read a token, a credential or customer data | Nothing logs, and the only printing outside tests and examples is one line on stderr when the core's own end or give-back of an HQ voice session is declined, fails or goes unanswered (CONTRIBUTING.md, Logging), which names the route and the error's own text and never a token, an id or a response body; `log`'s `max_level_warn` compiles lower levels out of the whole build; every type holding a credential redacts it from `Debug`; no error carries a token, a code or a response body; crash reports are opt-in and scrubbed |
 | Someone who can push to the repository, or who tampers with a tag | Point a release tag at code that was not released | Release tags are protected against moves and deletion; from the next release on they are signed with gitsign by the Release workflow under its own OIDC identity, and README.md says how to verify that identity |
 | A thief replaying a refresh token | Use a spent token | The service rotates it on every refresh; the core refreshes one at a time and records a fingerprint before sending, so a refresh interrupted mid-way asks for a new sign-in instead of presenting a token that may be spent |
 
@@ -50,10 +50,14 @@ that app's SECURITY.md.
 ## Secure design principles applied
 
 - **Least privilege.** The crates start no service and ask for no privilege. The client
-  sends a bearer token and an explicit workspace on every call, with no cookie store, so a
-  request can act only where it says. The live credential is minted for one workspace and
-  expires after fifteen minutes. CI workflows start read-only (`permissions: contents: read`
-  at the top of `.github/workflows/ci.yml`).
+  sends a bearer token on every call and an explicit workspace on every workspace-scoped
+  one, with no cookie store, so a request can act only where it says. The account-level
+  endpoints (who is signed in, the account's devices, MFA, re-authentication, account
+  deletion, billing and its hand-off, settings, the workspace list, the call token and
+  device registration) carry no workspace: they are the entries whose `workspace` is
+  `None` in `ALL_ENDPOINTS` (`crates/district-api/src/endpoints.rs`). The live credential
+  is minted for one workspace and expires after fifteen minutes. CI workflows start
+  read-only (`permissions: contents: read` at the top of `.github/workflows/ci.yml`).
 - **Fail closed.** A callback or hand-off answer that does not match exactly is dropped. A
   response that does not decode is an error. A server that selects the live credential as
   its WebSocket protocol is refused. An interrupted refresh ends the session rather than

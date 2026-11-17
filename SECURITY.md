@@ -156,7 +156,10 @@ that app's SECURITY.md describes it.
 
 ### Logging
 
-Nothing in these crates logs or prints. The `log` crate is a dependency only for
+Nothing in these crates logs. The only printing outside tests and examples is
+one line on stderr when the core's own end or give-back of an HQ voice session is
+declined, fails or goes unanswered, which CONTRIBUTING.md (Logging) describes;
+it carries no token, id or response body. The `log` crate is a dependency only for
 its `max_level_warn` feature, which compiles every `info!`, `debug!` and `trace!`
 in every crate of a build out of the binary, so no logger, however an app
 configures it, can bring any of them back. Cargo unifies features across a
