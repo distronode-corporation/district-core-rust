@@ -602,6 +602,34 @@ fn a_re_read_that_lands_before_a_step_write_never_skips_a_step() {
 }
 
 #[test]
+fn a_re_read_asked_before_a_write_landed_is_dropped_and_one_with_no_progress_keeps_the_step() {
+    let (mut model, _) = ready(state(ALL_TODO, json!({})), None);
+    let read = send(&mut model, SetupEvent::HandOffReturned);
+    let skip = send(&mut model, SetupEvent::Skip);
+    let saved = state(
+        ["skipped", "todo", "todo", "todo", "todo", "todo"],
+        json!({"businessFacts": {"faqs": [{"question": "Parking?", "answer": "Yes.", "enabled": true}]}}),
+    );
+    complete(&mut model, &skip, saved.clone());
+    assert_eq!(wizard(&model).active, Some(SetupStep::Number));
+    // The re-read asked before the write landed holds the older state.
+    let late = model.update(Event::SetupWizardLoaded {
+        ticket: ticket(&read[0]),
+        result: Ok(state(ALL_TODO, json!({}))),
+    });
+    assert!(late.is_empty(), "{late:?}");
+    assert_eq!(wizard(&model).data, Some(saved.clone()));
+    // A re-read with no progress says nothing about the steps.
+    let read = send(&mut model, SetupEvent::HandOffReturned);
+    model.update(Event::SetupWizardLoaded {
+        ticket: ticket(&read[0]),
+        result: Ok(state(ALL_TODO, json!({"setupProgress": null}))),
+    });
+    assert_eq!(wizard(&model).active, Some(SetupStep::Number));
+    assert_eq!(wizard(&model).data, Some(saved));
+}
+
+#[test]
 fn answers_that_arrive_after_the_wizard_was_left_change_nothing() {
     let (mut model, load, _) = opened();
     model.update(Event::Navigate(Route::Overview));

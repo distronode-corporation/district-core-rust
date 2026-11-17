@@ -717,9 +717,14 @@ impl SignedIn {
         result: Result<SetupResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Vec<Effect> {
+        // A failed read, or one with no progress (which says nothing about the
+        // steps), keeps the step on screen.
         let Ok(response) = result else {
             return Vec::new();
         };
+        if response.setup_progress.is_none() {
+            return Vec::new();
+        }
         // Asked for only while Ready, which always has a step on screen, and a
         // step leaves the screen only with the whole wizard, which cancels this
         // read: no `None` arm.
@@ -757,16 +762,20 @@ impl SignedIn {
         tickets: &mut Tickets,
     ) -> Next {
         if tickets.accept(Slot::SetupComplete, ticket) {
+            drop_older_read(&result, tickets);
             return Next::Stay(self.setup_completed(result, tickets));
         }
         if tickets.accept(Slot::SetupLookupSave, ticket) {
+            drop_older_read(&result, tickets);
             self.business_drafts_saved(result);
             return stay();
         }
         if tickets.accept(Slot::SetupBusinessSave, ticket) {
+            drop_older_read(&result, tickets);
             return Next::Stay(self.business_saved(result, tickets));
         }
         if tickets.accept(Slot::SetupCallersSave, ticket) {
+            drop_older_read(&result, tickets);
             return Next::Stay(self.callers_saved(result, tickets));
         }
         stay()
@@ -873,6 +882,15 @@ impl SignedIn {
     pub(crate) fn setup_persona_language_read(&mut self, language: Option<String>) {
         self.setup_persona_language = Some(language);
         self.settle_setup_draft();
+    }
+}
+
+/// A write answers with the whole state as it left it, so a re-read asked
+/// before that answer may hold older state: it is dropped, and a later save
+/// cannot write sections from it.
+fn drop_older_read(result: &Result<SetupResponse, ApiError>, tickets: &mut Tickets) {
+    if result.is_ok() {
+        tickets.cancel(Slot::SetupHandOffRead);
     }
 }
 
