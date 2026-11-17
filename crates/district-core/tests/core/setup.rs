@@ -704,6 +704,29 @@ fn an_empty_step_one_writes_only_its_empty_address() {
 }
 
 #[test]
+fn clearing_what_you_do_when_it_is_the_only_question_clears_the_questions() {
+    let what = district_core::setup::wire::what_question(SetupLanguage::En);
+    let stored = json!({"faqs": [{"question": what, "answer": "Teeth.", "enabled": true}]});
+    let step = district_core::BusinessStep::default();
+    let patch = step.facts_patch(stored.as_object());
+    assert_eq!(
+        patch["faqs"],
+        Value::Null,
+        "an empty section is sent as null"
+    );
+    // With another question stored, that one is kept.
+    let stored = json!({"faqs": [
+        {"question": what, "answer": "Teeth.", "enabled": true},
+        {"question": "Parking?", "answer": "Yes.", "enabled": true},
+    ]});
+    let patch = step.facts_patch(stored.as_object());
+    assert_eq!(
+        patch["faqs"],
+        json!([{"question": "Parking?", "answer": "Yes.", "enabled": true}])
+    );
+}
+
+#[test]
 fn a_provisioned_workspace_name_opens_step_one_with_no_name() {
     let (mut model, restore) = restored();
     let mut list = workspace_list();

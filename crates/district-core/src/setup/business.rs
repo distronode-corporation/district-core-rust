@@ -282,7 +282,13 @@ impl BusinessStep {
             rows.extend(others);
             patch.insert("faqs".into(), Value::Array(rows));
         } else if others.len() != all.len() {
-            patch.insert("faqs".into(), Value::Array(others));
+            // An empty section is cleared with `null`, as `faqs_json` sends it.
+            let faqs = if others.is_empty() {
+                Value::Null
+            } else {
+                Value::Array(others)
+            };
+            patch.insert("faqs".into(), faqs);
         }
         patch
     }
