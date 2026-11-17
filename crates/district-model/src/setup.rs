@@ -19,10 +19,10 @@ pub const SETUP_STEP_SKIPPED: &str = "skipped";
 
 /// `GET /api/district/setup`: where the workspace owner is in the setup wizard.
 ///
-/// The wizard itself runs on the web. The app reads one fact from this, through
-/// [`needs_web_setup`](Self::needs_web_setup): whether to show a card sending the
-/// owner there to finish. Only the workspace's owner gets an answer; anyone else
-/// gets an error.
+/// The overview reads one fact from this, through
+/// [`needs_web_setup`](Self::needs_web_setup): whether to show the card that
+/// opens the setup wizard for the owner to finish. Only the workspace's owner
+/// gets an answer; anyone else gets an error.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "strict-contracts", serde(deny_unknown_fields))]
 #[serde(rename_all = "camelCase")]
@@ -46,9 +46,9 @@ pub struct SetupResponse {
 }
 
 impl SetupResponse {
-    /// Whether to show "Finish setting up on the web": the workspace is in the
-    /// wizard and has not finished it. A workspace that never goes through the
-    /// wizard, and one that has finished, both answer `false`.
+    /// Whether to show the overview's "Finish setting up" card: the workspace
+    /// is in the wizard and has not finished it. A workspace that never goes
+    /// through the wizard, and one that has finished, both answer `false`.
     pub fn needs_web_setup(&self) -> bool {
         self.setup_progress
             .as_ref()

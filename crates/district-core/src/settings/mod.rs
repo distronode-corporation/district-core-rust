@@ -434,7 +434,19 @@ impl SignedIn {
         result: Result<WorkspaceConfigResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
-        if tickets.accept(Slot::PersonaConfig, ticket) {
+        if tickets.accept(Slot::SetupConfig, ticket) {
+            let language = result
+                .ok()
+                .and_then(|response| response.config.ai_persona)
+                .and_then(|persona| persona.language);
+            self.setup_persona_language_read(language);
+        } else if tickets.accept(Slot::SetupReceptionistConfig, ticket) {
+            self.receptionist_config_loaded(result);
+        } else if tickets.accept(Slot::SetupCallsConfig, ticket) {
+            self.calls_config_loaded(result);
+        } else if tickets.accept(Slot::SetupGoLiveConfig, ticket) {
+            self.golive_config_loaded(result);
+        } else if tickets.accept(Slot::PersonaConfig, ticket) {
             self.persona_config_loaded(result);
         } else if tickets.accept(Slot::ToolsConfig, ticket) {
             self.tools_config_loaded(result);
@@ -454,6 +466,13 @@ impl SignedIn {
         result: Result<(), ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
+        if tickets.accept(Slot::SetupPersonaSave, ticket) {
+            return Next::Stay(self.receptionist_saved(result, tickets));
+        }
+        if tickets.accept(Slot::SetupProfilesSave, ticket) {
+            self.calls_profiles_saved(result);
+            return stay();
+        }
         let workspace_id = self.workspace_id();
         let effects = if tickets.accept(Slot::PersonaSave, ticket) {
             self.persona_saved(result, workspace_id, tickets)

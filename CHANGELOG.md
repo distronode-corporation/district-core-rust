@@ -17,11 +17,37 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
-The setup wizard's routes, for the in-app wizard the next release brings to the desktop
-apps. A breaking change for an app that matches on `Endpoint` exhaustively: it gains six
-variants.
+The setup wizard in the app: the service's routes for it, and the six steps' state. A
+major version because `Event`, `Effect`, `Endpoint` and `Route` gain variants,
+`SignedIn` gains a field, `DistrictApi` gains six methods, and the overview's "Finish
+setting up" card opens the wizard instead of the web page.
+
+### Upgrading from 13.0.x
+
+- A `match` with no wildcard arm on `Event`, `Effect`, `Endpoint` or `Route` stops
+  compiling: handle the new variants below. An app that runs effects with
+  `EffectRunner` over `ApiClient` needs no code for the new effects.
+- A type that implements `DistrictApi` itself (a test fake) adds `save_setup`,
+  `look_up_website`, `place_test_call`, `forwarding_check`, `start_forwarding_check` and
+  `connections`.
+- `Event::OpenFinishSetup` now navigates to `Route::Setup` and no longer asks for
+  `Effect::OpenUrl`; the app draws the wizard from `SignedIn::setup`. The card's copy
+  changes with it: "Finish setting up", "A few setup steps for this workspace are still
+  open." and "Open setup", in English and French. `SETUP_WEB_PATH` stays, as the page
+  where a number is bought.
 
 ### Added
+
+- The setup wizard (`Route::Setup`, `SetupWizard` in `SignedIn::setup`, `SetupEvent`
+  inside `Event::Setup`): the web's six steps in the web's order, for the workspace's
+  owner. The business (its name, place and language, with a draft read from its website),
+  the number, the receptionist, what callers should know, how calls are answered, and
+  going live with a test call and a forwarding check. Every step saves as it goes and
+  opens where the service says the owner left off, on any device. Buying a number, the
+  plan, a calendar sign-in, the email identity and the transfer number open the web page
+  (`SetupHandOff`), and the wizard reads its state again when the app comes back
+  (`SetupEvent::HandOffReturned`). A member who is not the owner is told so, never shown
+  a failure. Its strings are in `district_l10n::setup_strings`, with reviewed fr-CA.
 
 - `DistrictApi` (`ApiClient`) gains the setup wizard's calls, the workspace owner's alone:
   `save_setup` (`PATCH /api/district/setup`: step states inside `setupProgress`, and

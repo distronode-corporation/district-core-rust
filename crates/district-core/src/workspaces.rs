@@ -38,6 +38,21 @@ pub enum WorkspacesState {
 }
 
 impl WorkspacesState {
+    /// The open workspace, when one is.
+    pub(crate) fn active(&self) -> Option<&WorkspaceEntry> {
+        match self {
+            Self::Ready(workspaces) => Some(workspaces.active()),
+            _ => None,
+        }
+    }
+
+    /// Shows the open workspace under `name`; nothing when none is open.
+    pub(crate) fn rename_active(&mut self, name: &str) {
+        if let Self::Ready(workspaces) = self {
+            workspaces.rename_active(name);
+        }
+    }
+
     /// The body for [`NoWorkspaces`](Self::NoWorkspaces) in place of
     /// [`message`](Self::message) while the plans are offered
     /// ([`SignedIn::no_workspace_message`](crate::SignedIn::no_workspace_message)):
@@ -200,5 +215,30 @@ pub(crate) fn failed(error: &ApiError) -> WorkspacesState {
     match error {
         ApiError::NotFound(_) => WorkspacesState::NoWorkspaces,
         other => WorkspacesState::Unavailable(FailureText::from_api_error(other)),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Every path runs here as well as from the integration tests: a unit
+    /// test binary holds its own copy of each function, measured on its own.
+    #[test]
+    fn the_open_workspace_is_named_and_renamed_and_with_none_open_nothing_is() {
+        let list: WorkspaceListResponse = serde_json::from_str(include_str!(
+            "../../../contracts/fixtures/district-workspace-list.json"
+        ))
+        .unwrap();
+        let mut state = resolve(list, None).state;
+        state.rename_active("Renamed");
+        assert_eq!(
+            state.active().map(|entry| entry.name.as_str()),
+            Some("Renamed")
+        );
+        let mut state = WorkspacesState::Loading;
+        state.rename_active("Zulu Agency");
+        assert_eq!(state, WorkspacesState::Loading);
+        assert!(state.active().is_none());
     }
 }
