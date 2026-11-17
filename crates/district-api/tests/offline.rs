@@ -356,6 +356,38 @@ async fn a_refusal_from_the_service_after_reconnecting_takes_the_copy_off_the_sc
 }
 
 #[tokio::test]
+async fn any_answer_from_the_service_takes_down_the_banner() {
+    let server = MockServer::start().await;
+    answer(
+        &server,
+        LIST,
+        ResponseTemplate::new(200).set_body_json(list("Alpha")),
+    )
+    .await;
+    let s = setup(&server);
+    s.client.workspace_list().await.unwrap();
+    s.tokens.go_offline(true);
+    s.client.workspace_list().await.unwrap();
+    assert_eq!(s.client.showing_saved_since(), Some(1_000));
+
+    // Online again, and the next read is another one entirely: the machine is
+    // online, so no copy is on screen as an offline one.
+    s.tokens.go_offline(false);
+    answer(
+        &server,
+        "/api/auth/native/devices",
+        ResponseTemplate::new(200).set_body_json(json!({"devices": []})),
+    )
+    .await;
+    s.client
+        .request(Endpoint::NativeDevices)
+        .send::<Value>()
+        .await
+        .unwrap();
+    assert_eq!(s.client.showing_saved_since(), None);
+}
+
+#[tokio::test]
 async fn an_empty_or_oversized_body_is_not_kept() {
     let server = MockServer::start().await;
     let s = setup(&server);

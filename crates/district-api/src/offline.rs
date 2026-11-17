@@ -230,19 +230,19 @@ impl SavedReads {
         asked: Option<Asked>,
         result: Result<Vec<u8>, ApiError>,
     ) -> Result<Vec<u8>, ApiError> {
+        // ⚠️ The service answered (any read, even with a refusal or a 5xx): the
+        // machine is online, so no saved copy is on screen any more and the banner
+        // and the withheld writes go, whichever reads the copies came from.
+        if !result.as_ref().is_err_and(unreachable) {
+            self.state().shown.clear();
+        }
         match (result, asked) {
             (Ok(body), Some(asked)) => {
                 self.answered(&asked, &body);
                 Ok(body)
             }
             (Err(error), Some(asked)) if unreachable(&error) => self.saved(&asked.key).ok_or(error),
-            (result, asked) => {
-                // ⚠️ The service answered, even if with a refusal or a 5xx: this read
-                // is no longer a saved copy on screen, so it must not keep the banner
-                // up and the writes withheld once the connection is back.
-                if let Some(asked) = asked {
-                    self.state().shown.remove(&asked.key);
-                }
+            (result, _) => {
                 if result.as_ref().is_err_and(session_over) {
                     self.clear();
                 }
@@ -251,12 +251,10 @@ impl SavedReads {
         }
     }
 
-    /// The service answered `key` with `body`: keep it, and it is no longer a
-    /// saved copy on screen.
+    /// The service answered `asked` with `body`: keep it.
     fn answered(&self, asked: &Asked, body: &[u8]) {
         {
             let mut state = self.state();
-            state.shown.remove(&asked.key);
             if state.generation != asked.generation
                 || body.is_empty()
                 || body.len() > SAVED_COPY_MAX_BYTES

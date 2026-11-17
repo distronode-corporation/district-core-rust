@@ -68,8 +68,8 @@ impl<S: TokenSource> ApiClient<S> {
     }
 
     /// When the oldest saved copy that answered a read was saved, in Unix epoch
-    /// milliseconds, or `None` when every read answered live. A read the service
-    /// answers again takes its own copy off the list.
+    /// milliseconds, or `None` when no saved copy is on screen. Any answer from the
+    /// service (the machine is online again) clears it.
     ///
     /// While this is `Some`, the app is offline and read-only: it says so (with
     /// the time from here) and offers no write, since none could be sent.
