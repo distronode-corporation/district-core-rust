@@ -136,6 +136,8 @@ fn session_over(error: &ApiError) -> bool {
 pub(crate) struct Asked {
     key: String,
     generation: u64,
+    /// When the request was sent: the time its copy is stamped with.
+    asked_at_ms: i64,
 }
 
 /// For a saved read, its key and generation, taken before the request is sent;
@@ -177,6 +179,10 @@ struct State {
     generation: u64,
     /// The saved copies the last answers were, by key, with when each was saved.
     shown: HashMap<String, i64>,
+    /// When the request whose answer was last kept, by key, was sent. An answer
+    /// to an older request (two in flight, answering out of order) is not kept
+    /// over it.
+    kept: HashMap<String, i64>,
 }
 
 impl SavedReads {
@@ -187,6 +193,7 @@ impl SavedReads {
             state: Mutex::new(State {
                 generation: 0,
                 shown: HashMap::new(),
+                kept: HashMap::new(),
             }),
         }
     }
@@ -203,6 +210,7 @@ impl SavedReads {
         is_saved_read(endpoint).then(|| Asked {
             key: format!("{} {url}", district_l10n::current().tag()),
             generation: self.state().generation,
+            asked_at_ms: self.clock.now_ms(),
         })
     }
 
@@ -214,7 +222,7 @@ impl SavedReads {
     ) -> Result<Vec<u8>, ApiError> {
         match (result, asked) {
             (Ok(body), Some(asked)) => {
-                self.answered(&asked.key, &body, asked.generation);
+                self.answered(&asked, &body);
                 Ok(body)
             }
             (Err(error), Some(asked)) if unreachable(&error) => self.saved(&asked.key).ok_or(error),
@@ -235,29 +243,32 @@ impl SavedReads {
 
     /// The service answered `key` with `body`: keep it, and it is no longer a
     /// saved copy on screen.
-    fn answered(&self, key: &str, body: &[u8], generation: u64) {
+    fn answered(&self, asked: &Asked, body: &[u8]) {
         {
             let mut state = self.state();
-            state.shown.remove(key);
-            if state.generation != generation {
+            state.shown.remove(&asked.key);
+            if state.generation != asked.generation
+                || body.is_empty()
+                || body.len() > SAVED_COPY_MAX_BYTES
+                || state.kept.get(&asked.key) > Some(&asked.asked_at_ms)
+            {
                 return;
             }
-        }
-        if body.is_empty() || body.len() > SAVED_COPY_MAX_BYTES {
-            return;
+            state.kept.insert(asked.key.clone(), asked.asked_at_ms);
         }
         // ⚠️ OUTSIDE THE LOCK: a cache that writes files (and flushes them) must not
-        // hold up every other request's bookkeeping while it does.
+        // hold up every other request's bookkeeping while it does. Stamped with when
+        // the request was sent, so an answer never claims to be fresher than it is.
         self.cache.save(
-            key,
+            &asked.key,
             SavedRead {
                 body: body.to_vec(),
-                saved_at_ms: self.clock.now_ms(),
+                saved_at_ms: asked.asked_at_ms,
             },
         );
         // A clear that landed while it was being written still wins: what was just
         // written belonged to the session that ended.
-        if self.state().generation != generation {
+        if self.state().generation != asked.generation {
             self.cache.clear();
         }
     }
@@ -295,16 +306,12 @@ impl SavedReads {
         self.state().shown.values().copied().min()
     }
 
-    #[cfg(test)]
-    fn generation_for_test(&self) -> u64 {
-        self.state().generation
-    }
-
     pub(crate) fn clear(&self) {
         {
             let mut state = self.state();
             state.generation += 1;
             state.shown.clear();
+            state.kept.clear();
         }
         // Outside the lock, like every other use of the cache; see `answered`.
         self.cache.clear();
@@ -374,10 +381,16 @@ mod tests {
             go_on: std::sync::Barrier::new(2),
         });
         let saved = Arc::new(SavedReads::new(Held(cache.clone()), crate::SystemClock));
-        let generation = saved.generation_for_test();
+        let asked = saved
+            .asking(
+                Endpoint::Overview,
+                &Url::parse("https://example.test/k").unwrap(),
+            )
+            .unwrap();
+        let key = asked.key.clone();
         let writer = {
             let saved = saved.clone();
-            std::thread::spawn(move || saved.answered("k", b"{}", generation))
+            std::thread::spawn(move || saved.answered(&asked, b"{}"))
         };
 
         cache.writing.wait();
@@ -387,9 +400,43 @@ mod tests {
         writer.join().unwrap();
 
         assert_eq!(
-            Held(cache).load("k"),
+            Held(cache).load(&key),
             None,
             "the session that ended keeps nothing"
+        );
+    }
+
+    /// A clock the test sets.
+    struct At(Arc<std::sync::atomic::AtomicI64>);
+
+    impl crate::Clock for At {
+        fn now_ms(&self) -> i64 {
+            self.0.load(std::sync::atomic::Ordering::SeqCst)
+        }
+    }
+
+    #[test]
+    fn an_older_request_answering_last_does_not_replace_the_newer_copy() {
+        let cache = Arc::new(MemoryReadCache::new());
+        let now = Arc::new(std::sync::atomic::AtomicI64::new(1_000));
+        let saved = SavedReads::new(cache.clone(), At(now.clone()));
+        let url = Url::parse("https://example.test/overview").unwrap();
+        let older = saved.asking(Endpoint::Overview, &url).unwrap();
+        now.store(2_000, std::sync::atomic::Ordering::SeqCst);
+        let newer = saved.asking(Endpoint::Overview, &url).unwrap();
+        let key = newer.key.clone();
+        now.store(3_000, std::sync::atomic::Ordering::SeqCst);
+
+        saved.answered(&newer, b"{\"n\":2}");
+        saved.answered(&older, b"{\"n\":1}");
+
+        assert_eq!(
+            cache.load(&key),
+            Some(SavedRead {
+                body: b"{\"n\":2}".to_vec(),
+                saved_at_ms: 2_000,
+            }),
+            "the newer answer, stamped with when it was asked"
         );
     }
 
