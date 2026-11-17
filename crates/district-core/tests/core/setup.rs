@@ -2175,6 +2175,32 @@ fn who_answers_is_saved_with_only_what_changed_and_continue_waits_for_it() {
 }
 
 #[test]
+fn continue_while_who_answers_is_saving_moves_on_when_the_save_lands() {
+    let (mut model, _) = on_calls(
+        "ai_first",
+        Ok(workspace_config()),
+        Ok(fixture("district-connections.json")),
+    );
+    calls(&mut model, SetupCallsEvent::SetMode("app_first".into()));
+    let effects = calls(&mut model, SetupCallsEvent::SaveAnswering);
+    let save = ticket(&effects[0]);
+    assert!(
+        calls(&mut model, SetupCallsEvent::Continue).is_empty(),
+        "the save on its way carries it"
+    );
+    let effects = model.update(Event::CallHandlingLoaded {
+        ticket: save,
+        result: Ok(handling("app_first", 20)),
+    });
+    complete(
+        &mut model,
+        &effects,
+        state(["done", "done", "done", "done", "done", "todo"], json!({})),
+    );
+    assert_eq!(wizard(&model).active, Some(SetupStep::Golive));
+}
+
+#[test]
 fn caller_profiles_are_written_only_when_offered_and_flipped() {
     let (mut model, _) = on_calls(
         "ai_first",

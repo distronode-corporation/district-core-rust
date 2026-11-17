@@ -256,7 +256,12 @@ impl SignedIn {
 
     fn save_answering(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         let step = &mut self.setup.calls;
-        if !step.answering_changed() || step.saving_answering {
+        // A save on its way carries a Continue made meanwhile: it moves on
+        // when it lands.
+        if step.saving_answering {
+            return Vec::new();
+        }
+        if !step.answering_changed() {
             step.continuing = false;
             return Vec::new();
         }
