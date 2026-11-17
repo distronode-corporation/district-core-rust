@@ -500,6 +500,24 @@ pub const OPAQUE_OBJECTS: &[OpaqueObject] = &[
         path: "$.data",
         reason: TELEMETRY_DATA,
     },
+    OpaqueObject {
+        fixture: "fixtures/district-setup-lookup.json",
+        path: "$.draft.address",
+        reason: "SetupLookupDraft::address: drafted as a business facts section, sent back \
+                 unchanged inside a facts save; the service owns its validation",
+    },
+    OpaqueObject {
+        fixture: "fixtures/district-setup-lookup.json",
+        path: "$.draft.weeklyHours",
+        reason: "SetupLookupDraft::weekly_hours: drafted as a business facts section, sent back \
+                 unchanged inside a facts save; the service owns its validation",
+    },
+    OpaqueObject {
+        fixture: "fixtures/district-setup-patch.json",
+        path: "$.businessFacts",
+        reason: "SetupResponse::business_facts, as for GET /api/district/setup: free-form, \
+                 edited section by section and sent back whole",
+    },
 ];
 
 /// Whether `path` is at or inside `root`.

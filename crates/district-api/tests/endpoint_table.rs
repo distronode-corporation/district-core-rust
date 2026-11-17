@@ -157,6 +157,10 @@ fn calls_with_side_effects_or_cost_never_repeat() {
         Endpoint::RegistrationDocumentUpload,
         Endpoint::RegistrationDocumentDelete,
         Endpoint::NumberRegistrationSubmit,
+        Endpoint::SetupSave,
+        Endpoint::SetupLookup,
+        Endpoint::SetupTestCall,
+        Endpoint::ForwardingCheckStart,
     ];
     for endpoint in never {
         assert_eq!(

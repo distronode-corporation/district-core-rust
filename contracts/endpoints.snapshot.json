@@ -1,10 +1,40 @@
 {
   "generated_by": "scripts/sync-endpoints.py",
   "source": {
-    "commit": "39a1c39b94fff7e1b426d43a54899eb704a1dd57",
+    "commit": "f63dfb54f9c279be2e060fd56fc004e79350f417",
     "uncommitted_changes": false
   },
   "endpoints": [
+    {
+      "method": "DELETE",
+      "path": "/api/auth/delete-account",
+      "auth": "bearer",
+      "workspace": "none"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/mfa",
+      "auth": "bearer",
+      "workspace": "none"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/mfa/confirm",
+      "auth": "bearer",
+      "workspace": "none"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/mfa/disable",
+      "auth": "bearer",
+      "workspace": "none"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/mfa/enroll",
+      "auth": "bearer",
+      "workspace": "none"
+    },
     {
       "method": "GET",
       "path": "/api/auth/native/devices",
@@ -14,6 +44,18 @@
     {
       "method": "POST",
       "path": "/api/auth/native/devices/revoke",
+      "auth": "bearer",
+      "workspace": "none"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/native/reauth/password",
+      "auth": "bearer",
+      "workspace": "none"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/native/reauth/sso",
       "auth": "bearer",
       "workspace": "none"
     },
@@ -110,6 +152,12 @@
     {
       "method": "GET",
       "path": "/api/district/calls/{callId}/transcript",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/connections",
       "auth": "bearer",
       "workspace": "query"
     },
@@ -258,6 +306,48 @@
       "workspace": "body"
     },
     {
+      "method": "POST",
+      "path": "/api/district/hq/proposals/cancel",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/hq/voice-context",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/hq/voice-discard",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/hq/voice-end",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/hq/voice-settings",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/district/hq/voice-settings",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/hq/voice-token",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
       "method": "GET",
       "path": "/api/district/meetings",
       "auth": "bearer",
@@ -388,6 +478,36 @@
       "path": "/api/district/setup",
       "auth": "bearer",
       "workspace": "query"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/district/setup",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "GET",
+      "path": "/api/district/setup/forwarding-check",
+      "auth": "bearer",
+      "workspace": "query"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/setup/forwarding-check",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/setup/lookup",
+      "auth": "bearer",
+      "workspace": "body"
+    },
+    {
+      "method": "POST",
+      "path": "/api/district/setup/test-call",
+      "auth": "bearer",
+      "workspace": "body"
     },
     {
       "method": "GET",

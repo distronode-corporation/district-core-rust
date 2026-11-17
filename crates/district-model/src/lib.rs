@@ -203,7 +203,11 @@ pub use scheduling::{
 };
 pub use scheduling_admin::*;
 pub use setup::{
-    SETUP_STEP_DONE, SETUP_STEP_SKIPPED, SETUP_STEP_TODO, SetupProgress, SetupResponse, SetupSteps,
+    CalendarResolution, ConnectionsResponse, FORWARDING_CHECK_PASSED, FORWARDING_CHECK_PENDING,
+    ForwardingCheck, ForwardingCheckMode, ForwardingCheckResponse, SETUP_STEP_DONE,
+    SETUP_STEP_SKIPPED, SETUP_STEP_TODO, SetupDraftFaq, SetupDraftService, SetupLookupDraft,
+    SetupLookupRefusal, SetupLookupResponse, SetupLookupSource, SetupProgress, SetupResponse,
+    SetupStep, SetupStepState, SetupSteps, SetupTestCallResponse, WorkspaceConnection,
 };
 pub use softphone::{CallAnswerResponse, DIRECT_ROOM_PREFIX, DialResponse};
 pub use supervise::{
