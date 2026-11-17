@@ -169,5 +169,5 @@ pub use error::{
 };
 pub use exclusions::{Addition, DESKTOP_ONLY, EXCLUDED, Exclusion, PathMatch, normalize_template};
 pub use inbox::ConversationsQuery;
-pub use offline::{MemoryReadCache, ReadCache, SavedRead};
+pub use offline::{MemoryReadCache, OWNER_KEY, ReadCache, SavedRead};
 pub use token::{AccessToken, ReauthReason, RetryReason, TokenCell, TokenError, TokenSource};

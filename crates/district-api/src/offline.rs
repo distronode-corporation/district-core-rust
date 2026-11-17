@@ -148,6 +148,9 @@ pub(crate) struct Asked {
     generation: u64,
     /// When the request was sent: the time its copy is stamped with.
     asked_at_ms: i64,
+    /// The order requests were sent in, which the wall clock is not (it can be
+    /// set back).
+    sequence: u64,
 }
 
 /// For a saved read, its key and generation, taken before the request is sent;
@@ -184,8 +187,10 @@ pub(crate) fn own(saved: Option<&SavedReads>, user_id: &str) {
 }
 
 /// The cache entry that names whose saved reads these are. Not a read's key:
-/// those always hold spaces.
-const OWNER_KEY: &str = "owner";
+/// those always hold spaces. ⚠️ A [`ReadCache`] that prunes by age or count
+/// leaves this entry alone (it is as old as the session, not a read); only
+/// [`ReadCache::clear`] removes it.
+pub const OWNER_KEY: &str = "owner";
 
 /// The client's saved reads, and which of them are on screen.
 pub(crate) struct SavedReads {
@@ -200,10 +205,12 @@ struct State {
     generation: u64,
     /// The saved copies the last answers were, by key, with when each was saved.
     shown: HashMap<String, i64>,
-    /// When the request whose answer was last kept, by key, was sent. An answer
+    /// The sequence of the request whose answer was last kept, by key. An answer
     /// to an older request (two in flight, answering out of order) is not kept
     /// over it.
-    kept: HashMap<String, i64>,
+    kept: HashMap<String, u64>,
+    /// The next request's sequence.
+    next_sequence: u64,
     /// The account the saved reads belong to, or `None` before a session is
     /// known. ⛔ EVERY KEY NAMES IT, and with none nothing is kept or shown, so
     /// one account can never be shown another's saved reads, even if a sign-out
@@ -226,6 +233,7 @@ impl SavedReads {
                 generation: 0,
                 shown: HashMap::new(),
                 kept: HashMap::new(),
+                next_sequence: 0,
                 owner,
             }),
         }
@@ -271,13 +279,19 @@ impl SavedReads {
         if !is_saved_read(endpoint) {
             return None;
         }
-        let state = self.state();
+        let mut state = self.state();
         // No account, no saved reads: see `State::owner`.
-        let owner = state.owner.as_deref()?;
+        let key = format!(
+            "{} {} {url}",
+            state.owner.as_deref()?,
+            district_l10n::current().tag()
+        );
+        state.next_sequence += 1;
         Some(Asked {
-            key: format!("{owner} {} {url}", district_l10n::current().tag()),
+            key,
             generation: state.generation,
             asked_at_ms: self.clock.now_ms(),
+            sequence: state.next_sequence,
         })
     }
 
@@ -315,11 +329,11 @@ impl SavedReads {
             if state.generation != asked.generation
                 || body.is_empty()
                 || body.len() > SAVED_COPY_MAX_BYTES
-                || state.kept.get(&asked.key) > Some(&asked.asked_at_ms)
+                || state.kept.get(&asked.key) > Some(&asked.sequence)
             {
                 return;
             }
-            state.kept.insert(asked.key.clone(), asked.asked_at_ms);
+            state.kept.insert(asked.key.clone(), asked.sequence);
         }
         // ⚠️ OUTSIDE THE LOCK: a cache that writes files (and flushes them) must not
         // hold up every other request's bookkeeping while it does. Stamped with when
@@ -525,6 +539,28 @@ mod tests {
                 saved_at_ms: 2_000,
             }),
             "the newer answer, stamped with when it was asked"
+        );
+    }
+
+    #[test]
+    fn a_clock_set_back_does_not_make_a_newer_answer_look_older() {
+        let cache = Arc::new(MemoryReadCache::new());
+        let now = Arc::new(std::sync::atomic::AtomicI64::new(5_000));
+        let saved = SavedReads::new(cache.clone(), At(now.clone()));
+        saved.own("user-a");
+        let url = Url::parse("https://example.test/overview").unwrap();
+        let first = saved.asking(Endpoint::Overview, &url).unwrap();
+        let key = first.key.clone();
+        saved.answered(&first, b"{\"n\":1}");
+
+        // The clock goes back an hour, and the next read is answered.
+        now.store(1_000, std::sync::atomic::Ordering::SeqCst);
+        let later = saved.asking(Endpoint::Overview, &url).unwrap();
+        saved.answered(&later, b"{\"n\":2}");
+
+        assert_eq!(
+            cache.load(&key).map(|read| read.body),
+            Some(b"{\"n\":2}".to_vec())
         );
     }
 

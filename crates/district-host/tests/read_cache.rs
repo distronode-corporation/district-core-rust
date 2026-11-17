@@ -4,7 +4,7 @@ use std::fs;
 use std::path::Path;
 
 use district_api::offline::SAVED_COPY_MAX_AGE_MS;
-use district_api::{ReadCache, SavedRead};
+use district_api::{OWNER_KEY, ReadCache, SavedRead};
 use district_host::{READ_CACHE_MAX_FILES, ReadCacheDir};
 
 const KEY: &str = "en https://www.distronode.com/api/district/overview?workspaceId=ws-secret";
@@ -156,6 +156,29 @@ fn a_temporary_file_a_crash_left_behind_is_removed() {
     cache.save(KEY, read("{}", 1));
 
     assert!(!left.exists());
+}
+
+#[test]
+fn the_owner_marker_outlives_pruning_and_only_a_clear_removes_it() {
+    let tmp = tempfile::tempdir().unwrap();
+    let cache = ReadCacheDir::new(tmp.path());
+    cache.save(OWNER_KEY, read("user-a", 0));
+
+    // Older than any copy may be, and pushed past the count by newer reads.
+    let count = i64::try_from(READ_CACHE_MAX_FILES).unwrap();
+    for at in 0..=count {
+        cache.save(
+            &format!("key {at}"),
+            read("{}", SAVED_COPY_MAX_AGE_MS + 1_000 + at),
+        );
+    }
+
+    assert_eq!(
+        cache.load(OWNER_KEY).map(|r| r.body),
+        Some(b"user-a".to_vec())
+    );
+    cache.clear();
+    assert_eq!(cache.load(OWNER_KEY), None);
 }
 
 #[test]

@@ -5,7 +5,7 @@ use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
 use district_api::offline::SAVED_COPY_MAX_AGE_MS;
-use district_api::{ReadCache, SavedRead};
+use district_api::{OWNER_KEY, ReadCache, SavedRead};
 use sha2::{Digest, Sha256};
 
 use crate::files;
@@ -78,9 +78,13 @@ impl ReadCacheDir {
     /// Removes the copies too old to show at `now_ms`, then the oldest past
     /// [`READ_CACHE_MAX_FILES`].
     fn prune(&self, now_ms: i64) {
+        // ⚠️ The owner marker is not a read: it lasts as long as the session, and
+        // only a clear removes it (see `district_api::OWNER_KEY`).
+        let owner = self.dir.join(file_name(OWNER_KEY));
         let mut kept: Vec<(PathBuf, i64)> = self
             .saved_files()
             .into_iter()
+            .filter(|(path, _)| *path != owner)
             .filter(|(path, saved_at)| {
                 let fresh = now_ms - saved_at <= SAVED_COPY_MAX_AGE_MS;
                 if !fresh {
