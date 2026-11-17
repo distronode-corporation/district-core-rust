@@ -58,7 +58,7 @@ of `district-core` has the whole shape.
 | Crate | What it holds |
 | --- | --- |
 | `district-model` | Serde data types for the District AI API, mirroring the Android app's core model, and the live telemetry envelopes. `Platform` and `ClientIdentity` name the app on the wire. No IO. |
-| `district-api` | The HTTP client and the endpoint table. A bearer token and an explicit workspace on every call, no cookie store, redirects never followed, rustls. |
+| `district-api` | The HTTP client and the endpoint table. A bearer token on every call and an explicit workspace on every workspace-scoped one, no cookie store, redirects never followed, rustls. |
 | `district-auth` | Sign-in with OAuth 2.0 and PKCE through the system browser, the token exchange, single-flight refresh-token rotation, sign-out. |
 | `district-live` | The live telemetry WebSocket client. |
 | `district-core` | App state with no user interface toolkit and no IO of its own: the session, routes, role capabilities, a model per screen, and the effect runner with the traits an app implements. |
@@ -93,6 +93,34 @@ says what counts).
 log line below warn out of the whole build, the app's own crates included; see
 [SECURITY.md](SECURITY.md#logging) for why.
 
+## Verify a release
+
+From the next release on, every release tag is an annotated tag signed with
+[gitsign](https://github.com/sigstore/gitsign): keyless Sigstore signing by the
+repository's Release workflow, under its GitHub OIDC identity, with the signature
+recorded in Sigstore's public transparency log. There is no long-lived signing key to
+publish or to lose. Tags up to and including v13.0.0 were made before this and are not
+signed.
+
+With gitsign installed (`brew install gitsign`, `go install github.com/sigstore/gitsign@latest`,
+or a binary from its releases page), in a clone with the tags fetched:
+
+```
+gitsign verify-tag vX.Y.Z \
+  --certificate-identity https://github.com/distronode-corporation/district-core-rust/.github/workflows/release.yml@refs/heads/main \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+```
+
+It succeeds only when the tag's signature is valid, is in the transparency log, and was
+made by that workflow file running on main of this repository. `git verify-tag` works
+too, with gitsign as git's signing program
+(`git -c gpg.format=x509 -c gpg.x509.program=gitsign verify-tag vX.Y.Z`), but it checks
+the signature without checking whose it is; use `gitsign verify-tag` for that.
+
+An app's `Cargo.lock` records the commit the tag named when it was added, and the
+release tags are protected against moves and deletion, so a verified tag is also what
+`--locked` builds.
+
 ## Build and test
 
 Requirements: Rust 1.92 or newer (via [rustup](https://rustup.rs); the repository
@@ -113,6 +141,43 @@ prebuilt assembly rather than looking for NASM;
 engine (`--features district-call/livekit`) links libwebrtc and needs more;
 [CONTRIBUTING.md](CONTRIBUTING.md#building-with-calls) has the steps.
 
+## Quick start
+
+With Rust 1.92 or newer and a C compiler (see Build and test above), clone the repository
+and run the smallest use of the core, which picks the language from the user's preferred
+languages and formats a price and a call's length the way the service does:
+
+```
+git clone https://github.com/distronode-corporation/district-core-rust
+cd district-core-rust
+cargo run -p district-l10n --example quick_start --locked
+```
+
+It prints `en: CA$49.00, 2m 5s`, then the same in Canadian French. From an app, the
+crates are git dependencies (Using it from an app, above), and the crate documentation
+(`cargo doc --workspace --no-deps --open`) starts at `district-core`'s shape: events in,
+effects out.
+
+## Uninstall
+
+Nothing here installs anything on the machine: the crates are compiled into the app that
+uses them. To stop using them, remove their lines from the app's `Cargo.toml`; the next
+`cargo build` drops them from `Cargo.lock`. Cargo keeps its copy of a git dependency under
+`~/.cargo/git/` (`%USERPROFILE%\.cargo\git\` on Windows), which `cargo clean` in the app
+does not touch; delete the `district-core-rust-*` directories there to reclaim the space.
+For a clone, delete the directory. The coverage tool from CONTRIBUTING.md, if you installed
+it, goes with `cargo uninstall cargo-llvm-cov`. What an app built on the crates keeps on the
+machine (its settings, its device id, the refresh token in the secret store) is that app's
+to remove; its README says how.
+
+## Architecture and security model
+
+- [ARCHITECTURE.md](ARCHITECTURE.md): the crates, the event and effect loop, a request end
+  to end, and where state lives.
+- [SECURITY-MODEL.md](SECURITY-MODEL.md): the threat model, trust boundaries, the secure
+  design principles applied, and the common weaknesses countered, with the tests that hold
+  each.
+
 ## Contributing, security and conduct
 
 - [CONTRIBUTING.md](CONTRIBUTING.md): the layout, the local checks CI runs, the
@@ -124,6 +189,8 @@ engine (`--features district-call/livekit`) links libwebrtc and needs more;
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): everyone taking part is expected to
   follow it.
 - [SUPPORT.md](.github/SUPPORT.md): where questions, bugs and product support go.
+- [GOVERNANCE.md](https://github.com/distronode-corporation/.github/blob/main/GOVERNANCE.md):
+  who maintains the project, how a change is accepted, and how a vulnerability is handled.
 
 ## License and trademarks
 

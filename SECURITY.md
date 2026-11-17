@@ -22,6 +22,9 @@ move it.
 Expect an acknowledgement within a few working days. There is no paid bug bounty;
 what you get is credit in the changelog entry for the fix, if you want it.
 
+The whole process, from report to advisory, is in the organization's
+[GOVERNANCE.md](https://github.com/distronode-corporation/.github/blob/main/GOVERNANCE.md#vulnerability-response).
+
 ## Supported versions
 
 Only the latest release is supported. Fixes go into a new release rather than being
@@ -31,6 +34,14 @@ backported, and the apps move their pin to it.
 | --- | --- |
 | 13.0.x (the current release, [13.0.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
 | Anything older | No |
+
+## Verifying a release
+
+Release tags from the next release on are annotated tags signed with gitsign by
+`.github/workflows/release.yml`, keyless, under the identity
+`https://github.com/distronode-corporation/district-core-rust/.github/workflows/release.yml@refs/heads/main` with the issuer `https://token.actions.githubusercontent.com`. README.md,
+"Verify a release", has the command. Tags up to and including v13.0.0 are not signed. A
+release tag that does not verify against that identity is in scope for a report.
 
 ## Security model
 
@@ -145,7 +156,10 @@ that app's SECURITY.md describes it.
 
 ### Logging
 
-Nothing in these crates logs or prints. The `log` crate is a dependency only for
+Nothing in these crates logs. The only printing outside tests and examples is
+one line on stderr when the core's own end or give-back of an HQ voice session is
+declined, fails or goes unanswered, which CONTRIBUTING.md (Logging) describes;
+it carries no token, id or response body. The `log` crate is a dependency only for
 its `max_level_warn` feature, which compiles every `info!`, `debug!` and `trace!`
 in every crate of a build out of the binary, so no logger, however an app
 configures it, can bring any of them back. Cargo unifies features across a

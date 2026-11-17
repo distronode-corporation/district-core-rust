@@ -67,6 +67,18 @@ setting up" card opens the wizard instead of the web page.
 - Eight vendored fixtures are decoded, and leave the manifest's excluded-by-decision list:
   the facts save, the website lookup and its refusal, the test call, the forwarding check
   and its start, and both connections reads.
+- ARCHITECTURE.md (the crates, the event and effect loop, a request end to end, and where
+  state lives) and SECURITY-MODEL.md (threat model, trust boundaries, secure design
+  principles and the weaknesses countered, each with its test).
+- A quick start in README.md, run by a new `district-l10n` example (`quick_start`), and
+  uninstall steps. CONTRIBUTING.md names the style the code is held to and says that new
+  functionality comes with tests and a bug fix with a test that fails without it.
+- Signed release tags. `.github/workflows/release.yml`, run by hand from main, checks the
+  version and the French sign-off, then creates the annotated `vX.Y.Z` tag signed with
+  gitsign (keyless Sigstore, under the workflow's OIDC identity) and pushes it. README.md,
+  "Verify a release", has the command to check a tag. Tags up to v13.0.0 stay unsigned.
+- CI checks that the build is repeatable: the `repeatable` job builds the workspace's
+  crates twice from the same commit and compares the libraries byte for byte.
 
 ### Fixed
 

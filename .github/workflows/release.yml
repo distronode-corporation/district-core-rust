@@ -1,0 +1,108 @@
+name: Release
+
+# Creates a release tag, `vX.Y.Z`, annotated and signed with gitsign: keyless
+# Sigstore signing under this workflow's GitHub OIDC identity, so no long-lived key
+# exists anywhere. The certificate names this file on refs/heads/main and the issuer
+# https://token.actions.githubusercontent.com, and the signature is recorded in
+# Sigstore's public transparency log. README.md ("Verify a release") has the command
+# that checks both. Run by hand from main once the version bump is merged
+# (CONTRIBUTING.md, "Releases"); the GitHub release is still made by hand after it.
+#
+# The checks release-guard.yml runs on a tag are run here as well, before the tag
+# exists: a tag pushed with the workflow's own token starts no other workflow, so
+# release-guard does not fire for it.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version to tag, as in Cargo.toml (13.1.0, no v)
+        required: true
+        type: string
+      summary:
+        description: One line for the tag message, after the version (the release in a few words)
+        required: true
+        type: string
+
+# Nothing at the top level; the one job asks for what it needs.
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # push the tag
+      id-token: write # the OIDC token gitsign exchanges for its signing certificate
+    env:
+      VERSION: ${{ inputs.version }}
+      SUMMARY: ${{ inputs.summary }}
+      # The upstream release, checked against a pinned SHA-256. Move both together.
+      GITSIGN_VERSION: 0.18.0
+      GITSIGN_SHA256: 2bc625472a08fea3bb6a57982c7d8b4978d1032251d305ceef3bf2ded0ca4483
+    steps:
+      # The certificate identity README.md tells users to expect is this file on
+      # main. A run from any other ref would sign under another identity.
+      - name: Only from main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Run the release workflow from main, not $GITHUB_REF."
+          exit 1
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: The version is X.Y.Z and has no tag yet
+        run: |
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::version must be X.Y.Z, got '$VERSION'"
+            exit 1
+          fi
+          if git rev-parse -q --verify "refs/tags/v$VERSION" > /dev/null; then
+            echo "::error::v$VERSION already exists; a tag never moves"
+            exit 1
+          fi
+
+      - name: The version agrees with Cargo.toml, CHANGELOG.md, README.md and SECURITY.md
+        run: python3 scripts/check-version.py "v$VERSION"
+
+      - name: The catalogs are the signed-off ones
+        run: python3 scripts/check-fr-signoff.py
+
+      - name: Install gitsign
+        run: |
+          set -euo pipefail
+          curl -fsSL -o "$RUNNER_TEMP/gitsign" \
+            "https://github.com/sigstore/gitsign/releases/download/v${GITSIGN_VERSION}/gitsign_${GITSIGN_VERSION}_linux_amd64"
+          echo "${GITSIGN_SHA256}  $RUNNER_TEMP/gitsign" | sha256sum -c -
+          install -m 0755 "$RUNNER_TEMP/gitsign" /usr/local/bin/gitsign
+          gitsign --version
+
+      # Signs the commit this run checked out (main's head when it was dispatched),
+      # then verifies the new tag against the identity users are told to expect
+      # before anything is pushed.
+      - name: Create the signed tag
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config gpg.format x509
+          git config gpg.x509.program gitsign
+          git tag -s -m "$VERSION: $SUMMARY" "v$VERSION" "$GITHUB_SHA"
+          gitsign verify-tag "v$VERSION" \
+            --certificate-identity "https://github.com/${GITHUB_REPOSITORY}/.github/workflows/release.yml@refs/heads/main" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com
+
+      - name: Push the tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c http.extraheader="AUTHORIZATION: basic $auth" \
+            push origin "refs/tags/v$VERSION"
