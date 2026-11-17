@@ -58,6 +58,10 @@ use district_model::{
     AccountDeleteResponse, MfaConfirmation, MfaDisableResponse, MfaEnrollment, MfaStatus,
     NativeReauthResponse,
 };
+use district_model::{
+    ConnectionsResponse, ForwardingCheckResponse, SetupLookupRefusal, SetupLookupResponse,
+    SetupTestCallResponse,
+};
 
 use district_model::{
     SchedulingAdminErrorBody, SchedulingAdminFailure, SchedulingAdminSuccess, SchedulingApiKey,
@@ -209,6 +213,13 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ),
     // POST /api/district/contacts/clear-intel.
     ("district-clear-intel.json", codec::<ClearIntelResponse>),
+    // GET /api/district/connections for a viewer: the rows without `calendar`.
+    (
+        "district-connections-viewer.json",
+        codec::<ConnectionsResponse>,
+    ),
+    // GET /api/district/connections: the rows and the calendar in use.
+    ("district-connections.json", codec::<ConnectionsResponse>),
     // POST /api/district/contacts/block: a caller blocked.
     ("district-contact-block.json", codec::<ContactBlockResponse>),
     // DELETE /api/district/contacts/delete.
@@ -345,6 +356,16 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ("district-drafts-list.json", codec::<DraftListResponse>),
     // POST /api/district/contacts/enrich: a research run queued.
     ("district-enrich.json", codec::<EnrichResponse>),
+    // POST /api/district/setup/forwarding-check: the check started, pending.
+    (
+        "district-forwarding-check-start.json",
+        codec::<ForwardingCheckResponse>,
+    ),
+    // GET /api/district/setup/forwarding-check: the check passed.
+    (
+        "district-forwarding-check.json",
+        codec::<ForwardingCheckResponse>,
+    ),
     // POST /api/district/hq with a prompt: an answer and nothing proposed.
     ("district-hq-answer.json", codec::<HqPromptResponse>),
     // POST /api/district/hq with a confirmation.
@@ -827,6 +848,20 @@ pub const IMPLEMENTED: &[(&str, Codec)] = &[
     ("district-settings-unset.json", codec::<SettingsResponse>),
     // GET /api/settings.
     ("district-settings.json", codec::<SettingsResponse>),
+    // POST /api/district/setup/lookup for a page the service cannot read (422).
+    (
+        "district-setup-lookup-unreadable.json",
+        codec::<SetupLookupRefusal>,
+    ),
+    // POST /api/district/setup/lookup: a draft read off the website.
+    ("district-setup-lookup.json", codec::<SetupLookupResponse>),
+    // PATCH /api/district/setup: the state after a save.
+    ("district-setup-patch.json", codec::<SetupResponse>),
+    // POST /api/district/setup/test-call.
+    (
+        "district-setup-test-call.json",
+        codec::<SetupTestCallResponse>,
+    ),
     // GET /api/district/setup.
     ("district-setup.json", codec::<SetupResponse>),
     // POST /api/district/workspace/sip: the trunk created.
@@ -1041,30 +1076,6 @@ pub const EXCLUDED_BY_DECISION: &[Exclusion] = &[
                  agent on the line for a list of contacts, and is web-only (the \
                  endpoint table excludes it as `campaign dialling`).",
         fixtures: &["district-calls-outbound.json"],
-    },
-    Exclusion {
-        reason: "The rest of the setup wizard, which runs on the web dashboard (this \
-                 client reads only where the owner is in it, `GET \
-                 /api/district/setup`, and opens the web page): the business facts \
-                 patch, the website lookup and its refusal, the test call, and the \
-                 call forwarding check's start and poll.",
-        fixtures: &[
-            "district-forwarding-check-start.json",
-            "district-forwarding-check.json",
-            "district-setup-lookup-unreadable.json",
-            "district-setup-lookup.json",
-            "district-setup-patch.json",
-            "district-setup-test-call.json",
-        ],
-    },
-    Exclusion {
-        reason: "The integrations read, `GET /api/district/connections` (and its \
-                 Viewer answer, without `calendar`): the integrations page is the \
-                 web dashboard's, and this client has no integrations screen.",
-        fixtures: &[
-            "district-connections-viewer.json",
-            "district-connections.json",
-        ],
     },
     Exclusion {
         reason: "District HQ by voice's settings (voice, length, pace, language and \
