@@ -330,6 +330,32 @@ async fn a_copy_that_can_no_longer_be_shown_comes_off_the_screen() {
 }
 
 #[tokio::test]
+async fn a_refusal_from_the_service_after_reconnecting_takes_the_copy_off_the_screen() {
+    let server = MockServer::start().await;
+    answer(
+        &server,
+        LIST,
+        ResponseTemplate::new(200).set_body_json(list("Alpha")),
+    )
+    .await;
+    let s = setup(&server);
+    s.client.workspace_list().await.unwrap();
+    s.tokens.go_offline(true);
+    s.client.workspace_list().await.unwrap();
+    assert_eq!(s.client.showing_saved_since(), Some(1_000));
+
+    // Back online, and the service answers with a 5xx: it answered, so no saved
+    // copy is on screen any more, and the error is not covered over.
+    s.tokens.go_offline(false);
+    answer(&server, LIST, ResponseTemplate::new(503)).await;
+    assert!(matches!(
+        s.client.workspace_list().await.unwrap_err(),
+        ApiError::Server { status: 503, .. }
+    ));
+    assert_eq!(s.client.showing_saved_since(), None);
+}
+
+#[tokio::test]
 async fn an_empty_or_oversized_body_is_not_kept() {
     let server = MockServer::start().await;
     let s = setup(&server);

@@ -218,7 +218,13 @@ impl SavedReads {
                 Ok(body)
             }
             (Err(error), Some(asked)) if unreachable(&error) => self.saved(&asked.key).ok_or(error),
-            (result, _) => {
+            (result, asked) => {
+                // ⚠️ The service answered, even if with a refusal or a 5xx: this read
+                // is no longer a saved copy on screen, so it must not keep the banner
+                // up and the writes withheld once the connection is back.
+                if let Some(asked) = asked {
+                    self.state().shown.remove(&asked.key);
+                }
                 if result.as_ref().is_err_and(session_over) {
                     self.clear();
                 }
