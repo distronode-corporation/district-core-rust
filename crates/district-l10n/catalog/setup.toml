@@ -1,0 +1,1530 @@
+[meta]
+catalog = "setup"
+platform = "rust"
+apple = false
+
+[setup.back]
+en = "Back"
+fr = "Retour"
+ctx = "button"
+screen = "setup"
+state = "reviewed"
+
+[setup.business_address_found]
+en = "We filled in your address from your website. Check it below."
+fr = "Nous avons rempli votre adresse à partir de votre site Internet. Vérifiez-la ci-dessous."
+ctx = "body"
+screen = "setup.business"
+state = "reviewed"
+note = "When the website read found an address and nothing else. The owner's own website, not a destination (StoreCopyTests allowance)."
+
+[setup.business_city_label]
+en = "City"
+fr = "Ville"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_city_required]
+en = "Enter your city."
+fr = "Entrez votre ville."
+ctx = "error"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_country_label]
+en = "Country"
+fr = "Pays"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_country_placeholder]
+en = "Choose a country"
+fr = "Choisissez un pays"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_country_required]
+en = "Choose your country."
+fr = "Choisissez votre pays."
+ctx = "error"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_description]
+en = "Tell us who you are, or let us read your website."
+fr = "Dites-nous qui vous êtes, ou laissez-nous lire votre site Internet."
+ctx = "body"
+screen = "setup.steps"
+state = "reviewed"
+note = "⚠️ THE OWNER'S OWN WEBSITE, read for a draft of their facts: not a destination (StoreCopyTests allowance)."
+
+[setup.business_details_heading]
+en = "About your business"
+fr = "Votre entreprise"
+ctx = "title"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_email_body]
+en = "The name customers see on emails from your business, and where their replies go, are changed on the Skills page."
+fr = "Le nom que vos clients voient sur les courriels de votre entreprise et l'adresse où arrivent leurs réponses se modifient dans la page Compétences."
+ctx = "body"
+screen = "setup.business"
+state = "reviewed"
+note = "⛔ NAMES NO DESTINATION BEYOND THE PAGE'S OWN TITLE (StoreCopyTests). The email identity has no mobile contract in DistrictCore 8.5.0."
+
+[setup.business_email_heading]
+en = "Email sender name and reply-to address"
+fr = "Nom de l'expéditeur des courriels et adresse de réponse"
+ctx = "title"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_found_faqs_one]
+en = "{n} question"
+fr = "{n} question trouvée"
+ctx = "label"
+screen = "setup.business"
+args = { n = "int" }
+state = "reviewed"
+
+[setup.business_found_faqs_other]
+en = "{n} questions"
+fr = "{n} questions trouvées"
+ctx = "label"
+screen = "setup.business"
+args = { n = "int" }
+state = "reviewed"
+
+[setup.business_found_services_one]
+en = "{n} service"
+fr = "{n} service trouvé"
+ctx = "label"
+screen = "setup.business"
+args = { n = "int" }
+state = "reviewed"
+
+[setup.business_found_services_other]
+en = "{n} services"
+fr = "{n} services trouvés"
+ctx = "label"
+screen = "setup.business"
+args = { n = "int" }
+state = "reviewed"
+
+[setup.business_hours_found]
+en = "We found opening hours on your website; confirm them in step 4."
+fr = "Nous avons trouvé des heures d'ouverture sur votre site Internet; confirmez-les à l'étape 4."
+ctx = "body"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_language_en]
+en = "English"
+fr = "Anglais"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_language_fr]
+en = "French"
+fr = "Français"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_language_label]
+en = "Language your receptionist speaks"
+fr = "Langue de votre réceptionniste"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_name_label]
+en = "Business name"
+fr = "Nom de l'entreprise"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_name_required]
+en = "Enter your business name."
+fr = "Entrez le nom de votre entreprise."
+ctx = "error"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_read_nothing]
+en = "We read your website but found nothing we could use. Fill in the form below instead."
+fr = "Nous avons lu votre site Internet, mais n'y avons rien trouvé d'utilisable. Remplissez plutôt le formulaire ci-dessous."
+ctx = "body"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_read_result]
+en = "Found {services} and {faqs}. They are saved as drafts for step 4."
+fr = "{services} et {faqs}. Ils sont enregistrés comme ébauches pour l'étape 4."
+ctx = "body"
+screen = "setup.business"
+args = { services = "str", faqs = "str" }
+state = "reviewed"
+note = "{services} and {faqs} are the found_* counts, chosen by number in the core (French takes the singular for 0 and 1)."
+
+[setup.business_read_website]
+en = "Read my website"
+fr = "Lire mon site Internet"
+ctx = "button"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_reading]
+en = "Reading your website"
+fr = "Lecture de votre site Internet"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_street_hint]
+en = "Optional. Your receptionist gives it to callers who ask where you are."
+fr = "Facultatif. Votre réceptionniste la donne aux appelants qui demandent où vous êtes."
+ctx = "body"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_street_label]
+en = "Street address"
+fr = "Adresse civique"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_subdivision_label_ca]
+en = "Province or territory"
+fr = "Province ou territoire"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_subdivision_label_other]
+en = "Region"
+fr = "Région"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_subdivision_label_us]
+en = "State"
+fr = "État"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_subdivision_placeholder]
+en = "Choose one"
+fr = "Choisissez"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_subdivision_required]
+en = "Choose your province or state."
+fr = "Choisissez votre province ou votre État."
+ctx = "error"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_timezone_label]
+en = "Time zone"
+fr = "Fuseau horaire"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_timezone_multi]
+en = "{zone}. Your area has more than one time zone, so check it in step 4."
+fr = "{zone}. Votre région compte plus d'un fuseau horaire, alors vérifiez-le à l'étape 4."
+ctx = "body"
+screen = "setup.business"
+args = { zone = "str" }
+state = "reviewed"
+
+[setup.business_timezone_unknown]
+en = "Choose your country and province or state to set it."
+fr = "Choisissez votre pays et votre province ou votre État pour le définir."
+ctx = "body"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_timezone_value]
+en = "{zone}. You can change it in step 4."
+fr = "{zone}. Vous pourrez le modifier à l'étape 4."
+ctx = "body"
+screen = "setup.business"
+args = { zone = "str" }
+state = "reviewed"
+
+[setup.business_title]
+en = "Find your business"
+fr = "Trouvez votre entreprise"
+ctx = "title"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.business_website_heading]
+en = "Start from your website"
+fr = "Partir de votre site Internet"
+ctx = "title"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_website_label]
+en = "Website"
+fr = "Site"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_website_lead]
+en = "Enter your website address and we will draft your hours, address, services and common questions. You review every item in step 4 before your receptionist uses it."
+fr = "Entrez l'adresse de votre site Internet et nous préparerons une ébauche de vos heures, de votre adresse, de vos services et de vos questions fréquentes. Vous vérifiez chaque élément à l'étape 4 avant que votre réceptionniste l'utilise."
+ctx = "body"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_website_placeholder]
+en = "example.com"
+fr = "example.com"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_what_faqs_full]
+en = "You already have {n} saved questions, the most allowed. Remove one in step 4, or leave what you do empty."
+fr = "Vous avez déjà {n} questions enregistrées, le maximum permis. Supprimez-en une à l'étape 4 ou laissez vide le champ «\u00A0Ce que vous faites\u00A0»."
+ctx = "error"
+screen = "setup.business"
+args = { n = "int" }
+state = "reviewed"
+
+[setup.business_what_label]
+en = "What you do, in one line"
+fr = "Ce que vous faites, en une ligne"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.business_what_placeholder]
+en = "Family dental clinic with evening appointments"
+fr = "Clinique dentaire familiale avec rendez-vous en soirée"
+ctx = "label"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.callers_add_faq]
+en = "Add a question"
+fr = "Ajouter une question"
+ctx = "button"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_add_period]
+en = "Add a period"
+fr = "Ajouter une période"
+ctx = "button"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_add_service]
+en = "Add a service"
+fr = "Ajouter un service"
+ctx = "button"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_address_country]
+en = "Country code"
+fr = "Code de pays"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_address_country_hint]
+en = "Two letters, for example CA or US."
+fr = "Deux lettres, par exemple CA ou US."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_address_header]
+en = "Address"
+fr = "Adresse"
+ctx = "title"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_address_incomplete]
+en = "Enter at least the city and a two-letter country code, or leave the address empty."
+fr = "Entrez au moins la ville et un code de pays à deux lettres, ou laissez l'adresse vide."
+ctx = "error"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_address_postal]
+en = "Postal or ZIP code"
+fr = "Code postal"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_address_region]
+en = "Province or state"
+fr = "Province ou État"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_closes]
+en = "Closes"
+fr = "Fermeture"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_confirm_hours_first]
+en = "Use or discard the hours from your website before you continue."
+fr = "Utilisez ou ignorez les heures de votre site Internet avant de continuer."
+ctx = "error"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_closed]
+en = "Closed"
+fr = "Fermé"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_fri]
+en = "Friday"
+fr = "Vendredi"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_mon]
+en = "Monday"
+fr = "Lundi"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_not_set]
+en = "Not set"
+fr = "Non défini"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_open]
+en = "Open"
+fr = "Ouvert"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_sat]
+en = "Saturday"
+fr = "Samedi"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_sun]
+en = "Sunday"
+fr = "Dimanche"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_thu]
+en = "Thursday"
+fr = "Jeudi"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_tue]
+en = "Tuesday"
+fr = "Mardi"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_day_wed]
+en = "Wednesday"
+fr = "Mercredi"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_description]
+en = "Hours, address, services and common questions."
+fr = "Heures, adresse, services et questions fréquentes."
+ctx = "body"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.callers_discard_hours]
+en = "Discard"
+fr = "Ignorer"
+ctx = "button"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_draft_note]
+en = "Items we drafted from your website start switched off. Check each one, fix anything that is wrong, and switch it on."
+fr = "Les éléments tirés de votre site Internet sont désactivés au départ. Vérifiez chacun d'eux, corrigez ce qui est inexact, puis activez-le."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_faq_answer]
+en = "Answer"
+fr = "Réponse"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_faq_error]
+en = "Enter a question (up to 300 characters) and an answer (up to 1000 characters)."
+fr = "Entrez une question (300 caractères au plus) et une réponse (1000 caractères au plus)."
+ctx = "error"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_faq_label]
+en = "Question {n}"
+fr = "Question {n}"
+ctx = "label"
+screen = "setup.callers"
+args = { n = "int" }
+state = "reviewed"
+same_ok = true
+
+[setup.callers_faq_question]
+en = "Question"
+fr = "Question"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+same_ok = true
+
+[setup.callers_faqs_description]
+en = "Questions callers often ask, with the answer your receptionist should give."
+fr = "Les questions que les appelants posent souvent, avec la réponse que votre réceptionniste doit donner."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_faqs_header]
+en = "Common questions"
+fr = "Questions fréquentes"
+ctx = "title"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_fill_from_website]
+en = "Fill from my website"
+fr = "Remplir à partir de mon site Internet"
+ctx = "button"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_fix_errors]
+en = "Fix the entries marked in red, then save."
+fr = "Corrigez les éléments marqués en rouge, puis enregistrez."
+ctx = "error"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_hours_description]
+en = "Add up to four opening periods a day. A day left as Not set is not mentioned to callers."
+fr = "Ajoutez jusqu'à quatre périodes d'ouverture par jour. Un jour laissé à Non défini n'est pas mentionné aux appelants."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_hours_draft_note]
+en = "These hours come from your website and are not saved yet. Check each day, then use them."
+fr = "Ces heures proviennent de votre site Internet et ne sont pas encore enregistrées. Vérifiez chaque jour, puis utilisez-les."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_hours_header]
+en = "Opening hours"
+fr = "Heures d'ouverture"
+ctx = "title"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_intro]
+en = "Your receptionist answers from these facts. Only items that are switched on are used on calls."
+fr = "Votre réceptionniste répond à partir de ces renseignements. Seuls les éléments activés sont utilisés pendant les appels."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_no_faqs]
+en = "No questions yet."
+fr = "Aucune question pour l'instant."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_no_hours_found]
+en = "We did not find opening hours on that website. Enter them below."
+fr = "Nous n'avons pas trouvé d'heures d'ouverture sur ce site Internet. Entrez-les ci-dessous."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_no_services]
+en = "No services yet."
+fr = "Aucun service pour l'instant."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_off_hint]
+en = "Switched off. Your receptionist will not use this."
+fr = "Désactivé. Votre réceptionniste ne l'utilisera pas."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_opens]
+en = "Opens"
+fr = "Ouverture"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_period_error]
+en = "Close after you open. Periods must not overlap."
+fr = "La fermeture doit suivre l'ouverture. Les périodes ne doivent pas se chevaucher."
+ctx = "error"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_period_label]
+en = "Period {n}"
+fr = "Période {n}"
+ctx = "label"
+screen = "setup.callers"
+args = { n = "int" }
+state = "reviewed"
+
+[setup.callers_remove]
+en = "Remove"
+fr = "Retirer"
+ctx = "button"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_remove_period]
+en = "Remove this period"
+fr = "Retirer cette période"
+ctx = "button"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_service_error]
+en = "Enter a service name (up to 120 characters) and a price of up to 40 characters."
+fr = "Entrez un nom de service (120 caractères au plus) et un prix de 40 caractères au plus."
+ctx = "error"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_service_label]
+en = "Service {n}"
+fr = "Service {n}"
+ctx = "label"
+screen = "setup.callers"
+args = { n = "int" }
+state = "reviewed"
+same_ok = true
+
+[setup.callers_service_name]
+en = "Service"
+fr = "Service"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+same_ok = true
+
+[setup.callers_service_price]
+en = "Price (optional)"
+fr = "Prix (facultatif)"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_services_description]
+en = "Write prices the way you would say them, for example $45 or quoted on site."
+fr = "Écrivez les prix comme vous les diriez, par exemple 45\u00A0$ ou sur estimation."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_services_header]
+en = "Services and prices"
+fr = "Services et prix"
+ctx = "title"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_timezone_description]
+en = "Your opening hours are read in this time zone."
+fr = "Vos heures d'ouverture sont lues dans ce fuseau horaire."
+ctx = "body"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_timezone_placeholder]
+en = "Choose a time zone"
+fr = "Choisissez un fuseau horaire"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_title]
+en = "What callers should know"
+fr = "Ce que les appelants doivent savoir"
+ctx = "title"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.callers_use_hours]
+en = "Use these hours"
+fr = "Utiliser ces heures"
+ctx = "button"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.callers_use_on_calls]
+en = "Use on calls"
+fr = "Utiliser pendant les appels"
+ctx = "label"
+screen = "setup.callers"
+state = "reviewed"
+
+[setup.calls_ai_first]
+en = "Every call"
+fr = "Chaque appel"
+ctx = "label"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_ai_first_description]
+en = "Your receptionist answers every call straight away."
+fr = "Votre réceptionniste répond à chaque appel immédiatement."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_ai_then_app]
+en = "Receptionist first, then the District app"
+fr = "La réceptionniste d'abord, puis l'app District"
+ctx = "label"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_ai_then_app_description]
+en = "Chosen earlier in Settings. Your receptionist answers and can pass the call to the app."
+fr = "Choisi plus tôt dans Réglages. Votre réceptionniste répond et peut passer l'appel à l'app."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_answer_description]
+en = "Choose who picks up a call first."
+fr = "Choisissez qui décroche en premier."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_answer_header]
+en = "When your receptionist answers"
+fr = "Quand votre réceptionniste répond"
+ctx = "title"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_app_first]
+en = "Ring the District app first"
+fr = "Faire sonner l'app District en premier"
+ctx = "label"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_app_first_description]
+en = "Your phone rings in the District app first. If nobody picks up, your receptionist answers."
+fr = "Votre téléphone sonne d'abord dans l'app District. Si personne ne répond, votre réceptionniste prend l'appel."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_app_needed]
+en = "This needs the District app installed and signed in on your phone, with Available for calls turned on. When nobody can be rung, your receptionist answers straight away."
+fr = "Il faut que l'app District soit installée et connectée sur votre téléphone, avec Disponible pour les appels activé. Quand personne ne peut être joint, votre réceptionniste répond immédiatement."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_bookings_connected]
+en = "Your receptionist books appointments into {provider}."
+fr = "Votre réceptionniste prend les rendez-vous dans {provider}."
+ctx = "body"
+screen = "setup.calls"
+args = { provider = "str" }
+state = "reviewed"
+note = "{provider} is a product name (Google Calendar, Microsoft Outlook Calendar), the same in both languages."
+
+[setup.calls_bookings_header]
+en = "Bookings"
+fr = "Rendez-vous"
+ctx = "title"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_bookings_none]
+en = "No calendar is connected, so your receptionist does not book appointments."
+fr = "Aucun agenda n'est connecté; votre réceptionniste ne prend donc pas de rendez-vous."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_bookings_where]
+en = "Google and Microsoft approve calendar access on their own sign-in page, so a calendar is connected on the Integrations page."
+fr = "Google et Microsoft approuvent l'accès à l'agenda sur leur propre page de connexion; un agenda se connecte donc dans la page Intégrations."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_description]
+en = "When calls are answered, who to transfer to, and bookings."
+fr = "Quand répondre aux appels, à qui les transférer et les rendez-vous."
+ctx = "body"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.calls_keeping_line_note]
+en = "Keeping your existing business number and only want calls you miss? Set your carrier to forward unanswered calls in the last step."
+fr = "Vous gardez votre numéro d'entreprise actuel et ne voulez que les appels manqués? À la dernière étape, demandez à votre transporteur de renvoyer les appels sans réponse."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_profiles_body]
+en = "When this is on, after each call we look up the caller's public business details (such as their company and role) to add a profile to your call log. The lookups use research services based in the United States. It is off unless you switch it on, and you can switch it off at any time."
+fr = "Quand cette option est activée, après chaque appel, nous recherchons les renseignements professionnels publics de l'appelant (comme son entreprise et son poste) pour ajouter un profil à votre journal d'appels. Les recherches passent par des services situés aux États-Unis. L'option reste désactivée tant que vous ne l'activez pas, et vous pouvez la désactiver en tout temps."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+note = "⛔ THE WEB'S SENTENCE, NOT SOFTENED: the privacy policy promises enrichment is off unless a workspace turns it on."
+
+[setup.calls_profiles_header]
+en = "Caller profiles"
+fr = "Profils des appelants"
+ctx = "title"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_profiles_off]
+en = "Caller profiles are off."
+fr = "Les profils d'appelants sont désactivés."
+ctx = "label"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_profiles_on]
+en = "Caller profiles are on."
+fr = "Les profils d'appelants sont activés."
+ctx = "label"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_profiles_toggle]
+en = "Build caller profiles"
+fr = "Créer des profils d'appelants"
+ctx = "label"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_ring_label]
+en = "How long to ring the app"
+fr = "Durée de sonnerie dans l'app"
+ctx = "label"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_ring_seconds]
+en = "{n} seconds"
+fr = "{n} secondes"
+ctx = "label"
+screen = "setup.calls"
+args = { n = "int" }
+state = "reviewed"
+
+[setup.calls_save_answering]
+en = "Save how calls are answered"
+fr = "Enregistrer la façon de répondre"
+ctx = "button"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_title]
+en = "Calls, people and bookings"
+fr = "Appels, personnes et rendez-vous"
+ctx = "title"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.calls_transfer_current]
+en = "When a caller asks for a person, your receptionist transfers the call to {number}."
+fr = "Quand un appelant demande une personne, votre réceptionniste transfère l'appel au {number}."
+ctx = "body"
+screen = "setup.calls"
+args = { number = "str" }
+state = "reviewed"
+
+[setup.calls_transfer_header]
+en = "Passing a call to a person"
+fr = "Passer un appel à une personne"
+ctx = "title"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_transfer_none]
+en = "No transfer number is set, so your receptionist takes a message instead."
+fr = "Aucun numéro de transfert n'est défini; votre réceptionniste prend donc un message."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.calls_transfer_where]
+en = "The transfer number is changed on the Skills page."
+fr = "Le numéro de transfert se modifie dans la page Compétences."
+ctx = "body"
+screen = "setup.calls"
+state = "reviewed"
+note = "⛔ NAMES NO DESTINATION BEYOND THE PAGE'S OWN TITLE (StoreCopyTests). DistrictCore 8.5.0 has no write for the transfer number."
+
+[setup.continue]
+en = "Continue"
+fr = "Continuer"
+ctx = "button"
+screen = "setup"
+state = "reviewed"
+
+[setup.done]
+en = "Done"
+fr = "OK"
+ctx = "button"
+screen = "setup"
+state = "reviewed"
+
+[setup.finish_later]
+en = "Finish later"
+fr = "Terminer plus tard"
+ctx = "button"
+screen = "setup"
+state = "reviewed"
+
+[setup.finished_body]
+en = "Your receptionist is ready. You can change any of this in Settings."
+fr = "Votre réceptionniste est prête. Vous pouvez modifier tout cela dans Réglages."
+ctx = "body"
+screen = "setup"
+state = "reviewed"
+
+[setup.finished_title]
+en = "Setup is finished"
+fr = "La configuration est terminée"
+ctx = "title"
+screen = "setup"
+state = "reviewed"
+
+[setup.golive_answers_ai_then_app]
+en = "Every call, with the District app as backup"
+fr = "Chaque appel, avec l'app District en relève"
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_answers_app_first]
+en = "After the District app rings for {n} seconds"
+fr = "Après {n} secondes de sonnerie dans l'app District"
+ctx = "body"
+screen = "setup.golive"
+args = { n = "int" }
+state = "reviewed"
+
+[setup.golive_answers_label]
+en = "When it answers"
+fr = "Quand elle répond"
+ctx = "label"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_attempts_left]
+en = "{n} checks left today."
+fr = "{n} vérifications restantes aujourd'hui."
+ctx = "label"
+screen = "setup.golive"
+args = { n = "int" }
+state = "reviewed"
+
+[setup.golive_attempts_left_one]
+en = "1 check left today."
+fr = "1 vérification restante aujourd'hui."
+ctx = "label"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_business_line_error]
+en = "Enter your business line with its country code, for example +14165550123."
+fr = "Entrez votre ligne d'affaires avec l'indicatif du pays, par exemple +14165550123."
+ctx = "error"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_business_line_label]
+en = "Your business line"
+fr = "Votre ligne d'affaires"
+ctx = "label"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_call_me]
+en = "Call my mobile now"
+fr = "Appeler mon cellulaire maintenant"
+ctx = "button"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_calling]
+en = "Calling you now. Answer your phone."
+fr = "Nous vous appelons. Répondez à votre téléphone."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_check_description]
+en = "We ring your business line and watch for the call to arrive on your District number."
+fr = "Nous appelons votre ligne d'affaires et vérifions que l'appel arrive sur votre numéro District."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_check_dial_failed]
+en = "We could not place the check call. Try again in a few minutes."
+fr = "Nous n'avons pas pu faire l'appel de vérification. Réessayez dans quelques minutes."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_check_failed]
+en = "The call did not arrive on your District number. Check your forwarding settings and try again."
+fr = "L'appel n'est pas arrivé sur votre numéro District. Vérifiez vos réglages de renvoi et réessayez."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_check_header]
+en = "Check my forwarding"
+fr = "Vérifier mon renvoi"
+ctx = "title"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_check_passed]
+en = "Forwarding works. The call arrived on your District number."
+fr = "Le renvoi fonctionne. L'appel est arrivé sur votre numéro District."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_check_pending]
+en = "Checking. This takes up to a minute."
+fr = "Vérification en cours. Cela prend jusqu'à une minute."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_check_still_pending]
+en = "The check is still running. Click the button to look again."
+fr = "La vérification est toujours en cours. Cliquez sur le bouton pour regarder de nouveau."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+note = "After two minutes of polling a check the service still holds as pending. The button then reads the check again; it does not place a new call."
+
+[setup.golive_consent_heading]
+en = "By clicking the button you agree to this"
+fr = "En cliquant sur le bouton, vous acceptez ceci"
+ctx = "label"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_consent_wording]
+en = "Call me now at the number I entered, from my District number, so I can hear my receptionist answer. This is a test call of up to two minutes. It is not billed, and the receptionist cannot transfer, book, email or text during it. The call is transcribed and summarized in my call log like any other call."
+fr = "Appelez-moi maintenant au numéro que j'ai indiqué, depuis mon numéro District, pour que j'entende ma réceptionniste répondre. Il s'agit d'un appel d'essai d'au plus deux minutes. Il n'est pas facturé, et la réceptionniste ne peut ni transférer, ni prendre de rendez-vous, ni envoyer de courriel ou de texto pendant l'appel. L'appel est transcrit et résumé dans mon journal d'appels comme tout autre appel."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+note = "⛔ A CONSENT RECORD, NOT ONLY COPY. The test-call route stores its own copy of these words (testCallI18n consentWording) for the owner's language; this is the same text, character for character. Change both or neither."
+
+[setup.golive_description]
+en = "Hear your receptionist answer, then send your calls."
+fr = "Entendez votre réceptionniste répondre, puis envoyez-lui vos appels."
+ctx = "body"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.golive_expect_call]
+en = "Expect a call from {number}."
+fr = "Attendez-vous à un appel du {number}."
+ctx = "body"
+screen = "setup.golive"
+args = { number = "str" }
+state = "reviewed"
+
+[setup.golive_finish]
+en = "Finish"
+fr = "Terminer"
+ctx = "button"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_greeting_label]
+en = "Your receptionist says"
+fr = "Votre réceptionniste dit"
+ctx = "label"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_keeping_description]
+en = "Forward your existing line to your District number with your carrier, then check it here."
+fr = "Renvoyez votre ligne actuelle vers votre numéro District auprès de votre transporteur, puis vérifiez le renvoi ici."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_keeping_header]
+en = "Keeping your existing business number?"
+fr = "Vous gardez votre numéro d'entreprise actuel?"
+ctx = "title"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_live_header]
+en = "You're live"
+fr = "Vous êtes en service"
+ctx = "title"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_mobile_error]
+en = "Enter your mobile number with its country code, for example +14165550123."
+fr = "Entrez votre numéro de cellulaire avec l'indicatif du pays, par exemple +14165550123."
+ctx = "error"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_mobile_label]
+en = "Your mobile number"
+fr = "Votre numéro de cellulaire"
+ctx = "label"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_mode_all]
+en = "All calls"
+fr = "Tous les appels"
+ctx = "label"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_mode_label]
+en = "Which calls do you forward?"
+fr = "Quels appels renvoyez-vous?"
+ctx = "label"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_mode_unanswered]
+en = "Only calls I don't pick up"
+fr = "Seulement les appels auxquels je ne réponds pas"
+ctx = "label"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_no_greeting]
+en = "Your receptionist uses its standard greeting."
+fr = "Votre réceptionniste utilise son message d'accueil standard."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_no_number_yet]
+en = "You need a District number before we can place a test call."
+fr = "Il vous faut un numéro District avant que nous puissions faire un appel d'essai."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_start_check]
+en = "Check my forwarding"
+fr = "Vérifier mon renvoi"
+ctx = "button"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_test_description]
+en = "We call your mobile from your District number and your receptionist answers, just as a caller would hear it."
+fr = "Nous appelons votre cellulaire depuis votre numéro District et votre réceptionniste répond, comme un appelant l'entendrait."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_test_header]
+en = "Hear your receptionist"
+fr = "Entendez votre réceptionniste"
+ctx = "title"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.golive_title]
+en = "Test and go live"
+fr = "Essai et mise en service"
+ctx = "title"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.golive_unanswered_note]
+en = "Do not answer when your business line rings. Let it ring until it forwards."
+fr = "Ne répondez pas quand votre ligne d'affaires sonne. Laissez-la sonner jusqu'au renvoi."
+ctx = "body"
+screen = "setup.golive"
+state = "reviewed"
+
+[setup.loading]
+en = "Loading your setup"
+fr = "Chargement de votre configuration"
+ctx = "label"
+screen = "setup"
+state = "reviewed"
+
+[setup.not_available_body]
+en = "This workspace was set up before these setup steps existed. Everything they cover is under Settings."
+fr = "Cet espace de travail a été créé avant ces étapes de configuration. Tout ce qu'elles couvrent se trouve dans Réglages."
+ctx = "body"
+screen = "setup"
+state = "reviewed"
+note = "⚠️ « Réglages » is Settings on Apple (the glossary's Apple OS word)."
+
+[setup.not_available_title]
+en = "Setup is not available here"
+fr = "La configuration n'est pas offerte ici"
+ctx = "title"
+screen = "setup"
+state = "reviewed"
+
+[setup.not_owner_body]
+en = "Setup decides what your receptionist says and which number it answers, so only the person who owns this workspace can do it. Ask them to finish it."
+fr = "La configuration décide de ce que dit votre réceptionniste et du numéro auquel elle répond; seule la personne propriétaire de cet espace de travail peut donc la faire. Demandez-lui de la terminer."
+ctx = "body"
+screen = "setup"
+state = "reviewed"
+
+[setup.not_owner_title]
+en = "Only the owner can do setup"
+fr = "Seul le propriétaire peut faire la configuration"
+ctx = "title"
+screen = "setup"
+state = "reviewed"
+
+[setup.number_answered_apac]
+en = "Calls are answered in Singapore."
+fr = "Les appels sont traités à Singapour."
+ctx = "body"
+screen = "setup.number"
+state = "reviewed"
+
+[setup.number_answered_ca]
+en = "Calls are answered in Montréal."
+fr = "Les appels sont traités à Montréal."
+ctx = "body"
+screen = "setup.number"
+state = "reviewed"
+
+[setup.number_answered_eu]
+en = "Calls are answered in Frankfurt."
+fr = "Les appels sont traités à Francfort."
+ctx = "body"
+screen = "setup.number"
+state = "reviewed"
+
+[setup.number_answered_us]
+en = "Calls are answered in the United States."
+fr = "Les appels sont traités aux États-Unis."
+ctx = "body"
+screen = "setup.number"
+state = "reviewed"
+
+[setup.number_description]
+en = "The phone number your receptionist answers."
+fr = "Le numéro de téléphone auquel votre réceptionniste répond."
+ctx = "body"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.number_have_lead]
+en = "You already have a number. Your receptionist answers it."
+fr = "Vous avez déjà un numéro. Votre réceptionniste y répond."
+ctx = "body"
+screen = "setup.number"
+state = "reviewed"
+
+[setup.number_held]
+en = "Numbers you hold: {held}"
+fr = "Numéros que vous détenez\u00A0: {held}"
+ctx = "label"
+screen = "setup.number"
+args = { held = "int" }
+state = "reviewed"
+
+[setup.number_included]
+en = "Included in your plan ({held} of {included})"
+fr = "Inclus dans votre forfait ({held} sur {included})"
+ctx = "label"
+screen = "setup.number"
+args = { held = "int", included = "int" }
+state = "reviewed"
+
+[setup.number_keep]
+en = "Keep this number"
+fr = "Garder ce numéro"
+ctx = "button"
+screen = "setup.number"
+state = "reviewed"
+
+[setup.number_none_body]
+en = "A number is chosen and bought on the setup page, which shows the numbers near you. Open it, take a number, then come back here to carry on."
+fr = "Un numéro se choisit et s'achète dans la page de configuration, qui affiche les numéros près de chez vous. Ouvrez-la, prenez un numéro, puis revenez ici pour continuer."
+ctx = "body"
+screen = "setup.number"
+state = "reviewed"
+note = "⛔ NAMES NO DESTINATION BEYOND THE PAGE'S OWN NAME (StoreCopyTests). Buying a number charges a card and stays on the web by decision (2026-11-08)."
+
+[setup.number_none_heading]
+en = "Get your number"
+fr = "Obtenez votre numéro"
+ctx = "title"
+screen = "setup.number"
+state = "reviewed"
+
+[setup.number_open_page]
+en = "Open the setup page"
+fr = "Ouvrir la page de configuration"
+ctx = "button"
+screen = "setup.number"
+state = "reviewed"
+
+[setup.number_title]
+en = "Your number"
+fr = "Votre numéro"
+ctx = "title"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.open_integrations]
+en = "Open the Integrations page"
+fr = "Ouvrir la page Intégrations"
+ctx = "button"
+screen = "setup.calls"
+state = "reviewed"
+
+[setup.open_skills]
+en = "Open the Skills page"
+fr = "Ouvrir la page Compétences"
+ctx = "button"
+screen = "setup.business"
+state = "reviewed"
+
+[setup.progress_label]
+en = "Setup progress"
+fr = "Progression de la configuration"
+ctx = "label"
+screen = "setup.a11y"
+state = "reviewed"
+
+[setup.receptionist_description]
+en = "A name, a greeting and a voice."
+fr = "Son nom, son message d'accueil et sa voix."
+ctx = "body"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.receptionist_disclosure_always]
+en = "Your receptionist tells callers it is an AI assistant at the start of every call."
+fr = "Votre réceptionniste indique aux appelants qu'elle est une assistante IA au début de chaque appel."
+ctx = "body"
+screen = "setup.receptionist"
+state = "reviewed"
+
+[setup.receptionist_disclosure_required]
+en = "This is required in Europe."
+fr = "C'est obligatoire en Europe."
+ctx = "body"
+screen = "setup.receptionist"
+state = "reviewed"
+
+[setup.receptionist_greeting_hint]
+en = "The first thing callers hear."
+fr = "La première chose que les appelants entendent."
+ctx = "body"
+screen = "setup.receptionist"
+state = "reviewed"
+
+[setup.receptionist_greeting_label]
+en = "Greeting"
+fr = "Message d'accueil"
+ctx = "label"
+screen = "setup.receptionist"
+state = "reviewed"
+
+[setup.receptionist_greeting_required]
+en = "Enter a greeting."
+fr = "Entrez un message d'accueil."
+ctx = "error"
+screen = "setup.receptionist"
+state = "reviewed"
+
+[setup.receptionist_name_label]
+en = "Receptionist's name"
+fr = "Nom de la réceptionniste"
+ctx = "label"
+screen = "setup.receptionist"
+state = "reviewed"
+
+[setup.receptionist_name_required]
+en = "Enter a name."
+fr = "Entrez un nom."
+ctx = "error"
+screen = "setup.receptionist"
+state = "reviewed"
+
+[setup.receptionist_title]
+en = "Your receptionist"
+fr = "Votre réceptionniste"
+ctx = "title"
+screen = "setup.steps"
+state = "reviewed"
+
+[setup.receptionist_voice_elsewhere]
+en = "Your receptionist uses a voice engine this step does not cover. Change the voice in Settings."
+fr = "Votre réceptionniste utilise un moteur vocal que cette étape ne couvre pas. Changez sa voix dans Réglages."
+ctx = "body"
+screen = "setup.receptionist"
+state = "reviewed"
+
+[setup.receptionist_voice_label]
+en = "Voice"
+fr = "Voix"
+ctx = "label"
+screen = "setup.receptionist"
+state = "reviewed"
+
+[setup.save]
+en = "Save"
+fr = "Enregistrer"
+ctx = "button"
+screen = "setup"
+state = "reviewed"
+
+[setup.save_and_continue]
+en = "Save and continue"
+fr = "Enregistrer et continuer"
+ctx = "button"
+screen = "setup"
+state = "reviewed"
+
+[setup.saved]
+en = "Saved."
+fr = "Enregistré."
+ctx = "label"
+screen = "setup"
+state = "reviewed"
+
+[setup.saving]
+en = "Saving…"
+fr = "Sauvegarde…"
+ctx = "label"
+screen = "setup"
+state = "reviewed"
+
+[setup.skip_step]
+en = "Skip this step for now"
+fr = "Passer cette étape pour l'instant"
+ctx = "button"
+screen = "setup"
+state = "reviewed"
+
+[setup.step_current]
+en = "Current step"
+fr = "Étape en cours"
+ctx = "label"
+screen = "setup.a11y"
+state = "reviewed"
+
+[setup.step_done]
+en = "Done"
+fr = "Terminée"
+ctx = "label"
+screen = "setup.a11y"
+state = "reviewed"
+
+[setup.step_of]
+en = "Step {n} of {total}"
+fr = "Étape {n} sur {total}"
+ctx = "label"
+screen = "setup"
+args = { n = "int", total = "int" }
+state = "reviewed"
+
+[setup.step_skipped]
+en = "Skipped"
+fr = "Passée"
+ctx = "label"
+screen = "setup.a11y"
+state = "reviewed"
+
+[setup.step_todo]
+en = "To do"
+fr = "À faire"
+ctx = "label"
+screen = "setup.a11y"
+state = "reviewed"
+
+[setup.title]
+en = "Setup"
+fr = "Configuration"
+ctx = "title"
+screen = "setup"
+state = "reviewed"

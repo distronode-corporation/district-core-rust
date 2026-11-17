@@ -150,6 +150,7 @@ mod scheduling;
 pub mod scheduling_admin;
 mod session;
 mod settings;
+pub mod setup;
 mod signed_in;
 pub mod studio;
 mod supervise;
@@ -297,6 +298,12 @@ pub use settings::{
     call_handling_mode_label, capability_label, channel_label, credential_source_label,
     default_allowed_tools, is_member_email, knowledge_mode_body, knowledge_mode_label,
     member_role_label, provider_label, settings_note, settings_rows,
+};
+pub use setup::{
+    BusinessDraft, BusinessEvent, BusinessNotice, BusinessStep, CallersEvent, CallersStep,
+    GoLiveEvent, GoLiveStep, GoLiveSummary, ReceptionistEvent, ReceptionistStep, SetupCallsEvent,
+    SetupCallsStep, SetupEvent, SetupHandOff, SetupLanguage, SetupPhase, SetupRefusal, SetupWizard,
+    StepPhase, TestCallStatus,
 };
 pub use signed_in::SignedIn;
 pub use supervise::{

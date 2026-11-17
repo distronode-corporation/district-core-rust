@@ -124,6 +124,9 @@ pub enum Route {
     /// Deleting the account, from the app. Like the account, not tied to a
     /// workspace.
     DeleteAccount,
+    /// The setup wizard, for the workspace's owner, from the overview's
+    /// "Finish setting up" card.
+    Setup,
     /// The workspace settings hub, or one of its sections. Some sections are
     /// closed to some roles: see [`Capabilities::allows`](crate::Capabilities::allows).
     Workspace(WorkspaceSection),
@@ -227,7 +230,8 @@ impl Route {
             | Self::Scheduling
             | Self::Desk
             | Self::Support
-            | Self::Rooms => Some(Self::Overview),
+            | Self::Rooms
+            | Self::Setup => Some(Self::Overview),
             Self::Overview | Self::Inbox | Self::Calls | Self::Contacts | Self::Account => None,
         }
     }
@@ -250,7 +254,8 @@ impl Route {
             | Self::DeskSettings
             | Self::Support
             | Self::SupportRequest { .. }
-            | Self::Dialer => Self::Overview,
+            | Self::Dialer
+            | Self::Setup => Self::Overview,
             // The new workspace may have no booking pages: its own status, on
             // the booking pages screen, says.
             Self::SchedulingAdmin(_) => Self::Scheduling,
@@ -308,6 +313,8 @@ impl Route {
             Self::Desk | Self::DeskTicket { .. } | Self::DeskSettings => page("desk"),
             Self::Support | Self::SupportRequest { .. } => page("support"),
             Self::Rooms => page("rooms"),
+            // The setup wizard is the web's home page's own wizard.
+            Self::Setup => page("home"),
             Self::Account | Self::Devices | Self::TwoStep | Self::DeleteAccount => page("account"),
             Self::Workspace(WorkspaceSection::Hub) => page("studio"),
             Self::Workspace(WorkspaceSection::Persona) => page("studio-persona"),

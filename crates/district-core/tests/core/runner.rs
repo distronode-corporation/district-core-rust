@@ -68,9 +68,14 @@ use district_model::{
     CallHandlingMode, MessagingChannel, MessagingCredentialSource, TwilioCredentials,
 };
 use district_model::{
+    ConnectionsResponse, ForwardingCheckMode, ForwardingCheckResponse, SetupLookupResponse,
+    SetupStep, SetupStepState, SetupTestCallResponse,
+};
+use district_model::{
     ConversationAssignResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse,
 };
 use district_model::{Credential, MfaConfirmation, MfaEnrollment, MfaStatus, ReauthAction};
+use serde_json::{Map, Value};
 
 use crate::support::{
     AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, monitor_credential,
@@ -112,6 +117,72 @@ impl DistrictApi for FakeApi {
     async fn setup_status(&self, workspace_id: &str) -> Result<SetupResponse, ApiError> {
         self.0.push(format!("setup {workspace_id}"));
         Ok(fixture("district-setup.json"))
+    }
+
+    async fn save_setup(
+        &self,
+        workspace_id: &str,
+        steps: &[(SetupStep, SetupStepState)],
+        business_facts: Option<&Map<String, Value>>,
+    ) -> Result<SetupResponse, ApiError> {
+        let steps: Vec<String> = steps
+            .iter()
+            .map(|(step, state)| format!("{}={}", step.as_str(), state.as_str()))
+            .collect();
+        let facts: Vec<&String> = business_facts
+            .map(|facts| facts.keys().collect())
+            .unwrap_or_default();
+        self.0
+            .push(format!("setup save {workspace_id} {steps:?} {facts:?}"));
+        Ok(fixture("district-setup-patch.json"))
+    }
+
+    async fn look_up_website(
+        &self,
+        workspace_id: &str,
+        website_url: &str,
+        locale: Locale,
+    ) -> Result<SetupLookupResponse, ApiError> {
+        self.0.push(format!(
+            "setup lookup {workspace_id} {website_url} {locale:?}"
+        ));
+        Ok(fixture("district-setup-lookup.json"))
+    }
+
+    async fn place_test_call(
+        &self,
+        workspace_id: &str,
+        phone: &str,
+    ) -> Result<SetupTestCallResponse, ApiError> {
+        self.0
+            .push(format!("setup test call {workspace_id} {phone}"));
+        Ok(fixture("district-setup-test-call.json"))
+    }
+
+    async fn forwarding_check(
+        &self,
+        workspace_id: &str,
+    ) -> Result<ForwardingCheckResponse, ApiError> {
+        self.0.push(format!("forwarding check {workspace_id}"));
+        Ok(fixture("district-forwarding-check.json"))
+    }
+
+    async fn start_forwarding_check(
+        &self,
+        workspace_id: &str,
+        business_line: &str,
+        mode: ForwardingCheckMode,
+    ) -> Result<ForwardingCheckResponse, ApiError> {
+        self.0.push(format!(
+            "forwarding start {workspace_id} {business_line} {}",
+            mode.as_str()
+        ));
+        Ok(fixture("district-forwarding-check-start.json"))
+    }
+
+    async fn connections(&self, workspace_id: &str) -> Result<ConnectionsResponse, ApiError> {
+        self.0.push(format!("connections {workspace_id}"));
+        Ok(fixture("district-connections.json"))
     }
 
     async fn devices(&self) -> Result<DeviceListResponse, ApiError> {

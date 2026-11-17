@@ -63,6 +63,12 @@ use district_model::{
     SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
 };
 
+use district_model::{
+    ConnectionsResponse, ForwardingCheckMode, ForwardingCheckResponse, SetupLookupResponse,
+    SetupStep, SetupStepState, SetupTestCallResponse,
+};
+use serde_json::{Map, Value};
+
 use crate::account_security::ReauthProof;
 use crate::contacts::{ContactWrite, ContactWritten};
 use crate::hq_voice::{HQ_VOICE_RELEASE_TIMEOUT, HqVoiceSessionId};
@@ -93,6 +99,43 @@ pub trait DistrictApi: Send + Sync {
         &self,
         workspace_id: &str,
     ) -> impl Future<Output = Result<SetupResponse, ApiError>> + Send;
+    /// The setup wizard's save: step states and business facts sections.
+    fn save_setup(
+        &self,
+        workspace_id: &str,
+        steps: &[(SetupStep, SetupStepState)],
+        business_facts: Option<&Map<String, Value>>,
+    ) -> impl Future<Output = Result<SetupResponse, ApiError>> + Send;
+    /// A draft of the business's facts from its website.
+    fn look_up_website(
+        &self,
+        workspace_id: &str,
+        website_url: &str,
+        locale: Locale,
+    ) -> impl Future<Output = Result<SetupLookupResponse, ApiError>> + Send;
+    /// Has the receptionist call the owner's phone.
+    fn place_test_call(
+        &self,
+        workspace_id: &str,
+        phone: &str,
+    ) -> impl Future<Output = Result<SetupTestCallResponse, ApiError>> + Send;
+    /// The latest call forwarding check.
+    fn forwarding_check(
+        &self,
+        workspace_id: &str,
+    ) -> impl Future<Output = Result<ForwardingCheckResponse, ApiError>> + Send;
+    /// Starts a call forwarding check.
+    fn start_forwarding_check(
+        &self,
+        workspace_id: &str,
+        business_line: &str,
+        mode: ForwardingCheckMode,
+    ) -> impl Future<Output = Result<ForwardingCheckResponse, ApiError>> + Send;
+    /// The workspace's connections.
+    fn connections(
+        &self,
+        workspace_id: &str,
+    ) -> impl Future<Output = Result<ConnectionsResponse, ApiError>> + Send;
     /// The installations signed in to the account.
     fn devices(&self) -> impl Future<Output = Result<DeviceListResponse, ApiError>> + Send;
     /// Signs one installation out.
@@ -1080,6 +1123,71 @@ where
             } => Event::OverviewLoaded {
                 ticket,
                 result: self.api.overview(&workspace_id).await,
+            },
+            Effect::LoadSetupWizard {
+                ticket,
+                workspace_id,
+            } => Event::SetupWizardLoaded {
+                ticket,
+                result: self.api.setup_status(&workspace_id).await,
+            },
+            Effect::SaveSetupWizard {
+                ticket,
+                workspace_id,
+                steps,
+                business_facts,
+            } => Event::SetupWizardSaved {
+                ticket,
+                result: self
+                    .api
+                    .save_setup(&workspace_id, &steps, business_facts.as_ref())
+                    .await,
+            },
+            Effect::ReadSetupWebsite {
+                ticket,
+                workspace_id,
+                website_url,
+                locale,
+            } => Event::SetupWebsiteRead {
+                ticket,
+                result: self
+                    .api
+                    .look_up_website(&workspace_id, &website_url, locale)
+                    .await,
+            },
+            Effect::PlaceSetupTestCall {
+                ticket,
+                workspace_id,
+                phone,
+            } => Event::SetupTestCallPlaced {
+                ticket,
+                result: self.api.place_test_call(&workspace_id, &phone).await,
+            },
+            Effect::LoadSetupForwardingCheck {
+                ticket,
+                workspace_id,
+            } => Event::SetupForwardingRead {
+                ticket,
+                result: self.api.forwarding_check(&workspace_id).await,
+            },
+            Effect::StartSetupForwardingCheck {
+                ticket,
+                workspace_id,
+                business_line,
+                mode,
+            } => Event::SetupForwardingRead {
+                ticket,
+                result: self
+                    .api
+                    .start_forwarding_check(&workspace_id, &business_line, mode)
+                    .await,
+            },
+            Effect::LoadSetupConnections {
+                ticket,
+                workspace_id,
+            } => Event::SetupConnectionsLoaded {
+                ticket,
+                result: self.api.connections(&workspace_id).await,
             },
             Effect::LoadSetupStatus {
                 ticket,
