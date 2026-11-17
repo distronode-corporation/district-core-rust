@@ -149,6 +149,7 @@ mod rooms;
 mod scheduling;
 mod scheduling_admin;
 mod settings;
+mod setup;
 mod supervise;
 mod support;
 mod telemetry;

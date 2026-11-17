@@ -267,6 +267,25 @@ endpoint_table! {
     /// Setup progress for a new workspace.
     Setup => Get "/api/district/setup",
         workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// Saves setup step states and business facts sections. The workspace's
+    /// owner only.
+    SetupSave => Patch "/api/district/setup",
+        workspace: Body, body: Json, retry: Never;
+    /// Drafts the business's facts from its website. Writes nothing.
+    SetupLookup => Post "/api/district/setup/lookup",
+        workspace: Body, body: Json, retry: Never;
+    /// Has the receptionist call the owner's phone. Places a real call.
+    SetupTestCall => Post "/api/district/setup/test-call",
+        workspace: Body, body: Json, retry: Never;
+    /// The latest call forwarding check of the business line.
+    ForwardingCheck => Get "/api/district/setup/forwarding-check",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
+    /// Starts a call forwarding check. Places a real call.
+    ForwardingCheckStart => Post "/api/district/setup/forwarding-check",
+        workspace: Body, body: Json, retry: Never;
+    /// The workspace's connected providers, and the calendar in use.
+    Connections => Get "/api/district/connections",
+        workspace: Query, body: Empty, retry: OnceAfterRefresh;
 
     // Calls.
 

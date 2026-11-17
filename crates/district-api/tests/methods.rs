@@ -8,6 +8,8 @@ use std::path::PathBuf;
 
 use common::client;
 use district_api::{ApiError, Endpoint};
+use district_l10n::Locale;
+use district_model::{SetupStep, SetupStepState};
 use serde_json::{Value, json};
 use wiremock::matchers::{body_json, method, path, query_param};
 use wiremock::{Mock, MockServer, Request, ResponseTemplate};
@@ -98,6 +100,105 @@ async fn setup_status_names_its_workspace_and_a_refusal_is_an_ordinary_error() {
         matches!(&refused, ApiError::Forbidden(detail) if detail.message.as_deref() == Some("Owner only")),
         "{refused:?}"
     );
+}
+
+#[tokio::test]
+async fn a_setup_save_sends_only_the_steps_and_sections_given() {
+    let body = fixture("district-setup-patch.json");
+    let server = serving("PATCH", "/api/district/setup", body.clone()).await;
+    let client = client(&server);
+    let mut facts = serde_json::Map::new();
+    facts.insert(
+        "address".to_owned(),
+        json!({"city": "Toronto", "country": "CA"}),
+    );
+    facts.insert("services".to_owned(), Value::Null);
+
+    let saved = client
+        .save_setup(
+            "ws-owner",
+            &[
+                (SetupStep::Receptionist, SetupStepState::Done),
+                (SetupStep::Number, SetupStepState::Skipped),
+            ],
+            Some(&facts),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(serde_json::to_value(&saved).unwrap(), body);
+    let sent: Value = serde_json::from_slice(&only_request(&server).await.body).unwrap();
+    assert_eq!(
+        sent,
+        json!({
+            "workspaceId": "ws-owner",
+            "setupProgress": {"steps": {"receptionist": "done", "number": "skipped"}},
+            "businessFacts": {"address": {"city": "Toronto", "country": "CA"}, "services": null},
+        })
+    );
+}
+
+#[tokio::test]
+async fn an_empty_setup_save_sends_only_the_workspace() {
+    let server = serving(
+        "PATCH",
+        "/api/district/setup",
+        fixture("district-setup-patch.json"),
+    )
+    .await;
+
+    client(&server)
+        .save_setup("ws-owner", &[], None)
+        .await
+        .unwrap();
+
+    let sent: Value = serde_json::from_slice(&only_request(&server).await.body).unwrap();
+    assert_eq!(sent, json!({"workspaceId": "ws-owner"}));
+}
+
+#[tokio::test]
+async fn a_member_and_a_workspace_before_the_wizard_keep_the_service_answer() {
+    let server = MockServer::start().await;
+    Mock::given(method("PATCH"))
+        .and(path("/api/district/setup"))
+        .and(body_json(json!({"workspaceId": "ws-member"})))
+        .respond_with(ResponseTemplate::new(403).set_body_json(json!({"error": "Owner only"})))
+        .mount(&server)
+        .await;
+    Mock::given(method("PATCH"))
+        .and(path("/api/district/setup"))
+        .and(body_json(json!({"workspaceId": "ws-old"})))
+        .respond_with(ResponseTemplate::new(409).set_body_json(
+            json!({"error": "Setup is not available", "code": "setup_not_available"}),
+        ))
+        .mount(&server)
+        .await;
+    let client = client(&server);
+
+    let member = client.save_setup("ws-member", &[], None).await.unwrap_err();
+    assert!(matches!(member, ApiError::Forbidden(_)), "{member:?}");
+    let old = client.save_setup("ws-old", &[], None).await.unwrap_err();
+    assert_eq!(old.code(), Some("setup_not_available"), "{old:?}");
+}
+
+#[tokio::test]
+async fn an_unreadable_website_is_its_422_with_its_code() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path("/api/district/setup/lookup"))
+        .respond_with(
+            ResponseTemplate::new(422)
+                .set_body_json(fixture("district-setup-lookup-unreadable.json")),
+        )
+        .mount(&server)
+        .await;
+
+    let refused = client(&server)
+        .look_up_website("ws-owner", "https://example.com/", Locale::En)
+        .await
+        .unwrap_err();
+
+    assert_eq!(refused.code(), Some("website_unreadable"), "{refused:?}");
 }
 
 #[tokio::test]
@@ -201,6 +302,9 @@ async fn a_failure_comes_through_as_the_error_it_is() {
     assert!(server_error(client.workspace_list().await.unwrap_err()));
     assert!(server_error(client.overview("ws").await.unwrap_err()));
     assert!(server_error(client.setup_status("ws").await.unwrap_err()));
+    assert!(server_error(
+        client.save_setup("ws", &[], None).await.unwrap_err()
+    ));
     assert!(server_error(client.native_devices().await.unwrap_err()));
     assert!(server_error(
         client.revoke_device("device-1").await.unwrap_err()

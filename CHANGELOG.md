@@ -17,8 +17,30 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+The setup wizard's routes, for the in-app wizard the next release brings to the desktop
+apps. A breaking change for an app that matches on `Endpoint` exhaustively: it gains six
+variants.
+
 ### Added
 
+- `DistrictApi` (`ApiClient`) gains the setup wizard's calls, the workspace owner's alone:
+  `save_setup` (`PATCH /api/district/setup`: step states inside `setupProgress`, and
+  business facts sections, each replacing the stored one whole, `null` clearing it),
+  `look_up_website` (`POST setup/lookup`, a draft that writes nothing; an unreadable page is
+  a 422 `website_unreadable`), `place_test_call` (`POST setup/test-call`),
+  `forwarding_check` and `start_forwarding_check` (`GET` and `POST
+  setup/forwarding-check`), and `connections` (`GET /api/district/connections`, for every
+  member). None of the writes is ever repeated: the test call and the forwarding check each
+  place a real call.
+- `district-model` gains their types: `SetupStep`, `SetupStepState` and
+  `SetupSteps::state`, `SetupLookupResponse` (with `SetupLookupDraft`, `SetupDraftService`,
+  `SetupDraftFaq`, `SetupLookupSource`) and `SetupLookupRefusal`, `SetupTestCallResponse`,
+  `ForwardingCheckMode`, `ForwardingCheckResponse` and `ForwardingCheck`, and
+  `ConnectionsResponse` (with `WorkspaceConnection` and `CalendarResolution`). The same
+  shapes as district-core-swift 8.5.0's.
+- Eight vendored fixtures are decoded, and leave the manifest's excluded-by-decision list:
+  the facts save, the website lookup and its refusal, the test call, the forwarding check
+  and its start, and both connections reads.
 - ARCHITECTURE.md (the crates, the event and effect loop, a request end to end, and where
   state lives) and SECURITY-MODEL.md (threat model, trust boundaries, secure design
   principles and the weaknesses countered, each with its test).
@@ -41,6 +63,12 @@ variant, or a field of one. Those take a new major version.
 
 ### Tests
 
+- The Android endpoint snapshot is read again, from Android main (f63dfb5). The Android
+  app now has two-step verification, the fresh re-authentication, deleting the account and
+  HQ by voice, so those twelve endpoints leave `DESKTOP_ONLY`. The setup wizard's seven
+  routes are in the table as the Android app calls them. The Android app's HQ voice settings
+  (`GET` and `PUT /api/district/hq/voice-settings`) are named in `EXCLUDED` until the desktop
+  apps have a voice settings screen.
 - The number and carrier account cases in the typed client tests answer with the service's
   recorded responses in `contracts/fixtures/`, which have existed since they were written;
   their comment said the service recorded none.
