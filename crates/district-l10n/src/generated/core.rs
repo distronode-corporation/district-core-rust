@@ -3096,8 +3096,8 @@ pub fn messaging_viewer(l: Locale) -> &'static str {
 #[must_use]
 pub fn overview_finish_setup_action(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Open the web dashboard",
-        Locale::FrCa => "Ouvrir le tableau de bord Web",
+        Locale::En => "Open setup",
+        Locale::FrCa => "Ouvrir la configuration",
     }
 }
 
@@ -3105,8 +3105,8 @@ pub fn overview_finish_setup_action(l: Locale) -> &'static str {
 #[must_use]
 pub fn overview_finish_setup_body(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Your receptionist is not live yet. Pick your number, set up how it answers, and go live from the web dashboard.",
-        Locale::FrCa => "Votre réceptionniste n'est pas encore active. Choisissez votre numéro, réglez sa façon de répondre et activez-la depuis le tableau de bord Web.",
+        Locale::En => "A few setup steps for this workspace are still open.",
+        Locale::FrCa => "Quelques étapes de configuration de cet espace de travail restent à faire.",
     }
 }
 
@@ -3114,8 +3114,8 @@ pub fn overview_finish_setup_body(l: Locale) -> &'static str {
 #[must_use]
 pub fn overview_finish_setup_title(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Finish setting up on the web",
-        Locale::FrCa => "Terminer la configuration sur le Web",
+        Locale::En => "Finish setting up",
+        Locale::FrCa => "Terminer la configuration",
     }
 }
 

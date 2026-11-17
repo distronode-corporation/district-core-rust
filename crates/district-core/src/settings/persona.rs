@@ -896,6 +896,10 @@ impl SignedIn {
         result: Result<PersonaOptionsResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
+        if tickets.accept(Slot::SetupPersonaOptions, ticket) {
+            self.receptionist_options_loaded(result);
+            return stay();
+        }
         if tickets.accept(Slot::PersonaOptions, ticket)
             && let Some(section) = self.persona.as_mut()
         {

@@ -34,6 +34,7 @@ use district_model::{
 };
 use district_model::{ClientIdentity, Platform};
 use district_model::{Credential, ReauthAction};
+use district_model::{ForwardingCheckMode, SetupStep, SetupStepState};
 use serde_json::json;
 use url::Url;
 use wiremock::matchers::{body_string_contains, method, path, query_param};
@@ -267,6 +268,96 @@ async fn the_api_client_serves_two_step_verification_and_account_deletion() {
         !DistrictApi::delete_account(&client, "ada@example.com")
             .await
             .unwrap()
+    );
+}
+
+/// The setup wizard's routes, through the API client, against a server that
+/// answers each with its recording.
+#[tokio::test]
+async fn the_api_client_serves_the_setup_wizard() {
+    let server = MockServer::start().await;
+    for (verb, route, body) in [
+        (
+            "PATCH",
+            "/api/district/setup",
+            fixture("district-setup-patch.json"),
+        ),
+        (
+            "POST",
+            "/api/district/setup/lookup",
+            fixture("district-setup-lookup.json"),
+        ),
+        (
+            "POST",
+            "/api/district/setup/test-call",
+            fixture("district-setup-test-call.json"),
+        ),
+        (
+            "GET",
+            "/api/district/setup/forwarding-check",
+            fixture("district-forwarding-check.json"),
+        ),
+        (
+            "POST",
+            "/api/district/setup/forwarding-check",
+            fixture("district-forwarding-check-start.json"),
+        ),
+        (
+            "GET",
+            "/api/district/connections",
+            fixture("district-connections.json"),
+        ),
+    ] {
+        serve(&server, verb, route, body).await;
+    }
+    let client = ApiClient::new(local(&server), OneToken).unwrap();
+    let ws = "ws-contract-test";
+
+    let saved = DistrictApi::save_setup(
+        &client,
+        ws,
+        &[(SetupStep::Number, SetupStepState::Done)],
+        None,
+    )
+    .await
+    .unwrap();
+    assert_eq!(saved.numbers_held, 1);
+    let found = DistrictApi::look_up_website(
+        &client,
+        ws,
+        "https://example.com/",
+        district_core::Locale::En,
+    )
+    .await
+    .unwrap();
+    assert_eq!(found.draft.services.len(), 2);
+    assert!(
+        DistrictApi::place_test_call(&client, ws, "+14165550142")
+            .await
+            .unwrap()
+            .success
+    );
+    assert!(
+        DistrictApi::forwarding_check(&client, ws)
+            .await
+            .unwrap()
+            .forwarding_check
+            .unwrap()
+            .has_passed()
+    );
+    assert!(
+        DistrictApi::start_forwarding_check(&client, ws, "+14165550123", ForwardingCheckMode::All)
+            .await
+            .unwrap()
+            .forwarding_check
+            .unwrap()
+            .is_pending()
+    );
+    assert!(
+        DistrictApi::connections(&client, ws)
+            .await
+            .unwrap()
+            .has_active_calendar()
     );
 }
 

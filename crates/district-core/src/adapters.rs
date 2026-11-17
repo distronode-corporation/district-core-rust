@@ -49,10 +49,15 @@ use district_model::{
     PresenceRegistration, PushRegistrationResponse, RenameResponse, RoutingRule,
     VoiceStudioResponse, WorkspaceConfigResponse, WorkspaceSaveResponse,
 };
+use district_model::{
+    ConnectionsResponse, ForwardingCheckMode, ForwardingCheckResponse, SetupLookupResponse,
+    SetupStep, SetupStepState, SetupTestCallResponse,
+};
 use district_model::{Credential, MfaConfirmation, MfaEnrollment, MfaStatus, ReauthAction};
 use district_model::{
     MetaWindowResponse, SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
 };
+use serde_json::{Map, Value};
 use tokio::sync::mpsc::UnboundedReceiver;
 use url::Url;
 
@@ -87,6 +92,55 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         workspace_id: &str,
     ) -> impl Future<Output = Result<SetupResponse, ApiError>> + Send {
         ApiClient::setup_status(self, workspace_id)
+    }
+
+    fn save_setup(
+        &self,
+        workspace_id: &str,
+        steps: &[(SetupStep, SetupStepState)],
+        business_facts: Option<&Map<String, Value>>,
+    ) -> impl Future<Output = Result<SetupResponse, ApiError>> + Send {
+        ApiClient::save_setup(self, workspace_id, steps, business_facts)
+    }
+
+    fn look_up_website(
+        &self,
+        workspace_id: &str,
+        website_url: &str,
+        locale: Locale,
+    ) -> impl Future<Output = Result<SetupLookupResponse, ApiError>> + Send {
+        ApiClient::look_up_website(self, workspace_id, website_url, locale)
+    }
+
+    fn place_test_call(
+        &self,
+        workspace_id: &str,
+        phone: &str,
+    ) -> impl Future<Output = Result<SetupTestCallResponse, ApiError>> + Send {
+        ApiClient::place_test_call(self, workspace_id, phone)
+    }
+
+    fn forwarding_check(
+        &self,
+        workspace_id: &str,
+    ) -> impl Future<Output = Result<ForwardingCheckResponse, ApiError>> + Send {
+        ApiClient::forwarding_check(self, workspace_id)
+    }
+
+    fn start_forwarding_check(
+        &self,
+        workspace_id: &str,
+        business_line: &str,
+        mode: ForwardingCheckMode,
+    ) -> impl Future<Output = Result<ForwardingCheckResponse, ApiError>> + Send {
+        ApiClient::start_forwarding_check(self, workspace_id, business_line, mode)
+    }
+
+    fn connections(
+        &self,
+        workspace_id: &str,
+    ) -> impl Future<Output = Result<ConnectionsResponse, ApiError>> + Send {
+        ApiClient::connections(self, workspace_id)
     }
 
     fn devices(&self) -> impl Future<Output = Result<DeviceListResponse, ApiError>> + Send {

@@ -3121,31 +3121,31 @@ state = "reviewed"
 note = "Note for a member with read-only access."
 
 [overview.finish_setup_action]
-en = "Open the web dashboard"
-fr = "Ouvrir le tableau de bord Web"
+en = "Open setup"
+fr = "Ouvrir la configuration"
 ctx = "button"
 screen = "overview"
 tier = "T3"
 state = "reviewed"
-note = "Button on that card that opens the web dashboard in the browser."
+note = "Button on that card that opens the setup wizard in the app."
 
 [overview.finish_setup_body]
-en = "Your receptionist is not live yet. Pick your number, set up how it answers, and go live from the web dashboard."
-fr = "Votre réceptionniste n'est pas encore active. Choisissez votre numéro, réglez sa façon de répondre et activez-la depuis le tableau de bord Web."
+en = "A few setup steps for this workspace are still open."
+fr = "Quelques étapes de configuration de cet espace de travail restent à faire."
 ctx = "body"
 screen = "overview"
 tier = "T3"
 state = "reviewed"
-note = "Body of that card: the receptionist is not answering calls yet; the number and how it answers are set up on the web dashboard."
+note = "Body of that card: the workspace has setup steps left. The macOS app's card, word for word; it names no place to go but the app."
 
 [overview.finish_setup_title]
-en = "Finish setting up on the web"
-fr = "Terminer la configuration sur le Web"
+en = "Finish setting up"
+fr = "Terminer la configuration"
 ctx = "title"
 screen = "overview"
 tier = "T3"
 state = "reviewed"
-note = "Heading of the card shown while the workspace's receptionist is not live yet: setup is finished on the website."
+note = "Heading of the card shown while the workspace is in the setup wizard and has not finished it: the button opens the wizard in the app."
 
 [overview.read_only_badge]
 en = "Read-only access"

@@ -392,6 +392,9 @@ impl SignedIn {
         result: Result<RenameResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
+        if tickets.accept(Slot::SetupRename, ticket) {
+            return Next::Stay(self.business_renamed(result, tickets));
+        }
         // Closing the workspace closes the section and drops the rename's slot,
         // so a section with an answer is always in an open workspace.
         if tickets.accept(Slot::WorkspaceRename, ticket)
