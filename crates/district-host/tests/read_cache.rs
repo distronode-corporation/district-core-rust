@@ -42,6 +42,12 @@ fn a_saved_read_comes_back_as_it_was_saved() {
         "a later save replaces it"
     );
     assert_eq!(names(cache.dir()).len(), 1);
+
+    cache.save("other", read("{}", 44));
+    cache.remove(KEY);
+    assert_eq!(cache.load(KEY), None);
+    assert!(cache.load("other").is_some(), "only that one");
+    cache.remove("never saved");
 }
 
 #[test]

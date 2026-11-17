@@ -558,6 +558,9 @@ impl ReadCache for SignsOutWhileWriting {
         self.client.get().unwrap().clear_saved_reads();
         self.inner.save(key, read);
     }
+    fn remove(&self, key: &str) {
+        self.inner.remove(key);
+    }
     fn clear(&self) {
         self.inner.clear();
     }
@@ -607,7 +610,10 @@ fn a_shared_cache_is_one_cache() {
         saved_at_ms: 7,
     };
     ReadCache::save(&cache, "k", read.clone());
-    assert_eq!(cache.load("k"), Some(read));
+    assert_eq!(cache.load("k"), Some(read.clone()));
+    ReadCache::remove(&cache, "k");
+    assert_eq!(ReadCache::load(&cache, "k"), None);
+    ReadCache::save(&cache, "k", read.clone());
     ReadCache::clear(&cache);
     assert_eq!(ReadCache::load(&cache, "k"), None);
 }

@@ -2648,6 +2648,8 @@ impl district_api::ReadCache for CountedClears {
 
     fn save(&self, _key: &str, _read: district_api::SavedRead) {}
 
+    fn remove(&self, _key: &str) {}
+
     fn clear(&self) {
         *self.0.lock().unwrap() += 1;
     }

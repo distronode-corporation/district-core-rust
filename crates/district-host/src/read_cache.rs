@@ -172,6 +172,10 @@ impl ReadCache for ReadCacheDir {
         }
     }
 
+    fn remove(&self, key: &str) {
+        fs::remove_file(self.dir.join(file_name(key))).ok();
+    }
+
     /// Every saved read, and every temporary file a save left (customer data
     /// too, even half-written).
     fn clear(&self) {

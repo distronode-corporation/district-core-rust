@@ -51,6 +51,8 @@ pub trait ReadCache: Send + Sync + 'static {
     fn load(&self, key: &str) -> Option<SavedRead>;
     /// Keeps `read` as the answer for `key`, replacing any older one.
     fn save(&self, key: &str, read: SavedRead);
+    /// Forgets the saved answer for `key`, if there is one.
+    fn remove(&self, key: &str);
     /// Forgets every saved answer.
     fn clear(&self);
 }
@@ -82,6 +84,10 @@ impl ReadCache for MemoryReadCache {
         self.reads().insert(key.to_owned(), read);
     }
 
+    fn remove(&self, key: &str) {
+        self.reads().remove(key);
+    }
+
     fn clear(&self) {
         self.reads().clear();
     }
@@ -95,6 +101,10 @@ impl<C: ReadCache> ReadCache for Arc<C> {
 
     fn save(&self, key: &str, read: SavedRead) {
         C::save(self, key, read);
+    }
+
+    fn remove(&self, key: &str) {
+        C::remove(self, key);
     }
 
     fn clear(&self) {
@@ -267,9 +277,10 @@ impl SavedReads {
             },
         );
         // A clear that landed while it was being written still wins: what was just
-        // written belonged to the session that ended.
+        // written belonged to the session that ended. Only this copy goes: one a
+        // newer session has saved since is its own.
         if self.state().generation != asked.generation {
-            self.cache.clear();
+            self.cache.remove(&asked.key);
         }
     }
 
@@ -368,6 +379,9 @@ mod tests {
             self.0.go_on.wait();
             self.0.inner.save(key, read);
         }
+        fn remove(&self, key: &str) {
+            self.0.inner.remove(key);
+        }
         fn clear(&self) {
             self.0.inner.clear();
         }
@@ -396,8 +410,21 @@ mod tests {
         cache.writing.wait();
         // The lock is free while the copy is written: a sign-out is not held up.
         saved.clear();
+        // And the next session saves a copy of its own meanwhile.
+        cache.inner.save(
+            "the next session's",
+            SavedRead {
+                body: b"{}".to_vec(),
+                saved_at_ms: 1,
+            },
+        );
         cache.go_on.wait();
         writer.join().unwrap();
+
+        assert!(
+            cache.inner.load("the next session's").is_some(),
+            "only the copy the ended session wrote goes"
+        );
 
         assert_eq!(
             Held(cache).load(&key),
@@ -451,7 +478,11 @@ mod tests {
         cache.save("k", read(1));
         cache.save("k", read(2));
         assert_eq!(cache.load("k"), Some(read(2)));
-        cache.clear();
+        cache.save("j", read(3));
+        cache.remove("k");
         assert_eq!(cache.load("k"), None);
+        assert_eq!(cache.load("j"), Some(read(3)), "only that one");
+        cache.clear();
+        assert_eq!(cache.load("j"), None);
     }
 }
