@@ -222,8 +222,20 @@ pub(crate) fn failed(error: &ApiError) -> WorkspacesState {
 mod tests {
     use super::*;
 
+    /// Every path runs here as well as from the integration tests: a unit
+    /// test binary holds its own copy of each function, measured on its own.
     #[test]
-    fn with_no_workspace_open_there_is_none_to_name_or_rename() {
+    fn the_open_workspace_is_named_and_renamed_and_with_none_open_nothing_is() {
+        let list: WorkspaceListResponse = serde_json::from_str(include_str!(
+            "../../../contracts/fixtures/district-workspace-list.json"
+        ))
+        .unwrap();
+        let mut state = resolve(list, None).state;
+        state.rename_active("Renamed");
+        assert_eq!(
+            state.active().map(|entry| entry.name.as_str()),
+            Some("Renamed")
+        );
         let mut state = WorkspacesState::Loading;
         state.rename_active("Zulu Agency");
         assert_eq!(state, WorkspacesState::Loading);

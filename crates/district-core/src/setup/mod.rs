@@ -683,10 +683,16 @@ impl SignedIn {
             &self.setup.workspace_name,
             l(),
         );
-        self.update_setup_draft(draft);
-        if self.setup.active == Some(SetupStep::Business) {
-            self.open_business();
+        // Step 1 may already be on screen with what the owner typed: only the
+        // language the persona names comes in, and only over the app's own
+        // default (one the owner chose stays).
+        let shown = &mut self.setup.business;
+        if self.setup.active == Some(SetupStep::Business)
+            && shown.language == SetupLanguage::app_default(l())
+        {
+            shown.language = draft.language;
         }
+        self.update_setup_draft(draft);
     }
 
     /// After a page opened in the browser was left: read again, and move on if
@@ -877,19 +883,29 @@ pub(crate) type SetupDrafts = BTreeMap<String, BusinessDraft>;
 mod tests {
     use super::*;
 
-    #[test]
-    fn a_step_has_no_state_before_an_answer_or_in_one_with_no_progress() {
-        assert_eq!(SetupWizard::default().state(SetupStep::Business), None);
-        let wizard = SetupWizard {
+    fn with_progress(progress: Value) -> SetupWizard {
+        SetupWizard {
             data: Some(
                 serde_json::from_value(serde_json::json!({
-                    "setupProgress": null, "businessFacts": null, "region": "ca",
+                    "setupProgress": progress, "businessFacts": null, "region": "ca",
                     "tier": "VoicePro", "includedNumbers": 3, "numbersHeld": 1,
                 }))
                 .unwrap(),
             ),
             ..SetupWizard::default()
-        };
-        assert_eq!(wizard.state(SetupStep::Business), None);
+        }
+    }
+
+    /// Every path runs here as well as from the integration tests: a unit
+    /// test binary holds its own copy of each function, measured on its own.
+    #[test]
+    fn a_step_has_its_state_and_none_before_an_answer_or_in_one_with_no_progress() {
+        assert_eq!(SetupWizard::default().state(SetupStep::Business), None);
+        assert_eq!(with_progress(Value::Null).state(SetupStep::Business), None);
+        let steps = serde_json::json!({"steps": {"business": "done"}});
+        assert_eq!(
+            with_progress(steps).state(SetupStep::Business),
+            Some(SetupStepState::Done)
+        );
     }
 }

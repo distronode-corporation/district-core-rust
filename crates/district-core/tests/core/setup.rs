@@ -715,9 +715,29 @@ fn the_persona_language_arriving_after_the_wizard_opens_step_one_on_it() {
         SetupLanguage::En,
         "the app's until then"
     );
+    // What the owner typed meanwhile stays.
+    business(&mut model, BusinessEvent::SetName("Zulu Dental".into()));
+    business(&mut model, BusinessEvent::SetCity("Montreal".into()));
     model.update(Event::WorkspaceConfigLoaded {
         ticket: config,
         result: Ok(config_with(json!({"language": "fr-CA"}))),
+    });
+    let step = &wizard(&model).business;
+    assert_eq!(step.language, SetupLanguage::Fr);
+    assert_eq!(
+        (step.business_name.as_str(), step.city.as_str()),
+        ("Zulu Dental", "Montreal")
+    );
+    // A language the owner chose stays too.
+    let (mut model, load, config) = opened();
+    model.update(Event::SetupWizardLoaded {
+        ticket: load,
+        result: Ok(state(ALL_TODO, json!({}))),
+    });
+    business(&mut model, BusinessEvent::SetLanguage(SetupLanguage::Fr));
+    model.update(Event::WorkspaceConfigLoaded {
+        ticket: config,
+        result: Ok(config_with(json!({"language": "en-US"}))),
     });
     assert_eq!(wizard(&model).business.language, SetupLanguage::Fr);
     // A failed persona read opens on the app's language, here French.
