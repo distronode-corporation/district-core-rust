@@ -110,6 +110,24 @@ fn a_save_removes_copies_too_old_to_show_and_damaged_ones() {
 }
 
 #[test]
+fn a_save_removes_a_copy_dated_far_in_the_future_and_keeps_a_newer_one() {
+    let tmp = tempfile::tempdir().unwrap();
+    let cache = ReadCacheDir::new(tmp.path());
+    let now = 10 * SAVED_COPY_MAX_AGE_MS;
+    cache.save("far ahead", read("{}", now + SAVED_COPY_MAX_AGE_MS + 1));
+    cache.save("a moment later", read("{}", now + 5));
+
+    cache.save(KEY, read("{}", now));
+
+    assert_eq!(cache.load("far ahead"), None, "the clock was set back");
+    assert!(
+        cache.load("a moment later").is_some(),
+        "an overlapping save"
+    );
+    assert!(cache.load(KEY).is_some());
+}
+
+#[test]
 fn only_its_own_files_are_touched() {
     // A stray file, a name in capitals and a directory: neither a prune nor a
     // clear touches them. A temporary file of a write in progress survives a

@@ -86,7 +86,13 @@ impl ReadCacheDir {
             .into_iter()
             .filter(|(path, _)| *path != owner)
             .filter(|(path, saved_at)| {
-                let fresh = now_ms - saved_at <= SAVED_COPY_MAX_AGE_MS;
+                // ⚠️ Bounded both ways: a copy dated more than the same span in
+                // the future (the clock was set back) is removed too. Not any
+                // future date: `now_ms` is the stamp of the copy being saved, and
+                // one an overlapping request saved a moment later is newer, not
+                // wrong.
+                let fresh =
+                    (-SAVED_COPY_MAX_AGE_MS..=SAVED_COPY_MAX_AGE_MS).contains(&(now_ms - saved_at));
                 if !fresh {
                     fs::remove_file(path).ok();
                 }
