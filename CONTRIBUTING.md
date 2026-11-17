@@ -20,8 +20,8 @@ crates/district-model/    Serde data types for the District AI API, mirroring th
                           and the live telemetry envelopes; `Platform` and
                           `ClientIdentity`, which name the app on the wire. No IO.
 crates/district-api/      The HTTP client and the endpoint table. A bearer token and
-                          an explicit workspace on every call, no cookie store,
-                          redirects never followed.
+                          an explicit workspace on every workspace-scoped call,
+                          no cookie store, redirects never followed.
 crates/district-auth/     Sign-in with OAuth 2.0 and PKCE through the system
                           browser, the token exchange, single-flight refresh-token
                           rotation, sign-out.
@@ -57,6 +57,10 @@ contracts/                What these crates are checked against: the server's
                           Android app's endpoint snapshot (sync-endpoints.py), and
                           the brand colours from the design tokens
                           (sync-palette.py).
+ARCHITECTURE.md           The crates, the event and effect loop, and where state
+                          lives.
+SECURITY-MODEL.md         The threat model, trust boundaries, design principles and
+                          the weaknesses the code counters.
 tools/l10n/               The catalog tools (l10n.py, frcheck.py), vendored from
                           the server repository by `l10n.py vendor`.
 scripts/                  check-version.py, check-public-hygiene.py,
@@ -113,9 +117,9 @@ Two things differ on Windows by design:
   directory they are in (the app's own data directory), because the owner-only
   modes it sets on Unix have no Windows equivalent in the standard library.
 - Line endings: `.gitattributes` keeps every text file LF in every checkout,
-  Windows included, and never converts anything under `contracts/`, whose bytes
-  `contracts/SHA256SUMS` pins. A checkout made before `.gitattributes` existed,
-  or with a global setting that overrides it, fails the checksum test; clone
+  Windows included, and never converts anything under `contracts/`, where
+  `contracts/SHA256SUMS` pins the bytes of the three vendored sets. A checkout
+  made before `.gitattributes` existed, or with a global setting that overrides it, fails the checksum test; clone
   again.
 
 The call engine (`livekit`) is not built on Windows here: District AI for Windows
@@ -183,9 +187,22 @@ refused, as the last two `devices::` tests show.
 
 ## Logging
 
-Nothing in these crates logs or prints: no `println!`, `eprintln!` or `dbg!`
-outside tests, and no `log` macro. `log` is a dependency only for its
-`max_level_warn` feature, which compiles every line below warn out of a whole
+Nothing in these crates logs: there is no `log` macro. Nothing prints either (no
+`println!`, `eprintln!` or `dbg!` outside tests), with two exceptions:
+
+- `crates/district-core/src/runner.rs` writes one line to stderr with
+  `eprintln!` when the core's own end or give-back of an HQ voice session is
+  declined, fails or goes unanswered (`log_release`, and the declined discard in
+  `Effect::DiscardHqVoice`). Nothing waits on those calls, so there is no caller
+  to return the error to. The line names the route (`end` or `discard`) and
+  either the `ApiError`'s own text or the timeout, never a token, a session or
+  workspace id or a response body. Do not add another: a new failure is
+  returned as an error.
+- `examples/` may print with `println!`, because printing is how an example
+  shows its result (`crates/district-l10n/examples/quick_start.rs` prints two
+  formatted prices). An example prints no credential and no customer data.
+
+`log` is a dependency only for its `max_level_warn` feature, which compiles every line below warn out of a whole
 build; SECURITY.md says why, and a test in `district-live` (and, with the engine,
 one in `district-call`) fails if it goes. Keep it that way: an error is returned,
 not logged, and what reaches a user is the app's decision.
@@ -209,9 +226,33 @@ request:
 `python3 scripts/check-version.py` checks the three agree, and with the tag as
 its argument checks them against the tag. `python3 scripts/check-fr-signoff.py`
 checks that the catalogs are the signed-off ones (see "Strings and French").
-Once the pull request is merged, tag the merge commit and push the tag;
-`.github/workflows/release-guard.yml` runs the sign-off check on it. Once that
-is green, create the GitHub release from the CHANGELOG.md section. Then move each app's pin in a pull request of its own.
+Once the pull request is merged, and before anything else merges, run the
+Release workflow (`.github/workflows/release.yml`) from main with the version
+and a one-line summary. It runs both checks against the tag it is about to make,
+then creates the annotated `vX.Y.Z` tag on main's head, signed with gitsign under
+the workflow's own identity (no key to hold), verifies it, and pushes it. Once it
+is green, create the GitHub release from the CHANGELOG.md section. Then move each
+app's pin in a pull request of its own. README.md, "Verify a release", says how
+anyone checks the signature. A tag pushed by hand is unsigned and does not get
+that guarantee; `.github/workflows/release-guard.yml` still runs the sign-off
+check on one.
+
+## Style
+
+Code follows the Rust style guide as `rustfmt` implements it, with the settings in
+`rustfmt.toml`, and clippy's default lints plus the workspace lints in `Cargo.toml`
+(`unsafe_code = "forbid"`, `missing_docs`, `dbg_macro`, `todo`, `unimplemented`). CI runs
+`cargo fmt --all --check` and `cargo clippy --workspace --all-targets --locked -- -D
+warnings`, so any warning, a use of a deprecated API included, fails the build. A pull
+request that fails either does not merge. `.editorconfig` sets the whitespace of the other
+files.
+
+## Tests
+
+A pull request that adds or changes functionality adds tests for it to the automated suite
+(`cargo test --workspace --locked`), and a bug fix adds a test that fails without the fix.
+CI runs the suite on every pull request and every push to main, and it is a required check
+(`rust`, and `windows` on the Windows target).
 
 ## The whole local gate
 
@@ -333,12 +374,14 @@ its money, number, date and duration formatters in English and French.
 two and tests its formats against the third, byte for byte.
 
 `crates/district-model` decodes every file in the first two sets in its tests with unknown
-fields refused (the `strict-contracts` feature, which its tests always enable), so
-a field the server renames or adds fails here rather than in an app. The files
-are a snapshot: `contracts/SOURCE.toml` says which server commit they came from,
+fields refused (the `strict-contracts` feature, which its tests always enable),
+except those its fixture manifest (`crates/district-model/tests/contracts/manifest.rs`)
+lists as not yet modelled (`NOT_YET_MODELLED`, which may only shrink) or excluded by
+decision (`EXCLUDED_BY_DECISION`), so a field the server renames or adds fails here
+rather than in an app. The files are a snapshot: `contracts/SOURCE.toml` says which server commit they came from,
 with a `[sets.<name>]` table for each set, and lists every substitution made to
 keep real-looking data out of this public repository; `contracts/SHA256SUMS` pins
-the bytes of both sets. Do not edit them by hand; maintainers with access to the
+the bytes of all three sets. Do not edit them by hand; maintainers with access to the
 server repository re-run
 
 ```
@@ -390,6 +433,11 @@ Conventional Commits are not required. What is required is that the message says
 that was wrong, the evidence, and what would have caught it.
 
 Pull requests run `.github/workflows/ci.yml`, and all of it must be green.
+
+Documentation moves with the code: a change in behaviour updates README.md, ARCHITECTURE.md,
+SECURITY.md or SECURITY-MODEL.md in the same pull request when it changes what they say.
+How changes are reviewed and accepted is in the organization's
+[GOVERNANCE.md](https://github.com/distronode-corporation/.github/blob/main/GOVERNANCE.md).
 
 ## Reporting bugs
 
