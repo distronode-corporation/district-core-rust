@@ -105,28 +105,51 @@ fn a_save_removes_copies_too_old_to_show_and_damaged_ones() {
 
 #[test]
 fn only_its_own_files_are_touched() {
-    // ⚠️ Another save's temporary file (`.name.*.tmp`), a stray file, a name in
-    // capitals and a directory: a prune or a clear must leave every one alone.
+    // A stray file, a name in capitals and a directory: neither a prune nor a
+    // clear touches them. A temporary file of a write in progress survives a
+    // prune; a clear (a sign-out) removes it with the rest.
     let tmp = tempfile::tempdir().unwrap();
     let cache = ReadCacheDir::new(tmp.path());
     let hex = "a".repeat(64);
-    let others = vec![
-        format!(".{hex}.0123.tmp"),
-        "A".repeat(64),
-        "stray".to_owned(),
-    ];
-    for other in &others {
+    let in_progress = format!(".{hex}.0123.tmp");
+    // ⚠️ "C", not "A": Windows' file names ignore case, so a capital "A" name
+    // would be the `hex` directory below.
+    let others = vec!["C".repeat(64), "stray".to_owned(), format!(".{hex}")];
+    for other in others.iter().chain([&in_progress]) {
         fs::write(tmp.path().join(other), b"").unwrap();
     }
     fs::create_dir(tmp.path().join(&hex)).unwrap();
 
     cache.save(KEY, read("{}", SAVED_COPY_MAX_AGE_MS + 10));
-    cache.clear();
+    assert!(
+        tmp.path().join(&in_progress).exists(),
+        "a write in progress"
+    );
 
+    cache.clear();
     let mut expected = others.clone();
     expected.push(hex);
     expected.sort();
     assert_eq!(names(tmp.path()), expected);
+}
+
+#[test]
+fn a_temporary_file_a_crash_left_behind_is_removed() {
+    let tmp = tempfile::tempdir().unwrap();
+    let cache = ReadCacheDir::new(tmp.path());
+    let left = tmp.path().join(format!(".{}.0123.tmp", "b".repeat(64)));
+    fs::write(&left, b"half a body").unwrap();
+    let an_hour_ago = std::time::SystemTime::now() - std::time::Duration::from_secs(3600);
+    fs::File::options()
+        .write(true)
+        .open(&left)
+        .unwrap()
+        .set_modified(an_hour_ago)
+        .unwrap();
+
+    cache.save(KEY, read("{}", 1));
+
+    assert!(!left.exists());
 }
 
 #[test]

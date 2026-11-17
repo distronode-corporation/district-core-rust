@@ -93,7 +93,45 @@ impl ReadCacheDir {
         for (path, _) in kept.iter().skip(READ_CACHE_MAX_FILES) {
             fs::remove_file(path).ok();
         }
+        // A write that a crash interrupted left its temporary file behind; one
+        // older than any write takes is not a write in progress.
+        for path in self.temporary_files() {
+            let stale = fs::metadata(&path)
+                .and_then(|meta| meta.modified())
+                .ok()
+                .and_then(|modified| modified.elapsed().ok())
+                .is_some_and(|age| age >= TEMPORARY_MAX_AGE);
+            if stale {
+                fs::remove_file(path).ok();
+            }
+        }
     }
+
+    /// A save's temporary files (`.name.*.tmp`, see `files::replace`): each holds
+    /// a body until it is renamed, or for good if the write was interrupted.
+    fn temporary_files(&self) -> Vec<PathBuf> {
+        let Ok(entries) = fs::read_dir(&self.dir) else {
+            return Vec::new();
+        };
+        entries
+            .filter_map(Result::ok)
+            .filter(|entry| is_temporary_name(&entry.file_name().to_string_lossy()))
+            .map(|entry| entry.path())
+            .collect()
+    }
+}
+
+/// How old a temporary file must be before a save removes it as left over.
+const TEMPORARY_MAX_AGE: std::time::Duration = std::time::Duration::from_secs(10 * 60);
+
+/// Whether `name` is a save's temporary file: `.`, a saved read's name, then
+/// anything ending in `.tmp`.
+fn is_temporary_name(name: &str) -> bool {
+    name.ends_with(".tmp")
+        && name
+            .strip_prefix('.')
+            .and_then(|rest| rest.get(..64))
+            .is_some_and(is_saved_read_name)
 }
 
 /// Whether `name` is a saved read's: 64 lowercase hexadecimal digits.
@@ -134,8 +172,13 @@ impl ReadCache for ReadCacheDir {
         }
     }
 
+    /// Every saved read, and every temporary file a save left (customer data
+    /// too, even half-written).
     fn clear(&self) {
         for (path, _) in self.saved_files() {
+            fs::remove_file(path).ok();
+        }
+        for path in self.temporary_files() {
             fs::remove_file(path).ok();
         }
     }
