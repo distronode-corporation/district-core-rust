@@ -131,8 +131,11 @@ def snake(name: str) -> str:
 
 
 # Words a humanized value writes in capitals, as district-android's
-# scripts/l10n-contracts.py INITIALISMS does ("ses-missing" -> "SES missing").
-INITIALISMS = {w.lower(): w for w in ("SES",)}
+# scripts/l10n-contracts.py INITIALISMS does ("ses-missing" -> "SES missing"). Exactly
+# the ones a value with no label of its own uses (wire-vocabulary.json, `en: null`):
+# dnc, http-{status}, mms, ok, ses-missing, sms, missing-webhook-url. Android's list
+# also has API, CRM and AI, which no such value uses yet. tests/wire.rs holds the same list.
+INITIALISMS = {w.lower(): w for w in ("DNC", "HTTP", "MMS", "OK", "SES", "SMS", "URL")}
 
 
 def humanize(raw: str) -> str:

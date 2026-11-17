@@ -99,19 +99,6 @@ pub struct Case {
     pub body: Sent,
 }
 
-/// A SIP trunk as `workspace/sip` answers it.
-fn sip_trunk() -> Value {
-    json!({
-        "id": "billing_item_1",
-        "name": "Office",
-        "domain": "office.sip.twilio.com",
-        "ipAccessControlList": ["203.0.113.7"],
-        "domainSid": "SD0001",
-        "ipAclSid": "AL0001",
-        "status": "active",
-    })
-}
-
 /// A recorded response from `contracts/fixtures/`.
 pub fn fixture(name: &str) -> Value {
     fixture_in("fixtures", name)
@@ -1146,14 +1133,13 @@ pub fn cases() -> Vec<Case> {
             query: vec![("workspaceId", WS)],
             body: Sent::Nothing,
         },
-        // Managing a held number and the carrier account. The Android app has
-        // no screen for these, so the service records no response of theirs:
-        // each answer is written from its route, as the route builds it.
+        // Managing a held number and the carrier account, each answered with
+        // the service's recorded response.
         Case {
             name: "configure_number",
             endpoint: Endpoint::NumberConfigure,
             retried: false,
-            answer: json!({"success": true}),
+            answer: fixture("district-number-configure.json"),
             call: call!(c => c.configure_number(WS, "+12125550142")),
             method: "POST",
             path: "/api/district/workspace/numbers/configure",
@@ -1164,10 +1150,7 @@ pub fn cases() -> Vec<Case> {
             name: "release_number",
             endpoint: Endpoint::NumberRelease,
             retried: false,
-            answer: json!({
-                "success": true,
-                "warnings": ["The number's monthly charge could not be ended."],
-            }),
+            answer: fixture("district-number-release-warnings.json"),
             call: call!(c => c.release_number(WS, "+12125550142")),
             method: "POST",
             path: "/api/district/workspace/numbers/release",
@@ -1178,16 +1161,7 @@ pub fn cases() -> Vec<Case> {
             name: "lookup_number",
             endpoint: Endpoint::NumberLookup,
             retried: false,
-            answer: json!({
-                "success": true,
-                "info": {
-                    "valid": true,
-                    "phoneNumber": "+12125550142",
-                    "country": "US",
-                    "type": "mobile",
-                    "carrier": null,
-                },
-            }),
+            answer: fixture("district-number-lookup.json"),
             call: call!(c => c.lookup_number(WS, "+12125550142")),
             method: "GET",
             path: "/api/district/workspace/lookup",
@@ -1198,20 +1172,7 @@ pub fn cases() -> Vec<Case> {
             name: "provider_status",
             endpoint: Endpoint::ProviderStatus,
             retried: true,
-            answer: json!({
-                "connected": true,
-                "providers": {
-                    "twilio": {
-                        "connected": true,
-                        "accountName": "Main account",
-                        "status": "active",
-                        "balance": "12.50",
-                        "currency": "USD",
-                        "numberCount": 3,
-                    },
-                    "telnyx": {"connected": false, "error": "Invalid credentials"},
-                },
-            }),
+            answer: fixture("district-provider-status.json"),
             call: call!(c => c.provider_status(WS)),
             method: "GET",
             path: "/api/district/workspace/provider/status",
@@ -1222,7 +1183,7 @@ pub fn cases() -> Vec<Case> {
             name: "sip_trunks",
             endpoint: Endpoint::SipTrunks,
             retried: true,
-            answer: json!({"success": true, "trunks": [sip_trunk()]}),
+            answer: fixture("district-sip-trunks.json"),
             call: call!(c => c.sip_trunks(WS)),
             method: "GET",
             path: "/api/district/workspace/sip",
@@ -1233,7 +1194,7 @@ pub fn cases() -> Vec<Case> {
             name: "create_sip_trunk",
             endpoint: Endpoint::SipTrunkCreate,
             retried: false,
-            answer: json!({"success": true, "trunk": sip_trunk()}),
+            answer: fixture("district-sip-trunk-create.json"),
             call: call!(c => c.create_sip_trunk(WS, &SipTrunkDraft {
                 name: "Office".to_owned(),
                 domain: "office".to_owned(),

@@ -42,6 +42,13 @@ variants.
   the facts save, the website lookup and its refusal, the test call, the forwarding check
   and its start, and both connections reads.
 
+### Fixed
+
+- Six wire labels with no label of their own wrote an initialism in sentence case: "Mms",
+  "Sms", "Ok", "Dnc", "Http {status}" and "Missing webhook url" now read "MMS", "SMS", "OK",
+  "DNC", "HTTP {status}" and "Missing webhook URL", as in district-core-swift. English only;
+  the French is unchanged.
+
 ### Tests
 
 - The Android endpoint snapshot is read again, from Android main (f63dfb5). The Android
@@ -50,6 +57,9 @@ variants.
   routes are in the table as the Android app calls them. The Android app's HQ voice settings
   (`GET` and `PUT /api/district/hq/voice-settings`) are named in `EXCLUDED` until the desktop
   apps have a voice settings screen.
+- The number and carrier account cases in the typed client tests answer with the service's
+  recorded responses in `contracts/fixtures/`, which have existed since they were written;
+  their comment said the service recorded none.
 
 ## [13.0.0] - 2026-11-15
 
