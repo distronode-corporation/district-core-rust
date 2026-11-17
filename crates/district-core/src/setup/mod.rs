@@ -585,6 +585,9 @@ impl SignedIn {
     /// Puts `step` on screen, and reads what it shows.
     fn show_step(&mut self, step: SetupStep, tickets: &mut Tickets) -> Vec<Effect> {
         self.setup.active = Some(step);
+        // Step 4 opens afresh whenever it shows, so a website hours read it
+        // asked for before is dropped with what it had.
+        tickets.cancel(Slot::SetupHoursLookup);
         // Off step 6 (Back, say), its forwarding check stops being polled.
         if step != SetupStep::Golive {
             tickets.cancel_each(&[Slot::SetupPoll, Slot::SetupForwardingPoll]);

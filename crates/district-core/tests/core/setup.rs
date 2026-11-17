@@ -630,6 +630,38 @@ fn a_re_read_asked_before_a_write_landed_is_dropped_and_one_with_no_progress_kee
 }
 
 #[test]
+fn a_website_hours_read_from_step_four_left_and_reopened_brings_no_draft() {
+    let mut model = on_callers(json!({}));
+    callers(
+        &mut model,
+        CallersEvent::SetWebsite("https://example.com/".into()),
+    );
+    let read = callers(&mut model, CallersEvent::FillHoursFromWebsite);
+    // Back to step 3, then on to step 4 again while the read is out.
+    send(&mut model, SetupEvent::Back);
+    assert_eq!(wizard(&model).active, Some(SetupStep::Receptionist));
+    let skip = send(&mut model, SetupEvent::Skip);
+    complete(
+        &mut model,
+        &skip,
+        state(
+            ["done", "done", "skipped", "todo", "todo", "todo"],
+            json!({}),
+        ),
+    );
+    assert_eq!(wizard(&model).active, Some(SetupStep::Callers));
+    let late = model.update(Event::SetupWebsiteRead {
+        ticket: ticket(&read[0]),
+        result: Ok(fixture("district-setup-lookup.json")),
+    });
+    assert!(late.is_empty(), "{late:?}");
+    assert!(
+        !wizard(&model).callers.hours_draft_pending,
+        "the reopened step asked for nothing"
+    );
+}
+
+#[test]
 fn answers_that_arrive_after_the_wizard_was_left_change_nothing() {
     let (mut model, load, _) = opened();
     model.update(Event::Navigate(Route::Overview));
