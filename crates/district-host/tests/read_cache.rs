@@ -90,19 +90,43 @@ fn a_damaged_file_reads_as_nothing() {
 fn a_save_removes_copies_too_old_to_show_and_damaged_ones() {
     let tmp = tempfile::tempdir().unwrap();
     let cache = ReadCacheDir::new(tmp.path());
+    cache.save("damaged", read("{}", 1));
+    let damaged = names(tmp.path()).remove(0);
+    fs::write(tmp.path().join(&damaged), b"not a saved read").unwrap();
     cache.save("old", read("{}", 0));
-    fs::write(tmp.path().join("stray"), b"not a saved read").unwrap();
-    fs::create_dir(tmp.path().join("subdirectory")).unwrap();
 
     cache.save(KEY, read("{}", SAVED_COPY_MAX_AGE_MS + 1));
 
     assert_eq!(cache.load("old"), None);
-    assert!(!tmp.path().join("stray").exists());
-    assert!(
-        tmp.path().join("subdirectory").exists(),
-        "only files are its own"
-    );
+    assert!(!tmp.path().join(&damaged).exists());
+    assert_eq!(names(tmp.path()).len(), 1, "only the fresh copy is left");
     assert!(cache.load(KEY).is_some());
+}
+
+#[test]
+fn only_its_own_files_are_touched() {
+    // ⚠️ Another save's temporary file (`.name.*.tmp`), a stray file, a name in
+    // capitals and a directory: a prune or a clear must leave every one alone.
+    let tmp = tempfile::tempdir().unwrap();
+    let cache = ReadCacheDir::new(tmp.path());
+    let hex = "a".repeat(64);
+    let others = vec![
+        format!(".{hex}.0123.tmp"),
+        "A".repeat(64),
+        "stray".to_owned(),
+    ];
+    for other in &others {
+        fs::write(tmp.path().join(other), b"").unwrap();
+    }
+    fs::create_dir(tmp.path().join(&hex)).unwrap();
+
+    cache.save(KEY, read("{}", SAVED_COPY_MAX_AGE_MS + 10));
+    cache.clear();
+
+    let mut expected = others.clone();
+    expected.push(hex);
+    expected.sort();
+    assert_eq!(names(tmp.path()), expected);
 }
 
 #[test]

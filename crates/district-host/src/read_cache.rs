@@ -35,7 +35,7 @@ pub struct ReadCacheDir {
 
 impl ReadCacheDir {
     /// Saved reads in `dir`, created when the first is saved. Give the cache its
-    /// own directory: [`ReadCache::clear`] removes every file in it.
+    /// own directory: [`ReadCache::clear`] removes every saved read in it.
     pub fn new(dir: impl Into<PathBuf>) -> Self {
         Self { dir: dir.into() }
     }
@@ -48,12 +48,17 @@ impl ReadCacheDir {
     /// Every saved read's file, with when it was saved. A file that does not
     /// start with a time is listed as saved at the epoch, so the next save
     /// removes it.
+    ///
+    /// ⚠️ ONLY ITS OWN FILES, named as [`file_name`] names them. A save writes a
+    /// temporary `.name.*.tmp` beside the file first; listing those would let a
+    /// save or a clear on another task delete one mid-write.
     fn saved_files(&self) -> Vec<(PathBuf, i64)> {
         let Ok(entries) = fs::read_dir(&self.dir) else {
             return Vec::new();
         };
         entries
             .filter_map(Result::ok)
+            .filter(|entry| is_saved_read_name(&entry.file_name().to_string_lossy()))
             .map(|entry| entry.path())
             .filter(|path| path.is_file())
             .map(|path| {
@@ -89,6 +94,14 @@ impl ReadCacheDir {
             fs::remove_file(path).ok();
         }
     }
+}
+
+/// Whether `name` is a saved read's: 64 lowercase hexadecimal digits.
+fn is_saved_read_name(name: &str) -> bool {
+    name.len() == 64
+        && name
+            .bytes()
+            .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
 }
 
 /// The file name for `key`: its SHA-256, as 64 hexadecimal digits.
