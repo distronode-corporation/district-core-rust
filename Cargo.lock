@@ -721,10 +721,12 @@ dependencies = [
 name = "district-host"
 version = "13.0.0"
 dependencies = [
+ "district-api",
  "district-auth",
  "district-core",
  "district-model",
  "serde",
+ "sha2",
  "tempfile",
  "tokio",
  "toml",

@@ -13,6 +13,8 @@ publish.workspace = true
 # XDG crate) and nothing that builds only on Windows: both apps build on this
 # crate, and each keeps its own system's half.
 [dependencies]
+# `ReadCache`, which `ReadCacheDir` implements.
+district-api = { workspace = true }
 # `TokenFingerprint`, what the refresh-pending marker holds.
 district-auth = { workspace = true }
 # For the `Settings` trait `SettingsFile` implements.
@@ -20,6 +22,8 @@ district-core = { workspace = true }
 # `Platform`, which names the app in the settings file's header.
 district-model = { workspace = true }
 serde = { workspace = true }
+# The saved reads' file names.
+sha2 = { workspace = true }
 # `time` for the longest the app holds the machine's sleep.
 tokio = { workspace = true, features = ["time"] }
 # The settings file.

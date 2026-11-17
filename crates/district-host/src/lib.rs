@@ -11,6 +11,8 @@
 //! - [`SettingsFile`]: the app's preferences ("ring on this computer", the
 //!   last workspace) in a small TOML file, the `district_core::Settings` the
 //!   effect runner reads and writes.
+//! - [`ReadCacheDir`]: the API client's saved reads, for working offline and
+//!   read-only, as private files in the app's cache directory.
 //! - [`watch_sleep`]: the machine about to sleep and waking again, over a
 //!   [`SleepSource`] the operating system's side provides (logind on Linux),
 //!   holding the sleep while the app gets ready for it.
@@ -24,10 +26,12 @@
 mod device;
 mod files;
 mod marker;
+mod read_cache;
 mod settings;
 mod sleep;
 
 pub use device::{DEVICE_ID_FILE, DeviceIdentity};
 pub use marker::{MARKER_FILE, RefreshMarkerFile};
+pub use read_cache::{READ_CACHE_MAX_FILES, ReadCacheDir};
 pub use settings::{Preferences, SETTINGS_FILE, SettingsFile};
 pub use sleep::{SleepHandler, SleepSource, watch_sleep};

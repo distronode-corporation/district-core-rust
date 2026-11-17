@@ -143,6 +143,7 @@ mod methods;
 mod number_admin;
 mod number_registration;
 mod numbers;
+pub mod offline;
 mod persona;
 mod presence;
 mod rooms;
@@ -168,4 +169,5 @@ pub use error::{
 };
 pub use exclusions::{Addition, DESKTOP_ONLY, EXCLUDED, Exclusion, PathMatch, normalize_template};
 pub use inbox::ConversationsQuery;
+pub use offline::{MemoryReadCache, ReadCache, SavedRead};
 pub use token::{AccessToken, ReauthReason, RetryReason, TokenCell, TokenError, TokenSource};

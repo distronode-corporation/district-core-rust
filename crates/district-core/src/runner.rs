@@ -79,6 +79,11 @@ use crate::transcript::TranscriptWatch;
 
 /// The District AI API, as far as the app's screens use it.
 pub trait DistrictApi: Send + Sync {
+    /// Forgets every saved read (see [`district_api::offline`]). The runner calls
+    /// it on every sign-out, once the session is gone. An API that keeps nothing
+    /// has nothing to forget, which is the default.
+    fn clear_saved_reads(&self) {}
+
     /// The workspace list.
     fn workspace_list(
         &self,
@@ -1056,10 +1061,13 @@ where
                 ticket,
                 result: self.auth.complete_sign_in(&callback).await,
             },
-            Effect::SignOut { ticket } => Event::SignOutFinished {
-                ticket,
-                report: self.auth.sign_out(ticket).await,
-            },
+            Effect::SignOut { ticket } => {
+                let report = self.auth.sign_out(ticket).await;
+                // Every scope (this device, everywhere, a deleted account): what
+                // was saved under the session is not shown to whoever is next.
+                self.api.clear_saved_reads();
+                Event::SignOutFinished { ticket, report }
+            }
             Effect::LoadWorkspaces { ticket } => {
                 // Read before the list, so the answer and the memory it is
                 // resolved against travel together.

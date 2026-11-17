@@ -53,6 +53,23 @@ variants.
   "Verify a release", has the command to check a tag. Tags up to v13.0.0 stay unsigned.
 - CI checks that the build is repeatable: the `repeatable` job builds the workspace's
   crates twice from the same commit and compares the libraries byte for byte.
+- Works offline, read-only (the iOS app's "Works offline, read-only"). `ApiClient::with_saved_reads`
+  keeps the last answer of the five reads the first screens make (the workspace list, the
+  overview, the inbox's conversations, the calls and the contacts) in a `ReadCache`, and
+  answers from it when the service cannot be reached: `ApiError::Offline`, or no token because
+  the refresh could not leave the machine. A request always goes to the network first, an
+  answer from the service (a 4xx or 5xx) is never covered over, and no write is ever kept. A
+  copy older than 7 days is not shown, a body over 2 MB is not kept, and the language is part
+  of the key. `ApiClient::showing_saved_since` says when the oldest copy on screen was saved,
+  for the app's "Offline. Showing what was saved at..." banner and for offering no write while
+  it is set. The client forgets every copy when the service ends the session, and the runner
+  calls the new `DistrictApi::clear_saved_reads` on every sign-out (a default method that does
+  nothing, so an existing implementation still builds). `MemoryReadCache` keeps them in
+  memory; `district_host::ReadCacheDir` keeps them as files in the app's cache directory, its
+  owner's alone, named by the SHA-256 of the request, and at most 64 of them.
+- The banner's two sentences, `session_offline_saved_today` ("Offline. Showing what was
+  saved at {time}") and `session_offline_saved_earlier` ("... on {stamp}"), in English and
+  draft French, the iOS app's wording.
 
 ### Fixed
 
