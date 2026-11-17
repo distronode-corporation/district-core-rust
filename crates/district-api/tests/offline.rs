@@ -299,6 +299,37 @@ async fn a_copy_older_than_seven_days_or_from_the_future_is_not_shown() {
 }
 
 #[tokio::test]
+async fn a_copy_that_can_no_longer_be_shown_comes_off_the_screen() {
+    let server = MockServer::start().await;
+    answer(
+        &server,
+        LIST,
+        ResponseTemplate::new(200).set_body_json(list("Alpha")),
+    )
+    .await;
+    let s = setup(&server);
+    s.client.workspace_list().await.unwrap();
+    s.tokens.go_offline(true);
+    s.client.workspace_list().await.unwrap();
+    assert_eq!(s.client.showing_saved_since(), Some(1_000));
+
+    // Expired: the read is the offline error, and no copy is on screen.
+    s.clock.set(1_001 + SAVED_COPY_MAX_AGE_MS);
+    assert!(s.client.workspace_list().await.is_err());
+    assert_eq!(s.client.showing_saved_since(), None);
+
+    // Evicted by the cache itself: the same.
+    s.clock.set(2_000);
+    s.tokens.go_offline(false);
+    s.client.workspace_list().await.unwrap();
+    s.tokens.go_offline(true);
+    s.client.workspace_list().await.unwrap();
+    s.cache.clear();
+    assert!(s.client.workspace_list().await.is_err());
+    assert_eq!(s.client.showing_saved_since(), None);
+}
+
+#[tokio::test]
 async fn an_empty_or_oversized_body_is_not_kept() {
     let server = MockServer::start().await;
     let s = setup(&server);

@@ -248,12 +248,19 @@ impl SavedReads {
     /// The saved answer for `key`, if one is young enough, now marked as shown.
     fn saved(&self, key: &str) -> Option<Vec<u8>> {
         let mut state = self.state();
-        let read = self.cache.load(key)?;
-        let age = self.clock.now_ms() - read.saved_at_ms;
+        let now = self.clock.now_ms();
         // A copy from the future (the clock was moved back) is not trusted either.
-        if !(0..=SAVED_COPY_MAX_AGE_MS).contains(&age) {
+        let read = self
+            .cache
+            .load(key)
+            .filter(|read| (0..=SAVED_COPY_MAX_AGE_MS).contains(&(now - read.saved_at_ms)));
+        let Some(read) = read else {
+            // ⚠️ Nor is it on screen any more: the read is now the offline error, so a
+            // copy it showed before (since expired, or evicted) must not keep the
+            // banner up and the writes withheld.
+            state.shown.remove(key);
             return None;
-        }
+        };
         state.shown.insert(key.to_owned(), read.saved_at_ms);
         Some(read.body)
     }
