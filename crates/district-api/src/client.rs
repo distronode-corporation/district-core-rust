@@ -20,7 +20,7 @@ use crate::endpoints::{BodyKind, Endpoint, EndpointSpec, HttpMethod, RetryPolicy
 use crate::error::{
     ApiError, CODE_MFA_REQUIRED, TransportError, TransportKind, UnauthorizedReason,
 };
-use crate::offline::{ReadCache, SavedReads};
+use crate::offline::{self, ReadCache, SavedReads};
 use crate::token::{TokenError, TokenSource};
 
 /// The name of the workspace parameter, wherever it goes.
@@ -81,19 +81,19 @@ impl<S: TokenSource> ApiClient<S> {
     /// itself when the service says the session is over. A read in flight when
     /// this runs keeps nothing.
     pub fn clear_saved_reads(&self) {
-        if let Some(saved) = &self.saved {
-            saved.clear();
-        }
+        offline::clear(self.saved.as_ref());
     }
 
     /// The body of a successful answer to `prepared`, or, for a saved read the
     /// service could not be reached for, the body it last answered with.
+    ///
+    /// ⚠️ Straight-line on purpose, like the rest of the generic code here: the
+    /// decisions are in `offline`'s functions, compiled once rather than once
+    /// per token source, so no copy of this one has a branch it never takes.
     async fn body(&self, endpoint: Endpoint, prepared: &Prepared) -> Result<Vec<u8>, ApiError> {
-        let Some(saved) = &self.saved else {
-            return self.fetch(prepared).await;
-        };
-        let asked = saved.asking(endpoint, &prepared.url);
-        saved.answer(asked, self.fetch(prepared).await)
+        let saved = self.saved.as_ref();
+        let asked = offline::asking(saved, endpoint, &prepared.url);
+        offline::answer(saved, asked, self.fetch(prepared).await)
     }
 
     async fn fetch(&self, prepared: &Prepared) -> Result<Vec<u8>, ApiError> {

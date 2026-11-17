@@ -138,6 +138,32 @@ pub(crate) struct Asked {
     generation: u64,
 }
 
+/// For a saved read, its key and generation, taken before the request is sent;
+/// `None` without saved reads or for any other request.
+pub(crate) fn asking(saved: Option<&SavedReads>, endpoint: Endpoint, url: &Url) -> Option<Asked> {
+    saved?.asking(endpoint, url)
+}
+
+/// What the caller is told: `result`, or with saved reads, what
+/// [`SavedReads::answer`] makes of it.
+pub(crate) fn answer(
+    saved: Option<&SavedReads>,
+    asked: Option<Asked>,
+    result: Result<Vec<u8>, ApiError>,
+) -> Result<Vec<u8>, ApiError> {
+    match saved {
+        Some(saved) => saved.answer(asked, result),
+        None => result,
+    }
+}
+
+/// Forgets every saved read, if there are any.
+pub(crate) fn clear(saved: Option<&SavedReads>) {
+    if let Some(saved) = saved {
+        saved.clear();
+    }
+}
+
 /// The client's saved reads, and which of them are on screen.
 pub(crate) struct SavedReads {
     cache: Box<dyn ReadCache>,

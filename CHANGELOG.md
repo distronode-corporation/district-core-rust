@@ -69,7 +69,7 @@ variants.
   owner's alone, named by the SHA-256 of the request, and at most 64 of them.
 - The banner's two sentences, `session_offline_saved_today` ("Offline. Showing what was
   saved at {time}") and `session_offline_saved_earlier` ("... on {stamp}"), in English and
-  draft French, the iOS app's wording.
+  French, the iOS app's reviewed wording.
 
 ### Fixed
 
