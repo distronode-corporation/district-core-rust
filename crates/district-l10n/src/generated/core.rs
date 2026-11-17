@@ -4046,6 +4046,24 @@ pub fn session_not_saved(l: Locale, problem: &str) -> String {
     }
 }
 
+/// `session.offline_saved_earlier`
+#[must_use]
+pub fn session_offline_saved_earlier(l: Locale, stamp: &str) -> String {
+    match l {
+        Locale::En => format!("Offline. Showing what was saved on {stamp}"),
+        Locale::FrCa => format!("Hors ligne. Affichage des données enregistrées le\u{00A0}{stamp}"),
+    }
+}
+
+/// `session.offline_saved_today`
+#[must_use]
+pub fn session_offline_saved_today(l: Locale, time: &str) -> String {
+    match l {
+        Locale::En => format!("Offline. Showing what was saved at {time}"),
+        Locale::FrCa => format!("Hors ligne. Affichage des données enregistrées à\u{00A0}{time}"),
+    }
+}
+
 /// `session.opening_browser`
 #[must_use]
 pub fn session_opening_browser(l: Locale) -> &'static str {

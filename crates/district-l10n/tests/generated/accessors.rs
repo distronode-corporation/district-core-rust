@@ -902,6 +902,10 @@ fn every_core_accessor_says_what_its_catalog_says() {
     assert_eq!(strings::session_no_longer_valid(Locale::FrCa), "Votre session n'est plus valide. Veuillez vous reconnecter.");
     assert_eq!(strings::session_not_saved(Locale::En, "{problem}"), "You are signed in, but your sign-in could not be saved ({problem}), so you will need to sign in again the next time the app starts.");
     assert_eq!(strings::session_not_saved(Locale::FrCa, "{problem}"), "Connexion réussie, mais vos informations de connexion n'ont pas pu être sauvegardées ({problem})\u{00A0}: il faudra vous reconnecter au prochain démarrage de l'application.");
+    assert_eq!(strings::session_offline_saved_earlier(Locale::En, "{stamp}"), "Offline. Showing what was saved on {stamp}");
+    assert_eq!(strings::session_offline_saved_earlier(Locale::FrCa, "{stamp}"), "Hors ligne. Affichage des données enregistrées le\u{00A0}{stamp}");
+    assert_eq!(strings::session_offline_saved_today(Locale::En, "{time}"), "Offline. Showing what was saved at {time}");
+    assert_eq!(strings::session_offline_saved_today(Locale::FrCa, "{time}"), "Hors ligne. Affichage des données enregistrées à\u{00A0}{time}");
     assert_eq!(strings::session_opening_browser(Locale::En), "Opening your browser to sign in.");
     assert_eq!(strings::session_opening_browser(Locale::FrCa), "Ouverture du navigateur pour la connexion.");
     assert_eq!(strings::session_resuming(Locale::En), "Resuming your session.");

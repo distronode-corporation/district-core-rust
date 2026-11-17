@@ -70,6 +70,14 @@ use crate::session::{ExchangeFailure, RestoreError, SignInError, SignedInSession
 use crate::transcript::TranscriptWatch;
 
 impl<S: TokenSource> DistrictApi for ApiClient<S> {
+    fn clear_saved_reads(&self) {
+        ApiClient::clear_saved_reads(self);
+    }
+
+    fn own_saved_reads(&self, user_id: &str) {
+        ApiClient::own_saved_reads(self, user_id);
+    }
+
     fn workspace_list(
         &self,
     ) -> impl Future<Output = Result<WorkspaceListResponse, ApiError>> + Send {

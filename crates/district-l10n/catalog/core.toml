@@ -4081,6 +4081,26 @@ args = { problem = "str" }
 state = "reviewed"
 note = "After signing in when the sign-in could not be saved on this computer. {problem} is a clause from session.store_problem."
 
+[session.offline_saved_earlier]
+en = "Offline. Showing what was saved on {stamp}"
+fr = "Hors ligne. Affichage des données enregistrées le\u00A0{stamp}"
+ctx = "body"
+screen = "session"
+tier = "T2"
+args = { stamp = "str" }
+state = "reviewed"
+note = "As offline_saved_today, for a copy saved on an earlier day. {stamp} is a date and time already formatted. French from the iOS app's reviewed catalog."
+
+[session.offline_saved_today]
+en = "Offline. Showing what was saved at {time}"
+fr = "Hors ligne. Affichage des données enregistrées à\u00A0{time}"
+ctx = "body"
+screen = "session"
+tier = "T2"
+args = { time = "str" }
+state = "reviewed"
+note = "Shown above every screen while the app is offline and shows the copy it saved earlier today (ApiClient::showing_saved_since). {time} is a time of day already formatted (« 15 h 04 », \"3:04 p.m.\"). No final period: the English time can end with one. French from the iOS app's reviewed catalog."
+
 [session.opening_browser]
 en = "Opening your browser to sign in."
 fr = "Ouverture du navigateur pour la connexion."

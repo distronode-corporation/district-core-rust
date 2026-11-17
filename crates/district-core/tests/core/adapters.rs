@@ -2727,3 +2727,33 @@ async fn the_api_client_manages_numbers() {
         );
     }
 }
+
+/// A cache that only counts how often it was cleared.
+#[derive(Clone, Default)]
+struct CountedClears(Arc<Mutex<usize>>);
+
+impl district_api::ReadCache for CountedClears {
+    fn load(&self, _key: &str) -> Option<district_api::SavedRead> {
+        None
+    }
+
+    fn save(&self, _key: &str, _read: district_api::SavedRead) {}
+
+    fn remove(&self, _key: &str) {}
+
+    fn clear(&self) {
+        *self.0.lock().unwrap() += 1;
+    }
+}
+
+#[test]
+fn the_api_clients_saved_reads_are_cleared_through_the_runners_api() {
+    let cache = CountedClears::default();
+    let client = ApiClient::new(service(), OneToken)
+        .unwrap()
+        .with_saved_reads(cache.clone(), district_api::SystemClock);
+
+    DistrictApi::clear_saved_reads(&client);
+
+    assert_eq!(*cache.0.lock().unwrap(), 1);
+}

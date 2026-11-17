@@ -14,11 +14,13 @@ use serde::de::DeserializeOwned;
 use serde_json::{Map, Value};
 use url::Url;
 
+use crate::clock::Clock;
 use crate::config::{ApiConfig, ConfigError};
 use crate::endpoints::{BodyKind, Endpoint, EndpointSpec, HttpMethod, RetryPolicy, WorkspaceIn};
 use crate::error::{
     ApiError, CODE_MFA_REQUIRED, TransportError, TransportKind, UnauthorizedReason,
 };
+use crate::offline::{self, ReadCache, SavedReads};
 use crate::token::{TokenError, TokenSource};
 
 /// The name of the workspace parameter, wherever it goes.
@@ -35,9 +37,13 @@ const FILE_PART: &str = "file";
 /// never followed: a 3xx comes back as [`ApiError::Redirect`]. The HTTP stack's
 /// own automatic retries are switched off too, so a request is sent exactly as
 /// many times as its [`RetryPolicy`] says and no more.
+///
+/// With [`with_saved_reads`](Self::with_saved_reads) it also works offline,
+/// read-only: see the [`offline`](crate::offline) module.
 pub struct ApiClient<S> {
     transport: Transport,
     tokens: S,
+    saved: Option<SavedReads>,
 }
 
 impl<S: TokenSource> ApiClient<S> {
@@ -45,7 +51,63 @@ impl<S: TokenSource> ApiClient<S> {
     /// allowed only for a loopback address).
     pub fn new(config: ApiConfig, tokens: S) -> Result<Self, ConfigError> {
         let transport = Transport::new(config)?;
-        Ok(Self { transport, tokens })
+        Ok(Self {
+            transport,
+            tokens,
+            saved: None,
+        })
+    }
+
+    /// Keeps the last answer of the first screens' reads in `cache`, stamped by
+    /// `clock`, and answers from it when the service cannot be reached. Without
+    /// this the client keeps nothing.
+    #[must_use]
+    pub fn with_saved_reads(mut self, cache: impl ReadCache, clock: impl Clock) -> Self {
+        self.saved = Some(SavedReads::new(cache, clock));
+        self
+    }
+
+    /// When the oldest saved copy that answered a read was saved, in Unix epoch
+    /// milliseconds, or `None` when no saved copy is on screen. Any answer from the
+    /// service (the machine is online again) clears it.
+    ///
+    /// While this is `Some`, the app is offline and read-only: it says so (with
+    /// the time from here) and offers no write, since none could be sent.
+    pub fn showing_saved_since(&self) -> Option<i64> {
+        self.saved.as_ref().and_then(SavedReads::showing_since)
+    }
+
+    /// Forgets every saved read. Call it on every sign-out; the client does it
+    /// itself when the service says the session is over. A read in flight when
+    /// this runs keeps nothing.
+    pub fn clear_saved_reads(&self) {
+        offline::clear(self.saved.as_ref());
+    }
+
+    /// Says whose session is in use: the saved reads belong to `user_id` (the
+    /// access token's `sub`) from now on, and another account's are forgotten.
+    /// Until an owner is named nothing is kept or shown; an owner named on an
+    /// earlier launch is remembered, so a launch offline still shows its copies.
+    /// The runner calls this after every restore and every sign-in.
+    pub fn own_saved_reads(&self, user_id: &str) {
+        offline::own(self.saved.as_ref(), user_id);
+    }
+
+    /// The body of a successful answer to `prepared`, or, for a saved read the
+    /// service could not be reached for, the body it last answered with.
+    ///
+    /// ⚠️ Straight-line on purpose, like the rest of the generic code here: the
+    /// decisions are in `offline`'s functions, compiled once rather than once
+    /// per token source, so no copy of this one has a branch it never takes.
+    async fn body(&self, endpoint: Endpoint, prepared: &Prepared) -> Result<Vec<u8>, ApiError> {
+        let saved = self.saved.as_ref();
+        let asked = offline::asking(saved, endpoint, &prepared.url);
+        offline::answer(saved, asked, self.fetch(prepared).await)
+    }
+
+    async fn fetch(&self, prepared: &Prepared) -> Result<Vec<u8>, ApiError> {
+        let response = self.exchange(prepared, false).await?;
+        success_body(response).await
     }
 
     /// The platform this client names itself as, from its configuration.
@@ -285,8 +347,7 @@ impl<S: TokenSource> Request<'_, S> {
     pub async fn send<T: DeserializeOwned>(self) -> Result<T, ApiError> {
         let endpoint = self.parts.spec.id;
         let prepared = self.parts.prepare(&self.client.transport.base_url)?;
-        let response = self.client.exchange(&prepared, false).await?;
-        let body = success_body(response).await?;
+        let body = self.client.body(endpoint, &prepared).await?;
         serde_json::from_slice(&body).map_err(|error| decode_error(endpoint, &error))
     }
 
