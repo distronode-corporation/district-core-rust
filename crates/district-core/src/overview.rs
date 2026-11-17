@@ -1,5 +1,5 @@
-//! The overview of the open workspace, and the card that sends a new owner to
-//! finish setting up on the web.
+//! The overview of the open workspace, and the card that opens the setup
+//! wizard for a new owner.
 
 use district_model::OverviewResponse;
 
@@ -8,8 +8,8 @@ use crate::role::Capabilities;
 use crate::text::{l, s};
 
 /// The web dashboard's page where the setup wizard runs, below the service's
-/// origin. The wizard decides what the business's receptionist says and which
-/// number it answers, and it runs on the web only.
+/// origin. The wizard also runs in the app ([`Route::Setup`](crate::Route::Setup));
+/// the page is where a number is bought.
 pub const SETUP_WEB_PATH: &str = "/dashboard/district";
 
 /// The overview of the open workspace.
@@ -38,9 +38,9 @@ pub struct OverviewContent {
     /// What the member's effective role here lets the app offer, from the role
     /// this answer carries.
     pub capabilities: Capabilities,
-    /// Whether to show the card sending the owner to finish setting up on the
-    /// web. Read after the overview, from a request only the owner gets an
-    /// answer to, so it is false for everyone else and after any failure.
+    /// Whether to show the card that opens the setup wizard. Read after the
+    /// overview, from a request only the owner gets an answer to, so it is
+    /// false for everyone else and after any failure.
     pub show_finish_setup: bool,
     /// Whether a reload is under way. The content stays on screen meanwhile
     /// rather than flashing back to a spinner.

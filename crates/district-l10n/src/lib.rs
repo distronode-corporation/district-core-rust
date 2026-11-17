@@ -95,6 +95,11 @@ pub mod numbers_strings;
 #[path = "generated/scheduling.rs"]
 pub mod scheduling_strings;
 
+/// The setup wizard's sentences and labels, from `catalog/setup.toml`.
+#[rustfmt::skip]
+#[path = "generated/setup.rs"]
+pub mod setup_strings;
+
 /// True when every catalog has French for every entry. Until then the French
 /// arm of each generated function carries the English.
 pub const FR_COMPLETE: bool = strings::FR_COMPLETE
@@ -102,7 +107,8 @@ pub const FR_COMPLETE: bool = strings::FR_COMPLETE
     && wire_strings::FR_COMPLETE
     && support_strings::FR_COMPLETE
     && numbers_strings::FR_COMPLETE
-    && scheduling_strings::FR_COMPLETE;
+    && scheduling_strings::FR_COMPLETE
+    && setup_strings::FR_COMPLETE;
 
 /// A language the core writes in.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]

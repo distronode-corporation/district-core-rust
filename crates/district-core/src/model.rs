@@ -63,9 +63,16 @@ use district_model::{
     WorkspaceBillingResponse, WorkspaceConfigResponse, WorkspaceListResponse,
 };
 use district_model::{
+    ConnectionsResponse, ForwardingCheckMode, ForwardingCheckResponse, SetupLookupResponse,
+    SetupResponse, SetupStep, SetupStepState, SetupTestCallResponse,
+};
+use district_model::{
     Credential, MetaWindowResponse, MfaConfirmation, MfaEnrollment, MfaStatus, ReauthAction,
     SchedulingAdminReply, SchedulingAdminRequest, SchedulingSecret,
 };
+use serde_json::{Map, Value};
+
+use crate::setup::SetupEvent;
 use url::Url;
 
 use crate::account::AccountView;
@@ -229,8 +236,10 @@ pub enum Event {
     Refresh,
     /// Open another workspace from the switcher.
     SelectWorkspace(String),
-    /// Open the web dashboard to finish setting up, from the overview's card.
+    /// Open the setup wizard, from the overview's card.
     OpenFinishSetup,
+    /// Something on the setup wizard.
+    Setup(SetupEvent),
     /// Something on the devices screen.
     Devices(DevicesEvent),
     /// Something on the two-step verification screen.
@@ -413,6 +422,49 @@ pub enum Event {
         ticket: Ticket,
         /// The service's answer.
         result: Result<DeviceRevokeResponse, ApiError>,
+    },
+    /// The setup wizard's state was read.
+    SetupWizardLoaded {
+        /// The ticket of [`Effect::LoadSetupWizard`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<SetupResponse, ApiError>,
+    },
+    /// A setup wizard save landed, with the state after it.
+    SetupWizardSaved {
+        /// The ticket of [`Effect::SaveSetupWizard`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<SetupResponse, ApiError>,
+    },
+    /// The setup wizard's website read answered.
+    SetupWebsiteRead {
+        /// The ticket of [`Effect::ReadSetupWebsite`].
+        ticket: Ticket,
+        /// The service's answer: a draft, never a write.
+        result: Result<SetupLookupResponse, ApiError>,
+    },
+    /// The setup wizard's test call was placed, or not.
+    SetupTestCallPlaced {
+        /// The ticket of [`Effect::PlaceSetupTestCall`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<SetupTestCallResponse, ApiError>,
+    },
+    /// A call forwarding check was read, or started.
+    SetupForwardingRead {
+        /// The ticket of [`Effect::LoadSetupForwardingCheck`] or
+        /// [`Effect::StartSetupForwardingCheck`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<ForwardingCheckResponse, ApiError>,
+    },
+    /// The workspace's connections were read.
+    SetupConnectionsLoaded {
+        /// The ticket of [`Effect::LoadSetupConnections`].
+        ticket: Ticket,
+        /// The service's answer.
+        result: Result<ConnectionsResponse, ApiError>,
     },
     /// The two-step verification status was read.
     TwoStepLoaded {
@@ -1122,6 +1174,30 @@ impl Event {
                 ticket,
                 result: Err(error),
             }
+            | Event::SetupWizardLoaded {
+                ticket,
+                result: Err(error),
+            }
+            | Event::SetupWizardSaved {
+                ticket,
+                result: Err(error),
+            }
+            | Event::SetupWebsiteRead {
+                ticket,
+                result: Err(error),
+            }
+            | Event::SetupTestCallPlaced {
+                ticket,
+                result: Err(error),
+            }
+            | Event::SetupForwardingRead {
+                ticket,
+                result: Err(error),
+            }
+            | Event::SetupConnectionsLoaded {
+                ticket,
+                result: Err(error),
+            }
             | Event::TwoStepLoaded {
                 ticket,
                 result: Err(error),
@@ -1570,6 +1646,70 @@ pub enum Effect {
     /// Read a workspace's setup status.
     LoadSetupStatus {
         /// Returned in [`Event::SetupStatusLoaded`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+    },
+    /// Read the setup wizard's state.
+    LoadSetupWizard {
+        /// Returned in [`Event::SetupWizardLoaded`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+    },
+    /// Save setup step states and business facts sections. Sent once.
+    SaveSetupWizard {
+        /// Returned in [`Event::SetupWizardSaved`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The step states to write; a step left out keeps its state.
+        steps: Vec<(SetupStep, SetupStepState)>,
+        /// The facts sections to replace, each whole; `None` writes none.
+        business_facts: Option<Map<String, Value>>,
+    },
+    /// Draft the business's facts from its website. Writes nothing; sent once.
+    ReadSetupWebsite {
+        /// Returned in [`Event::SetupWebsiteRead`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The page to read.
+        website_url: String,
+        /// The language the draft is written in.
+        locale: Locale,
+    },
+    /// Have the receptionist call the owner's phone. Places a real call; sent
+    /// once.
+    PlaceSetupTestCall {
+        /// Returned in [`Event::SetupTestCallPlaced`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The owner's phone, in E.164.
+        phone: String,
+    },
+    /// Read the latest call forwarding check.
+    LoadSetupForwardingCheck {
+        /// Returned in [`Event::SetupForwardingRead`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+    },
+    /// Start a call forwarding check. Places a real call; sent once.
+    StartSetupForwardingCheck {
+        /// Returned in [`Event::SetupForwardingRead`].
+        ticket: Ticket,
+        /// The workspace.
+        workspace_id: String,
+        /// The business line, in E.164.
+        business_line: String,
+        /// Which calls it forwards.
+        mode: ForwardingCheckMode,
+    },
+    /// Read the workspace's connections.
+    LoadSetupConnections {
+        /// Returned in [`Event::SetupConnectionsLoaded`].
         ticket: Ticket,
         /// The workspace.
         workspace_id: String,
@@ -2699,6 +2839,13 @@ impl Effect {
             | Self::LoadWorkspaces { ticket }
             | Self::LoadOverview { ticket, .. }
             | Self::LoadSetupStatus { ticket, .. }
+            | Self::LoadSetupWizard { ticket, .. }
+            | Self::SaveSetupWizard { ticket, .. }
+            | Self::ReadSetupWebsite { ticket, .. }
+            | Self::PlaceSetupTestCall { ticket, .. }
+            | Self::LoadSetupForwardingCheck { ticket, .. }
+            | Self::StartSetupForwardingCheck { ticket, .. }
+            | Self::LoadSetupConnections { ticket, .. }
             | Self::LoadDevices { ticket }
             | Self::RevokeDevice { ticket, .. }
             | Self::RevokeAllDevices { ticket }
@@ -2997,6 +3144,31 @@ pub(crate) enum Slot {
     TranscriptCooldown,
     /// The grace window of a room left empty of whoever ends the session.
     EmptyRoom,
+    SetupLoad,
+    SetupHandOffRead,
+    SetupComplete,
+    SetupLookupSave,
+    SetupBusinessSave,
+    SetupCallersSave,
+    SetupLookup,
+    SetupHoursLookup,
+    SetupRename,
+    SetupConfig,
+    SetupReceptionistConfig,
+    SetupPersonaOptions,
+    SetupPersonaSave,
+    SetupCallsHandling,
+    SetupCallsHandlingSave,
+    SetupCallsConfig,
+    SetupConnections,
+    SetupProfilesSave,
+    SetupForwarding,
+    SetupForwardingStart,
+    SetupForwardingPoll,
+    SetupPoll,
+    SetupTestCall,
+    SetupGoLiveConfig,
+    SetupGoLiveHandling,
     RingDeadline,
 }
 
@@ -3343,7 +3515,27 @@ impl Model {
             }),
             Event::Refresh => self.signed_in(|s, tickets, _| s.refresh(tickets)),
             Event::SelectWorkspace(id) => self.signed_in(|s, tickets, _| s.select(&id, tickets)),
-            Event::OpenFinishSetup => self.signed_in(|s, _, config| s.open_finish_setup(config)),
+            Event::OpenFinishSetup => self.signed_in(|s, tickets, _| s.open_finish_setup(tickets)),
+            Event::Setup(event) => {
+                self.signed_in(|s, tickets, config| s.setup_event(event, tickets, config))
+            }
+            Event::SetupWizardLoaded { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.setup_wizard_loaded(ticket, result, tickets))
+            }
+            Event::SetupWizardSaved { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.setup_saved(ticket, result, tickets))
+            }
+            Event::SetupWebsiteRead { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.setup_website_read(ticket, result, tickets))
+            }
+            Event::SetupTestCallPlaced { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.setup_test_call_answered(ticket, result, tickets))
+            }
+            Event::SetupForwardingRead { ticket, result } => {
+                self.signed_in(|s, tickets, _| s.setup_forwarding_answered(ticket, result, tickets))
+            }
+            Event::SetupConnectionsLoaded { ticket, result } => self
+                .signed_in(|s, tickets, _| s.setup_connections_answered(ticket, result, tickets)),
             Event::TwoStep(event) => {
                 self.signed_in(|s, tickets, config| s.two_step_event(event, tickets, config))
             }
@@ -4031,6 +4223,7 @@ impl Model {
         let ticket = self.tickets.issue(Slot::Workspaces);
         effects.push(Effect::LoadWorkspaces { ticket });
         let mut signed_in = SignedIn::new(identity, notice, self.window_visible, calls_available);
+        signed_in.setup.buys_in_app = self.config.in_app_purchases;
         signed_in.meta_channels = self.config.meta_channels;
         // Only a restore can have one: nothing is kept outside restoring.
         signed_in.pending_open = self.pending_open.take();

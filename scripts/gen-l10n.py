@@ -15,7 +15,7 @@ What it writes, under crates/district-l10n/:
                             placeholders, and the generic labels for a value
                             this build does not know
   src/generated/core.rs, api_errors.rs, wire.rs, support.rs, numbers.rs,
-  scheduling.rs
+  scheduling.rs, setup.rs
                             the accessors, by `tools/l10n/l10n.py gen --backend
                             rust`, one module per catalog
   src/generated/api_error_table.rs, wire_table.rs
@@ -30,13 +30,13 @@ What it writes, under crates/district-l10n/:
   tests/generated/french_ahead.rs
                             FRENCH_AHEAD below, for tests/errors.rs
 
-catalog/core.toml, catalog/support.toml, catalog/numbers.toml and
-catalog/scheduling.toml (the booking scheduler's administration) are written
-by hand. In the two catalogs written here, an entry the contract gives French
-takes the contract's French, with FRENCH_AHEAD's words in place of the
-contract's; when that changes an entry's French (or gives it French), its
-state becomes `reviewed` (the service's French is reviewed there) and the key
-is printed, for the commit and the CHANGELOG to name. An entry whose English is
+catalog/core.toml, catalog/support.toml, catalog/numbers.toml,
+catalog/scheduling.toml (the booking scheduler's administration) and
+catalog/setup.toml (the setup wizard) are written by hand. In the two catalogs
+written here, an entry the contract gives French takes the contract's French,
+with FRENCH_AHEAD's words in place of the contract's; when that changes an
+entry's French (or gives it French), its state becomes `reviewed` (the
+service's French is reviewed there) and the key is printed, for the commit and the CHANGELOG to name. An entry whose English is
 unchanged keeps its other translation fields (`same_ok`, `fr_variant`, `waive`,
 `max`, `id`), and its `fr` and `state` too when the contract has no French for
 it: `l10n.py import` writes that French like into any other catalog, and a
@@ -74,6 +74,7 @@ MODULES = (
     ("support", "support_strings"),
     ("numbers", "numbers_strings"),
     ("scheduling", "scheduling_strings"),
+    ("setup", "setup_strings"),
 )
 GEN_OPTS = ("--opt", "locale_path=crate::Locale", "--opt", "int_fmt=crate::format::integer")
 

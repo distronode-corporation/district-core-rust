@@ -649,11 +649,11 @@ pub const MESSAGING_TEST_NEEDS_EVERY_FIELD: &str = "Fill in every key to check t
 /// `messaging.viewer` in English.
 pub const MESSAGING_VIEWER: &str = "You have read-only access to this workspace, so carrier accounts are shown and not changed.";
 /// `overview.finish_setup_action` in English.
-pub const OVERVIEW_FINISH_SETUP_ACTION: &str = "Open the web dashboard";
+pub const OVERVIEW_FINISH_SETUP_ACTION: &str = "Open setup";
 /// `overview.finish_setup_body` in English.
-pub const OVERVIEW_FINISH_SETUP_BODY: &str = "Your receptionist is not live yet. Pick your number, set up how it answers, and go live from the web dashboard.";
+pub const OVERVIEW_FINISH_SETUP_BODY: &str = "A few setup steps for this workspace are still open.";
 /// `overview.finish_setup_title` in English.
-pub const OVERVIEW_FINISH_SETUP_TITLE: &str = "Finish setting up on the web";
+pub const OVERVIEW_FINISH_SETUP_TITLE: &str = "Finish setting up";
 /// `overview.read_only_badge` in English.
 pub const OVERVIEW_READ_ONLY_BADGE: &str = "Read-only access";
 /// `overview.workspace_mismatch` in English.

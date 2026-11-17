@@ -35,9 +35,9 @@ use crate::inbox::{ConversationList, InboxScreen};
 use crate::live::{LiveState, NotificationTarget};
 use crate::marketplace::MarketplaceScreen;
 use crate::media::MediaSession;
-use crate::model::{CoreConfig, Effect, Slot, Ticket, Tickets, WORKSPACE_SLOTS};
+use crate::model::{Effect, Slot, Ticket, Tickets, WORKSPACE_SLOTS};
 use crate::number_admin::NUMBER_SLOTS;
-use crate::overview::{OverviewContent, OverviewScreen, SETUP_WEB_PATH, workspace_mismatch};
+use crate::overview::{OverviewContent, OverviewScreen, workspace_mismatch};
 use crate::presence::PresenceState;
 use crate::purchase::PurchaseState;
 use crate::ringing::RingController;
@@ -51,6 +51,7 @@ use crate::settings::{
     CallHandlingSection, DirectorySection, KnowledgeSection, MembersSection, MessagingSection,
     PersonaSection, RoutingRulesSection, ToolsSection, VoiceStudioSection,
 };
+use crate::setup::{SetupDrafts, SetupWizard};
 use crate::support::{SupportList, SupportRequestScreen, SupportScreen};
 use crate::thread::{DraftWrites, ThreadScreen};
 use crate::transcript::TranscriptWatch;
@@ -146,6 +147,8 @@ pub struct SignedIn {
     pub call_handling: Option<CallHandlingSection>,
     /// The members section, while it shows.
     pub members: Option<MembersSection>,
+    /// The setup wizard.
+    pub setup: SetupWizard,
     /// The open workspace's live updates.
     pub live: LiveState,
     /// Whether the main window is showing, as the app last reported it.
@@ -190,6 +193,13 @@ pub struct SignedIn {
     /// answered, each with its workspace: the session each opens is given
     /// back as it lands.
     pub(crate) hq_voice_abandoned: Vec<(Ticket, String)>,
+    /// The setup wizard's step 1 drafts, by workspace, while the app runs.
+    pub(crate) setup_drafts: SetupDrafts,
+    /// The persona's stored language, once its read for the wizard landed
+    /// (`Some(None)` when it names none or the read failed).
+    pub(crate) setup_persona_language: Option<Option<String>>,
+    /// What the website read found, until the drafts it saved land.
+    pub(crate) setup_found_sentence: Option<String>,
 }
 
 /// What a signed-in step decided.
@@ -268,6 +278,10 @@ impl SignedIn {
             calls_available,
             meta_channels: false,
             hq_voice_abandoned: Vec::new(),
+            setup: SetupWizard::default(),
+            setup_drafts: SetupDrafts::new(),
+            setup_persona_language: None,
+            setup_found_sentence: None,
         }
     }
 
@@ -350,6 +364,7 @@ impl SignedIn {
         self.close_account_security(tickets);
         self.close_support_request(tickets);
         self.close_scheduling_admin(next, tickets);
+        self.close_setup(tickets);
         effects.extend(self.close_rooms(tickets));
         effects.extend(self.close_thread(tickets));
         effects
@@ -393,6 +408,7 @@ impl SignedIn {
             Route::Rooms => self.enter_rooms(tickets),
             Route::Workspace(section) => self.enter_settings(section, tickets),
             Route::Dialer => self.enter_dialer(tickets),
+            Route::Setup => self.enter_setup(tickets),
             // A thread is opened by `navigate`, which reads its key first. The HQ
             // conversation is held, not read.
             Route::Overview | Route::Account | Route::Thread { .. } | Route::Hq => Vec::new(),
@@ -439,6 +455,11 @@ impl SignedIn {
         // a re-authentication under way: only the live sockets are seen to.
         if self.route == Route::DeleteAccount {
             return Next::Stay(self.rewatch(tickets));
+        }
+        if self.route == Route::Setup {
+            let mut effects = self.rewatch(tickets);
+            effects.extend(self.refresh_setup(tickets));
+            return Next::Stay(effects);
         }
         let mut effects = self.rewatch(tickets);
         let ready = matches!(self.workspaces, WorkspacesState::Ready(_));
@@ -530,6 +551,12 @@ impl SignedIn {
         effects.extend(self.close_rooms(tickets));
         effects.extend(self.close_settings(tickets));
         tickets.cancel_each(&WORKSPACE_SLOTS);
+        self.close_setup(tickets);
+        self.setup = SetupWizard {
+            buys_in_app: self.setup.buys_in_app,
+            ..SetupWizard::default()
+        };
+        self.setup_persona_language = None;
         tickets.cancel_each(&COMPOSE_SLOTS);
         tickets.cancel_each(&NUMBER_SLOTS);
         self.unread = None;
@@ -571,10 +598,9 @@ impl SignedIn {
         effects
     }
 
-    pub(crate) fn open_finish_setup(&mut self, config: &CoreConfig) -> Next {
-        Next::Stay(vec![Effect::OpenUrl {
-            url: config.web_url(SETUP_WEB_PATH),
-        }])
+    /// The overview's "Finish setting up" opens the wizard in the app.
+    pub(crate) fn open_finish_setup(&mut self, tickets: &mut Tickets) -> Next {
+        self.navigate(Route::Setup, tickets)
     }
 
     pub(crate) fn url_open_failed(&mut self, tickets: &mut Tickets) -> Next {

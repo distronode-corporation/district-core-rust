@@ -68,9 +68,14 @@ use district_model::{
     CallHandlingMode, MessagingChannel, MessagingCredentialSource, TwilioCredentials,
 };
 use district_model::{
+    ConnectionsResponse, ForwardingCheckMode, ForwardingCheckResponse, SetupLookupResponse,
+    SetupStep, SetupStepState, SetupTestCallResponse,
+};
+use district_model::{
     ConversationAssignResponse, WhatsAppTemplatesResponse, WhatsAppWindowResponse,
 };
 use district_model::{Credential, MfaConfirmation, MfaEnrollment, MfaStatus, ReauthAction};
+use serde_json::{Map, Value};
 
 use crate::support::{
     AGENCY, CLIENT, claims, config, content, desktop_fixture, fixture, loaded, monitor_credential,
@@ -112,6 +117,72 @@ impl DistrictApi for FakeApi {
     async fn setup_status(&self, workspace_id: &str) -> Result<SetupResponse, ApiError> {
         self.0.push(format!("setup {workspace_id}"));
         Ok(fixture("district-setup.json"))
+    }
+
+    async fn save_setup(
+        &self,
+        workspace_id: &str,
+        steps: &[(SetupStep, SetupStepState)],
+        business_facts: Option<&Map<String, Value>>,
+    ) -> Result<SetupResponse, ApiError> {
+        let steps: Vec<String> = steps
+            .iter()
+            .map(|(step, state)| format!("{}={}", step.as_str(), state.as_str()))
+            .collect();
+        let facts: Vec<&String> = business_facts
+            .map(|facts| facts.keys().collect())
+            .unwrap_or_default();
+        self.0
+            .push(format!("setup save {workspace_id} {steps:?} {facts:?}"));
+        Ok(fixture("district-setup-patch.json"))
+    }
+
+    async fn look_up_website(
+        &self,
+        workspace_id: &str,
+        website_url: &str,
+        locale: Locale,
+    ) -> Result<SetupLookupResponse, ApiError> {
+        self.0.push(format!(
+            "setup lookup {workspace_id} {website_url} {locale:?}"
+        ));
+        Ok(fixture("district-setup-lookup.json"))
+    }
+
+    async fn place_test_call(
+        &self,
+        workspace_id: &str,
+        phone: &str,
+    ) -> Result<SetupTestCallResponse, ApiError> {
+        self.0
+            .push(format!("setup test call {workspace_id} {phone}"));
+        Ok(fixture("district-setup-test-call.json"))
+    }
+
+    async fn forwarding_check(
+        &self,
+        workspace_id: &str,
+    ) -> Result<ForwardingCheckResponse, ApiError> {
+        self.0.push(format!("forwarding check {workspace_id}"));
+        Ok(fixture("district-forwarding-check.json"))
+    }
+
+    async fn start_forwarding_check(
+        &self,
+        workspace_id: &str,
+        business_line: &str,
+        mode: ForwardingCheckMode,
+    ) -> Result<ForwardingCheckResponse, ApiError> {
+        self.0.push(format!(
+            "forwarding start {workspace_id} {business_line} {}",
+            mode.as_str()
+        ));
+        Ok(fixture("district-forwarding-check-start.json"))
+    }
+
+    async fn connections(&self, workspace_id: &str) -> Result<ConnectionsResponse, ApiError> {
+        self.0.push(format!("connections {workspace_id}"));
+        Ok(fixture("district-connections.json"))
     }
 
     async fn devices(&self) -> Result<DeviceListResponse, ApiError> {
@@ -1543,6 +1614,120 @@ fn a_nonce() -> HandOffNonce {
             state.as_str()
         ))
         .unwrap()
+}
+
+/// The setup wizard's effects reach the API and come back with its answers.
+#[tokio::test]
+async fn the_setup_wizard_effects_call_the_api_and_report_back() {
+    let (runner, log) = fakes(Some(CLIENT), true);
+    let ticket = a_ticket();
+    let workspace_id = AGENCY.to_owned();
+    let mut facts = Map::new();
+    facts.insert("timezone".to_owned(), Value::from("America/Toronto"));
+    // Each names the ticket its event comes back with.
+    let save = Effect::SaveSetupWizard {
+        ticket,
+        workspace_id: workspace_id.clone(),
+        steps: vec![(SetupStep::Business, SetupStepState::Skipped)],
+        business_facts: Some(facts),
+    };
+    assert_eq!(save.ticket(), Some(ticket));
+    assert_eq!(
+        runner
+            .run(Effect::LoadSetupWizard {
+                ticket,
+                workspace_id: workspace_id.clone()
+            })
+            .await,
+        Some(Event::SetupWizardLoaded {
+            ticket,
+            result: Ok(fixture("district-setup.json"))
+        })
+    );
+    assert_eq!(
+        runner.run(save).await,
+        Some(Event::SetupWizardSaved {
+            ticket,
+            result: Ok(fixture("district-setup-patch.json"))
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::ReadSetupWebsite {
+                ticket,
+                workspace_id: workspace_id.clone(),
+                website_url: "https://example.com/".to_owned(),
+                locale: Locale::FrCa,
+            })
+            .await,
+        Some(Event::SetupWebsiteRead {
+            ticket,
+            result: Ok(fixture("district-setup-lookup.json"))
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::PlaceSetupTestCall {
+                ticket,
+                workspace_id: workspace_id.clone(),
+                phone: "+14165550142".to_owned(),
+            })
+            .await,
+        Some(Event::SetupTestCallPlaced {
+            ticket,
+            result: Ok(fixture("district-setup-test-call.json"))
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::LoadSetupForwardingCheck {
+                ticket,
+                workspace_id: workspace_id.clone()
+            })
+            .await,
+        Some(Event::SetupForwardingRead {
+            ticket,
+            result: Ok(fixture("district-forwarding-check.json"))
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::StartSetupForwardingCheck {
+                ticket,
+                workspace_id: workspace_id.clone(),
+                business_line: "+14165550123".to_owned(),
+                mode: ForwardingCheckMode::Unanswered,
+            })
+            .await,
+        Some(Event::SetupForwardingRead {
+            ticket,
+            result: Ok(fixture("district-forwarding-check-start.json")),
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::LoadSetupConnections {
+                ticket,
+                workspace_id
+            })
+            .await,
+        Some(Event::SetupConnectionsLoaded {
+            ticket,
+            result: Ok(fixture("district-connections.json"))
+        })
+    );
+    assert_eq!(
+        log.take(),
+        [
+            format!("setup {AGENCY}"),
+            format!("setup save {AGENCY} [\"business=skipped\"] [\"timezone\"]"),
+            format!("setup lookup {AGENCY} https://example.com/ FrCa"),
+            format!("setup test call {AGENCY} +14165550142"),
+            format!("forwarding check {AGENCY}"),
+            format!("forwarding start {AGENCY} +14165550123 unanswered"),
+            format!("connections {AGENCY}"),
+        ]
+    );
 }
 
 #[tokio::test]

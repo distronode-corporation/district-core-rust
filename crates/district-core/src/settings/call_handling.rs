@@ -309,6 +309,16 @@ impl SignedIn {
         result: Result<CallHandlingResponse, ApiError>,
         tickets: &mut Tickets,
     ) -> Next {
+        if tickets.accept(Slot::SetupCallsHandling, ticket) {
+            return Next::Stay(self.calls_handling_loaded(false, result, tickets));
+        }
+        if tickets.accept(Slot::SetupCallsHandlingSave, ticket) {
+            return Next::Stay(self.calls_handling_loaded(true, result, tickets));
+        }
+        if tickets.accept(Slot::SetupGoLiveHandling, ticket) {
+            self.golive_handling_loaded(result);
+            return stay();
+        }
         let read = tickets.accept(Slot::CallHandling, ticket);
         let saved = !read && tickets.accept(Slot::CallHandlingSave, ticket);
         if let Some(section) = self.call_handling.as_mut().filter(|_| read || saved) {
