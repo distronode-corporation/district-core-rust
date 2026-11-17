@@ -17,6 +17,19 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Fixed
+
+- Six wire labels with no label of their own wrote an initialism in sentence case: "Mms",
+  "Sms", "Ok", "Dnc", "Http {status}" and "Missing webhook url" now read "MMS", "SMS", "OK",
+  "DNC", "HTTP {status}" and "Missing webhook URL", as in district-core-swift. English only;
+  the French is unchanged.
+
+### Tests
+
+- The number and carrier account cases in the typed client tests answer with the service's
+  recorded responses in `contracts/fixtures/`, which have existed since they were written;
+  their comment said the service recorded none.
+
 ## [13.0.0] - 2026-11-15
 
 Two-step verification and deleting the account, in the app, each behind a fresh

@@ -756,7 +756,7 @@ pub fn wire_messaging_credential_source_managed(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_number_capability_mms(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Mms",
+        Locale::En => "MMS",
         Locale::FrCa => "MMS",
     }
 }
@@ -765,7 +765,7 @@ pub fn wire_number_capability_mms(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_number_capability_sms(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Sms",
+        Locale::En => "SMS",
         Locale::FrCa => "Texto",
     }
 }
@@ -1602,7 +1602,7 @@ pub fn wire_workflow_action_outcome_failed(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_workflow_action_outcome_ok(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Ok",
+        Locale::En => "OK",
         Locale::FrCa => "OK",
     }
 }
@@ -1647,7 +1647,7 @@ pub fn wire_workflow_action_reason_contact_not_found(l: Locale) -> &'static str 
 #[must_use]
 pub fn wire_workflow_action_reason_dnc(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Dnc",
+        Locale::En => "DNC",
         Locale::FrCa => "Liste d'exclusion",
     }
 }
@@ -1737,7 +1737,7 @@ pub fn wire_workflow_action_reason_fallback_push(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_workflow_action_reason_http_status(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Http {status}",
+        Locale::En => "HTTP {status}",
         Locale::FrCa => "HTTP {status}",
     }
 }
@@ -1773,7 +1773,7 @@ pub fn wire_workflow_action_reason_loop_paused(l: Locale) -> &'static str {
 #[must_use]
 pub fn wire_workflow_action_reason_missing_webhook_url(l: Locale) -> &'static str {
     match l {
-        Locale::En => "Missing webhook url",
+        Locale::En => "Missing webhook URL",
         Locale::FrCa => "URL du webhook manquante",
     }
 }

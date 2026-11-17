@@ -1984,9 +1984,9 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_messaging_credential_source_byok(Locale::FrCa), "Vos propres clés");
     assert_eq!(wire_strings::wire_messaging_credential_source_managed(Locale::En), "Managed Service");
     assert_eq!(wire_strings::wire_messaging_credential_source_managed(Locale::FrCa), "Service géré");
-    assert_eq!(wire_strings::wire_number_capability_mms(Locale::En), "Mms");
+    assert_eq!(wire_strings::wire_number_capability_mms(Locale::En), "MMS");
     assert_eq!(wire_strings::wire_number_capability_mms(Locale::FrCa), "MMS");
-    assert_eq!(wire_strings::wire_number_capability_sms(Locale::En), "Sms");
+    assert_eq!(wire_strings::wire_number_capability_sms(Locale::En), "SMS");
     assert_eq!(wire_strings::wire_number_capability_sms(Locale::FrCa), "Texto");
     assert_eq!(wire_strings::wire_number_capability_voice(Locale::En), "Voice");
     assert_eq!(wire_strings::wire_number_capability_voice(Locale::FrCa), "Voix");
@@ -2172,7 +2172,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_send_sms(Locale::FrCa), "Envoyer un texto");
     assert_eq!(wire_strings::wire_workflow_action_outcome_failed(Locale::En), "Failed");
     assert_eq!(wire_strings::wire_workflow_action_outcome_failed(Locale::FrCa), "Échec");
-    assert_eq!(wire_strings::wire_workflow_action_outcome_ok(Locale::En), "Ok");
+    assert_eq!(wire_strings::wire_workflow_action_outcome_ok(Locale::En), "OK");
     assert_eq!(wire_strings::wire_workflow_action_outcome_ok(Locale::FrCa), "OK");
     assert_eq!(wire_strings::wire_workflow_action_outcome_skipped(Locale::En), "Skipped");
     assert_eq!(wire_strings::wire_workflow_action_outcome_skipped(Locale::FrCa), "Ignoré");
@@ -2182,7 +2182,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_consent_check_failed(Locale::FrCa), "Texto non envoyé\u{00A0}: le consentement aux textos n'a pas pu être vérifié");
     assert_eq!(wire_strings::wire_workflow_action_reason_contact_not_found(Locale::En), "Contact not found");
     assert_eq!(wire_strings::wire_workflow_action_reason_contact_not_found(Locale::FrCa), "Contact introuvable");
-    assert_eq!(wire_strings::wire_workflow_action_reason_dnc(Locale::En), "Dnc");
+    assert_eq!(wire_strings::wire_workflow_action_reason_dnc(Locale::En), "DNC");
     assert_eq!(wire_strings::wire_workflow_action_reason_dnc(Locale::FrCa), "Liste d'exclusion");
     assert_eq!(wire_strings::wire_workflow_action_reason_dormant(Locale::En), "Dormant");
     assert_eq!(wire_strings::wire_workflow_action_reason_dormant(Locale::FrCa), "Inactif");
@@ -2202,7 +2202,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_fallback_failed(Locale::FrCa), "Texto non envoyé, et l'envoi par courriel et dans l'application a aussi échoué");
     assert_eq!(wire_strings::wire_workflow_action_reason_fallback_push(Locale::En), "Not texted and the email failed, so it was sent to the app instead");
     assert_eq!(wire_strings::wire_workflow_action_reason_fallback_push(Locale::FrCa), "Texto non envoyé et courriel en échec, l'alerte est partie dans l'application à la place");
-    assert_eq!(wire_strings::wire_workflow_action_reason_http_status(Locale::En), "Http {status}");
+    assert_eq!(wire_strings::wire_workflow_action_reason_http_status(Locale::En), "HTTP {status}");
     assert_eq!(wire_strings::wire_workflow_action_reason_http_status(Locale::FrCa), "HTTP {status}");
     assert_eq!(wire_strings::wire_workflow_action_reason_invalid_recipient(Locale::En), "Invalid recipient");
     assert_eq!(wire_strings::wire_workflow_action_reason_invalid_recipient(Locale::FrCa), "Destinataire invalide");
@@ -2210,7 +2210,7 @@ fn every_wire_accessor_says_what_its_catalog_says() {
     assert_eq!(wire_strings::wire_workflow_action_reason_loop_check_failed(Locale::FrCa), "Texto non envoyé\u{00A0}: les messages récents avec ce numéro n'ont pas pu être vérifiés");
     assert_eq!(wire_strings::wire_workflow_action_reason_loop_paused(Locale::En), "Not texted: this number answered automatically several times in a row, so texts to it are paused for an hour");
     assert_eq!(wire_strings::wire_workflow_action_reason_loop_paused(Locale::FrCa), "Texto non envoyé\u{00A0}: ce numéro a répondu automatiquement plusieurs fois de suite, les textos à ce numéro sont donc suspendus pendant une heure");
-    assert_eq!(wire_strings::wire_workflow_action_reason_missing_webhook_url(Locale::En), "Missing webhook url");
+    assert_eq!(wire_strings::wire_workflow_action_reason_missing_webhook_url(Locale::En), "Missing webhook URL");
     assert_eq!(wire_strings::wire_workflow_action_reason_missing_webhook_url(Locale::FrCa), "URL du webhook manquante");
     assert_eq!(wire_strings::wire_workflow_action_reason_no_consent(Locale::En), "Not texted: no call or text from them in the last 24 hours, and no consent on record");
     assert_eq!(wire_strings::wire_workflow_action_reason_no_consent(Locale::FrCa), "Texto non envoyé\u{00A0}: aucun appel ni texto de cette personne depuis 24\u{00A0}heures, et aucun consentement au dossier");
