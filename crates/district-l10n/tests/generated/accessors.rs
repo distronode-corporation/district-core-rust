@@ -3981,7 +3981,7 @@ fn every_setup_accessor_says_what_its_catalog_says() {
     assert_eq!(setup_strings::setup_calls_ai_then_app(Locale::En), "Receptionist first, then the District app");
     assert_eq!(setup_strings::setup_calls_ai_then_app(Locale::FrCa), "La réceptionniste d'abord, puis l'app District");
     assert_eq!(setup_strings::setup_calls_ai_then_app_description(Locale::En), "Chosen earlier in Settings. Your receptionist answers and can pass the call to the app.");
-    assert_eq!(setup_strings::setup_calls_ai_then_app_description(Locale::FrCa), "Choisi plus tôt dans Réglages. Votre réceptionniste répond et peut passer l'appel à l'app.");
+    assert_eq!(setup_strings::setup_calls_ai_then_app_description(Locale::FrCa), "Choisi plus tôt dans Paramètres. Votre réceptionniste répond et peut passer l'appel à l'app.");
     assert_eq!(setup_strings::setup_calls_answer_description(Locale::En), "Choose who picks up a call first.");
     assert_eq!(setup_strings::setup_calls_answer_description(Locale::FrCa), "Choisissez qui décroche en premier.");
     assert_eq!(setup_strings::setup_calls_answer_header(Locale::En), "When your receptionist answers");
@@ -4033,11 +4033,11 @@ fn every_setup_accessor_says_what_its_catalog_says() {
     assert_eq!(setup_strings::setup_continue(Locale::En), "Continue");
     assert_eq!(setup_strings::setup_continue(Locale::FrCa), "Continuer");
     assert_eq!(setup_strings::setup_done(Locale::En), "Done");
-    assert_eq!(setup_strings::setup_done(Locale::FrCa), "OK");
+    assert_eq!(setup_strings::setup_done(Locale::FrCa), "Terminé");
     assert_eq!(setup_strings::setup_finish_later(Locale::En), "Finish later");
     assert_eq!(setup_strings::setup_finish_later(Locale::FrCa), "Terminer plus tard");
     assert_eq!(setup_strings::setup_finished_body(Locale::En), "Your receptionist is ready. You can change any of this in Settings.");
-    assert_eq!(setup_strings::setup_finished_body(Locale::FrCa), "Votre réceptionniste est prête. Vous pouvez modifier tout cela dans Réglages.");
+    assert_eq!(setup_strings::setup_finished_body(Locale::FrCa), "Votre réceptionniste est prête. Vous pouvez modifier tout cela dans Paramètres.");
     assert_eq!(setup_strings::setup_finished_title(Locale::En), "Setup is finished");
     assert_eq!(setup_strings::setup_finished_title(Locale::FrCa), "La configuration est terminée");
     assert_eq!(setup_strings::setup_golive_answers_ai_then_app(Locale::En), "Every call, with the District app as backup");
@@ -4063,7 +4063,7 @@ fn every_setup_accessor_says_what_its_catalog_says() {
     assert_eq!(setup_strings::setup_golive_check_dial_failed(Locale::En), "We could not place the check call. Try again in a few minutes.");
     assert_eq!(setup_strings::setup_golive_check_dial_failed(Locale::FrCa), "Nous n'avons pas pu faire l'appel de vérification. Réessayez dans quelques minutes.");
     assert_eq!(setup_strings::setup_golive_check_failed(Locale::En), "The call did not arrive on your District number. Check your forwarding settings and try again.");
-    assert_eq!(setup_strings::setup_golive_check_failed(Locale::FrCa), "L'appel n'est pas arrivé sur votre numéro District. Vérifiez vos réglages de renvoi et réessayez.");
+    assert_eq!(setup_strings::setup_golive_check_failed(Locale::FrCa), "L'appel n'est pas arrivé sur votre numéro District. Vérifiez vos paramètres de renvoi et réessayez.");
     assert_eq!(setup_strings::setup_golive_check_header(Locale::En), "Check my forwarding");
     assert_eq!(setup_strings::setup_golive_check_header(Locale::FrCa), "Vérifier mon renvoi");
     assert_eq!(setup_strings::setup_golive_check_passed(Locale::En), "Forwarding works. The call arrived on your District number.");
@@ -4117,7 +4117,7 @@ fn every_setup_accessor_says_what_its_catalog_says() {
     assert_eq!(setup_strings::setup_loading(Locale::En), "Loading your setup");
     assert_eq!(setup_strings::setup_loading(Locale::FrCa), "Chargement de votre configuration");
     assert_eq!(setup_strings::setup_not_available_body(Locale::En), "This workspace was set up before these setup steps existed. Everything they cover is under Settings.");
-    assert_eq!(setup_strings::setup_not_available_body(Locale::FrCa), "Cet espace de travail a été créé avant ces étapes de configuration. Tout ce qu'elles couvrent se trouve dans Réglages.");
+    assert_eq!(setup_strings::setup_not_available_body(Locale::FrCa), "Cet espace de travail a été créé avant ces étapes de configuration. Tout ce qu'elles couvrent se trouve dans Paramètres.");
     assert_eq!(setup_strings::setup_not_available_title(Locale::En), "Setup is not available here");
     assert_eq!(setup_strings::setup_not_available_title(Locale::FrCa), "La configuration n'est pas offerte ici");
     assert_eq!(setup_strings::setup_not_owner_body(Locale::En), "Setup decides what your receptionist says and which number it answers, so only the person who owns this workspace can do it. Ask them to finish it.");
@@ -4175,7 +4175,7 @@ fn every_setup_accessor_says_what_its_catalog_says() {
     assert_eq!(setup_strings::setup_receptionist_title(Locale::En), "Your receptionist");
     assert_eq!(setup_strings::setup_receptionist_title(Locale::FrCa), "Votre réceptionniste");
     assert_eq!(setup_strings::setup_receptionist_voice_elsewhere(Locale::En), "Your receptionist uses a voice engine this step does not cover. Change the voice in Settings.");
-    assert_eq!(setup_strings::setup_receptionist_voice_elsewhere(Locale::FrCa), "Votre réceptionniste utilise un moteur vocal que cette étape ne couvre pas. Changez sa voix dans Réglages.");
+    assert_eq!(setup_strings::setup_receptionist_voice_elsewhere(Locale::FrCa), "Votre réceptionniste utilise un moteur vocal que cette étape ne couvre pas. Changez sa voix dans Paramètres.");
     assert_eq!(setup_strings::setup_receptionist_voice_label(Locale::En), "Voice");
     assert_eq!(setup_strings::setup_receptionist_voice_label(Locale::FrCa), "Voix");
     assert_eq!(setup_strings::setup_save(Locale::En), "Save");
@@ -4195,7 +4195,7 @@ fn every_setup_accessor_says_what_its_catalog_says() {
     assert_eq!(setup_strings::setup_step_of(Locale::En, 1204, 1204), "Step 1204 of 1204");
     assert_eq!(setup_strings::setup_step_of(Locale::FrCa, 1204, 1204), "Étape 1\u{00A0}204 sur 1\u{00A0}204");
     assert_eq!(setup_strings::setup_step_skipped(Locale::En), "Skipped");
-    assert_eq!(setup_strings::setup_step_skipped(Locale::FrCa), "Passée");
+    assert_eq!(setup_strings::setup_step_skipped(Locale::FrCa), "Ignorée");
     assert_eq!(setup_strings::setup_step_todo(Locale::En), "To do");
     assert_eq!(setup_strings::setup_step_todo(Locale::FrCa), "À faire");
     assert_eq!(setup_strings::setup_title(Locale::En), "Setup");

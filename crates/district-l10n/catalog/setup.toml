@@ -745,7 +745,7 @@ state = "reviewed"
 
 [setup.calls_ai_then_app_description]
 en = "Chosen earlier in Settings. Your receptionist answers and can pass the call to the app."
-fr = "Choisi plus tôt dans Réglages. Votre réceptionniste répond et peut passer l'appel à l'app."
+fr = "Choisi plus tôt dans Paramètres. Votre réceptionniste répond et peut passer l'appel à l'app."
 ctx = "body"
 screen = "setup.calls"
 state = "reviewed"
@@ -933,7 +933,7 @@ state = "reviewed"
 
 [setup.done]
 en = "Done"
-fr = "OK"
+fr = "Terminé"
 ctx = "button"
 screen = "setup"
 state = "reviewed"
@@ -947,7 +947,7 @@ state = "reviewed"
 
 [setup.finished_body]
 en = "Your receptionist is ready. You can change any of this in Settings."
-fr = "Votre réceptionniste est prête. Vous pouvez modifier tout cela dans Réglages."
+fr = "Votre réceptionniste est prête. Vous pouvez modifier tout cela dans Paramètres."
 ctx = "body"
 screen = "setup"
 state = "reviewed"
@@ -1040,7 +1040,7 @@ state = "reviewed"
 
 [setup.golive_check_failed]
 en = "The call did not arrive on your District number. Check your forwarding settings and try again."
-fr = "L'appel n'est pas arrivé sur votre numéro District. Vérifiez vos réglages de renvoi et réessayez."
+fr = "L'appel n'est pas arrivé sur votre numéro District. Vérifiez vos paramètres de renvoi et réessayez."
 ctx = "body"
 screen = "setup.golive"
 state = "reviewed"
@@ -1232,11 +1232,11 @@ state = "reviewed"
 
 [setup.not_available_body]
 en = "This workspace was set up before these setup steps existed. Everything they cover is under Settings."
-fr = "Cet espace de travail a été créé avant ces étapes de configuration. Tout ce qu'elles couvrent se trouve dans Réglages."
+fr = "Cet espace de travail a été créé avant ces étapes de configuration. Tout ce qu'elles couvrent se trouve dans Paramètres."
 ctx = "body"
 screen = "setup"
 state = "reviewed"
-note = "⚠️ « Réglages » is Settings on Apple (the glossary's Apple OS word)."
+note = "« Paramètres » is Settings outside Apple platforms (the glossary's OS word for a non-Apple catalog)."
 
 [setup.not_available_title]
 en = "Setup is not available here"
@@ -1439,7 +1439,7 @@ state = "reviewed"
 
 [setup.receptionist_voice_elsewhere]
 en = "Your receptionist uses a voice engine this step does not cover. Change the voice in Settings."
-fr = "Votre réceptionniste utilise un moteur vocal que cette étape ne couvre pas. Changez sa voix dans Réglages."
+fr = "Votre réceptionniste utilise un moteur vocal que cette étape ne couvre pas. Changez sa voix dans Paramètres."
 ctx = "body"
 screen = "setup.receptionist"
 state = "reviewed"
@@ -1510,10 +1510,11 @@ state = "reviewed"
 
 [setup.step_skipped]
 en = "Skipped"
-fr = "Passée"
+fr = "Ignorée"
 ctx = "label"
 screen = "setup.a11y"
 state = "reviewed"
+fr_variant = "gender agreement: an étape, feminine; the workflow outcome « Ignoré » is masculine"
 
 [setup.step_todo]
 en = "To do"

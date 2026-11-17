@@ -409,13 +409,16 @@ impl SignedIn {
     pub(crate) fn enter_setup(&mut self, tickets: &mut Tickets) -> Vec<Effect> {
         let workspace_id = self.workspace_id();
         self.close_setup(tickets);
-        let workspace_name = self.active_workspace_name().unwrap_or_default();
+        self.setup_persona_language = None;
         self.setup = SetupWizard {
-            workspace_name,
             buys_in_app: self.setup.buys_in_app,
             draft: self.setup_drafts.get(&workspace_id).cloned(),
             ..SetupWizard::default()
         };
+        // The wizard opens only on an open workspace (`navigate` sees to it).
+        if let crate::WorkspacesState::Ready(workspaces) = &self.workspaces {
+            self.setup.workspace_name = workspaces.active().name.clone();
+        }
         self.load_setup(tickets)
     }
 
@@ -450,13 +453,6 @@ impl SignedIn {
             Slot::SetupHandOffRead,
         ]);
         self.setup.step_writes = 0;
-    }
-
-    fn active_workspace_name(&self) -> Option<String> {
-        match &self.workspaces {
-            crate::WorkspacesState::Ready(workspaces) => Some(workspaces.active().name.clone()),
-            _ => None,
-        }
     }
 
     fn load_setup(&mut self, tickets: &mut Tickets) -> Vec<Effect> {

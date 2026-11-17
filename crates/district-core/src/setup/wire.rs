@@ -193,11 +193,11 @@ mod tests {
     #[test]
     fn a_phone_number_reads_as_e164_or_not_at_all() {
         assert_eq!(
-            e164("+44 20 7946 0958", None).as_deref(),
-            Some("+442079460958")
+            e164("+1 (416) 555-0142", None).as_deref(),
+            Some("+14165550142")
         );
-        assert_eq!(e164("+1234567", None), None);
-        assert_eq!(e164("+12a4567890", Some("us")), None);
+        assert_eq!(e164("+1555", None), None);
+        assert_eq!(e164("+1x", Some("us")), None);
         assert_eq!(
             e164("(416) 555-0123", Some("ca")).as_deref(),
             Some("+14165550123")

@@ -937,7 +937,7 @@ pub fn setup_calls_ai_then_app(l: Locale) -> &'static str {
 pub fn setup_calls_ai_then_app_description(l: Locale) -> &'static str {
     match l {
         Locale::En => "Chosen earlier in Settings. Your receptionist answers and can pass the call to the app.",
-        Locale::FrCa => "Choisi plus tôt dans Réglages. Votre réceptionniste répond et peut passer l'appel à l'app.",
+        Locale::FrCa => "Choisi plus tôt dans Paramètres. Votre réceptionniste répond et peut passer l'appel à l'app.",
     }
 }
 
@@ -1171,7 +1171,7 @@ pub fn setup_continue(l: Locale) -> &'static str {
 pub fn setup_done(l: Locale) -> &'static str {
     match l {
         Locale::En => "Done",
-        Locale::FrCa => "OK",
+        Locale::FrCa => "Terminé",
     }
 }
 
@@ -1189,7 +1189,7 @@ pub fn setup_finish_later(l: Locale) -> &'static str {
 pub fn setup_finished_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your receptionist is ready. You can change any of this in Settings.",
-        Locale::FrCa => "Votre réceptionniste est prête. Vous pouvez modifier tout cela dans Réglages.",
+        Locale::FrCa => "Votre réceptionniste est prête. Vous pouvez modifier tout cela dans Paramètres.",
     }
 }
 
@@ -1306,7 +1306,7 @@ pub fn setup_golive_check_dial_failed(l: Locale) -> &'static str {
 pub fn setup_golive_check_failed(l: Locale) -> &'static str {
     match l {
         Locale::En => "The call did not arrive on your District number. Check your forwarding settings and try again.",
-        Locale::FrCa => "L'appel n'est pas arrivé sur votre numéro District. Vérifiez vos réglages de renvoi et réessayez.",
+        Locale::FrCa => "L'appel n'est pas arrivé sur votre numéro District. Vérifiez vos paramètres de renvoi et réessayez.",
     }
 }
 
@@ -1549,7 +1549,7 @@ pub fn setup_loading(l: Locale) -> &'static str {
 pub fn setup_not_available_body(l: Locale) -> &'static str {
     match l {
         Locale::En => "This workspace was set up before these setup steps existed. Everything they cover is under Settings.",
-        Locale::FrCa => "Cet espace de travail a été créé avant ces étapes de configuration. Tout ce qu'elles couvrent se trouve dans Réglages.",
+        Locale::FrCa => "Cet espace de travail a été créé avant ces étapes de configuration. Tout ce qu'elles couvrent se trouve dans Paramètres.",
     }
 }
 
@@ -1810,7 +1810,7 @@ pub fn setup_receptionist_title(l: Locale) -> &'static str {
 pub fn setup_receptionist_voice_elsewhere(l: Locale) -> &'static str {
     match l {
         Locale::En => "Your receptionist uses a voice engine this step does not cover. Change the voice in Settings.",
-        Locale::FrCa => "Votre réceptionniste utilise un moteur vocal que cette étape ne couvre pas. Changez sa voix dans Réglages.",
+        Locale::FrCa => "Votre réceptionniste utilise un moteur vocal que cette étape ne couvre pas. Changez sa voix dans Paramètres.",
     }
 }
 
@@ -1900,7 +1900,7 @@ pub fn setup_step_of(l: Locale, n: i64, total: i64) -> String {
 pub fn setup_step_skipped(l: Locale) -> &'static str {
     match l {
         Locale::En => "Skipped",
-        Locale::FrCa => "Passée",
+        Locale::FrCa => "Ignorée",
     }
 }
 

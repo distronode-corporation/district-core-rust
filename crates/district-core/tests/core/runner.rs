@@ -1616,6 +1616,119 @@ fn a_nonce() -> HandOffNonce {
         .unwrap()
 }
 
+/// The setup wizard's effects reach the API and come back with its answers.
+#[tokio::test]
+async fn the_setup_wizard_effects_call_the_api_and_report_back() {
+    let (runner, log) = fakes(Some(CLIENT), true);
+    let ticket = a_ticket();
+    let workspace_id = AGENCY.to_owned();
+    let mut facts = Map::new();
+    facts.insert("timezone".to_owned(), Value::from("America/Toronto"));
+    assert_eq!(
+        runner
+            .run(Effect::LoadSetupWizard {
+                ticket,
+                workspace_id: workspace_id.clone()
+            })
+            .await,
+        Some(Event::SetupWizardLoaded {
+            ticket,
+            result: Ok(fixture("district-setup.json"))
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::SaveSetupWizard {
+                ticket,
+                workspace_id: workspace_id.clone(),
+                steps: vec![(SetupStep::Business, SetupStepState::Skipped)],
+                business_facts: Some(facts),
+            })
+            .await,
+        Some(Event::SetupWizardSaved {
+            ticket,
+            result: Ok(fixture("district-setup-patch.json"))
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::ReadSetupWebsite {
+                ticket,
+                workspace_id: workspace_id.clone(),
+                website_url: "https://example.com/".to_owned(),
+                locale: Locale::FrCa,
+            })
+            .await,
+        Some(Event::SetupWebsiteRead {
+            ticket,
+            result: Ok(fixture("district-setup-lookup.json"))
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::PlaceSetupTestCall {
+                ticket,
+                workspace_id: workspace_id.clone(),
+                phone: "+14165550142".to_owned(),
+            })
+            .await,
+        Some(Event::SetupTestCallPlaced {
+            ticket,
+            result: Ok(fixture("district-setup-test-call.json"))
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::LoadSetupForwardingCheck {
+                ticket,
+                workspace_id: workspace_id.clone()
+            })
+            .await,
+        Some(Event::SetupForwardingRead {
+            ticket,
+            result: Ok(fixture("district-forwarding-check.json"))
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::StartSetupForwardingCheck {
+                ticket,
+                workspace_id: workspace_id.clone(),
+                business_line: "+14165550123".to_owned(),
+                mode: ForwardingCheckMode::Unanswered,
+            })
+            .await,
+        Some(Event::SetupForwardingRead {
+            ticket,
+            result: Ok(fixture("district-forwarding-check-start.json")),
+        })
+    );
+    assert_eq!(
+        runner
+            .run(Effect::LoadSetupConnections {
+                ticket,
+                workspace_id
+            })
+            .await,
+        Some(Event::SetupConnectionsLoaded {
+            ticket,
+            result: Ok(fixture("district-connections.json"))
+        })
+    );
+    assert_eq!(
+        log.take(),
+        [
+            format!("setup {AGENCY}"),
+            format!("setup save {AGENCY} [\"business=skipped\"] [\"timezone\"]"),
+            format!("setup lookup {AGENCY} https://example.com/ FrCa"),
+            format!("setup test call {AGENCY} +14165550142"),
+            format!("forwarding check {AGENCY}"),
+            format!("forwarding start {AGENCY} +14165550123 unanswered"),
+            format!("connections {AGENCY}"),
+        ]
+    );
+}
+
 #[tokio::test]
 async fn each_effect_calls_its_dependency_and_reports_back() {
     let (runner, log) = fakes(Some(CLIENT), true);
