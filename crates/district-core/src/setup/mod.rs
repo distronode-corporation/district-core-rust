@@ -585,13 +585,10 @@ impl SignedIn {
     /// Puts `step` on screen, and reads what it shows.
     fn show_step(&mut self, step: SetupStep, tickets: &mut Tickets) -> Vec<Effect> {
         self.setup.active = Some(step);
-        // Step 4 opens afresh whenever it shows, so a website hours read it
-        // asked for before is dropped with what it had.
-        tickets.cancel(Slot::SetupHoursLookup);
-        // Off step 6 (Back, say), its forwarding check stops being polled.
-        if step != SetupStep::Golive {
-            tickets.cancel_each(&[Slot::SetupPoll, Slot::SetupForwardingPoll]);
-        }
+        // Every step opens afresh, so what a step asked for that is not one of
+        // its writes is dropped whenever a step shows: a late answer must not
+        // land on a step it was not asked for, or start step 6's poll off it.
+        tickets.cancel_each(&STEP_ASKS);
         match step {
             SetupStep::Business => {
                 self.open_business();
@@ -900,6 +897,25 @@ fn drop_older_read(result: &Result<SetupResponse, ApiError>, tickets: &mut Ticke
         tickets.cancel(Slot::SetupHandOffRead);
     }
 }
+
+/// What the steps ask for that is not a step write (a write holds the step
+/// on screen until it lands, [`SetupWizard::is_moving`]), each re-asked by the
+/// step's open when it is shown again.
+const STEP_ASKS: [Slot; 13] = [
+    Slot::SetupHoursLookup,
+    Slot::SetupReceptionistConfig,
+    Slot::SetupPersonaOptions,
+    Slot::SetupCallsHandling,
+    Slot::SetupCallsConfig,
+    Slot::SetupConnections,
+    Slot::SetupForwarding,
+    Slot::SetupGoLiveConfig,
+    Slot::SetupGoLiveHandling,
+    Slot::SetupTestCall,
+    Slot::SetupForwardingStart,
+    Slot::SetupForwardingPoll,
+    Slot::SetupPoll,
+];
 
 /// Every kept step 1 draft, by workspace.
 pub(crate) type SetupDrafts = BTreeMap<String, BusinessDraft>;

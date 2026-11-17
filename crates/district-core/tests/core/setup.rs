@@ -662,6 +662,33 @@ fn a_website_hours_read_from_step_four_left_and_reopened_brings_no_draft() {
 }
 
 #[test]
+fn step_six_left_mid_call_or_mid_check_drops_their_answers() {
+    let (mut model, _) = on_golive("ca", 1);
+    golive(&mut model, GoLiveEvent::SetMobile("+14165550142".into()));
+    let call = golive(&mut model, GoLiveEvent::CallMe);
+    golive(
+        &mut model,
+        GoLiveEvent::SetBusinessLine("+14165550123".into()),
+    );
+    let start = golive(&mut model, GoLiveEvent::StartCheck);
+    send(&mut model, SetupEvent::Back);
+    assert_eq!(wizard(&model).active, Some(SetupStep::Calls));
+    // A pending check's answer would start the poll: off step 6 it starts nothing.
+    let late = model.update(Event::SetupForwardingRead {
+        ticket: ticket(&start[0]),
+        result: Ok(forwarding("district-forwarding-check-start.json")),
+    });
+    assert!(late.is_empty(), "{late:?}");
+    let late = model.update(Event::SetupTestCallPlaced {
+        ticket: ticket(&call[0]),
+        result: Ok(fixture("district-setup-test-call.json")),
+    });
+    assert!(late.is_empty(), "{late:?}");
+    assert_eq!(wizard(&model).golive.forwarding, None);
+    assert_eq!(wizard(&model).golive.call_status, None);
+}
+
+#[test]
 fn answers_that_arrive_after_the_wizard_was_left_change_nothing() {
     let (mut model, load, _) = opened();
     model.update(Event::Navigate(Route::Overview));
