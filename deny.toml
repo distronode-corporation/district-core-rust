@@ -21,7 +21,15 @@ unsound = "all"
 # Every vulnerability and unmaintained or unsound notice fails the check unless it
 # is listed here with the reason it is tolerated and what would retire it. Remove an
 # entry the day it can go.
-ignore = []
+ignore = [
+  # chrono is unmaintained (a maintenance notice, not a vulnerability). It comes in
+  # only with the optional `livekit` feature of district-call: livekit,
+  # livekit-data-stream and pbjson-types (through livekit-protocol) depend on it
+  # without a feature that drops it, and so does livekit 0.11.0. No crate here
+  # uses it. Retired when LiveKit's Rust SDK and pbjson-types stop depending on
+  # chrono, or when district-call moves to a release of the SDK that does.
+  { id = "RUSTSEC-2026-0543", reason = "chrono unmaintained; pulled only by the LiveKit Rust SDK and pbjson-types under the optional livekit feature, with no feature that drops it" },
+]
 
 [licenses]
 # The project is Apache-2.0. Permissive licences only; no copyleft reaches a
