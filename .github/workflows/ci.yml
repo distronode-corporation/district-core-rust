@@ -4,7 +4,8 @@ name: CI
 # coverage while the tests run, holding every crate to its floor in
 # coverage-floors.toml. `windows` runs the same tests on Windows with the MSVC
 # toolchain, the target District AI for Windows ships. `msrv` compiles the
-# workspace at the declared minimum Rust version and `repo` runs the repository
+# workspace at the declared minimum Rust version, `repeatable` builds the
+# workspace's crates twice and compares the bytes, and `repo` runs the repository
 # checks under scripts/. `cargo-deny`, `dependency-review` (pull requests only)
 # and `zizmor` are the supply chain: advisories and licences for the dependency
 # tree, and the workflows themselves.
@@ -192,6 +193,42 @@ jobs:
       # dependency manifests, and `--all-targets` extends it to the tests.
       - name: cargo check at the MSRV
         run: cargo check --workspace --all-targets --locked
+
+  # The build is repeatable: the workspace's own crates, built a second time from
+  # the same commit, are the same bytes. Dependencies are built once and reused, so
+  # this compares what this repository's source produces. Incremental compilation
+  # is off, as it is in a release build, because its partitioning is not
+  # deterministic between runs.
+  repeatable:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      CARGO_INCREMENTAL: "0"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install the stable toolchain
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustc --version
+
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build twice and compare the workspace's libraries
+        run: |
+          set -euo pipefail
+          crates="$(python3 -c 'import tomllib;print(" ".join(m.rsplit("/",1)[1] for m in tomllib.load(open("Cargo.toml","rb"))["workspace"]["members"]))')"
+          for round in first second; do
+            for crate in $crates; do cargo clean -p "$crate"; done
+            cargo build --workspace --locked
+            sha256sum target/debug/deps/libdistrict_*.rlib | sort -k2 > "$RUNNER_TEMP/$round.txt"
+          done
+          test "$(wc -l < "$RUNNER_TEMP/first.txt")" -eq "$(wc -w <<< "$crates")"
+          diff "$RUNNER_TEMP/first.txt" "$RUNNER_TEMP/second.txt"
 
   # Seconds of runtime. The scripts need Python 3.11 or newer (tomllib), which
   # ubuntu-24.04 ships.

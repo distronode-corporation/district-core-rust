@@ -22,6 +22,9 @@ move it.
 Expect an acknowledgement within a few working days. There is no paid bug bounty;
 what you get is credit in the changelog entry for the fix, if you want it.
 
+The whole process, from report to advisory, is in the organization's
+[GOVERNANCE.md](https://github.com/distronode-corporation/.github/blob/main/GOVERNANCE.md#vulnerability-response).
+
 ## Supported versions
 
 Only the latest release is supported. Fixes go into a new release rather than being

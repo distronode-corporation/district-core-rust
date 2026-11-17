@@ -17,6 +17,17 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Added
+
+- ARCHITECTURE.md (the crates, the event and effect loop, a request end to end, and where
+  state lives) and SECURITY-MODEL.md (threat model, trust boundaries, secure design
+  principles and the weaknesses countered, each with its test).
+- A quick start in README.md, run by a new `district-l10n` example (`quick_start`), and
+  uninstall steps. CONTRIBUTING.md names the style the code is held to and says that new
+  functionality comes with tests and a bug fix with a test that fails without it.
+- CI checks that the build is repeatable: the `repeatable` job builds the workspace's
+  crates twice from the same commit and compares the libraries byte for byte.
+
 ## [13.0.0] - 2026-11-15
 
 Two-step verification and deleting the account, in the app, each behind a fresh

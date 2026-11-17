@@ -57,6 +57,10 @@ contracts/                What these crates are checked against: the server's
                           Android app's endpoint snapshot (sync-endpoints.py), and
                           the brand colours from the design tokens
                           (sync-palette.py).
+ARCHITECTURE.md           The crates, the event and effect loop, and where state
+                          lives.
+SECURITY-MODEL.md         The threat model, trust boundaries, design principles and
+                          the weaknesses the code counters.
 tools/l10n/               The catalog tools (l10n.py, frcheck.py), vendored from
                           the server repository by `l10n.py vendor`.
 scripts/                  check-version.py, check-public-hygiene.py,
@@ -212,6 +216,23 @@ checks that the catalogs are the signed-off ones (see "Strings and French").
 Once the pull request is merged, tag the merge commit and push the tag;
 `.github/workflows/release-guard.yml` runs the sign-off check on it. Once that
 is green, create the GitHub release from the CHANGELOG.md section. Then move each app's pin in a pull request of its own.
+
+## Style
+
+Code follows the Rust style guide as `rustfmt` implements it, with the settings in
+`rustfmt.toml`, and clippy's default lints plus the workspace lints in `Cargo.toml`
+(`unsafe_code = "forbid"`, `missing_docs`, `dbg_macro`, `todo`, `unimplemented`). CI runs
+`cargo fmt --all --check` and `cargo clippy --workspace --all-targets --locked -- -D
+warnings`, so any warning, a use of a deprecated API included, fails the build. A pull
+request that fails either does not merge. `.editorconfig` sets the whitespace of the other
+files.
+
+## Tests
+
+A pull request that adds or changes functionality adds tests for it to the automated suite
+(`cargo test --workspace --locked`), and a bug fix adds a test that fails without the fix.
+CI runs the suite on every pull request and every push to main, and it is a required check
+(`rust`, and `windows` on the Windows target).
 
 ## The whole local gate
 
@@ -390,6 +411,11 @@ Conventional Commits are not required. What is required is that the message says
 that was wrong, the evidence, and what would have caught it.
 
 Pull requests run `.github/workflows/ci.yml`, and all of it must be green.
+
+Documentation moves with the code: a change in behaviour updates README.md, ARCHITECTURE.md,
+SECURITY.md or SECURITY-MODEL.md in the same pull request when it changes what they say.
+How changes are reviewed and accepted is in the organization's
+[GOVERNANCE.md](https://github.com/distronode-corporation/.github/blob/main/GOVERNANCE.md).
 
 ## Reporting bugs
 
