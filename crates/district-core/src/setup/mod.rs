@@ -585,6 +585,10 @@ impl SignedIn {
     /// Puts `step` on screen, and reads what it shows.
     fn show_step(&mut self, step: SetupStep, tickets: &mut Tickets) -> Vec<Effect> {
         self.setup.active = Some(step);
+        // Off step 6 (Back, say), its forwarding check stops being polled.
+        if step != SetupStep::Golive {
+            tickets.cancel_each(&[Slot::SetupPoll, Slot::SetupForwardingPoll]);
+        }
         match step {
             SetupStep::Business => {
                 self.open_business();

@@ -5,7 +5,7 @@
 use district_api::{ApiError, ErrorDetail};
 use district_core::l10n::{self, Locale};
 use district_core::setup::facts::{
-    AddressDraft, DayState, FaqDraft, Interval, ServiceDraft, Weekday,
+    self, AddressDraft, DayState, FaqDraft, Interval, ServiceDraft, Weekday,
 };
 use district_core::setup::{
     FORWARDING_POLL_INTERVAL, FORWARDING_POLL_LIMIT, first_open, next_step, places, previous_step,
@@ -1639,7 +1639,8 @@ fn days_periods_services_and_questions_are_edited_within_the_limits() {
         callers(&mut model, CallersEvent::RemovePeriod(Weekday::Tue, index));
     }
     assert_eq!(wizard(&model).callers.hours[1].state, DayState::NotSet);
-    // A full day's next period stops at midnight.
+    // A late day's next period starts when the last closes and stops at
+    // midnight; a day open until midnight takes none.
     callers(
         &mut model,
         CallersEvent::SetDayState(Weekday::Fri, DayState::Open),
@@ -1650,19 +1651,23 @@ fn days_periods_services_and_questions_are_edited_within_the_limits() {
             Weekday::Fri,
             0,
             Interval {
-                open: 1320,
-                close: 1440,
+                open: 1260,
+                close: 1410,
             },
         ),
     );
     callers(&mut model, CallersEvent::AddPeriod(Weekday::Fri));
+    let friday = &wizard(&model).callers.hours[4];
     assert_eq!(
-        wizard(&model).callers.hours[4].intervals[1],
+        friday.intervals[1],
         Interval {
-            open: 1380,
+            open: 1410,
             close: 1440
         }
     );
+    assert!(facts::day_is_valid(friday), "no overlap");
+    callers(&mut model, CallersEvent::AddPeriod(Weekday::Fri));
+    assert_eq!(wizard(&model).callers.hours[4].intervals.len(), 2);
     for _ in 0..51 {
         callers(&mut model, CallersEvent::AddService);
         callers(&mut model, CallersEvent::AddFaq);
@@ -2505,5 +2510,12 @@ fn a_check_that_fails_to_start_or_fails_says_why() {
         ticket: first,
         result: Ok(forwarding("district-forwarding-check-start.json")),
     });
-    assert!(matches!(effects.as_slice(), [Effect::Wait { .. }]));
+    let [Effect::Wait { ticket: wait, .. }] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    // Back to step 5 stops the poll.
+    send(&mut model, SetupEvent::Back);
+    assert_eq!(wizard(&model).active, Some(SetupStep::Calls));
+    let late = model.update(Event::WaitOver { ticket: *wait });
+    assert!(late.is_empty(), "{late:?}");
 }

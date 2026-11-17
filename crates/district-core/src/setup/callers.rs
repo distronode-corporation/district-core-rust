@@ -199,11 +199,14 @@ impl SignedIn {
                         .map(|period| period.close)
                         .max()
                         .unwrap_or(9 * 60);
-                    let open = (last + 60).min(23 * 60);
-                    draft.intervals.push(Interval {
-                        open,
-                        close: (open + 60).min(24 * 60),
-                    });
+                    // An hour after the last period, as late as 23:00, and never
+                    // before the last period closes; a day already open until
+                    // midnight has no room for another.
+                    let open = (last + 60).min(23 * 60).max(last);
+                    let close = (open + 60).min(24 * 60);
+                    if close > open {
+                        draft.intervals.push(Interval { open, close });
+                    }
                 }
             }
             CallersEvent::SetPeriod(day, index, period) => {
