@@ -603,9 +603,7 @@ impl SignedIn {
     ) -> Vec<Effect> {
         match result {
             Ok(answer) => {
-                if let crate::WorkspacesState::Ready(workspaces) = &mut self.workspaces {
-                    workspaces.rename_active(&answer.name);
-                }
+                self.workspaces.rename_active(&answer.name);
                 self.setup.workspace_name = answer.name;
                 self.business_done(tickets)
             }

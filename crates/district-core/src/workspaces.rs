@@ -38,6 +38,21 @@ pub enum WorkspacesState {
 }
 
 impl WorkspacesState {
+    /// The open workspace, when one is.
+    pub(crate) fn active(&self) -> Option<&WorkspaceEntry> {
+        match self {
+            Self::Ready(workspaces) => Some(workspaces.active()),
+            _ => None,
+        }
+    }
+
+    /// Shows the open workspace under `name`; nothing when none is open.
+    pub(crate) fn rename_active(&mut self, name: &str) {
+        if let Self::Ready(workspaces) = self {
+            workspaces.rename_active(name);
+        }
+    }
+
     /// The body for [`NoWorkspaces`](Self::NoWorkspaces) in place of
     /// [`message`](Self::message) while the plans are offered
     /// ([`SignedIn::no_workspace_message`](crate::SignedIn::no_workspace_message)):
@@ -200,5 +215,18 @@ pub(crate) fn failed(error: &ApiError) -> WorkspacesState {
     match error {
         ApiError::NotFound(_) => WorkspacesState::NoWorkspaces,
         other => WorkspacesState::Unavailable(FailureText::from_api_error(other)),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn with_no_workspace_open_there_is_none_to_name_or_rename() {
+        let mut state = WorkspacesState::Loading;
+        state.rename_active("Zulu Agency");
+        assert_eq!(state, WorkspacesState::Loading);
+        assert!(state.active().is_none());
     }
 }

@@ -918,10 +918,7 @@ impl SignedIn {
 
     /// The open workspace's id, when one is open.
     pub(crate) fn active_id(&self) -> Option<String> {
-        match &self.workspaces {
-            WorkspacesState::Ready(workspaces) => Some(workspaces.active().id.clone()),
-            _ => None,
-        }
+        self.workspaces.active().map(|entry| entry.id.clone())
     }
 
     /// The open workspace's id, for a request only made while one is open.

@@ -244,6 +244,9 @@ pub struct SetupWizard {
     pub golive: GoLiveStep,
     /// Step writes on their way, other than the shell's own.
     pub(crate) step_writes: u32,
+    /// The step [`completing`](Self::completing) marks, which its answer
+    /// moves on from.
+    pub(crate) completing_step: Option<SetupStep>,
 }
 
 impl SetupWizard {
@@ -416,9 +419,11 @@ impl SignedIn {
             ..SetupWizard::default()
         };
         // The wizard opens only on an open workspace (`navigate` sees to it).
-        if let crate::WorkspacesState::Ready(workspaces) = &self.workspaces {
-            self.setup.workspace_name = workspaces.active().name.clone();
-        }
+        self.setup.workspace_name = self
+            .workspaces
+            .active()
+            .map(|entry| entry.name.clone())
+            .unwrap_or_default();
         self.load_setup(tickets)
     }
 
@@ -541,6 +546,7 @@ impl SignedIn {
             return Vec::new();
         }
         self.setup.completing = true;
+        self.setup.completing_step = Some(step);
         self.setup.step_error = None;
         vec![Effect::SaveSetupWizard {
             ticket: tickets.issue(Slot::SetupComplete),
@@ -726,6 +732,10 @@ impl SignedIn {
             self.setup.phase = SetupPhase::Finished;
             return Vec::new();
         }
+        // A step write on its way moves on itself when it lands.
+        if self.setup.completing {
+            return Vec::new();
+        }
         // Only a step the page finished moves on: one that was already done or
         // skipped (reached by Back) stays with whatever was typed into it.
         if before == Some(SetupStepState::Todo) && self.setup.state(step) != before {
@@ -762,6 +772,7 @@ impl SignedIn {
         tickets: &mut Tickets,
     ) -> Vec<Effect> {
         self.setup.completing = false;
+        let completed = self.setup.completing_step.take();
         let response = match result {
             Ok(response) => response,
             Err(error) => {
@@ -780,8 +791,10 @@ impl SignedIn {
             self.setup.phase = SetupPhase::Finished;
             return Vec::new();
         }
-        // Past the last step with one still open (reached by Back), the open one.
-        let next = self.setup.active.and_then(next_step).unwrap_or(first);
+        // From the step this marked, not the one on screen: a re-read that
+        // landed first cannot make it skip one. Past the last step with one
+        // still open (reached by Back), the open one.
+        let next = completed.and_then(next_step).unwrap_or(first);
         self.show_step(next, tickets)
     }
 
@@ -859,3 +872,24 @@ impl SignedIn {
 
 /// Every kept step 1 draft, by workspace.
 pub(crate) type SetupDrafts = BTreeMap<String, BusinessDraft>;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_step_has_no_state_before_an_answer_or_in_one_with_no_progress() {
+        assert_eq!(SetupWizard::default().state(SetupStep::Business), None);
+        let wizard = SetupWizard {
+            data: Some(
+                serde_json::from_value(serde_json::json!({
+                    "setupProgress": null, "businessFacts": null, "region": "ca",
+                    "tier": "VoicePro", "includedNumbers": 3, "numbersHeld": 1,
+                }))
+                .unwrap(),
+            ),
+            ..SetupWizard::default()
+        };
+        assert_eq!(wizard.state(SetupStep::Business), None);
+    }
+}

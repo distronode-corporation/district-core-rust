@@ -575,6 +575,33 @@ fn leaving_the_wizard_drops_what_it_had_on_its_way_and_the_draft_comes_back() {
 }
 
 #[test]
+fn a_re_read_that_lands_before_a_step_write_never_skips_a_step() {
+    let (mut model, _) = ready(state(ALL_TODO, json!({})), None);
+    assert_eq!(wizard(&model).active, Some(SetupStep::Business));
+    let skip = send(&mut model, SetupEvent::Skip);
+    // The window comes back while Skip's write is on its way, and the re-read
+    // it asks for lands first, with step 1 already skipped.
+    let skipped = || {
+        state(
+            ["skipped", "todo", "todo", "todo", "todo", "todo"],
+            json!({}),
+        )
+    };
+    let read = send(&mut model, SetupEvent::HandOffReturned);
+    model.update(Event::SetupWizardLoaded {
+        ticket: ticket(&read[0]),
+        result: Ok(skipped()),
+    });
+    assert_eq!(
+        wizard(&model).active,
+        Some(SetupStep::Business),
+        "the write moves on, not the read"
+    );
+    complete(&mut model, &skip, skipped());
+    assert_eq!(wizard(&model).active, Some(SetupStep::Number));
+}
+
+#[test]
 fn answers_that_arrive_after_the_wizard_was_left_change_nothing() {
     let (mut model, load, _) = opened();
     model.update(Event::Navigate(Route::Overview));
@@ -597,6 +624,55 @@ fn answers_that_arrive_after_the_wizard_was_left_change_nothing() {
     });
     assert!(late.is_empty(), "{late:?}");
     assert_eq!(wizard(&model).golive.forwarding, None);
+    // Step 6's test call, after the wizard was left.
+    let (mut model, _) = on_golive("ca", 1);
+    golive(&mut model, GoLiveEvent::SetMobile("+14165550142".into()));
+    let call = golive(&mut model, GoLiveEvent::CallMe);
+    model.update(Event::Navigate(Route::Overview));
+    let late = model.update(Event::SetupTestCallPlaced {
+        ticket: ticket(&call[0]),
+        result: Ok(fixture("district-setup-test-call.json")),
+    });
+    assert!(late.is_empty(), "{late:?}");
+    assert_eq!(wizard(&model).golive.call_status, None);
+    // Step 5's connections read, after the wizard was left.
+    let (mut model, effects) = ready(
+        state(["done", "done", "done", "done", "todo", "todo"], json!({})),
+        None,
+    );
+    let linked = find(&effects, |e| {
+        matches!(e, Effect::LoadSetupConnections { .. })
+    });
+    model.update(Event::Navigate(Route::Overview));
+    let late = model.update(Event::SetupConnectionsLoaded {
+        ticket: linked,
+        result: Ok(fixture("district-connections.json")),
+    });
+    assert!(late.is_empty(), "{late:?}");
+    assert_eq!(wizard(&model).calls.calendar_name, None);
+    // Step 4's hours read from the website, after the wizard was left.
+    let mut model = on_callers(json!({}));
+    callers(
+        &mut model,
+        CallersEvent::SetWebsite("https://example.com/".into()),
+    );
+    let read = callers(&mut model, CallersEvent::FillHoursFromWebsite);
+    model.update(Event::Navigate(Route::Overview));
+    let late = model.update(Event::SetupWebsiteRead {
+        ticket: ticket(&read[0]),
+        result: Ok(fixture("district-setup-lookup.json")),
+    });
+    assert!(late.is_empty(), "{late:?}");
+    assert!(!wizard(&model).callers.hours_draft_pending);
+}
+
+#[test]
+fn an_empty_step_one_writes_only_its_empty_address() {
+    let step = district_core::BusinessStep::default();
+    assert_eq!(
+        Value::Object(step.facts_patch(None)),
+        json!({"address": {"city": "", "country": ""}})
+    );
 }
 
 #[test]
@@ -1946,6 +2022,21 @@ fn who_answers_is_saved_with_only_what_changed_and_continue_waits_for_it() {
         panic!()
     };
     assert_eq!(patch.call_handling, Some(CallHandlingMode::AiThenApp));
+    // The receptionist first, from the app first: the mode alone.
+    let (mut model, _) = on_calls(
+        "app_first",
+        Ok(workspace_config()),
+        Ok(fixture("district-connections.json")),
+    );
+    calls(&mut model, SetupCallsEvent::SetMode("ai_first".into()));
+    let effects = calls(&mut model, SetupCallsEvent::SaveAnswering);
+    let [Effect::SaveCallHandling { patch, .. }] = effects.as_slice() else {
+        panic!("{effects:?}")
+    };
+    assert_eq!(
+        (patch.call_handling, patch.app_ring_seconds),
+        (Some(CallHandlingMode::AiFirst), None)
+    );
 }
 
 #[test]
