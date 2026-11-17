@@ -93,6 +93,12 @@ setting up" card opens the wizard instead of the web page.
   nothing, so an existing implementation still builds). `MemoryReadCache` keeps them in
   memory; `district_host::ReadCacheDir` keeps them as files in the app's cache directory, its
   owner's alone, named by the SHA-256 of the request, and at most 64 of them.
+- The saved reads belong to one account. `ApiClient::own_saved_reads(user_id)` names it (the
+  runner does, after every restore and every sign-in, through the new defaulted
+  `DistrictApi::saved_reads_step` and `SavedReadsStep`); every key holds it, another account's
+  copies are forgotten, and with no owner named nothing is kept or shown. The owner is kept in
+  the cache, so a launch offline still shows its own account's copies. A restore that finds the
+  session over (or unreadable) and every completed sign-in also forget them.
 - The banner's two sentences, `session_offline_saved_today` ("Offline. Showing what was
   saved at {time}") and `session_offline_saved_earlier` ("... on {stamp}"), in English and
   French, the iOS app's reviewed wording.

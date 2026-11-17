@@ -176,6 +176,17 @@ pub(crate) fn clear(saved: Option<&SavedReads>) {
     }
 }
 
+/// Makes `user_id` the owner of the saved reads, if there are any.
+pub(crate) fn own(saved: Option<&SavedReads>, user_id: &str) {
+    if let Some(saved) = saved {
+        saved.own(user_id);
+    }
+}
+
+/// The cache entry that names whose saved reads these are. Not a read's key:
+/// those always hold spaces.
+const OWNER_KEY: &str = "owner";
+
 /// The client's saved reads, and which of them are on screen.
 pub(crate) struct SavedReads {
     cache: Box<dyn ReadCache>,
@@ -193,10 +204,21 @@ struct State {
     /// to an older request (two in flight, answering out of order) is not kept
     /// over it.
     kept: HashMap<String, i64>,
+    /// The account the saved reads belong to, or `None` before a session is
+    /// known. ⛔ EVERY KEY NAMES IT, and with none nothing is kept or shown, so
+    /// one account can never be shown another's saved reads, even if a sign-out
+    /// that should have cleared them did not run.
+    owner: Option<String>,
 }
 
 impl SavedReads {
     pub(crate) fn new(cache: impl ReadCache, clock: impl Clock) -> Self {
+        // ⚠️ Read once, here: the owner of a cache saved before this launch, so a
+        // launch offline (whose session cannot be refreshed, and so cannot say
+        // whose it is) still shows that account's copies.
+        let owner = cache
+            .load(OWNER_KEY)
+            .and_then(|read| String::from_utf8(read.body).ok());
         Self {
             cache: Box::new(cache),
             clock: Box::new(clock),
@@ -204,8 +226,37 @@ impl SavedReads {
                 generation: 0,
                 shown: HashMap::new(),
                 kept: HashMap::new(),
+                owner,
             }),
         }
+    }
+
+    /// A session for `user_id` is in use: the saved reads are now that
+    /// account's. Another account's are forgotten first.
+    pub(crate) fn own(&self, user_id: &str) {
+        let changed = {
+            let mut state = self.state();
+            let changed = state.owner.as_deref() != Some(user_id);
+            if changed {
+                state.generation += 1;
+                state.shown.clear();
+                state.kept.clear();
+                state.owner = Some(user_id.to_owned());
+            }
+            changed
+        };
+        // Outside the lock, like every other use of the cache; see `answered`.
+        if changed {
+            self.cache.clear();
+        }
+        // Stamped now, so the marker is as fresh as the session that set it.
+        self.cache.save(
+            OWNER_KEY,
+            SavedRead {
+                body: user_id.as_bytes().to_vec(),
+                saved_at_ms: self.clock.now_ms(),
+            },
+        );
     }
 
     // Every change below is made whole under the lock, so a poisoned lock still
@@ -217,9 +268,15 @@ impl SavedReads {
     /// Taken before the request to `url` is sent: for a saved read, its key and
     /// the generation (see [`State::generation`]); `None` for anything else.
     pub(crate) fn asking(&self, endpoint: Endpoint, url: &Url) -> Option<Asked> {
-        is_saved_read(endpoint).then(|| Asked {
-            key: format!("{} {url}", district_l10n::current().tag()),
-            generation: self.state().generation,
+        if !is_saved_read(endpoint) {
+            return None;
+        }
+        let state = self.state();
+        // No account, no saved reads: see `State::owner`.
+        let owner = state.owner.as_deref()?;
+        Some(Asked {
+            key: format!("{owner} {} {url}", district_l10n::current().tag()),
+            generation: state.generation,
             asked_at_ms: self.clock.now_ms(),
         })
     }
@@ -321,6 +378,7 @@ impl SavedReads {
             state.generation += 1;
             state.shown.clear();
             state.kept.clear();
+            state.owner = None;
         }
         // Outside the lock, like every other use of the cache; see `answered`.
         self.cache.clear();
@@ -373,8 +431,11 @@ mod tests {
             self.0.inner.load(key)
         }
         fn save(&self, key: &str, read: SavedRead) {
-            self.0.writing.wait();
-            self.0.go_on.wait();
+            // Only a read's write is held; the owner marker goes straight in.
+            if key != OWNER_KEY {
+                self.0.writing.wait();
+                self.0.go_on.wait();
+            }
             self.0.inner.save(key, read);
         }
         fn remove(&self, key: &str) {
@@ -393,6 +454,7 @@ mod tests {
             go_on: std::sync::Barrier::new(2),
         });
         let saved = Arc::new(SavedReads::new(Held(cache.clone()), crate::SystemClock));
+        saved.own("user-a");
         let asked = saved
             .asking(
                 Endpoint::Overview,
@@ -445,6 +507,7 @@ mod tests {
         let cache = Arc::new(MemoryReadCache::new());
         let now = Arc::new(std::sync::atomic::AtomicI64::new(1_000));
         let saved = SavedReads::new(cache.clone(), At(now.clone()));
+        saved.own("user-a");
         let url = Url::parse("https://example.test/overview").unwrap();
         let older = saved.asking(Endpoint::Overview, &url).unwrap();
         now.store(2_000, std::sync::atomic::Ordering::SeqCst);

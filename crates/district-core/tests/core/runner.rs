@@ -4179,3 +4179,252 @@ async fn the_purchases_setting_is_read_and_kept() {
     );
     assert_eq!(log.take(), ["purchases Off"]);
 }
+
+// ── Saved reads across accounts ─────────────────────────────────────────────
+
+mod saved_reads_across_accounts {
+    //! ⛔ One account is never shown another's saved offline reads, whichever
+    //! way a session ends: through a real `ApiClient` with saved reads, driven by
+    //! the runner.
+
+    use std::sync::atomic::{AtomicBool, Ordering};
+
+    use district_api::{
+        AccessToken, ApiClient, ApiConfig, MemoryReadCache, ReauthReason, RetryReason, SystemClock,
+        TokenError, TokenSource,
+    };
+    use district_auth::{AccessClaims, Persistence};
+    use district_core::{Auth, EffectRunner, RestoreError, SignInError, SignedInSession};
+    use district_model::{ClientIdentity, Platform};
+    use serde_json::json;
+    use wiremock::matchers::{method, path};
+    use wiremock::{Mock, MockServer, ResponseTemplate};
+
+    use super::*;
+
+    /// A token source that is fine, or whose refresh cannot leave the machine.
+    #[derive(Clone, Default)]
+    struct Tokens(Arc<AtomicBool>);
+
+    impl TokenSource for Tokens {
+        async fn access_token(&self) -> Result<AccessToken, TokenError> {
+            if self.0.load(Ordering::SeqCst) {
+                Err(TokenError::RetryLater(RetryReason::Offline))
+            } else {
+                Ok(AccessToken::new("t"))
+            }
+        }
+
+        fn invalidate(&self, _rejected: &AccessToken) -> bool {
+            false
+        }
+    }
+
+    /// Sign-in whose restore and code exchange answer what the test sets.
+    #[derive(Clone)]
+    struct ScriptedAuth {
+        restore: Arc<Mutex<Result<AccessClaims, RestoreError>>>,
+        sign_in: Arc<Mutex<Option<AccessClaims>>>,
+    }
+
+    fn as_user(user: &str) -> AccessClaims {
+        AccessClaims {
+            user_id: user.to_owned(),
+            device_id: "device-1".to_owned(),
+            expires_at_secs: 4_000_000_000,
+        }
+    }
+
+    impl Auth for ScriptedAuth {
+        async fn restore(&self) -> Result<AccessClaims, RestoreError> {
+            self.restore.lock().unwrap().clone()
+        }
+
+        fn begin_sign_in(&self) -> String {
+            String::new()
+        }
+
+        fn cancel_sign_in(&self) {}
+
+        async fn complete_sign_in(&self, _callback: &str) -> Result<SignedInSession, SignInError> {
+            self.sign_in
+                .lock()
+                .unwrap()
+                .clone()
+                .map(|claims| SignedInSession {
+                    claims,
+                    persistence: Persistence::Saved,
+                })
+                .ok_or(SignInError::Exchange(ExchangeFailure::Rejected))
+        }
+
+        async fn sign_out(&self, _revision: Ticket) -> SignOutReport {
+            signed_out()
+        }
+
+        async fn drain_revoke_outbox(&self) -> DrainReport {
+            DrainReport::default()
+        }
+
+        async fn save_session(&self) {}
+    }
+
+    struct World {
+        runner: EffectRunner<
+            ApiClient<Tokens>,
+            ScriptedAuth,
+            FakeSettings,
+            FakeOpener,
+            TokioClock,
+            FakeLive,
+            FakeNotifier,
+            FakePresence,
+            FakeEngine,
+            FakeRing,
+        >,
+        auth: ScriptedAuth,
+        offline: Tokens,
+        _server: MockServer,
+    }
+
+    async fn world() -> World {
+        let server = MockServer::start().await;
+        Mock::given(method("GET"))
+            .and(path("/api/district/workspace/list"))
+            .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+                "success": true,
+                "workspaces": [{"id": "ws-a", "name": "A's workspace", "region": "us", "role": "agency"}]
+            })))
+            .mount(&server)
+            .await;
+        let identity = ClientIdentity::new(Platform::Linux, "DistrictAI-Linux", "1.0.0");
+        let config = ApiConfig::new(identity)
+            .with_base_url(&server.uri())
+            .unwrap();
+        let offline = Tokens::default();
+        let api = ApiClient::new(config, offline.clone())
+            .unwrap()
+            .with_saved_reads(MemoryReadCache::new(), SystemClock);
+        let auth = ScriptedAuth {
+            restore: Arc::new(Mutex::new(Ok(as_user("user-a")))),
+            sign_in: Arc::new(Mutex::new(None)),
+        };
+        let log = Log::default();
+        let runner = EffectRunner::new(
+            api,
+            auth.clone(),
+            FakeSettings(
+                Mutex::new(None),
+                log.clone(),
+                Mutex::new(false),
+                Mutex::new(None),
+            ),
+            FakeOpener(true, log.clone()),
+            TokioClock,
+            FakeLive(log.clone()),
+            FakeNotifier(log.clone()),
+            FakePresence(log.clone()),
+            FakeEngine(log.clone()),
+            FakeRing(log.clone()),
+        );
+        World {
+            runner,
+            auth,
+            offline,
+            _server: server,
+        }
+    }
+
+    impl World {
+        async fn restore(&self) {
+            self.runner
+                .run(Effect::RestoreSession { ticket: a_ticket() })
+                .await;
+        }
+
+        async fn sign_in_as(&self, user: &str) {
+            *self.auth.sign_in.lock().unwrap() = Some(as_user(user));
+            let event = self
+                .runner
+                .run(Effect::CompleteSignIn {
+                    ticket: a_ticket(),
+                    callback: "districtai://auth?code=c".to_owned(),
+                })
+                .await;
+            assert!(matches!(
+                event,
+                Some(Event::SignInCompleted { result: Ok(_), .. })
+            ));
+        }
+
+        /// The workspace list, as the runner reads it: whether it answered.
+        async fn list_answers(&self) -> bool {
+            match self
+                .runner
+                .run(Effect::LoadWorkspaces { ticket: a_ticket() })
+                .await
+            {
+                Some(Event::WorkspacesLoaded { result, .. }) => result.is_ok(),
+                other => panic!("{other:?}"),
+            }
+        }
+
+        fn go_offline(&self, offline: bool) {
+            self.offline.0.store(offline, Ordering::SeqCst);
+        }
+    }
+
+    #[tokio::test]
+    async fn an_expired_session_at_start_up_then_a_new_account_sees_nothing_of_the_old() {
+        let w = world().await;
+        w.restore().await;
+        assert!(w.list_answers().await, "A reads its workspaces");
+        w.go_offline(true);
+        assert!(w.list_answers().await, "and has A's copy offline");
+        w.go_offline(false);
+
+        // The next launch finds A's session expired.
+        *w.auth.restore.lock().unwrap() = Err(RestoreError::Token(TokenError::SignInRequired(
+            ReauthReason::NoSession,
+        )));
+        w.restore().await;
+        w.sign_in_as("user-b").await;
+
+        w.go_offline(true);
+        assert!(!w.list_answers().await, "B is shown nothing of A's");
+    }
+
+    #[tokio::test]
+    async fn a_sign_in_as_another_account_sees_nothing_of_the_old() {
+        let w = world().await;
+        w.sign_in_as("user-a").await;
+        assert!(w.list_answers().await);
+
+        // No sign-out ran (the app was killed first, say): B signs straight in.
+        w.sign_in_as("user-b").await;
+
+        w.go_offline(true);
+        assert!(!w.list_answers().await, "B is shown nothing of A's");
+    }
+
+    #[tokio::test]
+    async fn a_launch_offline_keeps_the_accounts_own_copies() {
+        let w = world().await;
+        w.restore().await;
+        assert!(w.list_answers().await);
+
+        // The refresh cannot leave the machine: the session is intact, and so are
+        // its copies.
+        w.go_offline(true);
+        *w.auth.restore.lock().unwrap() = Err(RestoreError::Token(TokenError::RetryLater(
+            RetryReason::Offline,
+        )));
+        w.restore().await;
+        assert!(w.list_answers().await);
+
+        // A token that cannot be read ends it like an expired one.
+        *w.auth.restore.lock().unwrap() = Err(RestoreError::UnreadableToken);
+        w.restore().await;
+        assert!(!w.list_answers().await);
+    }
+}

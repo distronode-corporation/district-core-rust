@@ -74,6 +74,10 @@ impl<S: TokenSource> DistrictApi for ApiClient<S> {
         ApiClient::clear_saved_reads(self);
     }
 
+    fn own_saved_reads(&self, user_id: &str) {
+        ApiClient::own_saved_reads(self, user_id);
+    }
+
     fn workspace_list(
         &self,
     ) -> impl Future<Output = Result<WorkspaceListResponse, ApiError>> + Send {

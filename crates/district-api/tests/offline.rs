@@ -18,6 +18,9 @@ mod common;
 
 const LIST: &str = "/api/district/workspace/list";
 
+/// The account the tests' saved reads belong to.
+const USER_A: &str = "user-a";
+
 /// A clock the test moves by hand.
 #[derive(Clone, Default)]
 struct HandClock(Arc<AtomicI64>);
@@ -86,6 +89,7 @@ fn setup(server: &MockServer) -> Setup {
     let client = ApiClient::new(config, tokens.clone())
         .expect("a loopback base URL is accepted")
         .with_saved_reads(cache.clone(), clock.clone());
+    client.own_saved_reads(USER_A);
     Setup {
         client,
         tokens,
@@ -153,9 +157,18 @@ async fn a_connection_that_cannot_be_made_is_answered_from_the_copy() {
     // ⚠️ Not a dropped MockServer: wiremock pools its servers, so the port of one
     // that was dropped still answers.
     let base = closed_port();
+    // Saved by an earlier launch, owner and all: this launch, offline, names no
+    // owner of its own and still shows them.
     let cache = Arc::new(MemoryReadCache::new());
     cache.save(
-        &format!("en {base}{LIST}"),
+        "owner",
+        SavedRead {
+            body: USER_A.as_bytes().to_vec(),
+            saved_at_ms: 1_000,
+        },
+    );
+    cache.save(
+        &format!("{USER_A} en {base}{LIST}"),
         SavedRead {
             body: list("Alpha").to_string().into_bytes(),
             saved_at_ms: 1_000,
@@ -469,7 +482,10 @@ async fn the_service_ending_the_session_forgets_every_copy() {
         s.client.workspace_list().await.unwrap_err(),
         ApiError::Unauthorized(UnauthorizedReason::SignInRequired(ReauthReason::NoSession))
     );
-    assert_eq!(s.cache.load(&format!("en {}{LIST}", server.uri())), None);
+    assert_eq!(
+        s.cache.load(&format!("{USER_A} en {}{LIST}", server.uri())),
+        None
+    );
 
     // And on any other request.
     s.tokens.signed_out.store(false, Ordering::SeqCst);
@@ -555,6 +571,7 @@ async fn a_client_without_saved_reads_keeps_nothing() {
     let client = common::client(&server);
     client.workspace_list().await.unwrap();
     client.clear_saved_reads();
+    client.own_saved_reads(USER_A);
     assert_eq!(client.showing_saved_since(), None);
 
     // The same token source as every other test here, with no saved reads.
@@ -586,8 +603,11 @@ impl ReadCache for SignsOutWhileWriting {
     }
     fn save(&self, key: &str, read: SavedRead) {
         // The client's lock is free while a copy is written, so this does not
-        // deadlock: a sign-out is never held up by a slow cache.
-        self.client.get().unwrap().clear_saved_reads();
+        // deadlock: a sign-out is never held up by a slow cache. (The owner
+        // marker is written before the client is in the slot.)
+        if let Some(client) = self.client.get() {
+            client.clear_saved_reads();
+        }
         self.inner.save(key, read);
     }
     fn remove(&self, key: &str) {
@@ -623,6 +643,7 @@ async fn a_sign_out_that_lands_while_a_copy_is_written_still_wins() {
                 HandClock::at(1_000),
             ),
     );
+    client.own_saved_reads(USER_A);
     assert!(slot.set(client.clone()).is_ok());
 
     assert_eq!(name(&client.workspace_list().await.unwrap()), "Alpha");
@@ -632,6 +653,85 @@ async fn a_sign_out_that_lands_while_a_copy_is_written_still_wins() {
         client.workspace_list().await.is_err(),
         "the copy written under the session that ended is gone"
     );
+}
+
+#[tokio::test]
+async fn saved_reads_belong_to_one_account() {
+    let server = MockServer::start().await;
+    answer(
+        &server,
+        LIST,
+        ResponseTemplate::new(200).set_body_json(list("Alpha")),
+    )
+    .await;
+    let s = setup(&server);
+    s.client.workspace_list().await.unwrap();
+
+    // The same account again (every restore names it) keeps its copies.
+    s.client.own_saved_reads(USER_A);
+    s.tokens.go_offline(true);
+    assert!(s.client.workspace_list().await.is_ok());
+
+    // ⛔ Another account forgets them, and is shown none of them.
+    s.client.own_saved_reads("user-b");
+    assert!(s.client.workspace_list().await.is_err());
+    assert_eq!(s.client.showing_saved_since(), None);
+    assert_eq!(
+        s.cache.load("owner").map(|read| read.body),
+        Some(b"user-b".to_vec()),
+        "the owner is remembered for the next launch"
+    );
+}
+
+#[tokio::test]
+async fn with_no_account_named_nothing_is_kept_or_shown() {
+    let server = MockServer::start().await;
+    answer(
+        &server,
+        LIST,
+        ResponseTemplate::new(200).set_body_json(list("Alpha")),
+    )
+    .await;
+    let s = setup(&server);
+    // A sign-out forgets the owner with the copies: until a session names one
+    // again, a read keeps nothing.
+    s.client.clear_saved_reads();
+    s.client.workspace_list().await.unwrap();
+    s.tokens.go_offline(true);
+    assert!(s.client.workspace_list().await.is_err());
+
+    // A fresh cache, never owned: the same.
+    let config = ApiConfig::new(common::app())
+        .with_base_url(&server.uri())
+        .unwrap();
+    let tokens = Tokens::default();
+    let cache = Arc::new(MemoryReadCache::new());
+    let unowned = ApiClient::new(config, tokens.clone())
+        .unwrap()
+        .with_saved_reads(cache.clone(), HandClock::at(1_000));
+    unowned.workspace_list().await.unwrap();
+    assert_eq!(cache.load("owner"), None);
+    tokens.go_offline(true);
+    assert!(unowned.workspace_list().await.is_err());
+}
+
+#[test]
+fn an_owner_that_is_not_text_is_no_owner() {
+    let cache = Arc::new(MemoryReadCache::new());
+    cache.save(
+        "owner",
+        SavedRead {
+            body: vec![0xff, 0xfe],
+            saved_at_ms: 1,
+        },
+    );
+    let config = ApiConfig::new(common::app())
+        .with_base_url("http://127.0.0.1:9")
+        .unwrap();
+    let client = ApiClient::new(config, Tokens::default())
+        .unwrap()
+        .with_saved_reads(cache, HandClock::at(1));
+    assert_eq!(client.showing_saved_since(), None);
 }
 
 #[test]

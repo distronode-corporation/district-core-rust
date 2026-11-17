@@ -17,7 +17,7 @@ use std::pin::pin;
 use std::task::Poll;
 use std::time::Duration;
 
-use district_api::{ApiError, ConversationsQuery};
+use district_api::{ApiError, ConversationsQuery, TokenError};
 use district_auth::{AccessClaims, DrainReport, SignOutReport};
 use district_l10n::Locale;
 use district_model::{
@@ -83,12 +83,70 @@ use crate::session::{RestoreError, SignInError, SignedInSession};
 use crate::settings::{MemberWrite, MessagingWrite};
 use crate::transcript::TranscriptWatch;
 
+/// What a restore or a sign-in means for the saved reads (see
+/// [`district_api::offline`]). ⛔ One account is never shown another's.
+///
+/// Decided here, outside the generic runner, so the runner's code is the same
+/// straight line for every API it is built over.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SavedReadsStep<'a> {
+    /// Leave them: the session is intact, but the refresh cannot leave the
+    /// machine, so its copies are what the app shows offline.
+    Keep,
+    /// Forget them: the session is over, or cannot be read.
+    Forget,
+    /// The session restored is this account's: the saved reads are its own.
+    Own(&'a str),
+    /// A new sign-in: start with nothing saved, owned by this account.
+    Restart(&'a str),
+}
+
+impl<'a> SavedReadsStep<'a> {
+    /// After a restore of the stored session.
+    pub fn after_restore(result: &'a Result<AccessClaims, RestoreError>) -> Self {
+        match result {
+            Ok(claims) => Self::Own(&claims.user_id),
+            Err(RestoreError::Token(TokenError::RetryLater(_))) => Self::Keep,
+            Err(
+                RestoreError::Token(TokenError::SignInRequired(_)) | RestoreError::UnreadableToken,
+            ) => Self::Forget,
+        }
+    }
+
+    /// After a sign-in completed, or failed (which changes nothing).
+    pub fn after_sign_in(result: &'a Result<SignedInSession, SignInError>) -> Self {
+        match result {
+            Ok(session) => Self::Restart(&session.claims.user_id),
+            Err(_) => Self::Keep,
+        }
+    }
+}
+
 /// The District AI API, as far as the app's screens use it.
 pub trait DistrictApi: Send + Sync {
     /// Forgets every saved read (see [`district_api::offline`]). The runner calls
     /// it on every sign-out, once the session is gone. An API that keeps nothing
     /// has nothing to forget, which is the default.
     fn clear_saved_reads(&self) {}
+
+    /// A session for `user_id` is in use: the saved reads are that account's
+    /// from now on (see [`district_api::ApiClient::own_saved_reads`]). The runner
+    /// calls it after every restore and every sign-in. Nothing by default.
+    fn own_saved_reads(&self, _user_id: &str) {}
+
+    /// Carries out what a restore or a sign-in means for the saved reads. The
+    /// runner calls it; an implementation keeps this default.
+    fn saved_reads_step(&self, step: SavedReadsStep<'_>) {
+        match step {
+            SavedReadsStep::Keep => {}
+            SavedReadsStep::Forget => self.clear_saved_reads(),
+            SavedReadsStep::Own(user_id) => self.own_saved_reads(user_id),
+            SavedReadsStep::Restart(user_id) => {
+                self.clear_saved_reads();
+                self.own_saved_reads(user_id);
+            }
+        }
+    }
 
     /// The workspace list.
     fn workspace_list(
@@ -1079,10 +1137,12 @@ where
                 self.auth.save_session().await;
                 return None;
             }
-            Effect::RestoreSession { ticket } => Event::SessionRestored {
-                ticket,
-                result: self.auth.restore().await,
-            },
+            Effect::RestoreSession { ticket } => {
+                let result = self.auth.restore().await;
+                self.api
+                    .saved_reads_step(SavedReadsStep::after_restore(&result));
+                Event::SessionRestored { ticket, result }
+            }
             Effect::RetryAfter { ticket, delay } => {
                 self.clock.sleep(delay).await;
                 Event::RetryDue { ticket }
@@ -1100,10 +1160,12 @@ where
                 self.auth.cancel_sign_in();
                 return None;
             }
-            Effect::CompleteSignIn { ticket, callback } => Event::SignInCompleted {
-                ticket,
-                result: self.auth.complete_sign_in(&callback).await,
-            },
+            Effect::CompleteSignIn { ticket, callback } => {
+                let result = self.auth.complete_sign_in(&callback).await;
+                self.api
+                    .saved_reads_step(SavedReadsStep::after_sign_in(&result));
+                Event::SignInCompleted { ticket, result }
+            }
             Effect::SignOut { ticket } => {
                 let report = self.auth.sign_out(ticket).await;
                 // Every scope (this device, everywhere, a deleted account): what

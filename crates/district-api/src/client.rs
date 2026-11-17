@@ -84,6 +84,15 @@ impl<S: TokenSource> ApiClient<S> {
         offline::clear(self.saved.as_ref());
     }
 
+    /// Says whose session is in use: the saved reads belong to `user_id` (the
+    /// access token's `sub`) from now on, and another account's are forgotten.
+    /// Until an owner is named nothing is kept or shown; an owner named on an
+    /// earlier launch is remembered, so a launch offline still shows its copies.
+    /// The runner calls this after every restore and every sign-in.
+    pub fn own_saved_reads(&self, user_id: &str) {
+        offline::own(self.saved.as_ref(), user_id);
+    }
+
     /// The body of a successful answer to `prepared`, or, for a saved read the
     /// service could not be reached for, the body it last answered with.
     ///
