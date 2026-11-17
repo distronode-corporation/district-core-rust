@@ -213,9 +213,16 @@ request:
 `python3 scripts/check-version.py` checks the three agree, and with the tag as
 its argument checks them against the tag. `python3 scripts/check-fr-signoff.py`
 checks that the catalogs are the signed-off ones (see "Strings and French").
-Once the pull request is merged, tag the merge commit and push the tag;
-`.github/workflows/release-guard.yml` runs the sign-off check on it. Once that
-is green, create the GitHub release from the CHANGELOG.md section. Then move each app's pin in a pull request of its own.
+Once the pull request is merged, and before anything else merges, run the
+Release workflow (`.github/workflows/release.yml`) from main with the version
+and a one-line summary. It runs both checks against the tag it is about to make,
+then creates the annotated `vX.Y.Z` tag on main's head, signed with gitsign under
+the workflow's own identity (no key to hold), verifies it, and pushes it. Once it
+is green, create the GitHub release from the CHANGELOG.md section. Then move each
+app's pin in a pull request of its own. README.md, "Verify a release", says how
+anyone checks the signature. A tag pushed by hand is unsigned and does not get
+that guarantee; `.github/workflows/release-guard.yml` still runs the sign-off
+check on one.
 
 ## Style
 

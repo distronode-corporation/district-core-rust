@@ -93,6 +93,34 @@ says what counts).
 log line below warn out of the whole build, the app's own crates included; see
 [SECURITY.md](SECURITY.md#logging) for why.
 
+## Verify a release
+
+From the next release on, every release tag is an annotated tag signed with
+[gitsign](https://github.com/sigstore/gitsign): keyless Sigstore signing by the
+repository's Release workflow, under its GitHub OIDC identity, with the signature
+recorded in Sigstore's public transparency log. There is no long-lived signing key to
+publish or to lose. Tags up to and including v13.0.0 were made before this and are not
+signed.
+
+With gitsign installed (`brew install gitsign`, `go install github.com/sigstore/gitsign@latest`,
+or a binary from its releases page), in a clone with the tags fetched:
+
+```
+gitsign verify-tag vX.Y.Z \
+  --certificate-identity https://github.com/distronode-corporation/district-core-rust/.github/workflows/release.yml@refs/heads/main \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+```
+
+It succeeds only when the tag's signature is valid, is in the transparency log, and was
+made by that workflow file running on main of this repository. `git verify-tag` works
+too, with gitsign as git's signing program
+(`git -c gpg.format=x509 -c gpg.x509.program=gitsign verify-tag vX.Y.Z`), but it checks
+the signature without checking whose it is; use `gitsign verify-tag` for that.
+
+An app's `Cargo.lock` records the commit the tag named when it was added, and the
+release tags are protected against moves and deletion, so a verified tag is also what
+`--locked` builds.
+
 ## Build and test
 
 Requirements: Rust 1.92 or newer (via [rustup](https://rustup.rs); the repository

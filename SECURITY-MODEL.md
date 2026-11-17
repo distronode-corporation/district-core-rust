@@ -27,6 +27,7 @@ that app's SECURITY.md.
 | A hostile or compromised server, or a redirect | Send the token elsewhere, or send data the client does not expect | Redirects are never followed; every response is decoded into a typed `district-model` value or is an error; a live event that cannot be read, or names another workspace, is dropped unread |
 | Someone who sends the member a link | Get a browser signed in to their account, or open an arbitrary page | A web hand-off is bound to the browser the app opened with a fresh `state` and a service nonce; links are opened only when they are web pages, and hand-off links only on the service's own address over HTTPS |
 | Someone with the member's logs, crash reports or screenshots of debug output | Read a token, a credential or customer data | Nothing logs or prints; `log`'s `max_level_warn` compiles lower levels out of the whole build; every type holding a credential redacts it from `Debug`; no error carries a token, a code or a response body; crash reports are opt-in and scrubbed |
+| Someone who can push to the repository, or who tampers with a tag | Point a release tag at code that was not released | Release tags are protected against moves and deletion; from the next release on they are signed with gitsign by the Release workflow under its own OIDC identity, and README.md says how to verify that identity |
 | A thief replaying a refresh token | Use a spent token | The service rotates it on every refresh; the core refreshes one at a time and records a fingerprint before sending, so a refresh interrupted mid-way asks for a new sign-in instead of presenting a token that may be spent |
 
 ## Trust boundaries
@@ -40,7 +41,9 @@ that app's SECURITY.md.
 4. **The process and the disk.** Only the device id, the refresh marker (a fingerprint, not
    a token) and the settings file are written, owner-only on Unix. The refresh token
    crosses into the app's secret store and nowhere else.
-5. **The process and libwebrtc.** With the `livekit` feature, a C++ media library runs in the
+5. **The repository and a release.** A release tag is made and signed by
+   `.github/workflows/release.yml` on main, and an app pins it with the exact version.
+6. **The process and libwebrtc.** With the `livekit` feature, a C++ media library runs in the
    process; the engine creates the runtime that routes its logging away from stderr before
    anything can reach it, and refuses the audio combinations SECURITY.md describes.
 

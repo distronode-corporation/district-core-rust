@@ -35,6 +35,14 @@ backported, and the apps move their pin to it.
 | 13.0.x (the current release, [13.0.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)) | Yes |
 | Anything older | No |
 
+## Verifying a release
+
+Release tags from the next release on are annotated tags signed with gitsign by
+`.github/workflows/release.yml`, keyless, under the identity
+`https://github.com/distronode-corporation/district-core-rust/.github/workflows/release.yml@refs/heads/main` with the issuer `https://token.actions.githubusercontent.com`. README.md,
+"Verify a release", has the command. Tags up to and including v13.0.0 are not signed. A
+release tag that does not verify against that identity is in scope for a report.
+
 ## Security model
 
 What these crates decide, so a report can say which part of it breaks. Each app
