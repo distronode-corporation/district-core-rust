@@ -236,39 +236,57 @@ impl SavedReads {
     /// The service answered `key` with `body`: keep it, and it is no longer a
     /// saved copy on screen.
     fn answered(&self, key: &str, body: &[u8], generation: u64) {
-        let mut state = self.state();
-        state.shown.remove(key);
-        // Under the lock, so a clear cannot land between the check and the save.
-        if state.generation == generation && !body.is_empty() && body.len() <= SAVED_COPY_MAX_BYTES
         {
-            self.cache.save(
-                key,
-                SavedRead {
-                    body: body.to_vec(),
-                    saved_at_ms: self.clock.now_ms(),
-                },
-            );
+            let mut state = self.state();
+            state.shown.remove(key);
+            if state.generation != generation {
+                return;
+            }
+        }
+        if body.is_empty() || body.len() > SAVED_COPY_MAX_BYTES {
+            return;
+        }
+        // ⚠️ OUTSIDE THE LOCK: a cache that writes files (and flushes them) must not
+        // hold up every other request's bookkeeping while it does.
+        self.cache.save(
+            key,
+            SavedRead {
+                body: body.to_vec(),
+                saved_at_ms: self.clock.now_ms(),
+            },
+        );
+        // A clear that landed while it was being written still wins: what was just
+        // written belonged to the session that ended.
+        if self.state().generation != generation {
+            self.cache.clear();
         }
     }
 
     /// The saved answer for `key`, if one is young enough, now marked as shown.
     fn saved(&self, key: &str) -> Option<Vec<u8>> {
-        let mut state = self.state();
+        let generation = self.state().generation;
         let now = self.clock.now_ms();
-        // A copy from the future (the clock was moved back) is not trusted either.
+        // Read outside the lock, as a save is written. A copy from the future (the
+        // clock was moved back) is not trusted either.
         let read = self
             .cache
             .load(key)
             .filter(|read| (0..=SAVED_COPY_MAX_AGE_MS).contains(&(now - read.saved_at_ms)));
-        let Some(read) = read else {
+        let mut state = self.state();
+        match read {
+            // Not a copy a clear has since forgotten.
+            Some(read) if state.generation == generation => {
+                state.shown.insert(key.to_owned(), read.saved_at_ms);
+                Some(read.body)
+            }
             // ⚠️ Nor is it on screen any more: the read is now the offline error, so a
             // copy it showed before (since expired, or evicted) must not keep the
             // banner up and the writes withheld.
-            state.shown.remove(key);
-            return None;
-        };
-        state.shown.insert(key.to_owned(), read.saved_at_ms);
-        Some(read.body)
+            _ => {
+                state.shown.remove(key);
+                None
+            }
+        }
     }
 
     /// When the oldest saved copy on screen was saved, or `None` when every read
@@ -277,10 +295,18 @@ impl SavedReads {
         self.state().shown.values().copied().min()
     }
 
+    #[cfg(test)]
+    fn generation_for_test(&self) -> u64 {
+        self.state().generation
+    }
+
     pub(crate) fn clear(&self) {
-        let mut state = self.state();
-        state.generation += 1;
-        state.shown.clear();
+        {
+            let mut state = self.state();
+            state.generation += 1;
+            state.shown.clear();
+        }
+        // Outside the lock, like every other use of the cache; see `answered`.
         self.cache.clear();
     }
 }
@@ -312,6 +338,58 @@ mod tests {
                 .filter(|spec| is_saved_read(spec.id))
                 .all(|spec| spec.method == crate::HttpMethod::Get),
             "a saved read is a GET"
+        );
+    }
+
+    /// A cache whose save waits, mid-write, for the test to say go.
+    struct HeldCache {
+        inner: MemoryReadCache,
+        writing: std::sync::Barrier,
+        go_on: std::sync::Barrier,
+    }
+
+    /// The test keeps one handle, the reads the other. A wrapper rather than
+    /// `Arc<HeldCache>`, so the test adds no copy of the generic `Arc` impl.
+    struct Held(Arc<HeldCache>);
+
+    impl ReadCache for Held {
+        fn load(&self, key: &str) -> Option<SavedRead> {
+            self.0.inner.load(key)
+        }
+        fn save(&self, key: &str, read: SavedRead) {
+            self.0.writing.wait();
+            self.0.go_on.wait();
+            self.0.inner.save(key, read);
+        }
+        fn clear(&self) {
+            self.0.inner.clear();
+        }
+    }
+
+    #[test]
+    fn a_clear_that_lands_while_a_copy_is_written_still_wins() {
+        let cache = Arc::new(HeldCache {
+            inner: MemoryReadCache::new(),
+            writing: std::sync::Barrier::new(2),
+            go_on: std::sync::Barrier::new(2),
+        });
+        let saved = Arc::new(SavedReads::new(Held(cache.clone()), crate::SystemClock));
+        let generation = saved.generation_for_test();
+        let writer = {
+            let saved = saved.clone();
+            std::thread::spawn(move || saved.answered("k", b"{}", generation))
+        };
+
+        cache.writing.wait();
+        // The lock is free while the copy is written: a sign-out is not held up.
+        saved.clear();
+        cache.go_on.wait();
+        writer.join().unwrap();
+
+        assert_eq!(
+            Held(cache).load("k"),
+            None,
+            "the session that ended keeps nothing"
         );
     }
 

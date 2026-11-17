@@ -541,6 +541,64 @@ async fn a_client_without_saved_reads_keeps_nothing() {
     assert_eq!(unreachable.showing_saved_since(), None);
 }
 
+/// A cache that signs out (clears the client's saved reads) in the middle of
+/// writing a copy, as a sign-out on another task would.
+struct SignsOutWhileWriting {
+    inner: MemoryReadCache,
+    client: Arc<std::sync::OnceLock<Arc<ApiClient<Tokens>>>>,
+}
+
+impl ReadCache for SignsOutWhileWriting {
+    fn load(&self, key: &str) -> Option<SavedRead> {
+        self.inner.load(key)
+    }
+    fn save(&self, key: &str, read: SavedRead) {
+        // The client's lock is free while a copy is written, so this does not
+        // deadlock: a sign-out is never held up by a slow cache.
+        self.client.get().unwrap().clear_saved_reads();
+        self.inner.save(key, read);
+    }
+    fn clear(&self) {
+        self.inner.clear();
+    }
+}
+
+#[tokio::test]
+async fn a_sign_out_that_lands_while_a_copy_is_written_still_wins() {
+    let server = MockServer::start().await;
+    answer(
+        &server,
+        LIST,
+        ResponseTemplate::new(200).set_body_json(list("Alpha")),
+    )
+    .await;
+    let slot = Arc::new(std::sync::OnceLock::new());
+    let config = ApiConfig::new(common::app())
+        .with_base_url(&server.uri())
+        .unwrap();
+    let tokens = Tokens::default();
+    let client = Arc::new(
+        ApiClient::new(config, tokens.clone())
+            .unwrap()
+            .with_saved_reads(
+                SignsOutWhileWriting {
+                    inner: MemoryReadCache::new(),
+                    client: slot.clone(),
+                },
+                HandClock::at(1_000),
+            ),
+    );
+    assert!(slot.set(client.clone()).is_ok());
+
+    assert_eq!(name(&client.workspace_list().await.unwrap()), "Alpha");
+
+    tokens.go_offline(true);
+    assert!(
+        client.workspace_list().await.is_err(),
+        "the copy written under the session that ended is gone"
+    );
+}
+
 #[test]
 fn a_shared_cache_is_one_cache() {
     let cache = Arc::new(MemoryReadCache::new());
