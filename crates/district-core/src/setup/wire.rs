@@ -113,9 +113,14 @@ pub fn is_default_workspace_name(name: &str) -> bool {
 }
 
 /// The web's `toE164`: an E.164 number, or a ten- or eleven-digit North
-/// American one in a `us` or `ca` workspace; `None` for anything else.
+/// American one in a `us` or `ca` workspace; `None` for anything else. Any
+/// whitespace (a no-break space, a tab) and `( ) . -` are dropped first, as
+/// the web's `[\s().-]` does; any other character makes it `None`.
 pub fn e164(raw: &str, region: Option<&str>) -> Option<String> {
-    let compact: String = raw.chars().filter(|c| !" ().-".contains(*c)).collect();
+    let compact: String = raw
+        .chars()
+        .filter(|c| !c.is_whitespace() && !"().-".contains(*c))
+        .collect();
     let digits = |text: &str| text.chars().all(|c| c.is_ascii_digit());
     if let Some(rest) = compact.strip_prefix('+') {
         return ((8..=15).contains(&rest.len()) && digits(rest)).then_some(compact);
@@ -212,5 +217,22 @@ mod tests {
         assert_eq!(e164("21165550123", Some("us")), None);
         assert_eq!(e164("416555012", Some("us")), None);
         assert_eq!(e164("41655501x3", Some("us")), None);
+    }
+
+    /// Any whitespace separates digits, as the web's `\s` does: the no-break
+    /// spaces the public pages put inside numbers, and a tab from a paste.
+    #[test]
+    fn a_number_spaced_with_no_break_spaces_or_a_tab_reads_as_e164() {
+        for raw in [
+            "+1\u{a0}416\u{a0}555\u{a0}0142",
+            "+1\u{202f}416\u{202f}555\u{202f}0142",
+            "+1\t416\t555-0142",
+        ] {
+            assert_eq!(e164(raw, None).as_deref(), Some("+14165550142"), "{raw:?}");
+        }
+        assert_eq!(
+            e164("(416)\u{a0}555\u{202f}0123", Some("ca")).as_deref(),
+            Some("+14165550123")
+        );
     }
 }
