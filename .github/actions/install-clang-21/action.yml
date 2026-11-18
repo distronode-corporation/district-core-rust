@@ -31,12 +31,20 @@ runs:
       run: |
         set -euo pipefail
         curl -fsSL -o "$RUNNER_TEMP/llvm.key" https://apt.llvm.org/llvm-snapshot.gpg.key
-        have="$(gpg --show-keys --with-colons "$RUNNER_TEMP/llvm.key" | awk -F: '/^fpr/ { print $10; exit }')"
+        # Every primary key in the file, one fingerprint per line: the file
+        # must hold the pinned key and nothing else.
+        have="$(gpg --show-keys --with-colons "$RUNNER_TEMP/llvm.key" \
+          | awk -F: '$1 == "pub" { want = 1; next } want && $1 == "fpr" { print $10; want = 0 }')"
         if [ "$have" != "$LLVM_KEY_FINGERPRINT" ]; then
-          echo "::error::apt.llvm.org's key is $have, not the pinned $LLVM_KEY_FINGERPRINT"
+          echo "::error::apt.llvm.org's key file holds $(echo "$have" | tr '\n' ' '), not the pinned $LLVM_KEY_FINGERPRINT alone"
           exit 1
         fi
-        gpg --dearmor < "$RUNNER_TEMP/llvm.key" | sudo tee /usr/share/keyrings/llvm.gpg > /dev/null
+        # The keyring apt trusts is exported from the pinned key alone (with
+        # its subkeys), never the downloaded file as it came.
+        GNUPGHOME="$(mktemp -d "$RUNNER_TEMP/gnupg.XXXXXX")"
+        export GNUPGHOME
+        gpg --batch --quiet --import "$RUNNER_TEMP/llvm.key"
+        gpg --batch --export "$LLVM_KEY_FINGERPRINT" | sudo tee /usr/share/keyrings/llvm.gpg > /dev/null
         echo "deb [signed-by=/usr/share/keyrings/llvm.gpg] https://apt.llvm.org/noble/ llvm-toolchain-noble-21 main" \
           | sudo tee /etc/apt/sources.list.d/llvm-21.list > /dev/null
         sudo apt-get update
