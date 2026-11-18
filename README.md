@@ -20,15 +20,17 @@ the application state and the call engine, with no user interface toolkit in any
 
 <sub>An excerpt of the `rust` job's log in
 [CI run 44094053252](https://github.com/distronode-corporation/district-core-rust/actions/runs/44094053252)
-(commit `1b872bf`, 2026-11-17), rendered as a terminal: one of the workspace's test binaries
-(`district-api`'s `tests/auth.rs`) and the coverage gate's table.</sub>
+(commit `1b872bf`, 2026-11-17), rendered as a terminal: one of the workspace's test binaries, the
+`tests/auth.rs` of `district-api`, and the coverage gate's table.</sub>
 
 **Quick start:** add a crate to your `Cargo.toml` by git tag, with the exact version beside it
 (a first program is in [Quick start](#quick-start) below):
 
 ```toml
-[dependencies]
-district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v13.0.0", version = "=13.0.0" }
+[dependencies.district-core]
+git = "https://github.com/distronode-corporation/district-core-rust"
+tag = "v13.0.0"
+version = "=13.0.0"
 ```
 
 > **Status: 13.0.0 is the current release**
