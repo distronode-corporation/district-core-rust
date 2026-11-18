@@ -6,25 +6,42 @@
 
 # District Core for Rust
 
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/distronode-corporation/district-core-rust/badge)](https://scorecard.dev/viewer/?uri=github.com/distronode-corporation/district-core-rust)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/15876/badge)](https://www.bestpractices.dev/projects/15876)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/distronode-corporation/district-core-rust/badge)](https://scorecard.dev/viewer/?uri=github.com/distronode-corporation/district-core-rust)
 [![Latest release](https://img.shields.io/github/v/release/distronode-corporation/district-core-rust?label=release)](https://github.com/distronode-corporation/district-core-rust/releases/latest)
+[![License: Apache-2.0](https://img.shields.io/github/license/distronode-corporation/district-core-rust)](LICENSE)
+[![CI](https://github.com/distronode-corporation/district-core-rust/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/distronode-corporation/district-core-rust/actions/workflows/ci.yml)
 
-The shared Rust core of the District AI desktop apps: the data types, the HTTP
-client, sign-in, live updates, the application state and the call engine of
-District AI, the AI voice receptionist from Distronode, with no user interface
-toolkit in any of it.
+The shared Rust core of the desktop apps for District AI, the AI voice receptionist from
+[Distronode](https://distronode.com): the data types, the HTTP client, sign-in, live updates,
+the application state and the call engine, with no user interface toolkit in any of it.
+
+![cargo test and the coverage gate in CI: the sign-in tests of district-api passing, and every crate at 100% line coverage](.github/assets/cargo-test-ci.png)
+
+<sub>An excerpt of the `rust` job's log in
+[CI run 44094053252](https://github.com/distronode-corporation/district-core-rust/actions/runs/44094053252)
+(commit `1b872bf`, 2026-11-17), rendered as a terminal: one of the workspace's test binaries
+(`district-api`'s `tests/auth.rs`) and the coverage gate's table.</sub>
+
+**Quick start:** add a crate to your `Cargo.toml` by git tag, with the exact version beside it
+(a first program is in [Quick start](#quick-start) below):
+
+```toml
+[dependencies]
+district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v13.0.0", version = "=13.0.0" }
+```
 
 > **Status: 13.0.0 is the current release**
 > ([13.0.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)).
 > District AI for Linux 3.4.0 and District AI for Windows 3.4.0 are built on 12.0.0.
-> The core was extracted from District AI for Linux 2.1.0 with its history. See the
-> [CHANGELOG](CHANGELOG.md).
+> The core was extracted from District AI for Linux 2.1.0 with its history.
 
-**Links:** [project page](https://www.distronode.com/open-source/district-core-rust),
-[GitLab mirror](https://gitlab.com/distronode-corporation/district-core-rust)
-(read-only mirror; issues and pull requests live on GitHub),
-[CHANGELOG](CHANGELOG.md).
+**Links:** [Distronode](https://distronode.com) ·
+[project page](https://www.distronode.com/open-source/district-core-rust) ·
+[Distronode on GitHub](https://github.com/distronode-corporation) ·
+[CHANGELOG](CHANGELOG.md) · [ROADMAP](ROADMAP.md) ·
+[GitLab mirror](https://gitlab.com/distronode-corporation/district-core-rust) (read only;
+issues and pull requests live on GitHub)
 
 ## Who uses it
 
