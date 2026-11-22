@@ -17,6 +17,13 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+### Fixed
+
+- The Release workflow signs the tag in gitsign's offline Rekor mode, so the signature
+  carries its transparency log entry and `gitsign verify-tag` checks it without a Rekor
+  search. The first run, for v14.0.0, signed the tag and then could not find the entry
+  by search, so it pushed nothing.
+
 ## [14.0.0] - 2026-11-22
 
 The setup wizard in the app: the service's routes for it, and the six steps' state. A
