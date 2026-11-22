@@ -1,5 +1,5 @@
 {
-  "signed_off_by": "PENDING: Sean Dean's review of the French for 14.0.0 (242 new strings and 10 changed since 13.0.0: 213 for the setup wizard, 27 API error codes, 2 for the offline banner, 3 on the overview's setup card, 6 wire labels, and member_phone_business_number). Replace this line with the sign-off before the Release workflow runs.",
+  "signed_off_by": "Sean Dean (sign-off 2026-11-22 for 14.0.0: 252 strings, 242 new and 10 changed; 213 for the setup wizard, 27 API error codes from the website, 2 for the offline banner, 3 on the overview's setup card, 6 wire labels and member_phone_business_number)",
   "release": "v14.0.0",
   "commit": "72e6a5ab36904357572f6f088c96a71687b36e72",
   "catalogs": [
