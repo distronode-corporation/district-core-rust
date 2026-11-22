@@ -284,6 +284,15 @@ pub fn api_error_carrier_rejected(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.checkout_marketplace_billed`
+#[must_use]
+pub fn api_error_checkout_marketplace_billed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your workspaces are billed through Microsoft Marketplace, so a plan can't be bought for them here. Change your plan in the Microsoft 365 admin center.",
+        Locale::FrCa => "Vos espaces de travail sont facturés par Microsoft Marketplace; un forfait ne peut donc pas être acheté pour eux ici. Modifiez votre forfait dans le Centre d'administration Microsoft 365.",
+    }
+}
+
 /// `api_error.checkout_setup_in_progress`
 #[must_use]
 pub fn api_error_checkout_setup_in_progress(l: Locale) -> &'static str {
@@ -434,6 +443,24 @@ pub fn api_error_draft_nothing_to_undo(l: Locale) -> &'static str {
     match l {
         Locale::En => "There is no earlier version of the draft to go back to.",
         Locale::FrCa => "Il n'y a pas de version antérieure du brouillon à rétablir.",
+    }
+}
+
+/// `api_error.email_changed`
+#[must_use]
+pub fn api_error_email_changed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This contact's email address changed since you opened it. Check the new address before confirming it.",
+        Locale::FrCa => "L'adresse courriel de ce contact a changé depuis l'ouverture de sa fiche. Vérifiez la nouvelle adresse avant de la confirmer.",
+    }
+}
+
+/// `api_error.email_unconfirmed`
+#[must_use]
+pub fn api_error_email_unconfirmed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This contact's email address is unconfirmed. Confirm it in the contact panel before emailing it.",
+        Locale::FrCa => "L'adresse courriel de ce contact n'est pas confirmée. Confirmez-la dans la fiche du contact avant de lui écrire.",
     }
 }
 
@@ -833,6 +860,69 @@ pub fn api_error_managed_billing_required(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.marketplace_billed_workspace`
+#[must_use]
+pub fn api_error_marketplace_billed_workspace(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace is billed through Microsoft Marketplace, which sets its plan and subscription status. Change them in Microsoft, or move the workspace off Microsoft billing once its Microsoft subscription is cancelled.",
+        Locale::FrCa => "Cet espace de travail est facturé par Microsoft Marketplace, qui fixe son forfait et l'état de son abonnement. Modifiez-les chez Microsoft, ou retirez l'espace de travail de la facturation Microsoft une fois son abonnement Microsoft annulé.",
+    }
+}
+
+/// `api_error.marketplace_cancel_refused`
+#[must_use]
+pub fn api_error_marketplace_cancel_refused(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Microsoft would not cancel a Microsoft Marketplace subscription on your workspace, so nothing was deleted. Cancel it in the Microsoft 365 admin center, then try again.",
+        Locale::FrCa => "Microsoft a refusé d'annuler un abonnement Microsoft Marketplace de votre espace de travail; rien n'a donc été supprimé. Annulez-le dans le Centre d'administration Microsoft 365, puis réessayez.",
+    }
+}
+
+/// `api_error.marketplace_intro_minutes_reached`
+#[must_use]
+pub fn api_error_marketplace_intro_minutes_reached(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace has used its plan's included voice minutes. For the first 72 hours after your Microsoft Marketplace subscription is activated, outgoing calls stop at the included minutes. They resume when the 72 hours end.",
+        Locale::FrCa => "Cet espace de travail a utilisé les minutes vocales incluses dans son forfait. Pendant les 72 heures suivant l'activation de votre abonnement Microsoft Marketplace, les appels sortants s'arrêtent aux minutes incluses. Ils reprennent à la fin de ces 72 heures.",
+    }
+}
+
+/// `api_error.marketplace_intro_numbers_locked`
+#[must_use]
+pub fn api_error_marketplace_intro_numbers_locked(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Phone numbers can be added 72 hours after your Microsoft Marketplace subscription is activated.",
+        Locale::FrCa => "Les numéros de téléphone peuvent être ajoutés 72 heures après l'activation de votre abonnement Microsoft Marketplace.",
+    }
+}
+
+/// `api_error.marketplace_subscription_pending`
+#[must_use]
+pub fn api_error_marketplace_subscription_pending(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace's Microsoft Marketplace purchase is still being set up. Calls and messaging start once Microsoft confirms it.",
+        Locale::FrCa => "L'achat Microsoft Marketplace de cet espace de travail est encore en cours de configuration. Les appels et la messagerie commencent dès que Microsoft le confirme.",
+    }
+}
+
+/// `api_error.marketplace_subscription_suspended`
+#[must_use]
+pub fn api_error_marketplace_subscription_suspended(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Microsoft has suspended this workspace's subscription because a payment was not received. Update the payment in the Microsoft 365 admin center to resume calls and messaging.",
+        Locale::FrCa => "Microsoft a suspendu l'abonnement de cet espace de travail, car un paiement n'a pas été reçu. Mettez le paiement à jour dans le Centre d'administration Microsoft 365 pour reprendre les appels et la messagerie.",
+    }
+}
+
+/// `api_error.marketplace_subscription_unsubscribed`
+#[must_use]
+pub fn api_error_marketplace_subscription_unsubscribed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace's Microsoft Marketplace subscription was cancelled or never completed. To use District AI here again, buy it again on Microsoft Marketplace.",
+        Locale::FrCa => "L'abonnement Microsoft Marketplace de cet espace de travail a été annulé ou n'a jamais été finalisé. Pour utiliser de nouveau District AI ici, achetez-le de nouveau sur Microsoft Marketplace.",
+    }
+}
+
 /// `api_error.media_not_found`
 #[must_use]
 pub fn api_error_media_not_found(l: Locale) -> &'static str {
@@ -864,8 +954,8 @@ pub fn api_error_member_not_found(l: Locale) -> &'static str {
 #[must_use]
 pub fn api_error_member_phone_business_number(l: Locale) -> &'static str {
     match l {
-        Locale::En => "This number belongs to a business on District, so it cannot receive alerts. Enter your own mobile number.",
-        Locale::FrCa => "Ce numéro appartient à une entreprise sur District, alors il ne peut pas recevoir d'alertes. Entrez votre propre numéro de cellulaire.",
+        Locale::En => "This number belongs to a business on District, so it cannot be your verified mobile. Enter your own mobile number.",
+        Locale::FrCa => "Ce numéro appartient à une entreprise sur District, alors il ne peut pas être votre cellulaire vérifié. Entrez votre propre numéro de cellulaire.",
     }
 }
 
@@ -1004,12 +1094,129 @@ pub fn api_error_mfa_code_invalid(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.microsoft_attach_stripe_billed`
+#[must_use]
+pub fn api_error_microsoft_attach_stripe_billed(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This workspace is billed through Stripe, so a Microsoft Marketplace plan can't be added to it. Choose a new workspace instead.",
+        Locale::FrCa => "Cet espace de travail est facturé par Stripe; un forfait Microsoft Marketplace ne peut donc pas y être ajouté. Choisissez plutôt un nouvel espace de travail.",
+    }
+}
+
+/// `api_error.microsoft_attach_unavailable`
+#[must_use]
+pub fn api_error_microsoft_attach_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "That workspace can't take this purchase. Choose a workspace you own that has no other Microsoft plan, or a new workspace.",
+        Locale::FrCa => "Cet espace de travail ne peut pas recevoir cet achat. Choisissez un espace de travail dont vous êtes propriétaire et qui n'a pas d'autre forfait Microsoft, ou un nouvel espace de travail.",
+    }
+}
+
+/// `api_error.microsoft_landing_busy`
+#[must_use]
+pub fn api_error_microsoft_landing_busy(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This purchase is being updated right now, perhaps in another tab. Try again in a moment.",
+        Locale::FrCa => "Cet achat est en cours de mise à jour, peut-être dans un autre onglet. Réessayez dans un instant.",
+    }
+}
+
+/// `api_error.microsoft_landing_consent_blocked`
+#[must_use]
+pub fn api_error_microsoft_landing_consent_blocked(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Your Microsoft 365 administrator must allow Distronode before you can sign in with this work account. We ask only to confirm who you are: your name and account identifier.",
+        Locale::FrCa => "Votre administrateur Microsoft 365 doit autoriser Distronode avant que vous puissiez vous connecter avec ce compte professionnel. Nous demandons seulement de confirmer qui vous êtes, soit votre nom et votre identifiant de compte.",
+    }
+}
+
+/// `api_error.microsoft_landing_held_elsewhere`
+#[must_use]
+pub fn api_error_microsoft_landing_held_elsewhere(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This purchase is set up in another region, so it is managed on that region's site.",
+        Locale::FrCa => "Cet achat est configuré dans une autre région; il se gère donc sur le site de cette région.",
+    }
+}
+
+/// `api_error.microsoft_landing_identity_mismatch`
+#[must_use]
+pub fn api_error_microsoft_landing_identity_mismatch(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Sign in with the Microsoft account that bought District AI, or the one it was bought for.",
+        Locale::FrCa => "Connectez-vous avec le compte Microsoft qui a acheté District AI, ou celui pour lequel il a été acheté.",
+    }
+}
+
+/// `api_error.microsoft_landing_refused`
+#[must_use]
+pub fn api_error_microsoft_landing_refused(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This purchase was cancelled in Microsoft, or it is not a District AI plan. To buy again, start a new purchase on Microsoft Marketplace.",
+        Locale::FrCa => "Cet achat a été annulé chez Microsoft, ou ce n'est pas un forfait District AI. Pour acheter de nouveau, faites un nouvel achat sur Microsoft Marketplace.",
+    }
+}
+
+/// `api_error.microsoft_landing_region_check_unavailable`
+#[must_use]
+pub fn api_error_microsoft_landing_region_check_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We could not check your account's region just now, so nothing was set up. Try again in a moment.",
+        Locale::FrCa => "Nous n'avons pas pu vérifier la région de votre compte pour le moment, alors rien n'a été configuré. Réessayez dans un instant.",
+    }
+}
+
+/// `api_error.microsoft_landing_token_invalid`
+#[must_use]
+pub fn api_error_microsoft_landing_token_invalid(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We could not identify this purchase. Open it again from the Microsoft 365 admin center, and choose Configure account or Manage account.",
+        Locale::FrCa => "Nous n'avons pas pu reconnaître cet achat. Rouvrez-le depuis le Centre d'administration Microsoft 365, puis choisissez Configurer le compte ou Gérer le compte.",
+    }
+}
+
+/// `api_error.microsoft_landing_too_many_tries`
+#[must_use]
+pub fn api_error_microsoft_landing_too_many_tries(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Too many tries for this purchase. Open it again from Microsoft to start over.",
+        Locale::FrCa => "Trop de tentatives pour cet achat. Rouvrez-le depuis Microsoft pour recommencer.",
+    }
+}
+
+/// `api_error.microsoft_landing_unavailable`
+#[must_use]
+pub fn api_error_microsoft_landing_unavailable(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "We could not reach Microsoft just now, so nothing was set up. Try again in a moment.",
+        Locale::FrCa => "Nous n'avons pas pu joindre Microsoft pour le moment, alors rien n'a été configuré. Réessayez dans un instant.",
+    }
+}
+
+/// `api_error.microsoft_landing_us_regional_account`
+#[must_use]
+pub fn api_error_microsoft_landing_us_regional_account(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "A Distronode account in another region can't hold a US purchase. Buy in that region to keep one account, or use a different email address to create a separate US account.",
+        Locale::FrCa => "Un compte Distronode d'une autre région ne peut pas détenir un achat fait aux États-Unis. Achetez dans cette région pour garder un seul compte, ou utilisez une autre adresse courriel pour créer un compte distinct aux États-Unis.",
+    }
+}
+
 /// `api_error.model_unavailable_in_region`
 #[must_use]
 pub fn api_error_model_unavailable_in_region(l: Locale) -> &'static str {
     match l {
         Locale::En => "This voice engine is not available for workspaces in this region. Choose another engine.",
         Locale::FrCa => "Ce moteur vocal n'est pas offert aux espaces de travail de cette région. Choisissez un autre moteur.",
+    }
+}
+
+/// `api_error.no_email`
+#[must_use]
+pub fn api_error_no_email(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This contact has no email address to confirm.",
+        Locale::FrCa => "Ce contact n'a aucune adresse courriel à confirmer.",
     }
 }
 
@@ -1055,6 +1262,24 @@ pub fn api_error_nothing_to_update(l: Locale) -> &'static str {
     match l {
         Locale::En => "There was nothing to change in that request.",
         Locale::FrCa => "Cette requête ne contenait rien à modifier.",
+    }
+}
+
+/// `api_error.number_bridge_ca_workspaces_only`
+#[must_use]
+pub fn api_error_number_bridge_ca_workspaces_only(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Canadian numbers on our managed phone service are answered in Montreal, so for now they are available to Canadian workspaces only.",
+        Locale::FrCa => "Les numéros canadiens de notre service téléphonique géré sont traités à Montréal; pour l'instant, ils sont donc disponibles seulement pour les espaces de travail canadiens.",
+    }
+}
+
+/// `api_error.number_bridge_eu_workspaces_only`
+#[must_use]
+pub fn api_error_number_bridge_eu_workspaces_only(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "Numbers from this country are answered in Frankfurt, so for now they are available to EU workspaces only.",
+        Locale::FrCa => "Les numéros de ce pays sont traités à Francfort; pour l'instant, ils sont donc disponibles seulement pour les espaces de travail de l'Union européenne.",
     }
 }
 
@@ -1265,6 +1490,15 @@ pub fn api_error_region_unavailable(l: Locale) -> &'static str {
     }
 }
 
+/// `api_error.registration_on_own_account`
+#[must_use]
+pub fn api_error_registration_on_own_account(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This number must be bought on Distronode's carrier account, but this workspace's regulatory registration is filed on its own Twilio account. Contact support to file the registration on Distronode's account, then buy this number.",
+        Locale::FrCa => "Ce numéro doit être acheté sur le compte de transporteur de Distronode, mais l'inscription réglementaire de cet espace de travail est déposée sur son propre compte Twilio. Communiquez avec notre équipe de soutien pour déposer l'inscription sur le compte de Distronode, puis achetez ce numéro.",
+    }
+}
+
 /// `api_error.reply_failed`
 #[must_use]
 pub fn api_error_reply_failed(l: Locale) -> &'static str {
@@ -1469,6 +1703,15 @@ pub fn api_error_test_call_needs_number(l: Locale) -> &'static str {
     match l {
         Locale::En => "Choose a phone number for this workspace first, so the test call has a number to come from.",
         Locale::FrCa => "Choisissez d'abord un numéro de téléphone pour cet espace de travail, afin que l'appel d'essai ait un numéro d'origine.",
+    }
+}
+
+/// `api_error.tfv_filed_by_distronode`
+#[must_use]
+pub fn api_error_tfv_filed_by_distronode(l: Locale) -> &'static str {
+    match l {
+        Locale::En => "This toll-free number is held on Distronode's account, so its verification must be filed by Distronode. Contact support to file it.",
+        Locale::FrCa => "Ce numéro sans frais est détenu sur le compte de Distronode; sa vérification doit donc être déposée par Distronode. Communiquez avec notre équipe de soutien pour la déposer.",
     }
 }
 

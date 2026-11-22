@@ -339,6 +339,18 @@
       "en": "Someone changed these settings since they were drafted. Rebase the draft on the live settings, review it, then publish.",
       "fr": "Quelqu'un a modifié ces réglages depuis la rédaction du brouillon. Mettez le brouillon à jour avec les réglages en vigueur, relisez-le, puis publiez-le."
     },
+    "email_changed": {
+      "en": "This contact's email address changed since you opened it. Check the new address before confirming it.",
+      "fr": "L'adresse courriel de ce contact a changé depuis l'ouverture de sa fiche. Vérifiez la nouvelle adresse avant de la confirmer."
+    },
+    "no_email": {
+      "en": "This contact has no email address to confirm.",
+      "fr": "Ce contact n'a aucune adresse courriel à confirmer."
+    },
+    "email_unconfirmed": {
+      "en": "This contact's email address is unconfirmed. Confirm it in the contact panel before emailing it.",
+      "fr": "L'adresse courriel de ce contact n'est pas confirmée. Confirmez-la dans la fiche du contact avant de lui écrire."
+    },
     "audition_busy": {
       "en": "Two auditions are already running for this workspace. End one and try again.",
       "fr": "Deux auditions sont déjà en cours pour cet espace de travail. Terminez-en une et réessayez."
@@ -406,6 +418,86 @@
     "default_card_in_use": {
       "en": "Set another card as default before removing this one.",
       "fr": "Définissez une autre carte comme carte par défaut avant de retirer celle-ci."
+    },
+    "checkout_marketplace_billed": {
+      "en": "Your workspaces are billed through Microsoft Marketplace, so a plan can't be bought for them here. Change your plan in the Microsoft 365 admin center.",
+      "fr": "Vos espaces de travail sont facturés par Microsoft Marketplace; un forfait ne peut donc pas être acheté pour eux ici. Modifiez votre forfait dans le Centre d'administration Microsoft 365."
+    },
+    "marketplace_billed_workspace": {
+      "en": "This workspace is billed through Microsoft Marketplace, which sets its plan and subscription status. Change them in Microsoft, or move the workspace off Microsoft billing once its Microsoft subscription is cancelled.",
+      "fr": "Cet espace de travail est facturé par Microsoft Marketplace, qui fixe son forfait et l'état de son abonnement. Modifiez-les chez Microsoft, ou retirez l'espace de travail de la facturation Microsoft une fois son abonnement Microsoft annulé."
+    },
+    "marketplace_cancel_refused": {
+      "en": "Microsoft would not cancel a Microsoft Marketplace subscription on your workspace, so nothing was deleted. Cancel it in the Microsoft 365 admin center, then try again.",
+      "fr": "Microsoft a refusé d'annuler un abonnement Microsoft Marketplace de votre espace de travail; rien n'a donc été supprimé. Annulez-le dans le Centre d'administration Microsoft 365, puis réessayez."
+    },
+    "marketplace_intro_numbers_locked": {
+      "en": "Phone numbers can be added 72 hours after your Microsoft Marketplace subscription is activated.",
+      "fr": "Les numéros de téléphone peuvent être ajoutés 72 heures après l'activation de votre abonnement Microsoft Marketplace."
+    },
+    "marketplace_intro_minutes_reached": {
+      "en": "This workspace has used its plan's included voice minutes. For the first 72 hours after your Microsoft Marketplace subscription is activated, outgoing calls stop at the included minutes. They resume when the 72 hours end.",
+      "fr": "Cet espace de travail a utilisé les minutes vocales incluses dans son forfait. Pendant les 72 heures suivant l'activation de votre abonnement Microsoft Marketplace, les appels sortants s'arrêtent aux minutes incluses. Ils reprennent à la fin de ces 72 heures."
+    },
+    "microsoft_attach_stripe_billed": {
+      "en": "This workspace is billed through Stripe, so a Microsoft Marketplace plan can't be added to it. Choose a new workspace instead.",
+      "fr": "Cet espace de travail est facturé par Stripe; un forfait Microsoft Marketplace ne peut donc pas y être ajouté. Choisissez plutôt un nouvel espace de travail."
+    },
+    "microsoft_attach_unavailable": {
+      "en": "That workspace can't take this purchase. Choose a workspace you own that has no other Microsoft plan, or a new workspace.",
+      "fr": "Cet espace de travail ne peut pas recevoir cet achat. Choisissez un espace de travail dont vous êtes propriétaire et qui n'a pas d'autre forfait Microsoft, ou un nouvel espace de travail."
+    },
+    "microsoft_landing_token_invalid": {
+      "en": "We could not identify this purchase. Open it again from the Microsoft 365 admin center, and choose Configure account or Manage account.",
+      "fr": "Nous n'avons pas pu reconnaître cet achat. Rouvrez-le depuis le Centre d'administration Microsoft 365, puis choisissez Configurer le compte ou Gérer le compte."
+    },
+    "microsoft_landing_refused": {
+      "en": "This purchase was cancelled in Microsoft, or it is not a District AI plan. To buy again, start a new purchase on Microsoft Marketplace.",
+      "fr": "Cet achat a été annulé chez Microsoft, ou ce n'est pas un forfait District AI. Pour acheter de nouveau, faites un nouvel achat sur Microsoft Marketplace."
+    },
+    "microsoft_landing_held_elsewhere": {
+      "en": "This purchase is set up in another region, so it is managed on that region's site.",
+      "fr": "Cet achat est configuré dans une autre région; il se gère donc sur le site de cette région."
+    },
+    "microsoft_landing_identity_mismatch": {
+      "en": "Sign in with the Microsoft account that bought District AI, or the one it was bought for.",
+      "fr": "Connectez-vous avec le compte Microsoft qui a acheté District AI, ou celui pour lequel il a été acheté."
+    },
+    "microsoft_landing_too_many_tries": {
+      "en": "Too many tries for this purchase. Open it again from Microsoft to start over.",
+      "fr": "Trop de tentatives pour cet achat. Rouvrez-le depuis Microsoft pour recommencer."
+    },
+    "microsoft_landing_consent_blocked": {
+      "en": "Your Microsoft 365 administrator must allow Distronode before you can sign in with this work account. We ask only to confirm who you are: your name and account identifier.",
+      "fr": "Votre administrateur Microsoft 365 doit autoriser Distronode avant que vous puissiez vous connecter avec ce compte professionnel. Nous demandons seulement de confirmer qui vous êtes, soit votre nom et votre identifiant de compte."
+    },
+    "microsoft_landing_us_regional_account": {
+      "en": "A Distronode account in another region can't hold a US purchase. Buy in that region to keep one account, or use a different email address to create a separate US account.",
+      "fr": "Un compte Distronode d'une autre région ne peut pas détenir un achat fait aux États-Unis. Achetez dans cette région pour garder un seul compte, ou utilisez une autre adresse courriel pour créer un compte distinct aux États-Unis."
+    },
+    "microsoft_landing_busy": {
+      "en": "This purchase is being updated right now, perhaps in another tab. Try again in a moment.",
+      "fr": "Cet achat est en cours de mise à jour, peut-être dans un autre onglet. Réessayez dans un instant."
+    },
+    "microsoft_landing_region_check_unavailable": {
+      "en": "We could not check your account's region just now, so nothing was set up. Try again in a moment.",
+      "fr": "Nous n'avons pas pu vérifier la région de votre compte pour le moment, alors rien n'a été configuré. Réessayez dans un instant."
+    },
+    "microsoft_landing_unavailable": {
+      "en": "We could not reach Microsoft just now, so nothing was set up. Try again in a moment.",
+      "fr": "Nous n'avons pas pu joindre Microsoft pour le moment, alors rien n'a été configuré. Réessayez dans un instant."
+    },
+    "marketplace_subscription_pending": {
+      "en": "This workspace's Microsoft Marketplace purchase is still being set up. Calls and messaging start once Microsoft confirms it.",
+      "fr": "L'achat Microsoft Marketplace de cet espace de travail est encore en cours de configuration. Les appels et la messagerie commencent dès que Microsoft le confirme."
+    },
+    "marketplace_subscription_suspended": {
+      "en": "Microsoft has suspended this workspace's subscription because a payment was not received. Update the payment in the Microsoft 365 admin center to resume calls and messaging.",
+      "fr": "Microsoft a suspendu l'abonnement de cet espace de travail, car un paiement n'a pas été reçu. Mettez le paiement à jour dans le Centre d'administration Microsoft 365 pour reprendre les appels et la messagerie."
+    },
+    "marketplace_subscription_unsubscribed": {
+      "en": "This workspace's Microsoft Marketplace subscription was cancelled or never completed. To use District AI here again, buy it again on Microsoft Marketplace.",
+      "fr": "L'abonnement Microsoft Marketplace de cet espace de travail a été annulé ou n'a jamais été finalisé. Pour utiliser de nouveau District AI ici, achetez-le de nouveau sur Microsoft Marketplace."
     },
     "workspace_dormant": {
       "en": "This workspace has been quiet long enough that outbound calling and messaging are paused pending an account review. Request reactivation from your dashboard.",
@@ -678,6 +770,22 @@
       "en": "This number was transferred here from your previous provider. Releasing it gives it up for good. To keep it, transfer it to another provider first.",
       "fr": "Ce numéro a été transféré ici depuis votre ancien fournisseur. Le libérer vous le fait perdre définitivement. Pour le conserver, transférez-le d'abord vers un autre fournisseur."
     },
+    "number_bridge_eu_workspaces_only": {
+      "en": "Numbers from this country are answered in Frankfurt, so for now they are available to EU workspaces only.",
+      "fr": "Les numéros de ce pays sont traités à Francfort; pour l'instant, ils sont donc disponibles seulement pour les espaces de travail de l'Union européenne."
+    },
+    "number_bridge_ca_workspaces_only": {
+      "en": "Canadian numbers on our managed phone service are answered in Montreal, so for now they are available to Canadian workspaces only.",
+      "fr": "Les numéros canadiens de notre service téléphonique géré sont traités à Montréal; pour l'instant, ils sont donc disponibles seulement pour les espaces de travail canadiens."
+    },
+    "registration_on_own_account": {
+      "en": "This number must be bought on Distronode's carrier account, but this workspace's regulatory registration is filed on its own Twilio account. Contact support to file the registration on Distronode's account, then buy this number.",
+      "fr": "Ce numéro doit être acheté sur le compte de transporteur de Distronode, mais l'inscription réglementaire de cet espace de travail est déposée sur son propre compte Twilio. Communiquez avec notre équipe de soutien pour déposer l'inscription sur le compte de Distronode, puis achetez ce numéro."
+    },
+    "tfv_filed_by_distronode": {
+      "en": "This toll-free number is held on Distronode's account, so its verification must be filed by Distronode. Contact support to file it.",
+      "fr": "Ce numéro sans frais est détenu sur le compte de Distronode; sa vérification doit donc être déposée par Distronode. Communiquez avec notre équipe de soutien pour la déposer."
+    },
     "auto_dial_country_not_permitted": {
       "en": "Automated calls are not permitted to this contact's country.",
       "fr": "Les appels automatisés ne sont pas permis vers le pays de ce contact."
@@ -723,8 +831,8 @@
       "fr": "Ce numéro a choisi de ne plus recevoir de textos de cette entreprise, alors aucun code ne peut lui être envoyé."
     },
     "member_phone_business_number": {
-      "en": "This number belongs to a business on District, so it cannot receive alerts. Enter your own mobile number.",
-      "fr": "Ce numéro appartient à une entreprise sur District, alors il ne peut pas recevoir d'alertes. Entrez votre propre numéro de cellulaire."
+      "en": "This number belongs to a business on District, so it cannot be your verified mobile. Enter your own mobile number.",
+      "fr": "Ce numéro appartient à une entreprise sur District, alors il ne peut pas être votre cellulaire vérifié. Entrez votre propre numéro de cellulaire."
     },
     "caller_id_unavailable": {
       "en": "Using your own mobile as caller ID is not available yet.",
