@@ -1,15 +1,15 @@
 {
-  "signed_off_by": "Sean Dean (sign-off 2026-11-16 for 13.0.0: 77 strings for two-step verification and deleting the account, 76 new and 1 changed; 73 from the iOS app's reviewed catalog, 4 written or adapted for a desktop)",
-  "release": "v13.0.0",
-  "commit": "cf10ac18ea250c95e2d84e431d4ee3909820b753",
+  "signed_off_by": "PENDING: Sean Dean's review of the French for 14.0.0 (242 new strings and 10 changed since 13.0.0: 213 for the setup wizard, 27 API error codes, 2 for the offline banner, 3 on the overview's setup card, 6 wire labels, and member_phone_business_number). Replace this line with the sign-off before the Release workflow runs.",
+  "release": "v14.0.0",
+  "commit": "72e6a5ab36904357572f6f088c96a71687b36e72",
   "catalogs": [
     {
       "path": "crates/district-l10n/catalog/api_errors.toml",
-      "sha256": "25b0b09321cfddc4d5716add21fc88d38611d1a7850e60862fa99c710b5cc978"
+      "sha256": "6d4bb1fe3a6b3f84c017aa38c239fd85e7a9e21bcaae2dc36c62949c7503d5f3"
     },
     {
       "path": "crates/district-l10n/catalog/core.toml",
-      "sha256": "019cdb956f189d6659866cfe40506da1d99f0554bc53b345ef4207d09e4e9f81"
+      "sha256": "44f628e9e3093aad4927b83a6a0794b78810a327190ce12d2dcaa0ee92705acf"
     },
     {
       "path": "crates/district-l10n/catalog/numbers.toml",
@@ -20,12 +20,16 @@
       "sha256": "a541eaf69f3d8dd26f7f4d73e69f1aa95cf59e31b1b1aa1dd2bde453ee919a5a"
     },
     {
+      "path": "crates/district-l10n/catalog/setup.toml",
+      "sha256": "058b74ee4d751a299d664f381e2fc5ea3c9d2c30cf7bac664117e9842f5792aa"
+    },
+    {
       "path": "crates/district-l10n/catalog/support.toml",
       "sha256": "bd239591388d956af282a397b9a9248d3a8e5694aaf70ca323a9cc93e9ae9c04"
     },
     {
       "path": "crates/district-l10n/catalog/wire.toml",
-      "sha256": "494e970992f5541e052c21b3e7a7dc58c07d9ba34e2833f6b8fe63d7b29b2de5"
+      "sha256": "48abca7a5b52b867db069351efbfcd4fd359523229690022b0790b343f5fda4f"
     }
   ]
 }

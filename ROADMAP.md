@@ -9,13 +9,6 @@ discuss an item or to propose a new one.
 
 ## Near term
 
-- **The next major release, the first with a signed tag.** The setup wizard, "Works offline,
-  read-only", signed release tags and the repeatable-build check are merged and listed under
-  `[Unreleased]` in [CHANGELOG.md](CHANGELOG.md). The setup wizard adds variants to `Event`,
-  `Effect`, `Endpoint` and `Route`, so the release is a new major version. Tags up to and
-  including v13.0.0 are not signed (README, "Verify a release"); this release's tag is the first
-  that can be checked with `gitsign verify-tag`
-  ([#104](https://github.com/distronode-corporation/district-core-rust/issues/104)).
 - **Types for the responses that have none yet.** The contract tests list seven of the
   service's recorded responses that the crates will use but have no type for yet:
   `district-dial-dnc`, `district-dial-dormant`, `district-dial-subscription`,
@@ -23,9 +16,9 @@ discuss an item or to propose a new one.
   `district-workspace-list-degraded` (`NOT_YET_MODELLED` in
   [`crates/district-model/tests/contracts/manifest.rs`](crates/district-model/tests/contracts/manifest.rs)).
   The list may only shrink: each entry leaves it with its type.
-- **The apps on the current release.** District AI for Linux 3.4.0 and District AI for Windows
-  3.4.0 are built on 12.0.0 (README, the status note). Each app moves to a newer release by
-  bumping its tag in a pull request of its own, in that app's repository.
+- **The apps on the current release.** District AI for Linux 3.4.0 is built on 12.0.0 and
+  District AI for Windows 3.5.0 on 13.0.0 (README, the status note). Each app moves to a newer
+  release by bumping its tag in a pull request of its own, in that app's repository.
 
 ## Open questions
 
