@@ -1,9 +1,9 @@
 # Roadmap
 
 The near-term plan for District Core for Rust. This repository has no open issues, so the list
-is taken from the repository's own unfinished items, each named with where it comes from. It has
-no dates: an item is done when the change that does it is merged and released, and it then
-leaves this list for [CHANGELOG.md](CHANGELOG.md). Anything here can change; open an issue to
+is taken from the repository's own unfinished items, each named with where it comes from. This roadmap covers the next twelve months, to November 2027. Items have no dates of their own:
+an item is done when the change that does it is merged and released, and it then leaves this
+list for [CHANGELOG.md](CHANGELOG.md). Anything here can change; open an issue to
 discuss an item or to propose a new one.
 
 ## Near term
@@ -32,6 +32,23 @@ discuss an item or to propose a new one.
   like, is an open question we are asking about before building anything (README, "Without an
   account with us";
   [the discussion](https://github.com/distronode-corporation/.github/discussions/1)).
+
+## Not planned
+
+What the crates will not do, as the README and [ARCHITECTURE.md](ARCHITECTURE.md) set it out.
+
+- **Publishing to crates.io.** Apps depend on the crates by git tag, with the exact version
+  beside the tag.
+- **A user interface toolkit, or a crate that builds on only one operating system.** The apps
+  (GTK 4 on Linux, WinUI 3 on Windows) render the model; every crate builds on both.
+- **A cache of customer data on disk.** The crates keep only the device id, the refresh marker
+  and the settings file on disk, and everything else on the service.
+- **A cookie store or following redirects.** `district-api` sends a bearer token and follows no
+  redirect.
+- **Crash reports by default.** `district-crash` sends a report only once the app passes a DSN
+  and the user's consent.
+- **The District AI service.** The service the crates talk to is not open source and is not
+  part of this repository.
 
 ## How the project is run
 
