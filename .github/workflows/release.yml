@@ -86,7 +86,18 @@ jobs:
       # Signs the commit this run checked out (main's head when it was dispatched),
       # then verifies the new tag against the identity users are told to expect
       # before anything is pushed.
+      #
+      # GITSIGN_REKOR_MODE=offline embeds the Rekor entry (with its inclusion
+      # proof) in the tag's signature. In gitsign's default online mode the entry
+      # is only uploaded, and every verify-tag has to find it again through
+      # Rekor's search API. The first release run (v14.0.0) failed that way: the
+      # tag was signed, and verify-tag six seconds later reported "looking up
+      # rekor entry: could not find matching tlog entry". An offline signature is
+      # verified from what the tag carries, here and for anyone who runs the
+      # command in README.md later.
       - name: Create the signed tag
+        env:
+          GITSIGN_REKOR_MODE: offline
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
