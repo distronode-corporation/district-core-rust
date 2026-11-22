@@ -1,9 +1,10 @@
 # Roadmap
 
-The near-term plan for District Core for Rust. This repository has no open issues, so the list
-is taken from the repository's own unfinished items, each named with where it comes from. This roadmap covers the next twelve months, to November 2027. Items have no dates of their own:
-an item is done when the change that does it is merged and released, and it then leaves this
-list for [CHANGELOG.md](CHANGELOG.md). Anything here can change; open an issue to
+The near-term plan for District Core for Rust. It is taken from the repository's open issues and
+its own unfinished items, each named with where it comes from. This roadmap covers the next
+twelve months, to November 2027. Items have no dates of their own: an item is done when the
+change that does it is merged and released, and it then leaves this list for
+[CHANGELOG.md](CHANGELOG.md). Anything here can change; open an issue to
 discuss an item or to propose a new one.
 
 ## Near term
@@ -13,7 +14,8 @@ discuss an item or to propose a new one.
   `[Unreleased]` in [CHANGELOG.md](CHANGELOG.md). The setup wizard adds variants to `Event`,
   `Effect`, `Endpoint` and `Route`, so the release is a new major version. Tags up to and
   including v13.0.0 are not signed (README, "Verify a release"); this release's tag is the first
-  that can be checked with `gitsign verify-tag`.
+  that can be checked with `gitsign verify-tag`
+  ([#104](https://github.com/distronode-corporation/district-core-rust/issues/104)).
 - **Types for the responses that have none yet.** The contract tests list seven of the
   service's recorded responses that the crates will use but have no type for yet:
   `district-dial-dnc`, `district-dial-dormant`, `district-dial-subscription`,
