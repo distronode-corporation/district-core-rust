@@ -282,6 +282,15 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `carrier_rejected`, in place of the service's own English."
 
+[api_error.checkout_marketplace_billed]
+en = "Your workspaces are billed through Microsoft Marketplace, so a plan can't be bought for them here. Change your plan in the Microsoft 365 admin center."
+fr = "Vos espaces de travail sont facturés par Microsoft Marketplace; un forfait ne peut donc pas être acheté pour eux ici. Modifiez votre forfait dans le Centre d'administration Microsoft 365."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `checkout_marketplace_billed`, in place of the service's own English."
+
 [api_error.checkout_setup_in_progress]
 en = "Your plan is already paid for. Finish setting up your receptionist from your dashboard before buying another plan."
 fr = "Votre forfait est déjà payé. Terminez la configuration de votre réceptionniste depuis votre tableau de bord avant d'acheter un autre forfait."
@@ -434,6 +443,24 @@ screen = "api_error"
 tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `draft_nothing_to_undo`, in place of the service's own English."
+
+[api_error.email_changed]
+en = "This contact's email address changed since you opened it. Check the new address before confirming it."
+fr = "L'adresse courriel de ce contact a changé depuis l'ouverture de sa fiche. Vérifiez la nouvelle adresse avant de la confirmer."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `email_changed`, in place of the service's own English."
+
+[api_error.email_unconfirmed]
+en = "This contact's email address is unconfirmed. Confirm it in the contact panel before emailing it."
+fr = "L'adresse courriel de ce contact n'est pas confirmée. Confirmez-la dans la fiche du contact avant de lui écrire."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `email_unconfirmed`, in place of the service's own English."
 
 [api_error.emergency_acknowledgement_required]
 en = "Confirm that you understand this number cannot be used to call 911 or other emergency services, then try again."
@@ -833,6 +860,69 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `managed_billing_required`, in place of the service's own English."
 
+[api_error.marketplace_billed_workspace]
+en = "This workspace is billed through Microsoft Marketplace, which sets its plan and subscription status. Change them in Microsoft, or move the workspace off Microsoft billing once its Microsoft subscription is cancelled."
+fr = "Cet espace de travail est facturé par Microsoft Marketplace, qui fixe son forfait et l'état de son abonnement. Modifiez-les chez Microsoft, ou retirez l'espace de travail de la facturation Microsoft une fois son abonnement Microsoft annulé."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `marketplace_billed_workspace`, in place of the service's own English."
+
+[api_error.marketplace_cancel_refused]
+en = "Microsoft would not cancel a Microsoft Marketplace subscription on your workspace, so nothing was deleted. Cancel it in the Microsoft 365 admin center, then try again."
+fr = "Microsoft a refusé d'annuler un abonnement Microsoft Marketplace de votre espace de travail; rien n'a donc été supprimé. Annulez-le dans le Centre d'administration Microsoft 365, puis réessayez."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `marketplace_cancel_refused`, in place of the service's own English."
+
+[api_error.marketplace_intro_minutes_reached]
+en = "This workspace has used its plan's included voice minutes. For the first 72 hours after your Microsoft Marketplace subscription is activated, outgoing calls stop at the included minutes. They resume when the 72 hours end."
+fr = "Cet espace de travail a utilisé les minutes vocales incluses dans son forfait. Pendant les 72 heures suivant l'activation de votre abonnement Microsoft Marketplace, les appels sortants s'arrêtent aux minutes incluses. Ils reprennent à la fin de ces 72 heures."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `marketplace_intro_minutes_reached`, in place of the service's own English."
+
+[api_error.marketplace_intro_numbers_locked]
+en = "Phone numbers can be added 72 hours after your Microsoft Marketplace subscription is activated."
+fr = "Les numéros de téléphone peuvent être ajoutés 72 heures après l'activation de votre abonnement Microsoft Marketplace."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `marketplace_intro_numbers_locked`, in place of the service's own English."
+
+[api_error.marketplace_subscription_pending]
+en = "This workspace's Microsoft Marketplace purchase is still being set up. Calls and messaging start once Microsoft confirms it."
+fr = "L'achat Microsoft Marketplace de cet espace de travail est encore en cours de configuration. Les appels et la messagerie commencent dès que Microsoft le confirme."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `marketplace_subscription_pending`, in place of the service's own English."
+
+[api_error.marketplace_subscription_suspended]
+en = "Microsoft has suspended this workspace's subscription because a payment was not received. Update the payment in the Microsoft 365 admin center to resume calls and messaging."
+fr = "Microsoft a suspendu l'abonnement de cet espace de travail, car un paiement n'a pas été reçu. Mettez le paiement à jour dans le Centre d'administration Microsoft 365 pour reprendre les appels et la messagerie."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `marketplace_subscription_suspended`, in place of the service's own English."
+
+[api_error.marketplace_subscription_unsubscribed]
+en = "This workspace's Microsoft Marketplace subscription was cancelled or never completed. To use District AI here again, buy it again on Microsoft Marketplace."
+fr = "L'abonnement Microsoft Marketplace de cet espace de travail a été annulé ou n'a jamais été finalisé. Pour utiliser de nouveau District AI ici, achetez-le de nouveau sur Microsoft Marketplace."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `marketplace_subscription_unsubscribed`, in place of the service's own English."
+
 [api_error.media_not_found]
 en = "That file could not be found."
 fr = "Ce fichier est introuvable."
@@ -861,8 +951,8 @@ state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `member_not_found`, in place of the service's own English."
 
 [api_error.member_phone_business_number]
-en = "This number belongs to a business on District, so it cannot receive alerts. Enter your own mobile number."
-fr = "Ce numéro appartient à une entreprise sur District, alors il ne peut pas recevoir d'alertes. Entrez votre propre numéro de cellulaire."
+en = "This number belongs to a business on District, so it cannot be your verified mobile. Enter your own mobile number."
+fr = "Ce numéro appartient à une entreprise sur District, alors il ne peut pas être votre cellulaire vérifié. Entrez votre propre numéro de cellulaire."
 ctx = "error"
 screen = "api_error"
 tier = "T2"
@@ -1004,6 +1094,114 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `mfa_code_invalid`, in place of the service's own English."
 
+[api_error.microsoft_attach_stripe_billed]
+en = "This workspace is billed through Stripe, so a Microsoft Marketplace plan can't be added to it. Choose a new workspace instead."
+fr = "Cet espace de travail est facturé par Stripe; un forfait Microsoft Marketplace ne peut donc pas y être ajouté. Choisissez plutôt un nouvel espace de travail."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_attach_stripe_billed`, in place of the service's own English."
+
+[api_error.microsoft_attach_unavailable]
+en = "That workspace can't take this purchase. Choose a workspace you own that has no other Microsoft plan, or a new workspace."
+fr = "Cet espace de travail ne peut pas recevoir cet achat. Choisissez un espace de travail dont vous êtes propriétaire et qui n'a pas d'autre forfait Microsoft, ou un nouvel espace de travail."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_attach_unavailable`, in place of the service's own English."
+
+[api_error.microsoft_landing_busy]
+en = "This purchase is being updated right now, perhaps in another tab. Try again in a moment."
+fr = "Cet achat est en cours de mise à jour, peut-être dans un autre onglet. Réessayez dans un instant."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_busy`, in place of the service's own English."
+
+[api_error.microsoft_landing_consent_blocked]
+en = "Your Microsoft 365 administrator must allow Distronode before you can sign in with this work account. We ask only to confirm who you are: your name and account identifier."
+fr = "Votre administrateur Microsoft 365 doit autoriser Distronode avant que vous puissiez vous connecter avec ce compte professionnel. Nous demandons seulement de confirmer qui vous êtes, soit votre nom et votre identifiant de compte."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_consent_blocked`, in place of the service's own English."
+
+[api_error.microsoft_landing_held_elsewhere]
+en = "This purchase is set up in another region, so it is managed on that region's site."
+fr = "Cet achat est configuré dans une autre région; il se gère donc sur le site de cette région."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_held_elsewhere`, in place of the service's own English."
+
+[api_error.microsoft_landing_identity_mismatch]
+en = "Sign in with the Microsoft account that bought District AI, or the one it was bought for."
+fr = "Connectez-vous avec le compte Microsoft qui a acheté District AI, ou celui pour lequel il a été acheté."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_identity_mismatch`, in place of the service's own English."
+
+[api_error.microsoft_landing_refused]
+en = "This purchase was cancelled in Microsoft, or it is not a District AI plan. To buy again, start a new purchase on Microsoft Marketplace."
+fr = "Cet achat a été annulé chez Microsoft, ou ce n'est pas un forfait District AI. Pour acheter de nouveau, faites un nouvel achat sur Microsoft Marketplace."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_refused`, in place of the service's own English."
+
+[api_error.microsoft_landing_region_check_unavailable]
+en = "We could not check your account's region just now, so nothing was set up. Try again in a moment."
+fr = "Nous n'avons pas pu vérifier la région de votre compte pour le moment, alors rien n'a été configuré. Réessayez dans un instant."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_region_check_unavailable`, in place of the service's own English."
+
+[api_error.microsoft_landing_token_invalid]
+en = "We could not identify this purchase. Open it again from the Microsoft 365 admin center, and choose Configure account or Manage account."
+fr = "Nous n'avons pas pu reconnaître cet achat. Rouvrez-le depuis le Centre d'administration Microsoft 365, puis choisissez Configurer le compte ou Gérer le compte."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_token_invalid`, in place of the service's own English."
+
+[api_error.microsoft_landing_too_many_tries]
+en = "Too many tries for this purchase. Open it again from Microsoft to start over."
+fr = "Trop de tentatives pour cet achat. Rouvrez-le depuis Microsoft pour recommencer."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_too_many_tries`, in place of the service's own English."
+
+[api_error.microsoft_landing_unavailable]
+en = "We could not reach Microsoft just now, so nothing was set up. Try again in a moment."
+fr = "Nous n'avons pas pu joindre Microsoft pour le moment, alors rien n'a été configuré. Réessayez dans un instant."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_unavailable`, in place of the service's own English."
+
+[api_error.microsoft_landing_us_regional_account]
+en = "A Distronode account in another region can't hold a US purchase. Buy in that region to keep one account, or use a different email address to create a separate US account."
+fr = "Un compte Distronode d'une autre région ne peut pas détenir un achat fait aux États-Unis. Achetez dans cette région pour garder un seul compte, ou utilisez une autre adresse courriel pour créer un compte distinct aux États-Unis."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `microsoft_landing_us_regional_account`, in place of the service's own English."
+
 [api_error.model_unavailable_in_region]
 en = "This voice engine is not available for workspaces in this region. Choose another engine."
 fr = "Ce moteur vocal n'est pas offert aux espaces de travail de cette région. Choisissez un autre moteur."
@@ -1012,6 +1210,15 @@ screen = "api_error"
 tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `model_unavailable_in_region`, in place of the service's own English."
+
+[api_error.no_email]
+en = "This contact has no email address to confirm."
+fr = "Ce contact n'a aucune adresse courriel à confirmer."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `no_email`, in place of the service's own English."
 
 [api_error.no_password]
 en = "This account signs in with Google or Microsoft and has no password to re-enter. Set a password on the web first."
@@ -1057,6 +1264,24 @@ screen = "api_error"
 tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `nothing_to_update`, in place of the service's own English."
+
+[api_error.number_bridge_ca_workspaces_only]
+en = "Canadian numbers on our managed phone service are answered in Montreal, so for now they are available to Canadian workspaces only."
+fr = "Les numéros canadiens de notre service téléphonique géré sont traités à Montréal; pour l'instant, ils sont donc disponibles seulement pour les espaces de travail canadiens."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `number_bridge_ca_workspaces_only`, in place of the service's own English."
+
+[api_error.number_bridge_eu_workspaces_only]
+en = "Numbers from this country are answered in Frankfurt, so for now they are available to EU workspaces only."
+fr = "Les numéros de ce pays sont traités à Francfort; pour l'instant, ils sont donc disponibles seulement pour les espaces de travail de l'Union européenne."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `number_bridge_eu_workspaces_only`, in place of the service's own English."
 
 [api_error.number_in_use]
 en = "That number is already assigned to another workspace."
@@ -1265,6 +1490,15 @@ tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `region_unavailable`, in place of the service's own English."
 
+[api_error.registration_on_own_account]
+en = "This number must be bought on Distronode's carrier account, but this workspace's regulatory registration is filed on its own Twilio account. Contact support to file the registration on Distronode's account, then buy this number."
+fr = "Ce numéro doit être acheté sur le compte de transporteur de Distronode, mais l'inscription réglementaire de cet espace de travail est déposée sur son propre compte Twilio. Communiquez avec notre équipe de soutien pour déposer l'inscription sur le compte de Distronode, puis achetez ce numéro."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `registration_on_own_account`, in place of the service's own English."
+
 [api_error.reply_failed]
 en = "Your reply could not be posted. Please try again."
 fr = "Votre réponse n'a pas pu être publiée. Veuillez réessayer."
@@ -1472,6 +1706,15 @@ screen = "api_error"
 tier = "T2"
 state = "reviewed"
 note = "Shown on any screen when the service refuses a request with the error code `test_call_needs_number`, in place of the service's own English."
+
+[api_error.tfv_filed_by_distronode]
+en = "This toll-free number is held on Distronode's account, so its verification must be filed by Distronode. Contact support to file it."
+fr = "Ce numéro sans frais est détenu sur le compte de Distronode; sa vérification doit donc être déposée par Distronode. Communiquez avec notre équipe de soutien pour la déposer."
+ctx = "error"
+screen = "api_error"
+tier = "T2"
+state = "reviewed"
+note = "Shown on any screen when the service refuses a request with the error code `tfv_filed_by_distronode`, in place of the service's own English."
 
 [api_error.ticket_create_failed]
 en = "That request could not be created. Please try again."

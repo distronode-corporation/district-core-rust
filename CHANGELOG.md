@@ -102,6 +102,17 @@ setting up" card opens the wizard instead of the web page.
 - The banner's two sentences, `session_offline_saved_today` ("Offline. Showing what was
   saved at {time}") and `session_offline_saved_earlier` ("... on {stamp}"), in English and
   French, the iOS app's reviewed wording.
+- `contracts/i18n/api-errors.json` in line with the website, byte for byte: 27 new error
+  codes (the Microsoft Marketplace and Microsoft landing codes, `checkout_marketplace_billed`,
+  the contact email codes `email_changed`, `email_unconfirmed` and `no_email`, the region
+  codes `number_bridge_ca_workspaces_only` and `number_bridge_eu_workspaces_only`, and
+  `registration_on_own_account` and `tfv_filed_by_distronode`), generated into
+  `catalog/api_errors.toml` and `api_error_table.rs` with the website's English and French.
+
+### Changed
+
+- `member_phone_business_number` in English and French, as the website now words it: the
+  number "cannot be your verified mobile" (was "cannot receive alerts").
 
 ### Fixed
 
