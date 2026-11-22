@@ -29,13 +29,13 @@ the application state and the call engine, with no user interface toolkit in any
 ```toml
 [dependencies.district-core]
 git = "https://github.com/distronode-corporation/district-core-rust"
-tag = "v13.0.0"
-version = "=13.0.0"
+tag = "v14.0.0"
+version = "=14.0.0"
 ```
 
-> **Status: 13.0.0 is the current release**
-> ([13.0.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)).
-> District AI for Linux 3.4.0 and District AI for Windows 3.4.0 are built on 12.0.0.
+> **Status: 14.0.0 is the current release**
+> ([14.0.0](https://github.com/distronode-corporation/district-core-rust/releases/latest)).
+> District AI for Linux 3.4.0 is built on 12.0.0, and District AI for Windows 3.5.0 on 13.0.0.
 > The core was extracted from District AI for Linux 2.1.0 with its history.
 
 **Links:** [Distronode](https://distronode.com) ·
@@ -99,8 +99,8 @@ hold that version:
 
 ```toml
 [workspace.dependencies]
-district-model = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v13.0.0", version = "=13.0.0" }
-district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v13.0.0", version = "=13.0.0" }
+district-model = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v14.0.0", version = "=14.0.0" }
+district-core = { git = "https://github.com/distronode-corporation/district-core-rust", tag = "v14.0.0", version = "=14.0.0" }
 ```
 
 and so on for each crate it uses, all at the same tag. Cargo.lock then records
@@ -114,7 +114,7 @@ log line below warn out of the whole build, the app's own crates included; see
 
 ## Verify a release
 
-From the next release on, every release tag is an annotated tag signed with
+From 14.0.0 on, every release tag is an annotated tag signed with
 [gitsign](https://github.com/sigstore/gitsign): keyless Sigstore signing by the
 repository's Release workflow, under its GitHub OIDC identity, with the signature
 recorded in Sigstore's public transparency log. There is no long-lived signing key to

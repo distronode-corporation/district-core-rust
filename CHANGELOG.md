@@ -17,6 +17,8 @@ variant, or a field of one. Those take a new major version.
 
 ## [Unreleased]
 
+## [14.0.0] - 2026-11-22
+
 The setup wizard in the app: the service's routes for it, and the six steps' state. A
 major version because `Event`, `Effect`, `Endpoint` and `Route` gain variants,
 `SignedIn` gains a field, `DistrictApi` gains six methods, and the overview's "Finish
