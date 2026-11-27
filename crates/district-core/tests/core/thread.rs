@@ -385,7 +385,10 @@ fn older_pages_are_read_one_at_a_time_and_merged() {
         ("2026-08-15T12:11:00.000Z", "msg_page_049")
     );
     assert!(events(&model).loading_older);
-    assert!(!events(&model).can_load_older(), "not offered while one is on its way");
+    assert!(
+        !events(&model).can_load_older(),
+        "not offered while one is on its way"
+    );
     // A second click while the page is on its way reads nothing twice.
     assert!(thread_event(&mut model, ThreadEvent::LoadOlder).is_empty());
 
