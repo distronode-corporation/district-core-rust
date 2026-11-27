@@ -103,6 +103,43 @@ jobs:
       - name: Line coverage meets every floor
         run: python3 scripts/check-coverage.py "$RUNNER_TEMP/coverage.json"
 
+  # Branch coverage, which only nightly Rust can measure (`-Z coverage-options=branch`,
+  # through `cargo llvm-cov --branch`). A pinned nightly, used for this measurement
+  # and nothing else: every build, test and release stays on stable. Each crate's
+  # branch floor is in coverage-floors.toml. Doctests are left out (on nightly they
+  # need --doctests, which instruments them too); the `rust` job still runs them.
+  branches:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      NIGHTLY: nightly-2026-11-01
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install the pinned nightly toolchain
+        run: |
+          rustup toolchain install "$NIGHTLY" --profile minimal -c llvm-tools-preview
+          rustc "+$NIGHTLY" --version
+
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: branches
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      - uses: $/.github/actions/install-cargo-llvm-cov
+
+      - name: cargo test, measuring branch coverage
+        run: |
+          set -euo pipefail
+          cargo "+$NIGHTLY" llvm-cov --branch --workspace --locked --no-report
+          cargo "+$NIGHTLY" llvm-cov report --branch --show-missing-lines
+          cargo "+$NIGHTLY" llvm-cov report --branch --json --summary-only --output-path "$RUNNER_TEMP/branches.json"
+
+      - name: Branch coverage meets every floor
+        run: python3 scripts/check-coverage.py --branches "$RUNNER_TEMP/branches.json"
+
   # The same tests on the target District AI for Windows ships. Coverage is
   # measured on Linux only: the code is the same, and the floors are held there.
   # What this job adds is the proof that every crate builds with MSVC and that
