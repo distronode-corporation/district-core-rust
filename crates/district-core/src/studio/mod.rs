@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Voice Studio's rules, with no state of their own: the engine the Studio
 //! holds and what it saves as, what a save sends and whether it landed, what
 //! the signal chain, the meter and the residency summary say, what each leg's

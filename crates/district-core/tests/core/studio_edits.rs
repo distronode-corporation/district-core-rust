@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Voice Studio's edits against the service's recorded read: what each leg's
 //! pickers offer and what a choice does, the tuning controls and their ranges,
 //! the recipes and tiers, and fitting a chain to a new language.

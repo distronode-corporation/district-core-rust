@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The typed methods for the inbox, the call log, contacts, HQ, analytics,
 //! numbers, billing, automations, booking pages, the help desk, support
 //! requests, meeting rooms and the workspace settings, against a local mock

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 [package]
 name = "district-auth"
 description = "Signing in to District AI: OAuth 2.0 with PKCE through the system browser, token refresh and sign-out."

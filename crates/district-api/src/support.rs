@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for support requests: the workspace writing to Distronode.
 //!
 //! Every one of these names its workspace in the query and refuses a viewer. The

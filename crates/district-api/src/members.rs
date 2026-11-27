@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the workspace's members and its name.
 //!
 //! Every role may read the members. The service lets only an agency member add,

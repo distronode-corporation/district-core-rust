@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Sign-out: the order of its steps, the revoke outbox, and the drain that
 //! empties it.
 

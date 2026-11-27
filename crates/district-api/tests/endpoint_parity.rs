@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The endpoint table against the Android app's, from the committed snapshot.
 //!
 //! `contracts/endpoints.snapshot.json` is the list of endpoints the District AI

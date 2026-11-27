@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The refresh-pending marker and the device identity, in temporary
 //! directories: no test here reads or writes the real user's files.
 

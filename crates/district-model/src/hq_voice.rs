@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! District HQ by voice: the credential for a voice session, the cancellation
 //! of a proposal, and what the voice agent sends the app in the room.
 //!

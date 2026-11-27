@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A chain of the member's own, moved to models that speak a new persona
 //! language: the web's `conformEngineMix`, from what the Studio's read says.
 //!

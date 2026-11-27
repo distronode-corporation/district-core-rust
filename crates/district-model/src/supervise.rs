@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Supervising a live call: listening in, sending the receptionist a private
 //! note (a whisper), and taking the call over by voice.
 //!

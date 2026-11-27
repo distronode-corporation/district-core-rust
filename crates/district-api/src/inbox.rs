@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the inbox: the threads, a thread's history, the unread count,
 //! search, sending, marking read, attachments, saved drafts, AI-written drafts,
 //! who owns a thread, and the WhatsApp composer's window and templates.

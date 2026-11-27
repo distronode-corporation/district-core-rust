@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Who answers an incoming call, and whether the signed-in member is rung.
 //!
 //! Two settings of two scopes, read apart and saved apart, never by one button.

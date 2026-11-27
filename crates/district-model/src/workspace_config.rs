@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The workspace settings row, and the three settings saved by replacing a whole
 //! list: the receptionist's tools, the call directory and the routing rules.
 //!

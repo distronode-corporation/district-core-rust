@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Starting a conversation from the inbox: choose a contact or type a phone
 //! number or an email address, write the first message, send it, and land in
 //! the thread it started.

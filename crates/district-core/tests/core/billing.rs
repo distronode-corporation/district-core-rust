@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Billing, read only: the plan the screen stands on, the payment processor's
 //! three answers, the way to the web by role, and the figures' wording.
 

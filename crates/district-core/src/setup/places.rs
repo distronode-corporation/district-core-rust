@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The places step 1 offers and the time zone each implies, as the web's
 //! `SETUP_COUNTRIES`, provinces and states hold them.
 

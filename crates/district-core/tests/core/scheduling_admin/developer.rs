@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Developer: API keys, connected apps and the MCP address, webhooks and
 //! their deliveries, and the key and secret shown once.
 

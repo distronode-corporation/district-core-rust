@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The account's own settings, `/api/settings`: who the member is, and the
 //! language their account speaks.
 //!

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Where the app is: the top-level destinations, their detail screens, the
 //! workspace's other sections, and the workspace settings sections.
 //!

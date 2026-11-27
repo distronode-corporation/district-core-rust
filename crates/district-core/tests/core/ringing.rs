@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A call ringing here: only for this member, only with "ring on this
 //! computer" on, for as long as the service holds the caller; answered once and
 //! joined through the engine; declined with the service told, on the member's

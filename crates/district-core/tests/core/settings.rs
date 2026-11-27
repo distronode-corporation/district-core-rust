@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The workspace settings hub, which section each role may open, what opening
 //! one reads, and what leaving one, or the workspace, drops.
 

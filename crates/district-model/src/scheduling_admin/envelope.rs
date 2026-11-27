@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The envelope every answer of the scheduling administration route comes in,
 //! and the helpers its row types share.
 

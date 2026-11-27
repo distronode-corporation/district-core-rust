@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Booking pages: the card's states, turning them on as the service allows, and
 //! the hand-off link that is opened at once and never kept, always bound to the
 //! browser that answered for it: when none did in time, it is not asked for.

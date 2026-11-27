@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Several workspaces' connections: started and stopped by the watched set, and
 //! their updates merged into one stream, each tagged with its workspace.
 

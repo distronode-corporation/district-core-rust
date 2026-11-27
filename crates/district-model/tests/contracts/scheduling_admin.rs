@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The booking scheduler's administration: each operation's answer read from
 //! its recorded fixture by the request that asks for it, the parameters each
 //! request sends, and the cases each fixture exists to cover.

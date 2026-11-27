@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What leaves the machine in a report: the user's home directory never does,
 //! and neither does the machine's name, a user or an address.
 

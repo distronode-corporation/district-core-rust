@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A model built in French: the core writes in the language its configuration
 //! names. A binary of its own, because the language is the process's and every
 //! other test runs in English.

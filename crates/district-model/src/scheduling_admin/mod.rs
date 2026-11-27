@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The booking scheduler's administration: event types, availability,
 //! bookings, calendars, the team, the developer settings and the pages'
 //! branding, all through `POST /api/district/scheduling/admin` and its upload

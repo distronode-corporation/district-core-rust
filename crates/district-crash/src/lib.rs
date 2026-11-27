@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Crash reports for the District AI desktop apps, off until the user turns
 //! them on.
 //!

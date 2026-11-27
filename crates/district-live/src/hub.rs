@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Several workspaces' connections, merged into one stream.
 
 use std::collections::{BTreeMap, BTreeSet};

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The error table: every code in `contracts/i18n/api-errors.json`, with its
 //! English and its French, and nothing for a code it does not have.
 

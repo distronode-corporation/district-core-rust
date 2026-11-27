@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The scheduler's own users and teams.
 //!
 //! A scheduler user is not a workspace member: the two populations differ, and

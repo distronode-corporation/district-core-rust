@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Workflows: the list, each workflow's runs read once and paged by what the
 //! service sent, the switch shown at once and put back on a refusal, and the
 //! campaign's pause and resume, each asked first.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Voice Studio as a section: one read, edits held, a save of only what changed
 //! through the persona's route, and the read after it compared with what was
 //! sent.

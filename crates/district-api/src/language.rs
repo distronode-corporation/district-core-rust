@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the account's own settings: the language it speaks.
 
 use district_model::{LanguageSave, SettingsSaveResponse};

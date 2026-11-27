@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The dialler: the country on its button, the number as it is typed, the line
 //! that says where it rings, and placing the call. Dialler design A, after
 //! district-ios (and the web and Mac dialers, which follow the same rules).

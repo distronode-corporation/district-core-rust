@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Where the core's words come from: `district-l10n`'s catalog, in the
 //! language the app chose (`CoreConfig::locale`). Every sentence and label a
 //! screen shows is one of its functions, called with [`l`].

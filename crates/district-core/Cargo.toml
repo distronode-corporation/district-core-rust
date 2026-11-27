@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 [package]
 name = "district-core"
 description = "GTK-free application state for the District AI desktop apps: the session, routes, role capabilities, screen models and the effect runner."

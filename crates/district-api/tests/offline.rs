@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Works offline, read-only: the saved copy of the first screens' reads.
 
 use std::sync::Arc;

@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 """Record the brand colours the apps' styles use, from the design tokens.
 
     python3 scripts/sync-palette.py --monorepo <path>          # rewrite the snapshot

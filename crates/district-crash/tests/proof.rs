@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What reaches the network, counted rather than reasoned about: the DSN names
 //! a mock server on this machine, and each test reads what that server
 //! received. Off sends nothing at all, a panic or a captured error with the

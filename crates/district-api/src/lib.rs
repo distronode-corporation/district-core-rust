@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The HTTP client for the District AI API, and the table of endpoints it calls.
 //!
 //! Every request this crate sends follows three rules:

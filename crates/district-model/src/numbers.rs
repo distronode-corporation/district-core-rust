@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Phone numbers: the ones for sale, and the ones the workspace holds.
 //!
 //! Buying a number stays on the web. Configuring, releasing and looking up a

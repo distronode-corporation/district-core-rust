@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Buying in the app: choosing a plan and managing billing on the service's own
 //! checkout and billing pages, shown inside the app window, for an app built
 //! with [`CoreConfig::in_app_purchases`]. District AI for Windows is the one

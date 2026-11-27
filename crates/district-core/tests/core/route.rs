@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Routes: the tabs, where back leads, and where a workspace switch leaves
 //! the user.
 

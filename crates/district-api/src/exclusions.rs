@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Where this client's endpoint table departs from the Android app's, on purpose.
 //!
 //! [`EXCLUDED`] names every endpoint the Android app calls (or could be expected

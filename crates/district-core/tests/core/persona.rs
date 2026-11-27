@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The persona: its texts from the settings read, its language half only with
 //! the options too, a save that sends only what changed and is read back, a
 //! chain of the member's own fitted to a new language, and the billed

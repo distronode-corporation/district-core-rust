@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Voice Studio: the receptionist's voice engine, as recipes, a signal chain
 //! with an editor per leg, the time-to-first-word meter and where the call is
 //! processed.

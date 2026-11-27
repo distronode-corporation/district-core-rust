@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Bookings: the context the first page waits for, paging over live data, the
 //! views, and cancelling, moving and handing over a booking, from the list and
 //! from one booking.

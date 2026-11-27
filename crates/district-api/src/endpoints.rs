@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Every endpoint this client calls, and how each one is called.
 //!
 //! The table mirrors the District AI Android app, which is the reference client:

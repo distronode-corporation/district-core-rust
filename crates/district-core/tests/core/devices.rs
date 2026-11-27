@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The devices screen: the list, which row is this device, and signing devices
 //! out with a question first.
 

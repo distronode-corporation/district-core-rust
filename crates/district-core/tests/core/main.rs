@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The core's tests, in one binary so the build makes one test executable
 //! rather than one per file.
 //!

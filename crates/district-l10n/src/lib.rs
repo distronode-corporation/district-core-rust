@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The words the District AI desktop apps' core shows, in English and in
 //! Canadian French, and the formats around them.
 //!

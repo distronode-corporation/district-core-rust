@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The workspaces the signed-in member may open, and which one is open.
 //!
 //! The open workspace is chosen here and named on every request. It cannot be

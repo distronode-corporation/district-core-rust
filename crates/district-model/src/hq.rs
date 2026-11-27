@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! District HQ, the workspace assistant: a prompt and its answer, and the
 //! confirmation of a change the assistant proposed.
 //!

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The signed-in member's scheduler profile, the booking pages' branding, and
 //! the meeting summariser's settings.
 

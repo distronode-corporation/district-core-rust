@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The receptionist's persona: saving it, the choices it may be given, and
 //! auditioning an unsaved one.
 //!

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Binding a hand-off to the web to the browser the app opened.
 //!
 //! A hand-off link signs in whichever browser opens it, so on its own it could

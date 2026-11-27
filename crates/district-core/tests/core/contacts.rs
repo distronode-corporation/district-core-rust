@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Contacts: the list and its paging, adding one, one contact's changes, the
 //! research poll, blocking, and the blocked list.
 

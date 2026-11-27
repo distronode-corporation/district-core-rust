@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Every generated accessor, called in both languages and held to the text its
 //! catalog gives it: the English as written, and the French as written or,
 //! while an entry has none, the English again. A string argument is passed as

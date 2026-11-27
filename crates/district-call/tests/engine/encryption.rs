@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! End-to-end encryption: the same passphrase carries the tone, a different
 //! one is reported and decodes nothing, and a session without one never keeps
 //! a key from the session before it.

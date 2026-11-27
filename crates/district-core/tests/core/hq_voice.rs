@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! District HQ by voice: the residency statement before anything starts, the
 //! encrypted session, the words both sides say, and the cards in front of every
 //! change proposed by voice, which only the member resolves.

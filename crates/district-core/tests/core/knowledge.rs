@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The knowledge base: two reads that fail apart, a billed add sent once, a
 //! delete and a switch to the linked mode that each ask first, the mode stored
 //! adopted from the service's answer, and a viewer who reads and changes

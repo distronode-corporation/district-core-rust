@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The call engine: answering and placing District AI calls from the desktop.
 //!
 //! It implements the `CallEngine` trait from `district-core`. The LiveKit

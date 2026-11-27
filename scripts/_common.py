@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 """What the sync scripts share: reading another repository's checkout with git.
 
 sync-contracts.py, sync-endpoints.py and sync-palette.py each copy something out

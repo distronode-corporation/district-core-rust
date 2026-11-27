@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What can go wrong with a call, and how each failure is told apart.
 //!
 //! The failures are not interchangeable, so they are not collapsed. The app has

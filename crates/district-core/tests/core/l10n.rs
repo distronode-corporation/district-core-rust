@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The core's words in the language the app chose: English exactly as it has
 //! always been, and French from the catalog, which has French for every entry.
 //! What these tests hold is which path each language takes: the service's

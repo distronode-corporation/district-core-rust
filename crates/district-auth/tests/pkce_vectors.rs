@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! This crate's PKCE challenge against the service's own.
 //!
 //! A test of the derivation against itself would pass with both sides wrong in

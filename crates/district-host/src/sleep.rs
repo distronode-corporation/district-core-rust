@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Suspend and resume: the machine announcing that it is about to sleep, and
 //! a hold on the sleep while the app gets ready for it.
 //!

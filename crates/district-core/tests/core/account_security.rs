@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Two-step verification and deleting the account: the fresh re-authentication
 //! in front of each, every step of each screen, and every refusal's sentence.
 

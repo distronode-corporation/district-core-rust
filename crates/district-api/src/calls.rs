@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the call log (the log, one call, and its transcript) and for
 //! calls on the desktop (placing one, answering or declining one that rings
 //! here, and ending a placed one at the carrier).

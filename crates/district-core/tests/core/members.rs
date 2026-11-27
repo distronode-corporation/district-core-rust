@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Members and the workspace's name: member changes for an agency member only,
 //! the rename for an agency or client member, every member change read back,
 //! the two refusals shown in the service's words with no retry, and a removal

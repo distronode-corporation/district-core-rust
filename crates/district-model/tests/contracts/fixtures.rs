@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What each implemented fixture is supposed to cover.
 //!
 //! The round trip proves a type reads and writes a fixture without loss. It cannot

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What reaches stderr and a logger: never a passphrase, the key derived from
 //! it, a credential or who is in the room.
 //!

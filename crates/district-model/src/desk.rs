@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The help desk: the workspace's own customers writing to the workspace, and
 //! its settings.
 //!

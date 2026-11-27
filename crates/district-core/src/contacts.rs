@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Contacts: the list, adding one, one contact with its changes, and the
 //! callers the workspace has blocked.
 //!

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Event types and what hangs off one: its hosts, its booking questions, the
 //! times it offers and the test email.
 

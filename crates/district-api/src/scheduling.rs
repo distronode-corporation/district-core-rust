@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for booking pages, the way the Android app reaches them: their
 //! status, turning them on, and a hand-off that signs the browser in to the web
 //! dashboard. Their administration is `scheduling_admin.rs`.

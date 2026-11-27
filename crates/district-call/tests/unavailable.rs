@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The engine of a build without calls, driven the way the app drives it: a
 //! meeting room started on a model, its `ConnectMedia` run through the engine,
 //! and the engine's reports fed back to the model. Only in a build without the

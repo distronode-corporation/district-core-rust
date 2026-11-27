@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! This desktop's presence: read at sign-in, registered and renewed by the
 //! clock while "ring on this computer" is on, tried again soon after a failure,
 //! and unregistered, in order, when the setting goes off, before sleep, on quit

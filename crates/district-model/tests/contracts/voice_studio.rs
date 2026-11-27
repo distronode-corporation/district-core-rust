@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The Voice Studio read, and the engine chain it describes: what the fixture is
 //! supposed to cover, and how a chain reads and writes beyond it.
 

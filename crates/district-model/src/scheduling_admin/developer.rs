@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What the scheduler hands other software: API keys, the apps connected with
 //! OAuth, and webhooks with their deliveries.
 

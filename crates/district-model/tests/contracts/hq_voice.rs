@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! HQ voice mode's wire, read from DRAFT fixtures in `tests/hq-voice-drafts/`.
 //!
 //! The server does not record these yet, so none of them is in `contracts/`,

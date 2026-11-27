@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What every list read a page at a time by offset keeps beside its rows: the
 //! next page's offset, whether it is on its way or failed, and the read of the
 //! newest page again.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Writing in the inbox: sending, marking read, attachments, saved drafts and
 //! AI-written drafts.
 //!

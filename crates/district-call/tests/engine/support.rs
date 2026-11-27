@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What the engine's tests stand on: a media server of their own on this
 //! machine, credentials signed here and handed over by a real model, and
 //! engines whose microphone is a tone and whose speaker is a meter.

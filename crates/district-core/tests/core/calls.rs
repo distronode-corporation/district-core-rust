@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The call log with its paging, and one call with its transcript.
 
 use district_api::{ApiError, ErrorDetail};

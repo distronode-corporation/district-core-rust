@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A build without a call engine (`CoreConfig::calls_available` false): it
 //! reads no ring setting, registers no presence, rings nothing, offers no
 //! dialler, answers nothing, and says plainly why a room cannot be joined.

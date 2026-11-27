@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The app's state, the events that change it, and the effects it asks for.
 //!
 //! [`Model::update`] is the only thing that changes the state. It takes an

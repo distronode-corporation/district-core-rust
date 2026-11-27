@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Availability: weekly rules, and dated overrides of them.
 //!
 //! Two shapes, not layers of one: a rule is a weekly window that repeats; an

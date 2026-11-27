@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Choosing the language, and the language the core is in.
 
 use district_l10n::{Locale, current, set_current, with_locale};

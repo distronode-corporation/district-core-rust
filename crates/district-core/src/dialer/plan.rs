@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Reading what the member types into the dialler, in a country: dialler
 //! design A, after district-ios's `DialPlan.swift` (and the Mac's identical
 //! copy), rule for rule.

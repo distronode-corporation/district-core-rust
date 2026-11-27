@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The business facts the receptionist answers from, read out of the service's
 //! JSON into the forms step 1 and step 4 edit, and written back.
 //!

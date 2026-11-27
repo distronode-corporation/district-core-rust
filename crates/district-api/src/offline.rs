@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Works offline, read-only: the last answer of the reads the first screens make,
 //! shown again when the service cannot be reached.
 //!

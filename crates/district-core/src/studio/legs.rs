@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Recipes, voices, what each leg's pickers offer, and the edits a choice
 //! makes.
 //!

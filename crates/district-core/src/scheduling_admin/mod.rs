@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The booking scheduler's administration, natively: the overview, bookings,
 //! event types, working hours, calendars, the team, the developer settings and
 //! the booking pages' settings, each a section under the booking pages screen

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Small files written so that a crash at any moment leaves either the old
 //! content or the new, never a mix, and never an unwritten buffer.
 //!

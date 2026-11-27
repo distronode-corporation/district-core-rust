@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The seam between this crate and whatever holds the session.
 //!
 //! This crate never signs in, refreshes or stores anything. It asks a

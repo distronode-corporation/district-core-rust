@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Every implemented fixture decodes strictly, and encodes back to the same JSON.
 //!
 //! Decoding alone proves only that the fields a type declares can be read. It

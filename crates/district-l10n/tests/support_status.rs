@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A support request's status label (4.0.2): the catalog's label in both
 //! languages, never the help desk's own word, and a label from the category for
 //! a status this build does not list. The same rows as District AI for iOS's

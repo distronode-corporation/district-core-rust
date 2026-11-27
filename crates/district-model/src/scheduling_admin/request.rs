@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What the scheduling administration route is asked, and what it answers.
 //!
 //! [`SchedulingAdminRequest`] is one operation with its parameters, typed. Its

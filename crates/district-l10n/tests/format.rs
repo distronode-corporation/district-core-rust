@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The formats beyond the service's vectors: the core's own English, which
 //! must not change, and the edges the vectors do not reach.
 
