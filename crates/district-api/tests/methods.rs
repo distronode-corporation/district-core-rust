@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The typed methods: what each one sends, what it decodes, and that a body
 //! which does not confirm success is an error rather than an empty answer.
 

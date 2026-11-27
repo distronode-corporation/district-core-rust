@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 """Record which HTTP endpoints the District AI Android client calls.
 
     python3 scripts/sync-endpoints.py --android <path>          # rewrite the snapshot

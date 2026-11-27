@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The inbox: the message threads, one thread's history, the unread count,
 //! search, and finding the thread a message belongs to.
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The real transport, on real sockets on this machine: TCP for `ws`, TLS for
 //! `wss`, the operating system's network errors, and the API client as the
 //! minter. The clock runs for real here, so each test waits only for things that

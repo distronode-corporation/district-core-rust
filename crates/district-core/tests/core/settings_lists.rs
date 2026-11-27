@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The three sections whose saves replace a stored list (the capabilities, the
 //! transfer directory and the routing rules): nothing is savable before the
 //! settings are read or after the read failed, every list sent is the list read

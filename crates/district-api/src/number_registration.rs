@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for a phone number's regulatory registration: what a country's
 //! regulator asks for, the workspace's filings, the documents on a draft, and
 //! filing it with the carrier. The same six calls, with the same shapes, as the

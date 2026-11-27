@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Calendars: the connections and their calendars, connecting through the
 //! provider's consent page and through the CalDAV form, choosing calendars,
 //! and disconnecting.

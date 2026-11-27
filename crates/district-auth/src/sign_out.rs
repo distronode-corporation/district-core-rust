@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Signing out: the steps, their order, and what happens to a refresh token the
 //! service could not be told about.
 

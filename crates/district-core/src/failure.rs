@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What to tell the user about a failed request.
 //!
 //! One mapping, shared by every screen. The rule it holds is that a failure is

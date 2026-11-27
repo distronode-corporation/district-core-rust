@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The seam between the app and its media stack: the [`CallEngine`] trait the
 //! app implements (over LiveKit, in `district-call`), the credential it joins
 //! with, what it reports, and the one media session the app holds at a time.

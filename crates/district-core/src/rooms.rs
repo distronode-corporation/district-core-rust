@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The rooms lobby: the meetings held in the workspace's rooms, one meeting's
 //! record, and starting or rejoining a room.
 //!

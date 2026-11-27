@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Phone numbers: the numbers held, the search once the typing stops, a
 //! workspace with no carrier, and the way to the web marketplace by role.
 

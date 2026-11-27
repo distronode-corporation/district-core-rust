@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Automations: the workspace's workflows and their runs, and the outbound
 //! campaign's on switch.
 //!

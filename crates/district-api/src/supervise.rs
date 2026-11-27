@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for supervising a live call: listening in, a private note to
 //! the AI (a whisper), and taking the call over by voice.
 //!

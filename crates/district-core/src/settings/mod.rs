@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The workspace settings: the hub and its ten sections.
 //!
 //! The hub ([`settings_rows`]) holds no state and makes no request: it lists the

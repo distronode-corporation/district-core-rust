@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Support requests: the workspace writing to Distronode. The list, one request
 //! and its conversation, raising one, replying, and closing one.
 //!

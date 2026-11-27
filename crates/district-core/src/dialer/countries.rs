@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The data the dial plan reads by: every country the dialler lists, with its
 //! calling code and its name in English and Canadian French, and the few facts
 //! about numbering plans the formatter needs. After district-ios's

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A phone number's regulatory registration: what a country's regulator asks
 //! for before a number there can be bought, the workspace's filings (the
 //! carrier calls one a "bundle"), the documents on a filing, and filing it.

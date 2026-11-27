@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Billing, read only: the workspace's plan from the service's own records, and
 //! the account's subscriptions and invoices from the payment processor.
 //!

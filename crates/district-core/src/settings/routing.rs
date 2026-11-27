@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The routing rules: which callers get which voice and instruction.
 //!
 //! The same rule as the directory, for the same reason: the save replaces the

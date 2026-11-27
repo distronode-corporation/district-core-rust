@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The endpoint table's own invariants: every row unique and well formed, and the
 //! rules about bodies, workspaces and retries that hold across the whole table.
 

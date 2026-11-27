@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What the signal chain, the meter and the residency summary say for the
 //! engine the Studio holds.
 //!

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the receptionist's persona: the choices it may be given,
 //! Voice Studio's read, saving it, and auditioning an unsaved one.
 //!

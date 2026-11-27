@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Bookings: the rows `bookings.*` answers.
 //!
 //! Only four fields of a booking are guaranteed (`id`, `start_at`, `end_at`

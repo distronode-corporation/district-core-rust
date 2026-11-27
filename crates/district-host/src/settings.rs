@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The app's preferences, in a small TOML file in the app's configuration
 //! directory (on Linux, under `$XDG_CONFIG_HOME`).
 

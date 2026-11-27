@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Which tuning controls a leg shows, over what range, and keeping a chain
 //! within them.
 //!

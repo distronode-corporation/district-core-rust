@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! PKCE (RFC 7636) for the sign-in hand-off, and the `state` value that goes
 //! with it.
 //!

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The first leg of sign-in: the authorize URL the system browser opens, and the
 //! checks on the callback it hands back.
 //!

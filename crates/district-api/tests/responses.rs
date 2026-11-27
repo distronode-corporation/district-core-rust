@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! How answers become values or errors: status mapping, the error envelope and
 //! its code header, `Retry-After`, redirects, decode failures and no answer at all.
 

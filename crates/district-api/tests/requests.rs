@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What goes on the wire: every endpoint's method, path, headers, workspace and
 //! body, checked against a local mock server; and the requests the client refuses
 //! to send because they were built wrongly.

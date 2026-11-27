@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Step 6, "Test and go live": the test call, the forwarding check, the
 //! summary, and Finish.
 //!

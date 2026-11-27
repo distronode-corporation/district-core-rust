@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The overview of the open workspace, and the card that opens the setup
 //! wizard for a new owner.
 

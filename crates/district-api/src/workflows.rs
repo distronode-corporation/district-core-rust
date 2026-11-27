@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for automations: the workflows, a workflow's runs, turning one on
 //! or off, and the outbound campaign's on switch.
 //!

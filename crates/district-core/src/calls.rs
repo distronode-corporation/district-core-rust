@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The call log, and one call with its transcript.
 //!
 //! The log is read a page at a time, newest first, by offset. The service

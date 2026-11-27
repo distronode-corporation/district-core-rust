@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Team: the workspace's members beside the scheduler's accounts, the teams
 //! and their hosts, and archiving a scheduler account.
 

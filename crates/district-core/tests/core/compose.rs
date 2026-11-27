@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Starting a conversation: a contact or a typed address, the channel, the
 //! first message sent once, and the thread it started.
 

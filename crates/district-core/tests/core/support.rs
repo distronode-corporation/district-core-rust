@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What the tests share: a configuration, an identity, recorded server
 //! responses, and models brought to a given state by events.
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the setup wizard: the step saves, the website lookup, the
 //! test call, the call forwarding check, and the connections read its later
 //! steps make.

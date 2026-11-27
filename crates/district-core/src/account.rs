@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The account screen: who is signed in on this device, and what the account
 //! allows here (sign out, see the devices, two-step verification, delete the
 //! account).

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Everything that exists only while someone is signed in: who, the workspace
 //! list, the screen showing, and each screen's state.
 //!

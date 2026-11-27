@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! One workspace's telemetry connection: minting, connecting, renewing,
 //! reconnecting and stopping.
 

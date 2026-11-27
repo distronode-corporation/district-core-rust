@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! This desktop's presence: whether the service counts it as a device a call
 //! can ring.
 //!

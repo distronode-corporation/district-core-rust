@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 [package]
 name = "district-l10n"
 description = "The District AI desktop apps' words in English and Canadian French: the locale, the generated string catalogs, the API error sentences, the wire value labels and the number, money, date and duration formats."

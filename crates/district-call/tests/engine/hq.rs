@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! District HQ by voice: what a voice agent sends in an encrypted room reaches
 //! the engine decrypted. Its state attribute, a data packet on the proposal
 //! topic, and transcription streams, the member's words (sent by the agent on

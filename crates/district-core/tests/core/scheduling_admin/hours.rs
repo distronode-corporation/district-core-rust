@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Working hours: the week and the overrides as read, the week's editor and
 //! its save as a difference, and the overrides' editor.
 

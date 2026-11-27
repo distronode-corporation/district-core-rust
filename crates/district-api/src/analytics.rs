@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the analytics screen: call analytics over a window, and
 //! metered usage for this month and the months before.
 //!

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The brand's accent and semantic colours, light and dark.
 //!
 //! Copied from the Distronode design tokens, whose source of truth is outside

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The account's own security: the two-step verification screen
 //! ([`TwoStepScreen`]) and the account's deletion ([`DeleteAccountScreen`]),
 //! each behind a fresh re-authentication ([`ReauthStep`]).

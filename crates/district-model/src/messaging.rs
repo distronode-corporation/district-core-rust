@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The carrier accounts the workspace sends texts and places calls through.
 //!
 //! One read, five changes that share one route and differ by an `action` in the

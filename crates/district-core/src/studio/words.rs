@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The words this client builds itself from the read's templates: an unsaved
 //! edit's meter headline and the "Based on" line, in the reader's portal
 //! language.

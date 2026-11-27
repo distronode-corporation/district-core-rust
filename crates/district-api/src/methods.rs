@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the endpoints the first screens use: the workspace list, the
 //! overview, setup status and the signed-in devices.
 //!

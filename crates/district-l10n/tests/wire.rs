@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The wire labels: every value in `contracts/i18n/wire-vocabulary.json`, the
 //! English the desktop apps show for it today and its French (the website's,
 //! where the website has one), and a generic label, never the stored English,

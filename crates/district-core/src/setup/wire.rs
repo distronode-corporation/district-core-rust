@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Values the wizard writes into the business's own data. They are chosen by
 //! the receptionist's language, not the app's, so they are not in the catalog,
 //! and they match the web's byte for byte because the web reads them back:

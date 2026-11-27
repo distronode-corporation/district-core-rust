@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The sentence for an error code the service sends.
 //!
 //! The service names most refusals with a machine-readable code, in the body

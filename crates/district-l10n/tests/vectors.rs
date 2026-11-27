@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The formats held byte for byte to the service's own, in both languages:
 //! every vector in `contracts/i18n/format-vectors.json`, which the service
 //! records from the functions its portal formats with.

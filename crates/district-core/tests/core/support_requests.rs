@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Support requests: closed to a viewer, the draft's key kept through retries,
 //! one request's replies, and the close that asks first.
 

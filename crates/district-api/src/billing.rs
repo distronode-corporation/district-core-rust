@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for billing: the workspace's plan and the account's
 //! subscriptions and invoices, read only, and the hand-off that signs a browser
 //! in to the service's checkout or billing page.

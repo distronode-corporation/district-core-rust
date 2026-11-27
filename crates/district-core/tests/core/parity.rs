@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! App parity: the reply channels the service lists for a thread, Messenger and
 //! Instagram, who owns a thread, the WhatsApp templates a closed window offers,
 //! and the Messenger and Instagram reply window.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Bookings: every booking, a page at a time by view, and one booking's answers;
 //! cancelling, moving and handing a booking to another host.
 //!

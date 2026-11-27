@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Shared by the transport tests: a scripted token source and a client pointed at
 //! a local mock server.
 

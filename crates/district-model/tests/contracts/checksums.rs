@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The vendored files, in every set, are exactly what `contracts/SHA256SUMS`
 //! lists.
 //!

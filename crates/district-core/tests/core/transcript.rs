@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The live transcript of the call on this desktop: asked for once the call has
 //! an id, read from the service's recorded frames into the call's lines in
 //! order, interim lines replaced by their finals, gaps healed, refusals and

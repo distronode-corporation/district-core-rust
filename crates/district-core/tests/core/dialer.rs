@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The dialler and a placed call: the number read in the country on the button
 //! and sent as E.164, the home country from the workspace's numbers, the length
 //! said once the member stops, one dial at a time and never for a viewer, the service's refusals in its own words, the room joined

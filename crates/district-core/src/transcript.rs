@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The live transcript of the call on this desktop.
 //!
 //! Once the call has an id (a placed call's from the dial's answer, an answered

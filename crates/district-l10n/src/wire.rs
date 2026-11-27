@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What a screen shows for a value the service stores in English.
 //!
 //! A call's status, its direction, a member's role and the rest are stored as

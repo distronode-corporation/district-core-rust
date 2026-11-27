@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The three unauthenticated sign-in routes: code exchange, refresh and revoke.
 //!
 //! These are the only requests the app sends without a bearer token, and they

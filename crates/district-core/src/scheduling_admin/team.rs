@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The team: the workspace's members beside the scheduler's own users (who
 //! takes bookings, who has no scheduler account yet, who was archived), the
 //! teams that route bookings, and archiving a scheduler account.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Buying in the app: off in every app but one, and byte for byte the read-only
 //! billing of 2.0.0 there; in the app that buys, a plan confirmed on a step
 //! that names Stripe, a hand-off bound to the private view inside the app that

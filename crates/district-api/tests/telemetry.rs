@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The typed call for the live telemetry credential: what it sends and how it
 //! reads the answer.
 

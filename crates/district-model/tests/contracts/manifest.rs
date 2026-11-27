@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The fixture manifest: every vendored file accounted for, in each of the three
 //! sets (`contracts/fixtures/`, the Android app's set, `contracts/desktop/`, the
 //! shapes only this client reads, and `contracts/i18n/`, the service's

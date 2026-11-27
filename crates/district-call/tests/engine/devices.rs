@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The desktop's own devices, `Audio::Devices`, which is what the app runs.
 //!
 //! Each test runs in a child process with its sound server chosen for it, so no

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Booking pages: whether the workspace has them and where they stand, turning
 //! them on, the way into their administration (whose sections are
 //! [`scheduling_admin`](crate::scheduling_admin), listed once the pages are

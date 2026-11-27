@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A member's role in a workspace, and what it lets the app offer.
 //!
 //! None of this is a security boundary. The service checks the role on every

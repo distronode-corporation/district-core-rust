@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The live call transcript on the telemetry socket (`transcript` v1).
 //!
 //! A socket receives a call's transcript only after it asked for it with a

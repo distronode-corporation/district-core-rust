@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The signed-in member's own calendars: which are connected, which calendars
 //! of an account are read for conflicts, and where new bookings are written.
 

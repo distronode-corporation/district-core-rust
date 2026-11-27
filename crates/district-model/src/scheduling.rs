@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Booking pages: whether the workspace has them, turning them on, and the
 //! hand-off that signs the browser in to the web dashboard for whatever this
 //! app does not draw. Their administration (event types, availability,

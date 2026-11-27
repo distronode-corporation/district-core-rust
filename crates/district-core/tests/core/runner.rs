@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The effect runner against fakes: what each effect calls and what it
 //! reports, and the whole loop from start-up to a loaded overview.
 

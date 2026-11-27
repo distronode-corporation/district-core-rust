@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Application state for the District AI desktop apps (for Linux and for
 //! Windows), with no user interface toolkit in it and no IO of its own.
 //!

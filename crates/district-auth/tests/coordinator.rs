@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The refresh coordinator, against a store that records the order of every
 //! change and a refresh API that answers from a script.
 //!

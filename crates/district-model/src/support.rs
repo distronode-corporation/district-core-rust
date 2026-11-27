@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Support requests: the workspace writing to Distronode, and the answers.
 //!
 //! Not to be confused with the [help desk](crate::DeskTicketSummary), which is

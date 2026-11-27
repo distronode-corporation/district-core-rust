@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What differs: between the saved fields and the held ones (what a save
 //! sends), between what was sent and what was read back (whether it landed),
 //! and between two engines (how far an edit is from its recipe).

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! One workspace's connection, against an in-memory server that behaves like the
 //! telemetry server, on a paused clock: the handshake, events, renewal, the
 //! close codes, backoff, and stopping.

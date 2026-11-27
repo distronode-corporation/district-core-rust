@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Sign-in, refresh and sign-out end to end: the real `NativeAuthApi` over a
 //! socket to a local mock of the service, the coordinator, and the API client
 //! that asks it for tokens.

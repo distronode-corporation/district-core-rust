@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 [package]
 name = "district-model"
 description = "Serde data types for the District AI API and its live telemetry envelopes. No IO."

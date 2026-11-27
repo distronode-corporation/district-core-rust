@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The real implementations of the runner's API, sign-in, live updates and
 //! presence traits, over `district-api`, `district-auth` and `district-live`.
 

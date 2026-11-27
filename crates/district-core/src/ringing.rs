@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A call ringing on this desktop: the ring, answering it, declining it, and
 //! the ways a ring ends by itself.
 //!

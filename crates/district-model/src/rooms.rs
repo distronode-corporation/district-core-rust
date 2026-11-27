@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Meeting rooms: the name of a room, the credential to join one, and the
 //! meetings recorded in them.
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The workspace's carrier accounts: adding and editing one, the default sender,
 //! each channel's sender, removing one, the owner's mobile number, and checking
 //! credentials before saving them.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The brand colours held equal to the design tokens they were copied from,
 //! as `scripts/sync-palette.py` recorded them.
 

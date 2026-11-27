@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The workspace's members, their roles, and the workspace's name.
 //!
 //! Two role rules on one section. Adding, changing and removing members is for

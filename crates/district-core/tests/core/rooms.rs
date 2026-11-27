@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The rooms lobby: meetings and their records, starting and rejoining a room,
 //! and the credential kept for the call engine, redacted and dropped when the
 //! lobby is left.

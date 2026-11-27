@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The help desk: closed to a viewer, the queue behind the desk's switch, raising
 //! a ticket, one ticket's replies and status, and the settings form that sends
 //! only what changed.

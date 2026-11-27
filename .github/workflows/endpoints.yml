@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 name: Endpoints
 
 # A weekly re-check of contracts/endpoints.snapshot.json against the Android app,

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A read Studio and what it holds: every transition and every view, as plain
 //! functions of the read and the edits.
 

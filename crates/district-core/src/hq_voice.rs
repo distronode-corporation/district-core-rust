@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! District HQ by voice: a session in an encrypted room with the voice agent,
 //! the words both sides say, and a card for every change the agent proposes.
 //!
