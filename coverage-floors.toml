@@ -25,37 +25,37 @@
 
 [crates.district-model]
 floor = 100
-branch_floor = 0
+branch_floor = 79
 reason = "Plain data types with no IO, so the unit and contract tests reach every line."
 
 [crates.district-api]
 floor = 100
-branch_floor = 0
+branch_floor = 96
 reason = "Tested against a local mock HTTP server, so every path, failures included, runs in CI."
 
 [crates.district-auth]
 floor = 100
-branch_floor = 0
+branch_floor = 99
 reason = "Protocol logic a test can drive end to end, with a local server standing in for the real one."
 
 [crates.district-live]
 floor = 100
-branch_floor = 0
+branch_floor = 98
 reason = "A local test server can drive the telemetry client through every state."
 
 [crates.district-core]
 floor = 100
-branch_floor = 0
+branch_floor = 96
 reason = "App state with no user interface toolkit and no IO: plain functions the tests call directly."
 
 [crates.district-host]
 floor = 100
-branch_floor = 0
+branch_floor = 100
 reason = "Files in a temporary directory and a scripted sleep source, so the tests reach every line on any machine."
 
 [crates.district-call]
 floor = 100
-branch_floor = 0
+branch_floor = 100
 reason = "The default build: the crate root and UnavailableCallEngine, all of which the tests run. The LiveKit engine is the entry below."
 
 [features."district-call/livekit"]
@@ -64,10 +64,10 @@ reason = "Measured, not a target: voice.yml's tests against a real media server 
 
 [crates.district-l10n]
 floor = 100
-branch_floor = 0
+branch_floor = 97
 reason = "Pure functions of a locale and a value; the generated accessor test calls every accessor in both languages, and the vectors test reaches every format."
 
 [crates.district-crash]
 floor = 100
-branch_floor = 0
+branch_floor = 91
 reason = "A local mock server stands in for the report service, so the tests reach every line: off, on, a panic, a captured error and the scrubber."
