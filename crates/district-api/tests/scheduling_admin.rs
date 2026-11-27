@@ -306,6 +306,9 @@ async fn a_sign_in_that_does_not_redirect_somewhere_is_unconfirmed() {
     for response in [
         ResponseTemplate::new(200).set_body_json(json!({"ok": true})),
         ResponseTemplate::new(302),
+        // A link on an answer that is not a redirect, and a redirect to nowhere.
+        ResponseTemplate::new(200).insert_header("Location", "https://book.example.com/v1/x"),
+        ResponseTemplate::new(302).insert_header("Location", ""),
     ] {
         let server = signing_in(response).await;
         let error = client(&server)

@@ -507,6 +507,79 @@ mod tests {
         );
     }
 
+    #[test]
+    fn an_answer_to_a_request_sent_before_a_sign_out_is_not_kept() {
+        let cache = Arc::new(MemoryReadCache::new());
+        let saved = SavedReads::new(cache.clone(), crate::SystemClock);
+        saved.own("user-a");
+        let asked = saved
+            .asking(
+                Endpoint::Overview,
+                &Url::parse("https://example.test/before").unwrap(),
+            )
+            .unwrap();
+        let key = asked.key.clone();
+        saved.clear();
+        saved.answered(&asked, b"{}");
+        assert_eq!(cache.load(&key), None);
+    }
+
+    /// A cache whose load lets the test sign out while the copy is read.
+    struct ClearsOnLoad {
+        inner: MemoryReadCache,
+        reads: std::sync::OnceLock<Arc<SavedReads>>,
+    }
+
+    struct Clearing(Arc<ClearsOnLoad>);
+
+    impl ReadCache for Clearing {
+        fn load(&self, key: &str) -> Option<SavedRead> {
+            let read = self.0.inner.load(key);
+            // Set only once the copy is saved, so the owner read at startup clears nothing.
+            self.0
+                .reads
+                .get()
+                .into_iter()
+                .for_each(|reads| reads.clear());
+            read
+        }
+        fn save(&self, key: &str, read: SavedRead) {
+            self.0.inner.save(key, read);
+        }
+        fn remove(&self, key: &str) {
+            self.0.inner.remove(key);
+        }
+        fn clear(&self) {
+            self.0.inner.clear();
+        }
+    }
+
+    #[test]
+    fn a_copy_read_while_the_session_ends_is_not_shown() {
+        let cache = Arc::new(ClearsOnLoad {
+            inner: MemoryReadCache::new(),
+            reads: std::sync::OnceLock::new(),
+        });
+        let saved = Arc::new(SavedReads::new(Clearing(cache.clone()), crate::SystemClock));
+        saved.own("user-a");
+        let asked = saved
+            .asking(
+                Endpoint::Overview,
+                &Url::parse("https://example.test/during").unwrap(),
+            )
+            .unwrap();
+        let key = asked.key.clone();
+        saved.answered(&asked, b"{}");
+        assert!(
+            cache.inner.load(&key).is_some(),
+            "kept while the session lasted"
+        );
+
+        assert!(cache.reads.set(saved.clone()).is_ok());
+        assert_eq!(saved.saved(&key), None);
+        assert_eq!(saved.showing_since(), None);
+    }
+
     /// A clock the test sets.
     struct At(Arc<std::sync::atomic::AtomicI64>);
 
