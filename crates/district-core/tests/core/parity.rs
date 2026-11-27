@@ -296,6 +296,33 @@ fn a_channel_cannot_change_while_a_reply_is_on_its_way() {
     });
 }
 
+/// Choosing the channel the reply already goes on reads nothing again: the
+/// WhatsApp window already read stays.
+#[test]
+fn choosing_the_channel_already_chosen_changes_nothing() {
+    with_meta_channels(|| {
+        let (mut model, _) = inbox_with(AGENCY, "agency", reply_options());
+        opened(&mut model, ADA);
+        let effects = thread_event(
+            &mut model,
+            ThreadEvent::ChooseChannel(CHANNEL_WHATSAPP.to_owned()),
+        );
+        model.update(Event::WhatsAppWindowLoaded {
+            ticket: last_ticket(&effects),
+            result: Ok(fixture("district-whatsapp-window.json")),
+        });
+        let before = screen(&model).clone();
+        assert!(
+            thread_event(
+                &mut model,
+                ThreadEvent::ChooseChannel(CHANNEL_WHATSAPP.to_owned())
+            )
+            .is_empty()
+        );
+        assert_eq!(*screen(&model), before);
+    });
+}
+
 #[test]
 fn attachments_go_by_sms_only() {
     with_meta_channels(|| {
@@ -1355,6 +1382,46 @@ fn a_template_waits_for_free_text_on_its_way() {
         assert!(controls(&model).can_send_template);
         let message = the_send(&thread_event(&mut model, ThreadEvent::SendTemplate));
         assert_eq!(message.template_id.as_deref(), Some("wa_tpl_reminder"));
+    });
+}
+
+/// Free text refused for a closed window that a read had found closed while it
+/// was on its way: the templates already being read are not read again, and
+/// their answer lands.
+#[test]
+fn text_refused_for_a_window_already_read_closed_reads_the_templates_once() {
+    with_meta_channels(|| {
+        let (mut model, _) = inbox_with(AGENCY, "agency", reply_options());
+        let opening = opened(&mut model, WHATSAPP_ONLY);
+        thread_event(&mut model, ThreadEvent::Compose("Late reply".to_owned()));
+        let text = pick(&thread_event(&mut model, ThreadEvent::Send), |e| {
+            matches!(e, Effect::SendMessage { .. })
+        });
+        let effects = model.update(Event::WhatsAppWindowLoaded {
+            ticket: pick(&opening, |e| matches!(e, Effect::LoadWhatsAppWindow { .. })),
+            result: Ok(closed()),
+        });
+        let templates = last_ticket(&effects);
+        model.update(Event::MessageSent {
+            ticket: text,
+            result: Err(coded(
+                409,
+                "whatsapp_window_closed",
+                "The 24-hour WhatsApp window with this contact is closed.",
+            )),
+        });
+        assert!(screen(&model).whatsapp_window_closed());
+        assert_eq!(whatsapp(&model).templates, TemplateList::Loading);
+        // Read again, this answer would be no one's.
+        model.update(Event::WhatsAppTemplatesLoaded {
+            ticket: templates,
+            result: Ok(fixture("district-whatsapp-templates.json")),
+        });
+        assert_eq!(
+            whatsapp(&model).templates,
+            whatsapp(&templates_offered()).templates
+        );
+        assert_eq!(screen(&model).composer.text, "Late reply", "kept");
     });
 }
 

@@ -412,6 +412,19 @@ fn a_team_is_renamed_or_deleted_asked_once_more() {
     assert!(section(&model).dialog.is_none());
 }
 
+#[test]
+fn a_delete_asked_about_is_not_sent_while_a_rename_is_on_its_way() {
+    let mut model = read("agency");
+    team(&mut model, TeamEvent::OpenEditor("team-contract-1".into()));
+    team(&mut model, TeamEvent::AskDelete);
+    assert!(editor(&model).confirming_delete);
+    team(&mut model, TeamEvent::EditName("Sales East".into()));
+    let effects = team(&mut model, TeamEvent::SaveName);
+    assert_eq!(sent(&effects).len(), 1);
+    assert!(team(&mut model, TeamEvent::ConfirmDelete).is_empty());
+    assert!(editor(&model).confirming_delete, "still asked");
+}
+
 fn hosts(model: &Model) -> &TeamMembersDialog {
     match section(model).dialog.as_ref() {
         Some(TeamDialog::Members(dialog)) => dialog,
@@ -749,6 +762,37 @@ fn an_account_is_archived_only_with_no_upcoming_booking() {
         WriteState::Done("Contract Member's scheduler account is closed".into())
     );
     assert_eq!(sent(&effects).len(), 2);
+}
+
+#[test]
+fn an_archive_asked_about_is_not_sent_once_bookings_show_up() {
+    let mut model = read("agency");
+    let first = team(
+        &mut model,
+        TeamEvent::OpenArchive("sched-user-contract".into()),
+    );
+    let second = team(
+        &mut model,
+        TeamEvent::OpenArchive("sched-user-contract".into()),
+    );
+    answer(
+        &mut model,
+        sent(&second)[0].0,
+        done(SchedulingAdminData::UpcomingBookings(Vec::new())),
+    );
+    team(&mut model, TeamEvent::AskArchive);
+    assert!(archive(&model).confirming);
+    // The first count lands late, with bookings.
+    answer(
+        &mut model,
+        sent(&first)[0].0,
+        done(SchedulingAdminData::UpcomingBookings(upcoming())),
+    );
+    assert!(team(&mut model, TeamEvent::ConfirmArchive).is_empty());
+    assert_eq!(
+        archive(&model).blocked_reason(),
+        Some("Reassign or cancel their upcoming bookings first.")
+    );
 }
 
 #[test]

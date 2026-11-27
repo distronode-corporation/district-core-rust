@@ -627,13 +627,11 @@ mod tests {
     #[test]
     fn no_secret_of_a_voice_credential_is_printed() {
         let shown = format!("{:?}", token(credential()));
-        assert!(
-            !shown.contains("secret-jwt")
-                && !shown.contains("secret-key")
-                && !shown.contains("secret-session"),
-            "{shown}"
-        );
-        assert!(shown.contains("wss://media.example.com") && shown.contains("\"us\""));
+        for secret in ["secret-jwt", "secret-key", "secret-session"] {
+            assert!(!shown.contains(secret), "{shown}");
+        }
+        assert!(shown.contains("wss://media.example.com"), "{shown}");
+        assert!(shown.contains("\"us\""), "{shown}");
         // Absent, never null, and left out again when written.
         let bare = token(without(credential(), "e2ee"));
         assert!(serde_json::to_value(&bare).unwrap().get("e2ee").is_none());

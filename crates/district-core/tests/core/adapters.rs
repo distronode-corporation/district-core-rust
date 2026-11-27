@@ -1509,6 +1509,34 @@ async fn the_live_hub_asks_for_only_the_newest_transcript() {
     assert!(hub.transcripts().await.is_empty());
 }
 
+/// Another call in the same workspace is another transcript: it replaces the
+/// one before rather than reading as a heal of it.
+#[tokio::test]
+async fn the_live_hub_replaces_a_transcript_with_another_call_in_its_workspace() {
+    let config = LiveConfig {
+        transport: Arc::new(NoNetwork),
+        clock: Arc::new(SystemClock),
+        jitter: || 0.5,
+    };
+    let minted = Arc::new(Mutex::new(Vec::new()));
+    let (hub, _updates) = LiveHub::new(Arc::new(RefusingMinter(minted)), config);
+    let watch = |call_id: &str| {
+        Some(TranscriptWatch {
+            workspace_id: "ws_a".to_owned(),
+            call_id: call_id.to_owned(),
+            resubscribes: 0,
+        })
+    };
+    let revisions = many_revisions();
+
+    hub.watch_transcript(revisions[0], watch("call_1")).await;
+    hub.watch_transcript(revisions[1], watch("call_2")).await;
+    assert_eq!(
+        hub.transcripts().await,
+        [("ws_a".to_owned(), "call_2".to_owned())]
+    );
+}
+
 /// Who asked for an exchange: the installation id and name.
 type Asked = Arc<Mutex<Vec<(String, Option<String>)>>>;
 

@@ -222,6 +222,36 @@ fn turning_the_setting_off_unregisters_and_stops_the_renewals() {
 }
 
 #[test]
+fn an_unregistration_that_succeeds_leaves_the_desktop_off_and_asks_nothing_more() {
+    let (mut model, effects) = signed_in_with(true);
+    let (set, _) = registered(&effects);
+    model.update(Event::PresenceSet {
+        ticket: set,
+        result: Ok(()),
+    });
+    let effects = model.update(Event::SetRingOnThisComputer(false));
+    let [
+        Effect::SaveRingSetting { ring_here: false },
+        Effect::SetPresence {
+            ticket: unregister,
+            registered: false,
+        },
+    ] = effects.as_slice()
+    else {
+        panic!("{effects:?}");
+    };
+    assert!(
+        model
+            .update(Event::PresenceSet {
+                ticket: *unregister,
+                result: Ok(()),
+            })
+            .is_empty()
+    );
+    assert_eq!(presence(&model).status, PresenceStatus::Off);
+}
+
+#[test]
 fn before_sleep_the_desktop_unregisters_and_rings_nothing_until_it_wakes() {
     let (mut model, effects) = signed_in_with(true);
     let (set, renewal) = registered(&effects);

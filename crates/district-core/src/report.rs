@@ -394,10 +394,8 @@ mod tests {
                 sent,
                 format!("{WINDOWS}\nConversation reply drafted with AI\n\n{NO_NOTE}")
             );
-            assert!(
-                !sent.contains("2125550142") && !sent.contains("ada@"),
-                "{sent}"
-            );
+            assert!(!sent.contains("2125550142"), "{sent}");
+            assert!(!sent.contains("ada@"), "{sent}");
         }
     }
 

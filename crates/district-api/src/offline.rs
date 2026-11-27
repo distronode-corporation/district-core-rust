@@ -511,6 +511,112 @@ mod tests {
         );
     }
 
+    /// An empty or oversized answer is never kept; one of a size to keep is,
+    /// and reads back as shown. In this binary too: the integration tests'
+    /// copy of the code is measured on its own.
+    #[test]
+    fn only_an_answer_of_a_size_to_keep_is_kept_and_shown() {
+        let cache = Arc::new(MemoryReadCache::new());
+        let saved = SavedReads::new(cache.clone(), crate::SystemClock);
+        saved.own("user-a");
+        let asked = saved
+            .asking(
+                Endpoint::Overview,
+                &Url::parse("https://example.test/sizes").unwrap(),
+            )
+            .unwrap();
+        saved.answered(&asked, b"");
+        assert_eq!(cache.load(&asked.key), None);
+        saved.answered(&asked, &vec![b' '; SAVED_COPY_MAX_BYTES + 1]);
+        assert_eq!(cache.load(&asked.key), None);
+        saved.answered(&asked, b"{}");
+        assert_eq!(saved.saved(&asked.key), Some(b"{}".to_vec()));
+        assert!(saved.showing_since().is_some());
+    }
+
+    #[test]
+    fn an_answer_to_a_request_sent_before_a_sign_out_is_not_kept() {
+        let cache = Arc::new(MemoryReadCache::new());
+        let saved = SavedReads::new(cache.clone(), crate::SystemClock);
+        saved.own("user-a");
+        let asked = saved
+            .asking(
+                Endpoint::Overview,
+                &Url::parse("https://example.test/before").unwrap(),
+            )
+            .unwrap();
+        let key = asked.key.clone();
+        saved.clear();
+        saved.answered(&asked, b"{}");
+        assert_eq!(cache.load(&key), None);
+    }
+
+    /// A cache whose load lets the test sign out while the copy is read.
+    struct ClearsOnLoad {
+        inner: MemoryReadCache,
+        reads: std::sync::OnceLock<Arc<SavedReads>>,
+    }
+
+    struct Clearing(Arc<ClearsOnLoad>);
+
+    impl ReadCache for Clearing {
+        fn load(&self, key: &str) -> Option<SavedRead> {
+            let read = self.0.inner.load(key);
+            // Set only once the copy is saved, so the owner read at startup clears nothing.
+            self.0
+                .reads
+                .get()
+                .into_iter()
+                .for_each(|reads| reads.clear());
+            read
+        }
+        fn save(&self, key: &str, read: SavedRead) {
+            self.0.inner.save(key, read);
+        }
+        fn remove(&self, key: &str) {
+            self.0.inner.remove(key);
+        }
+        fn clear(&self) {
+            self.0.inner.clear();
+        }
+    }
+
+    #[test]
+    fn a_copy_read_while_the_session_ends_is_not_shown() {
+        let cache = Arc::new(ClearsOnLoad {
+            inner: MemoryReadCache::new(),
+            reads: std::sync::OnceLock::new(),
+        });
+        let saved = Arc::new(SavedReads::new(Clearing(cache.clone()), crate::SystemClock));
+        saved.own("user-a");
+        let asked = saved
+            .asking(
+                Endpoint::Overview,
+                &Url::parse("https://example.test/during").unwrap(),
+            )
+            .unwrap();
+        let key = asked.key.clone();
+        saved.answered(&asked, b"{}");
+        assert!(
+            cache.inner.load(&key).is_some(),
+            "kept while the session lasted"
+        );
+
+        assert!(cache.reads.set(saved.clone()).is_ok());
+        assert_eq!(saved.saved(&key), None);
+        assert_eq!(saved.showing_since(), None);
+        // The cache forwards a removal too, though nothing here asks for one.
+        cache.inner.save(
+            &key,
+            SavedRead {
+                body: b"{}".to_vec(),
+                saved_at_ms: 0,
+            },
+        );
+        Clearing(cache.clone()).remove(&key);
+        assert_eq!(cache.inner.load(&key), None);
+    }
+
     /// A clock the test sets.
     struct At(Arc<std::sync::atomic::AtomicI64>);
 

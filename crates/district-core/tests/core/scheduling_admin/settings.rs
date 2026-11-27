@@ -336,6 +336,15 @@ fn any_member_saves_their_own_checked_profile() {
         assert!(settings(&mut model, SettingsEvent::SaveProfile).is_empty());
         assert_eq!(profile(&model).rejected, Some(issue));
     }
+    // A blank zone is not offered at all.
+    settings(
+        &mut model,
+        SettingsEvent::EditProfile(ProfileForm {
+            timezone: " ".into(),
+            ..valid.clone()
+        }),
+    );
+    assert_eq!(profile(&model).timezone_options(), zones);
     // A zone this build does not list is offered first.
     settings(
         &mut model,
@@ -744,6 +753,19 @@ fn the_logo_and_banner_save_as_soon_as_chosen_or_removed() {
         )
         .is_empty()
     );
+    settings(
+        &mut model,
+        SettingsEvent::ImageUnreadable(SchedulingUploadTarget::Avatar),
+    );
+    assert!(
+        settings(
+            &mut model,
+            SettingsEvent::RemoveImage(SchedulingUploadTarget::Avatar),
+        )
+        .is_empty()
+    );
+    assert_eq!(brand(&model).logo, WriteState::Idle);
+    assert_eq!(brand(&model).banner, WriteState::Idle);
     settings(
         &mut model,
         SettingsEvent::ImageUnreadable(SchedulingUploadTarget::Logo),

@@ -22,8 +22,8 @@ use serde_json::json;
 
 use crate::settings::{open, settings_row, unchanged};
 use crate::support::{
-    AGENCY, USER, connect, fixture, media, ring_here, ringing, server_error, service, signed_in,
-    ticket, without_calls,
+    AGENCY, USER, VIEWER, connect, fixture, loaded, media, pick, ring_here, ringing, server_error,
+    service, signed_in, ticket, without_calls,
 };
 
 const DEEPGRAM: &str = "deepgram-pipeline";
@@ -443,6 +443,22 @@ fn a_chain_that_still_fits_is_left_alone() {
         result: Ok(Box::new(studio_after(true))),
     });
     assert!(effects.is_empty() && persona(&model).refit.is_none());
+}
+
+/// A workspace the service has since moved off the chain of the member's own
+/// has no chain to fit, and is left alone.
+#[test]
+fn an_engine_no_longer_the_members_own_is_left_alone() {
+    let mut model = custom();
+    let studio = save_language(&mut model);
+    let mut moved = studio_after(false);
+    moved.current.model_id = Some(DEEPGRAM.to_owned());
+    let effects = model.update(Event::VoiceStudioLoaded {
+        ticket: studio,
+        result: Ok(Box::new(moved)),
+    });
+    assert!(effects.is_empty());
+    assert_eq!(persona(&model).refit, None);
 }
 
 /// Nothing to fit to, a read or a save that fails, and a check that does not
@@ -944,4 +960,60 @@ fn editing_during_an_audition_keeps_its_room() {
     assert!(effects.is_empty(), "{effects:?}");
     assert!(signed_in(&model).media.is_some());
     assert!(persona(&model).preview_credential().is_some());
+}
+
+/// The persona opened, its dialog too, by a member the overview read as an
+/// agency member in a workspace the list says they only view; then a read of
+/// the list fails, so the list's role is the one that counts, and the section
+/// stays on screen.
+fn narrowed() -> Model {
+    let (mut model, _) = loaded(VIEWER, "agency");
+    let refresh = model.update(Event::Refresh);
+    let list = pick(&refresh, |effect| {
+        matches!(effect, Effect::LoadWorkspaces { .. })
+    });
+    let effects = model.update(Event::Navigate(Route::Workspace(WorkspaceSection::Persona)));
+    model.update(Event::PersonaOptionsLoaded {
+        ticket: pick(&effects, |effect| {
+            matches!(effect, Effect::LoadPersonaOptions { .. })
+        }),
+        result: Ok(options()),
+    });
+    model.update(Event::WorkspaceConfigLoaded {
+        ticket: pick(&effects, |effect| {
+            matches!(effect, Effect::LoadWorkspaceConfig { .. })
+        }),
+        result: Ok(settings_row()),
+    });
+    event(&mut model, PersonaEvent::OpenPreview);
+    model.update(Event::WorkspacesLoaded {
+        ticket: list,
+        remembered: None,
+        result: Err(server_error()),
+    });
+    model
+}
+
+/// A member who may no longer change the workspace changes nothing on the
+/// persona still showing.
+#[test]
+fn a_member_whose_role_narrowed_changes_nothing_on_the_persona() {
+    let mut model = narrowed();
+    assert!(!signed_in(&model).capabilities().can_change);
+    assert!(text(&mut model, PersonaText::Name, "Grace").is_empty());
+    assert_eq!(persona(&model).value(PersonaText::Name), "Ada");
+    assert!(event(&mut model, PersonaEvent::ClosePreview).is_empty());
+    assert_eq!(persona(&model).preview, Some(PersonaPreview::Idle));
+}
+
+/// In a build without calls, Start is not even answered with its failure for
+/// a member who may no longer change the workspace.
+#[test]
+fn a_build_without_calls_answers_no_start_for_a_member_whose_role_narrowed() {
+    without_calls(|| {
+        let mut model = narrowed();
+        assert!(persona(&model).can_start_preview());
+        assert!(event(&mut model, PersonaEvent::StartPreview).is_empty());
+        assert_eq!(persona(&model).preview, Some(PersonaPreview::Idle));
+    });
 }

@@ -70,6 +70,23 @@ fn the_list_reads_each_types_length_place_state_and_link() {
 }
 
 #[test]
+fn an_inactive_type_has_no_link() {
+    let (mut model, effects) = open("agency", SchedulingSection::EventTypes);
+    status_answer(&mut model, &effects, Ok(ready_status()));
+    let mut items = types();
+    items[0].is_active = Some(false);
+    let ticket = ticket_for(&effects, |r| *r == SchedulingAdminRequest::EventTypes);
+    answer(
+        &mut model,
+        ticket,
+        done(SchedulingAdminData::EventTypes(items)),
+    );
+    let rows = list(&model).rows();
+    assert_eq!(rows[0].state, "Inactive");
+    assert_eq!(rows[0].booking_page, "Not public");
+}
+
+#[test]
 fn without_a_host_no_type_has_a_link_and_a_failed_read_is_its_own_state() {
     let (mut model, effects) = open("agency", SchedulingSection::EventTypes);
     status_answer(&mut model, &effects, Err(server_error()));
@@ -499,6 +516,17 @@ fn an_edit_sends_every_field_and_reads_the_event_type_again() {
         edit_form(&model).validation,
         Some("Has to be a whole number of minutes, at least 1.")
     );
+    // The duration is held to the same rule as the interval.
+    let duration = form.duration.clone();
+    form.duration = "0".into();
+    form.interval = "30".into();
+    one(&mut model, EventTypeEvent::EditForm(form.clone()));
+    assert!(one(&mut model, EventTypeEvent::Save).is_empty());
+    assert_eq!(
+        edit_form(&model).validation,
+        Some("Has to be a whole number of minutes, at least 1.")
+    );
+    form.duration = duration;
     form.name = " ".into();
     one(&mut model, EventTypeEvent::EditForm(form.clone()));
     one(&mut model, EventTypeEvent::Save);

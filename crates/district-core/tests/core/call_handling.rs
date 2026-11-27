@@ -209,6 +209,28 @@ fn availability_is_the_members_own_switch_sent_at_once() {
     );
 }
 
+/// A refresh reads both again while nothing is on its way, and not while the
+/// member's own switch is: that answer belongs to the switch.
+#[test]
+fn a_refresh_reads_both_again_unless_the_switch_is_on_its_way() {
+    let mut model = read("agency", None);
+    let effects = model.update(Event::Refresh);
+    assert!(matches!(
+        effects.as_slice(),
+        [
+            Effect::LoadCallHandling { .. },
+            Effect::LoadAvailability { .. }
+        ]
+    ));
+    assert_eq!(section(&model).mode(), None);
+
+    let mut model = read("agency", None);
+    event(&mut model, CallHandlingEvent::SetAvailable(false));
+    assert!(model.update(Event::Refresh).is_empty());
+    assert_eq!(section(&model).availability_save, SaveState::Saving);
+    assert_eq!(section(&model).mode(), Some(CallHandlingMode::AiFirst));
+}
+
 /// Either read failing takes only its own half.
 #[test]
 fn each_read_failing_takes_only_its_half() {

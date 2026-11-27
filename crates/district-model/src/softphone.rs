@@ -150,7 +150,8 @@ mod tests {
     fn neither_credential_prints_its_token() {
         let printed = format!("{:?} {:?}", dial(), answer());
         assert!(!printed.contains("media-token-secret"), "{printed}");
-        assert!(printed.contains("<redacted>") && printed.contains("CA01"));
+        assert!(printed.contains("<redacted>"), "{printed}");
+        assert!(printed.contains("CA01"), "{printed}");
     }
 
     #[test]

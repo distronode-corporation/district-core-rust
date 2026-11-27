@@ -260,6 +260,11 @@ fn a_disconnect_is_asked_once_more_and_says_when_nothing_receives_bookings() {
         CalendarEvent::AskDisconnect("cal-conn-contract-2".into()),
     );
     assert_eq!(section(&model).disconnect.asking, None, "one at a time");
+    assert!(
+        calendar(&mut model, CalendarEvent::ConfirmDisconnect).is_empty(),
+        "nor is a second one sent"
+    );
+    assert!(section(&model).disconnect.busy);
     let ticket = *ticket;
     answer(&mut model, ticket, Err(server_error()));
     assert!(section(&model).disconnect.failure.is_some());

@@ -325,16 +325,19 @@ impl SignedIn {
             HqEvent::Ask(prompt) => ask(hq, prompt.trim(), workspace_id, tickets),
             HqEvent::Retry => retry(hq, workspace_id, tickets),
             HqEvent::Confirm => match &hq.phase {
-                HqPhase::Confirming(proposal) | HqPhase::ConfirmFailed { proposal, .. }
-                    if capabilities.can_change =>
-                {
-                    let proposal = proposal.clone();
-                    hq.phase = HqPhase::Applying(proposal.clone());
-                    vec![Effect::ConfirmHq {
-                        ticket: tickets.issue(Slot::HqConfirm),
-                        workspace_id,
-                        proposal,
-                    }]
+                // One test of the role, not a guard copied onto each pattern of the pair.
+                HqPhase::Confirming(proposal) | HqPhase::ConfirmFailed { proposal, .. } => {
+                    if capabilities.can_change {
+                        let proposal = proposal.clone();
+                        hq.phase = HqPhase::Applying(proposal.clone());
+                        vec![Effect::ConfirmHq {
+                            ticket: tickets.issue(Slot::HqConfirm),
+                            workspace_id,
+                            proposal,
+                        }]
+                    } else {
+                        Vec::new()
+                    }
                 }
                 _ => Vec::new(),
             },

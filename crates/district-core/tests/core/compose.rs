@@ -153,6 +153,8 @@ fn a_contact_is_reached_on_its_own_number_and_address_a_text_first() {
     );
     assert_eq!(compose(&model).recipient, None);
     assert_eq!(compose(&model).target(), None);
+    // No one chosen yet is not a contact with nothing to send to.
+    assert_eq!(compose(&model).no_address_note(), None);
     event(&mut model, ComposeEvent::ChooseContact(ADA_ID.to_owned()));
     assert_eq!(
         compose(&model).channel_choices(),
@@ -255,6 +257,7 @@ fn a_text_goes_once_and_a_refusal_keeps_what_was_typed() {
     assert_eq!(message.subject, None);
     assert_eq!(message.channel, CHANNEL_SMS);
     assert!(compose(&model).sending);
+    assert!(!compose(&model).can_send());
     assert_eq!(compose(&model).send_label(), "Sending\u{2026}");
     // Nothing changes while it is on its way, and it is not sent twice.
     assert!(event(&mut model, ComposeEvent::Send).is_empty());

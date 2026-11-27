@@ -655,6 +655,19 @@ fn a_room_that_cannot_be_joined_is_a_failed_call() {
 }
 
 #[test]
+fn a_room_that_ends_while_still_joining_ends_the_call_without_failing_it() {
+    let mut model = at_dialler(AGENCY, "agency");
+    let session = placed(&mut model);
+    assert_eq!(*phase(&model), CallPhase::Connecting);
+    let effects = model.update(media(
+        session,
+        MediaEvent::Disconnected(DisconnectReason::RoomEnded),
+    ));
+    assert_eq!(and_transcript_read(effects), [carrier_hang_up()]);
+    assert_eq!(*phase(&model), CallPhase::Ended(CallEnd::Remote));
+}
+
+#[test]
 fn a_call_through_an_engine_that_can_join_nothing_fails_saying_so() {
     let mut model = at_dialler(AGENCY, "agency");
     let session = placed(&mut model);

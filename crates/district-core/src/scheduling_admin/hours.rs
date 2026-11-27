@@ -991,7 +991,13 @@ mod tests {
         assert_eq!(wire_or_typed("9 h 30"), "09:30");
         assert_eq!(wire_or_typed("09-30"), "09-30");
         assert!(well_formed_date("2026-09-14"));
-        for bad in ["2026-9-14", "2026/09/14", "20260914xx", "abcd-ef-gh"] {
+        for bad in [
+            "2026-9-14",
+            "2026/09/14",
+            "2026-09x14",
+            "20260914xx",
+            "abcd-ef-gh",
+        ] {
             assert!(!well_formed_date(bad), "{bad}");
         }
         assert_eq!(

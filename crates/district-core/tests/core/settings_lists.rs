@@ -804,6 +804,115 @@ fn no_rules_are_editable_without_a_read_this_app_can_carry() {
     }
 }
 
+/// A switch moved on the capabilities, and a rule edited, are each an edit
+/// leaving would lose.
+#[test]
+fn a_moved_switch_or_an_edited_rule_is_unsaved_work() {
+    let mut model = read(WorkspaceSection::Tools, Ok(settings_row()));
+    assert!(!signed_in(&model).settings_unsaved());
+    toggle(&mut model, "send_sms", true);
+    assert!(signed_in(&model).settings_unsaved());
+
+    let mut model = read(WorkspaceSection::Routing, Ok(settings_row()));
+    assert!(!signed_in(&model).settings_unsaved());
+    model.update(Event::RoutingRules(RoutingRulesEvent::Remove(0)));
+    assert!(signed_in(&model).settings_unsaved());
+}
+
+/// An entry needs a name as well as a number to be added.
+#[test]
+fn a_directory_entry_without_a_name_is_not_added() {
+    let mut model = read(WorkspaceSection::Directory, Ok(settings_row()));
+    model.update(Event::Directory(DirectoryEvent::EditNewName(
+        "  ".to_owned(),
+    )));
+    model.update(Event::Directory(DirectoryEvent::EditNewPhoneNumber(
+        "+14165550120".to_owned(),
+    )));
+    assert!(!directory(&model).can_add());
+    assert!(
+        model
+            .update(Event::Directory(DirectoryEvent::Add))
+            .is_empty()
+    );
+    assert!(directory(&model).add_rejected);
+    assert_eq!(directory(&model).entries().len(), 2);
+}
+
+/// While a directory save is on its way an entry is not edited, and a question
+/// whose edits were undone before it was answered saves nothing.
+#[test]
+fn a_directory_is_not_edited_while_saving_or_saved_once_its_edits_are_undone() {
+    let mut model = read(WorkspaceSection::Directory, Ok(settings_row()));
+    let rename = |value: &str| {
+        Event::Directory(DirectoryEvent::Edit {
+            index: 0,
+            field: DirectoryField::Name,
+            value: value.to_owned(),
+        })
+    };
+    model.update(rename("Operations"));
+    model.update(Event::Directory(DirectoryEvent::Save));
+    model.update(rename("Ops desk"));
+    assert!(!directory(&model).has_unsaved_changes());
+    assert!(
+        model
+            .update(Event::Directory(DirectoryEvent::ConfirmSave))
+            .is_empty()
+    );
+    assert_eq!(directory(&model).save, SaveState::Idle);
+
+    model.update(rename("Operations"));
+    model.update(Event::Directory(DirectoryEvent::Save));
+    let effects = model.update(Event::Directory(DirectoryEvent::ConfirmSave));
+    assert_eq!(effects.len(), 1);
+    assert!(model.update(rename("Front desk")).is_empty());
+    assert_eq!(directory(&model).entries()[0].name(), "Operations");
+}
+
+/// While a rules save is on its way no rule is edited or removed, and a
+/// question whose edits were undone before it was answered saves nothing.
+#[test]
+fn rules_are_not_edited_while_saving_or_saved_once_their_edits_are_undone() {
+    let mut model = read(WorkspaceSection::Routing, Ok(settings_row()));
+    let voice = |value: &str| {
+        Event::RoutingRules(RoutingRulesEvent::Edit {
+            index: 2,
+            field: RoutingRuleField::Voice,
+            value: value.to_owned(),
+        })
+    };
+    assert!(
+        model
+            .update(Event::RoutingRules(RoutingRulesEvent::ConfirmSave))
+            .is_empty(),
+        "no question, no save"
+    );
+    model.update(voice("Kore"));
+    model.update(Event::RoutingRules(RoutingRulesEvent::Save));
+    model.update(voice("Fenrir"));
+    assert!(!rules(&model).has_unsaved_changes());
+    assert!(
+        model
+            .update(Event::RoutingRules(RoutingRulesEvent::ConfirmSave))
+            .is_empty()
+    );
+    assert_eq!(rules(&model).save, SaveState::Idle);
+
+    model.update(voice("Kore"));
+    model.update(Event::RoutingRules(RoutingRulesEvent::Save));
+    let effects = model.update(Event::RoutingRules(RoutingRulesEvent::ConfirmSave));
+    assert_eq!(effects.len(), 1);
+    let sent = rules(&model).rules();
+    assert!(model.update(voice("Puck")).is_empty());
+    assert!(
+        model
+            .update(Event::RoutingRules(RoutingRulesEvent::Remove(0)))
+            .is_empty()
+    );
+    assert_eq!(rules(&model).rules(), sent);
+}
+
 /// The two parts are saved apart, and saving one leaves the other's unsaved
 /// edit as it was rather than dropping it without a word.
 #[test]

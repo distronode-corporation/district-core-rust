@@ -559,3 +559,68 @@ fn a_reply_already_read_back_is_shown_once() {
     assert_eq!(shown, 1);
     assert_eq!(request_screen(&model).reply, "");
 }
+
+/// A request left with a reply and a close on their way: neither answer lands
+/// with no request open, nor on the same request opened again and still being
+/// read.
+#[test]
+fn a_request_opened_again_drops_the_answers_of_the_last_visit() {
+    let mut model = on_request(AGENCY, "agency");
+    event(&mut model, SupportEvent::EditReply("Thanks".to_owned()));
+    let reply = last_ticket(&event(&mut model, SupportEvent::SendReply));
+    event(&mut model, SupportEvent::AskClose);
+    let close = last_ticket(&event(&mut model, SupportEvent::ConfirmClose));
+    model.update(Event::Back);
+    let before = signed_in(&model).clone();
+    let effects = model.update(Event::SupportRequestClosed {
+        ticket: close,
+        result: Ok(fixture("district-support-close.json")),
+    });
+    assert!(effects.is_empty());
+    assert_eq!(*signed_in(&model), before);
+
+    model.update(Event::Navigate(Route::SupportRequest {
+        key: KEY.to_owned(),
+    }));
+    assert_eq!(request_screen(&model).request, SupportRequestView::Loading);
+    let before = signed_in(&model).clone();
+    let effects = model.update(Event::SupportReplied {
+        ticket: reply,
+        result: Ok(fixture("district-support-reply.json")),
+    });
+    assert!(effects.is_empty());
+    let effects = model.update(Event::SupportRequestClosed {
+        ticket: close,
+        result: Ok(fixture("district-support-close.json")),
+    });
+    assert!(effects.is_empty());
+    assert_eq!(*signed_in(&model), before);
+}
+
+/// A close on a request the list does not hold leaves the list as read: its
+/// next read shows it.
+#[test]
+fn a_close_on_a_request_the_list_does_not_hold_leaves_the_list_alone() {
+    let mut model = on_support();
+    let list = support(&model).list.clone();
+    let effects = model.update(Event::Navigate(Route::SupportRequest {
+        key: KEY.to_owned(),
+    }));
+    let mut answer: SupportRequestResponse = fixture("district-support-request.json");
+    answer.request.id = "support_request_unlisted".to_owned();
+    model.update(Event::SupportRequestLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(answer),
+    });
+    event(&mut model, SupportEvent::AskClose);
+    let effects = event(&mut model, SupportEvent::ConfirmClose);
+    model.update(Event::SupportRequestClosed {
+        ticket: last_ticket(&effects),
+        result: Ok(fixture("district-support-close.json")),
+    });
+    assert_eq!(support(&model).list, list);
+    assert_eq!(
+        request_screen(&model).detail().unwrap().status_category,
+        "DONE"
+    );
+}

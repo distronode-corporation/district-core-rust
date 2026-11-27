@@ -541,6 +541,7 @@ mod tests {
         assert_eq!(Interval::minutes("24:30"), None);
         assert_eq!(Interval::minutes("12:60"), None);
         assert_eq!(Interval::minutes("9:30"), None);
+        assert_eq!(Interval::minutes("09:3"), None);
         assert_eq!(Interval::minutes("0930"), None);
         assert_eq!(Interval::minutes("ab:cd"), None);
         assert_eq!(Interval::text(570), "09:30");

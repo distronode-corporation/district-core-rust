@@ -296,7 +296,8 @@ mod tests {
             source: "workspace".to_owned(),
             region: "us".to_owned(),
         };
-        assert!(request("DONE").is_done() && request("done").is_done());
+        assert!(request("DONE").is_done());
+        assert!(request("done").is_done());
         assert!(!request("INDETERMINATE").is_done());
     }
 }

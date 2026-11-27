@@ -150,12 +150,10 @@ mod tests {
     fn this_process_lists_the_image_holding_this_code() {
         let here = this_process_lists_the_image_holding_this_code as fn() as usize as u64;
         let OwnImages(meta) = OwnImages::new();
-        assert!(
-            meta.images.iter().any(|image| matches!(image,
-                DebugImage::Symbolic(image)
-                    if image.image_addr.0 <= here && here - image.image_addr.0 < image.image_size)),
-            "{meta:?}"
-        );
+        // Read through the filter itself, with no main name, so only the image
+        // holding `here` is kept: no pattern in the test that can go one way.
+        let holding = own_images(meta.images.clone(), "", here, "x86_64");
+        assert_eq!(holding.len(), 1, "{meta:?}");
         assert_eq!(OwnImages(meta).name(), "district-crash-images");
     }
 }
