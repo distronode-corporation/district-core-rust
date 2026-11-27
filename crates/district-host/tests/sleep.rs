@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! `watch_sleep`, the suspend and resume protocol, against a scripted source
 //! and handler: a hold on the sleep while awake, let go of only once the app
 //! is ready to sleep or the limit has passed, and taken again on waking before

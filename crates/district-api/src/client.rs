@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The transport: builds each request from the endpoint table, sends it with the
 //! access token, and turns the answer into a value or an [`ApiError`].
 //!

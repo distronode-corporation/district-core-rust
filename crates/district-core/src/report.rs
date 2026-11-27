@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Reporting AI-generated content: a support request to Distronode, raised
 //! through the support form without leaving the screen the content is on.
 //!

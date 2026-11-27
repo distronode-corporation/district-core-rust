@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The authorize URL, and every way a callback can be refused.
 //!
 //! The central rule: a callback whose `state` is not the one this app generated

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The new-customer setup wizard: its state, the step saves, the website
 //! lookup, the test call, the call forwarding check and the connections read.
 //!

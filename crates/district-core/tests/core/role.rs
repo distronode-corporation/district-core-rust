@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The role matrix: which role the app offers what, and that anything it does
 //! not recognise offers nothing.
 

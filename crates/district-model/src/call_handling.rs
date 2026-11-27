@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Who answers a call, and whether the signed-in member can be rung.
 //!
 //! Two settings of two scopes. Call handling is the workspace's: every member

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Numbers, money, dates, times, durations, percentages, lists and plural
 //! categories, in English and Canadian French.
 //!

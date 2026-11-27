@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The people in a room: those already there when the engine joins, those who
 //! join and leave after, and the services among them.
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Voice Studio: the read that describes the receptionist's voice engine, and
 //! the engine itself as the persona stores it.
 //!

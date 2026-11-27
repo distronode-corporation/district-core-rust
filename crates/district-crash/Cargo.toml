@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 [package]
 name = "district-crash"
 description = "Opt-in crash reports for the District AI desktop apps: nothing is set up or sent without a DSN and the user's consent."

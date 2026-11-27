@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What a screen shows for a support request's status, in the app's language.
 //!
 //! The help desk's own status name (`statusName`) is never shown as it is. It

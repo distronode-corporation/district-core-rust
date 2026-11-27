@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The phone call on this desktop: one placed from the dialler, or one rung here
 //! and answered. At most one at a time, and it outlives a change of workspace:
 //! a live call is not dropped because the member looked at another workspace.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the help desk: the workspace's own customers' tickets, and the
 //! desk's settings and logo.
 //!

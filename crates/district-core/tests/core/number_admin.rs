@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Managing held numbers and the carrier account: the carrier tab's reads, a
 //! number's routing and its release behind a confirmation, the billed lookup,
 //! SIP trunks, the one-time passcode sender and the two registrations, and a

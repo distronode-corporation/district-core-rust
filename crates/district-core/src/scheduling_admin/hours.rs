@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Working hours: the member's weekly windows and the dated overrides of them,
 //! each with its editor.
 //!

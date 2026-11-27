@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The settings file, in temporary directories: no test here reads or writes
 //! the real user's configuration.
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The in-memory store, which the app falls back to when the desktop has no
 //! secret store, and the store error type.
 

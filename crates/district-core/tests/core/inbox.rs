@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The inbox: the list, the unread badge, the draft badges and the search.
 
 use district_core::{

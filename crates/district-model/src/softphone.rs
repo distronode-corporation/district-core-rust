@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Calls on the desktop: placing one, and taking one that rings here.
 //!
 //! Both answers are a media credential: the server that holds the call's room,

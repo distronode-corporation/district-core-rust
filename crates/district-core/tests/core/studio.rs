@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Voice Studio's rules against the service's recorded read: what an engine
 //! saves as, what a save sends and whether it landed, and what the chain, the
 //! meter and the residency summary say.

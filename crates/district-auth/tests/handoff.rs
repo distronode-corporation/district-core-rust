@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A hand-off's `state`, and every way the browser's answer can be refused.
 //!
 //! The rule is the sign-in's: an answer whose `state` is not the one this app

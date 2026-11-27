@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Where the time is read: Unix epoch milliseconds, the unit the service states
 //! every expiry in. One trait for the sign-in crate and the live updates alike,
 //! so a test moves both by hand and the app wires one clock.

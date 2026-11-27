@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The debug images a report lists, so the service can match the raw
 //! addresses of a stripped release build to the debug files uploaded for it:
 //! an ELF image by its build id, a PE image by its PDB's id and age.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The call directory: who the receptionist can put a live caller through to.
 //!
 //! The save replaces the stored directory with exactly the list it is sent, and

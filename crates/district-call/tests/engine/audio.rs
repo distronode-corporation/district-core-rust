@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Sound crossing a room: the tone one engine sends is what the other hears,
 //! and the microphone going off and on is reported and heard.
 

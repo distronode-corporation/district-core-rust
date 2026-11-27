@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Supervising a live call from its call screen: listening in with the
 //! microphone off, the voice agent's lines, a note to the receptionist sent
 //! once, and a takeover that is confirmed first and handed back by leaving.

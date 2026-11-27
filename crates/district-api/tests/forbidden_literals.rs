@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A scan of every crate's `src/` for surfaces this client must never reach.
 //!
 //! - `/api/admin`: service administration, which is web-only.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The booking scheduler's administration, section by section: what each one
 //! reads, what each action sends, and how each answer and refusal lands.
 

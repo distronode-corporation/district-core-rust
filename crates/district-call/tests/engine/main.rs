@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The LiveKit engine against a real media server on this machine.
 //!
 //! Every test starts a `livekit-server` of its own on free loopback ports

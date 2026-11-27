@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Live updates for the open workspace and for every other workspace where the
 //! member takes calls, and the notification for a message that arrives while
 //! nobody is looking.

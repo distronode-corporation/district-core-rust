@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Step 5, "Calls, people and bookings".
 //!
 //! Who answers is saved here, through the call handling route the settings

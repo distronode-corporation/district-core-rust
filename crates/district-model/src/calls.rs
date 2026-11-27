@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The call log: its rows, one call, its transcript, and ending a call.
 
 use serde::{Deserialize, Serialize};

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Settings: the booking page and its images, the booking assistant, the
 //! member's profile and picture, and their notifications.
 

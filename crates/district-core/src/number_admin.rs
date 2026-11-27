@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Managing the numbers a workspace holds and its carrier account, on the phone
 //! numbers screen: reapplying a number's routing, releasing it, the billed
 //! lookup, which carriers are connected, SIP trunks, the one-time passcode

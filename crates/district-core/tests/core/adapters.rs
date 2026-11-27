@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The real implementations behind the runner's traits: the API client, and
 //! sign-in over the refresh coordinator.
 

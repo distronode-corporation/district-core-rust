@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A session's life: joining and failing to, leaving (twice, and while still
 //! joining), a second session replacing the first, and a server that goes.
 

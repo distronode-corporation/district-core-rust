@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Every result of the third milestone's screens, arriving under a ticket
 //! nobody awaits (an answer for a screen already left, a workspace already
 //! closed, a request already answered), changes nothing and asks for nothing.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Step 3, "Your receptionist": a name, a greeting and a voice, saved into the
 //! persona.
 //!

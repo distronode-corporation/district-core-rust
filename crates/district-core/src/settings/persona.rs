@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The receptionist's persona: its three texts, the language it speaks and its
 //! answer length, and auditioning the form as it stands.
 //!

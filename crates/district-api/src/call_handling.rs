@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for who answers a call and whether the signed-in member can be
 //! rung.
 //!

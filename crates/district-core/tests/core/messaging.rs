@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Carrier accounts: a form whose credentials are held only while it is open
 //! and printed nowhere, saves that send only what the member typed, the
 //! credential check whose refusal is an answer, one write at a time, a removal

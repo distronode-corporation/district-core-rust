@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for the workspace's carrier accounts: the read, the five changes
 //! that share `PATCH /api/district/workspace/messaging`, and the check of
 //! unsaved credentials.

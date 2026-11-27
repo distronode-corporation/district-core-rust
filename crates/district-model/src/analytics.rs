@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Call analytics for one workspace over a window of days.
 //!
 //! Every number here is worked out by the service over the whole window, and the

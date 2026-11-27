@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Managing the numbers a workspace holds, and the carrier account behind them:
 //! configuring and releasing a number, the billed number lookup, which carriers
 //! are connected, SIP trunks, the one-time passcode sender, and the A2P 10DLC and

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Typed calls for meeting rooms, the read side: the credential to join a room,
 //! and the meetings recorded in rooms.
 //!

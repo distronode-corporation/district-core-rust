@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A fresh re-authentication at the person's provider, before a sensitive
 //! change: deleting the account, or turning two-step verification on or off.
 //!

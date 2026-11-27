@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The engine the Studio holds, and what it saves as.
 //!
 //! A port of the web Studio's `fieldsOf` and `canonicalModelId`, and the rule

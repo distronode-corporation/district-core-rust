@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! A phone number's regulatory registration, on the phone numbers screen's
 //! Registrations tab, after the Android app's `RegistrationsTab` and its view
 //! model: what a country's regulator asks for, starting a draft filing, the

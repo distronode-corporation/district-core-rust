@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! How a connection reaches the server: a byte stream to the socket's host, with
 //! TLS for `wss`. The WebSocket handshake runs over it afterwards.
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The contract gate: this crate's data types held to the server's recorded
 //! responses in `contracts/fixtures/` (the Android app's set) and
 //! `contracts/desktop/` (the shapes only this client reads), and the vendored

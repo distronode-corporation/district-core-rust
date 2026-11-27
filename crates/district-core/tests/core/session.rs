@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The session: start-up, resuming, signing in through the browser, signing
 //! out, and the words for each.
 

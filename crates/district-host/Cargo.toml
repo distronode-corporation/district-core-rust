@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 [package]
 name = "district-host"
 description = "The District AI desktop apps' files and sleep protocol, on any operating system: device id, refresh marker, settings file. GTK-free."

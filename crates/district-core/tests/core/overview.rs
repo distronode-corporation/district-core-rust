@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The workspace switcher and the overview: which workspace opens, what each
 //! "nothing to show" state means, the finish-setup card, and navigation.
 

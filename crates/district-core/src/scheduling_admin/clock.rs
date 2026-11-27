@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The scheduler's times on the member's wall clock: an RFC 3339 instant read
 //! in the IANA zone on their scheduler profile (not the computer's), then
 //! written by `district_l10n::format`.

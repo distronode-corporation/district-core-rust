@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The credentials this crate handles, each in a wrapper that keeps it out of
 //! `Debug` output.
 //!

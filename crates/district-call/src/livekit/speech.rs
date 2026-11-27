@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The words spoken in a room, as the agents framework transcribes them: one
 //! text stream per update on `lk.transcription`, for the member's words as
 //! well as the agent's.

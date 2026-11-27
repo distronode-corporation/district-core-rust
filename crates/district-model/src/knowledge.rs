@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The knowledge base: the documents the receptionist answers from, and where
 //! it answers from.
 //!

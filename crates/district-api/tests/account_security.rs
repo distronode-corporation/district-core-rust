@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Two-step verification, the fresh re-authentication and the account's
 //! deletion: what each call sends, what it decodes from the service's recorded
 //! answers, and which answers are not the success they look like.

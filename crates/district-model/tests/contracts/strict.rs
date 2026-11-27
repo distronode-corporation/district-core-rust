@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The `strict-contracts` feature is on in every test build, and every type in
 //! this crate that derives `Deserialize` honours it.
 //!

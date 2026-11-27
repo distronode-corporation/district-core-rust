@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The signed-in devices screen and signing out.
 
 use serde::{Deserialize, Serialize};

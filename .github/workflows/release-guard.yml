@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 name: Release guard
 
 # Fires on a `vX.Y.Z` tag. A release here is the tag and a GitHub release made by

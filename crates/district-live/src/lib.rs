@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The client for District AI's live telemetry WebSocket.
 //!
 //! While a desktop app runs, calls and messages reach it as they happen over

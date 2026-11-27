@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The three sign-in routes over a real socket, against a local mock server.
 //!
 //! The mapping from each answer to an outcome is the point of these tests, and

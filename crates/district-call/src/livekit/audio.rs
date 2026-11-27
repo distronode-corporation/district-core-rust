@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Where a session's sound comes from and where the far end's goes: the
 //! desktop's devices, or frames the caller makes and hears itself.
 

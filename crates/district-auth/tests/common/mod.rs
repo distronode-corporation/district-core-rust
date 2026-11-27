@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Test doubles shared by the sign-in tests: a session store that records the
 //! order of every change and can be told to fail, refresh and revoke APIs that
 //! answer from a script and can be held mid-request, and a clock moved by hand.

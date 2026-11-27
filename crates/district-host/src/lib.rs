@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What a District AI desktop app keeps on the machine, and how it hears that
 //! the machine is going to sleep, on any operating system. No GTK, and nothing
 //! that builds only on Linux or only on Windows: each app keeps its own

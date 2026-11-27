@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Step 4, "What callers should know": the time zone, the address, the opening
 //! hours, the services and the common questions the receptionist answers from.
 //!

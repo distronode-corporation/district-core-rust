@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Call handling and availability: two reads that fail apart, a workspace
 //! setting saved with a button and only what changed, the member's own switch
 //! sent at once, and both answers adopted as stored.

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The member's own calendars: which accounts are connected, which of their
 //! calendars are read for conflicts and which receives new bookings; connecting
 //! Google or Microsoft through the provider's consent page in the browser, a

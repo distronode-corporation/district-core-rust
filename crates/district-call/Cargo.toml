@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Distronode Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 [package]
 name = "district-call"
 description = "The District AI call engine. The LiveKit implementation sits behind the optional `livekit` feature."

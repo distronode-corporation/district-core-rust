@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! One thread: its history of messages and calls, and the reply composer.
 //!
 //! # The history

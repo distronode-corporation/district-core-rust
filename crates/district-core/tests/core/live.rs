@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Live updates: which workspace is watched, what each event reads again, the
 //! reads after a gap, the notification for a new message, opening one, and the
 //! window's visibility. Also the one rule every result follows: a result still

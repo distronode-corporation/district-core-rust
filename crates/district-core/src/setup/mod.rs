@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The setup wizard, in the app: the six steps of the web's wizard, in the
 //! web's order, for the workspace's owner ([`Route::Setup`](crate::Route::Setup)).
 //!

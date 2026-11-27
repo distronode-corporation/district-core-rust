@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The live transcript's frames read into their typed events: every field of
 //! the service's recorded frames, the explicit nulls written back, what is not
 //! read (another version, another call, malformed data, text beyond the

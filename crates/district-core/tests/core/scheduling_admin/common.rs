@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! What every section shares: the way in from the booking pages screen, the
 //! routes, the five sentences for a refusal, and answers that come too late.
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! Shared by the connection tests: a scripted minter, a clock that follows
 //! Tokio's, an in-memory transport, and a WebSocket server that behaves like the
 //! telemetry server: it selects a subprotocol, pings every thirty seconds, and

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The booking scheduler's administration: one typed method for every
 //! operation of the service's catalog, the upload, and the scheduler sign-in a
 //! calendar connection starts with.

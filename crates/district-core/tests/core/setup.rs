@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The setup wizard in the app: the shell (the first open step, the single
 //! step write, Back and Skip, the hand-off re-read, the refusals), and each of
 //! its six steps, against the service's recorded answers.

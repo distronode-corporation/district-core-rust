@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! District HQ: the conversation the app holds, the confirmation in front of
 //! every change, and who may confirm one.
 

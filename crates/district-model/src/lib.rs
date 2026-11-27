@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Distronode Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //! The data the District AI desktop apps exchange with the District AI service.
 //!
 //! Serde types for the REST API, mirroring the core model of the District AI
