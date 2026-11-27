@@ -396,6 +396,12 @@ mod tests {
         let started = Instant::now();
         reporter.wait_for_captures(Duration::from_millis(20));
         assert!(started.elapsed() >= Duration::from_millis(20));
+
+        // With none under way it does not wait at all.
+        reporter.captures.store(0, Ordering::Release);
+        let started = Instant::now();
+        reporter.wait_for_captures(Duration::from_secs(60));
+        assert!(started.elapsed() < Duration::from_secs(60));
     }
 
     #[test]

@@ -1552,6 +1552,8 @@ fn the_greeting_follows_the_name_until_the_owner_writes_it_and_the_save_sends_on
     receptionist(&mut model, ReceptionistEvent::SetName("Max".into()));
     receptionist(&mut model, ReceptionistEvent::SetGreeting(" ".into()));
     assert!(wizard(&model).receptionist.greeting_error().is_some());
+    // A good name with no greeting is not saved either.
+    assert!(receptionist(&mut model, ReceptionistEvent::Save).is_empty());
     receptionist(&mut model, ReceptionistEvent::SetName("Moe".into()));
     assert_eq!(
         wizard(&model).receptionist.greeting,

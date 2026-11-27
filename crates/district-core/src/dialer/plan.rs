@@ -121,10 +121,10 @@ impl DialReading {
 /// which reads back exactly.
 pub fn read_dial_entry(raw: &str, country: Option<&str>) -> DialReading {
     let mut reading = read_entry(raw, country);
+    // With a code and a number, `national` is always a local form, never one starting with `+`.
     if reading.status != DialStatus::Emergency
         && !reading.calling_code.is_empty()
         && !reading.national_number.is_empty()
-        && !reading.national.starts_with('+')
     {
         let again = read_entry(&reading.national, reading.iso);
         if again.calling_code != reading.calling_code
@@ -646,8 +646,8 @@ pub fn search_countries(query: &str, locale: Locale) -> Vec<&'static str> {
         return all;
     }
     let digits = needle.strip_prefix('+').unwrap_or(&needle);
-    let by_code = needle.starts_with('+') || !digits.is_empty();
-    let by_code = by_code && digits.chars().all(|c| c.is_ascii_digit());
+    // A non-empty needle always leaves a `+` or some digits, so only the digits decide.
+    let by_code = digits.chars().all(|c| c.is_ascii_digit());
     let mut ranks: [Vec<&'static str>; 4] = Default::default();
     for iso in all {
         let name = fold(country_name(iso, locale));
@@ -692,12 +692,7 @@ pub fn suggested_countries(home: Option<&str>, current: Option<&str>) -> Vec<&'s
 /// otherwise read as American.
 pub fn home_country<'a>(numbers: impl IntoIterator<Item = &'a str>) -> Option<&'static str> {
     let mut counts: Vec<(&'static str, usize)> = Vec::new();
-    for number in numbers {
-        let reading = read_dial_entry(number, None);
-        let Some(iso) = reading.iso else { continue };
-        if reading.calling_code == "1" && is_nanp_no_country(&reading.national_number) {
-            continue;
-        }
+    for iso in numbers.into_iter().filter_map(country_evidence) {
         match counts.iter_mut().find(|(seen, _)| *seen == iso) {
             Some((_, count)) => *count += 1,
             None => counts.push((iso, 1)),
@@ -710,6 +705,15 @@ pub fn home_country<'a>(numbers: impl IntoIterator<Item = &'a str>) -> Option<&'
         .rev()
         .max_by_key(|(_, count)| *count)
         .map(|(iso, _)| iso)
+}
+
+/// The country `number` is evidence of, if any. Not generic, so its tests are
+/// measured once rather than per caller's kind of list.
+fn country_evidence(number: &str) -> Option<&'static str> {
+    let reading = read_dial_entry(number, None);
+    let iso = reading.iso?;
+    let no_country = reading.calling_code == "1" && is_nanp_no_country(&reading.national_number);
+    (!no_country).then_some(iso)
 }
 
 /// An example national number for `iso`'s placeholder, in a range nobody can

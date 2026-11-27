@@ -272,6 +272,12 @@ fn interruption(mix: &EngineMix, edit: impl FnOnce(&mut EngineMixInterruption)) 
             false_timeout: None,
         });
     edit(&mut next);
+    with_interruption(mix, next)
+}
+
+/// `mix` with `next` as its interruption, or none when all four are unset. Not
+/// generic, so its tests are measured once rather than per caller's closure.
+fn with_interruption(mix: &EngineMix, next: EngineMixInterruption) -> EngineMix {
     let empty = next.min_duration.is_none()
         && next.min_words.is_none()
         && next.resume.is_none()

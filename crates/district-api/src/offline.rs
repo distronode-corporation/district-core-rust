@@ -511,6 +511,29 @@ mod tests {
         );
     }
 
+    /// An empty or oversized answer is never kept; one of a size to keep is,
+    /// and reads back as shown. In this binary too: the integration tests'
+    /// copy of the code is measured on its own.
+    #[test]
+    fn only_an_answer_of_a_size_to_keep_is_kept_and_shown() {
+        let cache = Arc::new(MemoryReadCache::new());
+        let saved = SavedReads::new(cache.clone(), crate::SystemClock);
+        saved.own("user-a");
+        let asked = saved
+            .asking(
+                Endpoint::Overview,
+                &Url::parse("https://example.test/sizes").unwrap(),
+            )
+            .unwrap();
+        saved.answered(&asked, b"");
+        assert_eq!(cache.load(&asked.key), None);
+        saved.answered(&asked, &vec![b' '; SAVED_COPY_MAX_BYTES + 1]);
+        assert_eq!(cache.load(&asked.key), None);
+        saved.answered(&asked, b"{}");
+        assert_eq!(saved.saved(&asked.key), Some(b"{}".to_vec()));
+        assert!(saved.showing_since().is_some());
+    }
+
     #[test]
     fn an_answer_to_a_request_sent_before_a_sign_out_is_not_kept() {
         let cache = Arc::new(MemoryReadCache::new());

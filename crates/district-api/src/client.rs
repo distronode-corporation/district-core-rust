@@ -160,9 +160,7 @@ impl<S: TokenSource> ApiClient<S> {
                 .map_err(|e| ApiError::Offline(TransportError::from_reqwest(e)))?;
 
             if response.status() != reqwest::StatusCode::UNAUTHORIZED {
-                let answered = response.status().is_success()
-                    || (redirect_expected && response.status().is_redirection());
-                return if answered {
+                return if is_answer(response.status(), redirect_expected) {
                     Ok(response)
                 } else {
                     Err(ApiError::from_failure(response).await)
@@ -194,6 +192,13 @@ impl<S: TokenSource> ApiClient<S> {
             }
         }
     }
+}
+
+/// Whether a response with `status` (not a 401) is the answer: a success, or a
+/// redirect when one is expected. Not generic, so its tests are measured once
+/// rather than per token provider.
+fn is_answer(status: reqwest::StatusCode, redirect_expected: bool) -> bool {
+    status.is_success() || (redirect_expected && status.is_redirection())
 }
 
 /// The HTTP half of the client: the connection pool, where it points, and the
