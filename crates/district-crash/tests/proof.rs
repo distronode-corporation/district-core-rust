@@ -590,7 +590,7 @@ fn a_report_under_way_is_sent_before_its_reporter_closes() {
 fn an_https_dsn_is_accepted_whatever_its_host() {
     let _turn = serial();
     let mut settings = Server::start().settings();
-    settings.dsn = Some("https://publickey@crash.example.com/42".to_owned());
+    settings.dsn = Some("https://publickey@example.com/42".to_owned());
     assert_eq!(
         district_crash::apply(&settings, Consent::Granted),
         Ok(Status::On)

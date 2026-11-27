@@ -582,6 +582,16 @@ mod tests {
         assert!(cache.reads.set(saved.clone()).is_ok());
         assert_eq!(saved.saved(&key), None);
         assert_eq!(saved.showing_since(), None);
+        // The cache forwards a removal too, though nothing here asks for one.
+        cache.inner.save(
+            &key,
+            SavedRead {
+                body: b"{}".to_vec(),
+                saved_at_ms: 0,
+            },
+        );
+        Clearing(cache.clone()).remove(&key);
+        assert_eq!(cache.inner.load(&key), None);
     }
 
     /// A clock the test sets.

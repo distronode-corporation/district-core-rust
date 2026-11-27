@@ -21,8 +21,8 @@ use district_model::{
 use serde_json::json;
 
 use crate::support::{
-    AGENCY, CLIENT, VIEWER, fixture, last_ticket, loaded, restored, server_error, signed_in,
-    voice_credential, voice_packet, voice_proposal, without_calls,
+    AGENCY, CLIENT, VIEWER, fixture, last_ticket, loaded, overview, restored, server_error,
+    signed_in, voice_credential, voice_packet, voice_proposal, without_calls, workspace_list,
 };
 
 const ID: &str = "11111111-1111-4111-8111-111111111111";
@@ -806,6 +806,25 @@ fn a_click_confirm_sends_the_proposal_back_once_and_notes_the_outcome() {
         .is_empty(),
         "no such card"
     );
+}
+
+#[test]
+fn a_card_confirmed_after_the_role_narrowed_sends_nothing_and_stays_open() {
+    let (mut model, _) = proposed();
+    model.update(Event::Navigate(Route::Overview));
+    let effects = model.update(Event::Refresh);
+    let effects = model.update(Event::WorkspacesLoaded {
+        ticket: last_ticket(&effects),
+        remembered: Some(AGENCY.to_owned()),
+        result: Ok(workspace_list()),
+    });
+    model.update(Event::OverviewLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(overview(AGENCY, "viewer")),
+    });
+    assert!(!signed_in(&model).hq_voice_controls().can_confirm);
+    assert!(hq(&mut model, HqEvent::ConfirmVoiceCard(ID.to_owned())).is_empty());
+    assert_eq!(voice(&model).card(ID).unwrap().state, HqCardState::Open);
 }
 
 #[test]

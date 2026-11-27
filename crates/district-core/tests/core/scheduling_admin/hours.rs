@@ -622,6 +622,13 @@ fn an_override_is_checked_and_added_as_a_day_a_run_or_custom_hours() {
         (OverrideForm::default(), "Pick a date."),
         (
             OverrideForm {
+                date: "2026-10x02".into(),
+                ..OverrideForm::default()
+            },
+            "Pick a date.",
+        ),
+        (
+            OverrideForm {
                 date: "2026-10-02".into(),
                 end_date: "soon".into(),
                 ..OverrideForm::default()
@@ -877,6 +884,150 @@ fn a_day_off_needs_no_end_date_and_a_save_with_no_form_sends_nothing() {
     let mut model = overrides_open();
     assert!(hours(&mut model, HoursEvent::SaveOverride).is_empty());
     assert_eq!(editor(&model).validation, None);
+    hours(&mut model, HoursEvent::AddOverride);
+    hours(&mut model, HoursEvent::EditOverride(day));
+    let effects = hours(&mut model, HoursEvent::SaveOverride);
+    assert_eq!(
+        sent(&effects)[0].1,
+        SchedulingAdminRequest::CreateOverride(SchedulingOverrideDraft {
+            date: "2026-10-01".into(),
+            end_date: None,
+            reason: "day_off".into(),
+            start_time: None,
+            end_time: None,
+        })
+    );
+}
+
+#[test]
+fn a_day_marked_available_without_both_times_reads_as_unavailable() {
+    let (mut model, effects) = open("agency", SchedulingSection::Hours);
+    let no_start = SchedulingAvailabilityOverride {
+        is_available: true,
+        end_time: Some("16:00".into()),
+        ..day_off("no-start", "2026-10-01", None, "custom_hours")
+    };
+    let no_end = SchedulingAvailabilityOverride {
+        is_available: true,
+        start_time: Some("12:00".into()),
+        ..day_off("no-end", "2026-10-02", None, "custom_hours")
+    };
+    answer(
+        &mut model,
+        ticket_for(&effects, |r| *r == SchedulingAdminRequest::Overrides),
+        done(SchedulingAdminData::Overrides(vec![no_end, no_start])),
+    );
+    let rows = section(&model).override_rows(now());
+    let shown: Vec<(&str, &str)> = rows
+        .iter()
+        .map(|r| (r.key.as_str(), r.hours.as_str()))
+        .collect();
+    assert_eq!(
+        shown,
+        [("id:no-start", "Unavailable"), ("id:no-end", "Unavailable")]
+    );
+}
+
+#[test]
+fn a_window_already_wrong_is_not_also_called_an_overlap() {
+    let mut model = week_open();
+    hours(&mut model, HoursEvent::AddRange { day: 6 });
+    hours(&mut model, HoursEvent::AddRange { day: 6 });
+    let first = key(&model, 6, 0);
+    // The later window ends before it starts, inside the earlier one.
+    hours(
+        &mut model,
+        HoursEvent::SetRangeStart {
+            day: 6,
+            key: first,
+            value: "10:00".into(),
+        },
+    );
+    hours(
+        &mut model,
+        HoursEvent::SetRangeEnd {
+            day: 6,
+            key: first,
+            value: "08:00".into(),
+        },
+    );
+    assert_eq!(
+        week(&model).errors(6),
+        [Some("The end has to be after the start."), None]
+    );
+    // The earlier window's end cannot be read; the later one starts inside
+    // what it would cover.
+    hours(
+        &mut model,
+        HoursEvent::SetRangeStart {
+            day: 6,
+            key: first,
+            value: "08:00".into(),
+        },
+    );
+    hours(
+        &mut model,
+        HoursEvent::SetRangeEnd {
+            day: 6,
+            key: first,
+            value: "x".into(),
+        },
+    );
+    assert_eq!(
+        week(&model).errors(6),
+        [Some("Enter a time as HH:MM."), None]
+    );
+}
+
+#[test]
+fn a_window_moved_to_another_time_changes_its_rule() {
+    let mut model = week_open();
+    let monday = key(&model, 0, 0);
+    hours(
+        &mut model,
+        HoursEvent::SetRangeStart {
+            day: 0,
+            key: monday,
+            value: "08:00".into(),
+        },
+    );
+    assert_eq!(
+        save_week(&mut model),
+        [
+            SchedulingAdminRequest::DeleteRule { id: "bad".into() },
+            SchedulingAdminRequest::PatchRule {
+                id: "mon".into(),
+                day_of_week: Some(1),
+                start_time: Some("08:00".into()),
+                end_time: Some("17:00".into()),
+            },
+        ]
+    );
+}
+
+#[test]
+fn a_rule_id_the_scheduler_lists_on_two_days_is_moved_to_the_later_one() {
+    // Hostile data: the second window finds the first rule by its id, on
+    // another day, and the save moves that rule.
+    let mut model = read("agency");
+    let effects = hours(&mut model, HoursEvent::OpenWeek);
+    answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Rules(vec![
+            rule("twin", 1, "09:00", "17:00"),
+            rule("twin", 2, "09:00", "17:00"),
+        ])),
+    );
+    assert_eq!(
+        save_week(&mut model),
+        [SchedulingAdminRequest::PatchRule {
+            id: "twin".into(),
+            day_of_week: Some(2),
+            start_time: Some("09:00".into()),
+            end_time: Some("17:00".into()),
+        }]
+    );
 }
 
 /// An editor whose read failed is read again on request, and only then:

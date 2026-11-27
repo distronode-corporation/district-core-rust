@@ -924,6 +924,10 @@ mod tests {
             "06",
             "the whole trunk alone is shown"
         );
+        // A first digit that does not start the trunk is the number itself.
+        let digit = read("1", "HU");
+        assert_eq!(digit.national_number, "1");
+        assert_eq!(digit.national, "061");
         assert_eq!(
             read("8 017 123 4567", "BY").e164,
             Some(plus("375171234567"))
@@ -1024,6 +1028,7 @@ mod tests {
             "9031234567",
             "8812345",
             "88123456",
+            "80812345",
             "1",
         ] {
             assert!(!by(no.as_bytes()), "BY {no}");
@@ -1163,6 +1168,22 @@ mod tests {
         // With no country either exit code is taken.
         assert_eq!(read_dial_entry("011 44 20 7946 0958", None).iso, Some("GB"));
         assert_eq!(read_dial_entry("0044 20 7946 0958", None).iso, Some("GB"));
+    }
+
+    /// A local form that would read back as something else is shown in its
+    /// international form: `911` after the exit code and `1` is no emergency
+    /// call yet, but the same digits alone in the field would be one.
+    #[test]
+    fn a_local_form_that_reads_back_as_an_emergency_is_shown_with_its_code() {
+        let reading = read("011 1 911", "US");
+        assert_eq!(reading.status, DialStatus::Typing);
+        assert_eq!(reading.calling_code, "1");
+        assert_eq!(reading.national_number, "911");
+        assert_eq!(reading.national, plus("1911"));
+        assert_eq!(
+            read_dial_entry(&reading.national, reading.iso).status,
+            DialStatus::Emergency
+        );
     }
 
     #[test]

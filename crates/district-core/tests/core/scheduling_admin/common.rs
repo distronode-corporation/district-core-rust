@@ -346,6 +346,15 @@ fn every_refusal_reads_as_one_of_the_web_dashboards_sentences() {
             UNKNOWN,
             true,
         ),
+        (
+            ApiError::Envelope {
+                status: 409,
+                code: "conflict".into(),
+                detail: detail(Some("conflict")),
+            },
+            UNKNOWN,
+            true,
+        ),
         (ApiError::NotFound(detail(None)), UNKNOWN, true),
         (ApiError::Conflict(detail(None)), UNKNOWN, true),
         (

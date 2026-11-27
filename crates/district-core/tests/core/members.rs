@@ -354,6 +354,36 @@ fn removing_a_member_asks_first() {
     assert_eq!(members(&model).last_write, Some(MembersAction::Remove));
 }
 
+/// A removal question showing when an add started is answered with nothing,
+/// and no add is offered while one is on its way.
+#[test]
+fn a_removal_confirmed_while_an_add_is_on_its_way_sends_nothing() {
+    let mut model = read("agency");
+    event(
+        &mut model,
+        MembersEvent::AskRemove {
+            email: "auditor@example.com".to_owned(),
+        },
+    );
+    event(
+        &mut model,
+        MembersEvent::EditEmail("new@example.com".to_owned()),
+    );
+    let effects = event(&mut model, MembersEvent::Add);
+    assert_eq!(
+        write(&effects),
+        MemberWrite::Add {
+            email: "new@example.com".to_owned(),
+            role: MemberRole::Client,
+        }
+    );
+    assert!(!members(&model).can_add(), "one write at a time");
+    assert!(event(&mut model, MembersEvent::ConfirmRemove).is_empty());
+    let section = members(&model);
+    assert_eq!(section.confirming, None);
+    assert_eq!(section.last_write, Some(MembersAction::Add));
+}
+
 /// The service's loose address rule, and each role's words.
 #[test]
 fn addresses_and_roles() {

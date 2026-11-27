@@ -1037,3 +1037,139 @@ fn a_logo_change_keeps_what_is_typed_and_waits_for_a_save() {
     });
     assert!(self::form(&model).logo_file_kept);
 }
+
+/// A ticket read and with a reply typed still offers a viewer nothing: every
+/// desk route refuses one.
+#[test]
+fn a_read_ticket_offers_a_viewer_nothing() {
+    let detail = fixture::<DeskTicketResponse>("district-desk-ticket.json").ticket;
+    let screen = DeskTicketScreen {
+        ticket_id: TICKET.to_owned(),
+        ticket: DeskTicketView::Ready(Box::new(detail)),
+        refresh_failure: None,
+        reply: "Thanks".to_owned(),
+        sending: false,
+        send_failure: None,
+        status_change: None,
+        status_failure: None,
+        last_notified: None,
+    };
+    assert_eq!(
+        screen.controls(&Capabilities::for_role(Some("viewer"))),
+        DeskTicketControls {
+            can_reply: false,
+            can_change_status: false,
+            status: Some(DeskTicketStatus::Open),
+        }
+    );
+}
+
+/// The service's word that it already had the ticket wins over the ticket it
+/// describes: the same press arrived twice.
+#[test]
+fn a_repeated_ticket_described_all_the_same_is_already_raised() {
+    let mut model = on_queue();
+    event(&mut model, DeskEvent::StartTicket);
+    event(
+        &mut model,
+        DeskEvent::EditTicket(DeskTicketForm {
+            subject: "Invoice question".to_owned(),
+            message: "Which card?".to_owned(),
+            ..DeskTicketForm::default()
+        }),
+    );
+    let effects = event(&mut model, DeskEvent::SubmitTicket);
+    let mut answer: DeskTicketCreateResponse = fixture("district-desk-ticket-create.json");
+    answer.deduplicated = true;
+    model.update(Event::DeskTicketCreated {
+        ticket: last_ticket(&effects),
+        result: Ok(answer),
+    });
+    assert_eq!(desk(&model).submitted, Some(DeskSubmitted::AlreadyRaised));
+    assert_eq!(desk(&model).compose, None);
+}
+
+/// A reply answered with the ticket but not the message adopts the ticket and
+/// keeps the thread as read.
+#[test]
+fn a_reply_answered_without_its_message_keeps_the_thread_as_read() {
+    let mut model = on_ticket(AGENCY, "agency");
+    event(&mut model, DeskEvent::EditReply("Thanks".to_owned()));
+    let (ticket, ..) = reply_sent(&event(&mut model, DeskEvent::SendReply));
+    let mut answer: DeskReplyResponse = fixture("district-desk-ticket-reply.json");
+    answer.message = None;
+    let effects = model.update(Event::DeskReplied {
+        ticket,
+        result: Ok(answer),
+    });
+    assert!(effects.is_empty());
+    let screen = ticket_screen(&model);
+    let detail = screen.detail().unwrap();
+    assert_eq!(detail.status, "waiting");
+    assert_eq!(detail.message_count, 4);
+    assert_eq!(detail.messages.len(), 3);
+    assert_eq!(screen.reply, "");
+}
+
+/// A ticket left with a reply and a status change on their way: neither answer
+/// lands with no ticket open, nor on the same ticket opened again and still
+/// being read.
+#[test]
+fn a_ticket_opened_again_drops_the_answers_of_the_last_visit() {
+    let mut model = on_ticket(AGENCY, "agency");
+    event(&mut model, DeskEvent::EditReply("Thanks".to_owned()));
+    let (reply, ..) = reply_sent(&event(&mut model, DeskEvent::SendReply));
+    let status = last_ticket(&event(
+        &mut model,
+        DeskEvent::SetStatus(DeskTicketStatus::Resolved),
+    ));
+    model.update(Event::Back);
+    let before = signed_in(&model).clone();
+    let effects = model.update(Event::DeskTicketStatusSet {
+        ticket: status,
+        result: Ok(fixture("district-desk-ticket-status.json")),
+    });
+    assert!(effects.is_empty());
+    assert_eq!(*signed_in(&model), before);
+
+    model.update(Event::Navigate(Route::DeskTicket {
+        ticket_id: TICKET.to_owned(),
+    }));
+    assert_eq!(ticket_screen(&model).ticket, DeskTicketView::Loading);
+    let before = signed_in(&model).clone();
+    let effects = model.update(Event::DeskReplied {
+        ticket: reply,
+        result: Ok(fixture("district-desk-ticket-reply.json")),
+    });
+    assert!(effects.is_empty());
+    let effects = model.update(Event::DeskTicketStatusSet {
+        ticket: status,
+        result: Ok(fixture("district-desk-ticket-status.json")),
+    });
+    assert!(effects.is_empty());
+    assert_eq!(*signed_in(&model), before);
+}
+
+/// A change on a ticket the queue does not list leaves the queue as read: its
+/// next read lists it.
+#[test]
+fn a_change_on_a_ticket_the_queue_does_not_list_leaves_the_queue_alone() {
+    let mut model = on_queue();
+    let queue = desk(&model).queue.clone();
+    let effects = model.update(Event::Navigate(Route::DeskTicket {
+        ticket_id: TICKET.to_owned(),
+    }));
+    model.update(Event::DeskTicketLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(fixture("district-desk-ticket.json")),
+    });
+    let effects = event(&mut model, DeskEvent::SetStatus(DeskTicketStatus::Resolved));
+    let mut answer: DeskTicketStatusResponse = fixture("district-desk-ticket-status.json");
+    answer.ticket.id = "desk_ticket_unlisted".to_owned();
+    model.update(Event::DeskTicketStatusSet {
+        ticket: last_ticket(&effects),
+        result: Ok(answer),
+    });
+    assert_eq!(desk(&model).queue, queue);
+    assert_eq!(ticket_screen(&model).detail().unwrap().status, "resolved");
+}

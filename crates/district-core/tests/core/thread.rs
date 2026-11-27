@@ -6,13 +6,14 @@
 //! sending, attachments and the written reply.
 
 use district_core::{
-    ATTACHMENT_TYPES, DRAFT_SAVE_DEBOUNCE, Effect, Event, FailureText, InboxEvent,
-    MAX_ATTACHMENT_BYTES, MAX_ATTACHMENTS, Model, PickedAttachment, Route, ThreadControls,
-    ThreadEvent, ThreadEvents, ThreadHistory, ThreadScreen,
+    ATTACHMENT_TYPES, AssigneeList, DRAFT_SAVE_DEBOUNCE, Effect, Event, FailureText, InboxEvent,
+    MAX_ATTACHMENT_BYTES, MAX_ATTACHMENTS, Model, PickedAttachment, Route, SendableTemplate,
+    TemplateList, ThreadAssignment, ThreadControls, ThreadEvent, ThreadEvents, ThreadHistory,
+    ThreadScreen, WhatsAppComposer, WhatsAppWindowState,
 };
 use district_model::{
     AiDraftResponse, DraftResponse, MediaUploadResponse, MessageSearchHit, MessageSearchResponse,
-    ThreadRef, TimelineEvent, TimelineResponse, UploadedMedia,
+    ThreadRef, TimelineEvent, TimelinePageInfo, TimelineResponse, UploadedMedia,
 };
 
 use crate::inbox::{ADA, WALK_IN, conversations, inbox, on_inbox};
@@ -1169,4 +1170,135 @@ fn a_draft_is_written_one_write_at_a_time() {
                 .is_empty()
         );
     }
+}
+
+/// A saved draft brings its attachments back to a thread with nowhere to reply
+/// to; there is no channel to say they cannot go on.
+#[test]
+fn attachments_restored_on_a_thread_with_no_reply_target_are_not_blocked() {
+    let (mut model, _) = loaded(AGENCY, "agency");
+    let effects = open(&mut model, WALK_IN);
+    model.update(Event::DraftLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadDraft { .. })),
+        result: Ok(fixture("district-draft.json")),
+    });
+    let screen = screen(&model);
+    assert_eq!(screen.reply_target, None);
+    assert_eq!(screen.composer.attachments, [IMAGE]);
+    assert!(!screen.attachments_blocked());
+}
+
+/// A page that says there is more but names no oldest event gives nothing to
+/// read the older page by, so it is not offered.
+#[test]
+fn more_history_with_no_cursor_is_not_offered() {
+    let mut model = on_inbox(AGENCY, "agency", 3);
+    let effects = open(&mut model, ADA);
+    let mut empty = page(Vec::new());
+    empty.page_info = TimelinePageInfo {
+        has_more: true,
+        oldest: None,
+        oldest_id: None,
+    };
+    model.update(Event::TimelineLoaded {
+        ticket: pick(&effects, |e| matches!(e, Effect::LoadTimeline { .. })),
+        result: Ok(empty),
+    });
+    assert!(events(&model).has_more);
+    assert!(!events(&model).can_load_older());
+    assert!(thread_event(&mut model, ThreadEvent::LoadOlder).is_empty());
+}
+
+/// A mark superseded by the thread opened again is no one's; the later one
+/// reads the badge.
+#[test]
+fn a_mark_read_superseded_by_a_later_one_reads_no_badge() {
+    let mut model = on_inbox(AGENCY, "agency", 3);
+    let first = pick(&open(&mut model, ADA), |e| {
+        matches!(e, Effect::MarkRead { .. })
+    });
+    let second = pick(&open(&mut model, ADA), |e| {
+        matches!(e, Effect::MarkRead { .. })
+    });
+    let effects = model.update(Event::MarkedRead {
+        ticket: first,
+        result: Ok(fixture("district-message-mark-read.json")),
+    });
+    assert!(effects.is_empty());
+    let effects = model.update(Event::MarkedRead {
+        ticket: second,
+        result: Ok(fixture("district-message-mark-read.json")),
+    });
+    assert_eq!(
+        effects,
+        [Effect::LoadUnreadCount {
+            ticket: last_ticket(&effects),
+            workspace_id: AGENCY.to_owned(),
+            meta_channels: false,
+        }]
+    );
+}
+
+/// A template variable on a thread that does not reply by WhatsApp changes
+/// nothing.
+#[test]
+fn a_template_variable_off_whatsapp_changes_nothing() {
+    let mut model = opened("agency");
+    let before = screen(&model).clone();
+    assert!(
+        thread_event(
+            &mut model,
+            ThreadEvent::TemplateVariable(0, "Ada".to_owned())
+        )
+        .is_empty()
+    );
+    assert_eq!(*screen(&model), before);
+}
+
+/// The owner already among the members is offered once.
+#[test]
+fn an_owner_among_the_members_is_offered_once() {
+    let assignment = ThreadAssignment {
+        assignee: Some("ada@example.com".to_owned()),
+        members: AssigneeList::Ready(vec![
+            "grace@example.com".to_owned(),
+            "ada@example.com".to_owned(),
+        ]),
+        ..ThreadAssignment::default()
+    };
+    assert_eq!(
+        assignment.options(),
+        ["grace@example.com", "ada@example.com"]
+    );
+}
+
+/// A filled template is not complete while one is on its way, nor with none
+/// chosen.
+#[test]
+fn a_template_on_its_way_or_not_chosen_is_not_complete() {
+    let filled = WhatsAppComposer {
+        window: WhatsAppWindowState::Closed,
+        sender_id: Some("wa_sender_contract".to_owned()),
+        templates: TemplateList::Ready(vec![SendableTemplate {
+            id: "wa_tpl_reminder".to_owned(),
+            name: "appointment_reminder".to_owned(),
+            language: "en_US".to_owned(),
+            body: "Hi {{1}}".to_owned(),
+            variable_count: 1,
+        }]),
+        chosen: Some("wa_tpl_reminder".to_owned()),
+        variables: vec!["Ada".to_owned()],
+        sending: false,
+    };
+    assert!(filled.template_complete());
+    let sending = WhatsAppComposer {
+        sending: true,
+        ..filled.clone()
+    };
+    assert!(!sending.template_complete());
+    let not_chosen = WhatsAppComposer {
+        chosen: None,
+        ..filled
+    };
+    assert!(!not_chosen.template_complete());
 }

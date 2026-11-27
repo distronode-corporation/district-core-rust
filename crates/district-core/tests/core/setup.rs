@@ -353,6 +353,15 @@ fn skip_marks_the_step_and_moves_on_one_write_at_a_time() {
 }
 
 #[test]
+fn keeping_a_number_is_only_for_the_number_step() {
+    let (mut model, _) = ready(state(ALL_TODO, json!({})), None);
+    assert_eq!(wizard(&model).active, Some(SetupStep::Business));
+    assert!(send(&mut model, SetupEvent::KeepNumber).is_empty());
+    assert_eq!(wizard(&model).active, Some(SetupStep::Business));
+    assert!(!wizard(&model).is_moving());
+}
+
+#[test]
 fn a_failed_step_write_stays_and_says_why_until_dismissed() {
     let (mut model, _) = ready(
         state(["done", "todo", "todo", "todo", "todo", "todo"], json!({})),
@@ -1362,6 +1371,62 @@ fn what_you_do_is_refused_at_the_question_cap_and_a_new_one_starts_on() {
     assert_eq!(what["answer"].as_str().unwrap().len(), 1000);
 }
 
+#[test]
+fn a_step_one_without_a_name_is_not_saved() {
+    let stored = json!({"businessFacts": {
+        "address": {"city": "Toronto", "region": "ON", "country": "CA"},
+    }});
+    let (mut model, _) = ready(state(ALL_TODO, stored), None);
+    assert!(wizard(&model).business.is_valid());
+    business(&mut model, BusinessEvent::SetName("  ".into()));
+    assert!(!wizard(&model).business.is_valid());
+    assert!(business(&mut model, BusinessEvent::Save).is_empty());
+    assert!(wizard(&model).business.show_errors);
+    assert!(!wizard(&model).is_moving());
+}
+
+#[test]
+fn another_province_in_the_stored_country_takes_its_own_time_zone() {
+    let facts = json!({"businessFacts": {
+        "timezone": "America/Winnipeg",
+        "address": {"city": "Toronto", "region": "ON", "country": "CA"},
+    }});
+    let (mut model, _) = ready(state(ALL_TODO, facts), None);
+    let stored = wizard(&model).facts().cloned();
+    business(&mut model, BusinessEvent::SetSubdivision("QC".into()));
+    assert_eq!(
+        wizard(&model).business.timezone(stored.as_ref()).as_deref(),
+        Some("America/Toronto")
+    );
+}
+
+#[test]
+fn a_website_address_fills_only_what_is_empty_and_a_country_this_app_knows() {
+    let (mut model, _) = ready(state(ALL_TODO, json!({})), None);
+    business(&mut model, BusinessEvent::SetStreet("1 Main".into()));
+    business(&mut model, BusinessEvent::SetCity(String::new()));
+    business(&mut model, BusinessEvent::ChooseCountry(String::new()));
+    business(&mut model, BusinessEvent::SetWebsite("example.com".into()));
+    let read = ticket(&business(&mut model, BusinessEvent::ReadWebsite)[0]);
+    model.update(Event::SetupWebsiteRead {
+        ticket: read,
+        result: Ok(serde_json::from_value(json!({
+            "draft": {"address": {"line1": "9 Other Road", "country": "ZZ", "region": "Nowhere"}},
+            "source": {"kind": "website", "url": "https://example.com/"},
+        }))
+        .unwrap()),
+    });
+    let step = &wizard(&model).business;
+    assert_eq!(step.street, "1 Main", "a typed street stays");
+    assert_eq!(step.city, "", "no city to fill it with");
+    assert_eq!(
+        (step.country.as_str(), step.subdivision.as_str()),
+        ("", ""),
+        "a country this app does not list is not chosen"
+    );
+    assert!(matches!(step.notice, Some(BusinessNotice::Found(_))));
+}
+
 // ── Step 3 ────────────────────────────────────────────────────────────────
 
 fn receptionist(model: &mut Model, event: ReceptionistEvent) -> Vec<Effect> {
@@ -1610,6 +1675,20 @@ fn a_starter_greeting_is_recognised_in_both_languages() {
         "Acme"
     ));
     assert!(!ReceptionistStep::is_starter("Hello.", "Léa", "Acme"));
+}
+
+#[test]
+fn step_three_is_not_saved_before_its_reads_land() {
+    let (mut model, _) = ready(
+        state(["done", "done", "todo", "todo", "todo", "todo"], json!({})),
+        None,
+    );
+    receptionist(&mut model, ReceptionistEvent::SetName("Ava".into()));
+    receptionist(&mut model, ReceptionistEvent::SetGreeting("Hello.".into()));
+    assert!(receptionist(&mut model, ReceptionistEvent::Save).is_empty());
+    let step = &wizard(&model).receptionist;
+    assert_eq!(step.phase, StepPhase::Loading);
+    assert!(!step.saving);
 }
 
 // ── Step 4 ────────────────────────────────────────────────────────────────
@@ -1943,6 +2022,48 @@ fn step_four_saves_all_five_sections_and_continue_moves_on() {
     callers(&mut model, CallersEvent::AddService);
     assert!(callers(&mut model, CallersEvent::Save).is_empty());
     assert!(wizard(&model).callers.save_error.is_some());
+}
+
+#[test]
+fn an_address_without_a_city_or_a_day_closing_before_it_opens_is_refused() {
+    let mut model = on_callers(json!({}));
+    callers(
+        &mut model,
+        CallersEvent::SetAddress(AddressDraft {
+            country: "CA".into(),
+            ..AddressDraft::default()
+        }),
+    );
+    assert!(!wizard(&model).callers.is_valid());
+    assert!(callers(&mut model, CallersEvent::Save).is_empty());
+    assert!(wizard(&model).callers.save_error.is_some());
+
+    callers(
+        &mut model,
+        CallersEvent::SetAddress(AddressDraft {
+            city: "Regina".into(),
+            country: "CA".into(),
+            ..AddressDraft::default()
+        }),
+    );
+    assert!(wizard(&model).callers.is_valid());
+    callers(
+        &mut model,
+        CallersEvent::SetDayState(Weekday::Mon, DayState::Open),
+    );
+    callers(
+        &mut model,
+        CallersEvent::SetPeriod(
+            Weekday::Mon,
+            0,
+            Interval {
+                open: 17 * 60,
+                close: 9 * 60,
+            },
+        ),
+    );
+    assert!(!wizard(&model).callers.is_valid());
+    assert!(callers(&mut model, CallersEvent::Save).is_empty());
 }
 
 // ── Step 5 ────────────────────────────────────────────────────────────────
@@ -2630,4 +2751,30 @@ fn a_check_that_fails_to_start_or_fails_says_why() {
     assert_eq!(wizard(&model).active, Some(SetupStep::Calls));
     let late = model.update(Event::WaitOver { ticket: *wait });
     assert!(late.is_empty(), "{late:?}");
+}
+
+#[test]
+fn a_first_read_landing_after_a_check_started_keeps_one_poll() {
+    let (mut model, effects) = on_golive("ca", 1);
+    let first = find(&effects, |e| {
+        matches!(e, Effect::LoadSetupForwardingCheck { .. })
+    });
+    golive(
+        &mut model,
+        GoLiveEvent::SetBusinessLine("416 555 0123".into()),
+    );
+    let effects = golive(&mut model, GoLiveEvent::StartCheck);
+    let effects = model.update(Event::SetupForwardingRead {
+        ticket: ticket(&effects[0]),
+        result: Ok(forwarding("district-forwarding-check-start.json")),
+    });
+    let [Effect::Wait { .. }] = effects.as_slice() else {
+        panic!("{effects:?}");
+    };
+    let late = model.update(Event::SetupForwardingRead {
+        ticket: first,
+        result: Ok(forwarding("district-forwarding-check-start.json")),
+    });
+    assert!(late.is_empty(), "{late:?}");
+    assert!(wizard(&model).golive.polling);
 }

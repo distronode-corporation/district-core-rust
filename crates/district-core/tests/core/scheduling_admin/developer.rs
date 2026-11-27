@@ -410,6 +410,7 @@ fn a_key_is_made_named_and_shown_once() {
         }
     );
     assert_eq!(key_dialog(&model).submit_label(), "Creating…");
+    assert!(!key_dialog(&model).can_submit(), "while it is sent");
     assert!(developer(&mut model, DeveloperEvent::CreateKey).is_empty());
     answer(&mut model, sent(&effects)[0].0, refused("unavailable"));
     assert!(key_dialog(&model).write.failure().is_some());
@@ -562,6 +563,65 @@ fn keys_apps_and_webhooks_are_removed_asked_once_more() {
 }
 
 #[test]
+fn apps_and_webhooks_are_not_asked_about_by_a_viewer_or_while_a_removal_is_sent() {
+    let mut model = read("viewer");
+    show(
+        &mut model,
+        DeveloperTab::Apps,
+        SchedulingAdminData::OauthConnections(apps()),
+    );
+    developer(
+        &mut model,
+        DeveloperEvent::AskRevokeApp("oauth-contract-1".into()),
+    );
+    assert_eq!(section(&model).removal.asking, None);
+    show(
+        &mut model,
+        DeveloperTab::Webhooks,
+        SchedulingAdminData::Webhooks(hooks()),
+    );
+    developer(
+        &mut model,
+        DeveloperEvent::AskDeleteWebhook("wh-contract-2".into()),
+    );
+    assert_eq!(section(&model).removal.asking, None);
+    developer(
+        &mut model,
+        DeveloperEvent::OpenEditWebhook("wh-contract-1".into()),
+    );
+    assert!(section(&model).dialog.is_none());
+
+    let mut model = read("agency");
+    show(
+        &mut model,
+        DeveloperTab::Apps,
+        SchedulingAdminData::OauthConnections(apps()),
+    );
+    show(
+        &mut model,
+        DeveloperTab::Webhooks,
+        SchedulingAdminData::Webhooks(hooks()),
+    );
+    developer(
+        &mut model,
+        DeveloperEvent::AskRevokeKey("key-contract-1".into()),
+    );
+    let effects = developer(&mut model, DeveloperEvent::ConfirmRemoval);
+    assert_eq!(sent(&effects).len(), 1);
+    assert!(section(&model).removal.busy);
+    developer(
+        &mut model,
+        DeveloperEvent::AskRevokeApp("oauth-contract-1".into()),
+    );
+    assert_eq!(section(&model).removal.asking, None);
+    developer(
+        &mut model,
+        DeveloperEvent::AskDeleteWebhook("wh-contract-2".into()),
+    );
+    assert_eq!(section(&model).removal.asking, None);
+}
+
+#[test]
 fn a_webhook_save_reads_the_open_deliveries_again_and_a_gone_webhook_closes_them() {
     let mut model = read("agency");
     show(
@@ -673,6 +733,7 @@ fn a_webhook_is_added_to_a_public_https_address_and_its_secret_shown_once() {
     assert_eq!(e.fields.len(), WEBHOOK_FIELDS.len() - 4);
     assert!(!e.fields.iter().any(|f| f == "answers"));
     assert!(is_personal_data("host_email") && is_personal_data("answers"));
+    assert!(is_personal_data("host_name"));
     assert!(!is_personal_data("status"));
 
     for (url, issue) in [
@@ -703,6 +764,13 @@ fn a_webhook_is_added_to_a_public_https_address_and_its_secret_shown_once() {
         DeveloperEvent::EditWebhookUrl(" https://hooks.example.com/b ".into()),
     );
     assert_eq!(editor(&model).url_rejected, None);
+    // A good address alone is not enough.
+    assert!(developer(&mut model, DeveloperEvent::SaveWebhook).is_empty());
+    assert_eq!(editor(&model).url_rejected, None);
+    assert_eq!(
+        editor(&model).events_rejected,
+        Some("Choose at least one event.")
+    );
     // Only the four booking events are offered: one about recordings, which
     // are never made, cannot be ticked.
     assert_eq!(
@@ -742,6 +810,7 @@ fn a_webhook_is_added_to_a_public_https_address_and_its_secret_shown_once() {
     assert_eq!(fields.last().map(String::as_str), Some("hours_before"));
     assert!(fields.iter().any(|f| f == "answers"));
     assert_eq!(editor(&model).submit_label(), "Saving…");
+    assert!(!editor(&model).can_submit());
     // One save at a time.
     assert!(developer(&mut model, DeveloperEvent::ToggleEvent("x".into())).is_empty());
     answer(&mut model, sent(&effects)[0].0, Err(server_error()));

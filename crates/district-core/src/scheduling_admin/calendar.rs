@@ -884,6 +884,16 @@ mod tests {
     }
 
     #[test]
+    fn a_bare_hex_prefix_is_no_hex_address() {
+        // https reads a host of "0x" as 0.0.0.0; only a scheme the URL
+        // standard does not know keeps it, and that is refused for its scheme.
+        assert_eq!(
+            server_url_issue("dav://0x/dav"),
+            Some(ss::caldav_server_url_not_https(l()))
+        );
+    }
+
+    #[test]
     fn the_return_address_travels_encoded_inside_next() {
         assert_eq!(
             connect_next("google", "https://www.example.com/dashboard/x?a=b c"),

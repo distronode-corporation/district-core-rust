@@ -119,6 +119,40 @@ fn the_first_page_waits_for_the_profile_the_event_types_and_the_status() {
 }
 
 #[test]
+fn the_first_page_waits_for_the_profile_or_the_event_types_whichever_is_last() {
+    // The status first, then the profile, then the event types.
+    let (mut model, effects) = open("agency", SchedulingSection::Bookings);
+    assert!(sent(&status_answer(&mut model, &effects, Ok(ready_status()))).is_empty());
+    let me_ticket = ticket_for(&effects, |r| *r == SchedulingAdminRequest::Me);
+    assert!(answer(&mut model, me_ticket, done(SchedulingAdminData::Me(me()))).is_empty());
+    let types_ticket = ticket_for(&effects, |r| *r == SchedulingAdminRequest::EventTypes);
+    let last = answer(
+        &mut model,
+        types_ticket,
+        done(SchedulingAdminData::EventTypes(Vec::new())),
+    );
+    ticket_for(&last, is_page);
+    assert_eq!(section(&model).list, SectionLoad::Loading);
+
+    // The status first, then the event types, then the profile.
+    let (mut model, effects) = open("agency", SchedulingSection::Bookings);
+    assert!(sent(&status_answer(&mut model, &effects, Ok(ready_status()))).is_empty());
+    let types_ticket = ticket_for(&effects, |r| *r == SchedulingAdminRequest::EventTypes);
+    assert!(
+        answer(
+            &mut model,
+            types_ticket,
+            done(SchedulingAdminData::EventTypes(Vec::new()))
+        )
+        .is_empty()
+    );
+    let me_ticket = ticket_for(&effects, |r| *r == SchedulingAdminRequest::Me);
+    let last = answer(&mut model, me_ticket, done(SchedulingAdminData::Me(me())));
+    ticket_for(&last, is_page);
+    assert_eq!(section(&model).times_in(), "Times in America/Toronto");
+}
+
+#[test]
 fn rows_read_in_the_profiles_zone_with_the_actions_the_member_may_take() {
     let model = listed();
     let rows = section(&model).rows(true, now());
@@ -597,6 +631,27 @@ fn a_move_whose_new_time_cannot_be_read_still_says_it_moved() {
 }
 
 #[test]
+fn a_move_that_fails_for_another_reason_keeps_the_times_and_the_choice() {
+    let mut model = listed();
+    let effects = open_reschedule(&mut model, "bk-contract-1");
+    answer(&mut model, sent(&effects)[0].0, slots());
+    bookings(
+        &mut model,
+        BookingsEvent::PickSlot("2026-09-14T13:00:00Z".into()),
+    );
+    let effects = bookings(&mut model, BookingsEvent::Confirm);
+    let effects = answer(&mut model, sent(&effects)[0].0, Err(server_error()));
+    assert!(sent(&effects).is_empty(), "neither the times nor the list");
+    let dialog = reschedule(&model);
+    assert_eq!(
+        dialog.write.failure().unwrap().message,
+        "The booking system did not answer. Try again in a minute."
+    );
+    assert_eq!(dialog.slots.value().unwrap().len(), 2);
+    assert_eq!(dialog.selected.as_deref(), Some("2026-09-14T13:00:00Z"));
+}
+
+#[test]
 fn the_times_can_be_read_again_after_a_failure_only() {
     let mut model = listed();
     let effects = open_reschedule(&mut model, "bk-contract-1");
@@ -760,6 +815,21 @@ fn the_hosts_can_be_read_again_after_a_failure() {
     ));
     assert_eq!(ReassignDialog::title(), "Reassign this booking?");
     assert_eq!(ReassignDialog::no_hosts(), "No other host can take it.");
+}
+
+#[test]
+fn the_hosts_are_not_read_again_while_they_load_or_once_read() {
+    let mut model = listed();
+    let effects = open_reassign(&mut model);
+    assert!(bookings(&mut model, BookingsEvent::RetryDialogRead).is_empty());
+    assert_eq!(reassign(&model).hosts, SectionLoad::Loading);
+    answer(
+        &mut model,
+        sent(&effects)[0].0,
+        done(SchedulingAdminData::Users(vec![user("sam", "Sam", false)])),
+    );
+    assert!(bookings(&mut model, BookingsEvent::RetryDialogRead).is_empty());
+    assert_eq!(reassign(&model).hosts.value().unwrap().len(), 1);
 }
 
 #[test]
