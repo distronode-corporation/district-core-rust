@@ -239,10 +239,9 @@ mod tests {
             "xUsersx",
             "Users/home",
         ] {
-            assert!(
-                matches!(scrub_home_paths(text), Cow::Borrowed(t) if t == text),
-                "{text:?}"
-            );
+            let scrubbed = scrub_home_paths(text);
+            assert!(matches!(scrubbed, Cow::Borrowed(_)), "{text:?}");
+            assert_eq!(scrubbed, text);
         }
     }
 

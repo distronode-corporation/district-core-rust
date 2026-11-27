@@ -242,7 +242,9 @@ mod tests {
     #[test]
     fn empty_answers_decode_to_the_defaults() {
         let delete: AccountDeleteResponse = serde_json::from_str("{}").unwrap();
-        assert!(!delete.success && !delete.account_deleted && !delete.external_erasure_pending);
+        assert!(!delete.success);
+        assert!(!delete.account_deleted);
+        assert!(!delete.external_erasure_pending);
         assert_eq!(delete.message, None);
         assert_eq!(delete.support_erasure, None);
         let confirm: MfaConfirmation = serde_json::from_str(r#"{"enrolled":true}"#).unwrap();

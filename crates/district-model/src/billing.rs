@@ -245,7 +245,8 @@ mod tests {
                 "paymentMethod":null,"billingAddress":null,"customerId":null}"#,
         )
         .unwrap();
-        assert!(outage.billing_unavailable && !none.billing_unavailable);
+        assert!(outage.billing_unavailable);
+        assert!(!none.billing_unavailable);
         assert_eq!(none.overage_spend_cap_cents, None);
         let encoded = serde_json::to_value(&none).unwrap();
         assert!(encoded.get("billingUnavailable").is_none(), "{encoded}");

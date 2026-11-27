@@ -301,13 +301,15 @@ mod tests {
         for secret in ["secret-jwt", "secret-sig", "secret-key"] {
             assert!(!shown.contains(secret), "{shown}");
         }
-        assert!(shown.contains("wss://media.example.com") && shown.contains("exp: 1"));
+        assert!(shown.contains("wss://media.example.com"), "{shown}");
+        assert!(shown.contains("exp: 1"), "{shown}");
 
         let viewer: RoomTokenResponse = serde_json::from_str(
             r#"{"success":true,"token":"secret-jwt","url":"wss://media.example.com"}"#,
         )
         .unwrap();
         let shown = format!("{viewer:?}");
-        assert!(shown.contains("guest_path: None") && shown.contains("e2ee: None"));
+        assert!(shown.contains("guest_path: None"), "{shown}");
+        assert!(shown.contains("e2ee: None"), "{shown}");
     }
 }

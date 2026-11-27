@@ -147,9 +147,12 @@ mod tests {
         let here = this_process_lists_the_image_holding_this_code as fn() as usize as u64;
         let OwnImages(meta) = OwnImages::new();
         assert!(
-            meta.images.iter().any(|image| matches!(image,
-                DebugImage::Symbolic(image)
-                    if image.image_addr.0 <= here && here - image.image_addr.0 < image.image_size)),
+            meta.images.iter().any(|image| match image {
+                DebugImage::Symbolic(image) => {
+                    (image.image_addr.0..image.image_addr.0 + image.image_size).contains(&here)
+                }
+                _ => false,
+            }),
             "{meta:?}"
         );
         assert_eq!(OwnImages(meta).name(), "district-crash-images");

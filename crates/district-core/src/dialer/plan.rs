@@ -1484,7 +1484,8 @@ mod tests {
                 "no name for {}",
                 country.iso
             );
-            assert!(!country.fr.is_empty() && !country.fr.starts_with(char::is_lowercase));
+            assert!(!country.fr.is_empty());
+            assert!(!country.fr.starts_with(char::is_lowercase));
         }
         assert_eq!(country_name("ZZ", En), "ZZ");
         assert_eq!(country_name("DE", FrCa), "Allemagne");
@@ -1546,7 +1547,8 @@ mod tests {
         // The countries sharing a calling code stay alphabetical among
         // themselves.
         let plus_one = search_countries("+1", En);
-        assert!(plus_one.contains(&"CA") && plus_one.contains(&"US"));
+        assert!(plus_one.contains(&"CA"));
+        assert!(plus_one.contains(&"US"));
         let alphabetical: Vec<&str> = sorted_countries(En)
             .into_iter()
             .filter(|c| plus_one.contains(c))

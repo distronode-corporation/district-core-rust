@@ -156,7 +156,8 @@ mod tests {
     fn an_answer_without_a_proposal_leaves_both_keys_out() {
         let answer: HqPromptResponse =
             serde_json::from_str(r#"{"success":true,"answer":"Nineteen."}"#).unwrap();
-        assert!(!answer.needs_confirmation && answer.pending_write.is_none());
+        assert!(!answer.needs_confirmation);
+        assert!(answer.pending_write.is_none());
         assert_eq!(
             serde_json::to_value(&answer).unwrap(),
             json!({"success": true, "answer": "Nineteen."})

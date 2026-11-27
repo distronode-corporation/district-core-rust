@@ -456,12 +456,10 @@ mod tests {
         }))
         .unwrap();
         let shown = format!("{answer:?}");
-        assert!(
-            !shown.contains("secret-jwt") && !shown.contains("secret-key"),
-            "{shown}"
-        );
-        assert!(
-            shown.contains("preview_ws_1") && answer.room_name.starts_with(PREVIEW_ROOM_PREFIX)
-        );
+        for secret in ["secret-jwt", "secret-key"] {
+            assert!(!shown.contains(secret), "{shown}");
+        }
+        assert!(shown.contains("preview_ws_1"), "{shown}");
+        assert!(answer.room_name.starts_with(PREVIEW_ROOM_PREFIX));
     }
 }
