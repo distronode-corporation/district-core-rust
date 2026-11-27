@@ -15,7 +15,7 @@ use district_core::{
 use district_model::{
     DeskBrandName, DeskLogoRemovalResponse, DeskReplyResponse, DeskSettings, DeskSettingsPatch,
     DeskSettingsResponse, DeskTicketCreateResponse, DeskTicketDraft, DeskTicketResponse,
-    DeskTicketStatus, DeskTicketStatusResponse,
+    DeskTicketStatus, DeskTicketStatusResponse, DeskTicketsResponse,
 };
 
 use crate::support::{
@@ -1154,7 +1154,13 @@ fn a_ticket_opened_again_drops_the_answers_of_the_last_visit() {
 /// next read lists it.
 #[test]
 fn a_change_on_a_ticket_the_queue_does_not_list_leaves_the_queue_alone() {
-    let mut model = on_queue();
+    let (mut model, effects) = on_desk(settings());
+    let mut listed: DeskTicketsResponse = fixture("district-desk-tickets.json");
+    listed.tickets.retain(|row| row.id != TICKET);
+    model.update(Event::DeskTicketsLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(listed),
+    });
     let queue = desk(&model).queue.clone();
     let effects = model.update(Event::Navigate(Route::DeskTicket {
         ticket_id: TICKET.to_owned(),
@@ -1164,11 +1170,9 @@ fn a_change_on_a_ticket_the_queue_does_not_list_leaves_the_queue_alone() {
         result: Ok(fixture("district-desk-ticket.json")),
     });
     let effects = event(&mut model, DeskEvent::SetStatus(DeskTicketStatus::Resolved));
-    let mut answer: DeskTicketStatusResponse = fixture("district-desk-ticket-status.json");
-    answer.ticket.id = "desk_ticket_unlisted".to_owned();
     model.update(Event::DeskTicketStatusSet {
         ticket: last_ticket(&effects),
-        result: Ok(answer),
+        result: Ok(fixture("district-desk-ticket-status.json")),
     });
     assert_eq!(desk(&model).queue, queue);
     assert_eq!(ticket_screen(&model).detail().unwrap().status, "resolved");
