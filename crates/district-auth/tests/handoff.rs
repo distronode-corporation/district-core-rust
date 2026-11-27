@@ -100,6 +100,7 @@ fn a_link_that_is_not_the_hand_off_address_is_refused() {
         format!("districtai://handoff:8443?state={s}&nonce={sent}"),
         format!("districtai://ada@handoff?state={s}&nonce={sent}"),
         format!("districtai://ada:pw@handoff?state={s}&nonce={sent}"),
+        format!("districtai://:pw@handoff?state={s}&nonce={sent}"),
         format!("districtai://handoff/x?state={s}&nonce={sent}"),
         format!("districtai:handoff?state={s}&nonce={sent}"),
         format!("https://handoff/?state={s}&nonce={sent}"),

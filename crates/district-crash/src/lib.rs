@@ -386,6 +386,15 @@ mod tests {
     }
 
     #[test]
+    fn a_wait_for_reports_under_way_ends_at_its_timeout() {
+        let reporter = Reporter::new(Client::from(ClientOptions::default()));
+        reporter.captures.store(1, Ordering::Release);
+        let started = Instant::now();
+        reporter.wait_for_captures(Duration::from_millis(20));
+        assert!(started.elapsed() >= Duration::from_millis(20));
+    }
+
+    #[test]
     fn the_defaults_are_off() {
         assert_eq!(Consent::default(), Consent::Denied);
         assert_eq!(Settings::default().dsn, None);

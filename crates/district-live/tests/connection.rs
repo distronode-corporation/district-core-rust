@@ -372,6 +372,34 @@ async fn any_other_close_reconnects_on_the_same_credential() {
 }
 
 #[tokio::test(start_paused = true)]
+async fn a_reconnect_inside_the_renewal_lead_mints_a_fresh_credential() {
+    let clock = TestClock::new();
+    let minter = FakeMinter::new(clock.clone());
+    // Thirty seconds left is inside the renewal lead, so the reconnect after a
+    // close does not reuse it.
+    minter.script([
+        Ok(minter.credential(1, 30 * SECOND)),
+        Ok(minter.credential(2, TTL)),
+    ]);
+    let (config, _, mut server) = memory(clock, no_jitter);
+    let (connection, mut updates) = TelemetryConnection::start(WORKSPACE, minter.clone(), config);
+
+    let first = server.accept().await;
+    assert_eq!(next(&mut updates).await, LiveUpdate::Connected);
+    first.close(1001, "Server shutting down");
+    assert_eq!(
+        next(&mut updates).await,
+        reconnecting(backoff_delay(1, 0.0), closed(1001, "Server shutting down"))
+    );
+
+    let second = server.accept().await;
+    assert_eq!(next(&mut updates).await, LiveUpdate::Connected);
+    assert!(second.offered.as_deref().unwrap().ends_with(&token_text(2)));
+    assert_eq!(minter.calls(), 2);
+    connection.stop().await;
+}
+
+#[tokio::test(start_paused = true)]
 async fn a_connection_that_drops_reconnects() {
     let clock = TestClock::new();
     let minter = FakeMinter::new(clock.clone());

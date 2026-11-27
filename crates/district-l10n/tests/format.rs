@@ -239,3 +239,23 @@ fn a_day_of_a_month_reads_as_an_axis_labels_it() {
     assert_eq!(format::day_month(Locale::FrCa, 9, 1), "1er sept.");
     assert_eq!(format::day_month(Locale::En, 9, 1), "Sep 1");
 }
+
+#[test]
+fn only_us_dollars_are_disambiguated_and_a_code_with_a_digit_is_written_as_it_came() {
+    let disambiguated = MoneyOptions {
+        display: MoneyDisplay::Symbol,
+        disambiguate_dollar: true,
+    };
+    assert_eq!(
+        format::money(Locale::En, 1_000, "usd", disambiguated),
+        "US$10.00"
+    );
+    assert_eq!(
+        format::money(Locale::En, 1_000, "cad", disambiguated),
+        "CA$10.00"
+    );
+    assert_eq!(
+        format::money(Locale::En, 1_000, "us1", MoneyOptions::default()),
+        "US1\u{a0}10.00"
+    );
+}

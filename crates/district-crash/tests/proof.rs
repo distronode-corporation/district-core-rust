@@ -583,6 +583,23 @@ fn a_report_under_way_is_sent_before_its_reporter_closes() {
 }
 
 #[test]
+fn an_https_dsn_is_accepted_whatever_its_host() {
+    let _turn = serial();
+    let mut settings = Server::start().settings();
+    settings.dsn = Some("https://publickey@crash.example.com/42".to_owned());
+    assert_eq!(
+        district_crash::apply(&settings, Consent::Granted),
+        Ok(Status::On)
+    );
+    assert!(district_crash::is_enabled());
+    assert_eq!(
+        district_crash::apply(&settings, Consent::Denied),
+        Ok(Status::Off(OffReason::NoConsent))
+    );
+    assert!(!district_crash::is_enabled());
+}
+
+#[test]
 fn an_unusable_dsn_is_refused_and_leaves_reporting_off() {
     let _turn = serial();
     let server = Server::start();
