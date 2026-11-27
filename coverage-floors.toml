@@ -46,7 +46,7 @@ reason = "A local test server can drive the telemetry client through every state
 [crates.district-core]
 floor = 100
 branch_floor = 96
-reason = "App state with no user interface toolkit and no IO: plain functions the tests call directly."
+reason = "App state with no user interface toolkit and no IO: plain functions the tests call directly. Branches: every reachable one is tested; the rest are guards on a screen after its answer is accepted (`tickets.accept(..) && let Some(..)`), whose `None` side cannot happen because closing a screen cancels its slots (THREAD_SLOTS and the like)."
 
 [crates.district-host]
 floor = 100
