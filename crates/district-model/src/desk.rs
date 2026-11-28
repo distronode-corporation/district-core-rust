@@ -402,7 +402,8 @@ mod tests {
     fn a_repeated_create_has_no_ticket_and_a_degraded_repeated_reply_has_nothing_else() {
         let create: DeskTicketCreateResponse =
             serde_json::from_str(r#"{"success":true,"deduplicated":true}"#).unwrap();
-        assert!(create.deduplicated && create.ticket.is_none());
+        assert!(create.deduplicated);
+        assert!(create.ticket.is_none());
         assert_eq!(
             serde_json::to_value(&create).unwrap(),
             json!({"success": true, "deduplicated": true})

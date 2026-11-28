@@ -17,7 +17,7 @@ use serde_json::json;
 
 use crate::support::{
     AGENCY, CLIENT, VIEWER, connect, fixture, live_event, loaded, media, monitor_credential, pick,
-    server_error, service, signed_in, takeover_credential, without_calls,
+    server_error, service, signed_in, takeover_credential, voice_credential, without_calls,
 };
 
 /// A call's id as the service writes one: a UUID.
@@ -400,6 +400,54 @@ fn another_session_holding_the_engine_keeps_listen_and_takeover_back() {
     assert!(!shown.can_listen);
     assert!(!shown.can_take_over);
     assert!(shown.can_whisper, "a note needs no engine");
+}
+
+#[test]
+fn another_session_joined_keeps_listen_and_takeover_back() {
+    let mut model = on_live_call("agency");
+    // An HQ voice session in its room holds the engine.
+    model.update(Event::Navigate(Route::Hq));
+    model.update(Event::Hq(HqEvent::StartVoice));
+    let effects = model.update(Event::Hq(HqEvent::AcceptVoiceDisclosure));
+    let ticket = pick(&effects, |effect| {
+        matches!(effect, Effect::RequestHqVoice { .. })
+    });
+    model.update(Event::HqVoiceIssued {
+        ticket,
+        result: Ok(voice_credential()),
+    });
+    assert_eq!(
+        signed_in(&model).hq_voice_session().unwrap().owner,
+        MediaOwner::HqVoice
+    );
+    let effects = model.update(Event::Navigate(Route::CallDetail {
+        call_id: CALL.to_owned(),
+    }));
+    let ticket = pick(&effects, |effect| matches!(effect, Effect::LoadCall { .. }));
+    model.update(Event::CallLoaded {
+        ticket,
+        result: Ok(call_read(CALL, "in-progress")),
+    });
+    let shown = controls(&model);
+    assert!(shown.live);
+    assert!(!shown.can_listen);
+    assert!(!shown.can_take_over);
+    assert!(shown.can_whisper, "a note needs no engine");
+}
+
+/// A role this build does not know is offered nothing, not even listening.
+#[test]
+fn a_member_whose_role_is_not_known_may_not_listen() {
+    let mut model = on_live_call("owner");
+    assert_eq!(
+        controls(&model),
+        SuperviseControls {
+            live: true,
+            ..SuperviseControls::default()
+        }
+    );
+    assert!(supervise(&mut model, SuperviseEvent::Listen).is_empty());
+    assert_eq!(phase(&model), SupervisePhase::Idle);
 }
 
 #[test]

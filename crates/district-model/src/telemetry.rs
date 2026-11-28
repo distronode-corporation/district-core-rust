@@ -509,7 +509,8 @@ mod tests {
             timestamp: "t".to_owned(),
         };
         let shown = format!("{envelope:?}");
-        assert!(shown.contains("ws_1") && shown.contains("later"), "{shown}");
+        assert!(shown.contains("ws_1"), "{shown}");
+        assert!(shown.contains("later"), "{shown}");
         assert!(!shown.contains("555"), "{shown}");
 
         let token: TelemetryToken = serde_json::from_str(
@@ -569,10 +570,8 @@ mod tests {
         )
         .unwrap();
         let printed = format!("{data:?}");
-        assert!(
-            !printed.contains("morning") && printed.contains("<redacted>"),
-            "{printed}"
-        );
+        assert!(!printed.contains("morning"), "{printed}");
+        assert!(printed.contains("<redacted>"), "{printed}");
 
         let refused = event(
             TelemetryEventType::WhisperApplied,

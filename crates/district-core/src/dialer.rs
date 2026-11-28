@@ -807,6 +807,8 @@ mod tests {
         assert_eq!(title("+12125550142".to_owned()), "+1 212 555 0142");
         // A number the plan cannot read as whole keeps the plain grouping.
         assert_eq!(title(plus("99912345678")), plus("9 991 234 5678"));
+        // So does one too short to dial.
+        assert_eq!(title(plus("1212555")), plus("121 255 5"));
     }
 
     /// A +1 toll-free number says it belongs to no one country, whatever +1

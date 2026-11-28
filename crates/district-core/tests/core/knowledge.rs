@@ -145,6 +145,61 @@ fn adding_is_sent_once_and_the_list_is_read_again() {
     assert_eq!(knowledge(&model).write, SaveState::Idle);
 }
 
+/// Text without a title is not added either.
+#[test]
+fn a_document_without_a_title_is_not_added() {
+    let mut model = read("agency");
+    typed(&mut model, "  ", "Nine to five");
+    assert!(!knowledge(&model).can_add());
+    assert!(event(&mut model, KnowledgeEvent::Add).is_empty());
+    assert!(knowledge(&model).add_rejected);
+}
+
+/// While an add is on its way no delete is asked, and a question showing when
+/// it started is answered with nothing: one write at a time.
+#[test]
+fn a_question_answered_while_an_add_is_on_its_way_sends_nothing() {
+    let mut model = read("agency");
+    event(
+        &mut model,
+        KnowledgeEvent::AskDelete {
+            document_id: "doc_contract_ready".to_owned(),
+        },
+    );
+    typed(&mut model, "Hours", "Nine to five");
+    assert_eq!(event(&mut model, KnowledgeEvent::Add).len(), 1);
+    event(
+        &mut model,
+        KnowledgeEvent::AskDelete {
+            document_id: "doc_contract_processing".to_owned(),
+        },
+    );
+    assert_eq!(
+        knowledge(&model).confirming,
+        Some(KnowledgeConfirm::Delete {
+            document_id: "doc_contract_ready".to_owned(),
+            title: "Refund policy".to_owned(),
+        }),
+        "the question showing stays"
+    );
+    assert!(event(&mut model, KnowledgeEvent::Confirm).is_empty());
+    assert_eq!(knowledge(&model).confirming, None);
+    assert_eq!(knowledge(&model).last_write, Some(KnowledgeWrite::Add));
+
+    let mut model = read("agency");
+    event(
+        &mut model,
+        KnowledgeEvent::SelectMode(KnowledgeMode::Linked),
+    );
+    typed(&mut model, "Hours", "Nine to five");
+    assert_eq!(event(&mut model, KnowledgeEvent::Add).len(), 1);
+    assert!(event(&mut model, KnowledgeEvent::Confirm).is_empty());
+    let section = knowledge(&model);
+    assert_eq!(section.confirming, None);
+    assert_eq!(section.mode(), Some("internal"));
+    assert_eq!(section.last_write, Some(KnowledgeWrite::Add));
+}
+
 /// A failed add keeps the text for another try and reads nothing.
 #[test]
 fn a_failed_add_keeps_the_text() {

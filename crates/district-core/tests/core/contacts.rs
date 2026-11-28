@@ -10,7 +10,8 @@ use district_core::{
     BlockedList, BlockedScreen, CONTACT_PAGE_SIZE, ContactAction, ContactConfirmation,
     ContactControls, ContactDetailScreen, ContactForm, ContactList, ContactRows, ContactView,
     ContactWrite, ContactWritten, ContactsEvent, CreateContact, Effect, Event, FailureText, Model,
-    RESEARCH_POLL_INTERVAL, Route, UNNAMED_CONTACT, blocked_label, contact_label,
+    RESEARCH_POLL_INTERVAL, Route, SchedulingSection, UNNAMED_CONTACT, blocked_label,
+    contact_label,
 };
 use district_model::{
     BlockedContact, BlockedContactsResponse, Contact, ContactBlockResponse, ContactDetailResponse,
@@ -19,7 +20,8 @@ use district_model::{
 use serde_json::json;
 
 use crate::support::{
-    AGENCY, VIEWER, fixture, last_ticket, loaded, pick, refusal, server_error, signed_in, ticket,
+    AGENCY, VIEWER, fixture, last_ticket, loaded, overview, pick, refusal, server_error, signed_in,
+    ticket, workspace_list,
 };
 
 const ADA: &str = "contact_contract_1";
@@ -462,6 +464,44 @@ fn a_viewer_can_read_contacts_and_change_nothing() {
     assert_eq!(screen(&model).editing, None);
 }
 
+/// The overview read again says the member is a viewer now, with whatever
+/// was open on the contacts screens left open.
+fn narrowed_to_viewer(model: &mut Model) {
+    model.update(Event::Navigate(Route::Overview));
+    let effects = model.update(Event::Refresh);
+    let effects = model.update(Event::WorkspacesLoaded {
+        ticket: last_ticket(&effects),
+        remembered: Some(AGENCY.to_owned()),
+        result: Ok(workspace_list()),
+    });
+    model.update(Event::OverviewLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(overview(AGENCY, "viewer")),
+    });
+    assert!(!signed_in(model).capabilities().can_change);
+}
+
+#[test]
+fn a_new_contact_submitted_after_the_role_narrowed_sends_nothing() {
+    let mut model = on_contacts("agency");
+    contacts_event(&mut model, ContactsEvent::StartCreate);
+    let form = ContactForm {
+        name: "Grace".to_owned(),
+        email: "grace@example.com".to_owned(),
+        ..ContactForm::default()
+    };
+    contacts_event(&mut model, ContactsEvent::EditCreate(form.clone()));
+    narrowed_to_viewer(&mut model);
+    assert!(contacts_event(&mut model, ContactsEvent::SubmitCreate).is_empty());
+    assert_eq!(
+        signed_in(&model).contacts.create,
+        Some(CreateContact {
+            form,
+            ..CreateContact::default()
+        })
+    );
+}
+
 // One contact.
 
 #[test]
@@ -553,8 +593,10 @@ fn an_edit_sends_the_whole_contact_with_what_changed() {
     // Nothing changed: the form closes without a request.
     assert!(contacts_event(&mut model, ContactsEvent::SaveEdit).is_empty());
     assert_eq!(screen(&model).editing, None);
-    // Saving with no form open does nothing.
+    // Saving with no form open does nothing, and an edit opens no form.
     assert!(contacts_event(&mut model, ContactsEvent::SaveEdit).is_empty());
+    assert!(contacts_event(&mut model, ContactsEvent::Edit(ContactForm::default())).is_empty());
+    assert_eq!(screen(&model).editing, None);
 
     contacts_event(&mut model, ContactsEvent::StartEdit);
     contacts_event(
@@ -1091,6 +1133,98 @@ fn the_blocked_list_shows_live_blocks_and_unblocks_one_caller_at_a_time() {
     assert_eq!(rows.len(), 1);
     assert_eq!(BlockedList::EMPTY_TITLE, "No blocked callers");
     assert_eq!(BlockedList::FAILED_TITLE, "Could not load blocked callers");
+}
+
+#[test]
+fn an_unblock_confirmed_after_the_role_narrowed_sends_nothing_and_closes_the_question() {
+    let mut model = on_contacts("agency");
+    let effects = model.update(Event::Navigate(Route::BlockedContacts));
+    model.update(Event::BlockedLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(BlockedContactsResponse {
+            success: true,
+            blocked: vec![blocked_row("c1", Some("2026-09-02T00:00:00.000Z"))],
+        }),
+    });
+    contacts_event(
+        &mut model,
+        ContactsEvent::AskUnblock {
+            contact_id: "c1".to_owned(),
+        },
+    );
+    assert_eq!(
+        signed_in(&model).blocked.confirming,
+        Some(blocked_row("c1", Some("2026-09-02T00:00:00.000Z")))
+    );
+    narrowed_to_viewer(&mut model);
+    assert!(contacts_event(&mut model, ContactsEvent::ConfirmUnblock).is_empty());
+    assert_eq!(signed_in(&model).blocked.confirming, None);
+    assert!(signed_in(&model).blocked.unblocking.is_empty());
+}
+
+/// On the blocked list as an agency member, with `c1`'s unblock sent and its
+/// answer still on its way. Returns the unblock's ticket.
+fn unblock_on_its_way(model: &mut Model) -> district_core::Ticket {
+    let effects = model.update(Event::Navigate(Route::BlockedContacts));
+    model.update(Event::BlockedLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(BlockedContactsResponse {
+            success: true,
+            blocked: vec![blocked_row("c1", Some("2026-09-02T00:00:00.000Z"))],
+        }),
+    });
+    contacts_event(
+        model,
+        ContactsEvent::AskUnblock {
+            contact_id: "c1".to_owned(),
+        },
+    );
+    let (ticket, _) = write(&contacts_event(model, ContactsEvent::ConfirmUnblock));
+    ticket
+}
+
+/// The unblock's answer, landing after the member went elsewhere: the caller
+/// leaves the blocked list.
+fn unblock_lands(model: &mut Model, ticket: district_core::Ticket) {
+    model.update(Event::ContactWritten {
+        ticket,
+        result: Ok(ContactWritten::Blocked(blocked_answer("c1", false))),
+    });
+    assert!(signed_in(model).blocked.unblocking.is_empty());
+    assert_eq!(
+        signed_in(model).blocked.list,
+        BlockedList::Ready(Vec::new())
+    );
+}
+
+/// An unblock on its way is not another thread's assignment: a thread opened
+/// meanwhile is not held as saving, and the unblock still lands.
+#[test]
+fn a_thread_opened_while_an_unblock_is_on_its_way_is_not_saving() {
+    let mut model = on_contacts("agency");
+    let unblock = unblock_on_its_way(&mut model);
+    model.update(Event::Navigate(Route::Thread {
+        thread_key: crate::inbox::ADA.to_owned(),
+    }));
+    let thread = signed_in(&model).thread.as_ref().expect("a thread is open");
+    assert!(!thread.assignment.saving);
+    unblock_lands(&mut model, unblock);
+}
+
+/// Scheduling dropping the reads of a section left drops only its own: an
+/// unblock on its way still lands.
+#[test]
+fn a_scheduling_section_left_keeps_an_unblock_on_its_way() {
+    let mut model = on_contacts("agency");
+    let unblock = unblock_on_its_way(&mut model);
+    model.update(Event::Navigate(Route::SchedulingAdmin(
+        SchedulingSection::Overview,
+    )));
+    model.update(Event::Navigate(Route::SchedulingAdmin(
+        SchedulingSection::Hours,
+    )));
+    assert!(signed_in(&model).scheduling_admin.overview.is_none());
+    unblock_lands(&mut model, unblock);
 }
 
 #[test]

@@ -200,10 +200,14 @@ impl ActiveCall {
             CallPhase::Ended(CallEnd::NotPlaced(failure) | CallEnd::Failed(failure)) => {
                 failure.message.clone()
             }
-            CallPhase::Ended(CallEnd::HungUp | CallEnd::Remote) if self.answered => {
-                s::call_ended_lasted(l(), &format_call_duration(self.elapsed_secs))
+            // One test of `answered`, not a guard copied onto each pattern of the pair.
+            CallPhase::Ended(CallEnd::HungUp | CallEnd::Remote) => {
+                if self.answered {
+                    s::call_ended_lasted(l(), &format_call_duration(self.elapsed_secs))
+                } else {
+                    s::call_ended(l()).to_owned()
+                }
             }
-            CallPhase::Ended(CallEnd::HungUp | CallEnd::Remote) => s::call_ended(l()).to_owned(),
         }
     }
 

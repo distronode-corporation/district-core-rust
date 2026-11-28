@@ -666,6 +666,27 @@ fn a_ring_goes_quiet_when_a_room_is_joined_over_it() {
     assert_eq!(ring(&model).phase, RingPhase::Waiting);
 }
 
+/// A ring already over has nothing to quiet: joining a room leaves it missed.
+#[test]
+fn a_missed_ring_stays_missed_when_a_room_is_joined() {
+    let mut model = ready(AGENCY, "agency");
+    let deadline = rung(&mut model);
+    model.update(Event::WaitOver { ticket: deadline });
+    model.update(Event::Navigate(Route::Rooms));
+    model.update(Event::Rooms(district_core::RoomsEvent::EditRoomName(
+        "standup".to_owned(),
+    )));
+    let effects = model.update(Event::Rooms(district_core::RoomsEvent::Start));
+    let ticket = crate::support::ticket(&effects[0]);
+    let effects = model.update(Event::RoomTokenIssued {
+        ticket,
+        result: Ok(fixture("district-room-token.json")),
+    });
+    assert!(!effects.contains(&Effect::StopRingtone), "{effects:?}");
+    connect(&effects);
+    assert_eq!(ring(&model).phase, RingPhase::Ended(RingEnd::Missed));
+}
+
 #[test]
 fn a_client_member_is_rung_too() {
     let mut model = ready(CLIENT, "client");

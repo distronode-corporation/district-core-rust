@@ -5,9 +5,10 @@
 //! The call log with its paging, and one call with its transcript.
 
 use district_api::{ApiError, ErrorDetail};
+use district_core::l10n::{Locale, with_locale};
 use district_core::{
     CALL_PAGE_SIZE, CallDetailScreen, CallLog, CallRows, CallView, CallsEvent, Effect, Event,
-    FailureText, Model, Route, TranscriptView,
+    FailureText, Model, Route, TranscriptView, call_duration_label,
 };
 use district_model::{CallDetailResponse, CallSummary, CallTranscriptResponse};
 
@@ -204,6 +205,38 @@ fn the_newest_page_again_merges_on_top() {
     // A full newest page means the end is no longer known.
     assert!(!rows.paging.end_reached);
     assert_eq!(rows.paging.refresh_failure, None);
+}
+
+/// A short newest page says nothing about the end while older pages are still
+/// unread: the log keeps them on offer.
+#[test]
+fn a_short_newest_page_does_not_end_a_log_with_pages_left_to_read() {
+    let mut model = on_log(calls("c", 25));
+    assert!(!rows(&model).paging.end_reached);
+    let effects = model.update(Event::Refresh);
+    model.update(Event::CallsLoaded {
+        ticket: last_ticket(&effects),
+        result: Ok(calls("c", 3)),
+    });
+    let rows = rows(&model);
+    assert_eq!(rows.calls.len(), 25);
+    assert!(!rows.paging.end_reached);
+    assert!(rows.paging.can_load_more());
+}
+
+/// A French row whose minutes the service wrote as negative cannot be read,
+/// so it shows the service's own text.
+#[test]
+fn a_negative_length_in_french_is_shown_as_the_service_wrote_it() {
+    let row = CallSummary {
+        duration: "-1m 5s".to_owned(),
+        duration_raw: None,
+        ..call("c0")
+    };
+    assert_eq!(
+        with_locale(Locale::FrCa, || call_duration_label(&row)),
+        "-1m 5s"
+    );
 }
 
 /// More calls came in than a page holds: the log starts again from the newest

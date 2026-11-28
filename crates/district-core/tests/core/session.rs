@@ -552,6 +552,63 @@ fn a_late_or_stray_sign_in_answer_is_dropped() {
     assert!(matches!(model.session(), SessionState::SignedOut(_)));
 }
 
+/// An exchange answered once, a stray link's, does not complete a sign-in
+/// that is still waiting for the browser when it arrives again.
+#[test]
+fn an_answer_already_taken_does_not_complete_a_sign_in_still_waiting() {
+    let mut model = fresh();
+    model.update(Event::SignIn);
+    let effects = model.update(Event::SignInCallback(CALLBACK.to_owned()));
+    let exchange = last_ticket(&effects);
+    model.update(Event::SignInCompleted {
+        ticket: exchange,
+        result: Err(SignInError::Callback(LoginError::NotOurRedirect)),
+    });
+    assert!(
+        model
+            .update(Event::SignInCompleted {
+                ticket: exchange,
+                result: Ok(session(Persistence::Saved)),
+            })
+            .is_empty()
+    );
+    let SessionState::SigningIn(signing_in) = model.session() else {
+        panic!("{:?}", model.session());
+    };
+    assert_eq!(signing_in.phase, SignInPhase::WaitingForBrowser);
+}
+
+/// The report of a sign-out that was tried again is the only one that ends it:
+/// the first attempt's report, arriving late, changes nothing.
+#[test]
+fn a_late_report_of_an_earlier_sign_out_is_dropped_while_signing_out_again() {
+    let (mut model, _) = restored();
+    let effects = model.update(Event::SignOut);
+    let first = last_ticket(&effects);
+    model.update(Event::SignOutFinished {
+        ticket: first,
+        report: report(
+            RevokeStatus::Deferred,
+            Err(store_error(StoreErrorKind::Locked)),
+        ),
+    });
+    model.update(Event::RetrySignOut);
+    assert!(
+        model
+            .update(Event::SignOutFinished {
+                ticket: first,
+                report: report(RevokeStatus::Revoked, Ok(())),
+            })
+            .is_empty()
+    );
+    assert_eq!(
+        model.session(),
+        &SessionState::SigningOut(SigningOut {
+            scope: SignOutScope::ThisDevice
+        })
+    );
+}
+
 /// An old link from the browser's history, or an attempt the app did not see
 /// through: saying so beats a click that does nothing.
 #[test]

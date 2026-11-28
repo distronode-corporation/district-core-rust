@@ -10,7 +10,7 @@
 use district_api::{ApiError, ErrorDetail};
 use district_core::{
     Effect, Event, FailureText, MemberList, MemberWrite, MembersAction, MembersEvent,
-    MembersSection, Model, SaveState, WorkspaceSection, WorkspacesState, is_member_email,
+    MembersSection, Model, Route, SaveState, WorkspaceSection, WorkspacesState, is_member_email,
     member_role_label,
 };
 use district_model::{
@@ -19,7 +19,7 @@ use district_model::{
 };
 
 use crate::settings::{open, stale, unchanged, workspace_for};
-use crate::support::{fixture, server_error, signed_in, ticket};
+use crate::support::{VIEWER, fixture, loaded, pick, server_error, signed_in, ticket};
 
 fn members(model: &Model) -> &MembersSection {
     signed_in(model).members.as_ref().expect("the members open")
@@ -354,6 +354,36 @@ fn removing_a_member_asks_first() {
     assert_eq!(members(&model).last_write, Some(MembersAction::Remove));
 }
 
+/// A removal question showing when an add started is answered with nothing,
+/// and no add is offered while one is on its way.
+#[test]
+fn a_removal_confirmed_while_an_add_is_on_its_way_sends_nothing() {
+    let mut model = read("agency");
+    event(
+        &mut model,
+        MembersEvent::AskRemove {
+            email: "auditor@example.com".to_owned(),
+        },
+    );
+    event(
+        &mut model,
+        MembersEvent::EditEmail("new@example.com".to_owned()),
+    );
+    let effects = event(&mut model, MembersEvent::Add);
+    assert_eq!(
+        write(&effects),
+        MemberWrite::Add {
+            email: "new@example.com".to_owned(),
+            role: MemberRole::Client,
+        }
+    );
+    assert!(!members(&model).can_add(), "one write at a time");
+    assert!(event(&mut model, MembersEvent::ConfirmRemove).is_empty());
+    let section = members(&model);
+    assert_eq!(section.confirming, None);
+    assert_eq!(section.last_write, Some(MembersAction::Add));
+}
+
 /// The service's loose address rule, and each role's words.
 #[test]
 fn addresses_and_roles() {
@@ -377,4 +407,31 @@ fn addresses_and_roles() {
     ] {
         assert!(!text.is_empty());
     }
+}
+
+/// A member the overview read as an agency member, in a workspace the list says
+/// they only view, renames nothing once a read of the list fails and the list's
+/// role is the one that counts (issue #125 asks whether the section should stay).
+#[test]
+fn a_rename_by_a_member_whose_role_narrowed_sends_nothing() {
+    let (mut model, _) = loaded(VIEWER, "agency");
+    let refresh = model.update(Event::Refresh);
+    let list = pick(&refresh, |effect| {
+        matches!(effect, Effect::LoadWorkspaces { .. })
+    });
+    let effects = model.update(Event::Navigate(Route::Workspace(WorkspaceSection::Members)));
+    model.update(Event::MembersLoaded {
+        ticket: ticket(&effects[0]),
+        result: Ok(fixture("district-members.json")),
+    });
+    event(&mut model, MembersEvent::EditName("Renamed".to_owned()));
+    assert!(members(&model).can_rename());
+    model.update(Event::WorkspacesLoaded {
+        ticket: list,
+        remembered: None,
+        result: Err(server_error()),
+    });
+    assert!(!signed_in(&model).capabilities().can_rename_workspace);
+    assert!(event(&mut model, MembersEvent::Rename).is_empty());
+    assert_eq!(members(&model).write, SaveState::Idle);
 }

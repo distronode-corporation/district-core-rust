@@ -445,6 +445,55 @@ fn closing_the_form_drops_it_and_a_late_check() {
     assert!(edit(&mut model, MessagingFormEdit::Label("x".to_owned())).is_empty());
 }
 
+/// With a form open no other is opened over it, and while its check is on its
+/// way nothing else is checked, sent or asked.
+#[test]
+fn nothing_else_starts_beside_an_open_form_or_its_check() {
+    let mut model = read("agency");
+    event(&mut model, MessagingEvent::StartAdd);
+    let edit_twilio = || MessagingEvent::StartEdit {
+        account_id: "acct-twilio".to_owned(),
+    };
+    assert!(event(&mut model, edit_twilio()).is_empty());
+    assert_eq!(
+        form(&model).account_id,
+        None,
+        "still the new account's form"
+    );
+    secret(&mut model, CredentialField::AccountSid, SID);
+    secret(&mut model, CredentialField::AuthToken, TOKEN);
+    let effects = event(&mut model, MessagingEvent::TestCredentials);
+    assert_eq!(effects.len(), 1);
+    assert!(!messaging(&model).can_edit_now());
+
+    assert!(event(&mut model, MessagingEvent::TestCredentials).is_empty());
+    for sent in [
+        MessagingEvent::SetDefault {
+            account_id: "acct-twilio".to_owned(),
+        },
+        MessagingEvent::AskDelete {
+            account_id: "acct-twilio".to_owned(),
+        },
+    ] {
+        assert!(event(&mut model, sent).is_empty());
+    }
+    let section = messaging(&model);
+    assert_eq!(section.write, SaveState::Idle);
+    assert_eq!(section.confirming, None);
+    event(&mut model, MessagingEvent::CloseForm);
+    event(
+        &mut model,
+        MessagingEvent::EditCreatorCell("+14165550101".to_owned()),
+    );
+    let effects = event(&mut model, MessagingEvent::SaveCreatorCell);
+    assert_eq!(effects.len(), 1);
+    assert!(event(&mut model, edit_twilio()).is_empty());
+    assert!(
+        messaging(&model).form.is_none(),
+        "no form while a write is on its way"
+    );
+}
+
 /// The default sender and a channel's sender are changed at once, for a listed
 /// account, and the accounts are read again after.
 #[test]

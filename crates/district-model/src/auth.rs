@@ -56,7 +56,8 @@ mod tests {
     fn the_modelled_fields_round_trip() {
         let raw = r#"{"authenticated":true,"email":"ada@example.com","isAdmin":true}"#;
         let me: AuthMeResponse = serde_json::from_str(raw).unwrap();
-        assert!(me.authenticated && me.is_admin);
+        assert!(me.authenticated);
+        assert!(me.is_admin);
         assert_eq!(me.email.as_deref(), Some("ada@example.com"));
         let again: serde_json::Value = serde_json::to_value(&me).unwrap();
         assert_eq!(

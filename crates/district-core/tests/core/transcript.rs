@@ -435,6 +435,9 @@ fn a_duplicate_is_dropped_and_a_late_frame_fills_its_gap() {
         model.update(segment("item_g", 7, 7, 0, true)).is_empty(),
         "a duplicate"
     );
+    // So is one below the gap.
+    assert!(model.update(segment("item_x", 9, 2, 0, true)).is_empty());
+    assert!(!ids(&model).contains(&"item_x".to_owned()));
     // Late frames fill it from the middle out; each is shown.
     for (seq, id) in [(4, "item_d"), (3, "item_c"), (6, "item_f"), (5, "item_e")] {
         assert!(model.update(segment(id, seq, seq, 0, true)).is_empty());
@@ -500,6 +503,15 @@ fn a_frame_of_an_epoch_the_snapshot_closed_is_dropped() {
     assert_eq!(*phase(&model), LiveTranscriptPhase::Live);
 }
 
+#[test]
+fn an_end_already_seen_is_dropped_and_the_transcript_stays_live() {
+    let mut model = on_call();
+    model.update(snapshot());
+    // At or below the snapshot's mark: a duplicate, not an end.
+    assert!(model.update(ended(EPOCH, 2, "call_ended")).is_empty());
+    assert_eq!(*phase(&model), LiveTranscriptPhase::Live);
+}
+
 // Snapshots in parts.
 
 #[test]
@@ -560,6 +572,16 @@ fn a_snapshot_broken_by_another_frame_or_a_changed_header_is_asked_for_again() {
             }))
             .is_empty()
     );
+    let effects = model.update(snapshot_with(|data| data["part"] = json!(2)));
+    assert_eq!(watched(&effects), Some(watching(1)));
+    assert!(ids(&model).is_empty(), "nothing was put together");
+}
+
+#[test]
+fn a_snapshot_missing_a_part_is_asked_for_again() {
+    let mut model = on_call();
+    model.update(snapshot_with(|data| data["more"] = json!(true)));
+    // Part 1 never came: part 2 cannot be put after part 0.
     let effects = model.update(snapshot_with(|data| data["part"] = json!(2)));
     assert_eq!(watched(&effects), Some(watching(1)));
     assert!(ids(&model).is_empty(), "nothing was put together");

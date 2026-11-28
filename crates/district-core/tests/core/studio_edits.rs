@@ -128,6 +128,17 @@ fn a_realtime_model_refused_in_the_region_is_offered_only_while_held() {
     assert!(realtime_models(GEMINI_38_LIVE, &studio)[0].note.is_some());
 }
 
+#[test]
+fn a_realtime_model_not_offered_is_listed_only_while_held() {
+    let mut studio = studio();
+    studio.catalog.realtime[0].offered = false;
+    assert_eq!(
+        values(&realtime_models(GEMINI_LIVE_25, &studio)),
+        [GEMINI_LIVE_25]
+    );
+    assert_eq!(realtime_models(GEMINI_38_LIVE, &studio).len(), 2);
+}
+
 // What a choice does.
 
 #[test]
@@ -570,6 +581,24 @@ fn a_chain_is_fitted_to_the_models_that_speak_the_new_language() {
         ("flux-tts", "flux-alexis-en")
     );
     assert_eq!(fitted.llm, mix.llm);
+}
+
+/// An ear that still hears the language but is no longer offered is moved
+/// too: to its vendor's next ear that takes turns as it did.
+#[test]
+fn a_held_ear_no_longer_offered_moves_to_its_vendors_next_like_it() {
+    let mut studio = studio();
+    let mix = saved_mix();
+    for ear in &mut studio.catalog.stt {
+        if ear.model == mix.stt.model {
+            ear.offered = false;
+        }
+    }
+    let fitted = refit(&mix, &studio).unwrap();
+    assert_eq!(
+        (fitted.stt.provider.as_str(), fitted.stt.model.as_str()),
+        (DEEPGRAM, "flux-general-multi")
+    );
 }
 
 #[test]

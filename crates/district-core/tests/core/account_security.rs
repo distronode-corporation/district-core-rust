@@ -705,6 +705,15 @@ fn turning_off_by_password_asks_for_the_code_once_the_service_does() {
 }
 
 #[test]
+fn an_account_with_two_step_off_never_reads_as_signing_in_without_a_password() {
+    let mut read = status(false);
+    read.can_disable = false;
+    let model = at_overview(read);
+    assert!(!two_step(&model).signs_in_without_password());
+    assert_eq!(two_step(&model).status_lines(), [en::TWO_STEP_OFF_EXPLAIN]);
+}
+
+#[test]
 fn an_account_without_a_password_turns_it_off_at_its_provider() {
     let mut read = status(true);
     read.can_disable = false;
